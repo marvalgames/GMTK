@@ -1,0 +1,65 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 278d6a5fdbf6ef54482f21e19dee0edc, type: 3}
+  m_Name: OS_Chairs
+  m_EditorClassIdentifier: 
+  _editor_drawSettings: 1
+  _editor_drawPrefabs: 1
+  _editor_drawThumbs: 1
+  StampersetTag: 
+  RandomizePosition: 0.35
+  RandPositionAxis: {x: 1, y: 0, z: 1}
+  RotationRanges: {x: -10, y: 10}
+  RandRotationAxis: {x: 0.5, y: 1, z: 0.5}
+  AngleStepForAxis: {x: 90, y: 1, z: 90}
+  RandomizeScale: 0
+  RandScaleAxis: {x: 1, y: 1, z: 1}
+  RayCheckLayer:
+    serializedVersion: 2
+    m_Bits: 1
+  RayCheckDirection: {x: 0, y: -1, z: 0}
+  RaycastAlignment: 0
+  AlignOffset: 0
+  PlacementMode: 0
+  RaycastWorldSpace: 1
+  OverlapCheckScale: 0.89
+  OverlapCheckMask:
+    serializedVersion: 2
+    m_Bits: 1
+  RayDistanceMul: 1.5
+  ReferenceBounds:
+    m_Center: {x: 0, y: 0.8731451, z: -0.0255}
+    m_Extent: {x: 0.35, y: 0.8731451, z: 0.37549996}
+  Prefabs:
+  - Prefab: {fileID: 3505362477745029625, guid: e1aa8cc3f9d542443acc9696d6a05be5,
+      type: 3}
+    subID: 0
+    _refMesh: {fileID: 0}
+    _refCol: {fileID: 0}
+    Propability: 1
+    ReferenceBoundsFull:
+      m_Center: {x: 0, y: 0.8731451, z: -0.0255}
+      m_Extent: {x: 0.35, y: 0.8731451, z: 0.37549996}
+    ReferenceBounds:
+      m_Center: {x: 0, y: 0.8731451, z: -0.025499985}
+      m_Extent: {x: 0.35, y: 0.8731451, z: 0.37549996}
+    FlatBounds: 0
+  StampRestriction: 1
+  RestrictionSets:
+  - {fileID: 11400000}
+  PlacementLimitCount: 0
+  MaxSlopeAngle: 45
+  MinimumStandSpace: 0.3
+  AllowJustOnTags: []
+  DisallowOnTags: []
+  IgnoreCheckOnTags:
+  - Respawn

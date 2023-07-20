@@ -1,0 +1,204 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 671fd9c659a53a04eb310656f11c9125, type: 3}
+  m_Name: DungInteriorV2
+  m_EditorClassIdentifier: 
+  TemporaryContainer: {fileID: 0}
+  Enabled: 1
+  ModTag: 
+  DrawMeshAndBox: 0
+  Combine: 0
+  RunEmittersIfContains: 0
+  DrawSetupFor: 0
+  OStamp: {fileID: 0}
+  DrawObjectStamps: 1
+  OMultiStamp: {fileID: 0}
+  PrefabsList:
+  - Prefab: {fileID: 3037918682498669330, guid: 5a7d34d836a4e6a4f8dd2103922a5ec6,
+      type: 3}
+    MainCollider: {fileID: 2574858535005395712, guid: 5a7d34d836a4e6a4f8dd2103922a5ec6,
+      type: 3}
+    subID: 0
+    _refMesh: {fileID: -5495902117074765545, guid: 64fcd2652b495ca44945c63b46553d57,
+      type: 3}
+    _refCol: {fileID: 2574858535005395712, guid: 5a7d34d836a4e6a4f8dd2103922a5ec6,
+      type: 3}
+  - Prefab: {fileID: 175857586131865953, guid: 6bed8a5fc064dde46a8693d3812e6e61, type: 3}
+    MainCollider: {fileID: 863308481414305546, guid: 6bed8a5fc064dde46a8693d3812e6e61,
+      type: 3}
+    subID: 0
+    _refMesh: {fileID: -5495902117074765545, guid: 6c8146e3c8e6a5e4b9e35cb85452d0be,
+      type: 3}
+    _refCol: {fileID: 863308481414305546, guid: 6bed8a5fc064dde46a8693d3812e6e61,
+      type: 3}
+  - Prefab: {fileID: 7123659065733116465, guid: a30a8889776c8344bbea8057782621e8,
+      type: 3}
+    MainCollider: {fileID: 0}
+    subID: 0
+    _refMesh: {fileID: -5495902117074765545, guid: 935dbe748c543774a828530f338c335c,
+      type: 3}
+    _refCol: {fileID: 0}
+  - Prefab: {fileID: 7450407853225743347, guid: b59bb2377f482be4990e9cae4f86ec23,
+      type: 3}
+    MainCollider: {fileID: 0}
+    subID: 0
+    _refMesh: {fileID: -387298209978578080, guid: 51ee6a20cbe07dc409e49bf131f82937,
+      type: 3}
+    _refCol: {fileID: 0}
+  DrawMultiObjectStamps: 1
+  Spawners:
+  - Enabled: 1
+    Name: Wall-Base
+    SpawnerTag: Wall
+    StampPrefabID: 0
+    Parent: {fileID: 11400000}
+    Rules:
+    - {fileID: 9034513453344007269, guid: dcf66c3dfe0aef34e9f9693572dda7fd, type: 2}
+    - {fileID: 7787048315036503549, guid: dcf66c3dfe0aef34e9f9693572dda7fd, type: 2}
+    Mode: 3
+    CellCheckMode: 0
+    _Editor_SpawnerAdvancedOptionsFoldout: 0
+    OnScalledGrid: 1
+    Repeat: 1
+    DontInheritRotations: 0
+    SwitchSpawnedToStatic: 0
+    MultipleToSpawn: 0
+    UseGlobalRules: 0
+    UseParentPackageRules: 0
+    _wasEnablingGlobalRules: 0
+    ScaleAccess: 1
+    DisplayPreviewGUI: 1
+    IsSubSpawner: 0
+    _EditorDisplaySpawnerHeader: 0
+  - Enabled: 1
+    Name: Floor-Base
+    SpawnerTag: Floor
+    StampPrefabID: 1
+    Parent: {fileID: 11400000}
+    Rules: []
+    Mode: 3
+    CellCheckMode: 0
+    _Editor_SpawnerAdvancedOptionsFoldout: 0
+    OnScalledGrid: 1
+    Repeat: 1
+    DontInheritRotations: 0
+    SwitchSpawnedToStatic: 0
+    MultipleToSpawn: 0
+    UseGlobalRules: 0
+    UseParentPackageRules: 0
+    _wasEnablingGlobalRules: 0
+    ScaleAccess: 1
+    DisplayPreviewGUI: 1
+    IsSubSpawner: 0
+    _EditorDisplaySpawnerHeader: 0
+  - Enabled: 1
+    Name: EdgeIn
+    SpawnerTag: Supp,Edge
+    StampPrefabID: 2
+    Parent: {fileID: 11400000}
+    Rules:
+    - {fileID: -727073997672980482, guid: dcf66c3dfe0aef34e9f9693572dda7fd, type: 2}
+    Mode: 3
+    CellCheckMode: 0
+    _Editor_SpawnerAdvancedOptionsFoldout: 0
+    OnScalledGrid: 1
+    Repeat: 1
+    DontInheritRotations: 0
+    SwitchSpawnedToStatic: 0
+    MultipleToSpawn: 0
+    UseGlobalRules: 0
+    UseParentPackageRules: 0
+    _wasEnablingGlobalRules: 0
+    ScaleAccess: 1
+    DisplayPreviewGUI: 1
+    IsSubSpawner: 0
+    _EditorDisplaySpawnerHeader: 0
+  - Enabled: 1
+    Name: EdgeOut
+    SpawnerTag: Supp,Edge
+    StampPrefabID: 2
+    Parent: {fileID: 11400000}
+    Rules:
+    - {fileID: 8229219657958307742, guid: dcf66c3dfe0aef34e9f9693572dda7fd, type: 2}
+    Mode: 3
+    CellCheckMode: 0
+    _Editor_SpawnerAdvancedOptionsFoldout: 0
+    OnScalledGrid: 1
+    Repeat: 1
+    DontInheritRotations: 0
+    SwitchSpawnedToStatic: 0
+    MultipleToSpawn: 0
+    UseGlobalRules: 0
+    UseParentPackageRules: 0
+    _wasEnablingGlobalRules: 0
+    ScaleAccess: 1
+    DisplayPreviewGUI: 1
+    IsSubSpawner: 0
+    _EditorDisplaySpawnerHeader: 0
+  - Enabled: 1
+    Name: WallColumn
+    SpawnerTag: Supp
+    StampPrefabID: 2
+    Parent: {fileID: 11400000}
+    Rules:
+    - {fileID: 5918371274908046177, guid: dcf66c3dfe0aef34e9f9693572dda7fd, type: 2}
+    - {fileID: 7007840795287822201, guid: dcf66c3dfe0aef34e9f9693572dda7fd, type: 2}
+    - {fileID: -3444955318312593166, guid: dcf66c3dfe0aef34e9f9693572dda7fd, type: 2}
+    Mode: 3
+    CellCheckMode: 0
+    _Editor_SpawnerAdvancedOptionsFoldout: 0
+    OnScalledGrid: 1
+    Repeat: 1
+    DontInheritRotations: 0
+    SwitchSpawnedToStatic: 0
+    MultipleToSpawn: 0
+    UseGlobalRules: 0
+    UseParentPackageRules: 0
+    _wasEnablingGlobalRules: 0
+    ScaleAccess: 1
+    DisplayPreviewGUI: 1
+    IsSubSpawner: 0
+    _EditorDisplaySpawnerHeader: 0
+  - Enabled: 1
+    Name: PR_DungeonTorch
+    SpawnerTag: Light
+    StampPrefabID: 3
+    Parent: {fileID: 11400000}
+    Rules:
+    - {fileID: -393799048427610682, guid: dcf66c3dfe0aef34e9f9693572dda7fd, type: 2}
+    - {fileID: 6099307473148066261, guid: dcf66c3dfe0aef34e9f9693572dda7fd, type: 2}
+    Mode: 3
+    CellCheckMode: 0
+    _Editor_SpawnerAdvancedOptionsFoldout: 0
+    OnScalledGrid: 1
+    Repeat: 1
+    DontInheritRotations: 0
+    SwitchSpawnedToStatic: 0
+    MultipleToSpawn: 0
+    UseGlobalRules: 0
+    UseParentPackageRules: 0
+    _wasEnablingGlobalRules: 0
+    ScaleAccess: 1
+    DisplayPreviewGUI: 1
+    IsSubSpawner: 0
+    _EditorDisplaySpawnerHeader: 0
+  SubSpawners: []
+  VariantOf: {fileID: 9063430128532023327, guid: dcf66c3dfe0aef34e9f9693572dda7fd,
+    type: 2}
+  _editor_drawStamp: 1
+  _editor_drawSpawners: 1
+  _editor_drawGlobalRules: 0
+  _editor_drawModPackRules: 0
+  _editor_shareSelected: 0
+  ParentPreset: {fileID: 11400000, guid: eb40dc6b8bf88c247bbc6e6fe956d3c6, type: 2}
+  ParentPack: {fileID: 8071460775553708166, guid: dcf66c3dfe0aef34e9f9693572dda7fd,
+    type: 2}

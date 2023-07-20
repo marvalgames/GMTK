@@ -1,0 +1,180 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &9045787812185611542
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 9045787812185611540}
+  - component: {fileID: 9045787812185611543}
+  m_Layer: 0
+  m_Name: PR_SmallPipeGenerator
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &9045787812185611540
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9045787812185611542}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &9045787812185611543
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9045787812185611542}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fc7a8529cf8c99e47908a7a51433f21d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _EditorCategory: 2
+  generated: []
+  projectPreset: {fileID: 0}
+  componentPreset:
+    Segments:
+    - Enabled: 1
+      Prefab: {fileID: 8692517037550543987, guid: c68be41abc1ea14488d3eb2377f0b43e,
+        type: 3}
+      UseCost: 0
+      AllowRotationYAxisCheckPer: 90
+      AllowRotationZAxisCheckPer: 90
+      CanBeUsedSinceIteration: 0
+      JoinPoints:
+      - origin: {x: 0, y: 0.5, z: 0}
+        outAxis: {x: 0, y: 1, z: 0}
+      - origin: {x: 0, y: -0.5, z: 0}
+        outAxis: {x: 0, y: -1, z: 0}
+      ReferenceScale: 1.0240875
+      PreviewMesh: {fileID: -7923218325341418169, guid: dfbba802f90e13840b2c291c563a430b,
+        type: 3}
+    - Enabled: 1
+      Prefab: {fileID: 2874513888329101453, guid: cc5244369e653fd4781d9b361d407f47,
+        type: 3}
+      UseCost: 0.165
+      AllowRotationYAxisCheckPer: 90
+      AllowRotationZAxisCheckPer: 90
+      CanBeUsedSinceIteration: 0
+      JoinPoints:
+      - origin: {x: 0, y: -0.3, z: 0}
+        outAxis: {x: 0, y: -1, z: 0}
+      - origin: {x: -0.26698494, y: -0.03499995, z: 0.000000003933953}
+        outAxis: {x: -1, y: 0, z: 0}
+      ReferenceScale: 0.5174341
+      PreviewMesh: {fileID: 1517366946732455227, guid: 78ac489c8b224ca4f9f7b159965a4288,
+        type: 3}
+    - Enabled: 1
+      Prefab: {fileID: 6376912429366416362, guid: 16118d56ee007d8419b3292a71ba1924,
+        type: 3}
+      UseCost: 0.1
+      AllowRotationYAxisCheckPer: 90
+      AllowRotationZAxisCheckPer: 45
+      CanBeUsedSinceIteration: 1
+      JoinPoints:
+      - origin: {x: 0, y: -0.2, z: 0}
+        outAxis: {x: 0, y: -1, z: 0}
+      - origin: {x: -0.2, y: 0.265, z: 0}
+        outAxis: {x: -1, y: 1, z: 0}
+      ReferenceScale: 0.64090806
+      PreviewMesh: {fileID: 8454387301294396932, guid: 8fb64707a7b4f1c4aa12e0304ff3918b,
+        type: 3}
+    AllowUseUnendedOnStartAlign: 0
+    OptionalUnended:
+      Enabled: 1
+      Prefab: {fileID: 0}
+      UseCost: 0
+      AllowRotationYAxisCheckPer: 90
+      AllowRotationZAxisCheckPer: 90
+      CanBeUsedSinceIteration: 0
+      JoinPoints:
+      - origin: {x: 0, y: 0, z: 0}
+        outAxis: {x: 0, y: 0, z: 1}
+      ReferenceScale: 0.25
+      PreviewMesh: {fileID: 0}
+    AlignOnHitNormal: 1
+    OptionalEndCap:
+      Enabled: 1
+      Prefab: {fileID: 1318463451155897207, guid: 47917d2890058d34aa91747bc9ba9ce8,
+        type: 3}
+      UseCost: 0
+      AllowRotationYAxisCheckPer: 90
+      AllowRotationZAxisCheckPer: 90
+      CanBeUsedSinceIteration: 0
+      JoinPoints:
+      - origin: {x: 0, y: -0.05, z: 0}
+        outAxis: {x: 0, y: -1, z: 0}
+      - origin: {x: 0, y: 0.05, z: 0}
+        outAxis: {x: 0, y: 1, z: 0}
+      ReferenceScale: 0.3222646
+      PreviewMesh: {fileID: -7155247169022822335, guid: 1924cf75ddc345941b2e3a4a55d6fa65,
+        type: 3}
+    _editorSelected: 1
+  GenerateOnStart: 1
+  DesiredEnding: {fileID: 0}
+  MaxDistanceToEnding: 1.55
+  MaxTries: 128
+  AlignFinish: 1
+  AlignFinishOptionalsOn:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  DontGenerateIfNotEnded: 1
+  FirstSegmentsWithoutCollision: 1
+  AlignScaleForFinishingSegments: 1
+  AlignStartOn:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  AlignStartMaxDistance: 2
+  AlignStartDirections:
+  - {x: 1, y: 0, z: 0}
+  - {x: -1, y: -0, z: -0}
+  - {x: 0, y: 1, z: 0}
+  - {x: 0, y: -1, z: 0}
+  - {x: 0, y: 0, z: -1}
+  - {x: 0, y: 0, z: 1}
+  ObstaclesMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  BoxcastScale: 0.35
+  SelfCollisionScale: 0.827
+  HoldMask:
+    serializedVersion: 2
+    m_Bits: 1
+  HoldDirections:
+  - {x: 1, y: 0, z: 0}
+  - {x: -1, y: -0, z: -0}
+  - {x: 0, y: 1, z: 0}
+  - {x: -0, y: 0, z: 1}
+  - {x: 0, y: 0, z: -1}
+  MinimalDistanceToHoldMask: 4
+  RFindSeed: 0
+  RFindMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  RFindDirections:
+  - {x: 1, y: 0, z: 0}
+  - {x: -1, y: -0, z: -0}
+  - {x: 0, y: 1, z: 0}
+  - {x: -0, y: 1, z: -0}
+  - {x: 0, y: 0, z: 1}
+  - {x: -0, y: -0, z: -1}
+  WorldSpaceRFindDirs: 1
+  RFindMinimumDistance: 3
+  RFindMaxDistance: 25
+  FlattendRFindNormal: 1
+  RFindTries: 16
+  RFindSteps: 18
