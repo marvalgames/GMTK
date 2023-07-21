@@ -43,9 +43,9 @@ public partial struct AmmoSystem : ISystem
                 var trigger = SystemAPI.GetComponent<TriggerComponent>(entity);
                 var shooter = trigger.ParentEntity;
                 var isPlayer = SystemAPI.HasComponent<PlayerComponent>(shooter);
-                bool hasScore = SystemAPI.HasComponent<ScoreComponent>(shooter);
-                //Debug.Log("IS PLAYER " + isPlayer);
-                if (hasScore && isPlayer)
+                var hasScore = SystemAPI.HasComponent<ScoreComponent>(shooter);
+                
+                if (hasScore && isPlayer)//always false for GMTK
                 {
                     var score = scoreGroup[shooter];
                     score.zeroPoints = false;
@@ -60,13 +60,13 @@ public partial struct AmmoSystem : ISystem
                 }
                 ecb.DestroyEntity(entity);
             }
-            else
+            else // enemy
             {
                 if (ammo.ValueRW.DamageCausedPreviously) ammo.ValueRW.frameSkipCounter = ammo.ValueRW.frameSkipCounter + 1;
                 var trigger = SystemAPI.GetComponent<TriggerComponent>(entity);
                 var shooter = trigger.ParentEntity;
-            
-                if (SystemAPI.HasComponent<ScoreComponent>(shooter))
+                var hasScore = SystemAPI.HasComponent<ScoreComponent>(shooter);
+                if (hasScore)
                 {
                     var score = scoreGroup[shooter];
                     if (score.pointsScored && score.scoringAmmoEntity == entity)

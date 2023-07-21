@@ -38,8 +38,6 @@ namespace Enemy
 
                 player.IsFiring = 0;
                 EntityManager.SetComponentData(e, player);
-
-
             }
 
 
@@ -116,7 +114,8 @@ namespace Enemy
                                             weaponRaised = WeaponMotion.Raised;
                                         }
                                         weaponComponent.IsFiring = 1;
-                                        weaponComponent.Duration = 0;
+                                        //weaponComponent.Duration = 0;
+                                        
                                         //need new state for when shooting then animation movement adjust to this
                                         //enemyMove.FaceWaypoint();
                                     }
