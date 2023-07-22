@@ -8,15 +8,22 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: MAT_DungeonBossRoomWall
-  m_Shader: {fileID: 4800000, guid: 933532a4fcc9baf4fa0491de14d08ed7, type: 3}
+  m_Shader: {fileID: 4800000, guid: da8cbf846d45f7545928653e272925c0, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
-  m_ValidKeywords: []
-  m_InvalidKeywords: []
+  m_ValidKeywords:
+  - _NORMALINDEPTHNORMALPASS
+  - _RECEIVEDECALS
+  - _RIMLIGHTING
+  - _SSAO_ENABLED
+  - _TEXMODE_ONE
+  m_InvalidKeywords:
+  - _ENERGYCONSERVATION_ON
+  - _RAMP_OFF
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
-  m_CustomRenderQueue: -1
+  m_CustomRenderQueue: 2000
   stringTagMap:
     RenderType: Opaque
   disabledShaderPasses: []
@@ -25,6 +32,14 @@ Material:
     serializedVersion: 3
     m_TexEnvs:
     - _BaseMap:
+        m_Texture: {fileID: 2800000, guid: a94f169d24c96c3469e00f4aad67d841, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _BentNormalMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _BestFittingNormal:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
@@ -49,6 +64,10 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _GradientMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _HeightMap:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
@@ -94,6 +113,7 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
+    - _AOfromGI: 0
     - _AddLightFallOff: 1
     - _AlphaClip: 0
     - _AlphaFromMaskMap: 1
@@ -102,10 +122,15 @@ Material:
     - _Anisotropy: 0
     - _ApplyNormal: 0
     - _ApplyNormalDepthNormal: 1
+    - _BestFittingNormalEnabled: 0
     - _Blend: 0
     - _BlendModePreserveSpecular: 1
     - _Border: 10
     - _BumpScale: 1
+    - _CameraFadeDist: 1
+    - _CameraFadeShadows: 0
+    - _CameraFadingEnabled: 0
+    - _CameraShadowFadeDist: 1
     - _ClearCoatMask: 0
     - _ClearCoatSmoothness: 0
     - _ColorMask: 15
@@ -123,15 +148,37 @@ Material:
     - _DiffuseStep: 0
     - _DstBlend: 0
     - _DstBlendAlpha: 0
+    - _Dummy: 0
+    - _Emission: 0
+    - _EnableBentNormal: 0
     - _EnableMaskMap: 0
+    - _EnableMetalSpec: 0
+    - _EnableNormal: 0
+    - _EnableOcclusion: 0
+    - _EnableParallax: 0
+    - _EnableParallaxShadows: 0
     - _EnableToonRim: 0
     - _EnergyConservation: 1
     - _EnvironmentReflections: 1
+    - _FoldAdvanced: 0
+    - _FoldAdvancedSurfaceInputs: 1
+    - _FoldRimLightingInputs: 0
+    - _FoldStencilOptions: 0
+    - _FoldSurfaceDetailInputs: 1
+    - _FoldSurfaceInputs: 1
+    - _FoldSurfaceOptions: 0
+    - _GItoAO: 10
+    - _GItoAOBias: 0
+    - _GeometricSpecularAA: 0
     - _GlossMapScale: 1
     - _Glossiness: 0.046
     - _GlossyReflections: 1
     - _Help: 0
+    - _HelpA: 0
+    - _HelpX: 0
+    - _HorizonOcclusion: 0.5
     - _LightColorContribution: 1
+    - _LuxBlend: 0
     - _LuxSurface: 0
     - _Metallic: 0
     - _Mode: 0
@@ -144,11 +191,13 @@ Material:
     - _ReceiveDecals: 1
     - _ReceiveSSAO: 1
     - _ReceiveShadows: 1
-    - _Rim: 0
+    - _Rim: 1
     - _RimFrequency: 0
     - _RimMinPower: 1
     - _RimPerPositionFrequency: 1
     - _RimPower: 2
+    - _SAAThreshold: 0.2
+    - _ScreenSpaceVariance: 0.1
     - _ShadoBiasDirectional: 0
     - _ShadowBiasAdditional: 0
     - _ShadowFallOff: 0.75
@@ -167,10 +216,10 @@ Material:
     - _StencilZFail: 0
     - _Steps: 1
     - _Surface: 0
-    - _TexMode: 0
+    - _TexMode: 1
     - _ToonRimAttenuation: 0
     - _ToonRimFallOff: 0
-    - _ToonRimPower: 0
+    - _ToonRimPower: 1
     - _UVSec: 0
     - _WorkflowMode: 1
     - _WriteMask: 255
@@ -178,11 +227,11 @@ Material:
     - _ZTestOutline: 4
     - _ZWrite: 1
     m_Colors:
-    - _BaseColor: {r: 0.1254902, g: 0.4156863, b: 0.45098042, a: 1}
-    - _Color: {r: 0.12549016, g: 0.41568628, b: 0.45098042, a: 1}
+    - _BaseColor: {r: 0.080672264, g: 0.36302525, b: 0.4, a: 1}
+    - _Color: {r: 0.08067224, g: 0.36302522, b: 0.39999998, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
     - _OutlineColor: {r: 0, g: 0, b: 0, a: 1}
-    - _RimColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
+    - _RimColor: {r: 0.62352943, g: 0.43137255, b: 0.45882353, a: 1}
     - _ShadedBaseColor: {r: 0, g: 0, b: 0, a: 1}
     - _ShadedDecalColor: {r: 1, g: 1, b: 1, a: 1}
     - _SpecColor: {r: 0.19999996, g: 0.19999996, b: 0.19999996, a: 1}

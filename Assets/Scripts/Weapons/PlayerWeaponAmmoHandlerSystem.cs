@@ -19,7 +19,6 @@ public partial class PlayerWeaponAmmoHandlerSystem : SystemBase
 
     protected override void OnUpdate()
     {
-        
         if (LevelManager.instance == null) return;
         if (LevelManager.instance.endGame == true) return;
 
@@ -39,62 +38,69 @@ public partial class PlayerWeaponAmmoHandlerSystem : SystemBase
                 if (!SystemAPI.HasComponent<WeaponComponent>(entity) ||
                     SystemAPI.HasComponent<EnemyComponent>(entity)) return;
                 var gun = SystemAPI.GetComponent<WeaponComponent>(entity);
-
-
-                // if (attachWeapon.attachedWeaponSlot < 0 ||
-                //     attachWeapon.attachWeaponType != (int)WeaponType.Gun &&
-                //     attachWeapon.attachSecondaryWeaponType != (int)WeaponType.Gun
-                //     || !actorWeaponAimComponent.aimMode
-                //    )
-                // {
-                //     gun.Duration = 0;
-                //     gun.IsFiring = 0;
-                //     return;
-                // }
+                if (!gun.roleReversal)
+                {
+                    if (attachWeapon.attachedWeaponSlot < 0 ||
+                        attachWeapon.attachWeaponType != (int)WeaponType.Gun &&
+                        attachWeapon.attachSecondaryWeaponType != (int)WeaponType.Gun
+                        || !actorWeaponAimComponent.aimMode
+                       )
+                    {
+                        gun.Duration = 0;
+                        gun.IsFiring = 0;
+                        return;
+                    }
+                }
 
                 if (dead.isDead) return;
                 var primaryAmmoEntity = gun.PrimaryAmmo;
                 var ammoDataComponent = SystemAPI.GetComponent<AmmoDataComponent>(primaryAmmoEntity);
                 var rate = ammoDataComponent.GameRate;
-                // var strength = ammoDataComponent.GameStrength;
-                // //change based on game
-                // if (gun.ChangeAmmoStats > 0)
-                // {
-                //     strength = strength * (100 - gun.ChangeAmmoStats * 2) / 100;
-                //     if (strength <= 0) strength = 0;
-                // }
+                var strength = ammoDataComponent.GameStrength;
+                if (!gun.roleReversal)
+                {
+                    //change based on game
+                    if (gun.ChangeAmmoStats > 0)
+                    {
+                        strength = strength * (100 - gun.ChangeAmmoStats * 2) / 100;
+                        if (strength <= 0) strength = 0;
+                    }
+                }
 
 
                 if (gun is { IsFiring: 1, Duration: 0 })
                 {
                     gun.Duration += dt;
 
+                    if (!gun.roleReversal)
+                    {
+                        var e = commandBuffer.Instantiate(entityInQueryIndex, gun.PrimaryAmmo);
+                        var weaponPosition = gun.AmmoStartLocalToWorld.Position; //use bone mb transform
+                        var weaponRotation = gun.AmmoStartLocalToWorld.Rotation;
+                        var velocity = new PhysicsVelocity();
 
-                    // var e = commandBuffer.Instantiate(entityInQueryIndex, gun.PrimaryAmmo);
-                    // var weaponPosition = gun.AmmoStartLocalToWorld.Position; //use bone mb transform
-                    // var weaponRotation = gun.AmmoStartLocalToWorld.Rotation;
-                    // var velocity = new PhysicsVelocity();
-                    //
-                    // if (actorWeaponAimComponent.weaponCamera == CameraTypes.TopDown)
-                    // {
-                    //     velocity.Linear = actorWeaponAimComponent.aimDirection * strength;
-                    //     velocity.Angular = math.float3(0, 0, 0);
-                    // }
-                    // else
-                    // {
-                    //     velocity.Linear = actorWeaponAimComponent.aimDirection * strength;
-                    //     velocity.Angular = math.float3(0, 0, 0);
-                    // }
+                        if (actorWeaponAimComponent.weaponCamera == CameraTypes.TopDown)
+                        {
+                            velocity.Linear = actorWeaponAimComponent.aimDirection * strength;
+                            velocity.Angular = math.float3(0, 0, 0);
+                        }
+                        else
+                        {
+                            velocity.Linear = actorWeaponAimComponent.aimDirection * strength;
+                            velocity.Angular = math.float3(0, 0, 0);
+                        }
+
+                        ammoDataComponent.Shooter = entity;
+                        commandBuffer.SetComponent(entityInQueryIndex, e, ammoDataComponent);
+                        commandBuffer.SetComponent(entityInQueryIndex, e, new TriggerComponent
+                            { Type = (int)TriggerType.Ammo, ParentEntity = entity, Entity = e, Active = true });
+                        var localTransform = LocalTransform.FromPositionRotation(weaponPosition, weaponRotation);
+                        commandBuffer.SetComponent(entityInQueryIndex, e, localTransform);
+                        commandBuffer.SetComponent(entityInQueryIndex, e, velocity);
+                    }
 
                     bulletManagerComponent.playSound = true;
                     bulletManagerComponent.setAnimationLayer = true;
-                    // ammoDataComponent.Shooter = entity;
-                    // commandBuffer.SetComponent(entityInQueryIndex, e, ammoDataComponent);
-                    // commandBuffer.SetComponent(entityInQueryIndex, e, new TriggerComponent
-                    //     { Type = (int)TriggerType.Ammo, ParentEntity = entity, Entity = e, Active = true });
-                    // var localTransform = LocalTransform.FromPositionRotation(weaponPosition, weaponRotation);
-                    //commandBuffer.SetComponent(entityInQueryIndex, e, localTransform);
-                    //commandBuffer.SetComponent(entityInQueryIndex, e, velocity);
                 }
                 else if (gun is { IsFiring: 1, Duration: > 0 })
                 {

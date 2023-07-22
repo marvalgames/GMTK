@@ -21,16 +21,22 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: Dither
-  m_Shader: {fileID: 4800000, guid: 8d2bb70cbf9db8d4da26e15b26e74248, type: 3}
+  m_Shader: {fileID: 4800000, guid: 589366c8d179a91428574ab8bc5cf021, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords:
+  - _NORMALINDEPTHNORMALPASS
+  - _RECEIVEDECALS
+  - _SSAO_ENABLED
+  m_InvalidKeywords:
   - _EMISSION
-  m_InvalidKeywords: []
+  - _ENERGYCONSERVATION_ON
+  - _RAMP_OFF
+  - _TEXMODE_OFF
   m_LightmapFlags: 0
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
-  m_CustomRenderQueue: -1
+  m_CustomRenderQueue: 2000
   stringTagMap:
     RenderType: Opaque
   disabledShaderPasses: []
@@ -91,6 +97,10 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _GlossTexture:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _GradientMap:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
@@ -166,6 +176,10 @@ Material:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    - _ShadedBaseMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _ShadowColorTexture:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
@@ -209,10 +223,14 @@ Material:
     - Vector1_F9C37264: 1
     - Vector1_FFFD6FCD: 0.75
     - Vector1_c3d27e07a7d24a629d05ed7cea8a0f1f: 1
+    - _AddLightFallOff: 1
     - _AlphaBaseCutout: 1
     - _AlphaClip: 0
     - _AlphaCutoff: 0.5
+    - _AlphaFromMaskMap: 1
     - _AlphaToMask: 0
+    - _Anisotropic: 0
+    - _Anisotropy: 0
     - _ApplyNormal: 0
     - _ApplyNormalDepthNormal: 1
     - _BleModDest: 0
@@ -220,13 +238,20 @@ Material:
     - _Blend: 0
     - _BlendModePreserveSpecular: 1
     - _BlendOp: 0
+    - _Border: 10
     - _BumpRefraction: 0.1
     - _BumpScale: 1
     - _ClearCoatMask: 0
     - _ClearCoatSmoothness: 0
+    - _ColorMask: 15
+    - _ColorizedShadowsAdd: 0
+    - _ColorizedShadowsMain: 0
     - _Compa: 4
+    - _CompensateScale: 0
     - _ComputeMeshIndex: 0
+    - _Coverage: 0
     - _Cull: 2
+    - _CullOutline: 1
     - _Culling: 2
     - _CustomLightDirectionFollowObjectRotation: 0
     - _CustomLightDirectionIntensity: 0
@@ -235,6 +260,8 @@ Material:
     - _DepthThreshold: 900
     - _DetailAlbedoMapScale: 1
     - _DetailNormalMapScale: 1
+    - _DiffuseFallOff: 0.01
+    - _DiffuseStep: 0
     - _DirectionalLightIntensity: 0
     - _DoubleSidedOutline: 1
     - _DstBlend: 0
@@ -244,6 +271,8 @@ Material:
     - _EnableGeoRefr: 1
     - _EnableMaskMap: 0
     - _EnableScreenEdgeFade: 0
+    - _EnableToonRim: 0
+    - _EnergyConservation: 1
     - _EnvironmentReflections: 1
     - _EnvironmentalLightingIntensity: 1
     - _ExcludeForeground: 0
@@ -273,9 +302,11 @@ Material:
     - _LightAffectOutlineColor: 0
     - _LightAffectRimLightColor: 0
     - _LightAffectShadow: 0
+    - _LightColorContribution: 1
     - _LightFalloffAffectShadowT: 0
     - _LightFalloffSoftness: 1
     - _LightIntensity: 1
+    - _LuxSurface: 0
     - _MCIALO: 0
     - _MCapIntensity: 1
     - _METALLIC: 0
@@ -324,6 +355,7 @@ Material:
     - _Opacity: 1
     - _Oper: 0
     - _OutlineExtrudeMethod: 0
+    - _OutlineInScreenSpace: 0
     - _OutlineWidth: 0.5
     - _OutlineWidthAffectedByViewDistance: 0
     - _OutlineZPostionInCamera: 0
@@ -336,6 +368,7 @@ Material:
     - _QueueOffset: 0
     - _RELG: 1
     - _RIMPOWER: 0
+    - _Ramp: 0
     - _ReadMask: 255
     - _ReceiveDecals: 1
     - _ReceiveSSAO: 1
@@ -371,8 +404,12 @@ Material:
     - _SelfShadowRealtimeShadowIntensity: 1
     - _SelfShadowShadowTAtViewDirection: 0
     - _SelfShadowThreshold: 0.93
+    - _ShadoBiasDirectional: 0
+    - _ShadowBiasAdditional: 0
     - _ShadowColorTexturePower: 0
+    - _ShadowFallOff: 0.75
     - _ShadowHardness: 0
+    - _ShadowOffset: 1
     - _ShadowTColorPower: 1
     - _ShadowTHardness: 1
     - _ShadowTIntensity: 1
@@ -391,7 +428,9 @@ Material:
     - _SmoothnessSource: 0
     - _SmoothnessTextureChannel: 0
     - _SpecSource: 0
+    - _SpecularFallOff: 0.01
     - _SpecularHighlights: 1
+    - _SpecularStep: 0.45
     - _SrcBlend: 1
     - _SrcBlendAlpha: 1
     - _Stencil: 0
@@ -399,11 +438,16 @@ Material:
     - _StencilFail: 0
     - _StencilOp: 0
     - _StencilZFail: 0
+    - _Steps: 1
     - _Strength: 2
     - _Surface: 0
     - _TEXMCOLINT: 1
     - _TRANSMODE: 0
+    - _TexMode: 0
     - _TexturePatternStyle: 0
+    - _ToonRimAttenuation: 0
+    - _ToonRimFallOff: 1
+    - _ToonRimPower: 0.5
     - _TransAffSha: 1
     - _TransparentThreshold: 0
     - _UseSecondaryCutout: 0
@@ -413,6 +457,8 @@ Material:
     - _VertexColorRedControlSmoothObjectNormal: 0
     - _WorkflowMode: 1
     - _WriteMask: 255
+    - _ZTest: 4
+    - _ZTestOutline: 4
     - _ZWrite: 1
     m_Colors:
     - Color_04e54799d2f0428d94b2151877fcae32: {r: 1, g: 1, b: 1, a: 0}
@@ -442,8 +488,12 @@ Material:
     - _SSAOColor: {r: 0, g: 0, b: 0, a: 0}
     - _SelfLitColor: {r: 1, g: 1, b: 1, a: 1}
     - _SelfShadowRealTimeShadowColor: {r: 1, g: 1, b: 1, a: 1}
+    - _ShadedBaseColor: {r: 0, g: 0, b: 0, a: 1}
+    - _ShadedDecalColor: {r: 0.5, g: 5.5000005, b: 0.5, a: 1}
     - _ShadowTColor: {r: 1, g: 1, b: 1, a: 1}
     - _SpecColor: {r: 0.5, g: 0.5, b: 0.5, a: 0.5}
+    - _SpecColor2nd: {r: 0.4, g: 0.4, b: 0.4, a: 1}
     - _SpecColorBase: {r: 0.19999996, g: 0.19999996, b: 0.19999996, a: 1}
+    - _ToonRimColor: {r: 1, g: 1, b: 1, a: 1}
     - _XYZPosition: {r: 0, g: 0, b: 0, a: 0}
   m_BuildTextureStacks: []

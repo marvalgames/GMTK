@@ -7,6 +7,7 @@ using UnityEngine;
 
 public struct WeaponComponent : IComponentData
 {
+    public bool roleReversal;
     public Entity PrimaryAmmo;
     public Entity SecondaryAmmo;
     public Entity Weapon;
@@ -46,6 +47,7 @@ public class AmmoManagerAuthoring : MonoBehaviour
     public bool aimMode;
     public CameraTypes weaponCamera;
     public float animTriggerWeight = .7f;
+    public bool roleReversal = true;
 
 
     [Header("Read Only Ammo Ratings from Prefab")]
@@ -112,7 +114,8 @@ public class AmmoManagerAuthoring : MonoBehaviour
                     gameDamage = authoring.Damage,
                     gameRate = authoring.Rate,
                     IsFiring = 0,
-                    animTriggerWeight = authoring.animTriggerWeight
+                    animTriggerWeight = authoring.animTriggerWeight,
+                    roleReversal = authoring.roleReversal
 
                 });
             

@@ -52,14 +52,19 @@ namespace Enemy
                         strength = strength * (100 - enemyWeapon.ChangeAmmoStats * 2) / 100;
                         if (strength <= 0) strength = 0;
                     }
-                    if (enemyWeapon is { IsFiring: 1, Duration: 0 } )
+
+                    //if (enemyWeapon is { IsFiring: 1, Duration: 0 } )
+                    if (enemyWeapon is { IsFiring: 1, Duration: 0 } &&
+                        animatorWeightsComponent.aimWeight > enemyWeapon.animTriggerWeight)
                     {
                         enemyWeapon.Duration += dt;
                         //enemyWeapon.IsFiring = 0;
                         //var bossLocalTransform = SystemAPI.GetComponent<LocalTransform>(entity);
                         var e = commandBuffer.Instantiate(enemyWeapon.PrimaryAmmo);
                         //var ammoPosition = enemyWeapon.AmmoStartTransform.Position; //use bone mb transform
-                        var ammoStartTransform = LocalTransform.FromPosition(enemyWeapon.AmmoStartTransform.Position);//use bone mb transform
+                        var ammoStartTransform =
+                            LocalTransform.FromPosition(enemyWeapon.AmmoStartTransform
+                                .Position); //use bone mb transform
                         var playerLocalTransform = SystemAPI.GetComponent<LocalTransform>(playerE).Position;
                         var ammoRotation = enemyWeapon.AmmoStartTransform.Rotation;
                         var velocity = new PhysicsVelocity();
@@ -71,7 +76,7 @@ namespace Enemy
                         var playerStartXZ = new float3(playerLocalTransform.x, playerLocalTransform.y,
                             playerLocalTransform.z);
                         var forward = math.forward(ammoRotation);
-                        if (math.distancesq(ammoStartXZ,  playerStartXZ) > 0)
+                        if (math.distancesq(ammoStartXZ, playerStartXZ) > 0)
                         {
                             var direction = math.normalize(playerStartXZ - ammoStartXZ);
                             var targetRotation = quaternion.LookRotationSafe(direction, math.up()); //always face player

@@ -14,15 +14,15 @@ namespace Enemy
     {
         private static readonly int Zone = Animator.StringToHash("Zone");
         private static readonly int JumpState = Animator.StringToHash("JumpState");
-        
+
         [DeallocateOnJobCompletion] private NativeArray<Entity> PlayerEntities;
 
         private EntityQuery playerQuery;
- 
+
         protected override void OnUpdate()
         {
             var transformGroup = SystemAPI.GetComponentLookup<LocalTransform>(false);
-           
+
             //var weaponComponentGroup = SystemAPI.GetComponentLookup<WeaponComponent>(false);
             playerQuery = GetEntityQuery(ComponentType.ReadOnly<PlayerComponent>());
             PlayerEntities = playerQuery.ToEntityArray(Allocator.TempJob);
@@ -56,7 +56,7 @@ namespace Enemy
                     {
                         if (SystemAPI.HasComponent<DeadComponent>(e) == false) return;
                         if (SystemAPI.GetComponent<DeadComponent>(e).isDead) return;
-                        if(matchupComponent.targetEntity == Entity.Null) return;
+                        if (matchupComponent.targetEntity == Entity.Null) return;
                         var animator = enemyMove.anim;
                         var defensiveRole = SystemAPI.GetComponent<DefensiveStrategyComponent>(e).currentRole;
                         var enemyMeleeMovementComponent = SystemAPI.GetComponent<EnemyMeleeMovementComponent>(e);
@@ -92,18 +92,24 @@ namespace Enemy
                                 meleeMovement = true;
                             }
 
-                            weaponMovement = true;
+                            //weaponMovement = true;
+                            var hasWeaponComponent = SystemAPI.HasComponent<WeaponComponent>(e);
 
-                            if (weaponMovement)
+
+                            //if (weaponMovement)
+                            //{
+                            if (hasWeaponComponent)
                             {
-                                if (SystemAPI.HasComponent<WeaponComponent>(e) && SystemAPI.HasComponent<ActorWeaponAimComponent>(e) )
+                                var weaponComponent = SystemAPI.GetComponent<WeaponComponent>(e);
+                                var roleReversal = weaponComponent.roleReversal;
+                                if (roleReversal) weaponMovement = true;
+
+                                if (SystemAPI.HasComponent<ActorWeaponAimComponent>(e))
                                 {
-                                    var weaponComponent = SystemAPI.GetComponent<WeaponComponent>(e);
                                     var actorWeaponAim = SystemAPI.GetComponent<ActorWeaponAimComponent>(e);
                                     //gun.IsFiring = 0;
-                                    //Debug.Log("PLAYER FIRING " + playerIsFiring);
-                                    //if (distFromOpponent < enemyWeaponMovementComponent.shootRangeDistance)
-                                    if (playerIsFiring)
+                                    if (playerIsFiring && roleReversal || distFromOpponent <
+                                        enemyWeaponMovementComponent.shootRangeDistance && weaponMovement && !roleReversal)
                                     {
                                         if (weaponComponent.IsFiring == 0)
                                         {
@@ -113,18 +119,18 @@ namespace Enemy
                                         {
                                             weaponRaised = WeaponMotion.Raised;
                                         }
+
                                         weaponComponent.IsFiring = 1;
                                         //weaponComponent.Duration = 0;
-                                        
                                         //need new state for when shooting then animation movement adjust to this
                                         //enemyMove.FaceWaypoint();
+                                        actorWeaponAim.weaponRaised = weaponRaised;
+                                        SystemAPI.SetComponent(e, actorWeaponAim);
+                                        SystemAPI.SetComponent(e, weaponComponent);
                                     }
-
-                                    actorWeaponAim.weaponRaised = weaponRaised;
-                                    SystemAPI.SetComponent(e, actorWeaponAim);
-                                    SystemAPI.SetComponent(e, weaponComponent);
                                 }
                             }
+                            //}
 
                             var backupZoneClose = enemyMeleeMovementComponent.combatStrikeDistanceZoneBegin;
                             var backupZoneFar = enemyMeleeMovementComponent.combatStrikeDistanceZoneEnd;
@@ -241,27 +247,27 @@ namespace Enemy
                                 float3 opponentTargetPosition = new float3();
                                 float3 targetPosition = new float3();
                                 var targetEntity = matchupComponent.targetEntity;
-                             
+
                                 matchupComponent.isWaypointTarget = false;
                                 //if (targetEntity != Entity.Null)
                                 //{
 
-                                    opponentTargetPosition = transformGroup[targetEntity].Position;
+                                opponentTargetPosition = transformGroup[targetEntity].Position;
 
 
-                                    wayPointTargetPosition =
-                                        enemyMove.wayPoints[enemyMove.currentWayPointIndex].targetPosition;
+                                wayPointTargetPosition =
+                                    enemyMove.wayPoints[enemyMove.currentWayPointIndex].targetPosition;
 
-                                    if (state == MoveStates.Patrol)
-                                    {
-                                        matchupComponent.isWaypointTarget = true;
-                                        targetPosition = wayPointTargetPosition;
-                                    }
-                                    else
-                                    {
-                                        matchupComponent.isWaypointTarget = false;
-                                        targetPosition = opponentTargetPosition;
-                                   // }
+                                if (state == MoveStates.Patrol)
+                                {
+                                    matchupComponent.isWaypointTarget = true;
+                                    targetPosition = wayPointTargetPosition;
+                                }
+                                else
+                                {
+                                    matchupComponent.isWaypointTarget = false;
+                                    targetPosition = opponentTargetPosition;
+                                    // }
 
                                     matchupComponent.aimTarget = transformGroup[targetEntity];
                                 }
@@ -274,7 +280,6 @@ namespace Enemy
                                 enemyMove.AnimationMovement(targetPosition);
                                 enemyMove.FaceWaypoint();
 
-                                
 
                                 //Debug.Log("DISTANCE " + Mathf.Round(distFromOpponent));
                             }
