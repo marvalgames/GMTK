@@ -212,7 +212,7 @@ namespace Sandbox.Player
         }
 
 
-        private void Crosshair()
+        private void Crosshair(bool roleReversal)
         {
             var actorWeaponAimComponent = _manager.GetComponentData<ActorWeaponAimComponent>(_entity);
             crosshairImage.enabled = true;
@@ -315,16 +315,18 @@ namespace Sandbox.Player
             lastMousePosition.z = 0;
 
             _manager.SetComponentData(_entity, actorWeaponAimComponent);
+
+            if (roleReversal) crosshairImage.enabled = false;
         }
 
         public void LateUpdateSystem(WeaponMotion weaponMotion)
         {
             if (_entity == Entity.Null) return;
             var hasComponent = _manager.HasComponent<ActorWeaponAimComponent>(_entity) &&
-                               _manager.HasComponent<ApplyImpulseComponent>(_entity);
+                               _manager.HasComponent<ApplyImpulseComponent>(_entity) && _manager.HasComponent<WeaponComponent>(_entity) ;
             if (hasComponent == false) return;
-
-            Crosshair();
+            var roleReverse = _manager.GetComponentData<WeaponComponent>(_entity).roleReversal;
+            Crosshair(roleReverse);
             aimWeight = _startAimWeight;
             clampWeight = _startClampWeight;
 

@@ -42,6 +42,8 @@ namespace Michsky.MUIP
                 StartCoroutine("DisableAnimator"); 
             }
 
+            else { return; }
+
             toggleAnimator.enabled = true;
 
             if (toggleObject.isOn) { toggleAnimator.Play("On Instant"); }
@@ -50,11 +52,13 @@ namespace Michsky.MUIP
 
         public void UpdateState(bool value)
         {
-            if (gameObject.activeInHierarchy == true) 
+            if (gameObject.activeInHierarchy == true)
             {
-                StopCoroutine("DisableAnimator"); 
+                StopCoroutine("DisableAnimator");
                 StartCoroutine("DisableAnimator");
             }
+
+            else { return; }
 
             toggleAnimator.enabled = true;
 

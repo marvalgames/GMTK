@@ -24,7 +24,6 @@ namespace Michsky.MUIP
         // Items
         public List<ContextItem> contexItems = new List<ContextItem>();
 
-        Animator contextAnimator;
         GameObject selectedItem;
         Image setItemImage;
         TextMeshProUGUI setItemText;
@@ -70,8 +69,6 @@ namespace Michsky.MUIP
 
                 catch { Debug.LogError("<b>[Context Menu]</b> Context Manager is missing.", this); return; }
             }
-
-            contextAnimator = contextManager.contextAnimator;
 
             foreach (Transform child in itemParent)
                 Destroy(child.gameObject);
@@ -119,7 +116,7 @@ namespace Michsky.MUIP
 
                             Button itemButton = go.GetComponent<Button>();
                             itemButton.onClick.AddListener(contexItems[i].onClick.Invoke);
-                            itemButton.onClick.AddListener(CloseOnClick);
+                            itemButton.onClick.AddListener(contextManager.Close);
                         }
                     }
 
@@ -150,14 +147,12 @@ namespace Michsky.MUIP
             }
 
             contextManager.SetContextMenuPosition();
-            contextAnimator.Play("Menu In");
-            contextManager.isOn = true;
-            contextManager.SetContextMenuPosition();
+            contextManager.Open();
         }
 
         public void OnPointerClick(PointerEventData eventData)
         {
-            if (contextManager.isOn == true) { contextAnimator.Play("Menu Out"); contextManager.isOn = false; }
+            if (contextManager.isOn == true) { contextManager.Close(); }
             else if (eventData.button == PointerEventData.InputButton.Right && contextManager.isOn == false) { ProcessContent(); }
         }
 
@@ -179,14 +174,6 @@ namespace Michsky.MUIP
                 ProcessContent();
             }
         }
-
-        public void Close()
-        {
-            contextAnimator.Play("Menu Out");
-            contextManager.isOn = false;
-        }
-
-        public void CloseOnClick() { Close(); }
 
         public void AddNewItem()
         {

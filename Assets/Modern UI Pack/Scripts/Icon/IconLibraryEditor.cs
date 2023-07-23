@@ -39,7 +39,7 @@ namespace Michsky.MUIP
 
             GUILayout.EndVertical();
 
-            this.Repaint();
+            if (Application.isPlaying == false) { this.Repaint(); }
             serializedObject.ApplyModifiedProperties();
         }
     }

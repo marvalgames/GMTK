@@ -74,7 +74,7 @@ namespace Michsky.MUIP
 
             childRotate.boolValue = MUIPEditorHandler.DrawToggle(childRotate.boolValue, customSkin, "Rotate Child");
 
-            this.Repaint();
+            if (Application.isPlaying == false) { this.Repaint(); }
             serializedObject.ApplyModifiedProperties();
         }
     }

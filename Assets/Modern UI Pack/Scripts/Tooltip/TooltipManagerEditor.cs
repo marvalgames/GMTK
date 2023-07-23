@@ -56,6 +56,8 @@ namespace Michsky.MUIP
             var preferredWidth = serializedObject.FindProperty("preferredWidth");
             var targetCamera = serializedObject.FindProperty("targetCamera");
             var cameraSource = serializedObject.FindProperty("cameraSource");
+            var transitionMode = serializedObject.FindProperty("transitionMode");
+            var checkDispose = serializedObject.FindProperty("checkDispose");
 
             switch (currentTab)
             {
@@ -96,9 +98,11 @@ namespace Michsky.MUIP
 
                 case 2:
                     MUIPEditorHandler.DrawHeader(customSkin, "Options Header", 6);
+                    checkDispose.boolValue = MUIPEditorHandler.DrawToggle(checkDispose.boolValue, customSkin, "Check Dispose/Null");
                     MUIPEditorHandler.DrawProperty(preferredWidth, customSkin, "Preferred Width");
                     MUIPEditorHandler.DrawProperty(tooltipSmoothness, customSkin, "Smoothness");
                     MUIPEditorHandler.DrawProperty(dampSpeed, customSkin, "Damp Speed");
+                    MUIPEditorHandler.DrawProperty(transitionMode, customSkin, "Transition Mode");
                     MUIPEditorHandler.DrawProperty(cameraSource, customSkin, "Camera Source");
 
                     if (tooltipTarget.cameraSource == TooltipManager.CameraSource.Custom)
@@ -129,7 +133,7 @@ namespace Michsky.MUIP
                     break;            
             }
 
-            this.Repaint();
+            if (Application.isPlaying == false) { this.Repaint(); }
             serializedObject.ApplyModifiedProperties();
         }
     }

@@ -30,6 +30,8 @@ public partial class LevelCompleteSystem : SystemBase
 
         var currentLevelCompleted = LevelManager.instance.currentLevelCompleted;
         var totalGameLevels = LevelManager.instance.totalLevels;
+        Debug.Log("LEVEL TOTAL " + totalGameLevels);
+        Debug.Log("LEVEL CURRENT " + currentLevelCompleted);
         if (currentLevelCompleted >= totalGameLevels)
             return; //all levels complete before even checking if level complete below than return since game over basically
         

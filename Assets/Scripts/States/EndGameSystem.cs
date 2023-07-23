@@ -13,6 +13,9 @@ public partial class BasicWinnerSystem : SystemBase
 
     protected override void OnUpdate()
     {
+        var currentLevelCompleted = LevelManager.instance.currentLevelCompleted;
+        var totalGameLevels = LevelManager.instance.totalLevels;
+        
         if (LevelManager.instance == null) return;
         var query = GetEntityQuery(ComponentType.ReadOnly<EnemyComponent>());
         var enemyEntities = query.ToEntityArray(Allocator.TempJob);
@@ -48,6 +51,7 @@ public partial class BasicWinnerSystem : SystemBase
         //winner = false;//REMEMBER
         enemyEntities.Dispose();
 
+        if (currentLevelCompleted >= totalGameLevels) winner = true;
         if (winner == false) return;
         Debug.Log("basic winner system");
         LevelManager.instance.endGame = true;
@@ -122,9 +126,6 @@ public partial class EndGameSystem : SystemBase
         if (LevelManager.instance.gameResult == GameResult.Winner || LevelManager.instance.gameResult == GameResult.Loser)
         {
             var win = (LevelManager.instance.gameResult == GameResult.Winner);
-
-
-
             var dep = Entities.WithAny<PlayerComponent, EnemyComponent>().ForEach
             ((in Entity e) =>
                 {

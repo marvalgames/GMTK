@@ -59,8 +59,11 @@ namespace Michsky.MUIP
                 UpdateUI();
             });
 
-            try { if (sliderAnimator == null) { sliderAnimator = gameObject.GetComponent<Animator>(); } }
-            catch { }
+            if (sliderAnimator == null && showPopupValue == true)
+            {
+                try { sliderAnimator = gameObject.GetComponent<Animator>(); }
+                catch { showPopupValue = false; }
+            }
 
             if (invokeOnAwake == true) { sliderEvent.Invoke(mainSlider.value); }
             UpdateUI();
@@ -101,13 +104,13 @@ namespace Michsky.MUIP
 
         public void OnPointerEnter(PointerEventData eventData)
         {
-            if (showPopupValue == true)
+            if (showPopupValue == true && sliderAnimator != null)
                 sliderAnimator.Play("Value In");
         }
 
         public void OnPointerExit(PointerEventData eventData)
         {
-            if (showPopupValue == true)
+            if (showPopupValue == true && sliderAnimator != null)
                 sliderAnimator.Play("Value Out");
         }
     }

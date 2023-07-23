@@ -37,6 +37,9 @@ namespace Michsky.MUIP
         public StartBehaviour startBehaviour = StartBehaviour.Disable;
         public CloseBehaviour closeBehaviour = CloseBehaviour.Disable;
 
+        // Helpers
+        float cachedStateLength;
+
         public enum StartBehaviour { None, Disable, Enable }
         public enum CloseBehaviour { None, Disable, Destroy }
 
@@ -52,6 +55,7 @@ namespace Michsky.MUIP
             if (startBehaviour == StartBehaviour.Disable) { isOn = false; gameObject.SetActive(false); }
             else if (startBehaviour == StartBehaviour.Enable) { isOn = false; OpenWindow(); }
 
+            cachedStateLength = MUIPInternalTools.GetAnimatorClipLength(mwAnimator, MUIPInternalTools.modalWindowStateName);
             UpdateUI();
         }
 
@@ -122,7 +126,7 @@ namespace Michsky.MUIP
 
         IEnumerator DisableObject()
         {
-            yield return new WaitForSeconds(1);
+            yield return new WaitForSecondsRealtime(cachedStateLength);
 
             if (closeBehaviour == CloseBehaviour.Disable) { gameObject.SetActive(false); }
             else if (closeBehaviour == CloseBehaviour.Destroy) { Destroy(gameObject); }

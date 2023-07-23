@@ -54,6 +54,7 @@ namespace Michsky.MUIP
             var enableTimer = serializedObject.FindProperty("enableTimer");
             var timer = serializedObject.FindProperty("timer");
             var useCustomContent = serializedObject.FindProperty("useCustomContent");
+            var closeOnClick = serializedObject.FindProperty("closeOnClick");
             var useStacking = serializedObject.FindProperty("useStacking");
             var closeBehaviour = serializedObject.FindProperty("closeBehaviour");
             var startBehaviour = serializedObject.FindProperty("startBehaviour");
@@ -116,7 +117,7 @@ namespace Michsky.MUIP
 
                     if (ntfTarget.GetComponent<CanvasGroup>().alpha == 0)
                     {
-                        if (GUILayout.Button("Make It Visible", customSkin.button))
+                        if (GUILayout.Button("Set Visible", customSkin.button))
                         {
                             ntfTarget.GetComponent<CanvasGroup>().alpha = 1;
                             EditorSceneManager.MarkSceneDirty(EditorSceneManager.GetActiveScene());
@@ -125,7 +126,7 @@ namespace Michsky.MUIP
 
                     else
                     {
-                        if (GUILayout.Button("Make It Invisible", customSkin.button))
+                        if (GUILayout.Button("Set Invisible", customSkin.button))
                         {
                             ntfTarget.GetComponent<CanvasGroup>().alpha = 0;
                             EditorSceneManager.MarkSceneDirty(EditorSceneManager.GetActiveScene());
@@ -150,6 +151,7 @@ namespace Michsky.MUIP
                     MUIPEditorHandler.DrawProperty(startBehaviour, customSkin, "Start Behaviour");
                     MUIPEditorHandler.DrawProperty(closeBehaviour, customSkin, "Close Behaviour");
                     useCustomContent.boolValue = MUIPEditorHandler.DrawToggle(useCustomContent.boolValue, customSkin, "Use Custom Content");
+                    closeOnClick.boolValue = MUIPEditorHandler.DrawToggle(closeOnClick.boolValue, customSkin, "Close On Click");
                     useStacking.boolValue = MUIPEditorHandler.DrawToggle(useStacking.boolValue, customSkin, "Use Stacking");
                     enableTimer.boolValue = MUIPEditorHandler.DrawToggle(enableTimer.boolValue, customSkin, "Enable Timer");
 
@@ -183,7 +185,7 @@ namespace Michsky.MUIP
                     break;
             }
 
-            this.Repaint();
+            if (Application.isPlaying == false) { this.Repaint(); }
             serializedObject.ApplyModifiedProperties();
         }
     }

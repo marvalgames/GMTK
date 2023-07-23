@@ -56,6 +56,7 @@ namespace Michsky.MUIP
             var hBorderRight = serializedObject.FindProperty("hBorderRight");
             var cameraSource = serializedObject.FindProperty("cameraSource");
             var targetCamera = serializedObject.FindProperty("targetCamera");
+            var debugMode = serializedObject.FindProperty("debugMode");
 
             switch (currentTab)
             {
@@ -78,6 +79,7 @@ namespace Michsky.MUIP
 
                 case 2:
                     MUIPEditorHandler.DrawHeader(customSkin, "Options Header", 6);
+                    debugMode.boolValue = MUIPEditorHandler.DrawToggle(debugMode.boolValue, customSkin, "Debug Mode");
                     autoSubMenuPosition.boolValue = MUIPEditorHandler.DrawToggle(autoSubMenuPosition.boolValue, customSkin, "Auto Sub Menu Position");
                     MUIPEditorHandler.DrawProperty(subMenuBehaviour, customSkin, "Sub Menu Behaviour");
 #if UNITY_2022_1_OR_NEWER
@@ -113,7 +115,7 @@ namespace Michsky.MUIP
                     break;
             }
 
-            this.Repaint();
+            if (Application.isPlaying == false) { this.Repaint(); }
             serializedObject.ApplyModifiedProperties();
         }
     }

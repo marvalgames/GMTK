@@ -20,6 +20,10 @@ public class PauseMenuGroup : MonoBehaviour
 
     private CanvasGroup canvasGroup = null;
     [SerializeField]
+    private DeadMenuGroup deadGroup = null;
+    [SerializeField]
+    private WinnerMenuGroup winnerGroup = null;
+    [SerializeField]
     private EventSystem eventSystem;
     [SerializeField]
     private Button defaultButton;
@@ -149,6 +153,15 @@ public class PauseMenuGroup : MonoBehaviour
         //menuCanvas.GetComponent<Canvas>().gameObject.SetActive(show);
         //Canvas.ForceUpdateCanvases();
         //GameInterface.pauseMenuDisabled = false;
+        if (deadGroup)
+        {
+            deadGroup.HideMenu();
+        }
+        else if (winnerGroup)
+        {
+            winnerGroup.HideMenu();
+        }
+
         var show = GameInterface.instance.Paused && !GameInterface.instance.PauseMenuDisabled;//NA for now
         canvasGroup.alpha = show ? 1 : 0;
         canvasGroup.interactable = show;

@@ -66,7 +66,7 @@ namespace Michsky.MUIP
             SetupSelector();
             UpdateContentLayout();
 
-            if (invokeAtStart == true)
+            if (invokeAtStart)
             {
                 items[index].onItemSelect.Invoke();
                 onValueChanged.Invoke(index);
@@ -75,7 +75,7 @@ namespace Michsky.MUIP
 
         void OnEnable()
         {
-            if (gameObject.activeInHierarchy == true) { StartCoroutine("DisableAnimator"); }
+            if (gameObject.activeInHierarchy) { StartCoroutine("DisableAnimator"); }
         }
 
         public void SetupSelector()
@@ -83,9 +83,9 @@ namespace Michsky.MUIP
             if (items.Count == 0)
                 return;
 
-            if (saveSelected == true)
+            if (saveSelected)
             {
-                if (PlayerPrefs.HasKey("HorizontalSelector_" + saveKey) == true) { defaultIndex = PlayerPrefs.GetInt("HorizontalSelector_" + saveKey); }
+                if (PlayerPrefs.HasKey("HorizontalSelector_" + saveKey)) { defaultIndex = PlayerPrefs.GetInt("HorizontalSelector_" + saveKey); }
                 else { PlayerPrefs.SetInt("HorizontalSelector_" + saveKey, defaultIndex); }
             }
 
@@ -93,13 +93,13 @@ namespace Michsky.MUIP
             labelHelper.text = label.text;
             onItemTextChanged?.Invoke(label);
 
-            if (labelIcon != null && enableIcon == true)
+            if (labelIcon != null && enableIcon)
             {
                 labelIcon.sprite = items[defaultIndex].itemIcon;
                 labelIconHelper.sprite = labelIcon.sprite;
             }
 
-            else if (enableIcon == false)
+            else if (!enableIcon)
             {
                 if (labelIcon != null) { labelIcon.gameObject.SetActive(false); }
                 if (labelIconHelper != null) { labelIconHelper.gameObject.SetActive(false); }
@@ -107,7 +107,7 @@ namespace Michsky.MUIP
 
             index = defaultIndex;
 
-            if (enableIndicators == true) { UpdateIndicators(); }
+            if (enableIndicators) { UpdateIndicators(); }
             else { Destroy(indicatorParent.gameObject); }
         }
 
@@ -119,19 +119,19 @@ namespace Michsky.MUIP
             StopCoroutine("DisableAnimator");
             selectorAnimator.enabled = true;
 
-            if (loopSelection == false)
+            if (!loopSelection)
             {
                 if (index != 0)
                 {
                     labelHelper.text = label.text;
-                    if (labelIcon != null && enableIcon == true) { labelIconHelper.sprite = labelIcon.sprite; }
+                    if (labelIcon != null && enableIcon) { labelIconHelper.sprite = labelIcon.sprite; }
 
                     if (index == 0) { index = items.Count - 1; }
                     else { index--; }
 
                     label.text = items[index].itemTitle;
                     onItemTextChanged?.Invoke(label);
-                    if (labelIcon != null && enableIcon == true) { labelIcon.sprite = items[index].itemIcon; }
+                    if (labelIcon != null && enableIcon) { labelIcon.sprite = items[index].itemIcon; }
 
                     items[index].onItemSelect.Invoke();
                     onValueChanged.Invoke(index);
@@ -139,7 +139,7 @@ namespace Michsky.MUIP
                     selectorAnimator.Play(null);
                     selectorAnimator.StopPlayback();
 
-                    if (invertAnimation == true) { selectorAnimator.Play("Forward"); }
+                    if (invertAnimation) { selectorAnimator.Play("Forward"); }
                     else { selectorAnimator.Play("Previous"); }
                 }
             }
@@ -147,14 +147,14 @@ namespace Michsky.MUIP
             else
             {
                 labelHelper.text = label.text;
-                if (labelIcon != null && enableIcon == true) { labelIconHelper.sprite = labelIcon.sprite; }
+                if (labelIcon != null && enableIcon) { labelIconHelper.sprite = labelIcon.sprite; }
 
                 if (index == 0) { index = items.Count - 1; }
                 else { index--; }
 
                 label.text = items[index].itemTitle;
                 onItemTextChanged?.Invoke(label);
-                if (labelIcon != null && enableIcon == true) { labelIcon.sprite = items[index].itemIcon; }
+                if (labelIcon != null && enableIcon) { labelIcon.sprite = items[index].itemIcon; }
 
                 items[index].onItemSelect.Invoke();
                 onValueChanged.Invoke(index);
@@ -162,12 +162,13 @@ namespace Michsky.MUIP
                 selectorAnimator.Play(null);
                 selectorAnimator.StopPlayback();
 
-                if (invertAnimation == true) { selectorAnimator.Play("Forward"); }
+                if (invertAnimation) { selectorAnimator.Play("Forward"); }
                 else { selectorAnimator.Play("Previous"); }
             }
 
-            if (saveSelected == true) { PlayerPrefs.SetInt("HorizontalSelector_" + saveKey, index); }
-            if (enableIndicators == true)
+            if (saveSelected) { PlayerPrefs.SetInt("HorizontalSelector_" + saveKey, index); }
+            if (gameObject.activeInHierarchy) { StartCoroutine("DisableAnimator"); }
+            if (enableIndicators)
             {
                 for (int i = 0; i < items.Count; ++i)
                 {
@@ -179,8 +180,6 @@ namespace Michsky.MUIP
                     else { onObj.gameObject.SetActive(false); offObj.gameObject.SetActive(true); }
                 }
             }
-
-            if (gameObject.activeInHierarchy == true) { StartCoroutine("DisableAnimator"); }
         }
 
         public void NextItem()
@@ -191,19 +190,19 @@ namespace Michsky.MUIP
             StopCoroutine("DisableAnimator");
             selectorAnimator.enabled = true;
 
-            if (loopSelection == false)
+            if (!loopSelection)
             {
                 if (index != items.Count - 1)
                 {
                     labelHelper.text = label.text;
-                    if (labelIcon != null && enableIcon == true) { labelIconHelper.sprite = labelIcon.sprite; }
+                    if (labelIcon != null && enableIcon) { labelIconHelper.sprite = labelIcon.sprite; }
 
                     if ((index + 1) >= items.Count) { index = 0; }
                     else { index++; }
 
                     label.text = items[index].itemTitle;
                     onItemTextChanged?.Invoke(label);
-                    if (labelIcon != null && enableIcon == true) { labelIcon.sprite = items[index].itemIcon; }
+                    if (labelIcon != null && enableIcon) { labelIcon.sprite = items[index].itemIcon; }
 
                     items[index].onItemSelect.Invoke();
                     onValueChanged.Invoke(index);
@@ -211,7 +210,7 @@ namespace Michsky.MUIP
                     selectorAnimator.Play(null);
                     selectorAnimator.StopPlayback();
 
-                    if (invertAnimation == true) { selectorAnimator.Play("Previous"); }
+                    if (invertAnimation) { selectorAnimator.Play("Previous"); }
                     else { selectorAnimator.Play("Forward"); }
                 }
             }
@@ -219,14 +218,14 @@ namespace Michsky.MUIP
             else
             {
                 labelHelper.text = label.text;
-                if (labelIcon != null && enableIcon == true) { labelIconHelper.sprite = labelIcon.sprite; }
+                if (labelIcon != null && enableIcon) { labelIconHelper.sprite = labelIcon.sprite; }
 
                 if ((index + 1) >= items.Count) { index = 0; }
                 else { index++; }
 
                 label.text = items[index].itemTitle;
                 onItemTextChanged?.Invoke(label);
-                if (labelIcon != null && enableIcon == true) { labelIcon.sprite = items[index].itemIcon; }
+                if (labelIcon != null && enableIcon) { labelIcon.sprite = items[index].itemIcon; }
 
                 items[index].onItemSelect.Invoke();
                 onValueChanged.Invoke(index);
@@ -234,12 +233,12 @@ namespace Michsky.MUIP
                 selectorAnimator.Play(null);
                 selectorAnimator.StopPlayback();
 
-                if (invertAnimation == true) { selectorAnimator.Play("Previous"); }
+                if (invertAnimation) { selectorAnimator.Play("Previous"); }
                 else { selectorAnimator.Play("Forward"); }
             }
 
-            if (saveSelected == true) { PlayerPrefs.SetInt("HorizontalSelector_" + saveKey, index); }
-            if (enableIndicators == true)
+            if (saveSelected) { PlayerPrefs.SetInt("HorizontalSelector_" + saveKey, index); }
+            if (enableIndicators)
             {
                 for (int i = 0; i < items.Count; ++i)
                 {
@@ -252,7 +251,7 @@ namespace Michsky.MUIP
                 }
             }
 
-            if (gameObject.activeInHierarchy == true) { StartCoroutine("DisableAnimator"); }
+            if (gameObject.activeInHierarchy) { StartCoroutine("DisableAnimator"); }
         }
 
         // Obsolete
@@ -289,16 +288,17 @@ namespace Michsky.MUIP
 
             label.text = items[index].itemTitle;
             onItemTextChanged?.Invoke(label);
-            if (labelIcon != null && enableIcon == true) { labelIcon.sprite = items[index].itemIcon; }
-
+            
+            if (labelIcon != null && enableIcon) { labelIcon.sprite = items[index].itemIcon; }
+            if (gameObject.activeInHierarchy) { StartCoroutine("DisableAnimator"); }
+          
             UpdateContentLayout();
             UpdateIndicators();
-            StartCoroutine("DisableAnimator");
         }
 
         public void UpdateIndicators()
         {
-            if (enableIndicators == false)
+            if (!enableIndicators)
                 return;
 
             foreach (Transform child in indicatorParent) { Destroy(child.gameObject); }

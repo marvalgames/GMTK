@@ -86,6 +86,7 @@ namespace Michsky.MUIP
         public bool centered = false;
 
         // Helpers
+        bool isInitialized = false;
         Button targetButton;
         bool isPointerOn;
         bool waitingForDoubleClickInput;
@@ -101,6 +102,7 @@ namespace Michsky.MUIP
 
         void OnEnable()
         {
+            if (isInitialized == false) { Initialize(); }
             UpdateUI();
         }
 
@@ -114,7 +116,7 @@ namespace Michsky.MUIP
             if (highlightCG != null) { highlightCG.alpha = 0; }
         }
 
-        void Awake()
+        void Initialize()
         {
 #if UNITY_EDITOR
             if (!Application.isPlaying) { return; }
@@ -141,6 +143,7 @@ namespace Michsky.MUIP
             else if (useRipple == false && rippleParent != null) { Destroy(rippleParent); }
 
             StartCoroutine("LayoutFix");
+            isInitialized = true;
         }
 
         public void UpdateUI()

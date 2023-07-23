@@ -1,10 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
 using TMPro;
-using System.Collections;
 
 namespace Michsky.MUIP
 {
@@ -19,9 +19,7 @@ namespace Michsky.MUIP
         public GameObject itemObject;
         public GameObject scrollbar;
         public VerticalLayoutGroup itemList;
-        public Transform listParent;
         public AudioSource soundSource;
-        [HideInInspector] public Transform currentListParent;
         public RectTransform listRect;
         public CanvasGroup listCG;
         public CanvasGroup contentCG;
@@ -71,7 +69,8 @@ namespace Michsky.MUIP
         public AudioClip hoverSound;
         public AudioClip clickSound;
 
-        // Other variables
+        // Helpers
+        bool isInitialized = false;
         [HideInInspector] public bool isOn;
         [HideInInspector] public int index = 0;
         [HideInInspector] public int siblingIndex = 0;
@@ -97,7 +96,18 @@ namespace Michsky.MUIP
             public UnityEvent OnItemSelection = new UnityEvent();
         }
 
-        void Awake()
+        void OnEnable()
+        {
+            if (isInitialized == false) { Initialize(); }
+            if (updateOnEnable == true && index < items.Count) { SetDropdownIndex(selectedItemIndex); }
+
+            listCG.alpha = 0;
+            listCG.interactable = false;
+            listCG.blocksRaycasts = false;
+            listRect.sizeDelta = new Vector2(listRect.sizeDelta.x, 0);
+        }
+
+        void Initialize()
         {
             if (enableTrigger == true && triggerObject != null)
             {
@@ -120,30 +130,18 @@ namespace Michsky.MUIP
                 contentCG.gameObject.AddComponent<GraphicRaycaster>();
             }
 
-            if (initAtStart == true && items.Count != 0) { SetupDropdown(); }
-        }
+            dropdownAnimator = gameObject.GetComponent<Animator>();
 
-        void Start()
-        {
-            if (animationType == AnimationType.Custom) { return; }
-            else if (animationType == AnimationType.Modular && dropdownAnimator != null) { Destroy(dropdownAnimator); }
-        }
-
-        void OnEnable()
-        {
             if (listCG == null) { listCG = gameObject.GetComponentInChildren<CanvasGroup>(); }
             if (listRect == null) { listRect = listCG.GetComponent<RectTransform>(); }
-            if (updateOnEnable == true && index < items.Count) { SetDropdownIndex(selectedItemIndex); }
+            if (initAtStart == true && items.Count != 0) { SetupDropdown(); }
+            if (animationType == AnimationType.Modular && dropdownAnimator != null) { Destroy(dropdownAnimator); }
 
-            listCG.alpha = 0;
-            listCG.interactable = false;
-            listCG.blocksRaycasts = false;
-            listRect.sizeDelta = new Vector2(listRect.sizeDelta.x, 0);
+            isInitialized = true;
         }
 
         public void SetupDropdown()
         {
-            if (dropdownAnimator == null) { dropdownAnimator = gameObject.GetComponent<Animator>(); }
             if (enableScrollbar == false && scrollbar != null) { Destroy(scrollbar); }
             if (itemList == null) { itemList = itemParent.GetComponent<VerticalLayoutGroup>(); }
 
@@ -193,8 +191,6 @@ namespace Michsky.MUIP
                 else { SetDropdownIndex(PlayerPrefs.GetInt("Dropdown_" + saveKey)); }
             }
             else if (invokeAtStart == true) { items[selectedItemIndex].OnItemSelection.Invoke(); }
-
-            currentListParent = transform.parent;
         }
 
         // Obsolete
@@ -238,20 +234,12 @@ namespace Michsky.MUIP
             {
                 dropdownAnimator.Play("Stylish In");
                 isOn = true;
-
-                StopCoroutine("StartMinimize");
-                StopCoroutine("StartExpand");
-                StartCoroutine("StartMinimize");
             }
 
             else if (isOn == true && animationType == AnimationType.Custom)
             {
                 dropdownAnimator.Play("Stylish Out");
                 isOn = false;
-
-                StopCoroutine("StartMinimize");
-                StopCoroutine("StartExpand");
-                StartCoroutine("StartMinimize");
             }
 
             if (enableTrigger == true && isOn == false) { triggerObject.SetActive(false); }

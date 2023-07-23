@@ -1,14 +1,15 @@
-﻿using UnityEngine;
-using System.Collections;
+﻿using System.Collections;
+using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Events;
+using UnityEngine.EventSystems;
 using TMPro;
 
 namespace Michsky.MUIP
 {
     [DisallowMultipleComponent]
     [RequireComponent(typeof(Animator))]
-    public class NotificationManager : MonoBehaviour
+    public class NotificationManager : MonoBehaviour, IPointerClickHandler
     {
         // Content
         public Sprite icon;
@@ -25,6 +26,7 @@ namespace Michsky.MUIP
         public bool enableTimer = true;
         public float timer = 3f;
         public bool useCustomContent = false;
+        public bool closeOnClick = false;
         public bool useStacking = false;
         [HideInInspector] public bool isOn;
         public StartBehaviour startBehaviour = StartBehaviour.Disable;
@@ -41,10 +43,10 @@ namespace Michsky.MUIP
         {
             isOn = false;
 
-            if (useCustomContent == false) { UpdateUI(); }
+            if (!useCustomContent) { UpdateUI(); }
             if (notificationAnimator == null) { notificationAnimator = gameObject.GetComponent<Animator>(); }
             if (startBehaviour == StartBehaviour.Disable) { gameObject.SetActive(false); }
-            if (useStacking == true)
+            if (useStacking)
             {
                 try
                 {
@@ -59,7 +61,7 @@ namespace Michsky.MUIP
 
         public void Open()
         {
-            if (isOn == true)
+            if (isOn)
                 return;
 
             gameObject.SetActive(true);
@@ -76,13 +78,15 @@ namespace Michsky.MUIP
 
         public void Close()
         {
-            if (isOn == false)
+            if (!isOn)
                 return;
 
             isOn = false;
             notificationAnimator.Play("Out");
             onClose.Invoke();
 
+            StopCoroutine("StartTimer");
+            StopCoroutine("DisableNotification");
             StartCoroutine("DisableNotification");
         }
 
@@ -95,6 +99,14 @@ namespace Michsky.MUIP
             if (iconObj != null) { iconObj.sprite = icon; }
             if (titleObj != null) { titleObj.text = title; }
             if (descriptionObj != null) { descriptionObj.text = description; }
+        }
+
+        public void OnPointerClick(PointerEventData eventData)
+        {
+            if (!closeOnClick)
+                return;
+
+            Close();
         }
 
         IEnumerator StartTimer()

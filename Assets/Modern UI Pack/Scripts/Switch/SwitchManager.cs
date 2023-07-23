@@ -167,7 +167,7 @@ namespace Michsky.MUIP
 
         IEnumerator DisableAnimator()
         {
-            yield return new WaitForSeconds(0.5f);
+            yield return new WaitForSecondsRealtime(0.5f);
             switchAnimator.enabled = false;
         }
     }

@@ -2,6 +2,7 @@ using Sandbox.Player;
 using Unity.Entities;
 //using Unity.Burst;
 using Unity.Collections;
+using Unity.Mathematics;
 using Unity.Physics;
 using Unity.Transforms;
 using UnityEngine;
@@ -132,6 +133,11 @@ public partial class PostDeadSystem : SystemBase
                     if (deadComponent.deadEffectsFrames > 5.0)
                     {
                         character.gameObject.SetActive(false);
+                        var transform = character.transform;
+                        var pos = transform.position;
+                        pos.y = -4096;
+                        transform.position = pos;
+
                         ecb.RemoveComponent(e, typeof(DeadComponent));
                         ecb.RemoveComponent(e, typeof(NpcMovementComponent));
                         //ecb.DestroyEntity(e);
@@ -141,9 +147,6 @@ public partial class PostDeadSystem : SystemBase
                     }
                     else
                     {
-                        var pos = character.transform.position;
-                        pos.y += 100;
-                        character.transform.position = pos;
                         deadComponent.deadEffectsFrames += 1 * time;
                     }
                 }

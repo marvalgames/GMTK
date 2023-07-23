@@ -18,8 +18,10 @@ namespace Michsky.MUIP
         [Range(0.01f, 0.5f)] public float tooltipSmoothness = 0.1f;
         [Range(5, 10)] public float dampSpeed = 10;
         public float preferredWidth = 375;
-        public bool allowUpdating = false;
+        public bool allowUpdate = true;
+        public bool checkDispose = true;
         public CameraSource cameraSource = CameraSource.Main;
+        public TransitionMode transitionMode = TransitionMode.Damp;
 
         // Content Bounds
         [Range(-50, 50)] public int vBorderTop = -15;
@@ -33,17 +35,19 @@ namespace Michsky.MUIP
         [SerializeField] private int yTop = -325;
         [SerializeField] private int yBottom = 325;
 
+        [HideInInspector] public LayoutElement contentLE;
+        [HideInInspector] public TooltipContent currentTooltip;
+
         Vector2 uiPos;
         Vector3 cursorPos;
         Vector3 contentPos = new Vector3(0, 0, 0);
         Vector3 tooltipVelocity = Vector3.zero;
 
         RectTransform contentRect;
-        RectTransform tooltipRect;
-        
-        [HideInInspector] public LayoutElement contentLE;
+        RectTransform tooltipRect;  
 
         public enum CameraSource { Main, Custom }
+        public enum TransitionMode { Damp, Snap }
 
         void Awake()
         {
@@ -75,8 +79,8 @@ namespace Michsky.MUIP
 
         void Update()
         {
-            if (allowUpdating == false)
-                return;
+            if (allowUpdate == false) { return; }
+            if (checkDispose == true && currentTooltip != null && !currentTooltip.gameObject.activeInHierarchy) { currentTooltip.ProcessExit(); }
 
             CheckForPosition();
         }
@@ -93,15 +97,20 @@ namespace Michsky.MUIP
 
             if (mainCanvas.renderMode == RenderMode.ScreenSpaceCamera || mainCanvas.renderMode == RenderMode.WorldSpace)
             {
-                tooltipRect.position = targetCamera.ScreenToWorldPoint(cursorPos);
-                tooltipRect.localPosition = new Vector3(tooltipRect.localPosition.x, tooltipRect.localPosition.y, 0);
-                tooltipContent.transform.localPosition = Vector3.SmoothDamp(tooltipContent.transform.localPosition, contentPos, ref tooltipVelocity, tooltipSmoothness, dampSpeed * 1000, Time.unscaledDeltaTime);
+                Vector2 outPoint;
+                RectTransformUtility.ScreenPointToLocalPointInRectangle(tooltipRect.parent.GetComponent<RectTransform>(), Input.mousePosition, targetCamera, out outPoint);
+                tooltipRect.localPosition = outPoint;
+
+                if (transitionMode == TransitionMode.Damp) { tooltipContent.transform.localPosition = Vector3.SmoothDamp(tooltipContent.transform.localPosition, contentPos, ref tooltipVelocity, tooltipSmoothness, dampSpeed * 1000, Time.unscaledDeltaTime); }
+                else { tooltipContent.transform.localPosition = contentPos; }
             }
 
             else if (mainCanvas.renderMode == RenderMode.ScreenSpaceOverlay)
             {
                 tooltipRect.position = cursorPos;
-                tooltipContent.transform.position = Vector3.SmoothDamp(tooltipContent.transform.position, cursorPos + contentPos, ref tooltipVelocity, tooltipSmoothness, dampSpeed * 1000, Time.unscaledDeltaTime);
+
+                if (transitionMode == TransitionMode.Damp) { tooltipContent.transform.position = Vector3.SmoothDamp(tooltipContent.transform.position, cursorPos + contentPos, ref tooltipVelocity, tooltipSmoothness, dampSpeed * 1000, Time.unscaledDeltaTime); }
+                else { tooltipContent.transform.position = cursorPos + contentPos; }
             }
         }
 

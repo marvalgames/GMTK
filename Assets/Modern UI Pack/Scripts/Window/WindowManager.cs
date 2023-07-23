@@ -34,11 +34,13 @@ namespace Michsky.MUIP
         private Animator currentButtonAnimator;
         private Animator nextButtonAnimator;
 
-        // Animation states
+        // Helpers
         string windowFadeIn = "In";
         string windowFadeOut = "Out";
         string buttonFadeIn = "Hover to Pressed";
         string buttonFadeOut = "Pressed to Normal";
+        float cachedStateLength;
+        public bool altMode;
 
         [System.Serializable]
         public class WindowItem
@@ -86,6 +88,9 @@ namespace Michsky.MUIP
             currentWindowAnimator = currentWindow.GetComponent<Animator>();
             currentWindowAnimator.Play(windowFadeIn);
             onWindowChange.Invoke(currentWindowIndex);
+
+            if (altMode == true) { cachedStateLength = 0.3f; }
+            else { cachedStateLength = MUIPInternalTools.GetAnimatorClipLength(currentWindowAnimator, MUIPInternalTools.windowManagerStateName); }
 
             isInitialized = true;
 
@@ -369,7 +374,7 @@ namespace Michsky.MUIP
 
         IEnumerator DisablePreviousWindow()
         {
-            yield return new WaitForSeconds(0.4f);
+            yield return new WaitForSecondsRealtime(cachedStateLength);
 
             for (int i = 0; i < windows.Count; i++)
             {

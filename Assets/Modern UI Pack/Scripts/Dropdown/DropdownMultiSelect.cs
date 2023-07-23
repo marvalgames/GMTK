@@ -19,6 +19,7 @@ namespace Michsky.MUIP
         public Transform listParent;
         private Animator dropdownAnimator;
         public TextMeshProUGUI setItemText;
+        public CanvasGroup contentCG;
 
         // Settings
         public bool isInteractable = true;
@@ -26,7 +27,7 @@ namespace Michsky.MUIP
         public bool enableIcon = true;
         public bool enableTrigger = true;
         public bool enableScrollbar = true;
-        public bool setHighPriorty = true;
+        public bool setHighPriority = true;
         public bool outOnPointerExit = false;
         public bool isListItem = false;
         public bool invokeAtStart = false;
@@ -51,6 +52,7 @@ namespace Michsky.MUIP
         public List<Item> items = new List<Item>();
 
         // Other variables
+        bool isInitialized = false;
         int currentIndex;
         Toggle currentToggle;
         string textHelper;
@@ -74,24 +76,22 @@ namespace Michsky.MUIP
 
         void OnEnable()
         {
-            if (animationType == AnimationType.Stylish) { return; }
-            else if (animationType == AnimationType.Modular && dropdownAnimator != null) { Destroy(dropdownAnimator); }
-
-            if (listCG == null) { listCG = gameObject.GetComponentInChildren<CanvasGroup>(); }
-            listCG.alpha = 0;
-            listCG.interactable = false;
-            listCG.blocksRaycasts = false;
-
-            if (listRect == null) { listRect = listCG.GetComponent<RectTransform>(); }
-            closeOn = gameObject.GetComponent<RectTransform>().sizeDelta.y;
-            listRect.sizeDelta = new Vector2(listRect.sizeDelta.x, closeOn);
+            if (isInitialized == false) { Initialize(); }
+            if (animationType == AnimationType.Modular)
+            {
+                listCG.alpha = 0;
+                listCG.interactable = false;
+                listCG.blocksRaycasts = false;
+                listRect.sizeDelta = new Vector2(listRect.sizeDelta.x, closeOn);
+            }
         }
 
-        void Awake()
+        void Initialize()
         {
+            if (listCG == null) { listCG = gameObject.GetComponentInChildren<CanvasGroup>(); }
+            if (listRect == null) { listRect = listCG.GetComponent<RectTransform>(); }
             if (initAtStart == true) { SetupDropdown(); }
-
-            currentListParent = transform.parent;
+            if (animationType == AnimationType.Modular && dropdownAnimator != null) { Destroy(dropdownAnimator); }
 
             if (enableTrigger == true && triggerObject != null)
             {
@@ -102,6 +102,21 @@ namespace Michsky.MUIP
                 entry.callback.AddListener((eventData) => { Animate(); });
                 triggerEvent.GetComponent<EventTrigger>().triggers.Add(entry);
             }
+
+            if (setHighPriority == true)
+            {
+                if (contentCG == null) { contentCG = transform.Find("Content/Item List").GetComponent<CanvasGroup>(); }
+                contentCG.alpha = 1;
+
+                Canvas tempCanvas = contentCG.gameObject.AddComponent<Canvas>();
+                tempCanvas.overrideSorting = true;
+                tempCanvas.sortingOrder = 30000;
+                contentCG.gameObject.AddComponent<GraphicRaycaster>();
+            }
+
+            currentListParent = transform.parent;
+            closeOn = gameObject.GetComponent<RectTransform>().sizeDelta.y;
+            isInitialized = true;
         }
 
         void Update()
@@ -127,7 +142,7 @@ namespace Michsky.MUIP
                 listCG.alpha -= Time.unscaledDeltaTime * transitionSmoothness;
                 listRect.sizeDelta = Vector2.Lerp(listRect.sizeDelta, new Vector2(listRect.sizeDelta.x, closeOn), Time.unscaledDeltaTime * sizeSmoothness);
 
-                if (listRect.sizeDelta.y <= closeOn + 0.1f && listCG.alpha <= 0) { isInTransition = false; this.enabled = false; }
+                if (listRect.sizeDelta.y <= closeOn + 0.1f && listCG.alpha <= 0) { isInTransition = false; }
             }
         }
 
@@ -135,7 +150,6 @@ namespace Michsky.MUIP
         {
             if (dropdownAnimator == null) { dropdownAnimator = gameObject.GetComponent<Animator>(); }
             if (enableScrollbar == false && scrollbar != null) { Destroy(scrollbar); }
-            if (setHighPriorty == true) { transform.SetAsLastSibling(); }
             if (itemList == null) { itemList = itemParent.GetComponent<VerticalLayoutGroup>(); }
 
             UpdateItemLayout();
@@ -243,7 +257,6 @@ namespace Michsky.MUIP
             else if (enableTrigger == true && isOn == true) { triggerObject.SetActive(true); }
 
             if (enableTrigger == true && outOnPointerExit == true) { triggerObject.SetActive(false); }
-            if (setHighPriorty == true) { transform.SetAsLastSibling(); }
         }
 
         public void CreateNewItem(string title, bool value, bool notify)

@@ -10,7 +10,7 @@ namespace Michsky.MUIP
     public class UIManagerEditor : Editor
     {
         GUISkin customSkin;
-        protected static string buildID = "B16-20220914";
+        protected static string buildID = "B16-20230320";
         protected static float foldoutItemSpace = 2;
         protected static float foldoutTopSpace = 5;
         protected static float foldoutBottomSpace = 2;
@@ -499,7 +499,7 @@ namespace Michsky.MUIP
             #endregion
 
             serializedObject.ApplyModifiedProperties();
-            Repaint();
+            if (Application.isPlaying == false) { this.Repaint(); }
 
             GUILayout.Space(12);
             GUILayout.BeginHorizontal();

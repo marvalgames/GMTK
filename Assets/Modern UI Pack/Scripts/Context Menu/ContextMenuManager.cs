@@ -18,11 +18,14 @@ namespace Michsky.MUIP
         public GameObject contextSubMenu;
 
         // Settings
+        [SerializeField] private bool debugMode;
         public bool autoSubMenuPosition = true;
         public SubMenuBehaviour subMenuBehaviour;
         public CameraSource cameraSource = CameraSource.Main;
 
         // Bounds
+        public CursorBoundHorizontal horizontalBound;
+        public CursorBoundVertical verticalBound;
         [Range(-50, 50)] public int vBorderTop = -10;
         [Range(-50, 50)] public int vBorderBottom = 10;
         [Range(-50, 50)] public int hBorderLeft = 15;
@@ -37,14 +40,11 @@ namespace Michsky.MUIP
         RectTransform contentRect;
 
         [HideInInspector] public bool isOn;
-        [HideInInspector] public bool bottomLeft;
-        [HideInInspector] public bool bottomRight;
-        [HideInInspector] public bool topLeft;
-        [HideInInspector] public bool topRight;
 
         public enum CameraSource { Main, Custom }
-
         public enum SubMenuBehaviour { Hover, Click }
+        public enum CursorBoundHorizontal { Left, Right }
+        public enum CursorBoundVertical { Bottom, Top }
 
         void Awake()
         {
@@ -61,19 +61,31 @@ namespace Michsky.MUIP
 #endif
         }
 
-        public void CheckForBounds()
+        public void CheckForBound()
         {
-            if (uiPos.x <= -100) { contentPos = new Vector3(hBorderLeft, contentPos.y, 0); contentRect.pivot = new Vector2(0f, contentRect.pivot.y); bottomLeft = true; }
-            else { bottomLeft = false; }
+            if (uiPos.x <= -100) 
+            {
+                horizontalBound = CursorBoundHorizontal.Left;
+                contentPos = new Vector3(hBorderLeft, contentPos.y, 0); contentRect.pivot = new Vector2(0f, contentRect.pivot.y); 
+            }
 
-            if (uiPos.x >= 100) { contentPos = new Vector3(hBorderRight, contentPos.y, 0); contentRect.pivot = new Vector2(1f, contentRect.pivot.y); bottomRight = true; }
-            else { bottomRight = false; }
+            else if (uiPos.x >= 100)
+            {
+                horizontalBound = CursorBoundHorizontal.Right;
+                contentPos = new Vector3(hBorderRight, contentPos.y, 0); contentRect.pivot = new Vector2(1f, contentRect.pivot.y);
+            }
 
-            if (uiPos.y <= -75) { contentPos = new Vector3(contentPos.x, vBorderBottom, 0); contentRect.pivot = new Vector2(contentRect.pivot.x, 0f); topLeft = true; }
-            else { topLeft = false; }
+            if (uiPos.y <= -75)
+            {
+                verticalBound = CursorBoundVertical.Bottom;
+                contentPos = new Vector3(contentPos.x, vBorderBottom, 0); contentRect.pivot = new Vector2(contentRect.pivot.x, 0f);
+            }
 
-            if (uiPos.y >= 75) { contentPos = new Vector3(contentPos.x, vBorderTop, 0); contentRect.pivot = new Vector2(contentRect.pivot.x, 1f); topRight = true; }
-            else { topRight = false; }
+            else if (uiPos.y >= 75)
+            {
+                verticalBound = CursorBoundVertical.Top;
+                contentPos = new Vector3(contentPos.x, vBorderTop, 0); contentRect.pivot = new Vector2(contentRect.pivot.x, 1f);
+            }
         }
 
         public void SetContextMenuPosition()
@@ -83,9 +95,62 @@ namespace Michsky.MUIP
 #elif ENABLE_INPUT_SYSTEM
             cursorPos = Mouse.current.position.ReadValue();
 #endif
-            uiPos = contextRect.anchoredPosition;
-            CheckForBounds();
 
+            if (mainCanvas.renderMode == RenderMode.ScreenSpaceCamera || mainCanvas.renderMode == RenderMode.WorldSpace)
+            {
+                contextRect.position = targetCamera.ScreenToWorldPoint(cursorPos);
+                contextRect.localPosition = new Vector3(contextRect.localPosition.x, contextRect.localPosition.y, 0);
+                contextContent.transform.localPosition = Vector3.SmoothDamp(contextContent.transform.localPosition, contentPos, ref contextVelocity, 0);
+            }
+
+            else if (mainCanvas.renderMode == RenderMode.ScreenSpaceOverlay)
+            {
+                contextRect.position = cursorPos;
+                contextContent.transform.position = new Vector3(cursorPos.x + contentPos.x, cursorPos.y + contentPos.y, 0);
+            }
+
+            uiPos = contextRect.anchoredPosition;
+            CheckForBound();
+
+            if (debugMode == true)
+            {
+                PrintDebug();
+            }
+        }
+
+        public void SetFixedPosition()
+        {
+#if ENABLE_LEGACY_INPUT_MANAGER
+            cursorPos = Input.mousePosition;
+#elif ENABLE_INPUT_SYSTEM
+            cursorPos = Mouse.current.position.ReadValue();
+#endif
+            SetContextMenuPosition();
+
+            if (mainCanvas.renderMode == RenderMode.ScreenSpaceCamera || mainCanvas.renderMode == RenderMode.WorldSpace)
+            {
+                contextRect.position = targetCamera.ScreenToWorldPoint(cursorPos);
+                contextRect.localPosition = new Vector3(contextRect.localPosition.x, contextRect.localPosition.y, 0);
+                contextContent.transform.localPosition = Vector3.SmoothDamp(contextContent.transform.localPosition, contentPos, ref contextVelocity, 0);
+            }
+
+            else if (mainCanvas.renderMode == RenderMode.ScreenSpaceOverlay)
+            {
+                contextRect.position = cursorPos;
+                contextContent.transform.position = new Vector3(cursorPos.x + contentPos.x, cursorPos.y + contentPos.y, 0);
+            }
+
+            uiPos = contextRect.anchoredPosition;
+            CheckForBound();
+
+            if (debugMode == true)
+            {
+                PrintDebug();
+            }
+        }
+
+        void ProcessContextRect()
+        {
             if (mainCanvas.renderMode == RenderMode.ScreenSpaceCamera || mainCanvas.renderMode == RenderMode.WorldSpace)
             {
                 contextRect.position = targetCamera.ScreenToWorldPoint(cursorPos);
@@ -100,12 +165,32 @@ namespace Michsky.MUIP
             }
         }
 
-        public void Open() { contextAnimator.Play("Menu In"); isOn = true; }
-        public void Close() { contextAnimator.Play("Menu Out"); isOn = false; }
-      
-        // Obsolote
-        public void OpenContextMenu() { Open(); }
-        public void CloseOnClick() { Close(); }
+        void PrintDebug()
+        {
+            Debug.Log("<b>[Context Menu]</b> UI Pos: " + uiPos + ", H: " + horizontalBound + ", V: " + verticalBound, this);
+        }
 
+        public void Open() 
+        { 
+            contextAnimator.Play("Menu In"); 
+            isOn = true; 
+        }
+
+        public void Close()
+        { 
+            contextAnimator.Play("Menu Out"); 
+            isOn = false; 
+        }
+
+        public void OpenInFixedPosition()
+        {
+            SetFixedPosition();
+            Open();
+        }
+
+        #region Obsolote
+        public void OpenContextMenu() { Open(); }
+        public void CloseOnClick() { Close(); }   
+        #endregion
     }
 }

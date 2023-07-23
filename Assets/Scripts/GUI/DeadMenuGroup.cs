@@ -86,8 +86,9 @@ public class DeadMenuGroup : MonoBehaviour
         }
     }
 
-    void ShowMenu()
+    public void ShowMenu()
     {
+        
 
         GameInterface.instance.EnableControllerMaps(false, true, false);
 

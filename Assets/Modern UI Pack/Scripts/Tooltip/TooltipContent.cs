@@ -47,13 +47,16 @@ namespace Michsky.MUIP
                 tpManager.contentLE = descriptionText.GetComponent<LayoutElement>();
         }
 
-        private void ProcessEnter()
+        public void ProcessEnter()
         {
             if (tooltipRect == null)
                 return;
 
             descriptionText.text = description;
-            tpManager.allowUpdating = true;
+          
+            tpManager.allowUpdate = true;
+            tpManager.currentTooltip = this;
+         
             CheckForContentWidth();
 
             StopCoroutine("DisableAnimator");
@@ -67,7 +70,7 @@ namespace Michsky.MUIP
                 StartCoroutine("UpdateLayoutPosition");
         }
 
-        private void ProcessExit()
+        public void ProcessExit()
         {
             if (tooltipRect == null)
                 return;
@@ -82,7 +85,7 @@ namespace Michsky.MUIP
 
             else { tooltipAnimator.Play("Out"); }
 
-            tpManager.allowUpdating = false;
+            tpManager.allowUpdate = false;
         }
 
         public void OnPointerEnter(PointerEventData eventData) { ProcessEnter(); }

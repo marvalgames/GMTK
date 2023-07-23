@@ -158,7 +158,7 @@ namespace Michsky.MUIP
                     break;
             }
 
-            this.Repaint();
+            if (Application.isPlaying == false) { this.Repaint(); }
             serializedObject.ApplyModifiedProperties();
         }
     }

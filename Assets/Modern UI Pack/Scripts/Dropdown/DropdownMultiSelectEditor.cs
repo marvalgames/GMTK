@@ -52,7 +52,7 @@ namespace Michsky.MUIP
             var enableIcon = serializedObject.FindProperty("enableIcon");
             var enableTrigger = serializedObject.FindProperty("enableTrigger");
             var enableScrollbar = serializedObject.FindProperty("enableScrollbar");
-            var setHighPriorty = serializedObject.FindProperty("setHighPriorty");
+            var setHighPriority = serializedObject.FindProperty("setHighPriority");
             var outOnPointerExit = serializedObject.FindProperty("outOnPointerExit");
             var isListItem = serializedObject.FindProperty("isListItem");
             var invokeAtStart = serializedObject.FindProperty("invokeAtStart");
@@ -140,7 +140,7 @@ namespace Michsky.MUIP
                         GUILayout.EndHorizontal();
                     }
 
-                    setHighPriorty.boolValue = MUIPEditorHandler.DrawToggle(setHighPriorty.boolValue, customSkin, "Set High Priorty");
+                    setHighPriority.boolValue = MUIPEditorHandler.DrawToggle(setHighPriority.boolValue, customSkin, "Set High Priority");
                     outOnPointerExit.boolValue = MUIPEditorHandler.DrawToggle(outOnPointerExit.boolValue, customSkin, "Out On Pointer Exit");
                    
                     GUILayout.BeginVertical(EditorStyles.helpBox);
@@ -191,7 +191,7 @@ namespace Michsky.MUIP
                     break;
             }
 
-            this.Repaint();
+            if (Application.isPlaying == false) { this.Repaint(); }
             serializedObject.ApplyModifiedProperties();
         }
     }
