@@ -150,7 +150,7 @@ namespace AI
                     var bothEnemies = !playersGroup.HasComponent(playerEntity) && !playersGroup.HasComponent(enemyEntity);
                     if (bothEnemies)
                     {
-                        distance *= 6;
+                        distance *= defensiveStrategyComponent.switchToPlayerMultiplier;
                     }
                     var forwardVector = math.forward(enemyRotation);
                     var vectorToPlayer = playerPosition - enemyPosition;

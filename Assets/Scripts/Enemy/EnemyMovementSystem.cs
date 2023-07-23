@@ -30,14 +30,20 @@ namespace Enemy
             for (var i = 0; i < PlayerEntities.Length; i++)
             {
                 var e = PlayerEntities[i];
-                var player = EntityManager.GetComponentData<WeaponComponent>(e);
-                if (player.IsFiring == 1)
+                var hasWeapon = SystemAPI.HasComponent<WeaponComponent>(e);
+                if (hasWeapon)
                 {
-                    playerIsFiring = true;
+                    var player = SystemAPI.GetComponent<WeaponComponent>(e);
+                    if (player is {IsFiring: 1, roleReversal: true})
+                    {
+                        playerIsFiring = true;
+                    }
+                    if (player.roleReversal)
+                    {
+                        player.IsFiring = 0;
+                    }
+                    SystemAPI.SetComponent(e, player);
                 }
-
-                player.IsFiring = 0;
-                EntityManager.SetComponentData(e, player);
             }
 
 
@@ -109,7 +115,8 @@ namespace Enemy
                                     var actorWeaponAim = SystemAPI.GetComponent<ActorWeaponAimComponent>(e);
                                     //gun.IsFiring = 0;
                                     if (playerIsFiring && roleReversal || distFromOpponent <
-                                        enemyWeaponMovementComponent.shootRangeDistance && weaponMovement && !roleReversal)
+                                        enemyWeaponMovementComponent.shootRangeDistance && weaponMovement &&
+                                        !roleReversal)
                                     {
                                         if (weaponComponent.IsFiring == 0)
                                         {

@@ -12,28 +12,31 @@ public partial class PlayerInputAmmoSystem : SystemBase
     {
         //var check = new NativeArray<int>(1, Allocator.TempJob);
         Entities.WithoutBurst().ForEach((
-            Animator animator,  Entity e,
-            ref WeaponComponent gunComponent, ref ActorWeaponAimComponent playerWeaponAimComponent, 
+            Animator animator, Entity e,
+            ref WeaponComponent gunComponent, ref ActorWeaponAimComponent playerWeaponAimComponent,
             in InputControllerComponent inputController, in AttachWeaponComponent attachWeapon) =>
         {
             //lt mapped to 1 on keyboard when LT is not used for shooting - if not map to left mouse
             var dpadY = inputController.dpadY;
-            var currentWeaponMotion = (WeaponMotion)animator.GetInteger(WeaponRaised);
+            var currentWeaponMotion = (WeaponMotion) animator.GetInteger(WeaponRaised);
             playerWeaponAimComponent.weaponRaised = currentWeaponMotion;
-            if (inputController.leftBumperPressed )
+            if (inputController.leftBumperPressed)
             {
                 playerWeaponAimComponent.aimMode = !playerWeaponAimComponent.aimMode;
             }
 
 
             var rtPressed = inputController.rightTriggerPressed;
+            var aimMode = playerWeaponAimComponent.aimMode;
+            if (gunComponent.roleReversal) aimMode = true;
 
-            if ( 
-                (attachWeapon.attachWeaponType == (int)WeaponType.Gun && rtPressed == true ||
-                 attachWeapon.attachSecondaryWeaponType == (int)WeaponType.Gun && rtPressed == true))
-                // if (playerWeaponAimComponent.aimMode && 
-                //     (attachWeapon.attachWeaponType == (int)WeaponType.Gun && rtPressed == true ||
-                //      attachWeapon.attachSecondaryWeaponType == (int)WeaponType.Gun && rtPressed == true))
+            // if ( 
+            //(
+            //attachWeapon.attachWeaponType == (int)WeaponType.Gun && rtPressed == true ||
+            // attachWeapon.attachSecondaryWeaponType == (int)WeaponType.Gun && rtPressed == true))
+            if (aimMode &&
+                (attachWeapon.attachWeaponType == (int) WeaponType.Gun && rtPressed == true ||
+                 attachWeapon.attachSecondaryWeaponType == (int) WeaponType.Gun && rtPressed == true))
             {
                 gunComponent.IsFiring = 1;
                 playerWeaponAimComponent.weaponUpTimer = 0;
@@ -41,10 +44,10 @@ public partial class PlayerInputAmmoSystem : SystemBase
                 {
                     var score = SystemAPI.GetComponent<ScoreComponent>(e);
                     score.startShotValue = score.score;
-                    score.zeroPoints = false;//also in ammosystem but thats for normal not GMTK 23
+                    score.zeroPoints = false; //also in ammosystem but thats for normal not GMTK 23
                     SystemAPI.SetComponent(e, score);
                 }
-               
+
                 playerWeaponAimComponent.weaponRaised = WeaponMotion.Raised;
                 SetAnimationLayerWeights(animator, WeaponMotion.Raised);
             }
@@ -59,10 +62,6 @@ public partial class PlayerInputAmmoSystem : SystemBase
                     SetAnimationLayerWeights(animator, WeaponMotion.None);
                 }
             }
-            
-
-
-
         }).Run();
     }
 
@@ -81,6 +80,5 @@ public partial class PlayerInputAmmoSystem : SystemBase
             animator.SetLayerWeight(0, 1);
             animator.SetLayerWeight(1, 0);
         }
-        
     }
 }

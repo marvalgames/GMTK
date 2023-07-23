@@ -10,6 +10,7 @@ public struct DefensiveStrategyComponent : IComponentData
     public float currentRoleTimer;
     public Entity closeBulletEntity;
     public Entity closestPlayerEntity;
+    public float switchToPlayerMultiplier;
 }
 
 public struct EnemyBehaviourComponent : IComponentData
@@ -71,6 +72,9 @@ public class EnemyBehaviorManager : MonoBehaviour
     [SerializeField] [Tooltip("If enabled distance")]
     private float breakRouteVisionDistance;
 
+    [SerializeField] [Tooltip("Higher is closer range enemy looks for player")]
+    public float switchToPlayerMultiplier = 6;
+
     [Header("Mechanics")] [SerializeField] private bool canFreeze;
 
     class EnemyBehaviourBaker : Baker<EnemyBehaviorManager>
@@ -103,7 +107,8 @@ public class EnemyBehaviorManager : MonoBehaviour
                     breakRouteVisionDistance = authoring.breakRouteVisionDistance,
                     currentRole = DefensiveRoles.None,
                     currentRoleMaxTime = authoring.currentRoleMaxTime,
-                    currentRoleTimer = 0
+                    currentRoleTimer = 0,
+                    switchToPlayerMultiplier = authoring.switchToPlayerMultiplier
                 });
 
             var position = authoring.transform.position;

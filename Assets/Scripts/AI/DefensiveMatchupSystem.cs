@@ -63,7 +63,7 @@ namespace AI
                         var distance = math.distance(playerTransform.Position, enemyTransform.Position);
                         if (EnemiesGroup.HasComponent(enemyE) && EnemiesGroup.HasComponent(playerE))
                         {
-                            distance *= 6;
+                            distance *= defensiveStrategyComponent.switchToPlayerMultiplier;
                         }
                         if (distance < closestDistance)
                         {
