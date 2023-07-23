@@ -4,7 +4,6 @@ using Unity.Collections;
 using UnityEngine;
 
 
-
 [System.Serializable]
 public struct LevelCompleteComponent : IComponentData
 {
@@ -18,15 +17,12 @@ public struct LevelCompleteComponent : IComponentData
 //[UpdateAfter(typeof(WinnerSystems))]
 [UpdateInGroup(typeof(SimulationSystemGroup))]
 [RequireMatchingQueriesForUpdate]
-
 public partial class LevelCompleteSystem : SystemBase
 {
-    
-
     protected override void OnUpdate()
     {
         if (LevelManager.instance == null) return;
-        
+
 
         var currentLevelCompleted = LevelManager.instance.currentLevelCompleted;
         var totalGameLevels = LevelManager.instance.totalLevels;
@@ -34,8 +30,8 @@ public partial class LevelCompleteSystem : SystemBase
         Debug.Log("LEVEL CURRENT " + currentLevelCompleted);
         if (currentLevelCompleted >= totalGameLevels)
             return; //all levels complete before even checking if level complete below than return since game over basically
-        
-        
+
+
         var query = GetEntityQuery(typeof(LevelCompleteComponent), typeof(PlayerComponent));
         var requests =
             query.ToEntityArray(Allocator.Temp);
@@ -48,8 +44,6 @@ public partial class LevelCompleteSystem : SystemBase
         {
             return;
         }
-        
-
 
         var levelManager = LevelManager.instance.levelSettings[currentLevelCompleted];
         if (levelManager.levelCompleteScenario ==
@@ -66,7 +60,6 @@ public partial class LevelCompleteSystem : SystemBase
                     {
                         LevelCompleteComponent.targetReached = false;
                         levelCompleteCounter += 1;
-                       
                     }
                 }
             ).Run();
@@ -88,8 +81,6 @@ public partial class LevelCompleteSystem : SystemBase
                 levelComplete = true;
                 Debug.Log("LEVEL COMPLETE DESTROY");
             }
-           
-          
         }
 
         if (levelComplete)
@@ -108,9 +99,26 @@ public partial class LevelCompleteSystem : SystemBase
                         levelCompleteMenuGroup.ShowMenu(message);
                     }
                 ).Run();
-                
-                
+
+
                 LevelManager.instance.currentLevelCompleted += 1;
+
+                //level bonus
+                Entities.WithoutBurst().WithStructuralChanges().ForEach
+                (
+                    (
+                        Entity e,
+                        ref ScoreComponent scoreComponent) =>
+                    {
+                        Debug.Log("SCORE " + scoreComponent.score);
+                        var score = (1 + (float) LevelManager.instance.currentLevelCompleted / 20f +
+                                     scoreComponent.streak / 100f) * scoreComponent.score;
+                        Debug.Log("SCORE " + score);
+                        scoreComponent.score = (int) score;
+                    }
+                ).Run();
+
+
                 //Debug.Log("LEVEL UP " + LevelManager.instance.endGame);
                 //Debug.Log("LEVEL TOTAL " + LevelManager.instance.totalLevels);
             }

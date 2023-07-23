@@ -126,7 +126,7 @@ public partial class PostDeadSystem : SystemBase
         var time = SystemAPI.Time.DeltaTime;
 
         Entities.WithoutBurst().ForEach(
-            (HealthBar character, Entity e, ref DeadComponent deadComponent, ref LocalTransform LocalTransform) =>
+            (HealthBar character, Entity e, ref DeadComponent deadComponent, ref LocalTransform localTransform) =>
             {
                 if (deadComponent.isDead)
                 {
@@ -136,6 +136,7 @@ public partial class PostDeadSystem : SystemBase
                         var transform = character.transform;
                         var pos = transform.position;
                         pos.y = -4096;
+                        localTransform.Position.y = -4096;
                         transform.position = pos;
 
                         ecb.RemoveComponent(e, typeof(DeadComponent));
