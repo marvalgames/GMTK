@@ -42,8 +42,6 @@ public class DeadMenuGroup : MonoBehaviour
         var entity = manager.CreateEntity();
         manager.AddComponentData(entity, new DeadMenuComponent() {hide = true});
         manager.AddComponentObject(entity, this);
-
-        
         audioSource = GetComponent<AudioSource>();
         canvasGroup = GetComponent<CanvasGroup>();
         buttons = gameObject.GetComponentsInChildren<Button>().ToList();
@@ -88,8 +86,9 @@ public class DeadMenuGroup : MonoBehaviour
 
     public void ShowMenu()
     {
-        
 
+
+        GameInterface.instance.Paused = true;
         GameInterface.instance.EnableControllerMaps(false, true, false);
 
         canvasGroup.alpha = 1;

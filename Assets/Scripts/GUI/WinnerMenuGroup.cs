@@ -134,6 +134,7 @@ public class WinnerMenuGroup : MonoBehaviour
         canvasGroup.alpha = 1;
         canvasGroup.interactable = true;
         canvasGroup.blocksRaycasts = true;
+        GameInterface.instance.Paused = true;
         GameInterface.instance.EnableControllerMaps(false,true,false);
         if (defaultButton)
         {

@@ -28,6 +28,7 @@ public class GameInterface : MonoBehaviour
     public static event Action SelectClickedEvent;
     public static GameInterface instance = null;
 
+    private int sceneIndex = 0;
 
     [Header("READ ONLY")]
     public bool Paused = false;
@@ -62,8 +63,8 @@ public class GameInterface : MonoBehaviour
         player = ReInput.players.GetPlayer(playerId);
         Paused = startPaused;
         StateChange = true;
-        int scene = SceneManager.GetActiveScene().buildIndex;
-        if (scene <= 1)
+        sceneIndex = SceneManager.GetActiveScene().buildIndex;
+        if (sceneIndex <= 1)
         {
             EnableControllerMaps(false, isMenu: true, false);
         }
@@ -92,16 +93,17 @@ public class GameInterface : MonoBehaviour
     {
         //Debug.Log("enable DIALOG MENU ");
         var player = ReInput.players.GetPlayer(0);
+        if (sceneIndex <= 1) isMenu = true;//always true in menu or loader scene index
 
 
         foreach (ControllerMap map in player.controllers.maps.GetAllMapsInCategory("Default", ControllerType.Joystick))
         {
-            map.enabled = isDefault; // set the enabled state on the map
+            if(!isMenu) map.enabled = isDefault; // set the enabled state on the map
         }
 
         foreach (ControllerMap map in player.controllers.maps.GetAllMapsInCategory("Default", ControllerType.Keyboard))
         {
-            map.enabled = isDefault; // set the enabled state on the map
+            if(!isMenu) map.enabled = isDefault; // set the enabled state on the map
         }
         
         foreach (ControllerMap map in player.controllers.maps.GetAllMapsInCategory("Menu", ControllerType.Joystick))
@@ -116,12 +118,12 @@ public class GameInterface : MonoBehaviour
         
         foreach (ControllerMap map in player.controllers.maps.GetAllMapsInCategory("Dialog", ControllerType.Joystick))
         {
-            map.enabled = isDialog; // set the enabled state on the map
+            if(!isMenu) map.enabled = isDialog; // set the enabled state on the map
         }
 
         foreach (ControllerMap map in player.controllers.maps.GetAllMapsInCategory("Dialog", ControllerType.Keyboard))
         {
-            map.enabled = isDialog; // set the enabled state on the map
+            if(!isMenu) map.enabled = isDialog; // set the enabled state on the map
         }
 
         if (isDefault)

@@ -49,6 +49,9 @@ public class InstructionsMenuGroup : MonoBehaviour
     private bool startHideTimer;
     private float showTimeLength = 3;
 
+    [SerializeField] private InstructionsView startInstructions;
+    private bool startInstructionsCompleted;
+
     public InstructionsView[] instructionList;
     private TextMeshProUGUI currentInstruction;
 
@@ -78,6 +81,11 @@ public class InstructionsMenuGroup : MonoBehaviour
         startHideTimer = true;
 
 
+        currentInstruction = startInstructions.instruction;
+        currentInstruction.text = startInstructions.text;
+        currentInstruction.fontSize = startInstructions.fontSize;
+
+
     }
 
     void SetupCurrentInstruction(int index)
@@ -105,7 +113,13 @@ public class InstructionsMenuGroup : MonoBehaviour
     {
         if (manager == default) return;
 
-        if (currentInstructionCount > totalInstructions) return;
+        if (!GameInterface.instance.Paused)
+        {
+            startInstructionsCompleted = true;
+        }
+        
+
+        if (currentInstructionCount > totalInstructions || !startInstructionsCompleted) return;
 
 
 
