@@ -48,22 +48,19 @@ namespace Sandbox.Player
         public CameraTypes weaponCamera;
         public float3 aimDirection;
         public float3 crosshairRaycastTarget;
-        // public float raycastTargetHitDistanceZfromCamera;
-        // public float3 closetEnemyWeaponTargetPosition;
         public float3 weaponLocation;
-        // public float3 screenPosition;
         public float3 mousePosition;
         public float3 targetPosition;
         public LocalTransform target;
         public float3 rayCastStart;
         public float3 rayCastEnd;
         public LocalTransform AmmoStartTransform;
-        //public Rotation AmmoStartRotation;
         public bool isMouseMoving;
         public float angleToTarget;
         public bool aimMode;
         public float distanceFromTarget;
         public bool startDashAimMode;
+        public bool aimDisabled;
     }
 
     public class PlayerWeaponAim : MonoBehaviour
@@ -75,6 +72,7 @@ namespace Sandbox.Player
 
 
         public bool aimMode = true;
+        public bool aimDisabled = false;
         public Transform target;
         public Transform aimTransform;
         [Range(0.0f, 1.0f)] [SerializeField] private float aimWeight = 1.0f;
@@ -199,9 +197,7 @@ namespace Sandbox.Player
                     position.z);
             }
 
-            
-
-            var actorWeaponAimComponent = _manager.GetComponentData<ActorWeaponAimComponent>(_entity);
+          
 
             
         }
@@ -217,6 +213,7 @@ namespace Sandbox.Player
             var actorWeaponAimComponent = _manager.GetComponentData<ActorWeaponAimComponent>(_entity);
             crosshairImage.enabled = true;
             aimMode = actorWeaponAimComponent.aimMode;
+            aimDisabled = actorWeaponAimComponent.aimDisabled;
 
             if (crossHair == null || !actorWeaponAimComponent.aimMode)
             {

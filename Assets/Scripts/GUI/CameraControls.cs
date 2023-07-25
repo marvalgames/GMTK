@@ -105,12 +105,14 @@ public class CameraControls : MonoBehaviour
 
         var controller = player.controllers.GetLastActiveController();
         var aimMode = false;
+        var aimDisabled = false;
         if (playerWeaponAimReference)
         {
             aimMode = playerWeaponAimReference.aimMode;
+            aimDisabled = playerWeaponAimReference.aimDisabled;
         }
 
-        if (controller == null || aimMode) return;
+        if (controller == null || aimMode && !aimDisabled) return;//if aim Disabled completely then always allow right stick cam controls
 
         var gamePad = controller.type == ControllerType.Joystick;
         var keyboard = controller.type == ControllerType.Keyboard;
