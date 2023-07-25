@@ -9,7 +9,7 @@ namespace Collisions
         None = 0,
         Body = 1,
         Head = 2,
-        Base = 3,//chest for player
+        Base = 3, //chest for player
         LeftHand = 4,
         RightHand = 5,
         LeftFoot = 6,
@@ -25,8 +25,6 @@ namespace Collisions
         Player = 16,
         Stairs = 17,
         Platform = 18
-
-
     }
 
 
@@ -36,7 +34,9 @@ namespace Collisions
         public int Type;
         public int index;
         public int CurrentFrame;
+
         public bool TriggerChecked;
+
         //parent of trigger ie bone 
         //if trigger is bullet then just returns bullet not shooter
         //use ammo component for shooter (owner)
@@ -48,6 +48,7 @@ namespace Collisions
         public bool Active;
         public int VfxSpawned;
     }
+
     [System.Serializable]
     public class VfxClass : IComponentData
     {
@@ -57,27 +58,23 @@ namespace Collisions
 
     public struct TriggeredComponentTag : IComponentData
     {
-
     }
-
 
 
     public class Trigger : MonoBehaviour
     {
+        public bool parentActor;
 
         public TriggerType Type;
-        [SerializeField]
-        private int index;
+        [SerializeField] private int index;
         public GameObject ParentGameObject;
         public bool deParent;
         public GameObject triggerVfxPrefab;
         public AudioSource triggerAudioSource;
 
 
-
         public class TriggerBaker : Baker<Trigger>
         {
-
             public override void Bake(Trigger authoring)
             {
                 if (authoring.deParent)
@@ -109,7 +106,6 @@ namespace Collisions
                 var vfxEntity = GetEntity(authoring.triggerVfxPrefab, TransformUsageFlags.Dynamic);
 
 
-
                 var trigger = new TriggerComponent
                 {
                     Type = (int)authoring.Type,
@@ -123,17 +119,19 @@ namespace Collisions
                 };
 
                 AddComponent(e, trigger);
-                AddComponent(e, new Parent
+                if (authoring.parentActor)
                 {
-                    Value = parentEntity
+                    AddComponent(e, new Parent
+                        {
+                            Value = parentEntity
+                        }
+                    );
                 }
-                );
+
+
+
 
             }
         }
-
-
-
-
     }
 }
