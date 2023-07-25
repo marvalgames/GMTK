@@ -141,7 +141,7 @@ namespace AI
             var closestPlayerEntity = Entity.Null;
             for (var j = 0; j < enemiesAttackEntityList.Length; j++)
             {
-                if (enemiesAttackEntityList[j] == enemyEntity) continue;
+                if (enemiesAttackEntityList[j] == enemyEntity || deadComponent.isDead) continue;
                 var playerEntity = enemiesAttackEntityList[j];
                 if (transformGroup.HasComponent(playerEntity))
                 {

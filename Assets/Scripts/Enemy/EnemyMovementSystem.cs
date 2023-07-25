@@ -254,6 +254,7 @@ namespace Enemy
                                 float3 opponentTargetPosition = new float3();
                                 float3 targetPosition = new float3();
                                 var targetEntity = matchupComponent.targetEntity;
+                                
 
                                 matchupComponent.isWaypointTarget = false;
                                 //if (targetEntity != Entity.Null)
