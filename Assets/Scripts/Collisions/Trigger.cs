@@ -1,4 +1,5 @@
 ﻿using Unity.Entities;
+using Unity.Transforms;
 using UnityEngine;
 
 namespace Collisions
@@ -56,7 +57,7 @@ namespace Collisions
 
     public struct TriggeredComponentTag : IComponentData
     {
-    
+
     }
 
 
@@ -76,7 +77,7 @@ namespace Collisions
 
         public class TriggerBaker : Baker<Trigger>
         {
-        
+
             public override void Bake(Trigger authoring)
             {
                 if (authoring.deParent)
@@ -108,6 +109,7 @@ namespace Collisions
                 var vfxEntity = GetEntity(authoring.triggerVfxPrefab, TransformUsageFlags.Dynamic);
 
 
+
                 var trigger = new TriggerComponent
                 {
                     Type = (int)authoring.Type,
@@ -121,11 +123,16 @@ namespace Collisions
                 };
 
                 AddComponent(e, trigger);
+                AddComponent(e, new Parent
+                {
+                    Value = parentEntity
+                }
+                );
 
             }
         }
 
-   
+
 
 
     }
