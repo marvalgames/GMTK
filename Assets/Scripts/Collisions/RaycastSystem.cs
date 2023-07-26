@@ -97,7 +97,7 @@ namespace Collisions
                     }
                 };
 
-                NativeList<DistanceHit> pointHits = new NativeList<DistanceHit>(Allocator.TempJob);
+                NativeList<DistanceHit> pointHits = new NativeList<DistanceHit>(Allocator.Temp);
                 var hasPointHit = collisionWorld.OverlapSphere(start, radius, ref pointHits, pointDistanceInput.Filter);
                 if (hasPointHit && applyImpulse.InJump == false)
                 {

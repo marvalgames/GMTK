@@ -15,7 +15,7 @@ namespace Collisions
             var ecb = new EntityCommandBuffer(Allocator.TempJob);
             
             var playerQuery = GetEntityQuery(ComponentType.ReadOnly<PlayerComponent>());//player 0
-            var playerList = playerQuery.ToEntityArray(Allocator.TempJob);
+            var playerList = playerQuery.ToEntityArray(Allocator.Temp);
             if (playerList.Length == 0) return;
 
             

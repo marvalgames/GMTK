@@ -28,7 +28,7 @@ public partial struct AmmoSystem : ISystem
     {
         var ecb = new EntityCommandBuffer(Allocator.TempJob);
         var dt = SystemAPI.Time.fixedDeltaTime; //bullet duration
-        var playerEntities = playerQuery.ToEntityArray(Allocator.TempJob);
+        var playerEntities = playerQuery.ToEntityArray(Allocator.Temp);
         if(playerEntities.Length == 0) return;
         var player = playerEntities[0];//P1
 

@@ -25,7 +25,7 @@ namespace Enemy
 
             //var weaponComponentGroup = SystemAPI.GetComponentLookup<WeaponComponent>(false);
             playerQuery = GetEntityQuery(ComponentType.ReadOnly<PlayerComponent>());
-            PlayerEntities = playerQuery.ToEntityArray(Allocator.TempJob);
+            PlayerEntities = playerQuery.ToEntityArray(Allocator.Temp);
             var playerIsFiring = false;
             for (var i = 0; i < PlayerEntities.Length; i++)
             {
