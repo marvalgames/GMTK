@@ -12,7 +12,7 @@ namespace Sandbox.Player
     [RequireMatchingQueriesForUpdate]
     public partial class PlayerDashSystem : SystemBase
     {
-        private static readonly int dash = Animator.StringToHash("Dash");
+        private static readonly int Dash = Animator.StringToHash("Dash");
 
 
         protected override void OnUpdate()
@@ -24,19 +24,16 @@ namespace Sandbox.Player
             Entities.WithoutBurst().ForEach(
                 (
                     Entity e,
-                    ref LocalTransform t,
                     ref PlayerDashComponent playerDash,
                     in InputControllerComponent inputController,
-                    in ApplyImpulseComponent apply,
                     in LocalToWorld ltw,
                     in Animator animator,
                     in PlayerDashClass player
-
                 ) =>
                 {
                     if (playerDash.active == false) return;
                     var audioSource = player.audioSource;
-                  
+
                     if (playerDash.DelayTimeTicker > 0)
                     {
                         playerDash.DelayTimeTicker -= dt;
@@ -49,17 +46,14 @@ namespace Sandbox.Player
 
                     if (playerDash.DashTimeTicker == 0 && playerDash.DelayTimeTicker <= 0)
                     {
-                        var bPressed = inputController.buttonB_DoublePress; // put back for general LD 50 change since no jump
-                        //bool rtPressed = inputController.buttonA_Pressed;
+                        var bPressed =
+                            inputController.buttonB_DoublePress; // put back for general LD 50 change since no jump
                         if (bPressed)
                         {
-                            //t.Value += ltw.Forward * dt * playerDash.power;
-                            //pv.Linear += ltw.Forward * playerDash.power;
                             playerDash.DashTimeTicker += dt;
-                            if (animator.GetInteger(dash) == 0)
+                            if (animator.GetInteger(Dash) == 0)
                             {
-                                animator.SetInteger(dash, 1);
-                                //playerDash.Collider = SystemAPI.GetComponent<PhysicsCollider>(e);
+                                animator.SetInteger(Dash, 1);
                                 playerDash.InDash = true;
                                 if (playerDash.uses > 0)
                                 {
@@ -69,7 +63,6 @@ namespace Sandbox.Player
                                 {
                                     playerDash.active = false;
                                 }
-
                             }
 
                             if (audioSource != null)
@@ -80,9 +73,7 @@ namespace Sandbox.Player
                                     {
                                         audioSource.clip = player.audioSource.clip;
                                         audioSource.Play();
-
                                     }
-
                                 }
                             }
 
@@ -94,58 +85,32 @@ namespace Sandbox.Player
                                     player.ps.Play(true);
                                 }
                             }
-
-
-
                         }
                     }
-                    else if (playerDash.DashTimeTicker < playerDash.dashTime && animator.speed > 0 && 
+                    else if (playerDash.DashTimeTicker < playerDash.dashTime && animator.speed > 0 &&
                              SystemAPI.HasComponent<PhysicsVelocity>(e) && SystemAPI.HasComponent<PhysicsMass>(e))
                     {
-                        //var pv = new PhysicsVelocity();
                         var pv = SystemAPI.GetComponent<PhysicsVelocity>(e);
                         var pm = SystemAPI.GetComponent<PhysicsMass>(e);
                         playerDash.InDash = true;
-
-                        //Debug.Log("fw");
-                        //t.Value += ltw.Forward * dt * playerDash.power;
                         var force = ltw.Forward * playerDash.power;
-                        //pv.Linear = ltw.Forward * playerDash.power;
                         pv.ApplyLinearImpulse(pm, force);
                         playerDash.DashTimeTicker += dt;
                         SystemAPI.SetComponent(e, pv);
                     }
                     else if (playerDash.DashTimeTicker >= playerDash.dashTime)
                     {
-                        //playerDash.colliderAdded = true;
-                        //playerDash.colliderRemoved = false;
-                        //if(SystemAPI.HasComponent<PhysicsCollider>(e) == false)
-                        //{
-                            //var collider = SystemAPI.GetComponent<PhysicsCollider>(e);
-                            //playerDash.box = collider.Value;
-                        //}    
                         playerDash.DashTimeTicker = 0;
                         playerDash.DelayTimeTicker = playerDash.delayTime;
-                        animator.SetInteger(dash, 0);
+                        animator.SetInteger(Dash, 0);
                         playerDash.InDash = false;
                         if (audioSource != null) audioSource.Stop();
                         if (player.ps != null) player.ps.Stop();
-
                     }
-
-
                 }
             ).Run();
-
             ecb.Playback(EntityManager);
             ecb.Dispose();
-
-
         }
-
-
-
     }
 }
-
-

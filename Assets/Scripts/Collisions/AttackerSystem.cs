@@ -452,6 +452,7 @@ namespace Collisions
                 }
             ).Run();
 
+            playerList.Dispose();
 
             ecb.Playback(EntityManager);
             ecb.Dispose();
