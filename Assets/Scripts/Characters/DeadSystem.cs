@@ -6,6 +6,7 @@ using Unity.Mathematics;
 using Unity.Physics;
 using Unity.Transforms;
 using UnityEngine;
+using Collisions;
 
 [System.Serializable]
 public struct DeadComponent : IComponentData
@@ -135,8 +136,8 @@ public partial class PostDeadSystem : SystemBase
                         character.gameObject.SetActive(false);
                         var transform = character.transform;
                         var pos = transform.position;
-                        pos.y = -4096;
-                        localTransform.Position.y = -4096;
+                        pos.y = -2000;
+                        localTransform.Position.y = -2000;
                         transform.position = pos;
 
                         ecb.RemoveComponent(e, typeof(DeadComponent));
@@ -153,6 +154,27 @@ public partial class PostDeadSystem : SystemBase
                 }
             }
         ).Run();
+
+
+
+        Entities.WithoutBurst().WithStructuralChanges().ForEach(
+            (ref TriggerComponent trigger, ref Entity triggerEntity) =>
+            {
+                var e = trigger.ParentEntity;
+                if (SystemAPI.HasComponent<DeadComponent>(e))
+                {
+                    var dead = SystemAPI.GetComponent<DeadComponent>(e).isDead;
+                    if (dead && e != triggerEntity)
+                    {
+                        EntityManager.DestroyEntity(triggerEntity);
+                    }
+                }
+
+            }
+        ).Run();
+
+
+
 
         ecb.Playback(EntityManager);
         ecb.Dispose();
