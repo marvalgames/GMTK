@@ -2,32 +2,21 @@
 %TAG !u! tag:unity3d.com,2011:
 --- !u!21 &2100000
 Material:
-  serializedVersion: 8
+  serializedVersion: 6
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: MAT_PGGFloorV1
-  m_Shader: {fileID: 4800000, guid: 933532a4fcc9baf4fa0491de14d08ed7, type: 3}
-  m_Parent: {fileID: 0}
-  m_ModifiedSerializedProperties: 0
-  m_ValidKeywords:
-  - _NORMALMAP
-  m_InvalidKeywords:
-  - _BORAISSMOOTH_ON
-  - _GORAISSMOOTH_ON
-  - _INVERSEMASK_ON
-  - _METALLICVORR_ON
-  - _VORRISMETALLIC_ON
-  - _YOBJECTSPACE_ON
+  m_Shader: {fileID: 46, guid: 0000000000000000f000000000000000, type: 0}
+  m_ShaderKeywords: _BORAISSMOOTH_ON _GORAISSMOOTH_ON _INVERSEMASK_ON _METALLICVORR_ON
+    _NORMALMAP _VORRISMETALLIC_ON _YOBJECTSPACE_ON
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 1
   m_DoubleSidedGI: 0
   m_CustomRenderQueue: -1
-  stringTagMap:
-    RenderType: Opaque
+  stringTagMap: {}
   disabledShaderPasses: []
-  m_LockedProperties: 
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
@@ -37,10 +26,6 @@ Material:
         m_Offset: {x: 0, y: 0}
     - _Albebo:
         m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    - _BaseMap:
-        m_Texture: {fileID: 2800000, guid: 4a883532a0557ba47ac96c39b3c73e08, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _BaseRoughness:
@@ -151,10 +136,6 @@ Material:
         m_Texture: {fileID: 2800000, guid: abe5e3461f60c7f4db0fa8625ae61590, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
-    - _SpecGlossMap:
-        m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
     - _ThirdTextureG:
         m_Texture: {fileID: 2800000, guid: 8cba8bc01d67d864b81b730e9be3c66f, type: 3}
         m_Scale: {x: 1, y: 1}
@@ -171,35 +152,15 @@ Material:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
-    - unity_Lightmaps:
-        m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    - unity_LightmapsInd:
-        m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    - unity_ShadowMasks:
-        m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    m_Ints: []
     m_Floats:
     - _AOPower: 0
     - _AlbedoAIsSmoothness: 0
-    - _AlphaClip: 0
-    - _AlphaToMask: 0
     - _BOrAIsSmooth: 1
     - _BaseMetallicness: 0
     - _BaseNormal: 1
-    - _Blend: 0
-    - _BlendModePreserveSpecular: 1
     - _BlendNormalWithMain: 0
     - _BrightenAlbebo: 0.5
     - _BumpScale: 0.4
-    - _ClearCoatMask: 0
-    - _ClearCoatSmoothness: 0
-    - _Cull: 2
     - _Cutoff: 0.5
     - _DamageAlphaBlend: 0
     - _DamageAlphaDistort: 0
@@ -209,7 +170,6 @@ Material:
     - _DamageMetalicness: 0
     - _DamageSmoothness: 1
     - _DebugVertexColor: 0
-    - _DetailAlbedoMapScale: 1
     - _DetailFadeAtDistance: 3
     - _DetailFaloff: 5
     - _DetailNormalMapScale: 0.23
@@ -222,9 +182,7 @@ Material:
     - _DistoMaskTileX: 0.2
     - _DistoMaskTileY: 0.2
     - _DstBlend: 0
-    - _DstBlendAlpha: 0
     - _EmissionScaleUI: 0
-    - _EnvironmentReflections: 1
     - _GlossMapScale: 1
     - _Glossiness: 0.2
     - _GlossyReflections: 1
@@ -248,8 +206,6 @@ Material:
     - _OcclusionPower: 0
     - _OcclusionStrength: 1
     - _Parallax: 0.02
-    - _QueueOffset: 0
-    - _ReceiveShadows: 1
     - _RimPower: 5.8125
     - _SecBlend: 0.414
     - _SecNormalPower: 0.87
@@ -259,14 +215,12 @@ Material:
     - _SecondaryMetalicness: 0
     - _SecondaryOverDamaged: 0
     - _Shininess: 0.14708251
-    - _Smoothness: 0.2
+    - _Smoothness: 1
     - _SmoothnessFRoughT: 0
     - _SmoothnessTextureChannel: 0
     - _Smothness: 0.214
     - _SpecularHighlights: 1
     - _SrcBlend: 1
-    - _SrcBlendAlpha: 1
-    - _Surface: 0
     - _ThirdDistortBlend: 0
     - _ThirdFaloff: 0
     - _ThirdMaskHardness: 0
@@ -279,12 +233,10 @@ Material:
     - _VOrRIsMetallic: 1
     - _WPosMul: 1
     - _WPosSmooth: 0
-    - _WorkflowMode: 1
     - _YObjectSpace: 1
     - _ZWrite: 1
     - __dirty: 0
     m_Colors:
-    - _BaseColor: {r: 0.7735849, g: 0.7735849, b: 0.7735849, a: 1}
     - _Color: {r: 0.7735849, g: 0.7735849, b: 0.7735849, a: 1}
     - _DirtColor_Blenda: {r: 0.12914327, g: 0.18399978, b: 0.057407834, a: 0.4745098}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 0}
@@ -296,17 +248,3 @@ Material:
     - _SpecColor: {r: 0.6985294, g: 0.8877283, b: 1, a: 1}
     - _TileBaseDamage: {r: 0.2, g: 0.2, b: 1, a: 1}
     - _TileSecThird: {r: 1, g: 1, b: 1, a: 1}
-  m_BuildTextureStacks: []
---- !u!114 &8781770206834099081
-MonoBehaviour:
-  m_ObjectHideFlags: 11
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d0353a89b1f911e48b9e16bdc9f2e058, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  version: 7

@@ -66,7 +66,7 @@ MonoBehaviour:
   Enabled: 1
   Ignore: 0
   _editor_drawRule: 1
-  CellAllow: 0
+  CellAllow: 1
   AllConditionsMet: 1
   replaceOnTag: Wall
   CheckMode: 0
@@ -194,11 +194,13 @@ MonoBehaviour:
   OMultiStamp: {fileID: 0}
   PrefabsList:
   - Prefab: {fileID: 249584196463317281, guid: fb41bd287d6b69a43a87e0327db4093e, type: 3}
-    MainCollider: {fileID: 0}
+    MainCollider: {fileID: 711815186599699760, guid: fb41bd287d6b69a43a87e0327db4093e,
+      type: 3}
     subID: 0
     _refMesh: {fileID: 752757723661553422, guid: 036af82fa45f3b645b1840f11d6a505e,
       type: 3}
-    _refCol: {fileID: 0}
+    _refCol: {fileID: 711815186599699760, guid: fb41bd287d6b69a43a87e0327db4093e,
+      type: 3}
   DrawMultiObjectStamps: 1
   Spawners:
   - Enabled: 1
@@ -220,9 +222,9 @@ MonoBehaviour:
     DontInheritRotations: 0
     SwitchSpawnedToStatic: 0
     MultipleToSpawn: 0
-    UseGlobalRules: 0
-    UseParentPackageRules: 0
-    _wasEnablingGlobalRules: 0
+    UseGlobalRules: 1
+    UseParentPackageRules: 1
+    _wasEnablingGlobalRules: 1
     ScaleAccess: 1
     DisplayPreviewGUI: 1
     IsSubSpawner: 0
@@ -640,9 +642,9 @@ MonoBehaviour:
     DontInheritRotations: 0
     SwitchSpawnedToStatic: 0
     MultipleToSpawn: 0
-    UseGlobalRules: 0
-    UseParentPackageRules: 0
-    _wasEnablingGlobalRules: 0
+    UseGlobalRules: 1
+    UseParentPackageRules: 1
+    _wasEnablingGlobalRules: 1
     ScaleAccess: 1
     DisplayPreviewGUI: 1
     IsSubSpawner: 0
@@ -654,7 +656,7 @@ MonoBehaviour:
   _editor_drawGlobalRules: 0
   _editor_drawModPackRules: 0
   _editor_shareSelected: 0
-  ParentPreset: {fileID: 11400000}
+  ParentPreset: {fileID: 0}
   ParentPack: {fileID: -6317926385928581201}
 --- !u!114 &4147124474684739195
 MonoBehaviour:
@@ -749,7 +751,9 @@ MonoBehaviour:
   UseYLevel: -1
   AutoRemoveOverlaps: 1
   SetGhosts: 0
+  OverlapDetectMode: 0
   Version2: 0
+  ScaleBounds: 0.99
   Padding: 0
   YawOffset: 180
   DirectOffset: {x: 0, y: 0, z: 0.45}
@@ -774,7 +778,7 @@ MonoBehaviour:
   Enabled: 1
   Ignore: 0
   _editor_drawRule: 1
-  CellAllow: 0
+  CellAllow: 1
   AllConditionsMet: 1
   Propability: 0.604
   PropabilityMulVariable:
@@ -806,24 +810,30 @@ MonoBehaviour:
   PrefabsList:
   - Prefab: {fileID: 9096521279689755996, guid: a4f6117bd85d87a4280458d74754ba32,
       type: 3}
-    MainCollider: {fileID: 0}
+    MainCollider: {fileID: 1765407259461955804, guid: a4f6117bd85d87a4280458d74754ba32,
+      type: 3}
     subID: 0
     _refMesh: {fileID: -1342113450020964371, guid: 31a8dce7596b6164cbd2617b47d0ab80,
       type: 3}
-    _refCol: {fileID: 0}
+    _refCol: {fileID: 1765407259461955804, guid: a4f6117bd85d87a4280458d74754ba32,
+      type: 3}
   - Prefab: {fileID: 209366151475736082, guid: b9c74d785b8e7004cbecd2f1f17103d4, type: 3}
-    MainCollider: {fileID: 0}
+    MainCollider: {fileID: 2099906225440021396, guid: b9c74d785b8e7004cbecd2f1f17103d4,
+      type: 3}
     subID: 0
     _refMesh: {fileID: -1027802640635308308, guid: 07aaaf8881f8960468433c9c3119cda2,
       type: 3}
-    _refCol: {fileID: 0}
+    _refCol: {fileID: 2099906225440021396, guid: b9c74d785b8e7004cbecd2f1f17103d4,
+      type: 3}
   - Prefab: {fileID: 2676747702942714435, guid: ab101aec553c4994ca7ba53f86c39af9,
       type: 3}
-    MainCollider: {fileID: 0}
+    MainCollider: {fileID: 7088813820754977430, guid: ab101aec553c4994ca7ba53f86c39af9,
+      type: 3}
     subID: 0
     _refMesh: {fileID: -6727692842055578504, guid: 609820b1846401745a4af9b0215666c8,
       type: 3}
-    _refCol: {fileID: 0}
+    _refCol: {fileID: 7088813820754977430, guid: ab101aec553c4994ca7ba53f86c39af9,
+      type: 3}
   DrawMultiObjectStamps: 1
   Spawners:
   - Enabled: 1
@@ -841,9 +851,9 @@ MonoBehaviour:
     DontInheritRotations: 0
     SwitchSpawnedToStatic: 0
     MultipleToSpawn: 0
-    UseGlobalRules: 0
-    UseParentPackageRules: 0
-    _wasEnablingGlobalRules: 0
+    UseGlobalRules: 1
+    UseParentPackageRules: 1
+    _wasEnablingGlobalRules: 1
     ScaleAccess: 1
     DisplayPreviewGUI: 1
     IsSubSpawner: 0
@@ -866,9 +876,9 @@ MonoBehaviour:
     DontInheritRotations: 0
     SwitchSpawnedToStatic: 0
     MultipleToSpawn: 0
-    UseGlobalRules: 0
-    UseParentPackageRules: 0
-    _wasEnablingGlobalRules: 0
+    UseGlobalRules: 1
+    UseParentPackageRules: 1
+    _wasEnablingGlobalRules: 1
     ScaleAccess: 1
     DisplayPreviewGUI: 1
     IsSubSpawner: 0
@@ -889,9 +899,9 @@ MonoBehaviour:
     DontInheritRotations: 0
     SwitchSpawnedToStatic: 0
     MultipleToSpawn: 0
-    UseGlobalRules: 0
-    UseParentPackageRules: 0
-    _wasEnablingGlobalRules: 0
+    UseGlobalRules: 1
+    UseParentPackageRules: 1
+    _wasEnablingGlobalRules: 1
     ScaleAccess: 1
     DisplayPreviewGUI: 1
     IsSubSpawner: 0

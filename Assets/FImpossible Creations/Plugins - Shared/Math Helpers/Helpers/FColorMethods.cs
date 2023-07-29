@@ -46,7 +46,7 @@ namespace FIMSpace
         {
             if (string.IsNullOrEmpty(hex))
             {
-                FDebug.LogRed("Trying convert from hex to color empty string!");
+                Debug.Log("<color=red>Trying convert from hex to color empty string!</color>");
                 return Color.white;
             }
 

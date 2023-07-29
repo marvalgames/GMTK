@@ -27,7 +27,9 @@ MonoBehaviour:
   UseYLevel: -1
   AutoRemoveOverlaps: 1
   SetGhosts: 0
+  OverlapDetectMode: 0
   Version2: 0
+  ScaleBounds: 0.99
   Padding: 0
   YawOffset: 180
   DirectOffset: {x: 0, y: 0, z: 0.5}
@@ -88,11 +90,13 @@ MonoBehaviour:
   PrefabsList:
   - Prefab: {fileID: 6129157285678211373, guid: 7953dcefacaf17344a1c7690a1f6e4ba,
       type: 3}
-    MainCollider: {fileID: 0}
+    MainCollider: {fileID: 618305331976328175, guid: 7953dcefacaf17344a1c7690a1f6e4ba,
+      type: 3}
     subID: 0
     _refMesh: {fileID: -3513030201615671447, guid: dc4ae294cc271284c9e4e23bac27b922,
       type: 3}
-    _refCol: {fileID: 0}
+    _refCol: {fileID: 618305331976328175, guid: 7953dcefacaf17344a1c7690a1f6e4ba,
+      type: 3}
   DrawMultiObjectStamps: 1
   Spawners:
   - Enabled: 1
@@ -111,9 +115,9 @@ MonoBehaviour:
     DontInheritRotations: 0
     SwitchSpawnedToStatic: 0
     MultipleToSpawn: 0
-    UseGlobalRules: 0
-    UseParentPackageRules: 0
-    _wasEnablingGlobalRules: 0
+    UseGlobalRules: 1
+    UseParentPackageRules: 1
+    _wasEnablingGlobalRules: 1
     ScaleAccess: 1
     DisplayPreviewGUI: 1
     IsSubSpawner: 0
@@ -125,7 +129,7 @@ MonoBehaviour:
   _editor_drawGlobalRules: 0
   _editor_drawModPackRules: 0
   _editor_shareSelected: 0
-  ParentPreset: {fileID: 11400000}
+  ParentPreset: {fileID: 0}
   ParentPack: {fileID: 5192682264000405028}
 --- !u!114 &-5625836432293910602
 MonoBehaviour:
@@ -270,32 +274,40 @@ MonoBehaviour:
   PrefabsList:
   - Prefab: {fileID: 8807981424252446863, guid: a1bcfef01c40a254c9d77d530d147d0e,
       type: 3}
-    MainCollider: {fileID: 0}
+    MainCollider: {fileID: 4352415413986447227, guid: a1bcfef01c40a254c9d77d530d147d0e,
+      type: 3}
     subID: 0
     _refMesh: {fileID: -2943837084719644361, guid: 4a8a3f1a2001b7e44a5e2a17582809ad,
       type: 3}
-    _refCol: {fileID: 0}
+    _refCol: {fileID: 4352415413986447227, guid: a1bcfef01c40a254c9d77d530d147d0e,
+      type: 3}
   - Prefab: {fileID: 5057260830621552475, guid: d2247b2165217c04b89641c6af103fe1,
       type: 3}
-    MainCollider: {fileID: 0}
+    MainCollider: {fileID: 7000868315334079291, guid: d2247b2165217c04b89641c6af103fe1,
+      type: 3}
     subID: 0
     _refMesh: {fileID: -348173146188741064, guid: f196cbb69e357dc4982af9da481c9452,
       type: 3}
-    _refCol: {fileID: 0}
+    _refCol: {fileID: 7000868315334079291, guid: d2247b2165217c04b89641c6af103fe1,
+      type: 3}
   - Prefab: {fileID: 6404195981750139294, guid: 4b032bcfaaa4656459cc0852d6691d7a,
       type: 3}
-    MainCollider: {fileID: 0}
+    MainCollider: {fileID: 6343697249403088830, guid: 4b032bcfaaa4656459cc0852d6691d7a,
+      type: 3}
     subID: 0
     _refMesh: {fileID: -7264460756561508440, guid: f85ca80485676ff48afbc6bc8be8eb56,
       type: 3}
-    _refCol: {fileID: 0}
+    _refCol: {fileID: 6343697249403088830, guid: 4b032bcfaaa4656459cc0852d6691d7a,
+      type: 3}
   - Prefab: {fileID: 4505610779779271740, guid: 3a93632631cc2704f971ca6a38ddab7f,
       type: 3}
-    MainCollider: {fileID: 0}
+    MainCollider: {fileID: 7915560129940487804, guid: 3a93632631cc2704f971ca6a38ddab7f,
+      type: 3}
     subID: 0
     _refMesh: {fileID: 5437256783707678637, guid: 98123d7676a75af4db0ecff19ac21bc3,
       type: 3}
-    _refCol: {fileID: 0}
+    _refCol: {fileID: 7915560129940487804, guid: 3a93632631cc2704f971ca6a38ddab7f,
+      type: 3}
   DrawMultiObjectStamps: 1
   Spawners:
   - Enabled: 1
@@ -314,9 +326,9 @@ MonoBehaviour:
     DontInheritRotations: 0
     SwitchSpawnedToStatic: 0
     MultipleToSpawn: 0
-    UseGlobalRules: 0
-    UseParentPackageRules: 0
-    _wasEnablingGlobalRules: 0
+    UseGlobalRules: 1
+    UseParentPackageRules: 1
+    _wasEnablingGlobalRules: 1
     ScaleAccess: 1
     DisplayPreviewGUI: 1
     IsSubSpawner: 0
@@ -328,6 +340,7 @@ MonoBehaviour:
     Parent: {fileID: -1378860347794066295}
     Rules:
     - {fileID: -4264904661727041051}
+    - {fileID: 8187289526526490648}
     Mode: 0
     CellCheckMode: 0
     _Editor_SpawnerAdvancedOptionsFoldout: 0
@@ -336,9 +349,9 @@ MonoBehaviour:
     DontInheritRotations: 0
     SwitchSpawnedToStatic: 0
     MultipleToSpawn: 0
-    UseGlobalRules: 0
-    UseParentPackageRules: 0
-    _wasEnablingGlobalRules: 0
+    UseGlobalRules: 1
+    UseParentPackageRules: 1
+    _wasEnablingGlobalRules: 1
     ScaleAccess: 1
     DisplayPreviewGUI: 1
     IsSubSpawner: 0
@@ -358,9 +371,9 @@ MonoBehaviour:
     DontInheritRotations: 0
     SwitchSpawnedToStatic: 0
     MultipleToSpawn: 0
-    UseGlobalRules: 0
-    UseParentPackageRules: 0
-    _wasEnablingGlobalRules: 0
+    UseGlobalRules: 1
+    UseParentPackageRules: 1
+    _wasEnablingGlobalRules: 1
     ScaleAccess: 1
     DisplayPreviewGUI: 1
     IsSubSpawner: 0
@@ -381,9 +394,9 @@ MonoBehaviour:
     DontInheritRotations: 0
     SwitchSpawnedToStatic: 0
     MultipleToSpawn: 0
-    UseGlobalRules: 0
-    UseParentPackageRules: 0
-    _wasEnablingGlobalRules: 0
+    UseGlobalRules: 1
+    UseParentPackageRules: 1
+    _wasEnablingGlobalRules: 1
     ScaleAccess: 1
     DisplayPreviewGUI: 1
     IsSubSpawner: 0
@@ -394,8 +407,8 @@ MonoBehaviour:
   _editor_drawSpawners: 1
   _editor_drawGlobalRules: 0
   _editor_drawModPackRules: 0
-  _editor_shareSelected: 0
-  ParentPreset: {fileID: 11400000}
+  _editor_shareSelected: 1
+  ParentPreset: {fileID: 0}
   ParentPack: {fileID: 5192682264000405028}
 --- !u!114 &-1270098888529892867
 MonoBehaviour:
@@ -588,7 +601,9 @@ MonoBehaviour:
   UseYLevel: -1
   AutoRemoveOverlaps: 1
   SetGhosts: 0
+  OverlapDetectMode: 0
   Version2: 0
+  ScaleBounds: 0.99
   Padding: 0
   YawOffset: 135
   DirectOffset: {x: 0.707, y: 0, z: -0.045}
@@ -620,11 +635,13 @@ MonoBehaviour:
   PrefabsList:
   - Prefab: {fileID: 5842927858856537548, guid: 6b084cc3c138ba24fbc1eba84b06f6d4,
       type: 3}
-    MainCollider: {fileID: 0}
+    MainCollider: {fileID: 5441241767219233899, guid: 6b084cc3c138ba24fbc1eba84b06f6d4,
+      type: 3}
     subID: 0
     _refMesh: {fileID: 2172331759731019218, guid: 6b1c33453df0f204aa0a4b20f7c366c5,
       type: 3}
-    _refCol: {fileID: 0}
+    _refCol: {fileID: 5441241767219233899, guid: 6b084cc3c138ba24fbc1eba84b06f6d4,
+      type: 3}
   DrawMultiObjectStamps: 1
   Spawners:
   - Enabled: 1
@@ -643,9 +660,9 @@ MonoBehaviour:
     DontInheritRotations: 0
     SwitchSpawnedToStatic: 0
     MultipleToSpawn: 0
-    UseGlobalRules: 0
-    UseParentPackageRules: 0
-    _wasEnablingGlobalRules: 0
+    UseGlobalRules: 1
+    UseParentPackageRules: 1
+    _wasEnablingGlobalRules: 1
     ScaleAccess: 1
     DisplayPreviewGUI: 1
     IsSubSpawner: 0
@@ -657,7 +674,7 @@ MonoBehaviour:
   _editor_drawGlobalRules: 0
   _editor_drawModPackRules: 0
   _editor_shareSelected: 0
-  ParentPreset: {fileID: 11400000}
+  ParentPreset: {fileID: 0}
   ParentPack: {fileID: 5192682264000405028}
 --- !u!114 &1863252743661460577
 MonoBehaviour:
@@ -711,11 +728,13 @@ MonoBehaviour:
   PrefabsList:
   - Prefab: {fileID: 6129157285678211373, guid: da906508781713b4097451a7a289fe96,
       type: 3}
-    MainCollider: {fileID: 0}
+    MainCollider: {fileID: 618305331976328175, guid: da906508781713b4097451a7a289fe96,
+      type: 3}
     subID: 0
     _refMesh: {fileID: -3513030201615671447, guid: dc4ae294cc271284c9e4e23bac27b922,
       type: 3}
-    _refCol: {fileID: 0}
+    _refCol: {fileID: 618305331976328175, guid: da906508781713b4097451a7a289fe96,
+      type: 3}
   DrawMultiObjectStamps: 1
   Spawners:
   - Enabled: 1
@@ -734,9 +753,9 @@ MonoBehaviour:
     DontInheritRotations: 0
     SwitchSpawnedToStatic: 0
     MultipleToSpawn: 0
-    UseGlobalRules: 0
-    UseParentPackageRules: 0
-    _wasEnablingGlobalRules: 0
+    UseGlobalRules: 1
+    UseParentPackageRules: 1
+    _wasEnablingGlobalRules: 1
     ScaleAccess: 1
     DisplayPreviewGUI: 1
     IsSubSpawner: 0
@@ -748,7 +767,7 @@ MonoBehaviour:
   _editor_drawGlobalRules: 0
   _editor_drawModPackRules: 0
   _editor_shareSelected: 0
-  ParentPreset: {fileID: 11400000}
+  ParentPreset: {fileID: 0}
   ParentPack: {fileID: 5192682264000405028}
 --- !u!114 &5192682264000405028
 MonoBehaviour:
@@ -878,6 +897,33 @@ MonoBehaviour:
   NewMaterial: {fileID: 0}
   MatVariable:
     name: OverrideWallsMat
+    requiredType: 3
+    Tooltip: 
+  ReplaceOnly: {fileID: 0}
+  ReplaceOnlyFirst: 1
+--- !u!114 &8187289526526490648
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3ea731bcdcafc6441aa5eca1daa55544, type: 3}
+  m_Name: SR_SetMaterial-[Walls Floor Ceil]
+  m_EditorClassIdentifier: 
+  Logic: 0
+  Negate: 0
+  Global: 0
+  Enabled: 1
+  Ignore: 0
+  _editor_drawRule: 1
+  CellAllow: 1
+  AllConditionsMet: 1
+  NewMaterial: {fileID: 0}
+  MatVariable:
+    name: OverrideFloorMat
     requiredType: 3
     Tooltip: 
   ReplaceOnly: {fileID: 0}

@@ -9,8 +9,9 @@ using System;
 
 namespace FIMSpace.Generating
 {
+
     [AddComponentMenu("FImpossible Creations/PGG/Grid Painter", 0)]
-    public class GridPainter : PGGGeneratorBase
+    public partial class GridPainter : PGGGeneratorBase
     {
         public FGenGraph<FieldCell, FGenPoint> grid = new FGenGraph<FieldCell, FGenPoint>();
 
@@ -72,6 +73,12 @@ namespace FIMSpace.Generating
             GridPainter painter = menuCommand.context as GridPainter;
             if (painter)
             {
+                if (painter.IsUsingNewApproach == false)
+                {
+                    UnityEngine.Debug.Log("Not Using new approch yet");
+                    return;
+                }
+
                 Selection.activeGameObject = painter.GetGridPainterData.gameObject;
             }
         }
@@ -177,6 +184,15 @@ namespace FIMSpace.Generating
 
         public FGenGraph<FieldCell, FGenPoint> Grid { get { return grid; } }
         public int LoadCount { get { return GetAllPainterCells.Count; } }
+
+
+#if UNITY_EDITOR
+        private void OnApplicationQuit()
+        {
+            if (Application.isPlaying) return;
+            SaveCells();
+        }
+#endif
 
         private void Reset()
         {
@@ -368,6 +384,7 @@ namespace FIMSpace.Generating
 
 #if UNITY_EDITOR
             EditorUtility.SetDirty(this);
+            if (_painterData) UnityEditor.EditorUtility.SetDirty(_painterData);
 #endif
         }
 
@@ -408,6 +425,7 @@ namespace FIMSpace.Generating
 
 #if UNITY_EDITOR
             UnityEditor.EditorUtility.SetDirty(this);
+            if (_painterData) UnityEditor.EditorUtility.SetDirty(_painterData);
 #endif
         }
 
@@ -600,11 +618,9 @@ namespace FIMSpace.Generating
         {
             if (grid.AllCells.Count <= 1) return;
 
-            var cellsMemo = GetAllPainterCells; // Back compability
-            ClearSavedCells();
-            cellsMemory.Clear();
+            cellsMemory.Clear(); // Back compability - removing old container, to save in new
 
-            cellsMemo = GetGridPainterData.CellsMemory; // Save using new approach
+            var cellsMemo = GetGridPainterData.CellsMemory; // Save using new approach
 
             for (int i = 0; i < grid.AllApprovedCells.Count; i++)
             {
@@ -617,6 +633,11 @@ namespace FIMSpace.Generating
                 //pCell.Instructions = cell.GetInstructions();
                 cellsMemo.Add(pCell);
             }
+
+#if UNITY_EDITOR
+            UnityEditor.EditorUtility.SetDirty(this);
+            if (_painterData) UnityEditor.EditorUtility.SetDirty(_painterData);
+#endif
         }
 
         public void LoadCells()
@@ -923,7 +944,7 @@ namespace FIMSpace.Generating
         #region Grid Data Containing Helper
 
         [SerializeField, HideInInspector] GridPainterData _painterData = null;
-
+        public bool IsUsingNewApproach { get { return _painterData != null; } }
         public GridPainterData GetGridPainterData
         {
             get
@@ -949,43 +970,6 @@ namespace FIMSpace.Generating
                 _painterData.Parent = this;
                 return _painterData;
             }
-        }
-
-        public class GridPainterData : MonoBehaviour
-        {
-            public GridPainter Parent;
-            /*[HideInInspector] */public List<PainterCell> CellsMemory = new List<PainterCell>();
-            public List<SpawnInstructionGuide> CellsInstructions = new List<SpawnInstructionGuide>();
-
-            #region Editor Class
-
-#if UNITY_EDITOR
-            [UnityEditor.CanEditMultipleObjects]
-            [UnityEditor.CustomEditor(typeof(GridPainterData))]
-            public class GridPainterDataEditor : UnityEditor.Editor
-            {
-                public GridPainterData Get { get { if (_get == null) _get = (GridPainterData)target; return _get; } }
-                private GridPainterData _get;
-
-                public override void OnInspectorGUI()
-                {
-                    UnityEditor.EditorGUILayout.HelpBox("This component is keeping grid data saved. Thanks to separated component, you will not lot performance in scene view when working with big grids.", UnityEditor.MessageType.Info);
-
-                    serializedObject.Update();
-
-                    GUILayout.Space(4f);
-                    DrawPropertiesExcluding(serializedObject, "m_Script");
-
-                    serializedObject.ApplyModifiedProperties();
-
-                    GUILayout.Space(4f);
-                    EditorGUILayout.LabelField("Containing " + Get.CellsMemory.Count + " saved cells.");
-                }
-            }
-#endif
-
-            #endregion
-
         }
 
         #endregion
@@ -1241,12 +1225,14 @@ namespace FIMSpace.Generating
                         Get.ignoredPacksForGenerating.Add(pack);
                         serializedObject.Update();
                         EditorUtility.SetDirty(Get);
+                        if (Get.IsUsingNewApproach) UnityEditor.EditorUtility.SetDirty(Get.GetGridPainterData);
                     }
                     else
                     {
                         Get.ignoredPacksForGenerating.Remove(pack);
                         serializedObject.Update();
                         EditorUtility.SetDirty(Get);
+                        if (Get.IsUsingNewApproach) UnityEditor.EditorUtility.SetDirty(Get.GetGridPainterData);
                     }
                 }
 
@@ -1279,12 +1265,14 @@ namespace FIMSpace.Generating
                             Get.ignoredForGenerating.Add(mod);
                             serializedObject.Update();
                             EditorUtility.SetDirty(Get);
+                            if (Get.IsUsingNewApproach) UnityEditor.EditorUtility.SetDirty(Get.GetGridPainterData);
                         }
                         else
                         {
                             Get.ignoredForGenerating.Remove(mod);
                             serializedObject.Update();
                             EditorUtility.SetDirty(Get);
+                            if (Get.IsUsingNewApproach) UnityEditor.EditorUtility.SetDirty(Get.GetGridPainterData);
                         }
                     }
 
@@ -1302,6 +1290,7 @@ namespace FIMSpace.Generating
                         Get.ignoredForGenerating.Clear();
                         serializedObject.Update();
                         EditorUtility.SetDirty(Get);
+                        if (Get.IsUsingNewApproach) UnityEditor.EditorUtility.SetDirty(Get.GetGridPainterData);
                     }
                 }
 
