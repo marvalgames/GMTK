@@ -173,7 +173,7 @@ public class EnemyMove : MonoBehaviour
     public Vector3 originalPosition;
 
 
-    [Header("Misc")]
+    [Header("Misc")] public float locoPitch = .5f;
     public AudioSource audioSource;
     public AudioClip clip;
     public ParticleSystem psPrefab;
@@ -508,7 +508,7 @@ public class EnemyMove : MonoBehaviour
             agent.speed = speed * impulseFactor;
             speedMultiple = 1;
             velz *= speedMultiple * impulseFactor;
-            audioSource.pitch = velz;
+            audioSource.pitch = velz * locoPitch;
             if (!audioSource.isPlaying)
             {
                 audioSource.Play();

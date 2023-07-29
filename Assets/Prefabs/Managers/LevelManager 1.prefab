@@ -24,13 +24,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 201093865025715368}
+  serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 7738861509813667989}
-  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!82 &201093865025715366
 AudioSource:
@@ -45,7 +45,7 @@ AudioSource:
   m_audioClip: {fileID: 0}
   m_PlayOnAwake: 0
   m_Volume: 0.5
-  m_Pitch: 1
+  m_Pitch: 0.5
   Loop: 1
   Mute: 0
   Spatialize: 0
@@ -152,13 +152,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 201093866161898824}
+  serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 7738861509813667989}
-  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!82 &201093866161898825
 AudioSource:
@@ -172,8 +172,8 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 243530566269496766, guid: 3cfb8b2a43afdf44b9f25032d6f5fc38, type: 2}
   m_audioClip: {fileID: 0}
   m_PlayOnAwake: 0
-  m_Volume: 0.5
-  m_Pitch: 0.75
+  m_Volume: 0.4
+  m_Pitch: 1
   Loop: 0
   Mute: 0
   Spatialize: 0
@@ -280,6 +280,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1692643065403539494}
+  serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
@@ -288,7 +289,6 @@ Transform:
   - {fileID: 201093866161898822}
   - {fileID: 201093865025715369}
   m_Father: {fileID: 0}
-  m_RootOrder: 13
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &6068869277186761693
 MonoBehaviour:
@@ -322,13 +322,13 @@ MonoBehaviour:
   worldName: World
   audioSourceMenu: {fileID: 201093866161898825}
   audioSourceGame: {fileID: 201093865025715366}
-  menuMusic: {fileID: 8300000, guid: 2f0f162b3872be34b8e6031bf2a3d025, type: 3}
+  menuMusic: {fileID: 8300000, guid: bf982fc32ccf39947996fadb5d8bbe0b, type: 3}
   currentLevelCompleted: 0
   skipLoad: 0
   levelSettings:
   - levelName: Area I
     levelCompleteScenario: 0
-    potentialLevelTargets: 1
+    potentialLevelTargets: 6
     lives: 0
     points: 0
     playersDead: 0
@@ -338,6 +338,6 @@ MonoBehaviour:
     enemiesSaved: 0
     NpcSaved: 0
   levelMediaList:
-  - levelMusic: {fileID: 8300000, guid: bf982fc32ccf39947996fadb5d8bbe0b, type: 3}
-    levelVolume: 0.5
+  - levelMusic: {fileID: 8300000, guid: a243f8c62d9b49d4d8ad8cda5c6dbf72, type: 3}
+    levelVolume: 0.4
   newGame: 0

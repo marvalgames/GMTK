@@ -168,10 +168,10 @@ public partial class CharacterImpulseEffectsSystem : SystemBase
                 Entity e,
                 ref DeadComponent deadComponent,
                 ref EffectsComponent effectsComponent,
-                in Animator animator, in AudioSource audioSource,
+                in Animator animator, 
                 in EffectsManager effects) =>
             {
-                //var audioSource = effects.audioSource;
+                var audioSource = effects.audioSource;
                 if (effectsComponent.playEffectType == EffectType.TwoClose)
                 {
                     var effectsIndex = effectsComponent.effectIndex;
