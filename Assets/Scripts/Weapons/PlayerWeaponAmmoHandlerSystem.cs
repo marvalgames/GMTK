@@ -38,7 +38,7 @@ public partial class PlayerWeaponAmmoHandlerSystem : SystemBase
                 if (!SystemAPI.HasComponent<WeaponComponent>(entity) ||
                     SystemAPI.HasComponent<EnemyComponent>(entity)) return;
                 var gun = SystemAPI.GetComponent<WeaponComponent>(entity);
-                if (!gun.roleReversal)
+                if (gun.roleReversal == RoleReversalMode.Off)
                 {
                     if (attachWeapon.attachedWeaponSlot < 0 ||
                         attachWeapon.attachWeaponType != (int)WeaponType.Gun &&
@@ -57,7 +57,7 @@ public partial class PlayerWeaponAmmoHandlerSystem : SystemBase
                 var ammoDataComponent = SystemAPI.GetComponent<AmmoDataComponent>(primaryAmmoEntity);
                 var rate = ammoDataComponent.GameRate;
                 var strength = ammoDataComponent.GameStrength;
-                if (!gun.roleReversal)
+                if (gun.roleReversal == RoleReversalMode.Off)
                 {
                     //change based on game
                     if (gun.ChangeAmmoStats > 0)
@@ -72,7 +72,7 @@ public partial class PlayerWeaponAmmoHandlerSystem : SystemBase
                 {
                     gun.Duration += dt;
 
-                    if (!gun.roleReversal)
+                    if (gun.roleReversal == RoleReversalMode.Off)
                     {
                         var e = commandBuffer.Instantiate(entityInQueryIndex, gun.PrimaryAmmo);
                         var weaponPosition = gun.AmmoStartLocalToWorld.Position; //use bone mb transform

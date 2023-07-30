@@ -4,10 +4,16 @@ using Unity.Mathematics;
 using Unity.Transforms;
 using UnityEngine;
 
+public enum RoleReversalMode
+{
+    Off,
+    On,
+    Toggle
+}
 
 public struct WeaponComponent : IComponentData
 {
-    public bool roleReversal;
+    public RoleReversalMode roleReversal;
     public Entity PrimaryAmmo;
     public Entity SecondaryAmmo;
     public Entity Weapon;
@@ -29,6 +35,7 @@ public struct WeaponComponent : IComponentData
     public float ChangeAmmoStats;
     public float animTriggerWeight;
 
+    public float roleReversalRangeMechanic;
     //public LocalTransform firingPosition;
 }
 
@@ -47,7 +54,8 @@ public class AmmoManagerAuthoring : MonoBehaviour
     public bool aimMode;
     public CameraTypes weaponCamera;
     public float animTriggerWeight = .7f;
-    public bool roleReversal = true;
+    public RoleReversalMode roleReversal = RoleReversalMode.On;
+    public float roleReversalRangeMechanic;
 
 
     [Header("Read Only Ammo Ratings from Prefab")]
@@ -115,7 +123,8 @@ public class AmmoManagerAuthoring : MonoBehaviour
                     gameRate = authoring.Rate,
                     IsFiring = 0,
                     animTriggerWeight = authoring.animTriggerWeight,
-                    roleReversal = authoring.roleReversal
+                    roleReversal = authoring.roleReversal,
+                    roleReversalRangeMechanic = authoring.roleReversalRangeMechanic
 
                 });
             

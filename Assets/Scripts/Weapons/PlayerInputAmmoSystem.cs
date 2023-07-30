@@ -28,7 +28,7 @@ public partial class PlayerInputAmmoSystem : SystemBase
 
             var rtPressed = inputController.rightTriggerPressed;
             var aimMode = playerWeaponAimComponent.aimMode;
-            if (gunComponent.roleReversal)
+            if (gunComponent.roleReversal == RoleReversalMode.On)
             {
                 aimMode = true;
                 playerWeaponAimComponent.aimDisabled = true;

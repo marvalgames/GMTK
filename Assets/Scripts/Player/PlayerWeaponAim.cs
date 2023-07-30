@@ -208,7 +208,7 @@ namespace Sandbox.Player
         }
 
 
-        private void Crosshair(bool roleReversal)
+        private void Crosshair(RoleReversalMode roleReversal)
         {
             var actorWeaponAimComponent = _manager.GetComponentData<ActorWeaponAimComponent>(_entity);
             crosshairImage.enabled = true;
@@ -313,7 +313,7 @@ namespace Sandbox.Player
 
             _manager.SetComponentData(_entity, actorWeaponAimComponent);
 
-            if (roleReversal) crosshairImage.enabled = false;
+            if (roleReversal == RoleReversalMode.On) crosshairImage.enabled = false;
         }
 
         public void LateUpdateSystem(WeaponMotion weaponMotion)

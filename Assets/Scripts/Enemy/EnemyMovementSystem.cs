@@ -21,27 +21,30 @@ namespace Enemy
 
         protected override void OnUpdate()
         {
+            if (LevelManager.instance.endGame == true) return;
+            var roleReversalDisabled =
+                LevelManager.instance.levelSettings[LevelManager.instance.currentLevelCompleted].roleReversalMode ==
+                RoleReversalMode.Off;
+            
+            Debug.Log("REVERSE " + roleReversalDisabled + LevelManager.instance.currentLevelCompleted);
+            
+            
             var transformGroup = SystemAPI.GetComponentLookup<LocalTransform>(false);
 
             //var weaponComponentGroup = SystemAPI.GetComponentLookup<WeaponComponent>(false);
             playerQuery = GetEntityQuery(ComponentType.ReadOnly<PlayerComponent>());
             PlayerEntities = playerQuery.ToEntityArray(Allocator.Temp);
             var playerIsFiring = false;
+            var playerInShootingRange = false;
             for (var i = 0; i < PlayerEntities.Length; i++)
             {
                 var e = PlayerEntities[i];
                 var hasWeapon = SystemAPI.HasComponent<WeaponComponent>(e);
-                if (hasWeapon)
+                if (hasWeapon &&  roleReversalDisabled == false)
                 {
                     var player = SystemAPI.GetComponent<WeaponComponent>(e);
-                    if (player is {IsFiring: 1, roleReversal: true})
-                    {
-                        playerIsFiring = true;
-                    }
-                    if (player.roleReversal)
-                    {
-                        player.IsFiring = 0;
-                    }
+                    if (player is {IsFiring: 1, roleReversal: RoleReversalMode.On}) playerIsFiring = true;
+                    if (player.roleReversal == RoleReversalMode.On) player.IsFiring = 0;
                     SystemAPI.SetComponent(e, player);
                 }
             }
@@ -92,31 +95,40 @@ namespace Enemy
                             var stopRange = enemyBehaviourComponent.stopRange;
                             var weaponRaised = WeaponMotion.None;
                             //if closer than weapon shooting stop range always melee if melee switch active 
+
                             if (distFromOpponent < stopRange && weaponMovement && enemyMeleeMovementComponent.switchUp)
                             {
                                 weaponMovement = false;
                                 meleeMovement = true;
                             }
 
-                            //weaponMovement = true;
                             var hasWeaponComponent = SystemAPI.HasComponent<WeaponComponent>(e);
 
-
-                            //if (weaponMovement)
-                            //{
                             if (hasWeaponComponent)
                             {
                                 var weaponComponent = SystemAPI.GetComponent<WeaponComponent>(e);
                                 var roleReversal = weaponComponent.roleReversal;
-                                if (roleReversal) weaponMovement = true;
+                                if (distFromOpponent > weaponComponent.roleReversalRangeMechanic || roleReversalDisabled)
+                                {
+                                    roleReversal = RoleReversalMode.Off;
+                                    playerInShootingRange = true;
+                                }
+                                else if(!roleReversalDisabled)
+                                {
+                                    roleReversal = RoleReversalMode.On; //fix need original
+                                }
+
+                           
+                                if (roleReversal == RoleReversalMode.On) weaponMovement = true;
 
                                 if (SystemAPI.HasComponent<ActorWeaponAimComponent>(e))
                                 {
                                     var actorWeaponAim = SystemAPI.GetComponent<ActorWeaponAimComponent>(e);
-                                    //gun.IsFiring = 0;
-                                    if (playerIsFiring && roleReversal || distFromOpponent <
+
+
+                                    if (playerIsFiring && roleReversal == RoleReversalMode.On || distFromOpponent <
                                         enemyWeaponMovementComponent.shootRangeDistance && weaponMovement &&
-                                        !roleReversal)
+                                        roleReversal == RoleReversalMode.Off)
                                     {
                                         if (weaponComponent.IsFiring == 0)
                                         {
@@ -128,9 +140,6 @@ namespace Enemy
                                         }
 
                                         weaponComponent.IsFiring = 1;
-                                        //weaponComponent.Duration = 0;
-                                        //need new state for when shooting then animation movement adjust to this
-                                        //enemyMove.FaceWaypoint();
                                         actorWeaponAim.weaponRaised = weaponRaised;
                                         SystemAPI.SetComponent(e, actorWeaponAim);
                                         SystemAPI.SetComponent(e, weaponComponent);
@@ -254,7 +263,7 @@ namespace Enemy
                                 float3 opponentTargetPosition = new float3();
                                 float3 targetPosition = new float3();
                                 var targetEntity = matchupComponent.targetEntity;
-                                
+
 
                                 matchupComponent.isWaypointTarget = false;
                                 //if (targetEntity != Entity.Null)
@@ -282,8 +291,7 @@ namespace Enemy
 
                                 matchupComponent.wayPointTargetPosition = wayPointTargetPosition;
                                 matchupComponent.opponentTargetPosition = opponentTargetPosition;
-
-
+                                
                                 enemyMove.UpdateEnemyMovement();
                                 enemyMove.AnimationMovement(targetPosition);
                                 enemyMove.FaceWaypoint();
@@ -294,6 +302,20 @@ namespace Enemy
                         }
                     }
                 ).Run();
+
+            Debug.Log("IN RANGE " + playerInShootingRange);
+            for (var i = 0; i < PlayerEntities.Length; i++)
+            {
+                var e = PlayerEntities[i];
+                var hasWeapon = SystemAPI.HasComponent<WeaponComponent>(e);
+                if (hasWeapon)
+                {
+                    var player = SystemAPI.GetComponent<WeaponComponent>(e);
+                    player.roleReversal = playerInShootingRange ? RoleReversalMode.Off : RoleReversalMode.On;
+                    SystemAPI.SetComponent(e, player);
+                }
+            }
         }
     }
 }
+

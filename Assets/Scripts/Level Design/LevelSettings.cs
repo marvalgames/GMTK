@@ -34,6 +34,9 @@ public class LevelSettings
     public int NpcSaved;
 
 
+    public RoleReversalMode roleReversalMode = RoleReversalMode.On;
+
+
 
 
 

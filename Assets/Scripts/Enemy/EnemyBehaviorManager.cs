@@ -11,6 +11,7 @@ public struct DefensiveStrategyComponent : IComponentData
     public Entity closeBulletEntity;
     public Entity closestPlayerEntity;
     public float switchToPlayerMultiplier;
+    
 }
 
 public struct EnemyBehaviourComponent : IComponentData
@@ -22,6 +23,7 @@ public struct EnemyBehaviourComponent : IComponentData
     public float stopRange;
     public float aggression;
     public float maxHealth;
+  
 }
 
 public struct EnemyWeaponMovementComponent : IComponentData
@@ -74,6 +76,7 @@ public class EnemyBehaviorManager : MonoBehaviour
 
     [SerializeField] [Tooltip("Higher is closer range enemy looks for player")]
     public float switchToPlayerMultiplier = 6;
+    
 
     [Header("Mechanics")] [SerializeField] private bool canFreeze;
 
@@ -99,6 +102,7 @@ public class EnemyBehaviorManager : MonoBehaviour
                     stopRange = GetComponent<EnemyRatings>().Ratings.stopRange,
                     speedMultiple = 1.0f,
                     aggression = GetComponent<EnemyRatings>().Ratings.aggression
+                    
                 });
             AddComponent(e, 
                 new DefensiveStrategyComponent
