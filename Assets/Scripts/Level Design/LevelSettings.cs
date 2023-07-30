@@ -17,11 +17,9 @@ public class LevelSettings
     public AudioClip levelMusic = null;
     public string levelName;
     public LevelCompleteScenario levelCompleteScenario = LevelCompleteScenario.DestroyAll;
-
-
+    
     public int potentialLevelTargets;//in some games max of something ie potential saved robots
-
-
+    
     public int lives = 1;
     public int points;
 

@@ -27,6 +27,10 @@ namespace Collisions
         Platform = 18
     }
 
+    public struct LevelCompleteRemove : IComponentData
+    {
+        public int levelCompleteIndex;
+    }
 
     public struct TriggerComponent : IComponentData
     {
@@ -63,6 +67,10 @@ namespace Collisions
 
     public class Trigger : MonoBehaviour
     {
+        //Can't because of WEBGL
+        //[Tooltip("Level to Remove Entity and corresponding GameObject Mesh  (0 never removes or creates Component Tag)  ")]
+        //public int levelCompleteIndex;
+
         public bool parentActor;
 
         public TriggerType Type;
@@ -127,6 +135,11 @@ namespace Collisions
                         }
                     );
                 }
+
+                // if (authoring.levelCompleteIndex > 0)
+                // {
+                //     AddComponent(e, new LevelCompleteRemove { levelCompleteIndex = authoring.levelCompleteIndex });
+                // }
 
 
 

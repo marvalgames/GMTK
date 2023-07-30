@@ -21,7 +21,7 @@ namespace Enemy
 
         protected override void OnUpdate()
         {
-            if (LevelManager.instance.endGame == true) return;
+            if (LevelManager.instance.endGame || LevelManager.instance.currentLevelCompleted >= LevelManager.instance.totalLevels) return;
             var roleReversalDisabled =
                 LevelManager.instance.levelSettings[LevelManager.instance.currentLevelCompleted].roleReversalMode ==
                 RoleReversalMode.Off;

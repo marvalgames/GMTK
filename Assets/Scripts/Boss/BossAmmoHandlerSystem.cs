@@ -26,7 +26,9 @@ public partial class BossAmmoHandlerSystem : SystemBase
     protected override void OnUpdate()
     {
 
-        if (LevelManager.instance.endGame == true) return;
+        //if (LevelManager.instance.endGame == true) return;
+        if (LevelManager.instance.endGame == true || LevelManager.instance.gameResult == GameResult.Loser ||
+            LevelManager.instance.gameResult == GameResult.Winner) return;
         
 
         EntityQuery playerQuery = GetEntityQuery(ComponentType.ReadOnly<PlayerComponent>());
