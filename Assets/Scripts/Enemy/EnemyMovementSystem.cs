@@ -26,8 +26,12 @@ namespace Enemy
                 LevelManager.instance.levelSettings[LevelManager.instance.currentLevelCompleted].roleReversalMode ==
                 RoleReversalMode.Off;
             
-            Debug.Log("REVERSE " + roleReversalDisabled + LevelManager.instance.currentLevelCompleted);
+            var toggleEnabled =
+                LevelManager.instance.levelSettings[LevelManager.instance.currentLevelCompleted].roleReversalMode ==
+                RoleReversalMode.Toggle;
+
             
+
             
             var transformGroup = SystemAPI.GetComponentLookup<LocalTransform>(false);
 
@@ -108,7 +112,7 @@ namespace Enemy
                             {
                                 var weaponComponent = SystemAPI.GetComponent<WeaponComponent>(e);
                                 var roleReversal = weaponComponent.roleReversal;
-                                if (distFromOpponent > weaponComponent.roleReversalRangeMechanic || roleReversalDisabled)
+                                if (distFromOpponent > weaponComponent.roleReversalRangeMechanic && toggleEnabled || roleReversalDisabled)
                                 {
                                     roleReversal = RoleReversalMode.Off;
                                     playerInShootingRange = true;
@@ -303,7 +307,6 @@ namespace Enemy
                     }
                 ).Run();
 
-            Debug.Log("IN RANGE " + playerInShootingRange);
             for (var i = 0; i < PlayerEntities.Length; i++)
             {
                 var e = PlayerEntities[i];
