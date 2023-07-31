@@ -22,6 +22,8 @@ namespace Enemy
         protected override void OnUpdate()
         {
             if (LevelManager.instance.endGame || LevelManager.instance.currentLevelCompleted >= LevelManager.instance.totalLevels) return;
+         
+            
             var roleReversalDisabled =
                 LevelManager.instance.levelSettings[LevelManager.instance.currentLevelCompleted].roleReversalMode ==
                 RoleReversalMode.Off;
@@ -60,6 +62,7 @@ namespace Enemy
                     (
                         EnemyMove enemyMove,
                         Entity e,
+                        LevelCompleteComponent levelCompleteComponent,
                         ref EnemyStateComponent enemyState,
                         ref CheckedComponent checkedComponent,
                         ref LocalTransform localTransform,
@@ -67,9 +70,11 @@ namespace Enemy
                         in AnimatorWeightsComponent animatorWeightsComponent
                     ) =>
                     {
+                     
                         if (SystemAPI.HasComponent<DeadComponent>(e) == false) return;
                         if (SystemAPI.GetComponent<DeadComponent>(e).isDead) return;
                         if (matchupComponent.targetEntity == Entity.Null) return;
+                        if (levelCompleteComponent.areaIndex > LevelManager.instance.currentLevelCompleted) return;
                         var animator = enemyMove.anim;
                         var defensiveRole = SystemAPI.GetComponent<DefensiveStrategyComponent>(e).currentRole;
                         var enemyMeleeMovementComponent = SystemAPI.GetComponent<EnemyMeleeMovementComponent>(e);
