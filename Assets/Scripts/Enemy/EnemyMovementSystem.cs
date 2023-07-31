@@ -41,7 +41,7 @@ namespace Enemy
             playerQuery = GetEntityQuery(ComponentType.ReadOnly<PlayerComponent>());
             PlayerEntities = playerQuery.ToEntityArray(Allocator.Temp);
             var playerIsFiring = false;
-            var playerInShootingRange = false;
+            var playerInShootingRange = true;
             for (var i = 0; i < PlayerEntities.Length; i++)
             {
                 var e = PlayerEntities[i];
@@ -120,11 +120,11 @@ namespace Enemy
                                 if (distFromOpponent > weaponComponent.roleReversalRangeMechanic && toggleEnabled || roleReversalDisabled)
                                 {
                                     roleReversal = RoleReversalMode.Off;
-                                    playerInShootingRange = true;
                                 }
                                 else if(!roleReversalDisabled)
                                 {
                                     roleReversal = RoleReversalMode.On; //fix need original
+                                    playerInShootingRange = false;
                                 }
 
                            
