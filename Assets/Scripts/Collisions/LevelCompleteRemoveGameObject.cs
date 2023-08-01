@@ -29,7 +29,6 @@ public class LevelCompleteRemoveGameObject : MonoBehaviour //need for webgl sinc
     void Update()
     {
         if (entityManager == default || entity == Entity.Null) return;
-        Debug.Log("CREATED " + levelCompleteIndex);
         if (entityManager.HasComponent<LevelCompleteRemove>(entity))
         {
             int level = LevelManager.instance.currentLevelCompleted;
@@ -38,7 +37,6 @@ public class LevelCompleteRemoveGameObject : MonoBehaviour //need for webgl sinc
                 //gameObject.SetActive(false);
                 Destroy(gameObject);
                 Debug.Log("LEVEL " + level);
-
             }
         }
         

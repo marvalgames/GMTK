@@ -78,15 +78,16 @@ namespace AI
         [BurstCompile]
         public void OnCreate(ref SystemState state)
         {
-            var playerBuilder = new EntityQueryBuilder(Allocator.Temp);
-            playerBuilder.WithAll<PlayerComponent>();
-            state.RequireForUpdate<EndFixedStepSimulationEntityCommandBufferSystem.Singleton>();
+            //var playerBuilder = new EntityQueryBuilder(Allocator.Temp);
+            //playerBuilder.WithAll<PlayerComponent>();
             var enemyBuilder = new EntityQueryBuilder(Allocator.Temp);
             enemyBuilder.WithAll<EnemyComponent>();
             enemyQuery = state.GetEntityQuery(enemyBuilder);
             var attacksBuilder = new EntityQueryBuilder(Allocator.Temp);
             attacksBuilder.WithAny<EnemiesAttackComponent, PlayerComponent>();
             enemiesAttackQuery = state.GetEntityQuery(attacksBuilder);
+            state.RequireForUpdate<EndFixedStepSimulationEntityCommandBufferSystem.Singleton>();
+
         }
 
         [BurstCompile]
@@ -100,12 +101,14 @@ namespace AI
             var targetZonesGroup = SystemAPI.GetComponentLookup<TargetZoneComponent>();
             var playersGroup = SystemAPI.GetComponentLookup<PlayerComponent>();
             var enemyCount = enemyEntityList.Length;
+            var enemiesAttackEntityList = enemiesAttackQuery.ToEntityArray(Allocator.TempJob);
+
             enemyEntityList.Dispose();
             if (enemyCount == 0)
             {
                 return;
             }
-            var enemiesAttackEntityList = enemiesAttackQuery.ToEntityArray(Allocator.TempJob);
+
             var matchupSystemJob = new MatchupSystemJob()
             {
                 transformGroup = transformGroup,
@@ -134,11 +137,14 @@ namespace AI
             in DefensiveStrategyComponent defensiveStrategyComponent,
             ref MatchupComponent matchup)
         {
+            //Debug.Log("ATTACK " + enemiesAttackEntityList.Length);
+
             if (!transformGroup.HasComponent(enemyEntity)) return;
             var enemyPosition = transformGroup[enemyEntity].Position;
             var enemyRotation = transformGroup[enemyEntity].Rotation;
             var closestDistance = math.INFINITY;
             var closestPlayerEntity = Entity.Null;
+
             for (var j = 0; j < enemiesAttackEntityList.Length; j++)
             {
                 if (enemiesAttackEntityList[j] == enemyEntity || deadComponent.isDead) continue;
