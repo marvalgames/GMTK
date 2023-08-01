@@ -84,9 +84,10 @@ public partial class LevelCompleteSystem : SystemBase
 
         if (levelComplete)
         {
-            if (LevelManager.instance.currentLevelCompleted < LevelManager.instance.totalLevels)
+            if (LevelManager.instance.currentLevelCompleted < LevelManager.instance.totalLevels - 1)
             {
-                LevelManager.instance.PlayLevelMusic();
+                Debug.Log("PLAY LEVEL MUSIC");
+                LevelManager.instance.PlayLevelMusic(LevelManager.instance.currentLevelCompleted + 1);
                 Entities.WithoutBurst().WithStructuralChanges().ForEach
                 (
                     (

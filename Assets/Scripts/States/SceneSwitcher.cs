@@ -38,7 +38,7 @@ public class SceneSwitcher : MonoBehaviour
         if (CurrentSceneIndex > 1 && LevelManager.instance.audioSourceMenu)
         {
             LevelManager.instance.audioSourceMenu.Stop();
-            LevelManager.instance.PlayLevelMusic(); //scene 0 is loader and scene 1  is menu - has own play
+            LevelManager.instance.PlayLevelMusic(0); //scene 0 is loader and scene 1  is menu - has own play
         }
         else if (CurrentSceneIndex == 1 && LevelManager.instance.audioSourceGame)
         {

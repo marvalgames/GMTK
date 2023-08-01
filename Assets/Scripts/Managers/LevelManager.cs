@@ -123,7 +123,7 @@ public class LevelManager : MonoBehaviour
         }
         else
         {
-            PlayLevelMusic();
+            PlayLevelMusic(0);
         }
 
     }
@@ -155,7 +155,7 @@ public class LevelManager : MonoBehaviour
         audioSourceMenu.Play();
     }
 
-    public void PlayLevelMusic()//called when switching levels either by scene or when switching levels even when same scene
+    public void PlayLevelMusic(int levelIndex)//called when switching levels either by scene or when switching levels even when same scene
     {
         if (!audioSourceGame) return;
 
@@ -164,8 +164,8 @@ public class LevelManager : MonoBehaviour
         //Debug.Log("CURRENT " + currentLevelCompleted);
 
 
-        var levelMusic = LevelManager.instance.levelMediaList[currentLevelCompleted].levelMusic;
-        var levelVolume = LevelManager.instance.levelMediaList[currentLevelCompleted].levelVolume;
+        var levelMusic = LevelManager.instance.levelMediaList[levelIndex].levelMusic;
+        var levelVolume = LevelManager.instance.levelMediaList[levelIndex].levelVolume;
 
 
         //Debug.Log("Play " + currentLevelCompleted);
