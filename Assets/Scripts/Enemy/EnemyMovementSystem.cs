@@ -127,6 +127,7 @@ namespace Enemy
                                     playerInShootingRange = false;
                                 }
 
+                                //Debug.Log("PLAYER IN SHOOTING RANGE " + playerInShootingRange + " COUNT " + co);
                            
                                 if (roleReversal == RoleReversalMode.On) weaponMovement = true;
 
