@@ -13,19 +13,15 @@ using UnityEngine.AI;
 [RequireMatchingQueriesForUpdate]
 public partial class EvadeSystem : SystemBase
 {
-    private static readonly int Evade1 = Animator.StringToHash("Evade");
 
     private uint _index = 1;
     protected override void OnUpdate()
     {
-        //var ecb = new EntityCommandBuffer(Allocator.TempJob);
         var time = SystemAPI.Time.DeltaTime;
         var random = new Random();
         random.InitState(_index++);
 
-
         Entities.WithBurst().WithAny<EnemyComponent>().ForEach((
-                //Animator animator, 
                 Entity e,
                 ref EvadeComponent evade,
                 ref LocalTransform enemyTransform, ref DefensiveStrategyComponent defensiveStrategy) =>
@@ -54,19 +50,17 @@ public partial class EvadeSystem : SystemBase
                         evade.agentStart = enemyTransform.Position;
                         var randomValue = random.NextFloat(evade.originalEvadeMoveSpeed * .2f,
                             evade.originalEvadeMoveSpeed);
-                        
+
                         evade.evadeMoveTime = evade.randomEvadeMoveTime
                             ? randomValue
                             : evade.originalEvadeMoveSpeed;
-                        
-                        
-                        
+
                         var addX = random.NextFloat(-1, 1);
                         float addZ = 0;
                         evade.addX = addX;
                         if (evade.zMovement)
                         {
-                            addZ =  random.NextFloat(-1f, 1f);
+                            addZ = random.NextFloat(-1f, 1f);
                             evade.addZ = addZ;
                         }
 
@@ -102,45 +96,54 @@ public partial class EvadeSystem : SystemBase
                             var agent = SystemAPI.GetComponent<NavMeshAgentComponent>(e);
                             agent.isStopped = isStopped;
                             SystemAPI.SetComponent(e, agent);
-                            
-
                         }
-
 
                     }
                 }
             }
         ).Schedule();
 
-        //animate evade
-        Entities.WithoutBurst().WithAny<EnemyComponent>().ForEach((Entity e, Animator animator, 
-                ref EvadeComponent evade) =>
-            {
-                animator.SetBool(Evade1, evade.startAnimation);
-            }
-        ).Run();
+
+    }
+}
+
+
+[UpdateAfter(typeof(EvadeSystem))]
+[RequireMatchingQueriesForUpdate]
+public partial class EvadeManagedSystem : SystemBase
+{
+    private static readonly int Evade1 = Animator.StringToHash("Evade");
+
+    private uint _index = 1;
+    protected override void OnUpdate()
+    {
+        var time = SystemAPI.Time.DeltaTime;
         
+        //animate evade
+        Entities.WithoutBurst().WithAny<EnemyComponent>().ForEach((Entity e, Animator animator,
+                ref EvadeComponent evade) =>
+        {
+            animator.SetBool(Evade1, evade.startAnimation);
+        }
+        ).Run();
+
         Entities.WithoutBurst().WithAny<EnemyComponent>().ForEach((Entity e, NavMeshAgent agent,
                 in EvadeComponent evade, in NavMeshAgentComponent agentComponent) =>
+        {
+            if ((agent.hasPath || agentComponent.isStopped) && evade.InEvade)
             {
-                if ((agent.hasPath || agentComponent.isStopped) && evade.InEvade)
-                {
-                    var forward = agent.transform.forward;
-                    float3 agentPosition = forward;
-                    float3 agentTarget = forward * time * evade.evadeMoveSpeed;
-                    agentTarget.x += evade.addX;
-                    agentTarget.z += evade.addZ;
-                    var next = math.lerp(agentPosition, agentTarget, evade.evadeMoveSpeed * 1 / 60);
-                    var offset = agentPosition - next;
-                    agent.speed = agentComponent.agentSpeed;
-                    agent.Move(-offset);
-                }
-
+                var forward = agent.transform.forward;
+                float3 agentPosition = forward;
+                float3 agentTarget = forward * time * evade.evadeMoveSpeed;
+                agentTarget.x += evade.addX;
+                agentTarget.z += evade.addZ;
+                var next = math.lerp(agentPosition, agentTarget, evade.evadeMoveSpeed * 1 / 60);
+                var offset = agentPosition - next;
+                agent.speed = agentComponent.agentSpeed;
+                agent.Move(-offset);
             }
+
+        }
         ).Run();
-        
-        
-        //ecb.Playback(EntityManager);
-        //ecb.Dispose();
     }
 }

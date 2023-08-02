@@ -115,7 +115,6 @@ public partial class PostDeadSystem : SystemBase
                 (ref ShowMessageMenuComponent messageMenuComponent, in ShowMessageMenuGroup messageMenu) =>
                 {
                     messageMenu.messageString = "... Destroyed ... ";
-                    Debug.Log("JUST DEAD ");
                     messageMenu.ShowMenu();
                     messageMenuComponent.show = false;
                     LevelManager.instance.enemyDestroyed = false;
@@ -143,8 +142,6 @@ public partial class PostDeadSystem : SystemBase
                         ecb.RemoveComponent(e, typeof(DeadComponent));
                         ecb.RemoveComponent(e, typeof(NpcMovementComponent));
                         //ecb.DestroyEntity(e);
-                        Debug.Log("HEALTH BAR");
-
                         
                     }
                     else
