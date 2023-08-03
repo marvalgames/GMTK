@@ -21,20 +21,19 @@ namespace Enemy
 
         protected override void OnUpdate()
         {
-            if (LevelManager.instance.endGame || LevelManager.instance.currentLevelCompleted >= LevelManager.instance.totalLevels) return;
-         
-            
+            if (LevelManager.instance.endGame ||
+                LevelManager.instance.currentLevelCompleted >= LevelManager.instance.totalLevels) return;
+
+
             var roleReversalDisabled =
                 LevelManager.instance.levelSettings[LevelManager.instance.currentLevelCompleted].roleReversalMode ==
                 RoleReversalMode.Off;
-            
+
             var toggleEnabled =
                 LevelManager.instance.levelSettings[LevelManager.instance.currentLevelCompleted].roleReversalMode ==
                 RoleReversalMode.Toggle;
 
-            
 
-            
             var transformGroup = SystemAPI.GetComponentLookup<LocalTransform>(false);
 
             //var weaponComponentGroup = SystemAPI.GetComponentLookup<WeaponComponent>(false);
@@ -46,15 +45,16 @@ namespace Enemy
             {
                 var e = PlayerEntities[i];
                 var hasWeapon = SystemAPI.HasComponent<WeaponComponent>(e);
-                if (hasWeapon &&  roleReversalDisabled == false)
+                if (hasWeapon && roleReversalDisabled == false)
                 {
                     var player = SystemAPI.GetComponent<WeaponComponent>(e);
-                    if (player is {IsFiring: 1, roleReversal: RoleReversalMode.On}) playerIsFiring = true;
+                    if (player is { IsFiring: 1, roleReversal: RoleReversalMode.On }) playerIsFiring = true;
                     if (player.roleReversal == RoleReversalMode.On) player.IsFiring = 0;
                     SystemAPI.SetComponent(e, player);
                 }
             }
 
+            int co = 0;
 
             Entities.WithoutBurst().WithNone<Pause>().WithAll<EnemyComponent>().WithAll<EnemyMeleeMovementComponent>()
                 .WithAll<EnemyWeaponMovementComponent>().ForEach
@@ -70,7 +70,6 @@ namespace Enemy
                         in AnimatorWeightsComponent animatorWeightsComponent
                     ) =>
                     {
-                     
                         if (SystemAPI.HasComponent<DeadComponent>(e) == false) return;
                         if (SystemAPI.GetComponent<DeadComponent>(e).isDead) return;
                         if (matchupComponent.targetEntity == Entity.Null) return;
@@ -117,18 +116,26 @@ namespace Enemy
                             {
                                 var weaponComponent = SystemAPI.GetComponent<WeaponComponent>(e);
                                 var roleReversal = weaponComponent.roleReversal;
-                                if (distFromOpponent > weaponComponent.roleReversalRangeMechanic && toggleEnabled || roleReversalDisabled)
+                                var isPlayerTarget =
+                                    SystemAPI.HasComponent<PlayerComponent>(matchupComponent.targetEntity);
+
+                                if ((distFromOpponent > weaponComponent.roleReversalRangeMechanic && isPlayerTarget) &&
+                                    toggleEnabled ||
+                                    roleReversalDisabled)
                                 {
                                     roleReversal = RoleReversalMode.Off;
                                 }
-                                else if(!roleReversalDisabled)
+                                else
                                 {
                                     roleReversal = RoleReversalMode.On; //fix need original
                                     playerInShootingRange = false;
                                 }
 
-                                //Debug.Log("PLAYER IN SHOOTING RANGE " + playerInShootingRange + " COUNT " + co);
-                           
+                                //co++;
+                                //if (distFromOpponent <= weaponComponent.roleReversalRangeMechanic)
+                                //Debug.Log("PLAYER IN SHOOTING RANGE " + pl);
+                                //Debug.Log("PLAYER MATCH " + SystemAPI.HasComponent<PlayerComponent>(matchupComponent.targetEntity));
+
                                 if (roleReversal == RoleReversalMode.On) weaponMovement = true;
 
                                 if (SystemAPI.HasComponent<ActorWeaponAimComponent>(e))
@@ -301,7 +308,7 @@ namespace Enemy
 
                                 matchupComponent.wayPointTargetPosition = wayPointTargetPosition;
                                 matchupComponent.opponentTargetPosition = opponentTargetPosition;
-                                
+
                                 enemyMove.UpdateEnemyMovement();
                                 enemyMove.AnimationMovement(targetPosition);
                                 enemyMove.FaceWaypoint();
@@ -313,6 +320,7 @@ namespace Enemy
                     }
                 ).Run();
 
+            Debug.Log("RANGE " + playerInShootingRange);
             for (var i = 0; i < PlayerEntities.Length; i++)
             {
                 var e = PlayerEntities[i];
@@ -327,4 +335,3 @@ namespace Enemy
         }
     }
 }
-
