@@ -73,7 +73,9 @@ namespace Enemy
 
                         var ammoStartXZ = new float3(ammoStartTransform.Position.x, ammoStartTransform.Position.y,
                             ammoStartTransform.Position.z);
-                        var playerStartXZ = new float3(playerLocalTransform.x, playerLocalTransform.y,
+                        //
+                        var yOffset = 1;//make member later
+                        var playerStartXZ = new float3(playerLocalTransform.x, playerLocalTransform.y + yOffset,
                             playerLocalTransform.z);
                         var forward = math.forward(ammoRotation);
                         if (math.distancesq(ammoStartXZ, playerStartXZ) > 0)
