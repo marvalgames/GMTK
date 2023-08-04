@@ -35,8 +35,6 @@ namespace Enemy
 
 
             var transformGroup = SystemAPI.GetComponentLookup<LocalTransform>(false);
-
-            //var weaponComponentGroup = SystemAPI.GetComponentLookup<WeaponComponent>(false);
             playerQuery = GetEntityQuery(ComponentType.ReadOnly<PlayerComponent>());
             PlayerEntities = playerQuery.ToEntityArray(Allocator.Temp);
             var playerIsFiring = false;
@@ -54,7 +52,6 @@ namespace Enemy
                 }
             }
 
-            int co = 0;
 
             Entities.WithoutBurst().WithNone<Pause>().WithAll<EnemyComponent>().WithAll<EnemyMeleeMovementComponent>()
                 .WithAll<EnemyWeaponMovementComponent>().ForEach
@@ -65,14 +62,14 @@ namespace Enemy
                         LevelCompleteComponent levelCompleteComponent,
                         ref EnemyStateComponent enemyState,
                         ref CheckedComponent checkedComponent,
-                        ref LocalTransform localTransform,
                         ref MatchupComponent matchupComponent,
+                        in LocalTransform localTransform,
                         in AnimatorWeightsComponent animatorWeightsComponent
                     ) =>
                     {
                         if (SystemAPI.HasComponent<DeadComponent>(e) == false) return;
                         if (SystemAPI.GetComponent<DeadComponent>(e).isDead) return;
-                        if (matchupComponent.targetEntity == Entity.Null) return;
+                        if (matchupComponent.targetEntity == Entity.Null || matchupComponent.closestPlayerEntity == Entity.Null) return;
                         if (levelCompleteComponent.areaIndex > LevelManager.instance.currentLevelCompleted) return;
                         var animator = enemyMove.anim;
                         var defensiveRole = SystemAPI.GetComponent<DefensiveStrategyComponent>(e).currentRole;
@@ -84,6 +81,7 @@ namespace Enemy
                         enemyMove.speedMultiple = 1;
                         enemyState.selectMove = false;
                         var role = enemyMove.enemyRole;
+                        var isPlayerTarget = SystemAPI.HasComponent<PlayerComponent>(matchupComponent.targetEntity);
                         if (role != EnemyRoles.None)
                         {
                             var enemyPosition = localTransform.Position;
@@ -116,10 +114,8 @@ namespace Enemy
                             {
                                 var weaponComponent = SystemAPI.GetComponent<WeaponComponent>(e);
                                 var roleReversal = weaponComponent.roleReversal;
-                                var isPlayerTarget =
-                                    SystemAPI.HasComponent<PlayerComponent>(matchupComponent.targetEntity);
 
-                                if ((distFromOpponent > weaponComponent.roleReversalRangeMechanic && isPlayerTarget) &&
+                                if (distFromOpponent > weaponComponent.roleReversalRangeMechanic &&
                                     toggleEnabled ||
                                     roleReversalDisabled)
                                 {
@@ -130,11 +126,6 @@ namespace Enemy
                                     roleReversal = RoleReversalMode.On; //fix need original
                                     playerInShootingRange = false;
                                 }
-
-                                //co++;
-                                //if (distFromOpponent <= weaponComponent.roleReversalRangeMechanic)
-                                //Debug.Log("PLAYER IN SHOOTING RANGE " + pl);
-                                //Debug.Log("PLAYER MATCH " + SystemAPI.HasComponent<PlayerComponent>(matchupComponent.targetEntity));
 
                                 if (roleReversal == RoleReversalMode.On) weaponMovement = true;
 
@@ -280,12 +271,13 @@ namespace Enemy
                                 float3 opponentTargetPosition = new float3();
                                 float3 targetPosition = new float3();
                                 var targetEntity = matchupComponent.targetEntity;
+                                if(isPlayerTarget)
+                                {
+                                    targetEntity = matchupComponent.closestPlayerEntity;
+                                }
 
 
                                 matchupComponent.isWaypointTarget = false;
-                                //if (targetEntity != Entity.Null)
-                                //{
-
                                 opponentTargetPosition = transformGroup[targetEntity].Position;
 
 
@@ -301,8 +293,6 @@ namespace Enemy
                                 {
                                     matchupComponent.isWaypointTarget = false;
                                     targetPosition = opponentTargetPosition;
-                                    // }
-
                                     matchupComponent.aimTarget = transformGroup[targetEntity];
                                 }
 

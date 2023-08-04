@@ -38,7 +38,7 @@ namespace Enemy
                     in LocalTransform enemyLocalTransform
                 ) =>
                 {
-                    var playerE = defensiveStrategyComponent.closestPlayerEntity;
+                    var playerE = defensiveStrategyComponent.closestEnemiesAttackEntity;
 
                     if (!SystemAPI.HasComponent<WeaponComponent>(entity)) return;
                     var enemyWeapon = SystemAPI.GetComponent<WeaponComponent>(entity);

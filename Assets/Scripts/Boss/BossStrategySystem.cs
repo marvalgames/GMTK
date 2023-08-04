@@ -106,7 +106,7 @@ public partial class BossStrategySystem : SystemBase
             var chase = targetPointBuffer[bossMovementComponent.CurrentIndex].wayPointChase;
             if (targetPointBuffer.Length <= 0)
                 return;
-            var playerE = defensiveStrategyComponent.closestPlayerEntity;
+            var playerE = defensiveStrategyComponent.closestEnemiesAttackEntity;
             if (playerE == Entity.Null) return;
             var playerMove = SystemAPI.GetComponent<LocalTransform>(playerE);
             var playerForward = SystemAPI.GetComponent<LocalToWorld>(playerE).Forward;

@@ -57,7 +57,7 @@ public partial class BossAmmoHandlerSystem : SystemBase
                 if (targetPointBuffer.Length <= 0)
                     return;
 
-                var playerE = defensiveStrategyComponent.closestPlayerEntity;
+                var playerE = defensiveStrategyComponent.closestEnemiesAttackEntity;
                 
                 if (!SystemAPI.HasComponent<BossWeaponComponent>(entity)) return;
 

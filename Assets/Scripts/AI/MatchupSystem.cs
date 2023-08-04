@@ -196,6 +196,7 @@ namespace AI
                 matchup.closestOpponent = closestPlayerEntity;
             }
 
+
             var closestPlayer = matchup.closestOpponent;
             matchup.validTarget = false;
             if (closestPlayer != Entity.Null)

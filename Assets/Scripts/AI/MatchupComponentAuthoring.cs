@@ -16,17 +16,19 @@ public struct MatchupComponent : IComponentData
     public float AngleRadians;
     public float ViewDistanceSQ;
     public bool View360;
-    public Entity closestOpponent;
+    public Entity closestOpponent;//player or enemy who can attack enemies
+    public Entity closestPlayerEntity;//player only
     public bool validTarget;
     public float lookAtDistance;
     public float closestDistance;
     public bool lookAt;
     public float3 targetZone;
-    [FormerlySerializedAs("targetPosition")] public float3 wayPointTargetPosition;
+    public float3 wayPointTargetPosition;
     public Entity targetEntity;
     public LocalTransform aimTarget;
     public bool isWaypointTarget;
-    [FormerlySerializedAs("patrolTargetPosition")] public float3 opponentTargetPosition;
+    public float3 opponentTargetPosition;
+    //public float3 playerTargetPosition;
 }
 
 

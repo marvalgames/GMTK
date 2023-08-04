@@ -9,7 +9,7 @@ public struct DefensiveStrategyComponent : IComponentData
     public float currentRoleMaxTime;
     public float currentRoleTimer;
     public Entity closeBulletEntity;
-    public Entity closestPlayerEntity;
+    public Entity closestEnemiesAttackEntity;
     public float switchToPlayerMultiplier;
     
 }
