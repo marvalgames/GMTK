@@ -39,6 +39,7 @@ namespace Enemy
             PlayerEntities = playerQuery.ToEntityArray(Allocator.Temp);
             var playerIsFiring = false;
             var playerInShootingRange = true;
+            var enemyInShootingRange = true;
             for (var i = 0; i < PlayerEntities.Length; i++)
             {
                 var e = PlayerEntities[i];
@@ -51,6 +52,47 @@ namespace Enemy
                     SystemAPI.SetComponent(e, player);
                 }
             }
+
+            //var pl = SystemAPI.GetComponent<LocalTransform>(PlayerEntities[0]).Position;
+
+
+            Entities.WithoutBurst().WithNone<Pause>().WithAll<EnemyComponent>().ForEach
+            (
+                (
+                    Entity e,
+                    EnemyMove enemyMove,
+                    in WeaponComponent weaponComponent,
+                    in MatchupComponent matchupComponent,
+                    in LevelCompleteComponent levelCompleteComponent,
+                    in LocalTransform localTransform
+                ) =>
+                {
+                    if (SystemAPI.HasComponent<DeadComponent>(e) == false) return;
+                    if (SystemAPI.GetComponent<DeadComponent>(e).isDead) return;
+                    if (matchupComponent.targetEntity == Entity.Null || matchupComponent.closestPlayerEntity == Entity.Null) return;
+                    if (levelCompleteComponent.areaIndex > LevelManager.instance.currentLevelCompleted) return;
+
+                    var enemyPosition = localTransform.Position;
+                    var pl = matchupComponent.opponentTargetPosition;
+                    pl.y = 0;
+                    var en = enemyPosition;
+                    en.y = 0;
+                    var distFromOpponent = math.distance(pl, en);
+
+                    if (distFromOpponent <= weaponComponent.roleReversalRangeMechanic &&
+                        toggleEnabled)
+
+                    {
+                        enemyInShootingRange = false;
+                    }
+                }
+
+            ).Run();
+
+
+
+
+
 
 
             Entities.WithoutBurst().WithNone<Pause>().WithAll<EnemyComponent>().WithAll<EnemyMeleeMovementComponent>()
@@ -81,12 +123,17 @@ namespace Enemy
                         enemyMove.speedMultiple = 1;
                         enemyState.selectMove = false;
                         var role = enemyMove.enemyRole;
-                        var isPlayerTarget = SystemAPI.HasComponent<PlayerComponent>(matchupComponent.targetEntity);
                         if (role != EnemyRoles.None)
                         {
                             var enemyPosition = localTransform.Position;
                             var homePosition = enemyMove.originalPosition;
                             var stayHome = enemyBehaviourComponent.useDistanceFromStation;
+
+                            var closestPlayerEntity = matchupComponent.closestPlayerEntity;
+                            var closestPlayerPosition = SystemAPI.GetComponent<LocalTransform>(closestPlayerEntity).Position;
+                            closestPlayerPosition.y = 0;
+
+                            var isPlayerTarget = SystemAPI.HasComponent<PlayerComponent>(matchupComponent.targetEntity);
                             var pl = matchupComponent.opponentTargetPosition;
                             var way = matchupComponent.wayPointTargetPosition;
                             var aimWeight = animatorWeightsComponent.aimWeight;
@@ -94,6 +141,7 @@ namespace Enemy
                             var en = enemyPosition;
                             en.y = 0;
                             var distFromOpponent = math.distance(pl, en);
+                            var distFromPlayer = math.distance(closestPlayerPosition, en);
                             var distFromWaypoint = math.distance(way, en);
                             var distFromStation = math.distance(homePosition, enemyPosition);
                             var chaseRange = enemyBehaviourComponent.chaseRange;
@@ -115,7 +163,7 @@ namespace Enemy
                                 var weaponComponent = SystemAPI.GetComponent<WeaponComponent>(e);
                                 var roleReversal = weaponComponent.roleReversal;
 
-                                if (distFromOpponent > weaponComponent.roleReversalRangeMechanic &&
+                                if (distFromPlayer > weaponComponent.roleReversalRangeMechanic &&
                                     toggleEnabled ||
                                     roleReversalDisabled)
                                 {
@@ -123,6 +171,7 @@ namespace Enemy
                                 }
                                 else
                                 {
+                                    //Debug.Log("DIST " + pl.x + " " + pl.z + " " + distFromOpponent); ;
                                     roleReversal = RoleReversalMode.On; //fix need original
                                     playerInShootingRange = false;
                                 }
@@ -136,7 +185,7 @@ namespace Enemy
 
                                     if (playerIsFiring && roleReversal == RoleReversalMode.On || distFromOpponent <
                                         enemyWeaponMovementComponent.shootRangeDistance && weaponMovement &&
-                                        roleReversal == RoleReversalMode.Off)
+                                        roleReversal == RoleReversalMode.Off && enemyInShootingRange)
                                     {
                                         if (weaponComponent.IsFiring == 0)
                                         {
@@ -154,13 +203,11 @@ namespace Enemy
                                     }
                                 }
                             }
-                            //}
 
                             var backupZoneClose = enemyMeleeMovementComponent.combatStrikeDistanceZoneBegin;
                             var backupZoneFar = enemyMeleeMovementComponent.combatStrikeDistanceZoneEnd;
 
                             var strike = false;
-                            //meleeMovement = false;
                             if (distFromOpponent < backupZoneClose && meleeMovement)
                             {
                                 enemyMove.backup = true; //only time to turn on 
@@ -270,13 +317,8 @@ namespace Enemy
                                 float3 wayPointTargetPosition = new float3();
                                 float3 opponentTargetPosition = new float3();
                                 float3 targetPosition = new float3();
+
                                 var targetEntity = matchupComponent.targetEntity;
-                                if(isPlayerTarget)
-                                {
-                                    targetEntity = matchupComponent.closestPlayerEntity;
-                                }
-
-
                                 matchupComponent.isWaypointTarget = false;
                                 opponentTargetPosition = transformGroup[targetEntity].Position;
 
