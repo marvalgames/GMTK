@@ -77,6 +77,10 @@ namespace Enemy
                         var yOffset = 1;//make member later
                         var playerStartXZ = new float3(playerLocalTransform.x, playerLocalTransform.y + yOffset,
                             playerLocalTransform.z);
+
+                        //playerStartXZ.y = 0;//test
+                        //ammoStartXZ.y = 0;//test
+                        
                         var forward = math.forward(ammoRotation);
                         if (math.distancesq(ammoStartXZ, playerStartXZ) > 0)
                         {

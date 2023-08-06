@@ -14,8 +14,10 @@ Material:
   m_ValidKeywords:
   - _NORMALINDEPTHNORMALPASS
   - _RECEIVEDECALS
+  - _RIMLIGHTING
   - _SSAO_ENABLED
   - _TEXMODE_ONE
+  - _TOONRIM
   m_InvalidKeywords:
   - _EMISSION
   - _ENERGYCONSERVATION_ON
@@ -221,7 +223,7 @@ Material:
     - _DstBlendAlpha: 0
     - _DynamicNoisyOutline: 0
     - _EnableMaskMap: 0
-    - _EnableToonRim: 0
+    - _EnableToonRim: 1
     - _EnergyConservation: 1
     - _EnvironmentReflections: 1
     - _EnvironmentalLightingIntensity: 1
@@ -335,7 +337,7 @@ Material:
     - _RefVal: 0
     - _ReflectionIntensity: 0
     - _ReflectionRoughtness: 0
-    - _Rim: 0
+    - _Rim: 1
     - _RimEnabled: 0
     - _RimFrequency: 0
     - _RimLigInt: 1

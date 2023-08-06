@@ -13,7 +13,6 @@ namespace Enemy
     public partial class EnemyMovementSystem : SystemBase
     {
         private static readonly int Zone = Animator.StringToHash("Zone");
-        private static readonly int JumpState = Animator.StringToHash("JumpState");
 
         [DeallocateOnJobCompletion] private NativeArray<Entity> PlayerEntities;
 
@@ -55,12 +54,12 @@ namespace Enemy
 
             //var pl = SystemAPI.GetComponent<LocalTransform>(PlayerEntities[0]).Position;
 
+            var enemiesTooFar = true;
 
             Entities.WithoutBurst().WithNone<Pause>().WithAll<EnemyComponent>().ForEach
             (
                 (
                     Entity e,
-                    EnemyMove enemyMove,
                     in WeaponComponent weaponComponent,
                     in MatchupComponent matchupComponent,
                     in LevelCompleteComponent levelCompleteComponent,
@@ -85,12 +84,25 @@ namespace Enemy
                     {
                         enemyInShootingRange = false;
                     }
+                    
+                    if (distFromOpponent < weaponComponent.roleReversalRangeMechanic * 1/2 &&
+                        !roleReversalDisabled)
+
+                    {
+                        enemiesTooFar = false;
+                        Debug.Log("EN TOO FAR");}
                 }
 
             ).Run();
 
 
 
+
+            if (enemiesTooFar && playerIsFiring)
+            {
+                playerIsFiring = false;
+                Debug.Log("TOO FAR");
+            }
 
 
 
