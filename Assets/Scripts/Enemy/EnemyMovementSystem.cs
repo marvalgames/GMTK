@@ -32,6 +32,11 @@ namespace Enemy
                 LevelManager.instance.levelSettings[LevelManager.instance.currentLevelCompleted].roleReversalMode ==
                 RoleReversalMode.Toggle;
 
+            var enemiesRemain = LevelManager.instance.levelSettings[LevelManager.instance.currentLevelCompleted]
+                                    .potentialLevelTargets
+                                - LevelManager.instance.levelSettings[LevelManager.instance.currentLevelCompleted]
+                                    .enemiesDead;
+
 
             var transformGroup = SystemAPI.GetComponentLookup<LocalTransform>(false);
             playerQuery = GetEntityQuery(ComponentType.ReadOnly<PlayerComponent>());
@@ -84,18 +89,20 @@ namespace Enemy
                     {
                         enemyInShootingRange = false;
                     }
-                    
-                    if (distFromOpponent < weaponComponent.roleReversalRangeMechanic * 1/2 &&
+
+                    var multiplier = 2 / enemiesRemain;
+                    if (distFromOpponent < weaponComponent.roleReversalRangeMechanic * multiplier &&
                         !roleReversalDisabled)
 
                     {
                         enemiesTooFar = false;
-                        Debug.Log("EN TOO FAR");}
+                    }
                 }
 
             ).Run();
 
 
+            Debug.Log("ENEMIES REMAIN " + enemiesRemain);
 
 
             if (enemiesTooFar && playerIsFiring)
