@@ -36,6 +36,7 @@ public struct WeaponComponent : IComponentData
     public float animTriggerWeight;
 
     public float roleReversalRangeMechanic;
+    public bool tooFarTooAttack;
     //public LocalTransform firingPosition;
 }
 

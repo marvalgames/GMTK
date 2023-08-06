@@ -32,10 +32,11 @@ namespace Enemy
                 LevelManager.instance.levelSettings[LevelManager.instance.currentLevelCompleted].roleReversalMode ==
                 RoleReversalMode.Toggle;
 
-            var enemiesRemain = LevelManager.instance.levelSettings[LevelManager.instance.currentLevelCompleted]
-                                    .potentialLevelTargets
-                                - LevelManager.instance.levelSettings[LevelManager.instance.currentLevelCompleted]
-                                    .enemiesDead;
+            // var enemiesRemain = LevelManager.instance.levelSettings[LevelManager.instance.currentLevelCompleted]
+            //                         .potentialLevelTargets
+            //                     - LevelManager.instance.levelSettings[LevelManager.instance.currentLevelCompleted]
+            //                         .enemiesDead;
+            // if (enemiesRemain > 4) enemiesRemain = 4;
 
 
             var transformGroup = SystemAPI.GetComponentLookup<LocalTransform>(false);
@@ -59,13 +60,13 @@ namespace Enemy
 
             //var pl = SystemAPI.GetComponent<LocalTransform>(PlayerEntities[0]).Position;
 
-            var enemiesTooFar = true;
+            //var enemiesTooFar = true;
 
             Entities.WithoutBurst().WithNone<Pause>().WithAll<EnemyComponent>().ForEach
             (
                 (
                     Entity e,
-                    in WeaponComponent weaponComponent,
+                    ref WeaponComponent weaponComponent,
                     in MatchupComponent matchupComponent,
                     in LevelCompleteComponent levelCompleteComponent,
                     in LocalTransform localTransform
@@ -75,6 +76,7 @@ namespace Enemy
                     if (SystemAPI.GetComponent<DeadComponent>(e).isDead) return;
                     if (matchupComponent.targetEntity == Entity.Null || matchupComponent.closestPlayerEntity == Entity.Null) return;
                     if (levelCompleteComponent.areaIndex > LevelManager.instance.currentLevelCompleted) return;
+                    weaponComponent.tooFarTooAttack = false;
 
                     var enemyPosition = localTransform.Position;
                     var pl = matchupComponent.opponentTargetPosition;
@@ -89,27 +91,28 @@ namespace Enemy
                     {
                         enemyInShootingRange = false;
                     }
-
-                    var multiplier = 2 / enemiesRemain;
-                    if (distFromOpponent < weaponComponent.roleReversalRangeMechanic * multiplier &&
+                    
+                    var multiplier = 2;
+                    
+                    if (distFromOpponent > weaponComponent.roleReversalRangeMechanic * multiplier &&
                         !roleReversalDisabled)
 
                     {
-                        enemiesTooFar = false;
+                        weaponComponent.tooFarTooAttack = true;
                     }
                 }
 
             ).Run();
 
 
-            Debug.Log("ENEMIES REMAIN " + enemiesRemain);
+            //Debug.Log("ENEMIES REMAIN " + enemiesRemain);
 
 
-            if (enemiesTooFar && playerIsFiring)
-            {
-                playerIsFiring = false;
-                Debug.Log("TOO FAR");
-            }
+            // if (enemiesTooFar && playerIsFiring)
+            // {
+            //     playerIsFiring = false;
+            //     Debug.Log("TOO FAR");
+           // }
 
 
 
@@ -202,7 +205,7 @@ namespace Enemy
                                     var actorWeaponAim = SystemAPI.GetComponent<ActorWeaponAimComponent>(e);
 
 
-                                    if (playerIsFiring && roleReversal == RoleReversalMode.On || distFromOpponent <
+                                    if (playerIsFiring && roleReversal == RoleReversalMode.On && weaponComponent.tooFarTooAttack == false || distFromOpponent <
                                         enemyWeaponMovementComponent.shootRangeDistance && weaponMovement &&
                                         roleReversal == RoleReversalMode.Off && enemyInShootingRange)
                                     {
