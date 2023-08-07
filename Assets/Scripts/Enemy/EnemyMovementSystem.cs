@@ -31,13 +31,7 @@ namespace Enemy
             var toggleEnabled =
                 LevelManager.instance.levelSettings[LevelManager.instance.currentLevelCompleted].roleReversalMode ==
                 RoleReversalMode.Toggle;
-
-            // var enemiesRemain = LevelManager.instance.levelSettings[LevelManager.instance.currentLevelCompleted]
-            //                         .potentialLevelTargets
-            //                     - LevelManager.instance.levelSettings[LevelManager.instance.currentLevelCompleted]
-            //                         .enemiesDead;
-            // if (enemiesRemain > 4) enemiesRemain = 4;
-
+            
 
             var transformGroup = SystemAPI.GetComponentLookup<LocalTransform>(false);
             playerQuery = GetEntityQuery(ComponentType.ReadOnly<PlayerComponent>());
@@ -58,10 +52,7 @@ namespace Enemy
                 }
             }
 
-            //var pl = SystemAPI.GetComponent<LocalTransform>(PlayerEntities[0]).Position;
-
-            //var enemiesTooFar = true;
-
+       
             Entities.WithoutBurst().WithNone<Pause>().WithAll<EnemyComponent>().ForEach
             (
                 (
@@ -78,8 +69,10 @@ namespace Enemy
                     if (levelCompleteComponent.areaIndex > LevelManager.instance.currentLevelCompleted) return;
                     weaponComponent.tooFarTooAttack = false;
 
+                    
                     var enemyPosition = localTransform.Position;
-                    var pl = matchupComponent.opponentTargetPosition;
+                    //var pl = matchupComponent.opponentTargetPosition;
+                    var pl = SystemAPI.GetComponent<LocalTransform>(matchupComponent.closestPlayerEntity).Position;
                     pl.y = 0;
                     var en = enemyPosition;
                     en.y = 0;
@@ -92,14 +85,18 @@ namespace Enemy
                         enemyInShootingRange = false;
                     }
                     
-                    var multiplier = 2;
+                    var multiplier = 2.0f;
+                    Debug.Log("DIST " + distFromOpponent);
                     
                     if (distFromOpponent > weaponComponent.roleReversalRangeMechanic * multiplier &&
                         !roleReversalDisabled)
 
                     {
                         weaponComponent.tooFarTooAttack = true;
+                        Debug.Log("TOO FAR LOOP " + " " + e);
                     }
+                    
+                  
                 }
 
             ).Run();
@@ -171,14 +168,26 @@ namespace Enemy
                             var stopRange = enemyBehaviourComponent.stopRange;
                             var weaponRaised = WeaponMotion.None;
                             //if closer than weapon shooting stop range always melee if melee switch active 
+                            var hasWeaponComponent = SystemAPI.HasComponent<WeaponComponent>(e);
 
+                            if (hasWeaponComponent)
+                            {
+                                var weaponComponent = SystemAPI.GetComponent<WeaponComponent>(e);
+                                if (weaponComponent.tooFarTooAttack)
+                                {
+                                    //Debug.Log("TOO FAR");
+                                    weaponMovement = false;
+                                    meleeMovement = false;
+                                }
+                            }
                             if (distFromOpponent < stopRange && weaponMovement && enemyMeleeMovementComponent.switchUp)
                             {
+                                var weaponComponent = SystemAPI.GetComponent<WeaponComponent>(e);
                                 weaponMovement = false;
                                 meleeMovement = true;
                             }
 
-                            var hasWeaponComponent = SystemAPI.HasComponent<WeaponComponent>(e);
+                   
 
                             if (hasWeaponComponent)
                             {
@@ -205,7 +214,7 @@ namespace Enemy
                                     var actorWeaponAim = SystemAPI.GetComponent<ActorWeaponAimComponent>(e);
 
 
-                                    if (playerIsFiring && roleReversal == RoleReversalMode.On && weaponComponent.tooFarTooAttack == false || distFromOpponent <
+                                    if (playerIsFiring && roleReversal == RoleReversalMode.On && !weaponComponent.tooFarTooAttack  || distFromOpponent <
                                         enemyWeaponMovementComponent.shootRangeDistance && weaponMovement &&
                                         roleReversal == RoleReversalMode.Off && enemyInShootingRange)
                                     {
@@ -222,6 +231,7 @@ namespace Enemy
                                         actorWeaponAim.weaponRaised = weaponRaised;
                                         SystemAPI.SetComponent(e, actorWeaponAim);
                                         SystemAPI.SetComponent(e, weaponComponent);
+                                        //meleeMovement = true;//test
                                     }
                                 }
                             }
@@ -374,7 +384,7 @@ namespace Enemy
                     }
                 ).Run();
 
-            Debug.Log("RANGE " + playerInShootingRange);
+            //Debug.Log("RANGE " + playerInShootingRange);
             for (var i = 0; i < PlayerEntities.Length; i++)
             {
                 var e = PlayerEntities[i];
