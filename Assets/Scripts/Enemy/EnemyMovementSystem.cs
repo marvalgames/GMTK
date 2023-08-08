@@ -130,7 +130,7 @@ namespace Enemy
                     {
                         if (SystemAPI.HasComponent<DeadComponent>(e) == false) return;
                         if (SystemAPI.GetComponent<DeadComponent>(e).isDead) return;
-                        if (matchupComponent.targetEntity == Entity.Null || matchupComponent.closestPlayerEntity == Entity.Null) return;
+                        if (matchupComponent.closestOpponent == Entity.Null || matchupComponent.closestPlayerEntity == Entity.Null) return;
                         if (levelCompleteComponent.areaIndex > LevelManager.instance.currentLevelCompleted) return;
                         var animator = enemyMove.anim;
                         var defensiveRole = SystemAPI.GetComponent<DefensiveStrategyComponent>(e).currentRole;
@@ -139,6 +139,9 @@ namespace Enemy
                         var enemyBehaviourComponent = SystemAPI.GetComponent<EnemyBehaviourComponent>(e);
                         var meleeMovement = enemyMeleeMovementComponent.enabled;
                         var weaponMovement = enemyWeaponMovementComponent.enabled;
+                        Debug.Log( "MOVE  " + weaponMovement + "  " + e);
+
+                        
                         enemyMove.speedMultiple = 1;
                         enemyState.selectMove = false;
                         var role = enemyMove.enemyRole;
@@ -152,14 +155,19 @@ namespace Enemy
                             var closestPlayerPosition = SystemAPI.GetComponent<LocalTransform>(closestPlayerEntity).Position;
                             closestPlayerPosition.y = 0;
 
+                            var closestOpponentEntity = matchupComponent.closestOpponent;
+                            var closestOpponentPosition = SystemAPI.GetComponent<LocalTransform>(closestOpponentEntity).Position;
+                            closestOpponentPosition.y = 0;
+                            
+
                             var isPlayerTarget = SystemAPI.HasComponent<PlayerComponent>(matchupComponent.targetEntity);
-                            var pl = matchupComponent.opponentTargetPosition;
+                            //var pl = matchupComponent.opponentTargetPosition;
                             var way = matchupComponent.wayPointTargetPosition;
                             var aimWeight = animatorWeightsComponent.aimWeight;
-                            pl.y = 0;
+                            //pl.y = 0;
                             var en = enemyPosition;
                             en.y = 0;
-                            var distFromOpponent = math.distance(pl, en);
+                            var distFromOpponent = math.distance(closestOpponentPosition, en);
                             var distFromPlayer = math.distance(closestPlayerPosition, en);
                             var distFromWaypoint = math.distance(way, en);
                             var distFromStation = math.distance(homePosition, enemyPosition);
@@ -180,15 +188,16 @@ namespace Enemy
                                     meleeMovement = false;
                                 }
                             }
+                            
+
+                            
                             if (distFromOpponent < stopRange && weaponMovement && enemyMeleeMovementComponent.switchUp)
                             {
                                 var weaponComponent = SystemAPI.GetComponent<WeaponComponent>(e);
                                 weaponMovement = false;
                                 meleeMovement = true;
                             }
-
-                   
-
+                            
                             if (hasWeaponComponent)
                             {
                                 var weaponComponent = SystemAPI.GetComponent<WeaponComponent>(e);
@@ -228,11 +237,16 @@ namespace Enemy
                                         }
 
                                         weaponComponent.IsFiring = 1;
+                                        Debug.Log("FIRING " + e);
                                         actorWeaponAim.weaponRaised = weaponRaised;
                                         SystemAPI.SetComponent(e, actorWeaponAim);
                                         SystemAPI.SetComponent(e, weaponComponent);
                                         //meleeMovement = true;//test
                                     }
+                                    //else
+                                    //{
+                                    //}
+                                    
                                 }
                             }
 

@@ -29,8 +29,9 @@ public partial struct EnemiesAttackEnableableComponentSystem : ISystem
         var enemiesAttackComponentGroup = SystemAPI.GetComponentLookup<EnemiesAttackComponent>();
         //var enemyComponentGroup = SystemAPI.GetComponentLookup<EnemyComponent>();
         var roleReversalMode = LevelManager.instance.levelSettings[LevelManager.instance.currentLevelCompleted]
-            .roleReversalMode == RoleReversalMode.Toggle;
-        var roleReversal = SystemAPI.GetComponent<WeaponComponent>(playerEntityList[0]).roleReversal ==
+            .roleReversalMode != RoleReversalMode.Off;//if toggle or on then true
+        
+        var roleReversal = SystemAPI.GetComponent<WeaponComponent>(playerEntityList[0]).roleReversal !=
                            RoleReversalMode.Off; //p1 shoots normal and enemies do not attack each other
 
         var job = new EnemiesAttackEnableableJob()
@@ -54,7 +55,7 @@ partial struct EnemiesAttackEnableableJob : IJobEntity
     {
         if (enemiesAttackComponentGroup.HasComponent(e))
         {
-            enemiesAttackComponentGroup.SetComponentEnabled(e, !reverseMode);
+            enemiesAttackComponentGroup.SetComponentEnabled(e, reverseMode);
         }
     }
 }

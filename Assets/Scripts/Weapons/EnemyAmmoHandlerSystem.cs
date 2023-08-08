@@ -54,8 +54,10 @@ namespace Enemy
                     }
 
                     //if (enemyWeapon is { IsFiring: 1, Duration: 0 } )
-                    if (enemyWeapon is { IsFiring: 1, Duration: 0 } &&
-                        animatorWeightsComponent.aimWeight > enemyWeapon.animTriggerWeight)
+                    if (enemyWeapon is { IsFiring: 1, Duration: 0 }
+                        &&
+                        animatorWeightsComponent.aimWeight > enemyWeapon.animTriggerWeight
+                        )
                     {
                         enemyWeapon.Duration += dt;
                         //enemyWeapon.IsFiring = 0;
