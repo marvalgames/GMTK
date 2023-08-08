@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using Unity.Entities;
 using UnityEngine;
+using UnityEngine.VFX;
 
 
 public struct EffectsComponent : IComponentData
@@ -46,10 +47,19 @@ public class EffectsManager : MonoBehaviour
         for (var i = 0; i < actorEffect.Count; i++)
         {
             if (actorEffect[i] == null) continue;
-            if(actorEffect[i].psPrefab == null) continue;
-            //Debug.Log("LOADED " + actorEffect[i].clip);
-            var ps = Instantiate(actorEffect[i].psPrefab, transform);
-            actorEffect[i].psInstance = ps;
+            if (actorEffect[i].psPrefab != null)
+            {
+                //Debug.Log("LOADED " + actorEffect[i].clip);
+                var ps = Instantiate(actorEffect[i].psPrefab, transform);
+                actorEffect[i].psInstance = ps;
+            }
+
+            if (actorEffect[i].vePrefab != null)
+            {
+                var ve = Instantiate(actorEffect[i].vePrefab, transform);
+                actorEffect[i].veInstance = ve;
+            }
+
         }
     }
 

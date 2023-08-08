@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 
-namespace UnityTemplateProjects
-{
+//namespace UnityTemplateProjects
+//{
     public class SimpleCameraController : MonoBehaviour
     {
         class CameraState
@@ -157,4 +157,4 @@ namespace UnityTemplateProjects
         }
     }
 
-}
+//}

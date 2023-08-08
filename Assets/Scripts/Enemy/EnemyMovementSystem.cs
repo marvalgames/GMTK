@@ -86,7 +86,7 @@ namespace Enemy
                     }
                     
                     var multiplier = 2.0f;
-                    Debug.Log("DIST " + distFromOpponent);
+                    //Debug.Log("DIST " + distFromOpponent);
                     
                     if (distFromOpponent > weaponComponent.roleReversalRangeMechanic * multiplier &&
                         !roleReversalDisabled)

@@ -8,6 +8,7 @@ using Unity.Physics;
 using UnityEngine.AI;
 using Unity.Collections;
 using Unity.Transforms;
+using UnityEngine.VFX;
 
 public enum SpawnStage
 {
@@ -31,6 +32,8 @@ public class EffectClass : IComponentData
     public EffectType effectType;
     public ParticleSystem psPrefab;
     public ParticleSystem psInstance;
+    public VisualEffect vePrefab;
+    public VisualEffect veInstance;
     public Entity psEntity;
     public AudioClip clip;
     public GameObject transformGameObject;
@@ -174,9 +177,12 @@ public partial class CharacterImpulseEffectsSystem : SystemBase
                 var audioSource = effects.audioSource;
                 if (effectsComponent.playEffectType == EffectType.TwoClose)
                 {
-                    var effectsIndex = effectsComponent.effectIndex;
+                    //var effectsIndex = effectsComponent.effectIndex;
                     if (effects.actorEffect != null)
                     {
+                
+                        
+                        
                         if (effects.actorEffect[effectsComponent.effectIndex]
                             .psInstance) //tryinmg to match index to effect type - 3 is 2 close
                         {
@@ -281,6 +287,12 @@ public partial class CharacterDamageEffectsSystem : SystemBase
                                 //Debug.Log("ps dam " + effects.actorEffect[effectsIndex].psInstance);
                             }
 
+                            if (effects.actorEffect[effectsIndex].veInstance)
+                            {
+                                effects.actorEffect[effectsComponent.effectIndex].veInstance.Play();
+                            }
+
+
                             if (effects.actorEffect[effectsIndex].clip)
                             {
                                 audioSource.clip = effects.actorEffect[effectsIndex].clip;
@@ -334,6 +346,22 @@ public partial class CharacterDeadEffectsSystem : SystemBase
 
                     if (effects.actorEffect != null && effects.actorEffect.Count > 0)
                     {
+                        
+                        if (effects.actorEffect[effectsIndex].veInstance)
+                        {
+                            effects.actorEffect[effectsComponent.effectIndex].veInstance.Play();
+                            if (effects.actorEffect[effectsIndex].clip)
+                            {
+                                //effectsComponent.startEffectSound = false;
+                                audioSource.clip = effects.actorEffect[effectsIndex].clip;
+                                if (!audioSource.isPlaying)
+                                {
+                                    audioSource.PlayOneShot(audioSource.clip, .5f);
+                                    //Log("play audio dead " + audioSource.clip);
+                                }
+                            }
+                        }
+                        
                         if (effects.actorEffect[effectsIndex]
                             .psInstance) //tryinmg to match index to effect type - 1 is dead
                         {
