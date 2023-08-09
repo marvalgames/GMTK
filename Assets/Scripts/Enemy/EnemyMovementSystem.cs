@@ -86,31 +86,17 @@ namespace Enemy
                     }
                     
                     var multiplier = 2.0f;
-                    //Debug.Log("DIST " + distFromOpponent);
                     
                     if (distFromOpponent > weaponComponent.roleReversalRangeMechanic * multiplier &&
                         !roleReversalDisabled)
 
                     {
                         weaponComponent.tooFarTooAttack = true;
-                        Debug.Log("TOO FAR LOOP " + " " + e);
+                        //Debug.Log("TOO FAR LOOP " + " " + e);
                     }
-                    
-                  
                 }
 
             ).Run();
-
-
-            //Debug.Log("ENEMIES REMAIN " + enemiesRemain);
-
-
-            // if (enemiesTooFar && playerIsFiring)
-            // {
-            //     playerIsFiring = false;
-            //     Debug.Log("TOO FAR");
-           // }
-
 
 
 
@@ -139,8 +125,6 @@ namespace Enemy
                         var enemyBehaviourComponent = SystemAPI.GetComponent<EnemyBehaviourComponent>(e);
                         var meleeMovement = enemyMeleeMovementComponent.enabled;
                         var weaponMovement = enemyWeaponMovementComponent.enabled;
-                        Debug.Log( "MOVE  " + weaponMovement + "  " + e);
-
                         
                         enemyMove.speedMultiple = 1;
                         enemyState.selectMove = false;
@@ -237,15 +221,12 @@ namespace Enemy
                                         }
 
                                         weaponComponent.IsFiring = 1;
-                                        Debug.Log("FIRING " + e);
+                                        //Debug.Log("FIRING " + e);
                                         actorWeaponAim.weaponRaised = weaponRaised;
                                         SystemAPI.SetComponent(e, actorWeaponAim);
                                         SystemAPI.SetComponent(e, weaponComponent);
                                         //meleeMovement = true;//test
                                     }
-                                    //else
-                                    //{
-                                    //}
                                     
                                 }
                             }

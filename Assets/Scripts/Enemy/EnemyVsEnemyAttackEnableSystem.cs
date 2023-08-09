@@ -25,23 +25,26 @@ public partial struct EnemiesAttackEnableableComponentSystem : ISystem
             LevelManager.instance.currentLevelCompleted >= LevelManager.instance.totalLevels) return;
 
         var playerEntityList = playerQuery.ToEntityArray(Allocator.TempJob);
-        if(playerEntityList.Length == 0) return;
+        if (playerEntityList.Length == 0) return;
         var enemiesAttackComponentGroup = SystemAPI.GetComponentLookup<EnemiesAttackComponent>();
-        //var enemyComponentGroup = SystemAPI.GetComponentLookup<EnemyComponent>();
         var roleReversalMode = LevelManager.instance.levelSettings[LevelManager.instance.currentLevelCompleted]
-            .roleReversalMode != RoleReversalMode.Off;//if toggle or on then true
-        
+            .roleReversalMode != RoleReversalMode.Off; //if toggle or on then true
+
         var roleReversal = SystemAPI.GetComponent<WeaponComponent>(playerEntityList[0]).roleReversal !=
                            RoleReversalMode.Off; //p1 shoots normal and enemies do not attack each other
 
-        var job = new EnemiesAttackEnableableJob()
+        var reverseMode = roleReversal;
+        if (roleReversalMode) //if no role reverse mechanic then reverseMode set skipped;
         {
-            //playerEntityList = playerEntityList,
-            //enemyComponentGroup = enemyComponentGroup,
-            enemiesAttackComponentGroup = enemiesAttackComponentGroup,
-            reverseMode = roleReversalMode && roleReversal
-        };
-        job.Schedule();
+            var job = new EnemiesAttackEnableableJob()
+            {
+                enemiesAttackComponentGroup = enemiesAttackComponentGroup,
+                reverseMode = true
+            };
+
+            job.Schedule();
+        }
+        
     }
 }
 

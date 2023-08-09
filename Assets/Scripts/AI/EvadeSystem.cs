@@ -107,14 +107,13 @@ public partial class EvadeSystem : SystemBase
     }
 }
 
-
+[UpdateInGroup(typeof(FixedStepSimulationSystemGroup))]
 [UpdateAfter(typeof(EvadeSystem))]
 [RequireMatchingQueriesForUpdate]
 public partial class EvadeManagedSystem : SystemBase
 {
     private static readonly int Evade1 = Animator.StringToHash("Evade");
-
-    private uint _index = 1;
+    
     protected override void OnUpdate()
     {
         var time = SystemAPI.Time.DeltaTime;
