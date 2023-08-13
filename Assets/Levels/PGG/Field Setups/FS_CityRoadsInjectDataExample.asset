@@ -17,26 +17,7 @@ MonoBehaviour:
   Global: 0
   Enabled: 1
   Ignore: 0
-  OwnerSpawner:
-    Enabled: 1
-    Name: PavementT-3Way
-    SpawnerTag: T
-    StampPrefabID: 3
-    Parent: {fileID: 7316711609801475726}
-    Rules:
-    - {fileID: -2165282623528920742}
-    - {fileID: -8763642367265237100}
-    - {fileID: 6251976380847724136}
-    - {fileID: -6010021690503178801}
-    Mode: 3
-    CellCheckMode: 0
-    GridScaling: 0
-    OnScalledGrid: 1
-    Repeat: 1
-    MultipleToSpawn: 0
-    ScaleAccess: 1
-    DisplayPreviewGUI: 1
-    IsSubSpawner: 0
+  _editor_drawRule: 1
   CellAllow: 0
   AllConditionsMet: 1
   quartRotor:
@@ -58,6 +39,7 @@ MonoBehaviour:
     occupiedByTag: P
     CheckMode: 2
     OffsetOrigin: {x: 0, y: 0, z: 0}
+    R: 0
     DirectCheck: 0
     placement:
       lu: 0
@@ -69,12 +51,16 @@ MonoBehaviour:
       ld: 0
       d: 1
       rd: 0
+      UseAdvancedSetup: 0
+      AdvancedSetup: []
     Negate: 0
     NeightbourNeeds: 0
+    FullRotGet: 0
   - CheckedCellsMustBe: 1
     occupiedByTag: '!P'
     CheckMode: 2
     OffsetOrigin: {x: 0, y: 0, z: 0}
+    R: 0
     DirectCheck: 0
     placement:
       lu: 0
@@ -86,8 +72,16 @@ MonoBehaviour:
       ld: 1
       d: 0
       rd: 1
+      UseAdvancedSetup: 0
+      AdvancedSetup: []
     Negate: 0
     NeightbourNeeds: 0
+    FullRotGet: 0
+  CheckPosit90: 0
+  CheckNeg90: 0
+  NotCheckDefaultPitch: 0
+  OverridePitchRotation: 1
+  InitPitchRotation: 0
 --- !u!114 &-8552289614431514113
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -105,24 +99,7 @@ MonoBehaviour:
   Global: 0
   Enabled: 1
   Ignore: 0
-  OwnerSpawner:
-    Enabled: 1
-    Name: PavementCross
-    SpawnerTag: Cross
-    StampPrefabID: 1
-    Parent: {fileID: 7316711609801475726}
-    Rules:
-    - {fileID: 83723586153721104}
-    - {fileID: -8552289614431514113}
-    Mode: 3
-    CellCheckMode: 0
-    GridScaling: 0
-    OnScalledGrid: 1
-    Repeat: 1
-    MultipleToSpawn: 0
-    ScaleAccess: 1
-    DisplayPreviewGUI: 1
-    IsSubSpawner: 0
+  _editor_drawRule: 1
   CellAllow: 1
   AllConditionsMet: 1
   Remove:
@@ -134,6 +111,14 @@ MonoBehaviour:
     RemoveWhen: 0
     UseSelfRotation: 1
     DegreesTolerance: 45
+    checkSetup:
+      UseRotor: 1
+      Rotor: 0
+      UseCondition: 0
+      Condition: 0
+      ToCheck:
+      - {x: 0, y: 0, z: 0}
+      EditorDisplayColor: {r: 0.4, g: 0.4, b: 1, a: 0.95}
 --- !u!114 &-8126197912874577482
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -151,24 +136,7 @@ MonoBehaviour:
   Global: 0
   Enabled: 1
   Ignore: 0
-  OwnerSpawner:
-    Enabled: 1
-    Name: FenceCross
-    SpawnerTag: Cross
-    StampPrefabID: 1
-    Parent: {fileID: -2820827574520984851}
-    Rules:
-    - {fileID: -8126197912874577482}
-    - {fileID: -5273263458236934143}
-    Mode: 3
-    CellCheckMode: 0
-    GridScaling: 0
-    OnScalledGrid: 1
-    Repeat: 1
-    MultipleToSpawn: 0
-    ScaleAccess: 1
-    DisplayPreviewGUI: 1
-    IsSubSpawner: 0
+  _editor_drawRule: 1
   CellAllow: 0
   AllConditionsMet: 1
   CheckedCellsMustBe: 1
@@ -187,6 +155,8 @@ MonoBehaviour:
     ld: 0
     d: 1
     rd: 0
+    UseAdvancedSetup: 0
+    AdvancedSetup: []
   quartRotor:
     q1: 1
     q2: 0
@@ -205,6 +175,16 @@ MonoBehaviour:
   GetNeightbourPos: 0
   GetNeightbourRot: 0
   GetNeightbourScale: 0
+  UseRestrictedDir: 0
+  CustomCellsCheck: 0
+  FullRotGet: 0
+  Check3DAngles: 0
+  RotationSpaceDisplay: 0
+  CheckPosit90: 1
+  CheckNeg90: 1
+  OverridePitchRotation: 1
+  InitPitchRotation: 0
+  NotCheckDefaultPitch: 0
 --- !u!114 &-7518277819394714361
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -222,24 +202,7 @@ MonoBehaviour:
   Global: 1
   Enabled: 1
   Ignore: 0
-  OwnerSpawner:
-    Enabled: 1
-    Name: Fence
-    SpawnerTag: 
-    StampPrefabID: 0
-    Parent: {fileID: -2820827574520984851}
-    Rules:
-    - {fileID: -7518277819394714361}
-    - {fileID: -7439889337675523375}
-    Mode: 3
-    CellCheckMode: 0
-    GridScaling: 0
-    OnScalledGrid: 1
-    Repeat: 1
-    MultipleToSpawn: 0
-    ScaleAccess: 1
-    DisplayPreviewGUI: 1
-    IsSubSpawner: 0
+  _editor_drawRule: 1
   CellAllow: 0
   AllConditionsMet: 1
   Tag: R
@@ -247,6 +210,14 @@ MonoBehaviour:
   UseRotationsCheck: 0
   OnlyWithSameDirection: 0
   CompareOffsetsAngle: 181
+  checkSetup:
+    UseRotor: 1
+    Rotor: 0
+    UseCondition: 1
+    Condition: 0
+    ToCheck:
+    - {x: 0, y: 0, z: 0}
+    EditorDisplayColor: {r: 0.4, g: 0.4, b: 1, a: 0.95}
 --- !u!114 &-7439889337675523375
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -264,25 +235,8 @@ MonoBehaviour:
   Global: 0
   Enabled: 1
   Ignore: 0
-  OwnerSpawner:
-    Enabled: 1
-    Name: Fence
-    SpawnerTag: 
-    StampPrefabID: 0
-    Parent: {fileID: -2820827574520984851}
-    Rules:
-    - {fileID: -7518277819394714361}
-    - {fileID: -7439889337675523375}
-    Mode: 3
-    CellCheckMode: 0
-    GridScaling: 0
-    OnScalledGrid: 1
-    Repeat: 1
-    MultipleToSpawn: 0
-    ScaleAccess: 1
-    DisplayPreviewGUI: 1
-    IsSubSpawner: 0
-  CellAllow: 1
+  _editor_drawRule: 1
+  CellAllow: 0
   AllConditionsMet: 1
   CheckedCellsMustBe: 1
   NeightbourNeeds: 0
@@ -300,6 +254,8 @@ MonoBehaviour:
     ld: 0
     d: 1
     rd: 0
+    UseAdvancedSetup: 0
+    AdvancedSetup: []
   quartRotor:
     q1: 1
     q2: 1
@@ -318,6 +274,16 @@ MonoBehaviour:
   GetNeightbourPos: 0
   GetNeightbourRot: 0
   GetNeightbourScale: 0
+  UseRestrictedDir: 0
+  CustomCellsCheck: 0
+  FullRotGet: 0
+  Check3DAngles: 0
+  RotationSpaceDisplay: 0
+  CheckPosit90: 1
+  CheckNeg90: 1
+  OverridePitchRotation: 1
+  InitPitchRotation: 0
+  NotCheckDefaultPitch: 0
 --- !u!114 &-7319114517084262237
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -335,24 +301,7 @@ MonoBehaviour:
   Global: 0
   Enabled: 1
   Ignore: 0
-  OwnerSpawner:
-    Enabled: 1
-    Name: Pavement
-    SpawnerTag: 
-    StampPrefabID: 0
-    Parent: {fileID: 7316711609801475726}
-    Rules:
-    - {fileID: 2161249051312929228}
-    - {fileID: -7319114517084262237}
-    Mode: 3
-    CellCheckMode: 0
-    GridScaling: 0
-    OnScalledGrid: 1
-    Repeat: 1
-    MultipleToSpawn: 0
-    ScaleAccess: 1
-    DisplayPreviewGUI: 1
-    IsSubSpawner: 0
+  _editor_drawRule: 1
   CellAllow: 1
   AllConditionsMet: 1
   Remove:
@@ -364,6 +313,14 @@ MonoBehaviour:
     RemoveWhen: 0
     UseSelfRotation: 1
     DegreesTolerance: 45
+    checkSetup:
+      UseRotor: 1
+      Rotor: 0
+      UseCondition: 0
+      Condition: 0
+      ToCheck:
+      - {x: 0, y: 0, z: 0}
+      EditorDisplayColor: {r: 0.4, g: 0.4, b: 1, a: 0.95}
 --- !u!114 &-6816420770485342276
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -381,24 +338,7 @@ MonoBehaviour:
   Global: 0
   Enabled: 1
   Ignore: 0
-  OwnerSpawner:
-    Enabled: 1
-    Name: Pavement-Cornered
-    SpawnerTag: 
-    StampPrefabID: 5
-    Parent: {fileID: 7316711609801475726}
-    Rules:
-    - {fileID: -6816420770485342276}
-    - {fileID: -4992984837058956106}
-    Mode: 3
-    CellCheckMode: 0
-    GridScaling: 0
-    OnScalledGrid: 1
-    Repeat: 1
-    MultipleToSpawn: 0
-    ScaleAccess: 1
-    DisplayPreviewGUI: 1
-    IsSubSpawner: 0
+  _editor_drawRule: 1
   CellAllow: 0
   AllConditionsMet: 1
   quartRotor:
@@ -420,6 +360,7 @@ MonoBehaviour:
     occupiedByTag: '!P'
     CheckMode: 2
     OffsetOrigin: {x: 0, y: 0, z: 0}
+    R: 0
     DirectCheck: 0
     placement:
       lu: 0
@@ -431,12 +372,16 @@ MonoBehaviour:
       ld: 0
       d: 1
       rd: 0
+      UseAdvancedSetup: 0
+      AdvancedSetup: []
     Negate: 0
     NeightbourNeeds: 0
+    FullRotGet: 0
   - CheckedCellsMustBe: 1
     occupiedByTag: P
     CheckMode: 2
     OffsetOrigin: {x: 0, y: 0, z: 0}
+    R: 0
     DirectCheck: 0
     placement:
       lu: 0
@@ -448,8 +393,16 @@ MonoBehaviour:
       ld: 0
       d: 0
       rd: 0
+      UseAdvancedSetup: 0
+      AdvancedSetup: []
     Negate: 0
     NeightbourNeeds: 0
+    FullRotGet: 0
+  CheckPosit90: 0
+  CheckNeg90: 0
+  NotCheckDefaultPitch: 0
+  OverridePitchRotation: 1
+  InitPitchRotation: 0
 --- !u!114 &-6500331840401566399
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -467,24 +420,7 @@ MonoBehaviour:
   Global: 0
   Enabled: 1
   Ignore: 0
-  OwnerSpawner:
-    Enabled: 1
-    Name: Fence
-    SpawnerTag: 
-    StampPrefabID: 0
-    Parent: {fileID: -2820827574520984851}
-    Rules:
-    - {fileID: -7439889337675523375}
-    - {fileID: -6500331840401566399}
-    Mode: 3
-    CellCheckMode: 0
-    GridScaling: 0
-    OnScalledGrid: 1
-    Repeat: 1
-    MultipleToSpawn: 0
-    ScaleAccess: 1
-    DisplayPreviewGUI: 1
-    IsSubSpawner: 0
+  _editor_drawRule: 1
   CellAllow: 1
   AllConditionsMet: 1
   quartRotor:
@@ -506,6 +442,7 @@ MonoBehaviour:
     occupiedByTag: R
     CheckMode: 2
     OffsetOrigin: {x: 0, y: 0, z: 0}
+    R: 0
     DirectCheck: 0
     placement:
       lu: 0
@@ -517,8 +454,16 @@ MonoBehaviour:
       ld: 0
       d: 1
       rd: 0
+      UseAdvancedSetup: 0
+      AdvancedSetup: []
     Negate: 1
     NeightbourNeeds: 0
+    FullRotGet: 0
+  CheckPosit90: 0
+  CheckNeg90: 0
+  NotCheckDefaultPitch: 0
+  OverridePitchRotation: 1
+  InitPitchRotation: 0
 --- !u!114 &-6465258471920625780
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -536,25 +481,7 @@ MonoBehaviour:
   Global: 0
   Enabled: 1
   Ignore: 0
-  OwnerSpawner:
-    Enabled: 1
-    Name: PavementCurve
-    SpawnerTag: 
-    StampPrefabID: 2
-    Parent: {fileID: 7316711609801475726}
-    Rules:
-    - {fileID: -6465258471920625780}
-    - {fileID: 1460966965103331119}
-    - {fileID: -2287396312574554714}
-    Mode: 3
-    CellCheckMode: 0
-    GridScaling: 0
-    OnScalledGrid: 1
-    Repeat: 1
-    MultipleToSpawn: 0
-    ScaleAccess: 1
-    DisplayPreviewGUI: 1
-    IsSubSpawner: 0
+  _editor_drawRule: 1
   CellAllow: 0
   AllConditionsMet: 1
   CheckedCellsMustBe: 1
@@ -573,6 +500,8 @@ MonoBehaviour:
     ld: 0
     d: 0
     rd: 0
+    UseAdvancedSetup: 0
+    AdvancedSetup: []
   quartRotor:
     q1: 1
     q2: 1
@@ -591,6 +520,16 @@ MonoBehaviour:
   GetNeightbourPos: 0
   GetNeightbourRot: 0
   GetNeightbourScale: 0
+  UseRestrictedDir: 0
+  CustomCellsCheck: 0
+  FullRotGet: 0
+  Check3DAngles: 0
+  RotationSpaceDisplay: 0
+  CheckPosit90: 1
+  CheckNeg90: 1
+  OverridePitchRotation: 1
+  InitPitchRotation: 0
+  NotCheckDefaultPitch: 0
 --- !u!114 &-6010021690503178801
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -608,26 +547,7 @@ MonoBehaviour:
   Global: 0
   Enabled: 1
   Ignore: 0
-  OwnerSpawner:
-    Enabled: 1
-    Name: PavementT-3Way
-    SpawnerTag: T
-    StampPrefabID: 3
-    Parent: {fileID: 7316711609801475726}
-    Rules:
-    - {fileID: -2165282623528920742}
-    - {fileID: -8763642367265237100}
-    - {fileID: 6251976380847724136}
-    - {fileID: -6010021690503178801}
-    Mode: 3
-    CellCheckMode: 0
-    GridScaling: 0
-    OnScalledGrid: 1
-    Repeat: 1
-    MultipleToSpawn: 0
-    ScaleAccess: 1
-    DisplayPreviewGUI: 1
-    IsSubSpawner: 0
+  _editor_drawRule: 1
   CellAllow: 1
   AllConditionsMet: 1
   Remove:
@@ -639,6 +559,14 @@ MonoBehaviour:
     RemoveWhen: 0
     UseSelfRotation: 1
     DegreesTolerance: 45
+    checkSetup:
+      UseRotor: 1
+      Rotor: 0
+      UseCondition: 0
+      Condition: 0
+      ToCheck:
+      - {x: 0, y: 0, z: 0}
+      EditorDisplayColor: {r: 0.4, g: 0.4, b: 1, a: 0.95}
 --- !u!114 &-5812745289923127369
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -656,25 +584,7 @@ MonoBehaviour:
   Global: 0
   Enabled: 1
   Ignore: 0
-  OwnerSpawner:
-    Enabled: 1
-    Name: FenceT-3Way
-    SpawnerTag: T
-    StampPrefabID: 3
-    Parent: {fileID: -2820827574520984851}
-    Rules:
-    - {fileID: -5812745289923127369}
-    - {fileID: -2289494167125159275}
-    - {fileID: -4868474567467274197}
-    Mode: 3
-    CellCheckMode: 0
-    GridScaling: 0
-    OnScalledGrid: 1
-    Repeat: 1
-    MultipleToSpawn: 0
-    ScaleAccess: 1
-    DisplayPreviewGUI: 1
-    IsSubSpawner: 0
+  _editor_drawRule: 1
   CellAllow: 0
   AllConditionsMet: 1
   CheckedCellsMustBe: 1
@@ -693,6 +603,8 @@ MonoBehaviour:
     ld: 0
     d: 0
     rd: 0
+    UseAdvancedSetup: 0
+    AdvancedSetup: []
   quartRotor:
     q1: 1
     q2: 1
@@ -711,6 +623,16 @@ MonoBehaviour:
   GetNeightbourPos: 0
   GetNeightbourRot: 0
   GetNeightbourScale: 0
+  UseRestrictedDir: 0
+  CustomCellsCheck: 0
+  FullRotGet: 0
+  Check3DAngles: 0
+  RotationSpaceDisplay: 0
+  CheckPosit90: 1
+  CheckNeg90: 1
+  OverridePitchRotation: 1
+  InitPitchRotation: 0
+  NotCheckDefaultPitch: 0
 --- !u!114 &-5273263458236934143
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -728,24 +650,7 @@ MonoBehaviour:
   Global: 0
   Enabled: 1
   Ignore: 0
-  OwnerSpawner:
-    Enabled: 1
-    Name: FenceCross
-    SpawnerTag: Cross
-    StampPrefabID: 1
-    Parent: {fileID: -2820827574520984851}
-    Rules:
-    - {fileID: -8126197912874577482}
-    - {fileID: -5273263458236934143}
-    Mode: 3
-    CellCheckMode: 0
-    GridScaling: 0
-    OnScalledGrid: 1
-    Repeat: 1
-    MultipleToSpawn: 0
-    ScaleAccess: 1
-    DisplayPreviewGUI: 1
-    IsSubSpawner: 0
+  _editor_drawRule: 1
   CellAllow: 1
   AllConditionsMet: 1
   Remove:
@@ -757,6 +662,14 @@ MonoBehaviour:
     RemoveWhen: 0
     UseSelfRotation: 1
     DegreesTolerance: 45
+    checkSetup:
+      UseRotor: 1
+      Rotor: 0
+      UseCondition: 0
+      Condition: 0
+      ToCheck:
+      - {x: 0, y: 0, z: 0}
+      EditorDisplayColor: {r: 0.4, g: 0.4, b: 1, a: 0.95}
 --- !u!114 &-4992984837058956106
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -774,24 +687,7 @@ MonoBehaviour:
   Global: 0
   Enabled: 1
   Ignore: 0
-  OwnerSpawner:
-    Enabled: 1
-    Name: Pavement-Cornered
-    SpawnerTag: 
-    StampPrefabID: 5
-    Parent: {fileID: 7316711609801475726}
-    Rules:
-    - {fileID: -6816420770485342276}
-    - {fileID: -4992984837058956106}
-    Mode: 3
-    CellCheckMode: 0
-    GridScaling: 0
-    OnScalledGrid: 1
-    Repeat: 1
-    MultipleToSpawn: 0
-    ScaleAccess: 1
-    DisplayPreviewGUI: 1
-    IsSubSpawner: 0
+  _editor_drawRule: 1
   CellAllow: 1
   AllConditionsMet: 1
   Remove:
@@ -803,6 +699,14 @@ MonoBehaviour:
     RemoveWhen: 0
     UseSelfRotation: 1
     DegreesTolerance: 45
+    checkSetup:
+      UseRotor: 1
+      Rotor: 0
+      UseCondition: 0
+      Condition: 0
+      ToCheck:
+      - {x: 0, y: 0, z: 0}
+      EditorDisplayColor: {r: 0.4, g: 0.4, b: 1, a: 0.95}
 --- !u!114 &-4868474567467274197
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -820,25 +724,7 @@ MonoBehaviour:
   Global: 0
   Enabled: 1
   Ignore: 0
-  OwnerSpawner:
-    Enabled: 1
-    Name: FenceT-3Way
-    SpawnerTag: T
-    StampPrefabID: 3
-    Parent: {fileID: -2820827574520984851}
-    Rules:
-    - {fileID: -5812745289923127369}
-    - {fileID: -2289494167125159275}
-    - {fileID: -4868474567467274197}
-    Mode: 3
-    CellCheckMode: 0
-    GridScaling: 0
-    OnScalledGrid: 1
-    Repeat: 1
-    MultipleToSpawn: 0
-    ScaleAccess: 1
-    DisplayPreviewGUI: 1
-    IsSubSpawner: 0
+  _editor_drawRule: 1
   CellAllow: 1
   AllConditionsMet: 1
   Remove:
@@ -850,6 +736,14 @@ MonoBehaviour:
     RemoveWhen: 0
     UseSelfRotation: 1
     DegreesTolerance: 45
+    checkSetup:
+      UseRotor: 1
+      Rotor: 0
+      UseCondition: 0
+      Condition: 0
+      ToCheck:
+      - {x: 0, y: 0, z: 0}
+      EditorDisplayColor: {r: 0.4, g: 0.4, b: 1, a: 0.95}
 --- !u!114 &-3318541774181517729
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -867,25 +761,7 @@ MonoBehaviour:
   Global: 0
   Enabled: 1
   Ignore: 0
-  OwnerSpawner:
-    Enabled: 1
-    Name: FenceCurve
-    SpawnerTag: 
-    StampPrefabID: 2
-    Parent: {fileID: -2820827574520984851}
-    Rules:
-    - {fileID: 2868822480962559376}
-    - {fileID: -3318541774181517729}
-    - {fileID: 2427052570670980322}
-    Mode: 3
-    CellCheckMode: 0
-    GridScaling: 0
-    OnScalledGrid: 1
-    Repeat: 1
-    MultipleToSpawn: 0
-    ScaleAccess: 1
-    DisplayPreviewGUI: 1
-    IsSubSpawner: 0
+  _editor_drawRule: 1
   CellAllow: 0
   AllConditionsMet: 1
   Tag: Cross,T
@@ -893,6 +769,14 @@ MonoBehaviour:
   UseRotationsCheck: 0
   OnlyWithSameDirection: 0
   CompareOffsetsAngle: 181
+  checkSetup:
+    UseRotor: 1
+    Rotor: 0
+    UseCondition: 1
+    Condition: 0
+    ToCheck:
+    - {x: 0, y: 0, z: 0}
+    EditorDisplayColor: {r: 0.4, g: 0.4, b: 1, a: 0.95}
 --- !u!114 &-2820827574520984851
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -909,6 +793,7 @@ MonoBehaviour:
   Enabled: 1
   ModTag: Road
   DrawMeshAndBox: 0
+  Combine: 0
   RunEmittersIfContains: 0
   DrawSetupFor: 0
   OStamp: {fileID: 0}
@@ -916,21 +801,25 @@ MonoBehaviour:
   OMultiStamp: {fileID: 0}
   PrefabsList:
   - Prefab: {fileID: 919132149155446097, guid: 2d8ce9597d14bde4b88ef349803f054b, type: 3}
+    MainCollider: {fileID: 0}
     subID: 0
     _refMesh: {fileID: 634379796303099065, guid: 87d33605713d9b644ad6d966041a4a46,
       type: 3}
     _refCol: {fileID: 0}
   - Prefab: {fileID: 919132149155446097, guid: 5f9c535e37d6a0c41b18107f085fef67, type: 3}
+    MainCollider: {fileID: 0}
     subID: 0
     _refMesh: {fileID: -6257370379249352891, guid: a663ff0753e64294d83aa09e81f0a159,
       type: 3}
     _refCol: {fileID: 0}
   - Prefab: {fileID: 919132149155446097, guid: a5649174f49b80b41aae21c14365fc30, type: 3}
+    MainCollider: {fileID: 0}
     subID: 0
     _refMesh: {fileID: -6257370379249352891, guid: 04fd99a5e8eb9a340b3981337b5cfaf9,
       type: 3}
     _refCol: {fileID: 0}
   - Prefab: {fileID: 919132149155446097, guid: 5353b725871bdf54287b88a83889aa4e, type: 3}
+    MainCollider: {fileID: 0}
     subID: 0
     _refMesh: {fileID: -6257370379249352891, guid: 0b587c3f65025034c996c27638b450cb,
       type: 3}
@@ -947,13 +836,19 @@ MonoBehaviour:
     - {fileID: -7439889337675523375}
     Mode: 3
     CellCheckMode: 0
-    GridScaling: 0
+    _Editor_SpawnerAdvancedOptionsFoldout: 0
     OnScalledGrid: 1
     Repeat: 1
+    DontInheritRotations: 0
+    SwitchSpawnedToStatic: 0
     MultipleToSpawn: 0
+    UseGlobalRules: 1
+    UseParentPackageRules: 1
+    _wasEnablingGlobalRules: 1
     ScaleAccess: 1
     DisplayPreviewGUI: 1
     IsSubSpawner: 0
+    _EditorDisplaySpawnerHeader: 0
   - Enabled: 1
     Name: FenceCross
     SpawnerTag: Cross
@@ -964,13 +859,19 @@ MonoBehaviour:
     - {fileID: -5273263458236934143}
     Mode: 3
     CellCheckMode: 0
-    GridScaling: 0
+    _Editor_SpawnerAdvancedOptionsFoldout: 0
     OnScalledGrid: 1
     Repeat: 1
+    DontInheritRotations: 0
+    SwitchSpawnedToStatic: 0
     MultipleToSpawn: 0
+    UseGlobalRules: 1
+    UseParentPackageRules: 1
+    _wasEnablingGlobalRules: 1
     ScaleAccess: 1
     DisplayPreviewGUI: 1
     IsSubSpawner: 0
+    _EditorDisplaySpawnerHeader: 0
   - Enabled: 1
     Name: FenceT-3Way
     SpawnerTag: T
@@ -982,13 +883,19 @@ MonoBehaviour:
     - {fileID: -4868474567467274197}
     Mode: 3
     CellCheckMode: 0
-    GridScaling: 0
+    _Editor_SpawnerAdvancedOptionsFoldout: 0
     OnScalledGrid: 1
     Repeat: 1
+    DontInheritRotations: 0
+    SwitchSpawnedToStatic: 0
     MultipleToSpawn: 0
+    UseGlobalRules: 1
+    UseParentPackageRules: 1
+    _wasEnablingGlobalRules: 1
     ScaleAccess: 1
     DisplayPreviewGUI: 1
     IsSubSpawner: 0
+    _EditorDisplaySpawnerHeader: 0
   - Enabled: 1
     Name: FenceCurve
     SpawnerTag: 
@@ -1000,16 +907,25 @@ MonoBehaviour:
     - {fileID: 2427052570670980322}
     Mode: 3
     CellCheckMode: 0
-    GridScaling: 0
+    _Editor_SpawnerAdvancedOptionsFoldout: 0
     OnScalledGrid: 1
     Repeat: 1
+    DontInheritRotations: 0
+    SwitchSpawnedToStatic: 0
     MultipleToSpawn: 0
+    UseGlobalRules: 1
+    UseParentPackageRules: 1
+    _wasEnablingGlobalRules: 1
     ScaleAccess: 1
     DisplayPreviewGUI: 1
     IsSubSpawner: 0
+    _EditorDisplaySpawnerHeader: 0
+  SubSpawners: []
   VariantOf: {fileID: 0}
   _editor_drawStamp: 1
   _editor_drawSpawners: 1
+  _editor_drawGlobalRules: 0
+  _editor_drawModPackRules: 0
   _editor_shareSelected: 3
   ParentPreset: {fileID: 11400000}
   ParentPack: {fileID: 6045939967085991322}
@@ -1030,25 +946,7 @@ MonoBehaviour:
   Global: 0
   Enabled: 1
   Ignore: 0
-  OwnerSpawner:
-    Enabled: 1
-    Name: FenceT-3Way
-    SpawnerTag: T
-    StampPrefabID: 3
-    Parent: {fileID: -2820827574520984851}
-    Rules:
-    - {fileID: -5812745289923127369}
-    - {fileID: -2289494167125159275}
-    - {fileID: -4868474567467274197}
-    Mode: 3
-    CellCheckMode: 0
-    GridScaling: 0
-    OnScalledGrid: 1
-    Repeat: 1
-    MultipleToSpawn: 0
-    ScaleAccess: 1
-    DisplayPreviewGUI: 1
-    IsSubSpawner: 0
+  _editor_drawRule: 1
   CellAllow: 0
   AllConditionsMet: 1
   Tag: Cross
@@ -1056,6 +954,14 @@ MonoBehaviour:
   UseRotationsCheck: 0
   OnlyWithSameDirection: 0
   CompareOffsetsAngle: 181
+  checkSetup:
+    UseRotor: 1
+    Rotor: 0
+    UseCondition: 1
+    Condition: 0
+    ToCheck:
+    - {x: 0, y: 0, z: 0}
+    EditorDisplayColor: {r: 0.4, g: 0.4, b: 1, a: 0.95}
 --- !u!114 &-2287396312574554714
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1073,25 +979,7 @@ MonoBehaviour:
   Global: 0
   Enabled: 1
   Ignore: 0
-  OwnerSpawner:
-    Enabled: 1
-    Name: PavementCurve
-    SpawnerTag: 
-    StampPrefabID: 2
-    Parent: {fileID: 7316711609801475726}
-    Rules:
-    - {fileID: -6465258471920625780}
-    - {fileID: 1460966965103331119}
-    - {fileID: -2287396312574554714}
-    Mode: 3
-    CellCheckMode: 0
-    GridScaling: 0
-    OnScalledGrid: 1
-    Repeat: 1
-    MultipleToSpawn: 0
-    ScaleAccess: 1
-    DisplayPreviewGUI: 1
-    IsSubSpawner: 0
+  _editor_drawRule: 1
   CellAllow: 1
   AllConditionsMet: 1
   Remove:
@@ -1103,6 +991,14 @@ MonoBehaviour:
     RemoveWhen: 0
     UseSelfRotation: 1
     DegreesTolerance: 45
+    checkSetup:
+      UseRotor: 1
+      Rotor: 0
+      UseCondition: 0
+      Condition: 0
+      ToCheck:
+      - {x: 0, y: 0, z: 0}
+      EditorDisplayColor: {r: 0.4, g: 0.4, b: 1, a: 0.95}
 --- !u!114 &-2165282623528920742
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1120,26 +1016,7 @@ MonoBehaviour:
   Global: 0
   Enabled: 0
   Ignore: 0
-  OwnerSpawner:
-    Enabled: 1
-    Name: PavementT-3Way
-    SpawnerTag: T
-    StampPrefabID: 3
-    Parent: {fileID: 7316711609801475726}
-    Rules:
-    - {fileID: -2165282623528920742}
-    - {fileID: -8763642367265237100}
-    - {fileID: 6251976380847724136}
-    - {fileID: -6010021690503178801}
-    Mode: 3
-    CellCheckMode: 0
-    GridScaling: 0
-    OnScalledGrid: 1
-    Repeat: 1
-    MultipleToSpawn: 0
-    ScaleAccess: 1
-    DisplayPreviewGUI: 1
-    IsSubSpawner: 0
+  _editor_drawRule: 1
   CellAllow: 0
   AllConditionsMet: 1
   CheckedCellsMustBe: 3
@@ -1158,6 +1035,8 @@ MonoBehaviour:
     ld: 0
     d: 0
     rd: 0
+    UseAdvancedSetup: 0
+    AdvancedSetup: []
   quartRotor:
     q1: 1
     q2: 1
@@ -1176,6 +1055,16 @@ MonoBehaviour:
   GetNeightbourPos: 0
   GetNeightbourRot: 0
   GetNeightbourScale: 0
+  UseRestrictedDir: 0
+  CustomCellsCheck: 0
+  FullRotGet: 0
+  Check3DAngles: 0
+  RotationSpaceDisplay: 0
+  CheckPosit90: 1
+  CheckNeg90: 1
+  OverridePitchRotation: 1
+  InitPitchRotation: 0
+  NotCheckDefaultPitch: 0
 --- !u!114 &-397804111272022243
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1193,23 +1082,7 @@ MonoBehaviour:
   Global: 0
   Enabled: 1
   Ignore: 0
-  OwnerSpawner:
-    Enabled: 1
-    Name: Pavement-Side
-    SpawnerTag: Side
-    StampPrefabID: 4
-    Parent: {fileID: 7316711609801475726}
-    Rules:
-    - {fileID: 1935342183480574082}
-    Mode: 3
-    CellCheckMode: 0
-    GridScaling: 0
-    OnScalledGrid: 1
-    Repeat: 1
-    MultipleToSpawn: 0
-    ScaleAccess: 1
-    DisplayPreviewGUI: 1
-    IsSubSpawner: 0
+  _editor_drawRule: 1
   CellAllow: 0
   AllConditionsMet: 1
   Mode: 2
@@ -1219,6 +1092,14 @@ MonoBehaviour:
   OffsetMode: 0
   RotateBy90Only: 1
   V2: 0
+  Advanced: 0
+  SpawnOnCheck: 3
+  SpawnOnTag: 
+  CheckMode: 0
+  OutsideCondition: 2
+  OutsideOnTag: 
+  CheckOutMode: 0
+  NegateOutsideCheck: 0
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1244,15 +1125,27 @@ MonoBehaviour:
     str: 
     mat: {fileID: 0}
     gameObj: {fileID: 0}
+    unityObj: {fileID: 0}
     helper: {x: 0, y: 5, z: 0}
+    additionalHelperRef: {fileID: 0}
     ValueType: 1
+    helpForFieldCommand: 0
+    displayOnScene: 0
+    allowTransformFollow: 0
+    FloatSwitch: 0
   - Name: Spawn Count Multiplier
     v3Val: {x: 1, y: 0, z: 0}
     str: 
     mat: {fileID: 0}
     gameObj: {fileID: 0}
+    unityObj: {fileID: 0}
     helper: {x: 0, y: 5, z: 0}
+    additionalHelperRef: {fileID: 0}
     ValueType: 1
+    helpForFieldCommand: 0
+    displayOnScene: 0
+    allowTransformFollow: 0
+    FloatSwitch: 0
   DoorsModificator: {fileID: 11400000, guid: 7500e28d48a8ac44da90dfc8719e91ef, type: 2}
   EraseWallModificator: {fileID: 11400000, guid: c5bd286613ebcb24c932c8d5e7f79f9b,
     type: 2}
@@ -1262,16 +1155,24 @@ MonoBehaviour:
     TargetModification: {fileID: -2820827574520984851}
     Tags: 
     InstructionArgument: R
+    Foldout: 1
+    extraMod: {fileID: 0}
+    extraPack: {fileID: 0}
   - Title: Pavements
     InstructionType: 7
     TargetModification: {fileID: 7316711609801475726}
     Tags: 
     InstructionArgument: P
+    Foldout: 1
+    extraMod: {fileID: 0}
+    extraPack: {fileID: 0}
   RootPack: {fileID: 6045939967085991322}
+  UtilityModificators: []
   ModificatorPacks:
   - {fileID: 6045939967085991322}
   Ignores: []
   DontSpawnOn: 
+  SelfInjections: []
   disabledMods: []
   AddReflectionProbes: 0
   MainReflectionSettings: {fileID: 11400000, guid: dabe448206028124294db7edb02eed3f,
@@ -1281,10 +1182,12 @@ MonoBehaviour:
     type: 2}
   MiniReflSettings: {fileID: 11400000, guid: b243a7973537dbf4faacf7bbda74dada, type: 2}
   SmallerReflLowerSpaceThan: 4
+  LimitSingleProbeSize: 0
   AddLightProbes: 0
   ProbesPerCell: 1
   TriggerColliderGeneration: 0
   TriggerGenSettings:
+    TriggersLayer: 0
     ScaleupTriggers: 1
     FillHeight: 1
     MaxCellChecks: 10
@@ -1309,24 +1212,7 @@ MonoBehaviour:
   Global: 0
   Enabled: 1
   Ignore: 0
-  OwnerSpawner:
-    Enabled: 1
-    Name: PavementCross
-    SpawnerTag: Cross
-    StampPrefabID: 1
-    Parent: {fileID: 7316711609801475726}
-    Rules:
-    - {fileID: 83723586153721104}
-    - {fileID: -8552289614431514113}
-    Mode: 3
-    CellCheckMode: 0
-    GridScaling: 0
-    OnScalledGrid: 1
-    Repeat: 1
-    MultipleToSpawn: 0
-    ScaleAccess: 1
-    DisplayPreviewGUI: 1
-    IsSubSpawner: 0
+  _editor_drawRule: 1
   CellAllow: 0
   AllConditionsMet: 1
   CheckedCellsMustBe: 1
@@ -1345,6 +1231,8 @@ MonoBehaviour:
     ld: 0
     d: 1
     rd: 0
+    UseAdvancedSetup: 0
+    AdvancedSetup: []
   quartRotor:
     q1: 1
     q2: 0
@@ -1363,6 +1251,16 @@ MonoBehaviour:
   GetNeightbourPos: 0
   GetNeightbourRot: 0
   GetNeightbourScale: 0
+  UseRestrictedDir: 0
+  CustomCellsCheck: 0
+  FullRotGet: 0
+  Check3DAngles: 0
+  RotationSpaceDisplay: 0
+  CheckPosit90: 1
+  CheckNeg90: 1
+  OverridePitchRotation: 1
+  InitPitchRotation: 0
+  NotCheckDefaultPitch: 0
 --- !u!114 &1460966965103331119
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1380,25 +1278,7 @@ MonoBehaviour:
   Global: 0
   Enabled: 1
   Ignore: 0
-  OwnerSpawner:
-    Enabled: 1
-    Name: PavementCurve
-    SpawnerTag: 
-    StampPrefabID: 2
-    Parent: {fileID: 7316711609801475726}
-    Rules:
-    - {fileID: -6465258471920625780}
-    - {fileID: 1460966965103331119}
-    - {fileID: -2287396312574554714}
-    Mode: 3
-    CellCheckMode: 0
-    GridScaling: 0
-    OnScalledGrid: 1
-    Repeat: 1
-    MultipleToSpawn: 0
-    ScaleAccess: 1
-    DisplayPreviewGUI: 1
-    IsSubSpawner: 0
+  _editor_drawRule: 1
   CellAllow: 0
   AllConditionsMet: 1
   Tag: Cross,T,Side
@@ -1406,6 +1286,14 @@ MonoBehaviour:
   UseRotationsCheck: 0
   OnlyWithSameDirection: 0
   CompareOffsetsAngle: 181
+  checkSetup:
+    UseRotor: 1
+    Rotor: 0
+    UseCondition: 1
+    Condition: 0
+    ToCheck:
+    - {x: 0, y: 0, z: 0}
+    EditorDisplayColor: {r: 0.4, g: 0.4, b: 1, a: 0.95}
 --- !u!114 &1935342183480574082
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1423,24 +1311,7 @@ MonoBehaviour:
   Global: 0
   Enabled: 1
   Ignore: 0
-  OwnerSpawner:
-    Enabled: 1
-    Name: Pavement-Side
-    SpawnerTag: Side
-    StampPrefabID: 4
-    Parent: {fileID: 7316711609801475726}
-    Rules:
-    - {fileID: 5699213118056490656}
-    - {fileID: 1935342183480574082}
-    Mode: 3
-    CellCheckMode: 0
-    GridScaling: 0
-    OnScalledGrid: 1
-    Repeat: 1
-    MultipleToSpawn: 0
-    ScaleAccess: 1
-    DisplayPreviewGUI: 1
-    IsSubSpawner: 0
+  _editor_drawRule: 1
   CellAllow: 0
   AllConditionsMet: 1
   quartRotor:
@@ -1462,6 +1333,7 @@ MonoBehaviour:
     occupiedByTag: P
     CheckMode: 2
     OffsetOrigin: {x: 0, y: 0, z: 0}
+    R: 0
     DirectCheck: 0
     placement:
       lu: 0
@@ -1473,12 +1345,16 @@ MonoBehaviour:
       ld: 0
       d: 0
       rd: 0
+      UseAdvancedSetup: 0
+      AdvancedSetup: []
     Negate: 1
     NeightbourNeeds: 0
+    FullRotGet: 0
   - CheckedCellsMustBe: 1
     occupiedByTag: P
     CheckMode: 2
     OffsetOrigin: {x: 0, y: 0, z: 0}
+    R: 0
     DirectCheck: 0
     placement:
       lu: 0
@@ -1490,8 +1366,16 @@ MonoBehaviour:
       ld: 0
       d: 1
       rd: 0
+      UseAdvancedSetup: 0
+      AdvancedSetup: []
     Negate: 0
     NeightbourNeeds: 0
+    FullRotGet: 0
+  CheckPosit90: 0
+  CheckNeg90: 0
+  NotCheckDefaultPitch: 0
+  OverridePitchRotation: 1
+  InitPitchRotation: 0
 --- !u!114 &2161249051312929228
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1509,25 +1393,8 @@ MonoBehaviour:
   Global: 0
   Enabled: 1
   Ignore: 0
-  OwnerSpawner:
-    Enabled: 1
-    Name: Pavement
-    SpawnerTag: 
-    StampPrefabID: 0
-    Parent: {fileID: 7316711609801475726}
-    Rules:
-    - {fileID: 2161249051312929228}
-    - {fileID: -7319114517084262237}
-    Mode: 3
-    CellCheckMode: 0
-    GridScaling: 0
-    OnScalledGrid: 1
-    Repeat: 1
-    MultipleToSpawn: 0
-    ScaleAccess: 1
-    DisplayPreviewGUI: 1
-    IsSubSpawner: 0
-  CellAllow: 1
+  _editor_drawRule: 1
+  CellAllow: 0
   AllConditionsMet: 1
   CheckedCellsMustBe: 1
   NeightbourNeeds: 0
@@ -1545,6 +1412,8 @@ MonoBehaviour:
     ld: 0
     d: 1
     rd: 0
+    UseAdvancedSetup: 0
+    AdvancedSetup: []
   quartRotor:
     q1: 1
     q2: 1
@@ -1563,6 +1432,16 @@ MonoBehaviour:
   GetNeightbourPos: 0
   GetNeightbourRot: 0
   GetNeightbourScale: 0
+  UseRestrictedDir: 0
+  CustomCellsCheck: 0
+  FullRotGet: 0
+  Check3DAngles: 0
+  RotationSpaceDisplay: 0
+  CheckPosit90: 1
+  CheckNeg90: 1
+  OverridePitchRotation: 1
+  InitPitchRotation: 0
+  NotCheckDefaultPitch: 0
 --- !u!114 &2427052570670980322
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1580,25 +1459,7 @@ MonoBehaviour:
   Global: 0
   Enabled: 1
   Ignore: 0
-  OwnerSpawner:
-    Enabled: 1
-    Name: FenceCurve
-    SpawnerTag: 
-    StampPrefabID: 2
-    Parent: {fileID: -2820827574520984851}
-    Rules:
-    - {fileID: 2868822480962559376}
-    - {fileID: -3318541774181517729}
-    - {fileID: 2427052570670980322}
-    Mode: 3
-    CellCheckMode: 0
-    GridScaling: 0
-    OnScalledGrid: 1
-    Repeat: 1
-    MultipleToSpawn: 0
-    ScaleAccess: 1
-    DisplayPreviewGUI: 1
-    IsSubSpawner: 0
+  _editor_drawRule: 1
   CellAllow: 1
   AllConditionsMet: 1
   Remove:
@@ -1610,6 +1471,14 @@ MonoBehaviour:
     RemoveWhen: 0
     UseSelfRotation: 1
     DegreesTolerance: 45
+    checkSetup:
+      UseRotor: 1
+      Rotor: 0
+      UseCondition: 0
+      Condition: 0
+      ToCheck:
+      - {x: 0, y: 0, z: 0}
+      EditorDisplayColor: {r: 0.4, g: 0.4, b: 1, a: 0.95}
 --- !u!114 &2635347257334393284
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1627,24 +1496,7 @@ MonoBehaviour:
   Global: 0
   Enabled: 1
   Ignore: 0
-  OwnerSpawner:
-    Enabled: 1
-    Name: Pavement-Cornered
-    SpawnerTag: 
-    StampPrefabID: 5
-    Parent: {fileID: 7316711609801475726}
-    Rules:
-    - {fileID: -6816420770485342276}
-    - {fileID: -4992984837058956106}
-    Mode: 3
-    CellCheckMode: 0
-    GridScaling: 0
-    OnScalledGrid: 1
-    Repeat: 1
-    MultipleToSpawn: 0
-    ScaleAccess: 1
-    DisplayPreviewGUI: 1
-    IsSubSpawner: 0
+  _editor_drawRule: 1
   CellAllow: 1
   AllConditionsMet: 1
   CheckedCellsMustBe: 2
@@ -1663,6 +1515,8 @@ MonoBehaviour:
     ld: 0
     d: 1
     rd: 0
+    UseAdvancedSetup: 0
+    AdvancedSetup: []
   quartRotor:
     q1: 1
     q2: 1
@@ -1681,6 +1535,16 @@ MonoBehaviour:
   GetNeightbourPos: 0
   GetNeightbourRot: 0
   GetNeightbourScale: 0
+  UseRestrictedDir: 0
+  CustomCellsCheck: 0
+  FullRotGet: 0
+  Check3DAngles: 0
+  RotationSpaceDisplay: 0
+  CheckPosit90: 1
+  CheckNeg90: 1
+  OverridePitchRotation: 1
+  InitPitchRotation: 0
+  NotCheckDefaultPitch: 0
 --- !u!114 &2868822480962559376
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1698,25 +1562,7 @@ MonoBehaviour:
   Global: 0
   Enabled: 1
   Ignore: 0
-  OwnerSpawner:
-    Enabled: 1
-    Name: FenceCurve
-    SpawnerTag: 
-    StampPrefabID: 2
-    Parent: {fileID: -2820827574520984851}
-    Rules:
-    - {fileID: 2868822480962559376}
-    - {fileID: -3318541774181517729}
-    - {fileID: 2427052570670980322}
-    Mode: 3
-    CellCheckMode: 0
-    GridScaling: 0
-    OnScalledGrid: 1
-    Repeat: 1
-    MultipleToSpawn: 0
-    ScaleAccess: 1
-    DisplayPreviewGUI: 1
-    IsSubSpawner: 0
+  _editor_drawRule: 1
   CellAllow: 0
   AllConditionsMet: 1
   CheckedCellsMustBe: 1
@@ -1735,6 +1581,8 @@ MonoBehaviour:
     ld: 0
     d: 0
     rd: 0
+    UseAdvancedSetup: 0
+    AdvancedSetup: []
   quartRotor:
     q1: 1
     q2: 1
@@ -1753,6 +1601,16 @@ MonoBehaviour:
   GetNeightbourPos: 0
   GetNeightbourRot: 0
   GetNeightbourScale: 0
+  UseRestrictedDir: 0
+  CustomCellsCheck: 0
+  FullRotGet: 0
+  Check3DAngles: 0
+  RotationSpaceDisplay: 0
+  CheckPosit90: 1
+  CheckNeg90: 1
+  OverridePitchRotation: 1
+  InitPitchRotation: 0
+  NotCheckDefaultPitch: 0
 --- !u!114 &5699213118056490656
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1770,24 +1628,7 @@ MonoBehaviour:
   Global: 1
   Enabled: 1
   Ignore: 0
-  OwnerSpawner:
-    Enabled: 1
-    Name: Pavement-Side
-    SpawnerTag: Side
-    StampPrefabID: 4
-    Parent: {fileID: 7316711609801475726}
-    Rules:
-    - {fileID: 5699213118056490656}
-    - {fileID: 1935342183480574082}
-    Mode: 3
-    CellCheckMode: 0
-    GridScaling: 0
-    OnScalledGrid: 1
-    Repeat: 1
-    MultipleToSpawn: 0
-    ScaleAccess: 1
-    DisplayPreviewGUI: 1
-    IsSubSpawner: 0
+  _editor_drawRule: 1
   CellAllow: 0
   AllConditionsMet: 1
   Tag: P
@@ -1795,6 +1636,14 @@ MonoBehaviour:
   UseRotationsCheck: 0
   OnlyWithSameDirection: 0
   CompareOffsetsAngle: 181
+  checkSetup:
+    UseRotor: 1
+    Rotor: 0
+    UseCondition: 1
+    Condition: 0
+    ToCheck:
+    - {x: 0, y: 0, z: 0}
+    EditorDisplayColor: {r: 0.4, g: 0.4, b: 1, a: 0.95}
 --- !u!114 &6045939967085991322
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1812,7 +1661,36 @@ MonoBehaviour:
   - {fileID: 7316711609801475726}
   ParentPreset: {fileID: 11400000}
   DisableWholePackage: 0
+  SeedMode: 0
+  CustomSeed: 0
   ModPackType: 0
+  TagForAllSpawners: 
+  CombineSpawns: 0
+  Variables: []
+  CallOnAllMod: {fileID: 0}
+  CallOnAllSpawners:
+    Enabled: 0
+    Name: 
+    SpawnerTag: 
+    StampPrefabID: 0
+    Parent: {fileID: 0}
+    Rules: []
+    Mode: 0
+    CellCheckMode: 0
+    _Editor_SpawnerAdvancedOptionsFoldout: 0
+    OnScalledGrid: 0
+    Repeat: 0
+    DontInheritRotations: 0
+    SwitchSpawnedToStatic: 0
+    MultipleToSpawn: 0
+    UseGlobalRules: 0
+    UseParentPackageRules: 0
+    _wasEnablingGlobalRules: 0
+    ScaleAccess: 0
+    DisplayPreviewGUI: 0
+    IsSubSpawner: 0
+    _EditorDisplaySpawnerHeader: 0
+  _EditorDisplayCallOnAll: 0
 --- !u!114 &6251976380847724136
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1830,26 +1708,7 @@ MonoBehaviour:
   Global: 0
   Enabled: 1
   Ignore: 0
-  OwnerSpawner:
-    Enabled: 1
-    Name: PavementT-3Way
-    SpawnerTag: T
-    StampPrefabID: 3
-    Parent: {fileID: 7316711609801475726}
-    Rules:
-    - {fileID: -2165282623528920742}
-    - {fileID: -8763642367265237100}
-    - {fileID: 6251976380847724136}
-    - {fileID: -6010021690503178801}
-    Mode: 3
-    CellCheckMode: 0
-    GridScaling: 0
-    OnScalledGrid: 1
-    Repeat: 1
-    MultipleToSpawn: 0
-    ScaleAccess: 1
-    DisplayPreviewGUI: 1
-    IsSubSpawner: 0
+  _editor_drawRule: 1
   CellAllow: 0
   AllConditionsMet: 1
   Tag: Cross
@@ -1857,6 +1716,14 @@ MonoBehaviour:
   UseRotationsCheck: 0
   OnlyWithSameDirection: 0
   CompareOffsetsAngle: 181
+  checkSetup:
+    UseRotor: 1
+    Rotor: 0
+    UseCondition: 1
+    Condition: 0
+    ToCheck:
+    - {x: 0, y: 0, z: 0}
+    EditorDisplayColor: {r: 0.4, g: 0.4, b: 1, a: 0.95}
 --- !u!114 &7316711609801475726
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1873,6 +1740,7 @@ MonoBehaviour:
   Enabled: 1
   ModTag: Pavement
   DrawMeshAndBox: 0
+  Combine: 0
   RunEmittersIfContains: 0
   DrawSetupFor: 0
   OStamp: {fileID: 0}
@@ -1880,31 +1748,37 @@ MonoBehaviour:
   OMultiStamp: {fileID: 0}
   PrefabsList:
   - Prefab: {fileID: 919132149155446097, guid: 79c09c61d0ce27b41ab9a9c94927d99c, type: 3}
+    MainCollider: {fileID: 0}
     subID: 0
     _refMesh: {fileID: 634379796303099065, guid: 87d33605713d9b644ad6d966041a4a46,
       type: 3}
     _refCol: {fileID: 0}
   - Prefab: {fileID: 919132149155446097, guid: f50e5bc4738cd9d40991527e2b10ef9a, type: 3}
+    MainCollider: {fileID: 0}
     subID: 0
     _refMesh: {fileID: -6257370379249352891, guid: a663ff0753e64294d83aa09e81f0a159,
       type: 3}
     _refCol: {fileID: 0}
   - Prefab: {fileID: 919132149155446097, guid: 6bf17694457b9154f94cddcd62f652da, type: 3}
+    MainCollider: {fileID: 0}
     subID: 0
     _refMesh: {fileID: -6257370379249352891, guid: 04fd99a5e8eb9a340b3981337b5cfaf9,
       type: 3}
     _refCol: {fileID: 0}
   - Prefab: {fileID: 919132149155446097, guid: de29bc2917ca5b54495a06303cb8df38, type: 3}
+    MainCollider: {fileID: 0}
     subID: 0
     _refMesh: {fileID: -6257370379249352891, guid: 0b587c3f65025034c996c27638b450cb,
       type: 3}
     _refCol: {fileID: 0}
   - Prefab: {fileID: 919132149155446097, guid: 968105b32db123a42b591eaa161c2f9c, type: 3}
+    MainCollider: {fileID: 0}
     subID: 0
     _refMesh: {fileID: -5495902117074765545, guid: 968105b32db123a42b591eaa161c2f9c,
       type: 3}
     _refCol: {fileID: 0}
   - Prefab: {fileID: 919132149155446097, guid: 64226ae7f6cdb0d4689be03df0775685, type: 3}
+    MainCollider: {fileID: 0}
     subID: 0
     _refMesh: {fileID: -5495902117074765545, guid: 64226ae7f6cdb0d4689be03df0775685,
       type: 3}
@@ -1921,13 +1795,19 @@ MonoBehaviour:
     - {fileID: 1935342183480574082}
     Mode: 3
     CellCheckMode: 0
-    GridScaling: 0
+    _Editor_SpawnerAdvancedOptionsFoldout: 0
     OnScalledGrid: 1
     Repeat: 1
+    DontInheritRotations: 0
+    SwitchSpawnedToStatic: 0
     MultipleToSpawn: 0
+    UseGlobalRules: 1
+    UseParentPackageRules: 1
+    _wasEnablingGlobalRules: 1
     ScaleAccess: 1
     DisplayPreviewGUI: 1
     IsSubSpawner: 0
+    _EditorDisplaySpawnerHeader: 0
   - Enabled: 1
     Name: Pavement
     SpawnerTag: 
@@ -1938,13 +1818,19 @@ MonoBehaviour:
     - {fileID: -7319114517084262237}
     Mode: 3
     CellCheckMode: 0
-    GridScaling: 0
+    _Editor_SpawnerAdvancedOptionsFoldout: 0
     OnScalledGrid: 1
     Repeat: 1
+    DontInheritRotations: 0
+    SwitchSpawnedToStatic: 0
     MultipleToSpawn: 0
+    UseGlobalRules: 1
+    UseParentPackageRules: 1
+    _wasEnablingGlobalRules: 1
     ScaleAccess: 1
     DisplayPreviewGUI: 1
     IsSubSpawner: 0
+    _EditorDisplaySpawnerHeader: 0
   - Enabled: 1
     Name: PavementCross
     SpawnerTag: Cross
@@ -1955,13 +1841,19 @@ MonoBehaviour:
     - {fileID: -8552289614431514113}
     Mode: 3
     CellCheckMode: 0
-    GridScaling: 0
+    _Editor_SpawnerAdvancedOptionsFoldout: 0
     OnScalledGrid: 1
     Repeat: 1
+    DontInheritRotations: 0
+    SwitchSpawnedToStatic: 0
     MultipleToSpawn: 0
+    UseGlobalRules: 1
+    UseParentPackageRules: 1
+    _wasEnablingGlobalRules: 1
     ScaleAccess: 1
     DisplayPreviewGUI: 1
     IsSubSpawner: 0
+    _EditorDisplaySpawnerHeader: 0
   - Enabled: 1
     Name: PavementT-3Way
     SpawnerTag: T
@@ -1974,13 +1866,19 @@ MonoBehaviour:
     - {fileID: -6010021690503178801}
     Mode: 3
     CellCheckMode: 0
-    GridScaling: 0
+    _Editor_SpawnerAdvancedOptionsFoldout: 0
     OnScalledGrid: 1
     Repeat: 1
+    DontInheritRotations: 0
+    SwitchSpawnedToStatic: 0
     MultipleToSpawn: 0
+    UseGlobalRules: 1
+    UseParentPackageRules: 1
+    _wasEnablingGlobalRules: 1
     ScaleAccess: 1
     DisplayPreviewGUI: 1
     IsSubSpawner: 0
+    _EditorDisplaySpawnerHeader: 0
   - Enabled: 1
     Name: PavementCurve
     SpawnerTag: 
@@ -1992,13 +1890,19 @@ MonoBehaviour:
     - {fileID: -2287396312574554714}
     Mode: 3
     CellCheckMode: 0
-    GridScaling: 0
+    _Editor_SpawnerAdvancedOptionsFoldout: 0
     OnScalledGrid: 1
     Repeat: 1
+    DontInheritRotations: 0
+    SwitchSpawnedToStatic: 0
     MultipleToSpawn: 0
+    UseGlobalRules: 1
+    UseParentPackageRules: 1
+    _wasEnablingGlobalRules: 1
     ScaleAccess: 1
     DisplayPreviewGUI: 1
     IsSubSpawner: 0
+    _EditorDisplaySpawnerHeader: 0
   - Enabled: 1
     Name: Pavement-Cornered
     SpawnerTag: 
@@ -2009,16 +1913,25 @@ MonoBehaviour:
     - {fileID: -4992984837058956106}
     Mode: 3
     CellCheckMode: 0
-    GridScaling: 0
+    _Editor_SpawnerAdvancedOptionsFoldout: 0
     OnScalledGrid: 1
     Repeat: 1
+    DontInheritRotations: 0
+    SwitchSpawnedToStatic: 0
     MultipleToSpawn: 0
+    UseGlobalRules: 1
+    UseParentPackageRules: 1
+    _wasEnablingGlobalRules: 1
     ScaleAccess: 1
     DisplayPreviewGUI: 1
     IsSubSpawner: 0
+    _EditorDisplaySpawnerHeader: 0
+  SubSpawners: []
   VariantOf: {fileID: 0}
   _editor_drawStamp: 1
   _editor_drawSpawners: 1
+  _editor_drawGlobalRules: 0
+  _editor_drawModPackRules: 0
   _editor_shareSelected: 0
   ParentPreset: {fileID: 11400000}
   ParentPack: {fileID: 6045939967085991322}
@@ -2039,26 +1952,7 @@ MonoBehaviour:
   Global: 0
   Enabled: 1
   Ignore: 0
-  OwnerSpawner:
-    Enabled: 1
-    Name: FenceT-3Way
-    SpawnerTag: T
-    StampPrefabID: 3
-    Parent: {fileID: 7316711609801475726}
-    Rules:
-    - {fileID: -2165282623528920742}
-    - {fileID: -8763642367265237100}
-    - {fileID: 6251976380847724136}
-    - {fileID: -6010021690503178801}
-    Mode: 3
-    CellCheckMode: 0
-    GridScaling: 0
-    OnScalledGrid: 1
-    Repeat: 1
-    MultipleToSpawn: 0
-    ScaleAccess: 1
-    DisplayPreviewGUI: 1
-    IsSubSpawner: 0
+  _editor_drawRule: 1
   CellAllow: 0
   AllConditionsMet: 1
   Tag: Side
@@ -2066,3 +1960,11 @@ MonoBehaviour:
   UseRotationsCheck: 0
   OnlyWithSameDirection: 0
   CompareOffsetsAngle: 181
+  checkSetup:
+    UseRotor: 1
+    Rotor: 0
+    UseCondition: 1
+    Condition: 0
+    ToCheck:
+    - {x: 0, y: 0, z: 0}
+    EditorDisplayColor: {r: 0.4, g: 0.4, b: 1, a: 0.95}

@@ -22,15 +22,27 @@ MonoBehaviour:
     str: 
     mat: {fileID: 0}
     gameObj: {fileID: 0}
+    unityObj: {fileID: 0}
     helper: {x: 0, y: 5, z: 0}
+    additionalHelperRef: {fileID: 0}
     ValueType: 1
+    helpForFieldCommand: 0
+    displayOnScene: 0
+    allowTransformFollow: 0
+    FloatSwitch: 0
   - Name: Spawn Count Multiplier
     v3Val: {x: 1, y: 0, z: 0}
     str: 
     mat: {fileID: 0}
     gameObj: {fileID: 0}
+    unityObj: {fileID: 0}
     helper: {x: 0, y: 5, z: 0}
+    additionalHelperRef: {fileID: 0}
     ValueType: 1
+    helpForFieldCommand: 0
+    displayOnScene: 0
+    allowTransformFollow: 0
+    FloatSwitch: 0
   DoorsModificator: {fileID: 11400000, guid: 7500e28d48a8ac44da90dfc8719e91ef, type: 2}
   EraseWallModificator: {fileID: 11400000, guid: c5bd286613ebcb24c932c8d5e7f79f9b,
     type: 2}
@@ -69,6 +81,7 @@ MonoBehaviour:
     type: 2}
   MiniReflSettings: {fileID: 11400000, guid: b243a7973537dbf4faacf7bbda74dada, type: 2}
   SmallerReflLowerSpaceThan: 4
+  LimitSingleProbeSize: 0
   AddLightProbes: 0
   ProbesPerCell: 1
   TriggerColliderGeneration: 0
@@ -101,6 +114,7 @@ MonoBehaviour:
   CustomSeed: 0
   ModPackType: 0
   TagForAllSpawners: 
+  CombineSpawns: 0
   Variables: []
   CallOnAllMod: {fileID: 0}
   CallOnAllSpawners:
@@ -116,6 +130,7 @@ MonoBehaviour:
     OnScalledGrid: 0
     Repeat: 0
     DontInheritRotations: 0
+    SwitchSpawnedToStatic: 0
     MultipleToSpawn: 0
     UseGlobalRules: 0
     UseParentPackageRules: 0

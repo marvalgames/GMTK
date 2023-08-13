@@ -17,36 +17,10 @@ MonoBehaviour:
   Global: 0
   Enabled: 1
   Ignore: 0
-  OwnerSpawner:
-    Enabled: 1
-    Name: DoorWall
-    SpawnerTag: Door
-    StampPrefabID: 1
-    Parent: {fileID: -6393234337139797620}
-    Rules:
-    - {fileID: -218395032416056646}
-    - {fileID: 1292297855677355465}
-    - {fileID: -8919165991277459185}
-    - {fileID: -2644531264234266626}
-    - {fileID: -5260382099976847394}
-    - {fileID: -7360270097597060677}
-    Mode: 3
-    CellCheckMode: 2
-    _Editor_SpawnerAdvancedOptionsFoldout: 0
-    OnScalledGrid: 1
-    Repeat: 1
-    DontInheritRotations: 0
-    MultipleToSpawn: 0
-    UseGlobalRules: 1
-    UseParentPackageRules: 1
-    _wasEnablingGlobalRules: 1
-    ScaleAccess: 1
-    DisplayPreviewGUI: 1
-    IsSubSpawner: 0
-    _EditorDisplaySpawnerHeader: 0
+  _editor_drawRule: 1
   CellAllow: 1
   AllConditionsMet: 1
-  Override: 0
+  Append: 0
   Randomize: 0
   GetOffsetFromTagged: 
   CheckMode: 0
@@ -70,30 +44,7 @@ MonoBehaviour:
   Global: 0
   Enabled: 1
   Ignore: 0
-  OwnerSpawner:
-    Enabled: 0
-    Name: HouseRoofRect
-    SpawnerTag: 
-    StampPrefabID: 1
-    Parent: {fileID: 0}
-    Rules:
-    - {fileID: 0}
-    - {fileID: 0}
-    - {fileID: 0}
-    Mode: 3
-    CellCheckMode: 0
-    _Editor_SpawnerAdvancedOptionsFoldout: 0
-    OnScalledGrid: 1
-    Repeat: 1
-    DontInheritRotations: 0
-    MultipleToSpawn: 0
-    UseGlobalRules: 0
-    UseParentPackageRules: 0
-    _wasEnablingGlobalRules: 0
-    ScaleAccess: 1
-    DisplayPreviewGUI: 1
-    IsSubSpawner: 0
-    _EditorDisplaySpawnerHeader: 0
+  _editor_drawRule: 1
   CellAllow: 1
   AllConditionsMet: 1
   GetRotationFromTagged: 
@@ -124,6 +75,7 @@ MonoBehaviour:
   CustomSeed: 0
   ModPackType: 0
   TagForAllSpawners: 
+  CombineSpawns: 0
   Variables: []
   CallOnAllMod: {fileID: 0}
   CallOnAllSpawners:
@@ -139,6 +91,7 @@ MonoBehaviour:
     OnScalledGrid: 0
     Repeat: 0
     DontInheritRotations: 0
+    SwitchSpawnedToStatic: 0
     MultipleToSpawn: 0
     UseGlobalRules: 0
     UseParentPackageRules: 0
@@ -164,6 +117,7 @@ MonoBehaviour:
   Enabled: 1
   ModTag: Roof
   DrawMeshAndBox: 0
+  Combine: 0
   RunEmittersIfContains: 0
   DrawSetupFor: 0
   OStamp: {fileID: 0}
@@ -221,6 +175,7 @@ MonoBehaviour:
     OnScalledGrid: 1
     Repeat: 1
     DontInheritRotations: 0
+    SwitchSpawnedToStatic: 0
     MultipleToSpawn: 0
     UseGlobalRules: 1
     UseParentPackageRules: 1
@@ -242,6 +197,7 @@ MonoBehaviour:
     OnScalledGrid: 1
     Repeat: 1
     DontInheritRotations: 0
+    SwitchSpawnedToStatic: 0
     MultipleToSpawn: 0
     UseGlobalRules: 1
     UseParentPackageRules: 1
@@ -265,6 +221,7 @@ MonoBehaviour:
     OnScalledGrid: 1
     Repeat: 1
     DontInheritRotations: 0
+    SwitchSpawnedToStatic: 0
     MultipleToSpawn: 0
     UseGlobalRules: 1
     UseParentPackageRules: 1
@@ -288,6 +245,7 @@ MonoBehaviour:
     OnScalledGrid: 1
     Repeat: 1
     DontInheritRotations: 0
+    SwitchSpawnedToStatic: 0
     MultipleToSpawn: 0
     UseGlobalRules: 1
     UseParentPackageRules: 1
@@ -296,6 +254,7 @@ MonoBehaviour:
     DisplayPreviewGUI: 1
     IsSubSpawner: 0
     _EditorDisplaySpawnerHeader: 0
+  SubSpawners: []
   VariantOf: {fileID: 0}
   _editor_drawStamp: 1
   _editor_drawSpawners: 1
@@ -321,28 +280,7 @@ MonoBehaviour:
   Global: 0
   Enabled: 1
   Ignore: 0
-  OwnerSpawner:
-    Enabled: 1
-    Name: HouseWall
-    SpawnerTag: Wall
-    StampPrefabID: 0
-    Parent: {fileID: -6393234337139797620}
-    Rules:
-    - {fileID: -7771651361391596993}
-    Mode: 3
-    CellCheckMode: 0
-    _Editor_SpawnerAdvancedOptionsFoldout: 0
-    OnScalledGrid: 1
-    Repeat: 0
-    DontInheritRotations: 0
-    MultipleToSpawn: 0
-    UseGlobalRules: 0
-    UseParentPackageRules: 0
-    _wasEnablingGlobalRules: 0
-    ScaleAccess: 1
-    DisplayPreviewGUI: 1
-    IsSubSpawner: 0
-    _EditorDisplaySpawnerHeader: 0
+  _editor_drawRule: 1
   CellAllow: 1
   AllConditionsMet: 1
   CheckedCellsMustBe: 2
@@ -381,8 +319,16 @@ MonoBehaviour:
   GetNeightbourPos: 0
   GetNeightbourRot: 0
   GetNeightbourScale: 0
+  UseRestrictedDir: 0
   CustomCellsCheck: 0
   FullRotGet: 0
+  Check3DAngles: 0
+  RotationSpaceDisplay: 0
+  CheckPosit90: 1
+  CheckNeg90: 1
+  OverridePitchRotation: 1
+  InitPitchRotation: 0
+  NotCheckDefaultPitch: 0
 --- !u!114 &-7820775533713291234
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -400,29 +346,7 @@ MonoBehaviour:
   Global: 0
   Enabled: 1
   Ignore: 0
-  OwnerSpawner:
-    Enabled: 1
-    Name: Sub spawner
-    SpawnerTag: 
-    StampPrefabID: 2
-    Parent: {fileID: 0}
-    Rules:
-    - {fileID: -7820775533713291234}
-    - {fileID: 3051502401499553145}
-    Mode: 0
-    CellCheckMode: 0
-    _Editor_SpawnerAdvancedOptionsFoldout: 0
-    OnScalledGrid: 0
-    Repeat: 0
-    DontInheritRotations: 0
-    MultipleToSpawn: 0
-    UseGlobalRules: 0
-    UseParentPackageRules: 0
-    _wasEnablingGlobalRules: 0
-    ScaleAccess: 0
-    DisplayPreviewGUI: 0
-    IsSubSpawner: 0
-    _EditorDisplaySpawnerHeader: 0
+  _editor_drawRule: 1
   CellAllow: 1
   AllConditionsMet: 1
   CheckedCellsMustBe: 2
@@ -461,8 +385,16 @@ MonoBehaviour:
   GetNeightbourPos: 0
   GetNeightbourRot: 0
   GetNeightbourScale: 0
+  UseRestrictedDir: 0
   CustomCellsCheck: 0
   FullRotGet: 0
+  Check3DAngles: 0
+  RotationSpaceDisplay: 0
+  CheckPosit90: 1
+  CheckNeg90: 1
+  OverridePitchRotation: 1
+  InitPitchRotation: 0
+  NotCheckDefaultPitch: 0
 --- !u!114 &-7771651361391596993
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -480,28 +412,7 @@ MonoBehaviour:
   Global: 0
   Enabled: 1
   Ignore: 0
-  OwnerSpawner:
-    Enabled: 1
-    Name: HouseWall
-    SpawnerTag: Wall
-    StampPrefabID: 0
-    Parent: {fileID: -6393234337139797620}
-    Rules:
-    - {fileID: -7771651361391596993}
-    Mode: 3
-    CellCheckMode: 0
-    _Editor_SpawnerAdvancedOptionsFoldout: 0
-    OnScalledGrid: 1
-    Repeat: 1
-    DontInheritRotations: 0
-    MultipleToSpawn: 0
-    UseGlobalRules: 1
-    UseParentPackageRules: 1
-    _wasEnablingGlobalRules: 1
-    ScaleAccess: 1
-    DisplayPreviewGUI: 1
-    IsSubSpawner: 0
-    _EditorDisplaySpawnerHeader: 0
+  _editor_drawRule: 1
   CellAllow: 1
   AllConditionsMet: 1
   Module: 0
@@ -510,6 +421,7 @@ MonoBehaviour:
   SpawnOnEachSide: 1
   UseYLevel: -1
   AutoRemoveOverlaps: 1
+  SetGhosts: 0
   Version2: 0
   Padding: 0
   YawOffset: 180
@@ -534,34 +446,8 @@ MonoBehaviour:
   Global: 0
   Enabled: 1
   Ignore: 0
-  OwnerSpawner:
-    Enabled: 1
-    Name: DoorWall
-    SpawnerTag: Door
-    StampPrefabID: 1
-    Parent: {fileID: -6393234337139797620}
-    Rules:
-    - {fileID: -218395032416056646}
-    - {fileID: 1292297855677355465}
-    - {fileID: -8919165991277459185}
-    - {fileID: -2644531264234266626}
-    - {fileID: -5260382099976847394}
-    - {fileID: -7360270097597060677}
-    Mode: 3
-    CellCheckMode: 2
-    _Editor_SpawnerAdvancedOptionsFoldout: 0
-    OnScalledGrid: 1
-    Repeat: 1
-    DontInheritRotations: 0
-    MultipleToSpawn: 0
-    UseGlobalRules: 1
-    UseParentPackageRules: 1
-    _wasEnablingGlobalRules: 1
-    ScaleAccess: 1
-    DisplayPreviewGUI: 1
-    IsSubSpawner: 0
-    _EditorDisplaySpawnerHeader: 0
-  CellAllow: 0
+  _editor_drawRule: 1
+  CellAllow: 1
   AllConditionsMet: 1
   Mode: 0
   Axis: 1
@@ -589,33 +475,10 @@ MonoBehaviour:
   Global: 0
   Enabled: 1
   Ignore: 0
-  OwnerSpawner:
-    Enabled: 1
-    Name: Roof45_Base
-    SpawnerTag: 
-    StampPrefabID: 0
-    Parent: {fileID: -8785691337203226872}
-    Rules:
-    - {fileID: 1820329699212856640}
-    - {fileID: -7353305790068215932}
-    - {fileID: 314942501462713638}
-    Mode: 3
-    CellCheckMode: 0
-    _Editor_SpawnerAdvancedOptionsFoldout: 0
-    OnScalledGrid: 1
-    Repeat: 1
-    DontInheritRotations: 0
-    MultipleToSpawn: 0
-    UseGlobalRules: 1
-    UseParentPackageRules: 1
-    _wasEnablingGlobalRules: 1
-    ScaleAccess: 1
-    DisplayPreviewGUI: 1
-    IsSubSpawner: 0
-    _EditorDisplaySpawnerHeader: 0
+  _editor_drawRule: 1
   CellAllow: 1
   AllConditionsMet: 1
-  Override: 0
+  Append: 0
   Randomize: 0
   GetOffsetFromTagged: 
   CheckMode: 0
@@ -639,31 +502,10 @@ MonoBehaviour:
   Global: 0
   Enabled: 1
   Ignore: 0
-  OwnerSpawner:
-    Enabled: 1
-    Name: HouseWall
-    SpawnerTag: Wall
-    StampPrefabID: 0
-    Parent: {fileID: -6393234337139797620}
-    Rules:
-    - {fileID: -7771651361391596993}
-    Mode: 3
-    CellCheckMode: 0
-    _Editor_SpawnerAdvancedOptionsFoldout: 0
-    OnScalledGrid: 1
-    Repeat: 0
-    DontInheritRotations: 0
-    MultipleToSpawn: 0
-    UseGlobalRules: 0
-    UseParentPackageRules: 0
-    _wasEnablingGlobalRules: 0
-    ScaleAccess: 1
-    DisplayPreviewGUI: 1
-    IsSubSpawner: 0
-    _EditorDisplaySpawnerHeader: 0
+  _editor_drawRule: 1
   CellAllow: 1
   AllConditionsMet: 1
-  Override: 0
+  Append: 0
   Randomize: 0
   GetOffsetFromTagged: 
   CheckMode: 0
@@ -686,6 +528,7 @@ MonoBehaviour:
   Enabled: 1
   ModTag: 
   DrawMeshAndBox: 0
+  Combine: 0
   RunEmittersIfContains: 0
   DrawSetupFor: 0
   OStamp: {fileID: 0}
@@ -743,6 +586,7 @@ MonoBehaviour:
     OnScalledGrid: 1
     Repeat: 1
     DontInheritRotations: 0
+    SwitchSpawnedToStatic: 0
     MultipleToSpawn: 0
     UseGlobalRules: 1
     UseParentPackageRules: 1
@@ -769,6 +613,7 @@ MonoBehaviour:
     OnScalledGrid: 1
     Repeat: 1
     DontInheritRotations: 0
+    SwitchSpawnedToStatic: 0
     MultipleToSpawn: 0
     UseGlobalRules: 1
     UseParentPackageRules: 1
@@ -795,6 +640,7 @@ MonoBehaviour:
     OnScalledGrid: 1
     Repeat: 1
     DontInheritRotations: 0
+    SwitchSpawnedToStatic: 0
     MultipleToSpawn: 0
     UseGlobalRules: 1
     UseParentPackageRules: 1
@@ -816,6 +662,7 @@ MonoBehaviour:
     OnScalledGrid: 1
     Repeat: 1
     DontInheritRotations: 0
+    SwitchSpawnedToStatic: 0
     MultipleToSpawn: 0
     UseGlobalRules: 1
     UseParentPackageRules: 1
@@ -824,6 +671,7 @@ MonoBehaviour:
     DisplayPreviewGUI: 1
     IsSubSpawner: 0
     _EditorDisplaySpawnerHeader: 0
+  SubSpawners: []
   VariantOf: {fileID: 0}
   _editor_drawStamp: 1
   _editor_drawSpawners: 1
@@ -849,33 +697,10 @@ MonoBehaviour:
   Global: 0
   Enabled: 1
   Ignore: 0
-  OwnerSpawner:
-    Enabled: 1
-    Name: RoofCornerOut
-    SpawnerTag: 
-    StampPrefabID: 3
-    Parent: {fileID: -8785691337203226872}
-    Rules:
-    - {fileID: 3269687625314544854}
-    - {fileID: 8535914135070295504}
-    - {fileID: -5594378653670705346}
-    Mode: 3
-    CellCheckMode: 0
-    _Editor_SpawnerAdvancedOptionsFoldout: 0
-    OnScalledGrid: 1
-    Repeat: 1
-    DontInheritRotations: 0
-    MultipleToSpawn: 0
-    UseGlobalRules: 1
-    UseParentPackageRules: 1
-    _wasEnablingGlobalRules: 1
-    ScaleAccess: 1
-    DisplayPreviewGUI: 1
-    IsSubSpawner: 0
-    _EditorDisplaySpawnerHeader: 0
+  _editor_drawRule: 1
   CellAllow: 1
   AllConditionsMet: 1
-  Override: 0
+  Append: 0
   Randomize: 0
   GetOffsetFromTagged: 
   CheckMode: 0
@@ -899,31 +724,7 @@ MonoBehaviour:
   Global: 0
   Enabled: 1
   Ignore: 0
-  OwnerSpawner:
-    Enabled: 1
-    Name: Roof-L
-    SpawnerTag: Roof45
-    StampPrefabID: 0
-    Parent: {fileID: 0}
-    Rules:
-    - {fileID: 0}
-    - {fileID: 0}
-    - {fileID: 0}
-    - {fileID: -5572800679469778965}
-    Mode: 3
-    CellCheckMode: 6
-    _Editor_SpawnerAdvancedOptionsFoldout: 0
-    OnScalledGrid: 1
-    Repeat: 1
-    DontInheritRotations: 0
-    MultipleToSpawn: 0
-    UseGlobalRules: 0
-    UseParentPackageRules: 0
-    _wasEnablingGlobalRules: 0
-    ScaleAccess: 1
-    DisplayPreviewGUI: 1
-    IsSubSpawner: 0
-    _EditorDisplaySpawnerHeader: 0
+  _editor_drawRule: 1
   CellAllow: 0
   AllConditionsMet: 1
   CheckedCellsMustBe: 1
@@ -962,8 +763,16 @@ MonoBehaviour:
   GetNeightbourPos: 0
   GetNeightbourRot: 0
   GetNeightbourScale: 0
+  UseRestrictedDir: 0
   CustomCellsCheck: 0
   FullRotGet: 0
+  Check3DAngles: 0
+  RotationSpaceDisplay: 0
+  CheckPosit90: 1
+  CheckNeg90: 1
+  OverridePitchRotation: 1
+  InitPitchRotation: 0
+  NotCheckDefaultPitch: 0
 --- !u!114 &-5260382099976847394
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -981,33 +790,7 @@ MonoBehaviour:
   Global: 0
   Enabled: 1
   Ignore: 0
-  OwnerSpawner:
-    Enabled: 1
-    Name: DoorWall
-    SpawnerTag: Door
-    StampPrefabID: 1
-    Parent: {fileID: -6393234337139797620}
-    Rules:
-    - {fileID: -218395032416056646}
-    - {fileID: 1292297855677355465}
-    - {fileID: -8919165991277459185}
-    - {fileID: -2644531264234266626}
-    - {fileID: -5260382099976847394}
-    - {fileID: -7360270097597060677}
-    Mode: 3
-    CellCheckMode: 2
-    _Editor_SpawnerAdvancedOptionsFoldout: 0
-    OnScalledGrid: 1
-    Repeat: 1
-    DontInheritRotations: 0
-    MultipleToSpawn: 0
-    UseGlobalRules: 1
-    UseParentPackageRules: 1
-    _wasEnablingGlobalRules: 1
-    ScaleAccess: 1
-    DisplayPreviewGUI: 1
-    IsSubSpawner: 0
-    _EditorDisplaySpawnerHeader: 0
+  _editor_drawRule: 1
   CellAllow: 0
   AllConditionsMet: 1
   CheckedCellsMustBe: 2
@@ -1046,8 +829,16 @@ MonoBehaviour:
   GetNeightbourPos: 0
   GetNeightbourRot: 0
   GetNeightbourScale: 0
+  UseRestrictedDir: 0
   CustomCellsCheck: 0
   FullRotGet: 0
+  Check3DAngles: 0
+  RotationSpaceDisplay: 0
+  CheckPosit90: 1
+  CheckNeg90: 1
+  OverridePitchRotation: 1
+  InitPitchRotation: 0
+  NotCheckDefaultPitch: 0
 --- !u!114 &-5196328817463393453
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1065,27 +856,7 @@ MonoBehaviour:
   Global: 0
   Enabled: 1
   Ignore: 0
-  OwnerSpawner:
-    Enabled: 1
-    Name: Sub spawner
-    SpawnerTag: 
-    StampPrefabID: 2
-    Parent: {fileID: 0}
-    Rules: []
-    Mode: 0
-    CellCheckMode: 0
-    _Editor_SpawnerAdvancedOptionsFoldout: 0
-    OnScalledGrid: 0
-    Repeat: 0
-    DontInheritRotations: 0
-    MultipleToSpawn: 0
-    UseGlobalRules: 0
-    UseParentPackageRules: 0
-    _wasEnablingGlobalRules: 0
-    ScaleAccess: 0
-    DisplayPreviewGUI: 0
-    IsSubSpawner: 0
-    _EditorDisplaySpawnerHeader: 0
+  _editor_drawRule: 1
   CellAllow: 1
   AllConditionsMet: 1
   OverrideOffset: 1
@@ -1095,6 +866,7 @@ MonoBehaviour:
   WorldOffset: {x: 0, y: 0, z: 0}
   OffsetMode: 0
   RandomWorldOffset: {x: 0, y: 0, z: 0}
+  RandomRange: {x: 0, y: 1}
 --- !u!114 &-5115188198819738102
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1112,32 +884,10 @@ MonoBehaviour:
   Global: 0
   Enabled: 1
   Ignore: 0
-  OwnerSpawner:
-    Enabled: 1
-    Name: Sub spawner
-    SpawnerTag: 
-    StampPrefabID: 1
-    Parent: {fileID: 0}
-    Rules:
-    - {fileID: 2282885550731203004}
-    - {fileID: -5115188198819738102}
-    Mode: 0
-    CellCheckMode: 0
-    _Editor_SpawnerAdvancedOptionsFoldout: 0
-    OnScalledGrid: 0
-    Repeat: 0
-    DontInheritRotations: 0
-    MultipleToSpawn: 0
-    UseGlobalRules: 0
-    UseParentPackageRules: 0
-    _wasEnablingGlobalRules: 0
-    ScaleAccess: 0
-    DisplayPreviewGUI: 0
-    IsSubSpawner: 0
-    _EditorDisplaySpawnerHeader: 0
+  _editor_drawRule: 1
   CellAllow: 1
   AllConditionsMet: 1
-  Override: 0
+  Append: 0
   Randomize: 0
   GetOffsetFromTagged: 
   CheckMode: 0
@@ -1161,28 +911,7 @@ MonoBehaviour:
   Global: 0
   Enabled: 1
   Ignore: 0
-  OwnerSpawner:
-    Enabled: 1
-    Name: RoofCornerIn
-    SpawnerTag: 
-    StampPrefabID: 1
-    Parent: {fileID: -8785691337203226872}
-    Rules:
-    - {fileID: -4821838793548622537}
-    Mode: 3
-    CellCheckMode: 0
-    _Editor_SpawnerAdvancedOptionsFoldout: 0
-    OnScalledGrid: 1
-    Repeat: 1
-    DontInheritRotations: 0
-    MultipleToSpawn: 0
-    UseGlobalRules: 1
-    UseParentPackageRules: 1
-    _wasEnablingGlobalRules: 1
-    ScaleAccess: 1
-    DisplayPreviewGUI: 1
-    IsSubSpawner: 0
-    _EditorDisplaySpawnerHeader: 0
+  _editor_drawRule: 1
   CellAllow: 1
   AllConditionsMet: 1
   Mode: 2
@@ -1199,6 +928,7 @@ MonoBehaviour:
   OutsideCondition: 2
   OutsideOnTag: 
   CheckOutMode: 0
+  NegateOutsideCheck: 0
 --- !u!114 &-4464199915989016659
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1216,31 +946,7 @@ MonoBehaviour:
   Global: 0
   Enabled: 1
   Ignore: 0
-  OwnerSpawner:
-    Enabled: 1
-    Name: Roof-R
-    SpawnerTag: Roof45
-    StampPrefabID: 0
-    Parent: {fileID: 0}
-    Rules:
-    - {fileID: 0}
-    - {fileID: 0}
-    - {fileID: 0}
-    - {fileID: -4464199915989016659}
-    Mode: 3
-    CellCheckMode: 0
-    _Editor_SpawnerAdvancedOptionsFoldout: 0
-    OnScalledGrid: 1
-    Repeat: 2
-    DontInheritRotations: 0
-    MultipleToSpawn: 0
-    UseGlobalRules: 0
-    UseParentPackageRules: 0
-    _wasEnablingGlobalRules: 0
-    ScaleAccess: 1
-    DisplayPreviewGUI: 1
-    IsSubSpawner: 0
-    _EditorDisplaySpawnerHeader: 0
+  _editor_drawRule: 1
   CellAllow: 0
   AllConditionsMet: 1
   CheckedCellsMustBe: 1
@@ -1279,8 +985,16 @@ MonoBehaviour:
   GetNeightbourPos: 0
   GetNeightbourRot: 0
   GetNeightbourScale: 0
+  UseRestrictedDir: 0
   CustomCellsCheck: 0
   FullRotGet: 0
+  Check3DAngles: 0
+  RotationSpaceDisplay: 0
+  CheckPosit90: 1
+  CheckNeg90: 1
+  OverridePitchRotation: 1
+  InitPitchRotation: 0
+  NotCheckDefaultPitch: 0
 --- !u!114 &-4092569371964409743
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1298,33 +1012,7 @@ MonoBehaviour:
   Global: 0
   Enabled: 1
   Ignore: 0
-  OwnerSpawner:
-    Enabled: 1
-    Name: WindowWall
-    SpawnerTag: Window
-    StampPrefabID: 2
-    Parent: {fileID: -6393234337139797620}
-    Rules:
-    - {fileID: 5875423369072565474}
-    - {fileID: 7122807827823098084}
-    - {fileID: 3936619014148561342}
-    - {fileID: 2432150905617511455}
-    - {fileID: 5756871056433540493}
-    - {fileID: -4092569371964409743}
-    Mode: 3
-    CellCheckMode: 4
-    _Editor_SpawnerAdvancedOptionsFoldout: 0
-    OnScalledGrid: 1
-    Repeat: 1
-    DontInheritRotations: 0
-    MultipleToSpawn: 0
-    UseGlobalRules: 1
-    UseParentPackageRules: 1
-    _wasEnablingGlobalRules: 1
-    ScaleAccess: 1
-    DisplayPreviewGUI: 1
-    IsSubSpawner: 0
-    _EditorDisplaySpawnerHeader: 0
+  _editor_drawRule: 1
   CellAllow: 1
   AllConditionsMet: 1
   MustHaveTag: Wall
@@ -1336,6 +1024,7 @@ MonoBehaviour:
   OffsetMode: 0
   DistanceMustBe: 0
   RemoveDistance: 0.1
+  FromOrigin: 0
 --- !u!114 &-3514258678865710979
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1353,29 +1042,7 @@ MonoBehaviour:
   Global: 0
   Enabled: 1
   Ignore: 0
-  OwnerSpawner:
-    Enabled: 1
-    Name: Sub spawner
-    SpawnerTag: 
-    StampPrefabID: 1
-    Parent: {fileID: 0}
-    Rules:
-    - {fileID: -3514258678865710979}
-    - {fileID: -987224403343907657}
-    Mode: 0
-    CellCheckMode: 0
-    _Editor_SpawnerAdvancedOptionsFoldout: 0
-    OnScalledGrid: 0
-    Repeat: 0
-    DontInheritRotations: 0
-    MultipleToSpawn: 0
-    UseGlobalRules: 0
-    UseParentPackageRules: 0
-    _wasEnablingGlobalRules: 0
-    ScaleAccess: 0
-    DisplayPreviewGUI: 0
-    IsSubSpawner: 0
-    _EditorDisplaySpawnerHeader: 0
+  _editor_drawRule: 1
   CellAllow: 1
   AllConditionsMet: 1
   CheckedCellsMustBe: 2
@@ -1414,8 +1081,16 @@ MonoBehaviour:
   GetNeightbourPos: 0
   GetNeightbourRot: 0
   GetNeightbourScale: 0
+  UseRestrictedDir: 0
   CustomCellsCheck: 0
   FullRotGet: 0
+  Check3DAngles: 0
+  RotationSpaceDisplay: 0
+  CheckPosit90: 1
+  CheckNeg90: 1
+  OverridePitchRotation: 1
+  InitPitchRotation: 0
+  NotCheckDefaultPitch: 0
 --- !u!114 &-3458196763101140060
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1433,28 +1108,7 @@ MonoBehaviour:
   Global: 0
   Enabled: 1
   Ignore: 0
-  OwnerSpawner:
-    Enabled: 1
-    Name: CornerColumn
-    SpawnerTag: 
-    StampPrefabID: 3
-    Parent: {fileID: -6393234337139797620}
-    Rules:
-    - {fileID: -3458196763101140060}
-    Mode: 3
-    CellCheckMode: 0
-    _Editor_SpawnerAdvancedOptionsFoldout: 0
-    OnScalledGrid: 1
-    Repeat: 1
-    DontInheritRotations: 0
-    MultipleToSpawn: 0
-    UseGlobalRules: 1
-    UseParentPackageRules: 1
-    _wasEnablingGlobalRules: 1
-    ScaleAccess: 1
-    DisplayPreviewGUI: 1
-    IsSubSpawner: 0
-    _EditorDisplaySpawnerHeader: 0
+  _editor_drawRule: 1
   CellAllow: 1
   AllConditionsMet: 1
   Module: 3
@@ -1463,6 +1117,7 @@ MonoBehaviour:
   SpawnOnEachSide: 0
   UseYLevel: -1
   AutoRemoveOverlaps: 1
+  SetGhosts: 0
   Version2: 0
   Padding: 0
   YawOffset: 0
@@ -1487,33 +1142,7 @@ MonoBehaviour:
   Global: 0
   Enabled: 1
   Ignore: 0
-  OwnerSpawner:
-    Enabled: 1
-    Name: DoorWall
-    SpawnerTag: Door
-    StampPrefabID: 1
-    Parent: {fileID: -6393234337139797620}
-    Rules:
-    - {fileID: -218395032416056646}
-    - {fileID: 1292297855677355465}
-    - {fileID: -8919165991277459185}
-    - {fileID: -2644531264234266626}
-    - {fileID: -5260382099976847394}
-    - {fileID: -7360270097597060677}
-    Mode: 3
-    CellCheckMode: 2
-    _Editor_SpawnerAdvancedOptionsFoldout: 0
-    OnScalledGrid: 1
-    Repeat: 1
-    DontInheritRotations: 0
-    MultipleToSpawn: 0
-    UseGlobalRules: 1
-    UseParentPackageRules: 1
-    _wasEnablingGlobalRules: 1
-    ScaleAccess: 1
-    DisplayPreviewGUI: 1
-    IsSubSpawner: 0
-    _EditorDisplaySpawnerHeader: 0
+  _editor_drawRule: 1
   CellAllow: 1
   AllConditionsMet: 1
   MustHaveTag: Wall
@@ -1525,6 +1154,7 @@ MonoBehaviour:
   OffsetMode: 0
   DistanceMustBe: 0
   RemoveDistance: 0.1
+  FromOrigin: 0
 --- !u!114 &-1599990519215681894
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1542,31 +1172,7 @@ MonoBehaviour:
   Global: 0
   Enabled: 1
   Ignore: 0
-  OwnerSpawner:
-    Enabled: 1
-    Name: Roof-L
-    SpawnerTag: Roof45,Roof45_1
-    StampPrefabID: 0
-    Parent: {fileID: 0}
-    Rules:
-    - {fileID: 0}
-    - {fileID: 0}
-    - {fileID: 0}
-    - {fileID: 0}
-    Mode: 3
-    CellCheckMode: 1
-    _Editor_SpawnerAdvancedOptionsFoldout: 0
-    OnScalledGrid: 1
-    Repeat: 1
-    DontInheritRotations: 0
-    MultipleToSpawn: 0
-    UseGlobalRules: 0
-    UseParentPackageRules: 0
-    _wasEnablingGlobalRules: 0
-    ScaleAccess: 1
-    DisplayPreviewGUI: 1
-    IsSubSpawner: 0
-    _EditorDisplaySpawnerHeader: 0
+  _editor_drawRule: 1
   CellAllow: 1
   AllConditionsMet: 1
   InheritCoords: 1
@@ -1585,6 +1191,7 @@ MonoBehaviour:
     OnScalledGrid: 0
     Repeat: 0
     DontInheritRotations: 0
+    SwitchSpawnedToStatic: 0
     MultipleToSpawn: 0
     UseGlobalRules: 0
     UseParentPackageRules: 0
@@ -1610,32 +1217,10 @@ MonoBehaviour:
   Global: 0
   Enabled: 1
   Ignore: 0
-  OwnerSpawner:
-    Enabled: 1
-    Name: Sub spawner
-    SpawnerTag: 
-    StampPrefabID: 1
-    Parent: {fileID: 0}
-    Rules:
-    - {fileID: -3514258678865710979}
-    - {fileID: -987224403343907657}
-    Mode: 0
-    CellCheckMode: 0
-    _Editor_SpawnerAdvancedOptionsFoldout: 0
-    OnScalledGrid: 0
-    Repeat: 0
-    DontInheritRotations: 0
-    MultipleToSpawn: 0
-    UseGlobalRules: 0
-    UseParentPackageRules: 0
-    _wasEnablingGlobalRules: 0
-    ScaleAccess: 0
-    DisplayPreviewGUI: 0
-    IsSubSpawner: 0
-    _EditorDisplaySpawnerHeader: 0
+  _editor_drawRule: 1
   CellAllow: 1
   AllConditionsMet: 1
-  Override: 0
+  Append: 0
   Randomize: 0
   GetOffsetFromTagged: 
   CheckMode: 0
@@ -1659,28 +1244,7 @@ MonoBehaviour:
   Global: 0
   Enabled: 1
   Ignore: 0
-  OwnerSpawner:
-    Enabled: 1
-    Name: Roof45_Base
-    SpawnerTag: 
-    StampPrefabID: 0
-    Parent: {fileID: 0}
-    Rules:
-    - {fileID: 0}
-    Mode: 3
-    CellCheckMode: 0
-    _Editor_SpawnerAdvancedOptionsFoldout: 0
-    OnScalledGrid: 1
-    Repeat: 0
-    DontInheritRotations: 0
-    MultipleToSpawn: 0
-    UseGlobalRules: 0
-    UseParentPackageRules: 0
-    _wasEnablingGlobalRules: 0
-    ScaleAccess: 1
-    DisplayPreviewGUI: 1
-    IsSubSpawner: 0
-    _EditorDisplaySpawnerHeader: 0
+  _editor_drawRule: 1
   CellAllow: 1
   AllConditionsMet: 1
   GetFromTagged: Roof45
@@ -1722,29 +1286,7 @@ MonoBehaviour:
   Global: 0
   Enabled: 1
   Ignore: 0
-  OwnerSpawner:
-    Enabled: 1
-    Name: Roof45_Base
-    SpawnerTag: Roof45
-    StampPrefabID: 0
-    Parent: {fileID: -8785691337203226872}
-    Rules:
-    - {fileID: 0}
-    - {fileID: 0}
-    Mode: 3
-    CellCheckMode: 0
-    _Editor_SpawnerAdvancedOptionsFoldout: 0
-    OnScalledGrid: 1
-    Repeat: 0
-    DontInheritRotations: 0
-    MultipleToSpawn: 0
-    UseGlobalRules: 0
-    UseParentPackageRules: 0
-    _wasEnablingGlobalRules: 0
-    ScaleAccess: 1
-    DisplayPreviewGUI: 1
-    IsSubSpawner: 0
-    _EditorDisplaySpawnerHeader: 0
+  _editor_drawRule: 1
   CellAllow: 1
   AllConditionsMet: 1
   Module: 0
@@ -1753,6 +1295,7 @@ MonoBehaviour:
   SpawnOnEachSide: 0
   UseYLevel: -1
   AutoRemoveOverlaps: 1
+  SetGhosts: 0
   Version2: 0
   Padding: 0
   YawOffset: 180
@@ -1777,33 +1320,7 @@ MonoBehaviour:
   Global: 0
   Enabled: 1
   Ignore: 0
-  OwnerSpawner:
-    Enabled: 1
-    Name: DoorWall
-    SpawnerTag: Door
-    StampPrefabID: 1
-    Parent: {fileID: -6393234337139797620}
-    Rules:
-    - {fileID: -218395032416056646}
-    - {fileID: 1292297855677355465}
-    - {fileID: -8919165991277459185}
-    - {fileID: -2644531264234266626}
-    - {fileID: -5260382099976847394}
-    - {fileID: -7360270097597060677}
-    Mode: 3
-    CellCheckMode: 2
-    _Editor_SpawnerAdvancedOptionsFoldout: 0
-    OnScalledGrid: 1
-    Repeat: 1
-    DontInheritRotations: 0
-    MultipleToSpawn: 0
-    UseGlobalRules: 1
-    UseParentPackageRules: 1
-    _wasEnablingGlobalRules: 1
-    ScaleAccess: 1
-    DisplayPreviewGUI: 1
-    IsSubSpawner: 0
-    _EditorDisplaySpawnerHeader: 0
+  _editor_drawRule: 1
   CellAllow: 0
   AllConditionsMet: 1
   Count:
@@ -1839,15 +1356,27 @@ MonoBehaviour:
     str: 
     mat: {fileID: 0}
     gameObj: {fileID: 0}
+    unityObj: {fileID: 0}
     helper: {x: 0, y: 5, z: 0}
+    additionalHelperRef: {fileID: 0}
     ValueType: 1
+    helpForFieldCommand: 0
+    displayOnScene: 0
+    allowTransformFollow: 0
+    FloatSwitch: 0
   - Name: Spawn Count Multiplier
     v3Val: {x: 1, y: 0, z: 0}
     str: 
     mat: {fileID: 0}
     gameObj: {fileID: 0}
+    unityObj: {fileID: 0}
     helper: {x: 0, y: 5, z: 0}
+    additionalHelperRef: {fileID: 0}
     ValueType: 1
+    helpForFieldCommand: 0
+    displayOnScene: 0
+    allowTransformFollow: 0
+    FloatSwitch: 0
   DoorsModificator: {fileID: 11400000, guid: 7500e28d48a8ac44da90dfc8719e91ef, type: 2}
   EraseWallModificator: {fileID: 11400000, guid: c5bd286613ebcb24c932c8d5e7f79f9b,
     type: 2}
@@ -1871,6 +1400,7 @@ MonoBehaviour:
     extraMod: {fileID: 0}
     extraPack: {fileID: 0}
   RootPack: {fileID: -8866271534969691292}
+  UtilityModificators: []
   ModificatorPacks:
   - {fileID: -8866271534969691292}
   Ignores: []
@@ -1885,10 +1415,12 @@ MonoBehaviour:
     type: 2}
   MiniReflSettings: {fileID: 11400000, guid: b243a7973537dbf4faacf7bbda74dada, type: 2}
   SmallerReflLowerSpaceThan: 4
+  LimitSingleProbeSize: 0
   AddLightProbes: 0
   ProbesPerCell: 1
   TriggerColliderGeneration: 0
   TriggerGenSettings:
+    TriggersLayer: 0
     ScaleupTriggers: 1
     FillHeight: 1
     MaxCellChecks: 10
@@ -1913,30 +1445,7 @@ MonoBehaviour:
   Global: 0
   Enabled: 1
   Ignore: 0
-  OwnerSpawner:
-    Enabled: 1
-    Name: RoofCornerOut
-    SpawnerTag: 
-    StampPrefabID: 3
-    Parent: {fileID: -8785691337203226872}
-    Rules:
-    - {fileID: 3269687625314544854}
-    - {fileID: 8535914135070295504}
-    - {fileID: -5594378653670705346}
-    Mode: 3
-    CellCheckMode: 0
-    _Editor_SpawnerAdvancedOptionsFoldout: 0
-    OnScalledGrid: 1
-    Repeat: 1
-    DontInheritRotations: 0
-    MultipleToSpawn: 0
-    UseGlobalRules: 0
-    UseParentPackageRules: 0
-    _wasEnablingGlobalRules: 0
-    ScaleAccess: 1
-    DisplayPreviewGUI: 1
-    IsSubSpawner: 0
-    _EditorDisplaySpawnerHeader: 0
+  _editor_drawRule: 1
   CellAllow: 0
   AllConditionsMet: 1
   CheckedCellsMustBe: 0
@@ -1975,8 +1484,16 @@ MonoBehaviour:
   GetNeightbourPos: 0
   GetNeightbourRot: 0
   GetNeightbourScale: 0
+  UseRestrictedDir: 0
   CustomCellsCheck: 0
   FullRotGet: 0
+  Check3DAngles: 0
+  RotationSpaceDisplay: 0
+  CheckPosit90: 1
+  CheckNeg90: 1
+  OverridePitchRotation: 1
+  InitPitchRotation: 0
+  NotCheckDefaultPitch: 0
 --- !u!114 &310513842094328477
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1994,29 +1511,7 @@ MonoBehaviour:
   Global: 1
   Enabled: 1
   Ignore: 0
-  OwnerSpawner:
-    Enabled: 1
-    Name: FlatRoof
-    SpawnerTag: 
-    StampPrefabID: 2
-    Parent: {fileID: -8785691337203226872}
-    Rules:
-    - {fileID: 3192826937709412401}
-    - {fileID: 310513842094328477}
-    Mode: 3
-    CellCheckMode: 0
-    _Editor_SpawnerAdvancedOptionsFoldout: 1
-    OnScalledGrid: 1
-    Repeat: 1
-    DontInheritRotations: 0
-    MultipleToSpawn: 0
-    UseGlobalRules: 1
-    UseParentPackageRules: 1
-    _wasEnablingGlobalRules: 1
-    ScaleAccess: 1
-    DisplayPreviewGUI: 1
-    IsSubSpawner: 0
-    _EditorDisplaySpawnerHeader: 0
+  _editor_drawRule: 1
   CellAllow: 1
   AllConditionsMet: 1
   Mode: 5
@@ -2045,30 +1540,7 @@ MonoBehaviour:
   Global: 0
   Enabled: 1
   Ignore: 0
-  OwnerSpawner:
-    Enabled: 1
-    Name: Roof45_Base
-    SpawnerTag: 
-    StampPrefabID: 0
-    Parent: {fileID: -8785691337203226872}
-    Rules:
-    - {fileID: 1820329699212856640}
-    - {fileID: -7353305790068215932}
-    - {fileID: 314942501462713638}
-    Mode: 3
-    CellCheckMode: 0
-    _Editor_SpawnerAdvancedOptionsFoldout: 0
-    OnScalledGrid: 1
-    Repeat: 1
-    DontInheritRotations: 0
-    MultipleToSpawn: 0
-    UseGlobalRules: 1
-    UseParentPackageRules: 1
-    _wasEnablingGlobalRules: 1
-    ScaleAccess: 1
-    DisplayPreviewGUI: 1
-    IsSubSpawner: 0
-    _EditorDisplaySpawnerHeader: 0
+  _editor_drawRule: 1
   CellAllow: 1
   AllConditionsMet: 1
   CheckedCellsMustBe: 2
@@ -2107,8 +1579,16 @@ MonoBehaviour:
   GetNeightbourPos: 0
   GetNeightbourRot: 0
   GetNeightbourScale: 0
+  UseRestrictedDir: 0
   CustomCellsCheck: 0
   FullRotGet: 0
+  Check3DAngles: 0
+  RotationSpaceDisplay: 0
+  CheckPosit90: 1
+  CheckNeg90: 1
+  OverridePitchRotation: 1
+  InitPitchRotation: 0
+  NotCheckDefaultPitch: 0
 --- !u!114 &359253996452263648
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2126,33 +1606,10 @@ MonoBehaviour:
   Global: 0
   Enabled: 1
   Ignore: 0
-  OwnerSpawner:
-    Enabled: 0
-    Name: HouseRoofRect
-    SpawnerTag: 
-    StampPrefabID: 1
-    Parent: {fileID: 0}
-    Rules:
-    - {fileID: 0}
-    - {fileID: 0}
-    - {fileID: 0}
-    Mode: 3
-    CellCheckMode: 0
-    _Editor_SpawnerAdvancedOptionsFoldout: 0
-    OnScalledGrid: 1
-    Repeat: 1
-    DontInheritRotations: 0
-    MultipleToSpawn: 0
-    UseGlobalRules: 0
-    UseParentPackageRules: 0
-    _wasEnablingGlobalRules: 0
-    ScaleAccess: 1
-    DisplayPreviewGUI: 1
-    IsSubSpawner: 0
-    _EditorDisplaySpawnerHeader: 0
+  _editor_drawRule: 1
   CellAllow: 1
   AllConditionsMet: 1
-  Override: 0
+  Append: 0
   Randomize: 0
   GetOffsetFromTagged: 
   CheckMode: 0
@@ -2176,34 +1633,8 @@ MonoBehaviour:
   Global: 0
   Enabled: 1
   Ignore: 0
-  OwnerSpawner:
-    Enabled: 1
-    Name: DoorWall
-    SpawnerTag: Door
-    StampPrefabID: 1
-    Parent: {fileID: -6393234337139797620}
-    Rules:
-    - {fileID: -218395032416056646}
-    - {fileID: 1292297855677355465}
-    - {fileID: -8919165991277459185}
-    - {fileID: -2644531264234266626}
-    - {fileID: -5260382099976847394}
-    - {fileID: -7360270097597060677}
-    Mode: 3
-    CellCheckMode: 2
-    _Editor_SpawnerAdvancedOptionsFoldout: 0
-    OnScalledGrid: 1
-    Repeat: 1
-    DontInheritRotations: 0
-    MultipleToSpawn: 0
-    UseGlobalRules: 1
-    UseParentPackageRules: 1
-    _wasEnablingGlobalRules: 1
-    ScaleAccess: 1
-    DisplayPreviewGUI: 1
-    IsSubSpawner: 0
-    _EditorDisplaySpawnerHeader: 0
-  CellAllow: 1
+  _editor_drawRule: 1
+  CellAllow: 0
   AllConditionsMet: 1
   CheckedCellsMustBe: 2
   NeightbourNeeds: 0
@@ -2241,8 +1672,16 @@ MonoBehaviour:
   GetNeightbourPos: 0
   GetNeightbourRot: 0
   GetNeightbourScale: 0
+  UseRestrictedDir: 0
   CustomCellsCheck: 0
   FullRotGet: 0
+  Check3DAngles: 0
+  RotationSpaceDisplay: 0
+  CheckPosit90: 1
+  CheckNeg90: 1
+  OverridePitchRotation: 1
+  InitPitchRotation: 0
+  NotCheckDefaultPitch: 0
 --- !u!114 &1820329699212856640
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2260,30 +1699,7 @@ MonoBehaviour:
   Global: 0
   Enabled: 1
   Ignore: 0
-  OwnerSpawner:
-    Enabled: 1
-    Name: Roof45_Base
-    SpawnerTag: 
-    StampPrefabID: 0
-    Parent: {fileID: -8785691337203226872}
-    Rules:
-    - {fileID: 1820329699212856640}
-    - {fileID: -7353305790068215932}
-    - {fileID: 314942501462713638}
-    Mode: 3
-    CellCheckMode: 0
-    _Editor_SpawnerAdvancedOptionsFoldout: 0
-    OnScalledGrid: 1
-    Repeat: 1
-    DontInheritRotations: 0
-    MultipleToSpawn: 0
-    UseGlobalRules: 1
-    UseParentPackageRules: 1
-    _wasEnablingGlobalRules: 1
-    ScaleAccess: 1
-    DisplayPreviewGUI: 1
-    IsSubSpawner: 0
-    _EditorDisplaySpawnerHeader: 0
+  _editor_drawRule: 1
   CellAllow: 1
   AllConditionsMet: 1
   Mode: 2
@@ -2300,6 +1716,7 @@ MonoBehaviour:
   OutsideCondition: 2
   OutsideOnTag: 
   CheckOutMode: 0
+  NegateOutsideCheck: 0
 --- !u!114 &2282885550731203004
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2317,29 +1734,7 @@ MonoBehaviour:
   Global: 0
   Enabled: 1
   Ignore: 0
-  OwnerSpawner:
-    Enabled: 1
-    Name: Sub spawner
-    SpawnerTag: 
-    StampPrefabID: 1
-    Parent: {fileID: 0}
-    Rules:
-    - {fileID: 2282885550731203004}
-    - {fileID: -5115188198819738102}
-    Mode: 0
-    CellCheckMode: 0
-    _Editor_SpawnerAdvancedOptionsFoldout: 0
-    OnScalledGrid: 0
-    Repeat: 0
-    DontInheritRotations: 0
-    MultipleToSpawn: 0
-    UseGlobalRules: 0
-    UseParentPackageRules: 0
-    _wasEnablingGlobalRules: 0
-    ScaleAccess: 0
-    DisplayPreviewGUI: 0
-    IsSubSpawner: 0
-    _EditorDisplaySpawnerHeader: 0
+  _editor_drawRule: 1
   CellAllow: 1
   AllConditionsMet: 1
   CheckedCellsMustBe: 2
@@ -2378,8 +1773,16 @@ MonoBehaviour:
   GetNeightbourPos: 0
   GetNeightbourRot: 0
   GetNeightbourScale: 0
+  UseRestrictedDir: 0
   CustomCellsCheck: 0
   FullRotGet: 0
+  Check3DAngles: 0
+  RotationSpaceDisplay: 0
+  CheckPosit90: 1
+  CheckNeg90: 1
+  OverridePitchRotation: 1
+  InitPitchRotation: 0
+  NotCheckDefaultPitch: 0
 --- !u!114 &2376048147359091683
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2397,30 +1800,7 @@ MonoBehaviour:
   Global: 0
   Enabled: 1
   Ignore: 0
-  OwnerSpawner:
-    Enabled: 0
-    Name: HouseRoofRect
-    SpawnerTag: 
-    StampPrefabID: 1
-    Parent: {fileID: 0}
-    Rules:
-    - {fileID: 0}
-    - {fileID: 0}
-    - {fileID: 0}
-    Mode: 3
-    CellCheckMode: 0
-    _Editor_SpawnerAdvancedOptionsFoldout: 0
-    OnScalledGrid: 1
-    Repeat: 1
-    DontInheritRotations: 0
-    MultipleToSpawn: 0
-    UseGlobalRules: 0
-    UseParentPackageRules: 0
-    _wasEnablingGlobalRules: 0
-    ScaleAccess: 1
-    DisplayPreviewGUI: 1
-    IsSubSpawner: 0
-    _EditorDisplaySpawnerHeader: 0
+  _editor_drawRule: 1
   CellAllow: 1
   AllConditionsMet: 1
   InheritCoords: 1
@@ -2437,6 +1817,7 @@ MonoBehaviour:
     OnScalledGrid: 0
     Repeat: 0
     DontInheritRotations: 0
+    SwitchSpawnedToStatic: 0
     MultipleToSpawn: 0
     UseGlobalRules: 0
     UseParentPackageRules: 0
@@ -2462,33 +1843,7 @@ MonoBehaviour:
   Global: 0
   Enabled: 1
   Ignore: 0
-  OwnerSpawner:
-    Enabled: 1
-    Name: WindowWall
-    SpawnerTag: Window
-    StampPrefabID: 2
-    Parent: {fileID: -6393234337139797620}
-    Rules:
-    - {fileID: 5875423369072565474}
-    - {fileID: 7122807827823098084}
-    - {fileID: 3936619014148561342}
-    - {fileID: 2432150905617511455}
-    - {fileID: 5756871056433540493}
-    - {fileID: -4092569371964409743}
-    Mode: 3
-    CellCheckMode: 4
-    _Editor_SpawnerAdvancedOptionsFoldout: 0
-    OnScalledGrid: 1
-    Repeat: 1
-    DontInheritRotations: 0
-    MultipleToSpawn: 0
-    UseGlobalRules: 1
-    UseParentPackageRules: 1
-    _wasEnablingGlobalRules: 1
-    ScaleAccess: 1
-    DisplayPreviewGUI: 1
-    IsSubSpawner: 0
-    _EditorDisplaySpawnerHeader: 0
+  _editor_drawRule: 1
   CellAllow: 1
   AllConditionsMet: 1
   Propability: 0.7
@@ -2513,30 +1868,7 @@ MonoBehaviour:
   Global: 0
   Enabled: 0
   Ignore: 0
-  OwnerSpawner:
-    Enabled: 1
-    Name: RoofCornerOut
-    SpawnerTag: 
-    StampPrefabID: 3
-    Parent: {fileID: -8785691337203226872}
-    Rules:
-    - {fileID: 3269687625314544854}
-    - {fileID: 8535914135070295504}
-    - {fileID: -5594378653670705346}
-    Mode: 3
-    CellCheckMode: 0
-    _Editor_SpawnerAdvancedOptionsFoldout: 0
-    OnScalledGrid: 1
-    Repeat: 1
-    DontInheritRotations: 0
-    MultipleToSpawn: 0
-    UseGlobalRules: 0
-    UseParentPackageRules: 0
-    _wasEnablingGlobalRules: 0
-    ScaleAccess: 1
-    DisplayPreviewGUI: 1
-    IsSubSpawner: 0
-    _EditorDisplaySpawnerHeader: 0
+  _editor_drawRule: 1
   CellAllow: 1
   AllConditionsMet: 1
   Mode: 2
@@ -2553,6 +1885,7 @@ MonoBehaviour:
   OutsideCondition: 2
   OutsideOnTag: 
   CheckOutMode: 0
+  NegateOutsideCheck: 0
 --- !u!114 &3051502401499553145
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2570,32 +1903,10 @@ MonoBehaviour:
   Global: 0
   Enabled: 1
   Ignore: 0
-  OwnerSpawner:
-    Enabled: 1
-    Name: Sub spawner
-    SpawnerTag: 
-    StampPrefabID: 2
-    Parent: {fileID: 0}
-    Rules:
-    - {fileID: -7820775533713291234}
-    - {fileID: 3051502401499553145}
-    Mode: 0
-    CellCheckMode: 0
-    _Editor_SpawnerAdvancedOptionsFoldout: 0
-    OnScalledGrid: 0
-    Repeat: 0
-    DontInheritRotations: 0
-    MultipleToSpawn: 0
-    UseGlobalRules: 0
-    UseParentPackageRules: 0
-    _wasEnablingGlobalRules: 0
-    ScaleAccess: 0
-    DisplayPreviewGUI: 0
-    IsSubSpawner: 0
-    _EditorDisplaySpawnerHeader: 0
+  _editor_drawRule: 1
   CellAllow: 1
   AllConditionsMet: 1
-  Override: 0
+  Append: 0
   Randomize: 0
   GetOffsetFromTagged: 
   CheckMode: 0
@@ -2619,29 +1930,7 @@ MonoBehaviour:
   Global: 0
   Enabled: 1
   Ignore: 0
-  OwnerSpawner:
-    Enabled: 1
-    Name: FlatRoof
-    SpawnerTag: 
-    StampPrefabID: 2
-    Parent: {fileID: -8785691337203226872}
-    Rules:
-    - {fileID: 3192826937709412401}
-    - {fileID: 310513842094328477}
-    Mode: 3
-    CellCheckMode: 0
-    _Editor_SpawnerAdvancedOptionsFoldout: 1
-    OnScalledGrid: 1
-    Repeat: 1
-    DontInheritRotations: 0
-    MultipleToSpawn: 0
-    UseGlobalRules: 1
-    UseParentPackageRules: 1
-    _wasEnablingGlobalRules: 1
-    ScaleAccess: 1
-    DisplayPreviewGUI: 1
-    IsSubSpawner: 0
-    _EditorDisplaySpawnerHeader: 0
+  _editor_drawRule: 1
   CellAllow: 0
   AllConditionsMet: 1
   Mode: 1
@@ -2658,6 +1947,7 @@ MonoBehaviour:
   OutsideCondition: 2
   OutsideOnTag: 
   CheckOutMode: 0
+  NegateOutsideCheck: 0
 --- !u!114 &3269687625314544854
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2675,30 +1965,7 @@ MonoBehaviour:
   Global: 0
   Enabled: 1
   Ignore: 0
-  OwnerSpawner:
-    Enabled: 1
-    Name: RoofCornerOut
-    SpawnerTag: 
-    StampPrefabID: 3
-    Parent: {fileID: -8785691337203226872}
-    Rules:
-    - {fileID: 3269687625314544854}
-    - {fileID: 8535914135070295504}
-    - {fileID: -5594378653670705346}
-    Mode: 3
-    CellCheckMode: 0
-    _Editor_SpawnerAdvancedOptionsFoldout: 0
-    OnScalledGrid: 1
-    Repeat: 1
-    DontInheritRotations: 0
-    MultipleToSpawn: 0
-    UseGlobalRules: 1
-    UseParentPackageRules: 1
-    _wasEnablingGlobalRules: 1
-    ScaleAccess: 1
-    DisplayPreviewGUI: 1
-    IsSubSpawner: 0
-    _EditorDisplaySpawnerHeader: 0
+  _editor_drawRule: 1
   CellAllow: 1
   AllConditionsMet: 1
   Tag: Roof
@@ -2713,6 +1980,7 @@ MonoBehaviour:
     Condition: 0
     ToCheck:
     - {x: 0, y: 0, z: 0}
+    EditorDisplayColor: {r: 0.4, g: 0.4, b: 1, a: 0.95}
 --- !u!114 &3936619014148561342
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2730,33 +1998,7 @@ MonoBehaviour:
   Global: 0
   Enabled: 1
   Ignore: 0
-  OwnerSpawner:
-    Enabled: 1
-    Name: WindowWall
-    SpawnerTag: Window
-    StampPrefabID: 2
-    Parent: {fileID: -6393234337139797620}
-    Rules:
-    - {fileID: 5875423369072565474}
-    - {fileID: 7122807827823098084}
-    - {fileID: 3936619014148561342}
-    - {fileID: 2432150905617511455}
-    - {fileID: 5756871056433540493}
-    - {fileID: -4092569371964409743}
-    Mode: 3
-    CellCheckMode: 4
-    _Editor_SpawnerAdvancedOptionsFoldout: 0
-    OnScalledGrid: 1
-    Repeat: 1
-    DontInheritRotations: 0
-    MultipleToSpawn: 0
-    UseGlobalRules: 1
-    UseParentPackageRules: 1
-    _wasEnablingGlobalRules: 1
-    ScaleAccess: 1
-    DisplayPreviewGUI: 1
-    IsSubSpawner: 0
-    _EditorDisplaySpawnerHeader: 0
+  _editor_drawRule: 1
   CellAllow: 0
   AllConditionsMet: 1
   Count:
@@ -2787,30 +2029,10 @@ MonoBehaviour:
   Global: 0
   Enabled: 1
   Ignore: 0
-  OwnerSpawner:
-    Enabled: 1
-    Name: Sub spawner
-    SpawnerTag: 
-    StampPrefabID: 2
-    Parent: {fileID: 0}
-    Rules: []
-    Mode: 0
-    CellCheckMode: 0
-    _Editor_SpawnerAdvancedOptionsFoldout: 0
-    OnScalledGrid: 0
-    Repeat: 0
-    DontInheritRotations: 0
-    MultipleToSpawn: 0
-    UseGlobalRules: 0
-    UseParentPackageRules: 0
-    _wasEnablingGlobalRules: 0
-    ScaleAccess: 0
-    DisplayPreviewGUI: 0
-    IsSubSpawner: 0
-    _EditorDisplaySpawnerHeader: 0
+  _editor_drawRule: 1
   CellAllow: 1
   AllConditionsMet: 1
-  Override: 0
+  Append: 0
   Randomize: 0
   GetOffsetFromTagged: 
   CheckMode: 0
@@ -2834,33 +2056,7 @@ MonoBehaviour:
   Global: 0
   Enabled: 1
   Ignore: 0
-  OwnerSpawner:
-    Enabled: 1
-    Name: WindowWall
-    SpawnerTag: Window
-    StampPrefabID: 2
-    Parent: {fileID: -6393234337139797620}
-    Rules:
-    - {fileID: 5875423369072565474}
-    - {fileID: 7122807827823098084}
-    - {fileID: 3936619014148561342}
-    - {fileID: 2432150905617511455}
-    - {fileID: 5756871056433540493}
-    - {fileID: -4092569371964409743}
-    Mode: 3
-    CellCheckMode: 4
-    _Editor_SpawnerAdvancedOptionsFoldout: 0
-    OnScalledGrid: 1
-    Repeat: 1
-    DontInheritRotations: 0
-    MultipleToSpawn: 0
-    UseGlobalRules: 1
-    UseParentPackageRules: 1
-    _wasEnablingGlobalRules: 1
-    ScaleAccess: 1
-    DisplayPreviewGUI: 1
-    IsSubSpawner: 0
-    _EditorDisplaySpawnerHeader: 0
+  _editor_drawRule: 1
   CellAllow: 1
   AllConditionsMet: 1
   OffsetCellMode: 0
@@ -2868,13 +2064,13 @@ MonoBehaviour:
   DistanceMustBe: 1
   IgnoreSelf: 1
   DistanceToTagged: Window
+  CheckMode: 0
   Distance: 1
+  MeasureIn: 0
   DistanceMulVariable:
     name: 
     requiredType: 1
     Tooltip: 
-  CheckMode: 0
-  MeasureIn: 0
 --- !u!114 &5875423369072565474
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2892,33 +2088,7 @@ MonoBehaviour:
   Global: 0
   Enabled: 1
   Ignore: 0
-  OwnerSpawner:
-    Enabled: 1
-    Name: WindowWall
-    SpawnerTag: Window
-    StampPrefabID: 2
-    Parent: {fileID: -6393234337139797620}
-    Rules:
-    - {fileID: 5875423369072565474}
-    - {fileID: 7122807827823098084}
-    - {fileID: 3936619014148561342}
-    - {fileID: 2432150905617511455}
-    - {fileID: 5756871056433540493}
-    - {fileID: -4092569371964409743}
-    Mode: 3
-    CellCheckMode: 4
-    _Editor_SpawnerAdvancedOptionsFoldout: 0
-    OnScalledGrid: 1
-    Repeat: 1
-    DontInheritRotations: 0
-    MultipleToSpawn: 0
-    UseGlobalRules: 1
-    UseParentPackageRules: 1
-    _wasEnablingGlobalRules: 1
-    ScaleAccess: 1
-    DisplayPreviewGUI: 1
-    IsSubSpawner: 0
-    _EditorDisplaySpawnerHeader: 0
+  _editor_drawRule: 1
   CellAllow: 0
   AllConditionsMet: 1
   Module: 0
@@ -2927,6 +2097,7 @@ MonoBehaviour:
   SpawnOnEachSide: 0
   UseYLevel: -1
   AutoRemoveOverlaps: 1
+  SetGhosts: 0
   Version2: 0
   Padding: 0
   YawOffset: 180
@@ -2951,31 +2122,10 @@ MonoBehaviour:
   Global: 0
   Enabled: 1
   Ignore: 0
-  OwnerSpawner:
-    Enabled: 1
-    Name: Roof45_Base
-    SpawnerTag: 
-    StampPrefabID: 0
-    Parent: {fileID: 0}
-    Rules:
-    - {fileID: 0}
-    Mode: 3
-    CellCheckMode: 0
-    _Editor_SpawnerAdvancedOptionsFoldout: 0
-    OnScalledGrid: 1
-    Repeat: 0
-    DontInheritRotations: 0
-    MultipleToSpawn: 0
-    UseGlobalRules: 0
-    UseParentPackageRules: 0
-    _wasEnablingGlobalRules: 0
-    ScaleAccess: 1
-    DisplayPreviewGUI: 1
-    IsSubSpawner: 0
-    _EditorDisplaySpawnerHeader: 0
+  _editor_drawRule: 1
   CellAllow: 0
   AllConditionsMet: 1
-  Override: 0
+  Append: 0
   Randomize: 0
   GetOffsetFromTagged: 
   CheckMode: 0
@@ -2999,33 +2149,7 @@ MonoBehaviour:
   Global: 0
   Enabled: 1
   Ignore: 0
-  OwnerSpawner:
-    Enabled: 1
-    Name: WindowWall
-    SpawnerTag: Window
-    StampPrefabID: 2
-    Parent: {fileID: -6393234337139797620}
-    Rules:
-    - {fileID: 5875423369072565474}
-    - {fileID: 7122807827823098084}
-    - {fileID: 3936619014148561342}
-    - {fileID: 2432150905617511455}
-    - {fileID: 5756871056433540493}
-    - {fileID: -4092569371964409743}
-    Mode: 3
-    CellCheckMode: 4
-    _Editor_SpawnerAdvancedOptionsFoldout: 0
-    OnScalledGrid: 1
-    Repeat: 1
-    DontInheritRotations: 0
-    MultipleToSpawn: 0
-    UseGlobalRules: 1
-    UseParentPackageRules: 1
-    _wasEnablingGlobalRules: 1
-    ScaleAccess: 1
-    DisplayPreviewGUI: 1
-    IsSubSpawner: 0
-    _EditorDisplaySpawnerHeader: 0
+  _editor_drawRule: 1
   CellAllow: 0
   AllConditionsMet: 1
   Tag: Door
@@ -3040,6 +2164,7 @@ MonoBehaviour:
     Condition: 0
     ToCheck:
     - {x: 0, y: 0, z: 0}
+    EditorDisplayColor: {r: 0.4, g: 0.4, b: 1, a: 0.95}
 --- !u!114 &7787123461762676316
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3057,27 +2182,7 @@ MonoBehaviour:
   Global: 0
   Enabled: 1
   Ignore: 0
-  OwnerSpawner:
-    Enabled: 0
-    Name: HouseRoofRect
-    SpawnerTag: 
-    StampPrefabID: 1
-    Parent: {fileID: 0}
-    Rules: []
-    Mode: 3
-    CellCheckMode: 0
-    _Editor_SpawnerAdvancedOptionsFoldout: 0
-    OnScalledGrid: 1
-    Repeat: 1
-    DontInheritRotations: 0
-    MultipleToSpawn: 0
-    UseGlobalRules: 0
-    UseParentPackageRules: 0
-    _wasEnablingGlobalRules: 0
-    ScaleAccess: 1
-    DisplayPreviewGUI: 1
-    IsSubSpawner: 0
-    _EditorDisplaySpawnerHeader: 0
+  _editor_drawRule: 1
   CellAllow: 0
   AllConditionsMet: 1
   CheckedCellsMustBe: 2
@@ -3116,8 +2221,16 @@ MonoBehaviour:
   GetNeightbourPos: 0
   GetNeightbourRot: 0
   GetNeightbourScale: 0
+  UseRestrictedDir: 0
   CustomCellsCheck: 0
   FullRotGet: 0
+  Check3DAngles: 0
+  RotationSpaceDisplay: 0
+  CheckPosit90: 1
+  CheckNeg90: 1
+  OverridePitchRotation: 1
+  InitPitchRotation: 0
+  NotCheckDefaultPitch: 0
 --- !u!114 &8535914135070295504
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3135,33 +2248,9 @@ MonoBehaviour:
   Global: 0
   Enabled: 1
   Ignore: 0
-  OwnerSpawner:
-    Enabled: 1
-    Name: RoofCornerOut
-    SpawnerTag: 
-    StampPrefabID: 3
-    Parent: {fileID: -8785691337203226872}
-    Rules:
-    - {fileID: 3269687625314544854}
-    - {fileID: 8535914135070295504}
-    - {fileID: -5594378653670705346}
-    Mode: 3
-    CellCheckMode: 0
-    _Editor_SpawnerAdvancedOptionsFoldout: 0
-    OnScalledGrid: 1
-    Repeat: 1
-    DontInheritRotations: 0
-    MultipleToSpawn: 0
-    UseGlobalRules: 1
-    UseParentPackageRules: 1
-    _wasEnablingGlobalRules: 1
-    ScaleAccess: 1
-    DisplayPreviewGUI: 1
-    IsSubSpawner: 0
-    _EditorDisplaySpawnerHeader: 0
+  _editor_drawRule: 1
   CellAllow: 0
   AllConditionsMet: 1
-  _test: 0
   quartRotor:
     q1: 1
     q2: 1
@@ -3219,3 +2308,8 @@ MonoBehaviour:
     Negate: 0
     NeightbourNeeds: 0
     FullRotGet: 0
+  CheckPosit90: 0
+  CheckNeg90: 0
+  NotCheckDefaultPitch: 0
+  OverridePitchRotation: 1
+  InitPitchRotation: 0

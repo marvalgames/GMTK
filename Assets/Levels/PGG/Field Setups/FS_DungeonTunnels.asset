@@ -316,7 +316,9 @@ MonoBehaviour:
   UseYLevel: -1
   AutoRemoveOverlaps: 1
   SetGhosts: 0
+  OverlapDetectMode: 0
   Version2: 0
+  ScaleBounds: 0.99
   Padding: 0
   YawOffset: 0
   DirectOffset: {x: -0.45, y: 0, z: -0.45}
@@ -397,7 +399,7 @@ MonoBehaviour:
   Enabled: 1
   Ignore: 0
   _editor_drawRule: 1
-  CellAllow: 0
+  CellAllow: 1
   AllConditionsMet: 1
   OffsetCellMode: 0
   OffsetCell: {x: 0, y: 0, z: 0}
@@ -430,9 +432,16 @@ MonoBehaviour:
   Variables:
   - Name: Spawn Propability Multiplier
     v3Val: {x: 1, y: 0, z: 0}
+    colVal: {r: 0, g: 0, b: 0, a: 0}
     str: 
     mat: {fileID: 0}
     gameObj: {fileID: 0}
+    curve:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
     unityObj: {fileID: 0}
     helper: {x: 0, y: 5, z: 0}
     additionalHelperRef: {fileID: 0}
@@ -443,9 +452,16 @@ MonoBehaviour:
     FloatSwitch: 0
   - Name: Spawn Count Multiplier
     v3Val: {x: 1, y: 0, z: 0}
+    colVal: {r: 0, g: 0, b: 0, a: 0}
     str: 
     mat: {fileID: 0}
     gameObj: {fileID: 0}
+    curve:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
     unityObj: {fileID: 0}
     helper: {x: 0, y: 5, z: 0}
     additionalHelperRef: {fileID: 0}
@@ -455,13 +471,11 @@ MonoBehaviour:
     allowTransformFollow: 0
     FloatSwitch: 0
   DoorsModificator: {fileID: 11400000, guid: 7500e28d48a8ac44da90dfc8719e91ef, type: 2}
-  EraseWallModificator: {fileID: 11400000, guid: c5bd286613ebcb24c932c8d5e7f79f9b,
-    type: 2}
+  EraseWallModificator: {fileID: 11400000, guid: c5bd286613ebcb24c932c8d5e7f79f9b, type: 2}
   CellsInstructions:
   - Title: Level Door Hole
     InstructionType: 1
-    TargetModification: {fileID: 11400000, guid: 02b447d24448f3c489b568031c984c26,
-      type: 2}
+    TargetModification: {fileID: 11400000, guid: 02b447d24448f3c489b568031c984c26, type: 2}
     Tags: Prop,Light,Treasure
     InstructionArgument: 
     Foldout: 1
@@ -469,8 +483,7 @@ MonoBehaviour:
     extraPack: {fileID: 0}
   - Title: Start Gate
     InstructionType: 1
-    TargetModification: {fileID: 11400000, guid: 6e3a15f78615cc14fa8f59f3d6b17be0,
-      type: 2}
+    TargetModification: {fileID: 11400000, guid: 6e3a15f78615cc14fa8f59f3d6b17be0, type: 2}
     Tags: Prop,Light,Treasure
     InstructionArgument: 
     Foldout: 1
@@ -478,8 +491,7 @@ MonoBehaviour:
     extraPack: {fileID: 0}
   - Title: End Gate
     InstructionType: 1
-    TargetModification: {fileID: 11400000, guid: eb6b8006de04cca4391586fb7e438d41,
-      type: 2}
+    TargetModification: {fileID: 11400000, guid: eb6b8006de04cca4391586fb7e438d41, type: 2}
     Tags: Prop,Light,Treasure
     InstructionArgument: 
     Foldout: 1
@@ -494,17 +506,14 @@ MonoBehaviour:
   SelfInjections: []
   disabledMods:
   - {fileID: 11400000, guid: 3b4e5513423863145ad2bba145e1e70d, type: 2}
+  CustomPostEvents: []
   AddReflectionProbes: 0
-  MainReflectionSettings: {fileID: 11400000, guid: dabe448206028124294db7edb02eed3f,
-    type: 2}
+  MainReflectionSettings: {fileID: 11400000, guid: dabe448206028124294db7edb02eed3f, type: 2}
   AddMultipleProbes: 0
-  SmallerReflSettings: {fileID: 11400000, guid: 290a908b3df7c6a4a84c21c932841cde,
-    type: 2}
+  SmallerReflSettings: {fileID: 11400000, guid: 290a908b3df7c6a4a84c21c932841cde, type: 2}
   MiniReflSettings: {fileID: 11400000, guid: b243a7973537dbf4faacf7bbda74dada, type: 2}
   SmallerReflLowerSpaceThan: 4
   LimitSingleProbeSize: 0
-  AddLightProbes: 0
-  ProbesPerCell: 1
   TriggerColliderGeneration: 0
   TriggerGenSettings:
     TriggersLayer: 0
@@ -854,7 +863,9 @@ MonoBehaviour:
   UseYLevel: -1
   AutoRemoveOverlaps: 1
   SetGhosts: 0
+  OverlapDetectMode: 0
   Version2: 0
+  ScaleBounds: 0.99
   Padding: 0
   YawOffset: 180
   DirectOffset: {x: 0, y: 0, z: 0.46}
@@ -934,7 +945,9 @@ MonoBehaviour:
   UseYLevel: -1
   AutoRemoveOverlaps: 1
   SetGhosts: 0
+  OverlapDetectMode: 0
   Version2: 0
+  ScaleBounds: 0.99
   Padding: 0
   YawOffset: 0
   DirectOffset: {x: -0.55, y: 0, z: -0.45}
@@ -997,37 +1010,25 @@ MonoBehaviour:
   DrawObjectStamps: 1
   OMultiStamp: {fileID: 0}
   PrefabsList:
-  - Prefab: {fileID: 3365684011197413729, guid: 99dee7ecb74670f4e849b21dbeb6bf01,
-      type: 3}
-    MainCollider: {fileID: -6402384711920371341, guid: 99dee7ecb74670f4e849b21dbeb6bf01,
-      type: 3}
+  - Prefab: {fileID: 3365684011197413729, guid: 99dee7ecb74670f4e849b21dbeb6bf01, type: 3}
+    MainCollider: {fileID: -6402384711920371341, guid: 99dee7ecb74670f4e849b21dbeb6bf01, type: 3}
     subID: 0
-    _refMesh: {fileID: -5495902117074765545, guid: 64fcd2652b495ca44945c63b46553d57,
-      type: 3}
-    _refCol: {fileID: -6402384711920371341, guid: 99dee7ecb74670f4e849b21dbeb6bf01,
-      type: 3}
-  - Prefab: {fileID: 6008907310162907614, guid: 66f77214dcd9c15499a15b9711ac7319,
-      type: 3}
-    MainCollider: {fileID: 6550554562988119989, guid: 66f77214dcd9c15499a15b9711ac7319,
-      type: 3}
+    _refMesh: {fileID: -5495902117074765545, guid: 64fcd2652b495ca44945c63b46553d57, type: 3}
+    _refCol: {fileID: -6402384711920371341, guid: 99dee7ecb74670f4e849b21dbeb6bf01, type: 3}
+  - Prefab: {fileID: 6008907310162907614, guid: 66f77214dcd9c15499a15b9711ac7319, type: 3}
+    MainCollider: {fileID: 6550554562988119989, guid: 66f77214dcd9c15499a15b9711ac7319, type: 3}
     subID: 0
-    _refMesh: {fileID: -5495902117074765545, guid: 6c8146e3c8e6a5e4b9e35cb85452d0be,
-      type: 3}
-    _refCol: {fileID: 6550554562988119989, guid: 66f77214dcd9c15499a15b9711ac7319,
-      type: 3}
-  - Prefab: {fileID: 7123659065733116465, guid: a30a8889776c8344bbea8057782621e8,
-      type: 3}
+    _refMesh: {fileID: -5495902117074765545, guid: 6c8146e3c8e6a5e4b9e35cb85452d0be, type: 3}
+    _refCol: {fileID: 6550554562988119989, guid: 66f77214dcd9c15499a15b9711ac7319, type: 3}
+  - Prefab: {fileID: 7123659065733116465, guid: a30a8889776c8344bbea8057782621e8, type: 3}
     MainCollider: {fileID: 0}
     subID: 0
-    _refMesh: {fileID: -5495902117074765545, guid: 935dbe748c543774a828530f338c335c,
-      type: 3}
+    _refMesh: {fileID: -5495902117074765545, guid: 935dbe748c543774a828530f338c335c, type: 3}
     _refCol: {fileID: 0}
-  - Prefab: {fileID: 7758877746660013494, guid: 8ad83fb792a9c3f4c9ce31cc4bf56c5f,
-      type: 3}
+  - Prefab: {fileID: 7758877746660013494, guid: 8ad83fb792a9c3f4c9ce31cc4bf56c5f, type: 3}
     MainCollider: {fileID: 0}
     subID: 0
-    _refMesh: {fileID: -387298209978578080, guid: 51ee6a20cbe07dc409e49bf131f82937,
-      type: 3}
+    _refMesh: {fileID: -387298209978578080, guid: 51ee6a20cbe07dc409e49bf131f82937, type: 3}
     _refCol: {fileID: 0}
   DrawMultiObjectStamps: 1
   Spawners:
@@ -1174,5 +1175,5 @@ MonoBehaviour:
   _editor_drawGlobalRules: 0
   _editor_drawModPackRules: 0
   _editor_shareSelected: 5
-  ParentPreset: {fileID: 0}
+  ParentPreset: {fileID: 11400000}
   ParentPack: {fileID: 8071460775553708166}

@@ -93,6 +93,7 @@ MonoBehaviour:
       Condition: 0
       ToCheck:
       - {x: 0, y: 0, z: 0}
+      EditorDisplayColor: {r: 0.4, g: 0.4, b: 1, a: 0.95}
 --- !u!114 &-8226222340216168808
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -121,6 +122,7 @@ MonoBehaviour:
   _EditorInContainedRange: []
   IsContainedBy: {fileID: 0}
   _EditorFoldout: 0
+  _EditorCollapse: 0
   Enabled: 1
   ParentPlanner: {fileID: 0}
   ParentNodesContainer: {fileID: -5873188578498315525}
@@ -157,6 +159,7 @@ MonoBehaviour:
   _EditorInContainedRange: []
   IsContainedBy: {fileID: 0}
   _EditorFoldout: 0
+  _EditorCollapse: 0
   Enabled: 1
   ParentPlanner: {fileID: 0}
   ParentNodesContainer: {fileID: 6791043723400557196}
@@ -240,6 +243,7 @@ MonoBehaviour:
   _EditorInContainedRange: []
   IsContainedBy: {fileID: 0}
   _EditorFoldout: 0
+  _EditorCollapse: 0
   Enabled: 1
   ParentPlanner: {fileID: 0}
   ParentNodesContainer: {fileID: 426039689658907955}
@@ -274,9 +278,16 @@ MonoBehaviour:
     Variable:
       Name: None
       v3Val: {x: 1, y: 0, z: 0}
+      colVal: {r: 0, g: 0, b: 0, a: 0}
       str: 
       mat: {fileID: 0}
       gameObj: {fileID: 0}
+      curve:
+        serializedVersion: 2
+        m_Curve: []
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 4
       unityObj: {fileID: 0}
       helper: {x: 0, y: 0, z: 0}
       additionalHelperRef: {fileID: 0}
@@ -377,8 +388,7 @@ MonoBehaviour:
   - Prefab: {fileID: 23088133044520102, guid: 9664923a624582940bdfa6c99eb63b14, type: 3}
     MainCollider: {fileID: 0}
     subID: 0
-    _refMesh: {fileID: -6659003102834268097, guid: f47a9249f2199f44b896bff81e760830,
-      type: 3}
+    _refMesh: {fileID: -6659003102834268097, guid: f47a9249f2199f44b896bff81e760830, type: 3}
     _refCol: {fileID: 0}
   DrawMultiObjectStamps: 1
   Spawners:
@@ -413,7 +423,7 @@ MonoBehaviour:
   _editor_drawGlobalRules: 0
   _editor_drawModPackRules: 0
   _editor_shareSelected: 0
-  ParentPreset: {fileID: 0}
+  ParentPreset: {fileID: 11400000}
   ParentPack: {fileID: 6438712971366170884}
 --- !u!114 &-5231282076970344932
 MonoBehaviour:
@@ -436,34 +446,6 @@ MonoBehaviour:
   CellAllow: 1
   AllConditionsMet: 1
   Design:
-    Static: 0
-    Tag: Untagged
-    Layer: 0
-    DefaultMaterial: {fileID: 2100000, guid: 670ba09dbd1a1954baf9b26ab69ec200, type: 2}
-    _editor_ToAttach: []
-    _string_ToAttach: []
-    SendMessages: []
-    AddRigidbody: 0
-    IsKinematic: 1
-    RigidbodyMass: 10
-    CollidersMaterial: {fileID: 0}
-    ColliderMode: 5
-    ScaleColliders: 1
-    ConvexCollider: 0
-    MeshColliderReduction: 0
-    ExpandThinCollider: {x: 0, y: 0, z: 0}
-    LatestGeneratedMeshes:
-    - {fileID: 0}
-    - {fileID: 0}
-    LatestGeneratedMeshesMaterials:
-    - {fileID: 2100000, guid: 670ba09dbd1a1954baf9b26ab69ec200, type: 2}
-    - {fileID: 2100000, guid: b73976d5132ed9c4a8856419ed9a859c, type: 2}
-    _LatestGen_Meshes: 2
-    _LatestGen_Vertices: 50
-    _LatestGen_Tris: 60
-    _LatestGen_Bounds:
-      m_Center: {x: 0, y: 1.5, z: 0}
-      m_Extent: {x: 0.99999994, y: 1.5, z: 0.20000005}
     DesignName: Empty
     TileMeshes:
     - Copies: 1
@@ -486,6 +468,8 @@ MonoBehaviour:
       splineLength: 2.142747
       splineLength2: 1
       splineLength3: 1
+      Name: Wall
+      OverrideTag: 
       ExtraMesh: 0
       CustomMesh: {fileID: 0}
       _extrudeMirror: 1
@@ -712,7 +696,6 @@ MonoBehaviour:
       _sweep_Close: 1
       _sweep_shapeSubdivLimit: 30
       _sweep_distribSubdivLimit: 30
-      Name: Wall
     - Copies: 1
       _instances:
       - Enabled: 1
@@ -733,6 +716,8 @@ MonoBehaviour:
       splineLength: 6.400015
       splineLength2: 1.1242293
       splineLength3: 1
+      Name: WallMid
+      OverrideTag: 
       ExtraMesh: 0
       CustomMesh: {fileID: 0}
       _extrudeMirror: 0
@@ -1607,7 +1592,6 @@ MonoBehaviour:
       _sweep_Close: 0
       _sweep_shapeSubdivLimit: 30
       _sweep_distribSubdivLimit: 30
-      Name: WallMid
     - Copies: 1
       _instances:
       - Enabled: 1
@@ -1628,6 +1612,8 @@ MonoBehaviour:
       splineLength: 1.25
       splineLength2: 1
       splineLength3: 1
+      Name: WallConcrete
+      OverrideTag: 
       ExtraMesh: 0
       CustomMesh: {fileID: 0}
       _extrudeMirror: 1
@@ -1854,7 +1840,34 @@ MonoBehaviour:
       _sweep_Close: 1
       _sweep_shapeSubdivLimit: 30
       _sweep_distribSubdivLimit: 30
-      Name: WallConcrete
+    Static: 0
+    Tag: Untagged
+    Layer: 0
+    DefaultMaterial: {fileID: 2100000, guid: 670ba09dbd1a1954baf9b26ab69ec200, type: 2}
+    _editor_ToAttach: []
+    _string_ToAttach: []
+    SendMessages: []
+    AddRigidbody: 0
+    IsKinematic: 1
+    RigidbodyMass: 10
+    CollidersMaterial: {fileID: 0}
+    ColliderMode: 5
+    ScaleColliders: 1
+    ConvexCollider: 0
+    MeshColliderReduction: 0
+    ExpandThinCollider: {x: 0, y: 0, z: 0}
+    LatestGeneratedMeshes:
+    - {fileID: 0}
+    - {fileID: 0}
+    LatestGeneratedMeshesMaterials:
+    - {fileID: 2100000, guid: 670ba09dbd1a1954baf9b26ab69ec200, type: 2}
+    - {fileID: 2100000, guid: b73976d5132ed9c4a8856419ed9a859c, type: 2}
+    _LatestGen_Meshes: 2
+    _LatestGen_Vertices: 50
+    _LatestGen_Tris: 60
+    _LatestGen_Bounds:
+      m_Center: {x: 0, y: 1.5, z: 0}
+      m_Extent: {x: 0.99999994, y: 1.5, z: 0.20000005}
   ReplacePrefabToSpawn: 1
 --- !u!114 &-5097762242998091253
 MonoBehaviour:
@@ -1877,32 +1890,6 @@ MonoBehaviour:
   CellAllow: 1
   AllConditionsMet: 1
   Design:
-    Static: 0
-    Tag: Untagged
-    Layer: 0
-    DefaultMaterial: {fileID: 2100000, guid: 71a9a913260588646bf4426ac64f541f, type: 2}
-    _editor_ToAttach: []
-    _string_ToAttach: []
-    SendMessages: []
-    AddRigidbody: 0
-    IsKinematic: 1
-    RigidbodyMass: 10
-    CollidersMaterial: {fileID: 0}
-    ColliderMode: 1
-    ScaleColliders: 1
-    ConvexCollider: 0
-    MeshColliderReduction: 0
-    ExpandThinCollider: {x: 0, y: -0.2, z: 0}
-    LatestGeneratedMeshes:
-    - {fileID: 0}
-    LatestGeneratedMeshesMaterials:
-    - {fileID: 2100000, guid: 71a9a913260588646bf4426ac64f541f, type: 2}
-    _LatestGen_Meshes: 1
-    _LatestGen_Vertices: 28
-    _LatestGen_Tris: 14
-    _LatestGen_Bounds:
-      m_Center: {x: 0, y: -0.1025, z: 0}
-      m_Extent: {x: 1, y: 0.1025, z: 1}
     DesignName: Empty
     TileMeshes:
     - Copies: 1
@@ -1925,6 +1912,8 @@ MonoBehaviour:
       splineLength: 1.25
       splineLength2: 1
       splineLength3: 1
+      Name: Tile Mesh
+      OverrideTag: 
       ExtraMesh: 0
       CustomMesh: {fileID: 0}
       _extrudeMirror: 1
@@ -2151,7 +2140,6 @@ MonoBehaviour:
       _sweep_Close: 1
       _sweep_shapeSubdivLimit: 30
       _sweep_distribSubdivLimit: 30
-      Name: Tile Mesh
     - Copies: 1
       _instances:
       - Enabled: 1
@@ -2172,6 +2160,8 @@ MonoBehaviour:
       splineLength: 1.25
       splineLength2: 1
       splineLength3: 1
+      Name: Tile Mesh 2
+      OverrideTag: 
       ExtraMesh: 0
       CustomMesh: {fileID: 0}
       _extrudeMirror: 1
@@ -2398,7 +2388,32 @@ MonoBehaviour:
       _sweep_Close: 1
       _sweep_shapeSubdivLimit: 30
       _sweep_distribSubdivLimit: 30
-      Name: Tile Mesh 2
+    Static: 0
+    Tag: Untagged
+    Layer: 0
+    DefaultMaterial: {fileID: 2100000, guid: 71a9a913260588646bf4426ac64f541f, type: 2}
+    _editor_ToAttach: []
+    _string_ToAttach: []
+    SendMessages: []
+    AddRigidbody: 0
+    IsKinematic: 1
+    RigidbodyMass: 10
+    CollidersMaterial: {fileID: 0}
+    ColliderMode: 1
+    ScaleColliders: 1
+    ConvexCollider: 0
+    MeshColliderReduction: 0
+    ExpandThinCollider: {x: 0, y: -0.2, z: 0}
+    LatestGeneratedMeshes:
+    - {fileID: 0}
+    LatestGeneratedMeshesMaterials:
+    - {fileID: 2100000, guid: 71a9a913260588646bf4426ac64f541f, type: 2}
+    _LatestGen_Meshes: 1
+    _LatestGen_Vertices: 28
+    _LatestGen_Tris: 14
+    _LatestGen_Bounds:
+      m_Center: {x: 0, y: -0.1025, z: 0}
+      m_Extent: {x: 1, y: 0.1025, z: 1}
   ReplacePrefabToSpawn: 0
 --- !u!114 &-5074504289301589893
 MonoBehaviour:
@@ -2421,34 +2436,6 @@ MonoBehaviour:
   CellAllow: 1
   AllConditionsMet: 1
   Design:
-    Static: 0
-    Tag: Untagged
-    Layer: 0
-    DefaultMaterial: {fileID: 2100000, guid: 8662cc11bf629e646b4d37deed5e380e, type: 2}
-    _editor_ToAttach: []
-    _string_ToAttach: []
-    SendMessages: []
-    AddRigidbody: 0
-    IsKinematic: 1
-    RigidbodyMass: 10
-    CollidersMaterial: {fileID: 0}
-    ColliderMode: 4
-    ScaleColliders: 1
-    ConvexCollider: 0
-    MeshColliderReduction: 0
-    ExpandThinCollider: {x: 0, y: 0, z: 0}
-    LatestGeneratedMeshes:
-    - {fileID: 0}
-    - {fileID: 0}
-    LatestGeneratedMeshesMaterials:
-    - {fileID: 2100000, guid: 8662cc11bf629e646b4d37deed5e380e, type: 2}
-    - {fileID: 2100000, guid: b73976d5132ed9c4a8856419ed9a859c, type: 2}
-    _LatestGen_Meshes: 2
-    _LatestGen_Vertices: 378
-    _LatestGen_Tris: 126
-    _LatestGen_Bounds:
-      m_Center: {x: 0, y: 1.5, z: 0}
-      m_Extent: {x: 1, y: 1.5, z: 0.08921683}
     DesignName: Empty
     TileMeshes:
     - Copies: 1
@@ -2471,6 +2458,8 @@ MonoBehaviour:
       splineLength: 2.142747
       splineLength2: 1
       splineLength3: 1
+      Name: Wall
+      OverrideTag: 
       ExtraMesh: 0
       CustomMesh: {fileID: 0}
       _extrudeMirror: 1
@@ -2697,7 +2686,6 @@ MonoBehaviour:
       _sweep_Close: 1
       _sweep_shapeSubdivLimit: 30
       _sweep_distribSubdivLimit: 30
-      Name: Wall
     - Copies: 1
       _instances:
       - Enabled: 1
@@ -2718,6 +2706,8 @@ MonoBehaviour:
       splineLength: 1
       splineLength2: 1
       splineLength3: 1
+      Name: WallConcrete
+      OverrideTag: 
       ExtraMesh: 0
       CustomMesh: {fileID: 0}
       _extrudeMirror: 1
@@ -2908,7 +2898,6 @@ MonoBehaviour:
       _sweep_Close: 1
       _sweep_shapeSubdivLimit: 30
       _sweep_distribSubdivLimit: 30
-      Name: WallConcrete
     - Copies: 2
       _instances:
       - Enabled: 1
@@ -2944,6 +2933,8 @@ MonoBehaviour:
       splineLength: 1
       splineLength2: 1
       splineLength3: 1
+      Name: WallConcrete
+      OverrideTag: 
       ExtraMesh: 0
       CustomMesh: {fileID: 0}
       _extrudeMirror: 1
@@ -3134,7 +3125,34 @@ MonoBehaviour:
       _sweep_Close: 1
       _sweep_shapeSubdivLimit: 30
       _sweep_distribSubdivLimit: 30
-      Name: WallConcrete
+    Static: 0
+    Tag: Untagged
+    Layer: 0
+    DefaultMaterial: {fileID: 2100000, guid: 8662cc11bf629e646b4d37deed5e380e, type: 2}
+    _editor_ToAttach: []
+    _string_ToAttach: []
+    SendMessages: []
+    AddRigidbody: 0
+    IsKinematic: 1
+    RigidbodyMass: 10
+    CollidersMaterial: {fileID: 0}
+    ColliderMode: 4
+    ScaleColliders: 1
+    ConvexCollider: 0
+    MeshColliderReduction: 0
+    ExpandThinCollider: {x: 0, y: 0, z: 0}
+    LatestGeneratedMeshes:
+    - {fileID: 0}
+    - {fileID: 0}
+    LatestGeneratedMeshesMaterials:
+    - {fileID: 2100000, guid: 8662cc11bf629e646b4d37deed5e380e, type: 2}
+    - {fileID: 2100000, guid: b73976d5132ed9c4a8856419ed9a859c, type: 2}
+    _LatestGen_Meshes: 2
+    _LatestGen_Vertices: 378
+    _LatestGen_Tris: 126
+    _LatestGen_Bounds:
+      m_Center: {x: 0, y: 1.5, z: 0}
+      m_Extent: {x: 1, y: 1.5, z: 0.08921683}
   ReplacePrefabToSpawn: 0
 --- !u!114 &-4558817212069008906
 MonoBehaviour:
@@ -3216,7 +3234,7 @@ MonoBehaviour:
   _editor_drawGlobalRules: 0
   _editor_drawModPackRules: 0
   _editor_shareSelected: 1
-  ParentPreset: {fileID: 0}
+  ParentPreset: {fileID: 11400000}
   ParentPack: {fileID: 6438712971366170884}
 --- !u!114 &-4379348131471526955
 MonoBehaviour:
@@ -3245,7 +3263,9 @@ MonoBehaviour:
   UseYLevel: -1
   AutoRemoveOverlaps: 1
   SetGhosts: 0
+  OverlapDetectMode: 0
   Version2: 0
+  ScaleBounds: 0.99
   Padding: 0
   YawOffset: 0
   DirectOffset: {x: 0, y: 0, z: -0.5}
@@ -3318,6 +3338,7 @@ MonoBehaviour:
   _EditorInContainedRange: []
   IsContainedBy: {fileID: 0}
   _EditorFoldout: 0
+  _EditorCollapse: 0
   Enabled: 1
   ParentPlanner: {fileID: 0}
   ParentNodesContainer: {fileID: 6791043723400557196}
@@ -3352,9 +3373,16 @@ MonoBehaviour:
     Variable:
       Name: None
       v3Val: {x: 1, y: 0, z: 0}
+      colVal: {r: 0, g: 0, b: 0, a: 0}
       str: 
       mat: {fileID: 0}
       gameObj: {fileID: 0}
+      curve:
+        serializedVersion: 2
+        m_Curve: []
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 4
       unityObj: {fileID: 0}
       helper: {x: 0, y: 0, z: 0}
       additionalHelperRef: {fileID: 0}
@@ -3460,6 +3488,7 @@ MonoBehaviour:
   WorldOffset: {x: 0, y: 0, z: 0.35}
   OffsetMode: 0
   RandomWorldOffset: {x: 0, y: 0, z: 0}
+  RandomRange: {x: 0, y: 1}
 --- !u!114 &-1721687982727151399
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3542,32 +3571,6 @@ MonoBehaviour:
   CellAllow: 1
   AllConditionsMet: 1
   Design:
-    Static: 0
-    Tag: Untagged
-    Layer: 0
-    DefaultMaterial: {fileID: 2100000, guid: f3ade6e5cc4f1804da20d68063b0fbb4, type: 2}
-    _editor_ToAttach: []
-    _string_ToAttach: []
-    SendMessages: []
-    AddRigidbody: 0
-    IsKinematic: 1
-    RigidbodyMass: 10
-    CollidersMaterial: {fileID: 0}
-    ColliderMode: 4
-    ScaleColliders: 1
-    ConvexCollider: 0
-    MeshColliderReduction: 0
-    ExpandThinCollider: {x: 0, y: 0, z: 0}
-    LatestGeneratedMeshes:
-    - {fileID: 0}
-    LatestGeneratedMeshesMaterials:
-    - {fileID: 2100000, guid: f3ade6e5cc4f1804da20d68063b0fbb4, type: 2}
-    _LatestGen_Meshes: 1
-    _LatestGen_Vertices: 210
-    _LatestGen_Tris: 70
-    _LatestGen_Bounds:
-      m_Center: {x: 0, y: 0.100499965, z: 0}
-      m_Extent: {x: 1, y: 0.100500055, z: 1}
     DesignName: Empty
     TileMeshes:
     - Copies: 1
@@ -3590,6 +3593,8 @@ MonoBehaviour:
       splineLength: 1
       splineLength2: 1
       splineLength3: 1
+      Name: Tile Mesh
+      OverrideTag: 
       ExtraMesh: 0
       CustomMesh: {fileID: 0}
       _extrudeMirror: 1
@@ -3780,7 +3785,6 @@ MonoBehaviour:
       _sweep_Close: 1
       _sweep_shapeSubdivLimit: 30
       _sweep_distribSubdivLimit: 30
-      Name: Tile Mesh
     - Copies: 2
       _instances:
       - Enabled: 1
@@ -3816,6 +3820,8 @@ MonoBehaviour:
       splineLength: 1
       splineLength2: 1
       splineLength3: 1
+      Name: Tile Mesh 2
+      OverrideTag: 
       ExtraMesh: 0
       CustomMesh: {fileID: 0}
       _extrudeMirror: 1
@@ -4006,7 +4012,32 @@ MonoBehaviour:
       _sweep_Close: 1
       _sweep_shapeSubdivLimit: 30
       _sweep_distribSubdivLimit: 30
-      Name: Tile Mesh 2
+    Static: 0
+    Tag: Untagged
+    Layer: 0
+    DefaultMaterial: {fileID: 2100000, guid: f3ade6e5cc4f1804da20d68063b0fbb4, type: 2}
+    _editor_ToAttach: []
+    _string_ToAttach: []
+    SendMessages: []
+    AddRigidbody: 0
+    IsKinematic: 1
+    RigidbodyMass: 10
+    CollidersMaterial: {fileID: 0}
+    ColliderMode: 4
+    ScaleColliders: 1
+    ConvexCollider: 0
+    MeshColliderReduction: 0
+    ExpandThinCollider: {x: 0, y: 0, z: 0}
+    LatestGeneratedMeshes:
+    - {fileID: 0}
+    LatestGeneratedMeshesMaterials:
+    - {fileID: 2100000, guid: f3ade6e5cc4f1804da20d68063b0fbb4, type: 2}
+    _LatestGen_Meshes: 1
+    _LatestGen_Vertices: 210
+    _LatestGen_Tris: 70
+    _LatestGen_Bounds:
+      m_Center: {x: 0, y: 0.100499965, z: 0}
+      m_Extent: {x: 1, y: 0.100500055, z: 1}
   ReplacePrefabToSpawn: 0
 --- !u!114 &-1090196283472217798
 MonoBehaviour:
@@ -4087,32 +4118,6 @@ MonoBehaviour:
   CellAllow: 1
   AllConditionsMet: 1
   Design:
-    Static: 0
-    Tag: Untagged
-    Layer: 0
-    DefaultMaterial: {fileID: 2100000, guid: 5aa630d9038f158428c1eefc7dc1a2c7, type: 2}
-    _editor_ToAttach: []
-    _string_ToAttach: []
-    SendMessages: []
-    AddRigidbody: 0
-    IsKinematic: 1
-    RigidbodyMass: 10
-    CollidersMaterial: {fileID: 0}
-    ColliderMode: 5
-    ScaleColliders: 1
-    ConvexCollider: 0
-    MeshColliderReduction: 0
-    ExpandThinCollider: {x: 0, y: 0, z: 0}
-    LatestGeneratedMeshes:
-    - {fileID: 0}
-    LatestGeneratedMeshesMaterials:
-    - {fileID: 2100000, guid: 5aa630d9038f158428c1eefc7dc1a2c7, type: 2}
-    _LatestGen_Meshes: 1
-    _LatestGen_Vertices: 192
-    _LatestGen_Tris: 160
-    _LatestGen_Bounds:
-      m_Center: {x: 0, y: 1.75, z: 0}
-      m_Extent: {x: 0.45108047, y: 1.75, z: 0.04916691}
     DesignName: Ladder
     TileMeshes:
     - Copies: 2
@@ -4150,6 +4155,8 @@ MonoBehaviour:
       splineLength: 1.25
       splineLength2: 1
       splineLength3: 1
+      Name: Side
+      OverrideTag: 
       ExtraMesh: 0
       CustomMesh: {fileID: 0}
       _extrudeMirror: 1
@@ -4376,7 +4383,6 @@ MonoBehaviour:
       _sweep_Close: 1
       _sweep_shapeSubdivLimit: 30
       _sweep_distribSubdivLimit: 30
-      Name: Side
     - Copies: 6
       _instances:
       - Enabled: 1
@@ -4472,6 +4478,8 @@ MonoBehaviour:
       splineLength: 1.25
       splineLength2: 1
       splineLength3: 1
+      Name: Stick
+      OverrideTag: 
       ExtraMesh: 0
       CustomMesh: {fileID: 0}
       _extrudeMirror: 1
@@ -4698,7 +4706,32 @@ MonoBehaviour:
       _sweep_Close: 1
       _sweep_shapeSubdivLimit: 30
       _sweep_distribSubdivLimit: 30
-      Name: Stick
+    Static: 0
+    Tag: Untagged
+    Layer: 0
+    DefaultMaterial: {fileID: 2100000, guid: 5aa630d9038f158428c1eefc7dc1a2c7, type: 2}
+    _editor_ToAttach: []
+    _string_ToAttach: []
+    SendMessages: []
+    AddRigidbody: 0
+    IsKinematic: 1
+    RigidbodyMass: 10
+    CollidersMaterial: {fileID: 0}
+    ColliderMode: 5
+    ScaleColliders: 1
+    ConvexCollider: 0
+    MeshColliderReduction: 0
+    ExpandThinCollider: {x: 0, y: 0, z: 0}
+    LatestGeneratedMeshes:
+    - {fileID: 0}
+    LatestGeneratedMeshesMaterials:
+    - {fileID: 2100000, guid: 5aa630d9038f158428c1eefc7dc1a2c7, type: 2}
+    _LatestGen_Meshes: 1
+    _LatestGen_Vertices: 192
+    _LatestGen_Tris: 160
+    _LatestGen_Bounds:
+      m_Center: {x: 0, y: 1.75, z: 0}
+      m_Extent: {x: 0.45108047, y: 1.75, z: 0.04916691}
   ReplacePrefabToSpawn: 0
 --- !u!114 &11400000
 MonoBehaviour:
@@ -4719,9 +4752,16 @@ MonoBehaviour:
   Variables:
   - Name: Spawn Propability Multiplier
     v3Val: {x: 1, y: 0, z: 0}
+    colVal: {r: 0, g: 0, b: 0, a: 0}
     str: 
     mat: {fileID: 0}
     gameObj: {fileID: 0}
+    curve:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
     unityObj: {fileID: 0}
     helper: {x: 0, y: 5, z: 0}
     additionalHelperRef: {fileID: 0}
@@ -4732,9 +4772,16 @@ MonoBehaviour:
     FloatSwitch: 0
   - Name: Spawn Count Multiplier
     v3Val: {x: 1, y: 0, z: 0}
+    colVal: {r: 0, g: 0, b: 0, a: 0}
     str: 
     mat: {fileID: 0}
     gameObj: {fileID: 0}
+    curve:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
     unityObj: {fileID: 0}
     helper: {x: 0, y: 5, z: 0}
     additionalHelperRef: {fileID: 0}
@@ -4745,9 +4792,16 @@ MonoBehaviour:
     FloatSwitch: 0
   - Name: GenerateCeiling
     v3Val: {x: 1, y: 0, z: 0}
+    colVal: {r: 0, g: 0, b: 0, a: 0}
     str: 
     mat: {fileID: 0}
     gameObj: {fileID: 0}
+    curve:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
     unityObj: {fileID: 0}
     helper: {x: 0, y: 0, z: 0}
     additionalHelperRef: {fileID: 0}
@@ -4758,9 +4812,16 @@ MonoBehaviour:
     FloatSwitch: 0
   - Name: GenerateFloor
     v3Val: {x: 1, y: 0, z: 0}
+    colVal: {r: 0, g: 0, b: 0, a: 0}
     str: 
     mat: {fileID: 0}
     gameObj: {fileID: 0}
+    curve:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
     unityObj: {fileID: 0}
     helper: {x: 0, y: 0, z: 0}
     additionalHelperRef: {fileID: 0}
@@ -4770,8 +4831,7 @@ MonoBehaviour:
     allowTransformFollow: 0
     FloatSwitch: 0
   DoorsModificator: {fileID: 11400000, guid: 7500e28d48a8ac44da90dfc8719e91ef, type: 2}
-  EraseWallModificator: {fileID: 11400000, guid: c5bd286613ebcb24c932c8d5e7f79f9b,
-    type: 2}
+  EraseWallModificator: {fileID: 11400000, guid: c5bd286613ebcb24c932c8d5e7f79f9b, type: 2}
   CellsInstructions:
   - Title: Door Hole
     InstructionType: 1
@@ -4808,17 +4868,14 @@ MonoBehaviour:
   DontSpawnOn: 
   SelfInjections: []
   disabledMods: []
+  CustomPostEvents: []
   AddReflectionProbes: 0
-  MainReflectionSettings: {fileID: 11400000, guid: dabe448206028124294db7edb02eed3f,
-    type: 2}
+  MainReflectionSettings: {fileID: 11400000, guid: dabe448206028124294db7edb02eed3f, type: 2}
   AddMultipleProbes: 0
-  SmallerReflSettings: {fileID: 11400000, guid: 290a908b3df7c6a4a84c21c932841cde,
-    type: 2}
+  SmallerReflSettings: {fileID: 11400000, guid: 290a908b3df7c6a4a84c21c932841cde, type: 2}
   MiniReflSettings: {fileID: 11400000, guid: b243a7973537dbf4faacf7bbda74dada, type: 2}
   SmallerReflLowerSpaceThan: 4
   LimitSingleProbeSize: 0
-  AddLightProbes: 0
-  ProbesPerCell: 1
   TriggerColliderGeneration: 0
   TriggerGenSettings:
     TriggersLayer: 0
@@ -4850,32 +4907,6 @@ MonoBehaviour:
   CellAllow: 1
   AllConditionsMet: 1
   Design:
-    Static: 0
-    Tag: Untagged
-    Layer: 0
-    DefaultMaterial: {fileID: 2100000, guid: f3ade6e5cc4f1804da20d68063b0fbb4, type: 2}
-    _editor_ToAttach: []
-    _string_ToAttach: []
-    SendMessages: []
-    AddRigidbody: 0
-    IsKinematic: 1
-    RigidbodyMass: 10
-    CollidersMaterial: {fileID: 0}
-    ColliderMode: 1
-    ScaleColliders: 1
-    ConvexCollider: 0
-    MeshColliderReduction: 0
-    ExpandThinCollider: {x: 0, y: 0.2, z: 0}
-    LatestGeneratedMeshes:
-    - {fileID: 0}
-    LatestGeneratedMeshesMaterials:
-    - {fileID: 2100000, guid: f3ade6e5cc4f1804da20d68063b0fbb4, type: 2}
-    _LatestGen_Meshes: 1
-    _LatestGen_Vertices: 28
-    _LatestGen_Tris: 14
-    _LatestGen_Bounds:
-      m_Center: {x: 0, y: 0.10049996, z: 0}
-      m_Extent: {x: 1, y: 0.10050005, z: 1}
     DesignName: Empty
     TileMeshes:
     - Copies: 1
@@ -4898,6 +4929,8 @@ MonoBehaviour:
       splineLength: 1.25
       splineLength2: 1
       splineLength3: 1
+      Name: Tile Mesh
+      OverrideTag: 
       ExtraMesh: 0
       CustomMesh: {fileID: 0}
       _extrudeMirror: 1
@@ -5124,7 +5157,6 @@ MonoBehaviour:
       _sweep_Close: 1
       _sweep_shapeSubdivLimit: 30
       _sweep_distribSubdivLimit: 30
-      Name: Tile Mesh
     - Copies: 1
       _instances:
       - Enabled: 1
@@ -5145,6 +5177,8 @@ MonoBehaviour:
       splineLength: 1.25
       splineLength2: 1
       splineLength3: 1
+      Name: Tile Mesh 2
+      OverrideTag: 
       ExtraMesh: 0
       CustomMesh: {fileID: 0}
       _extrudeMirror: 1
@@ -5371,7 +5405,32 @@ MonoBehaviour:
       _sweep_Close: 1
       _sweep_shapeSubdivLimit: 30
       _sweep_distribSubdivLimit: 30
-      Name: Tile Mesh 2
+    Static: 0
+    Tag: Untagged
+    Layer: 0
+    DefaultMaterial: {fileID: 2100000, guid: f3ade6e5cc4f1804da20d68063b0fbb4, type: 2}
+    _editor_ToAttach: []
+    _string_ToAttach: []
+    SendMessages: []
+    AddRigidbody: 0
+    IsKinematic: 1
+    RigidbodyMass: 10
+    CollidersMaterial: {fileID: 0}
+    ColliderMode: 1
+    ScaleColliders: 1
+    ConvexCollider: 0
+    MeshColliderReduction: 0
+    ExpandThinCollider: {x: 0, y: 0.2, z: 0}
+    LatestGeneratedMeshes:
+    - {fileID: 0}
+    LatestGeneratedMeshesMaterials:
+    - {fileID: 2100000, guid: f3ade6e5cc4f1804da20d68063b0fbb4, type: 2}
+    _LatestGen_Meshes: 1
+    _LatestGen_Vertices: 28
+    _LatestGen_Tris: 14
+    _LatestGen_Bounds:
+      m_Center: {x: 0, y: 0.10049996, z: 0}
+      m_Extent: {x: 1, y: 0.10050005, z: 1}
   ReplacePrefabToSpawn: 0
 --- !u!114 &419032080628662115
 MonoBehaviour:
@@ -5459,32 +5518,6 @@ MonoBehaviour:
   CellAllow: 1
   AllConditionsMet: 1
   Design:
-    Static: 0
-    Tag: Untagged
-    Layer: 0
-    DefaultMaterial: {fileID: 2100000, guid: 71a9a913260588646bf4426ac64f541f, type: 2}
-    _editor_ToAttach: []
-    _string_ToAttach: []
-    SendMessages: []
-    AddRigidbody: 0
-    IsKinematic: 1
-    RigidbodyMass: 10
-    CollidersMaterial: {fileID: 0}
-    ColliderMode: 4
-    ScaleColliders: 1
-    ConvexCollider: 0
-    MeshColliderReduction: 0
-    ExpandThinCollider: {x: 0, y: 0, z: 0}
-    LatestGeneratedMeshes:
-    - {fileID: 0}
-    LatestGeneratedMeshesMaterials:
-    - {fileID: 2100000, guid: 71a9a913260588646bf4426ac64f541f, type: 2}
-    _LatestGen_Meshes: 1
-    _LatestGen_Vertices: 126
-    _LatestGen_Tris: 42
-    _LatestGen_Bounds:
-      m_Center: {x: 0, y: 0.1, z: 0}
-      m_Extent: {x: 1, y: 0.1, z: 1}
     DesignName: Empty
     TileMeshes:
     - Copies: 1
@@ -5507,6 +5540,8 @@ MonoBehaviour:
       splineLength: 1
       splineLength2: 1
       splineLength3: 1
+      Name: Tile Mesh
+      OverrideTag: 
       ExtraMesh: 0
       CustomMesh: {fileID: 0}
       _extrudeMirror: 1
@@ -5697,7 +5732,6 @@ MonoBehaviour:
       _sweep_Close: 1
       _sweep_shapeSubdivLimit: 30
       _sweep_distribSubdivLimit: 30
-      Name: Tile Mesh
     - Copies: 2
       _instances:
       - Enabled: 1
@@ -5733,6 +5767,8 @@ MonoBehaviour:
       splineLength: 1
       splineLength2: 1
       splineLength3: 1
+      Name: Tile Mesh 2
+      OverrideTag: 
       ExtraMesh: 0
       CustomMesh: {fileID: 0}
       _extrudeMirror: 1
@@ -5923,7 +5959,32 @@ MonoBehaviour:
       _sweep_Close: 1
       _sweep_shapeSubdivLimit: 30
       _sweep_distribSubdivLimit: 30
-      Name: Tile Mesh 2
+    Static: 0
+    Tag: Untagged
+    Layer: 0
+    DefaultMaterial: {fileID: 2100000, guid: 71a9a913260588646bf4426ac64f541f, type: 2}
+    _editor_ToAttach: []
+    _string_ToAttach: []
+    SendMessages: []
+    AddRigidbody: 0
+    IsKinematic: 1
+    RigidbodyMass: 10
+    CollidersMaterial: {fileID: 0}
+    ColliderMode: 4
+    ScaleColliders: 1
+    ConvexCollider: 0
+    MeshColliderReduction: 0
+    ExpandThinCollider: {x: 0, y: 0, z: 0}
+    LatestGeneratedMeshes:
+    - {fileID: 0}
+    LatestGeneratedMeshesMaterials:
+    - {fileID: 2100000, guid: 71a9a913260588646bf4426ac64f541f, type: 2}
+    _LatestGen_Meshes: 1
+    _LatestGen_Vertices: 126
+    _LatestGen_Tris: 42
+    _LatestGen_Bounds:
+      m_Center: {x: 0, y: 0.1, z: 0}
+      m_Extent: {x: 1, y: 0.1, z: 1}
   ReplacePrefabToSpawn: 0
 --- !u!114 &953264877204022097
 MonoBehaviour:
@@ -5953,6 +6014,7 @@ MonoBehaviour:
   _EditorInContainedRange: []
   IsContainedBy: {fileID: 0}
   _EditorFoldout: 0
+  _EditorCollapse: 0
   Enabled: 1
   ParentPlanner: {fileID: 0}
   ParentNodesContainer: {fileID: -5873188578498315525}
@@ -6055,6 +6117,7 @@ MonoBehaviour:
   _EditorInContainedRange: []
   IsContainedBy: {fileID: 0}
   _EditorFoldout: 0
+  _EditorCollapse: 0
   Enabled: 1
   ParentPlanner: {fileID: 0}
   ParentNodesContainer: {fileID: 426039689658907955}
@@ -6108,34 +6171,6 @@ MonoBehaviour:
   CellAllow: 1
   AllConditionsMet: 1
   Design:
-    Static: 0
-    Tag: Untagged
-    Layer: 0
-    DefaultMaterial: {fileID: 2100000, guid: 8662cc11bf629e646b4d37deed5e380e, type: 2}
-    _editor_ToAttach: []
-    _string_ToAttach: []
-    SendMessages: []
-    AddRigidbody: 0
-    IsKinematic: 1
-    RigidbodyMass: 10
-    CollidersMaterial: {fileID: 0}
-    ColliderMode: 5
-    ScaleColliders: 1
-    ConvexCollider: 0
-    MeshColliderReduction: 0
-    ExpandThinCollider: {x: 0, y: 0, z: 0}
-    LatestGeneratedMeshes:
-    - {fileID: 0}
-    - {fileID: 0}
-    LatestGeneratedMeshesMaterials:
-    - {fileID: 2100000, guid: 8662cc11bf629e646b4d37deed5e380e, type: 2}
-    - {fileID: 2100000, guid: b73976d5132ed9c4a8856419ed9a859c, type: 2}
-    _LatestGen_Meshes: 2
-    _LatestGen_Vertices: 56
-    _LatestGen_Tris: 30
-    _LatestGen_Bounds:
-      m_Center: {x: 0, y: 1.5, z: 0}
-      m_Extent: {x: 1, y: 1.5, z: 0.08921683}
     DesignName: Empty
     TileMeshes:
     - Copies: 1
@@ -6158,6 +6193,8 @@ MonoBehaviour:
       splineLength: 2.142747
       splineLength2: 1
       splineLength3: 1
+      Name: Wall
+      OverrideTag: 
       ExtraMesh: 0
       CustomMesh: {fileID: 0}
       _extrudeMirror: 1
@@ -6384,7 +6421,6 @@ MonoBehaviour:
       _sweep_Close: 1
       _sweep_shapeSubdivLimit: 30
       _sweep_distribSubdivLimit: 30
-      Name: Wall
     - Copies: 1
       _instances:
       - Enabled: 0
@@ -6405,6 +6441,8 @@ MonoBehaviour:
       splineLength: 6.400015
       splineLength2: 1.1242293
       splineLength3: 1
+      Name: WallMid
+      OverrideTag: 
       ExtraMesh: 0
       CustomMesh: {fileID: 0}
       _extrudeMirror: 0
@@ -7279,7 +7317,6 @@ MonoBehaviour:
       _sweep_Close: 0
       _sweep_shapeSubdivLimit: 30
       _sweep_distribSubdivLimit: 30
-      Name: WallMid
     - Copies: 1
       _instances:
       - Enabled: 1
@@ -7300,6 +7337,8 @@ MonoBehaviour:
       splineLength: 1.25
       splineLength2: 1
       splineLength3: 1
+      Name: WallConcrete
+      OverrideTag: 
       ExtraMesh: 0
       CustomMesh: {fileID: 0}
       _extrudeMirror: 1
@@ -7526,7 +7565,6 @@ MonoBehaviour:
       _sweep_Close: 1
       _sweep_shapeSubdivLimit: 30
       _sweep_distribSubdivLimit: 30
-      Name: WallConcrete
     - Copies: 1
       _instances:
       - Enabled: 1
@@ -7547,6 +7585,8 @@ MonoBehaviour:
       splineLength: 1.25
       splineLength2: 1
       splineLength3: 1
+      Name: WallConcrete
+      OverrideTag: 
       ExtraMesh: 0
       CustomMesh: {fileID: 0}
       _extrudeMirror: 1
@@ -7773,7 +7813,34 @@ MonoBehaviour:
       _sweep_Close: 1
       _sweep_shapeSubdivLimit: 30
       _sweep_distribSubdivLimit: 30
-      Name: WallConcrete
+    Static: 0
+    Tag: Untagged
+    Layer: 0
+    DefaultMaterial: {fileID: 2100000, guid: 8662cc11bf629e646b4d37deed5e380e, type: 2}
+    _editor_ToAttach: []
+    _string_ToAttach: []
+    SendMessages: []
+    AddRigidbody: 0
+    IsKinematic: 1
+    RigidbodyMass: 10
+    CollidersMaterial: {fileID: 0}
+    ColliderMode: 5
+    ScaleColliders: 1
+    ConvexCollider: 0
+    MeshColliderReduction: 0
+    ExpandThinCollider: {x: 0, y: 0, z: 0}
+    LatestGeneratedMeshes:
+    - {fileID: 0}
+    - {fileID: 0}
+    LatestGeneratedMeshesMaterials:
+    - {fileID: 2100000, guid: 8662cc11bf629e646b4d37deed5e380e, type: 2}
+    - {fileID: 2100000, guid: b73976d5132ed9c4a8856419ed9a859c, type: 2}
+    _LatestGen_Meshes: 2
+    _LatestGen_Vertices: 56
+    _LatestGen_Tris: 30
+    _LatestGen_Bounds:
+      m_Center: {x: 0, y: 1.5, z: 0}
+      m_Extent: {x: 1, y: 1.5, z: 0.08921683}
   ReplacePrefabToSpawn: 1
 --- !u!114 &3784516909265061747
 MonoBehaviour:
@@ -7798,8 +7865,7 @@ MonoBehaviour:
   DrawObjectStamps: 0
   OMultiStamp: {fileID: 0}
   PrefabsList:
-  - Prefab: {fileID: 3286884953550492245, guid: d548912d453e0444aa83e44f9ea07926,
-      type: 3}
+  - Prefab: {fileID: 3286884953550492245, guid: d548912d453e0444aa83e44f9ea07926, type: 3}
     MainCollider: {fileID: 0}
     subID: 0
     _refMesh: {fileID: 0}
@@ -7859,7 +7925,7 @@ MonoBehaviour:
   _editor_drawGlobalRules: 0
   _editor_drawModPackRules: 0
   _editor_shareSelected: 0
-  ParentPreset: {fileID: 0}
+  ParentPreset: {fileID: 11400000}
   ParentPack: {fileID: 6438712971366170884}
 --- !u!114 &4600562734999775183
 MonoBehaviour:
@@ -7889,6 +7955,7 @@ MonoBehaviour:
   _EditorInContainedRange: []
   IsContainedBy: {fileID: 0}
   _EditorFoldout: 0
+  _EditorCollapse: 0
   Enabled: 1
   ParentPlanner: {fileID: 0}
   ParentNodesContainer: {fileID: 426039689658907955}
@@ -7921,6 +7988,7 @@ MonoBehaviour:
   _EditorInContainedRange: []
   IsContainedBy: {fileID: 0}
   _EditorFoldout: 0
+  _EditorCollapse: 0
   Enabled: 1
   ParentPlanner: {fileID: 0}
   ParentNodesContainer: {fileID: 6791043723400557196}
@@ -7957,6 +8025,7 @@ MonoBehaviour:
   _EditorInContainedRange: []
   IsContainedBy: {fileID: 0}
   _EditorFoldout: 0
+  _EditorCollapse: 0
   Enabled: 1
   ParentPlanner: {fileID: 0}
   ParentNodesContainer: {fileID: -5873188578498315525}
@@ -8013,6 +8082,7 @@ MonoBehaviour:
   _EditorInContainedRange: []
   IsContainedBy: {fileID: 0}
   _EditorFoldout: 0
+  _EditorCollapse: 0
   Enabled: 1
   ParentPlanner: {fileID: 0}
   ParentNodesContainer: {fileID: -5873188578498315525}
@@ -8047,9 +8117,16 @@ MonoBehaviour:
     Variable:
       Name: None
       v3Val: {x: 1, y: 0, z: 0}
+      colVal: {r: 0, g: 0, b: 0, a: 0}
       str: 
       mat: {fileID: 0}
       gameObj: {fileID: 0}
+      curve:
+        serializedVersion: 2
+        m_Curve: []
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 4
       unityObj: {fileID: 0}
       helper: {x: 0, y: 0, z: 0}
       additionalHelperRef: {fileID: 0}
@@ -8087,6 +8164,7 @@ MonoBehaviour:
   _EditorInContainedRange: []
   IsContainedBy: {fileID: 0}
   _EditorFoldout: 0
+  _EditorCollapse: 0
   Enabled: 1
   ParentPlanner: {fileID: 0}
   ParentNodesContainer: {fileID: 6791043723400557196}
@@ -8369,6 +8447,7 @@ MonoBehaviour:
   WorldOffset: {x: 0, y: 3.05, z: 0}
   OffsetMode: 0
   RandomWorldOffset: {x: 0, y: 0, z: 0}
+  RandomRange: {x: 0, y: 1}
 --- !u!114 &7031993572659817013
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8478,6 +8557,7 @@ MonoBehaviour:
   _EditorInContainedRange: []
   IsContainedBy: {fileID: 0}
   _EditorFoldout: 0
+  _EditorCollapse: 0
   Enabled: 1
   ParentPlanner: {fileID: 0}
   ParentNodesContainer: {fileID: 426039689658907955}

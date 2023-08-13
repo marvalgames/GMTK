@@ -32,6 +32,7 @@ MonoBehaviour:
     Condition: 0
     ToCheck:
     - {x: 0, y: 0, z: 0}
+    EditorDisplayColor: {r: 0.4, g: 0.4, b: 1, a: 0.95}
 --- !u!114 &-6104363487319705350
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -59,6 +60,7 @@ MonoBehaviour:
   WorldOffset: {x: -1, y: 0, z: 1}
   OffsetMode: 0
   RandomWorldOffset: {x: 0, y: 0, z: 0}
+  RandomRange: {x: 0, y: 1}
 --- !u!114 &-5775612004441812867
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -88,6 +90,7 @@ MonoBehaviour:
   OffsetMode: 1
   DistanceMustBe: 0
   RemoveDistance: 0.1
+  FromOrigin: 0
 --- !u!114 &-5296721933097002662
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -124,6 +127,7 @@ MonoBehaviour:
       Condition: 0
       ToCheck:
       - {x: 0, y: 0, z: 0}
+      EditorDisplayColor: {r: 0.4, g: 0.4, b: 1, a: 0.95}
 --- !u!114 &-5097566039311887791
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -351,6 +355,7 @@ MonoBehaviour:
   WorldOffset: {x: 0, y: -0.05, z: 0}
   OffsetMode: 0
   RandomWorldOffset: {x: 0, y: 0, z: 0}
+  RandomRange: {x: 0, y: 1}
 --- !u!114 &-2301264679606462966
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -615,15 +620,11 @@ MonoBehaviour:
   DrawObjectStamps: 1
   OMultiStamp: {fileID: 0}
   PrefabsList:
-  - Prefab: {fileID: 1522558935224925925, guid: 9aad2f8e0ced1f844a2e6afd10398cba,
-      type: 3}
-    MainCollider: {fileID: 4758444485820703600, guid: 9aad2f8e0ced1f844a2e6afd10398cba,
-      type: 3}
+  - Prefab: {fileID: 1522558935224925925, guid: 9aad2f8e0ced1f844a2e6afd10398cba, type: 3}
+    MainCollider: {fileID: 4758444485820703600, guid: 9aad2f8e0ced1f844a2e6afd10398cba, type: 3}
     subID: 0
-    _refMesh: {fileID: -7754318969949236687, guid: c33a6e5699486b042b5a7a6fe651eecb,
-      type: 3}
-    _refCol: {fileID: 4758444485820703600, guid: 9aad2f8e0ced1f844a2e6afd10398cba,
-      type: 3}
+    _refMesh: {fileID: -7754318969949236687, guid: c33a6e5699486b042b5a7a6fe651eecb, type: 3}
+    _refCol: {fileID: 4758444485820703600, guid: 9aad2f8e0ced1f844a2e6afd10398cba, type: 3}
   DrawMultiObjectStamps: 1
   Spawners:
   - Enabled: 1
@@ -714,9 +715,16 @@ MonoBehaviour:
   Variables:
   - Name: Spawn Propability Multiplier
     v3Val: {x: 1, y: 0, z: 0}
+    colVal: {r: 0, g: 0, b: 0, a: 0}
     str: 
     mat: {fileID: 0}
     gameObj: {fileID: 0}
+    curve:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
     unityObj: {fileID: 0}
     helper: {x: 0, y: 5, z: 0}
     additionalHelperRef: {fileID: 0}
@@ -727,9 +735,16 @@ MonoBehaviour:
     FloatSwitch: 0
   - Name: Spawn Count Multiplier
     v3Val: {x: 1, y: 0, z: 0}
+    colVal: {r: 0, g: 0, b: 0, a: 0}
     str: 
     mat: {fileID: 0}
     gameObj: {fileID: 0}
+    curve:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
     unityObj: {fileID: 0}
     helper: {x: 0, y: 5, z: 0}
     additionalHelperRef: {fileID: 0}
@@ -739,8 +754,7 @@ MonoBehaviour:
     allowTransformFollow: 0
     FloatSwitch: 0
   DoorsModificator: {fileID: 11400000, guid: 7500e28d48a8ac44da90dfc8719e91ef, type: 2}
-  EraseWallModificator: {fileID: 11400000, guid: c5bd286613ebcb24c932c8d5e7f79f9b,
-    type: 2}
+  EraseWallModificator: {fileID: 11400000, guid: c5bd286613ebcb24c932c8d5e7f79f9b, type: 2}
   CellsInstructions:
   - Title: Hole Prepare
     InstructionType: 2
@@ -752,8 +766,7 @@ MonoBehaviour:
     extraPack: {fileID: 0}
   - Title: Clear Wall
     InstructionType: 3
-    TargetModification: {fileID: 11400000, guid: c5bd286613ebcb24c932c8d5e7f79f9b,
-      type: 2}
+    TargetModification: {fileID: 11400000, guid: c5bd286613ebcb24c932c8d5e7f79f9b, type: 2}
     Tags: 
     InstructionArgument: 
     Foldout: 1
@@ -761,8 +774,7 @@ MonoBehaviour:
     extraPack: {fileID: 0}
   - Title: Door Hole
     InstructionType: 1
-    TargetModification: {fileID: 11400000, guid: 3b4e5513423863145ad2bba145e1e70d,
-      type: 2}
+    TargetModification: {fileID: 11400000, guid: 3b4e5513423863145ad2bba145e1e70d, type: 2}
     Tags: Prop
     InstructionArgument: 
     Foldout: 1
@@ -790,17 +802,14 @@ MonoBehaviour:
   - {fileID: -668603320470416380}
   - {fileID: 7935240572467545108}
   - {fileID: 3708123138193967400}
+  CustomPostEvents: []
   AddReflectionProbes: 0
-  MainReflectionSettings: {fileID: 11400000, guid: dabe448206028124294db7edb02eed3f,
-    type: 2}
+  MainReflectionSettings: {fileID: 11400000, guid: dabe448206028124294db7edb02eed3f, type: 2}
   AddMultipleProbes: 0
-  SmallerReflSettings: {fileID: 11400000, guid: 290a908b3df7c6a4a84c21c932841cde,
-    type: 2}
+  SmallerReflSettings: {fileID: 11400000, guid: 290a908b3df7c6a4a84c21c932841cde, type: 2}
   MiniReflSettings: {fileID: 11400000, guid: b243a7973537dbf4faacf7bbda74dada, type: 2}
   SmallerReflLowerSpaceThan: 4
   LimitSingleProbeSize: 0
-  AddLightProbes: 0
-  ProbesPerCell: 1
   TriggerColliderGeneration: 0
   TriggerGenSettings:
     TriggersLayer: 0
@@ -925,6 +934,7 @@ MonoBehaviour:
     Condition: 0
     ToCheck:
     - {x: 0, y: 0, z: 0}
+    EditorDisplayColor: {r: 0.4, g: 0.4, b: 1, a: 0.95}
 --- !u!114 &1846248490761180420
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -961,6 +971,7 @@ MonoBehaviour:
       Condition: 0
       ToCheck:
       - {x: 0, y: 0, z: 0}
+      EditorDisplayColor: {r: 0.4, g: 0.4, b: 1, a: 0.95}
 --- !u!114 &2292276255464056016
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -990,6 +1001,7 @@ MonoBehaviour:
   OffsetMode: 1
   DistanceMustBe: 0
   RemoveDistance: 0.1
+  FromOrigin: 0
 --- !u!114 &2419594826917967729
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1379,6 +1391,7 @@ MonoBehaviour:
       Condition: 0
       ToCheck:
       - {x: 0, y: 0, z: 0}
+      EditorDisplayColor: {r: 0.4, g: 0.4, b: 1, a: 0.95}
 --- !u!114 &6732919016241654467
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1415,6 +1428,7 @@ MonoBehaviour:
       Condition: 0
       ToCheck:
       - {x: 0, y: 0, z: 0}
+      EditorDisplayColor: {r: 0.4, g: 0.4, b: 1, a: 0.95}
 --- !u!114 &7462829288707278766
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1442,6 +1456,7 @@ MonoBehaviour:
   WorldOffset: {x: 0, y: 0, z: 0.5}
   OffsetMode: 1
   RandomWorldOffset: {x: 0, y: 0, z: 0}
+  RandomRange: {x: 0, y: 1}
 --- !u!114 &7639072769004019218
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1492,7 +1507,9 @@ MonoBehaviour:
   UseYLevel: -1
   AutoRemoveOverlaps: 1
   SetGhosts: 0
+  OverlapDetectMode: 0
   Version2: 0
+  ScaleBounds: 0.99
   Padding: 0
   YawOffset: 180
   DirectOffset: {x: 0, y: 0, z: 0.475}
@@ -1522,15 +1539,11 @@ MonoBehaviour:
   DrawObjectStamps: 1
   OMultiStamp: {fileID: 0}
   PrefabsList:
-  - Prefab: {fileID: 4607517795865181455, guid: b0abf8fcb0aa81d4589b72cfaeadbf8c,
-      type: 3}
-    MainCollider: {fileID: 5349919115325949676, guid: b0abf8fcb0aa81d4589b72cfaeadbf8c,
-      type: 3}
+  - Prefab: {fileID: 4607517795865181455, guid: b0abf8fcb0aa81d4589b72cfaeadbf8c, type: 3}
+    MainCollider: {fileID: 5349919115325949676, guid: b0abf8fcb0aa81d4589b72cfaeadbf8c, type: 3}
     subID: 0
-    _refMesh: {fileID: -5495902117074765545, guid: 6c8146e3c8e6a5e4b9e35cb85452d0be,
-      type: 3}
-    _refCol: {fileID: 5349919115325949676, guid: b0abf8fcb0aa81d4589b72cfaeadbf8c,
-      type: 3}
+    _refMesh: {fileID: -5495902117074765545, guid: 6c8146e3c8e6a5e4b9e35cb85452d0be, type: 3}
+    _refCol: {fileID: 5349919115325949676, guid: b0abf8fcb0aa81d4589b72cfaeadbf8c, type: 3}
   DrawMultiObjectStamps: 1
   Spawners:
   - Enabled: 1
@@ -1671,6 +1684,7 @@ MonoBehaviour:
     Condition: 0
     ToCheck:
     - {x: 0, y: 0, z: 0}
+    EditorDisplayColor: {r: 0.4, g: 0.4, b: 1, a: 0.95}
 --- !u!114 &9063430128532023327
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1694,12 +1708,10 @@ MonoBehaviour:
   DrawObjectStamps: 1
   OMultiStamp: {fileID: 0}
   PrefabsList:
-  - Prefab: {fileID: 1042461877549604795, guid: 433107d2223c9ba40af82ee0e7a8bdc6,
-      type: 3}
+  - Prefab: {fileID: 1042461877549604795, guid: 433107d2223c9ba40af82ee0e7a8bdc6, type: 3}
     MainCollider: {fileID: 0}
     subID: 0
-    _refMesh: {fileID: -5495902117074765545, guid: 64fcd2652b495ca44945c63b46553d57,
-      type: 3}
+    _refMesh: {fileID: -5495902117074765545, guid: 64fcd2652b495ca44945c63b46553d57, type: 3}
     _refCol: {fileID: 0}
   DrawMultiObjectStamps: 1
   Spawners:

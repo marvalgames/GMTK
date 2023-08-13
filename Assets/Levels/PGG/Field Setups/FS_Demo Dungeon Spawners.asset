@@ -107,8 +107,8 @@ MonoBehaviour:
   Enabled: 1
   Ignore: 0
   _editor_drawRule: 1
-  CellAllow: 0
-  AllConditionsMet: 1
+  CellAllow: 1
+  AllConditionsMet: 0
   Count:
     Min: 2
     Max: 4
@@ -505,10 +505,12 @@ MonoBehaviour:
   PrefabsList:
   - Prefab: {fileID: 3769077128956724329, guid: 2cdcbab203b72e342982113355b81da8,
       type: 3}
-    MainCollider: {fileID: 0}
+    MainCollider: {fileID: 9120084653004568249, guid: 2cdcbab203b72e342982113355b81da8,
+      type: 3}
     subID: 0
     _refMesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
-    _refCol: {fileID: 0}
+    _refCol: {fileID: 9120084653004568249, guid: 2cdcbab203b72e342982113355b81da8,
+      type: 3}
   DrawMultiObjectStamps: 1
   Spawners:
   - Enabled: 1
@@ -530,9 +532,9 @@ MonoBehaviour:
     DontInheritRotations: 0
     SwitchSpawnedToStatic: 0
     MultipleToSpawn: 0
-    UseGlobalRules: 0
-    UseParentPackageRules: 0
-    _wasEnablingGlobalRules: 0
+    UseGlobalRules: 1
+    UseParentPackageRules: 1
+    _wasEnablingGlobalRules: 1
     ScaleAccess: 1
     DisplayPreviewGUI: 1
     IsSubSpawner: 0
@@ -544,7 +546,7 @@ MonoBehaviour:
   _editor_drawGlobalRules: 0
   _editor_drawModPackRules: 0
   _editor_shareSelected: 0
-  ParentPreset: {fileID: 11400000, guid: dcf66c3dfe0aef34e9f9693572dda7fd, type: 2}
+  ParentPreset: {fileID: 11400000}
   ParentPack: {fileID: -5995147623644665421}
 --- !u!114 &-4182403455301786610
 MonoBehaviour:
@@ -743,7 +745,7 @@ MonoBehaviour:
   Enabled: 1
   Ignore: 0
   _editor_drawRule: 1
-  CellAllow: 0
+  CellAllow: 1
   AllConditionsMet: 1
   Propability: 0.202
   PropabilityMulVariable:
@@ -865,10 +867,12 @@ MonoBehaviour:
   PrefabsList:
   - Prefab: {fileID: 2002509082697775661, guid: 8ebaa41f8b244184cbaed950a7a77c5d,
       type: 3}
-    MainCollider: {fileID: 0}
+    MainCollider: {fileID: 1074526828067882866, guid: 8ebaa41f8b244184cbaed950a7a77c5d,
+      type: 3}
     subID: 0
     _refMesh: {fileID: 10207, guid: 0000000000000000e000000000000000, type: 0}
-    _refCol: {fileID: 0}
+    _refCol: {fileID: 1074526828067882866, guid: 8ebaa41f8b244184cbaed950a7a77c5d,
+      type: 3}
   DrawMultiObjectStamps: 1
   Spawners:
   - Enabled: 1
@@ -889,9 +893,9 @@ MonoBehaviour:
     DontInheritRotations: 0
     SwitchSpawnedToStatic: 0
     MultipleToSpawn: 0
-    UseGlobalRules: 0
-    UseParentPackageRules: 0
-    _wasEnablingGlobalRules: 0
+    UseGlobalRules: 1
+    UseParentPackageRules: 1
+    _wasEnablingGlobalRules: 1
     ScaleAccess: 1
     DisplayPreviewGUI: 1
     IsSubSpawner: 0
@@ -903,7 +907,7 @@ MonoBehaviour:
   _editor_drawGlobalRules: 0
   _editor_drawModPackRules: 0
   _editor_shareSelected: 0
-  ParentPreset: {fileID: 11400000, guid: 775521f8d1036754caa8397c0338b9d0, type: 2}
+  ParentPreset: {fileID: 11400000}
   ParentPack: {fileID: -5995147623644665421}
 --- !u!114 &11400000
 MonoBehaviour:
@@ -1155,10 +1159,12 @@ MonoBehaviour:
   PrefabsList:
   - Prefab: {fileID: 9145608610316035504, guid: e045903dd4209e44199b90b6d733cdef,
       type: 3}
-    MainCollider: {fileID: 0}
+    MainCollider: {fileID: 3138027694786323860, guid: e045903dd4209e44199b90b6d733cdef,
+      type: 3}
     subID: 0
     _refMesh: {fileID: 10208, guid: 0000000000000000e000000000000000, type: 0}
-    _refCol: {fileID: 0}
+    _refCol: {fileID: 3138027694786323860, guid: e045903dd4209e44199b90b6d733cdef,
+      type: 3}
   DrawMultiObjectStamps: 1
   Spawners:
   - Enabled: 1
@@ -1179,9 +1185,9 @@ MonoBehaviour:
     DontInheritRotations: 0
     SwitchSpawnedToStatic: 0
     MultipleToSpawn: 0
-    UseGlobalRules: 0
-    UseParentPackageRules: 0
-    _wasEnablingGlobalRules: 0
+    UseGlobalRules: 1
+    UseParentPackageRules: 1
+    _wasEnablingGlobalRules: 1
     ScaleAccess: 1
     DisplayPreviewGUI: 1
     IsSubSpawner: 0
@@ -1193,7 +1199,7 @@ MonoBehaviour:
   _editor_drawGlobalRules: 0
   _editor_drawModPackRules: 0
   _editor_shareSelected: 0
-  ParentPreset: {fileID: 11400000, guid: dcf66c3dfe0aef34e9f9693572dda7fd, type: 2}
+  ParentPreset: {fileID: 11400000}
   ParentPack: {fileID: -5995147623644665421}
 --- !u!114 &3737668362270842120
 MonoBehaviour:
@@ -1453,7 +1459,7 @@ MonoBehaviour:
   _editor_drawGlobalRules: 0
   _editor_drawModPackRules: 0
   _editor_shareSelected: 1
-  ParentPreset: {fileID: 0}
+  ParentPreset: {fileID: 11400000}
   ParentPack: {fileID: -5995147623644665421}
 --- !u!114 &5078128811975809866
 MonoBehaviour:
@@ -1596,10 +1602,12 @@ MonoBehaviour:
   PrefabsList:
   - Prefab: {fileID: 1237235961483352426, guid: eddc95b7a9c0fd948a0dca42705afeac,
       type: 3}
-    MainCollider: {fileID: 0}
+    MainCollider: {fileID: 3257041859134610321, guid: eddc95b7a9c0fd948a0dca42705afeac,
+      type: 3}
     subID: 0
     _refMesh: {fileID: 10206, guid: 0000000000000000e000000000000000, type: 0}
-    _refCol: {fileID: 0}
+    _refCol: {fileID: 3257041859134610321, guid: eddc95b7a9c0fd948a0dca42705afeac,
+      type: 3}
   DrawMultiObjectStamps: 1
   Spawners:
   - Enabled: 1
@@ -1620,9 +1628,9 @@ MonoBehaviour:
     DontInheritRotations: 0
     SwitchSpawnedToStatic: 0
     MultipleToSpawn: 0
-    UseGlobalRules: 0
-    UseParentPackageRules: 0
-    _wasEnablingGlobalRules: 0
+    UseGlobalRules: 1
+    UseParentPackageRules: 1
+    _wasEnablingGlobalRules: 1
     ScaleAccess: 1
     DisplayPreviewGUI: 1
     IsSubSpawner: 0
@@ -1634,7 +1642,7 @@ MonoBehaviour:
   _editor_drawGlobalRules: 0
   _editor_drawModPackRules: 0
   _editor_shareSelected: 0
-  ParentPreset: {fileID: 11400000, guid: eb40dc6b8bf88c247bbc6e6fe956d3c6, type: 2}
+  ParentPreset: {fileID: 11400000}
   ParentPack: {fileID: -5995147623644665421}
 --- !u!114 &8233154986907813204
 MonoBehaviour:

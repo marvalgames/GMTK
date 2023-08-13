@@ -53,6 +53,7 @@ MonoBehaviour:
     ToCheck: []
     EditorDisplayColor: {r: 1, g: 0.1, b: 0.1, a: 1}
   wasGenerated: 1
+  doFullBreak: 0
 --- !u!114 &-7480277052404536107
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -106,18 +107,15 @@ MonoBehaviour:
   OMultiStamp: {fileID: 0}
   PrefabsList:
   - Prefab: {fileID: 1914728010758528, guid: e1937d885ef6d394586883b9c80d463c, type: 3}
-    MainCollider: {fileID: 65600122923653278, guid: e1937d885ef6d394586883b9c80d463c,
-      type: 3}
+    MainCollider: {fileID: 65600122923653278, guid: e1937d885ef6d394586883b9c80d463c, type: 3}
     subID: 0
     _refMesh: {fileID: 4300006, guid: b1dc64f8546856a499f57babb0460ac0, type: 3}
     _refCol: {fileID: 65600122923653278, guid: e1937d885ef6d394586883b9c80d463c, type: 3}
   - Prefab: {fileID: 641661205810491711, guid: fa15fb3e9d5365540bb9e7154c517dff, type: 3}
-    MainCollider: {fileID: 7762365339894878601, guid: fa15fb3e9d5365540bb9e7154c517dff,
-      type: 3}
+    MainCollider: {fileID: 7762365339894878601, guid: fa15fb3e9d5365540bb9e7154c517dff, type: 3}
     subID: 0
     _refMesh: {fileID: 4300000, guid: bb65f524f9f91b547b3da46c32446168, type: 3}
-    _refCol: {fileID: 7762365339894878601, guid: fa15fb3e9d5365540bb9e7154c517dff,
-      type: 3}
+    _refCol: {fileID: 7762365339894878601, guid: fa15fb3e9d5365540bb9e7154c517dff, type: 3}
   DrawMultiObjectStamps: 1
   Spawners:
   - Enabled: 1
@@ -171,7 +169,7 @@ MonoBehaviour:
   _editor_drawGlobalRules: 0
   _editor_drawModPackRules: 0
   _editor_shareSelected: 0
-  ParentPreset: {fileID: 0}
+  ParentPreset: {fileID: 11400000}
   ParentPack: {fileID: -5641264244822681886}
 --- !u!114 &-5902821184886996928
 MonoBehaviour:
@@ -200,7 +198,9 @@ MonoBehaviour:
   UseYLevel: -1
   AutoRemoveOverlaps: 1
   SetGhosts: 0
+  OverlapDetectMode: 0
   Version2: 0
+  ScaleBounds: 0.99
   Padding: 0
   YawOffset: 0
   DirectOffset: {x: 0, y: 0, z: 0}
@@ -309,12 +309,6 @@ MonoBehaviour:
   _editor_drawRule: 1
   CellAllow: 1
   AllConditionsMet: 1
-  GroundRaycastMask:
-    serializedVersion: 2
-    m_Bits: 1
-  RaycastDirection: {x: 0, y: -1, z: 0}
-  RaycastLength: 7
-  OffsetRaycastOrigin: {x: 0, y: 1, z: 0}
   FlattenAmount: 1
   BrushRadius: 3
   OffsetGround: {x: 0, y: 0, z: 0}
@@ -366,8 +360,7 @@ MonoBehaviour:
   DrawObjectStamps: 1
   OMultiStamp: {fileID: 0}
   PrefabsList:
-  - Prefab: {fileID: 1592327051768828723, guid: a4bfa44397313bc449641bcf06772320,
-      type: 3}
+  - Prefab: {fileID: 1592327051768828723, guid: a4bfa44397313bc449641bcf06772320, type: 3}
     MainCollider: {fileID: 0}
     subID: 0
     _refMesh: {fileID: 4300182, guid: 6d80b1048fb4872439e1837653334d26, type: 3}
@@ -424,9 +417,16 @@ MonoBehaviour:
   Variables:
   - Name: Spawn Propability Multiplier
     v3Val: {x: 1, y: 0, z: 0}
+    colVal: {r: 0, g: 0, b: 0, a: 0}
     str: 
     mat: {fileID: 0}
     gameObj: {fileID: 0}
+    curve:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
     unityObj: {fileID: 0}
     helper: {x: 0, y: 5, z: 0}
     additionalHelperRef: {fileID: 0}
@@ -437,9 +437,16 @@ MonoBehaviour:
     FloatSwitch: 0
   - Name: Spawn Count Multiplier
     v3Val: {x: 1, y: 0, z: 0}
+    colVal: {r: 0, g: 0, b: 0, a: 0}
     str: 
     mat: {fileID: 0}
     gameObj: {fileID: 0}
+    curve:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
     unityObj: {fileID: 0}
     helper: {x: 0, y: 5, z: 0}
     additionalHelperRef: {fileID: 0}
@@ -449,8 +456,7 @@ MonoBehaviour:
     allowTransformFollow: 0
     FloatSwitch: 0
   DoorsModificator: {fileID: 11400000, guid: 7500e28d48a8ac44da90dfc8719e91ef, type: 2}
-  EraseWallModificator: {fileID: 11400000, guid: c5bd286613ebcb24c932c8d5e7f79f9b,
-    type: 2}
+  EraseWallModificator: {fileID: 11400000, guid: c5bd286613ebcb24c932c8d5e7f79f9b, type: 2}
   CellsInstructions:
   - Title: Door Hole
     InstructionType: 1
@@ -469,17 +475,14 @@ MonoBehaviour:
   DontSpawnOn: 
   SelfInjections: []
   disabledMods: []
+  CustomPostEvents: []
   AddReflectionProbes: 0
-  MainReflectionSettings: {fileID: 11400000, guid: dabe448206028124294db7edb02eed3f,
-    type: 2}
+  MainReflectionSettings: {fileID: 11400000, guid: dabe448206028124294db7edb02eed3f, type: 2}
   AddMultipleProbes: 0
-  SmallerReflSettings: {fileID: 11400000, guid: 290a908b3df7c6a4a84c21c932841cde,
-    type: 2}
+  SmallerReflSettings: {fileID: 11400000, guid: 290a908b3df7c6a4a84c21c932841cde, type: 2}
   MiniReflSettings: {fileID: 11400000, guid: b243a7973537dbf4faacf7bbda74dada, type: 2}
   SmallerReflLowerSpaceThan: 4
   LimitSingleProbeSize: 0
-  AddLightProbes: 0
-  ProbesPerCell: 1
   TriggerColliderGeneration: 0
   TriggerGenSettings:
     TriggersLayer: 0
@@ -517,7 +520,9 @@ MonoBehaviour:
   UseYLevel: -1
   AutoRemoveOverlaps: 1
   SetGhosts: 0
+  OverlapDetectMode: 0
   Version2: 0
+  ScaleBounds: 0.99
   Padding: 0
   YawOffset: 0
   DirectOffset: {x: 0, y: 0, z: -2.5}
@@ -544,12 +549,6 @@ MonoBehaviour:
   _editor_drawRule: 1
   CellAllow: 1
   AllConditionsMet: 1
-  GroundRaycastMask:
-    serializedVersion: 2
-    m_Bits: 1
-  RaycastDirection: {x: 0, y: -1, z: 0}
-  RaycastLength: 7
-  OffsetRaycastOrigin: {x: 0, y: 1, z: 0}
   FlattenAmount: 1
   BrushRadius: 3
   OffsetGround: {x: 0, y: 0, z: 0}
@@ -692,7 +691,9 @@ MonoBehaviour:
   UseYLevel: -1
   AutoRemoveOverlaps: 1
   SetGhosts: 0
+  OverlapDetectMode: 0
   Version2: 0
+  ScaleBounds: 0.99
   Padding: 0
   YawOffset: 90
   DirectOffset: {x: 1, y: 0, z: 0}
