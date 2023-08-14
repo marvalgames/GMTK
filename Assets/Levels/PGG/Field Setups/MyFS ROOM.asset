@@ -1,5 +1,41 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!114 &-8524770542409158822
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b496837ae5a0c3b4786589d6fb51e8d5, type: 3}
+  m_Name: SR_MoveRotateScale-[Regular ROOM]
+  m_EditorClassIdentifier: 
+  Logic: 0
+  Negate: 0
+  Global: 0
+  Enabled: 1
+  Ignore: 0
+  _editor_drawRule: 1
+  CellAllow: 1
+  AllConditionsMet: 1
+  EffectOn: 2
+  ApplyMode: 0
+  Space: 0
+  GetCoords: 
+  CheckMode: 0
+  PositionOffset: {x: 0, y: 0, z: 0}
+  OffsetMode: 1
+  OffsetPosVariable:
+    name: 
+    requiredType: 5
+    Tooltip: Set Additive Vector3 Field Variable value to this property
+  RotationOffset: {x: 0, y: 90, z: 0}
+  ScaleMultiplier: {x: 2.5, y: 1, z: 1}
+  RandomizeOffset: {x: 0, y: 0, z: 0}
+  MaxDegreesSteps: {x: 1, y: 1, z: 1}
+  InheritScaleOffset: 0
 --- !u!114 &-7480277052404536107
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -52,16 +88,16 @@ MonoBehaviour:
   DrawObjectStamps: 1
   OMultiStamp: {fileID: 0}
   PrefabsList:
-  - Prefab: {fileID: 100000, guid: 13fbbd71d0278e9449670d69a9885156, type: 3}
-    MainCollider: {fileID: 65808964190448118, guid: 83516c172894b994594687afc95a3c32, type: 3}
+  - Prefab: {fileID: 8431194137298830544, guid: ad22814bd5dc23e4990c5b491f4952e3, type: 3}
+    MainCollider: {fileID: 189145720309963167, guid: 70d200fbba30dde4e9b8cf917ea98683, type: 3}
     subID: 0
-    _refMesh: {fileID: 4300006, guid: b1dc64f8546856a499f57babb0460ac0, type: 3}
-    _refCol: {fileID: 65808964190448118, guid: 83516c172894b994594687afc95a3c32, type: 3}
-  - Prefab: {fileID: 641661205810491711, guid: fa15fb3e9d5365540bb9e7154c517dff, type: 3}
-    MainCollider: {fileID: 7762365339894878601, guid: fa15fb3e9d5365540bb9e7154c517dff, type: 3}
+    _refMesh: {fileID: 1051399223010813255, guid: df21de69a4d8ea542bf154bf4985cdba, type: 3}
+    _refCol: {fileID: 189145720309963167, guid: 70d200fbba30dde4e9b8cf917ea98683, type: 3}
+  - Prefab: {fileID: 6501030773171655755, guid: c7dd6fb4d446e714289a4f8db5942f70, type: 3}
+    MainCollider: {fileID: -7823187826914514139, guid: c7dd6fb4d446e714289a4f8db5942f70, type: 3}
     subID: 0
-    _refMesh: {fileID: 4300000, guid: 32ec7708693eabb419c46b1b594bd3f9, type: 3}
-    _refCol: {fileID: 7762365339894878601, guid: fa15fb3e9d5365540bb9e7154c517dff, type: 3}
+    _refMesh: {fileID: 4317792554487935860, guid: 7531380633bda32469f3f4976173e1b6, type: 3}
+    _refCol: {fileID: -7823187826914514139, guid: c7dd6fb4d446e714289a4f8db5942f70, type: 3}
   DrawMultiObjectStamps: 1
   Spawners:
   - Enabled: 1
@@ -71,6 +107,7 @@ MonoBehaviour:
     Parent: {fileID: -7381331913408751791}
     Rules:
     - {fileID: 4263224772109317564}
+    - {fileID: 2617583654182874868}
     Mode: 0
     CellCheckMode: 0
     _Editor_SpawnerAdvancedOptionsFoldout: 0
@@ -93,6 +130,7 @@ MonoBehaviour:
     Parent: {fileID: -7381331913408751791}
     Rules:
     - {fileID: 186422662741355088}
+    - {fileID: -8524770542409158822}
     Mode: 0
     CellCheckMode: 0
     _Editor_SpawnerAdvancedOptionsFoldout: 0
@@ -114,8 +152,8 @@ MonoBehaviour:
   _editor_drawSpawners: 1
   _editor_drawGlobalRules: 0
   _editor_drawModPackRules: 0
-  _editor_shareSelected: 1
-  ParentPreset: {fileID: 0}
+  _editor_shareSelected: 0
+  ParentPreset: {fileID: 11400000}
   ParentPack: {fileID: -5641264244822681886}
 --- !u!114 &-5902821184886996928
 MonoBehaviour:
@@ -294,7 +332,7 @@ MonoBehaviour:
   _editor_drawGlobalRules: 0
   _editor_drawModPackRules: 0
   _editor_shareSelected: 0
-  ParentPreset: {fileID: 11400000}
+  ParentPreset: {fileID: 0}
   ParentPack: {fileID: -5641264244822681886}
 --- !u!114 &11400000
 MonoBehaviour:
@@ -540,6 +578,42 @@ MonoBehaviour:
   DistanceSource: 0
   DebugDirection: 0
   DrawDebugGizmos: 1
+--- !u!114 &2617583654182874868
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b496837ae5a0c3b4786589d6fb51e8d5, type: 3}
+  m_Name: SR_MoveRotateScale-[Regular ROOM]
+  m_EditorClassIdentifier: 
+  Logic: 0
+  Negate: 0
+  Global: 0
+  Enabled: 1
+  Ignore: 0
+  _editor_drawRule: 1
+  CellAllow: 1
+  AllConditionsMet: 1
+  EffectOn: 2
+  ApplyMode: 0
+  Space: 0
+  GetCoords: 
+  CheckMode: 0
+  PositionOffset: {x: 0, y: 0, z: 0}
+  OffsetMode: 1
+  OffsetPosVariable:
+    name: 
+    requiredType: 5
+    Tooltip: Set Additive Vector3 Field Variable value to this property
+  RotationOffset: {x: 0, y: 90, z: 0}
+  ScaleMultiplier: {x: 2.5, y: 1, z: 2.5}
+  RandomizeOffset: {x: 0, y: 0, z: 0}
+  MaxDegreesSteps: {x: 1, y: 1, z: 1}
+  InheritScaleOffset: 0
 --- !u!114 &3042665794430973048
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -657,7 +731,7 @@ MonoBehaviour:
   Mode: 0
   AlignMode: 0
   YawOffset: 0
-  DirectOffset: {x: 0.5, y: 0, z: -0.5}
+  DirectOffset: {x: 0, y: 0, z: 0}
   OffsetMode: 1
   RotateBy90Only: 1
   V2: 0

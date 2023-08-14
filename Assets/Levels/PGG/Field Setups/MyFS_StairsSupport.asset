@@ -169,7 +169,7 @@ MonoBehaviour:
   _editor_drawGlobalRules: 0
   _editor_drawModPackRules: 0
   _editor_shareSelected: 0
-  ParentPreset: {fileID: 11400000}
+  ParentPreset: {fileID: 0}
   ParentPack: {fileID: 4010537770972031752}
 --- !u!114 &-8036390951677653302
 MonoBehaviour:
@@ -261,6 +261,7 @@ MonoBehaviour:
     Rules:
     - {fileID: 3391657039994221933}
     - {fileID: -238880922451240241}
+    - {fileID: -2583754649143969806}
     Mode: 0
     CellCheckMode: 0
     _Editor_SpawnerAdvancedOptionsFoldout: 0
@@ -283,7 +284,7 @@ MonoBehaviour:
   _editor_drawGlobalRules: 0
   _editor_drawModPackRules: 0
   _editor_shareSelected: 0
-  ParentPreset: {fileID: 11400000}
+  ParentPreset: {fileID: 0}
   ParentPack: {fileID: 4010537770972031752}
 --- !u!114 &-7057274667417803235
 MonoBehaviour:
@@ -789,6 +790,42 @@ MonoBehaviour:
   OffsetMode: 1
   RandomWorldOffset: {x: 0, y: 0, z: 0}
   RandomRange: {x: 0, y: 1}
+--- !u!114 &-2583754649143969806
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b496837ae5a0c3b4786589d6fb51e8d5, type: 3}
+  m_Name: SR_MoveRotateScale-[Floor]
+  m_EditorClassIdentifier: 
+  Logic: 0
+  Negate: 0
+  Global: 0
+  Enabled: 1
+  Ignore: 0
+  _editor_drawRule: 1
+  CellAllow: 1
+  AllConditionsMet: 1
+  EffectOn: 2
+  ApplyMode: 0
+  Space: 0
+  GetCoords: 
+  CheckMode: 0
+  PositionOffset: {x: 0, y: 0, z: 0}
+  OffsetMode: 1
+  OffsetPosVariable:
+    name: 
+    requiredType: 5
+    Tooltip: Set Additive Vector3 Field Variable value to this property
+  RotationOffset: {x: 0, y: 90, z: 0}
+  ScaleMultiplier: {x: 2.5, y: 1, z: 2.5}
+  RandomizeOffset: {x: 0, y: 0, z: 0}
+  MaxDegreesSteps: {x: 1, y: 1, z: 1}
+  InheritScaleOffset: 0
 --- !u!114 &-2578806539607322669
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -816,6 +853,42 @@ MonoBehaviour:
   Offset: {x: 0, y: 1, z: 0}
   OffsetMode: 0
   RandomOffset: {x: 0, y: 0, z: 0}
+--- !u!114 &-2572470579978458959
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b496837ae5a0c3b4786589d6fb51e8d5, type: 3}
+  m_Name: SR_MoveRotateScale-[Stairs]
+  m_EditorClassIdentifier: 
+  Logic: 0
+  Negate: 0
+  Global: 0
+  Enabled: 1
+  Ignore: 0
+  _editor_drawRule: 1
+  CellAllow: 1
+  AllConditionsMet: 1
+  EffectOn: 2
+  ApplyMode: 0
+  Space: 0
+  GetCoords: 
+  CheckMode: 0
+  PositionOffset: {x: 0, y: 0, z: 0}
+  OffsetMode: 1
+  OffsetPosVariable:
+    name: 
+    requiredType: 5
+    Tooltip: Set Additive Vector3 Field Variable value to this property
+  RotationOffset: {x: 0, y: 90, z: 0}
+  ScaleMultiplier: {x: 2.5, y: 1, z: 2.5}
+  RandomizeOffset: {x: 0, y: 0, z: 0}
+  MaxDegreesSteps: {x: 1, y: 1, z: 1}
+  InheritScaleOffset: 0
 --- !u!114 &-2328914806453490717
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1627,6 +1700,42 @@ MonoBehaviour:
   OffsetMode: 1
   IgnoreOtherMods: 1
   DontCheckAdditionals: 0
+--- !u!114 &2324321871633719621
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b496837ae5a0c3b4786589d6fb51e8d5, type: 3}
+  m_Name: SR_MoveRotateScale-[Stairs]
+  m_EditorClassIdentifier: 
+  Logic: 0
+  Negate: 0
+  Global: 0
+  Enabled: 1
+  Ignore: 0
+  _editor_drawRule: 1
+  CellAllow: 1
+  AllConditionsMet: 1
+  EffectOn: 2
+  ApplyMode: 0
+  Space: 0
+  GetCoords: 
+  CheckMode: 0
+  PositionOffset: {x: 0, y: 0, z: 0}
+  OffsetMode: 1
+  OffsetPosVariable:
+    name: 
+    requiredType: 5
+    Tooltip: Set Additive Vector3 Field Variable value to this property
+  RotationOffset: {x: 0, y: 90, z: 0}
+  ScaleMultiplier: {x: 2.5, y: 1, z: 2.5}
+  RandomizeOffset: {x: 0, y: 0, z: 0}
+  MaxDegreesSteps: {x: 1, y: 1, z: 1}
+  InheritScaleOffset: 0
 --- !u!114 &2339920366916454944
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1911,7 +2020,7 @@ MonoBehaviour:
   _editor_drawRule: 1
   CellAllow: 1
   AllConditionsMet: 1
-  ScaleMultiplier: {x: 1.275, y: 1, z: 1}
+  ScaleMultiplier: {x: 3, y: 2.5, z: 2.5}
   ScaleMulVariable:
     name: 
     requiredType: 5
@@ -2297,10 +2406,10 @@ MonoBehaviour:
     _refMesh: {fileID: -4303887579223004961, guid: 8f50acbdb7056ea40af34807460ba408, type: 3}
     _refCol: {fileID: 9084905384021306996, guid: 40756c7bfb842fc419beb2432d4d05e3, type: 3}
   - Prefab: {fileID: 6924196216273371695, guid: 03f8c445d9e72774698eb911fc6bb19e, type: 3}
-    MainCollider: {fileID: 64698000271603898, guid: eba489ae8e1bae94c951ae212dc18c12, type: 3}
+    MainCollider: {fileID: 0}
     subID: 0
     _refMesh: {fileID: -4303887579223004961, guid: 8f50acbdb7056ea40af34807460ba408, type: 3}
-    _refCol: {fileID: 64698000271603898, guid: eba489ae8e1bae94c951ae212dc18c12, type: 3}
+    _refCol: {fileID: 0}
   - Prefab: {fileID: 6924196216273371695, guid: bf457cf57a6f7f64580591c3da1b3582, type: 3}
     MainCollider: {fileID: 9084905384021306996, guid: 40756c7bfb842fc419beb2432d4d05e3, type: 3}
     subID: 0
@@ -2387,6 +2496,7 @@ MonoBehaviour:
     - {fileID: -5497163362131261965}
     - {fileID: -939797738770742189}
     - {fileID: -2578806539607322669}
+    - {fileID: 2324321871633719621}
     Mode: 0
     CellCheckMode: 0
     _Editor_SpawnerAdvancedOptionsFoldout: 0
@@ -2477,8 +2587,8 @@ MonoBehaviour:
   _editor_drawSpawners: 1
   _editor_drawGlobalRules: 0
   _editor_drawModPackRules: 0
-  _editor_shareSelected: 1
-  ParentPreset: {fileID: 11400000}
+  _editor_shareSelected: 3
+  ParentPreset: {fileID: 0}
   ParentPack: {fileID: 4010537770972031752}
 --- !u!114 &8017177735639860324
 MonoBehaviour:
