@@ -103,11 +103,11 @@ MonoBehaviour:
   DrawObjectStamps: 1
   OMultiStamp: {fileID: 0}
   PrefabsList:
-  - Prefab: {fileID: 6325126634580688049, guid: da6cb1bb852e3ab4b9c4be244174e8f0, type: 3}
-    MainCollider: {fileID: 0}
+  - Prefab: {fileID: 3365684011197413729, guid: 99dee7ecb74670f4e849b21dbeb6bf01, type: 3}
+    MainCollider: {fileID: -6402384711920371341, guid: 99dee7ecb74670f4e849b21dbeb6bf01, type: 3}
     subID: 0
     _refMesh: {fileID: 2863967534805457344, guid: 8f50acbdb7056ea40af34807460ba408, type: 3}
-    _refCol: {fileID: 0}
+    _refCol: {fileID: -6402384711920371341, guid: 99dee7ecb74670f4e849b21dbeb6bf01, type: 3}
   - Prefab: {fileID: 7036582132204373045, guid: b650300a6aa460a4d86d1edcac3724c7, type: 3}
     MainCollider: {fileID: 0}
     subID: 0
@@ -169,7 +169,7 @@ MonoBehaviour:
   _editor_drawGlobalRules: 0
   _editor_drawModPackRules: 0
   _editor_shareSelected: 0
-  ParentPreset: {fileID: 0}
+  ParentPreset: {fileID: 11400000}
   ParentPack: {fileID: 4010537770972031752}
 --- !u!114 &-8036390951677653302
 MonoBehaviour:
@@ -188,7 +188,7 @@ MonoBehaviour:
   Global: 0
   Enabled: 1
   Ignore: 0
-  _editor_drawRule: 1
+  _editor_drawRule: 0
   CellAllow: 1
   AllConditionsMet: 1
   WallPlacementGuide: {x: 0, y: 1, z: 1}
@@ -283,7 +283,7 @@ MonoBehaviour:
   _editor_drawGlobalRules: 0
   _editor_drawModPackRules: 0
   _editor_shareSelected: 0
-  ParentPreset: {fileID: 0}
+  ParentPreset: {fileID: 11400000}
   ParentPack: {fileID: 4010537770972031752}
 --- !u!114 &-7057274667417803235
 MonoBehaviour:
@@ -802,13 +802,13 @@ MonoBehaviour:
   AllConditionsMet: 1
   replaceOnTag: 
   CheckMode: 0
-  Offset: {x: 0, y: 0, z: 0}
+  Offset: {x: 0, y: 0, z: 0.5}
   OffsetMode: 1
   YawRotationOffset: 0
   RemoveDistance: 0.5
   DistanceSource: 2
   DebugDirection: 0
-  DrawDebugGizmos: 0
+  DrawDebugGizmos: 1
 --- !u!114 &-2241661952690225057
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1185,7 +1185,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 3b6c361108247f045b5087f48c0c7951, type: 3}
-  m_Name: FS_FenceTileset_StairsSupport
+  m_Name: SANDBOX_FS_FenceTileset_StairsSupport
   m_EditorClassIdentifier: 
   CellSize: 2
   NonUniformSize: 1
@@ -1589,7 +1589,7 @@ MonoBehaviour:
   ScaleBounds: 0.99
   Padding: 0
   YawOffset: 180
-  DirectOffset: {x: 0, y: 0, z: 0}
+  DirectOffset: {x: 0, y: 0, z: 0.5}
   OffsetMode: 1
   IgnoreOtherMods: 1
   DontCheckAdditionals: 0
@@ -1879,7 +1879,7 @@ MonoBehaviour:
   _editor_drawRule: 1
   CellAllow: 1
   AllConditionsMet: 1
-  ScaleMultiplier: {x: 1.275, y: 1, z: 1}
+  ScaleMultiplier: {x: 1, y: 0.5, z: 1}
   ScaleMulVariable:
     name: 
     requiredType: 5
@@ -2236,6 +2236,42 @@ MonoBehaviour:
   OverridePitchRotation: 1
   InitPitchRotation: 0
   NotCheckDefaultPitch: 0
+--- !u!114 &7845900760080538436
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b496837ae5a0c3b4786589d6fb51e8d5, type: 3}
+  m_Name: SR_MoveRotateScale-[Door Hole - FenceTileset]
+  m_EditorClassIdentifier: 
+  Logic: 0
+  Negate: 0
+  Global: 0
+  Enabled: 1
+  Ignore: 0
+  _editor_drawRule: 1
+  CellAllow: 1
+  AllConditionsMet: 1
+  EffectOn: 2
+  ApplyMode: 0
+  Space: 0
+  GetCoords: 
+  CheckMode: 0
+  PositionOffset: {x: 0, y: 0, z: 0}
+  OffsetMode: 1
+  OffsetPosVariable:
+    name: 
+    requiredType: 5
+    Tooltip: Set Additive Vector3 Field Variable value to this property
+  RotationOffset: {x: 0, y: 90, z: 0}
+  ScaleMultiplier: {x: 1.2, y: 0.4, z: 0.3}
+  RandomizeOffset: {x: 0, y: 0, z: 0}
+  MaxDegreesSteps: {x: 1, y: 1, z: 1}
+  InheritScaleOffset: 0
 --- !u!114 &7906467318267168703
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2446,7 +2482,7 @@ MonoBehaviour:
   _editor_drawGlobalRules: 0
   _editor_drawModPackRules: 0
   _editor_shareSelected: 0
-  ParentPreset: {fileID: 0}
+  ParentPreset: {fileID: 11400000}
   ParentPack: {fileID: 4010537770972031752}
 --- !u!114 &8017177735639860324
 MonoBehaviour:
@@ -2463,7 +2499,7 @@ MonoBehaviour:
   TemporaryContainer: {fileID: 0}
   Enabled: 1
   ModTag: Hole
-  DrawMeshAndBox: 0
+  DrawMeshAndBox: 1
   Combine: 0
   RunEmittersIfContains: 0
   DrawSetupFor: 0
@@ -2486,6 +2522,7 @@ MonoBehaviour:
     Rules:
     - {fileID: -2328914806453490717}
     - {fileID: -8036390951677653302}
+    - {fileID: 7845900760080538436}
     Mode: 3
     CellCheckMode: 0
     _Editor_SpawnerAdvancedOptionsFoldout: 0
@@ -2508,5 +2545,5 @@ MonoBehaviour:
   _editor_drawGlobalRules: 0
   _editor_drawModPackRules: 0
   _editor_shareSelected: 0
-  ParentPreset: {fileID: 0}
+  ParentPreset: {fileID: 11400000}
   ParentPack: {fileID: 4010537770972031752}
