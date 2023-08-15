@@ -14,10 +14,10 @@ OcclusionCullingSettings:
 RenderSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 9
-  m_Fog: 0
-  m_FogColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
+  m_Fog: 1
+  m_FogColor: {r: 0.21698111, g: 0.21698111, b: 0.21698111, a: 1}
   m_FogMode: 3
-  m_FogDensity: 0.01
+  m_FogDensity: 0.013
   m_LinearFogStart: 0
   m_LinearFogEnd: 300
   m_AmbientSkyColor: {r: 0.212, g: 0.227, b: 0.259, a: 1}
@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.18028378, g: 0.22571412, b: 0.30692285, a: 1}
+  m_IndirectSpecularColor: {r: 0.17423521, g: 0.21789087, b: 0.300102, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -98,7 +98,7 @@ LightmapSettings:
     m_TrainingDataDestination: TrainingData
     m_LightProbeSampleCountMultiplier: 4
   m_LightingDataAsset: {fileID: 0}
-  m_LightingSettings: {fileID: 0}
+  m_LightingSettings: {fileID: 363985032}
 --- !u!196 &4
 NavMeshSettings:
   serializedVersion: 2
@@ -123,7 +123,7 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
---- !u!1 &203844586
+--- !u!1 &169829417
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -131,117 +131,30 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 203844589}
-  - component: {fileID: 203844588}
-  - component: {fileID: 203844587}
+  - component: {fileID: 169829418}
   m_Layer: 0
-  m_Name: Directional Light
+  m_Name: ------------------
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &203844587
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 203844586}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 474bcb49853aa07438625e644c072ee6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Version: 3
-  m_UsePipelineSettings: 1
-  m_AdditionalLightsShadowResolutionTier: 2
-  m_LightLayerMask: 1
-  m_RenderingLayers: 1
-  m_CustomShadowLayers: 0
-  m_ShadowLayerMask: 1
-  m_ShadowRenderingLayers: 1
-  m_LightCookieSize: {x: 1, y: 1}
-  m_LightCookieOffset: {x: 0, y: 0}
-  m_SoftShadowQuality: 1
---- !u!108 &203844588
-Light:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 203844586}
-  m_Enabled: 1
-  serializedVersion: 10
-  m_Type: 1
-  m_Shape: 0
-  m_Color: {r: 1, g: 0.95686275, b: 0.8392157, a: 1}
-  m_Intensity: 1
-  m_Range: 10
-  m_SpotAngle: 30
-  m_InnerSpotAngle: 21.80208
-  m_CookieSize: 10
-  m_Shadows:
-    m_Type: 2
-    m_Resolution: -1
-    m_CustomResolution: -1
-    m_Strength: 1
-    m_Bias: 0.05
-    m_NormalBias: 0.4
-    m_NearPlane: 0.2
-    m_CullingMatrixOverride:
-      e00: 1
-      e01: 0
-      e02: 0
-      e03: 0
-      e10: 0
-      e11: 1
-      e12: 0
-      e13: 0
-      e20: 0
-      e21: 0
-      e22: 1
-      e23: 0
-      e30: 0
-      e31: 0
-      e32: 0
-      e33: 1
-    m_UseCullingMatrixOverride: 0
-  m_Cookie: {fileID: 0}
-  m_DrawHalo: 0
-  m_Flare: {fileID: 0}
-  m_RenderMode: 0
-  m_CullingMask:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_RenderingLayerMask: 1
-  m_Lightmapping: 4
-  m_LightShadowCasterMode: 0
-  m_AreaSize: {x: 1, y: 1}
-  m_BounceIntensity: 1
-  m_ColorTemperature: 6570
-  m_UseColorTemperature: 0
-  m_BoundingSphereOverride: {x: 0, y: 0, z: 0, w: 0}
-  m_UseBoundingSphereOverride: 0
-  m_UseViewFrustumForShadowCasterCull: 1
-  m_ShadowRadius: 0
-  m_ShadowAngle: 0
---- !u!4 &203844589
+--- !u!4 &169829418
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 203844586}
+  m_GameObject: {fileID: 169829417}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.40821788, y: -0.23456968, z: 0.10938163, w: 0.8754261}
-  m_LocalPosition: {x: 0, y: 3, z: 0}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -4.2055283, y: -20.353233, z: -10.295307}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 50, y: -30, z: 0}
---- !u!1 &617798021
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &361241808
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -249,146 +162,225 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 617798023}
-  - component: {fileID: 617798022}
+  - component: {fileID: 361241812}
+  - component: {fileID: 361241811}
+  - component: {fileID: 361241810}
+  - component: {fileID: 361241809}
   m_Layer: 0
-  m_Name: BUILD PLANNER EXECUTOR
+  m_Name: Cube
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &617798022
+--- !u!65 &361241809
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 361241808}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!23 &361241810
+MeshRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 361241808}
+  m_Enabled: 1
+  m_CastShadows: 0
+  m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 2100000, guid: 9ac896bf3b522054b90bf014895801af, type: 2}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 3
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
+--- !u!33 &361241811
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 361241808}
+  m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!4 &361241812
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 361241808}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: -1, z: 0}
+  m_LocalScale: {x: 1000, y: 1, z: 1000}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!850595691 &363985032
+LightingSettings:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: 
+  serializedVersion: 6
+  m_GIWorkflowMode: 1
+  m_EnableBakedLightmaps: 1
+  m_EnableRealtimeLightmaps: 0
+  m_RealtimeEnvironmentLighting: 1
+  m_BounceScale: 1
+  m_AlbedoBoost: 1
+  m_IndirectOutputScale: 1
+  m_UsingShadowmask: 1
+  m_BakeBackend: 1
+  m_LightmapMaxSize: 1024
+  m_BakeResolution: 40
+  m_Padding: 2
+  m_LightmapCompression: 3
+  m_AO: 0
+  m_AOMaxDistance: 1
+  m_CompAOExponent: 1
+  m_CompAOExponentDirect: 0
+  m_ExtractAO: 0
+  m_MixedBakeMode: 2
+  m_LightmapsBakeMode: 1
+  m_FilterMode: 1
+  m_LightmapParameters: {fileID: 15204, guid: 0000000000000000f000000000000000, type: 0}
+  m_ExportTrainingData: 0
+  m_TrainingDataDestination: TrainingData
+  m_RealtimeResolution: 2
+  m_ForceWhiteAlbedo: 0
+  m_ForceUpdates: 0
+  m_FinalGather: 0
+  m_FinalGatherRayCount: 256
+  m_FinalGatherFiltering: 1
+  m_PVRCulling: 1
+  m_PVRSampling: 1
+  m_PVRDirectSampleCount: 32
+  m_PVRSampleCount: 512
+  m_PVREnvironmentSampleCount: 256
+  m_PVREnvironmentReferencePointCount: 2048
+  m_LightProbeSampleCountMultiplier: 4
+  m_PVRBounces: 2
+  m_PVRMinBounces: 2
+  m_PVREnvironmentImportanceSampling: 1
+  m_PVRFilteringMode: 1
+  m_PVRDenoiserTypeDirect: 1
+  m_PVRDenoiserTypeIndirect: 1
+  m_PVRDenoiserTypeAO: 1
+  m_PVRFilterTypeDirect: 0
+  m_PVRFilterTypeIndirect: 0
+  m_PVRFilterTypeAO: 0
+  m_PVRFilteringGaussRadiusDirect: 1
+  m_PVRFilteringGaussRadiusIndirect: 5
+  m_PVRFilteringGaussRadiusAO: 2
+  m_PVRFilteringAtrousPositionSigmaDirect: 0.5
+  m_PVRFilteringAtrousPositionSigmaIndirect: 2
+  m_PVRFilteringAtrousPositionSigmaAO: 1
+  m_PVRTiledBaking: 0
+  m_NumRaysToShootPerTexel: -1
+  m_RespectSceneVisibilityWhenBakingGI: 0
+--- !u!1 &389626014
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 389626016}
+  - component: {fileID: 389626015}
+  m_Layer: 0
+  m_Name: Build Planner Executor - Multi Level
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &389626015
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 617798021}
+  m_GameObject: {fileID: 389626014}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0cf09ae0e4269ee47ad7dc215a34444a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  BuildPlannerPreset: {fileID: 11400000, guid: bbfcb932451286d4a884b0ce5467ec1f, type: 2}
+  BuildPlannerPreset: {fileID: 11400000, guid: 9be85ece44ad8554aab434c1946693c7, type: 2}
   _plannerPrepare:
-    PlannerVariablesOverrides: []
+    PlannerVariablesOverrides:
+    - Name: Second Floor Level
+      v3Val: {x: 2, y: 0, z: 0}
+      colVal: {r: 0, g: 0, b: 0, a: 0}
+      str: 
+      mat: {fileID: 0}
+      gameObj: {fileID: 0}
+      curve:
+        serializedVersion: 2
+        m_Curve: []
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 4
+      unityObj: {fileID: 0}
+      helper: {x: 1, y: 50, z: 0}
+      additionalHelperRef: {fileID: 0}
+      ValueType: 1
+      helpForFieldCommand: 0
+      displayOnScene: 0
+      allowTransformFollow: 0
+      FloatSwitch: 1
     FieldSetupCompositions:
     - UseComposition: 1
-      Owner: {fileID: 617798022}
+      Owner: {fileID: 389626015}
       OverrideEnabled: 1
-      Prepared: 0
-      Setup: {fileID: 11400000, guid: 8fe2ab607f498b5418e47345eacec36f, type: 2}
-      Injections: []
-      GenType: 1
-      JustModPack: {fileID: 0}
-      JustMod: {fileID: 0}
-      OtherPlanner: {fileID: 0}
-      subSetup: {fileID: 0}
-      FieldSetupVariablesOverrides:
-      - Name: Spawn Propability Multiplier
-        v3Val: {x: 1, y: 0, z: 0}
-        colVal: {r: 0, g: 0, b: 0, a: 0}
-        str: 
-        mat: {fileID: 0}
-        gameObj: {fileID: 0}
-        curve:
-          serializedVersion: 2
-          m_Curve: []
-          m_PreInfinity: 2
-          m_PostInfinity: 2
-          m_RotationOrder: 4
-        unityObj: {fileID: 0}
-        helper: {x: 0, y: 5, z: 0}
-        additionalHelperRef: {fileID: 0}
-        ValueType: 1
-        helpForFieldCommand: 0
-        displayOnScene: 0
-        allowTransformFollow: 0
-        FloatSwitch: 0
-      - Name: Spawn Count Multiplier
-        v3Val: {x: 1, y: 0, z: 0}
-        colVal: {r: 0, g: 0, b: 0, a: 0}
-        str: 
-        mat: {fileID: 0}
-        gameObj: {fileID: 0}
-        curve:
-          serializedVersion: 2
-          m_Curve: []
-          m_PreInfinity: 2
-          m_PostInfinity: 2
-          m_RotationOrder: 4
-        unityObj: {fileID: 0}
-        helper: {x: 0, y: 5, z: 0}
-        additionalHelperRef: {fileID: 0}
-        ValueType: 1
-        helpForFieldCommand: 0
-        displayOnScene: 0
-        allowTransformFollow: 0
-        FloatSwitch: 0
-      FieldPackagesOverrides:
-      - ParentPack: {fileID: 8071460775553708166, guid: 8fe2ab607f498b5418e47345eacec36f, type: 2}
-        SetEnabled: 1
-        PackVariablesOverrides: []
-        PackModsOverrides:
-        - ParentMod: {fileID: 9063430128532023327, guid: 8fe2ab607f498b5418e47345eacec36f, type: 2}
-          SetEnabled: 1
-          OverridePrefabs:
-          - Prefab: {fileID: 0}
-            MainCollider: {fileID: 0}
-            subID: 0
-            _refMesh: {fileID: 0}
-            _refCol: {fileID: 0}
-          - Prefab: {fileID: 0}
-            MainCollider: {fileID: 0}
-            subID: 0
-            _refMesh: {fileID: 0}
-            _refCol: {fileID: 0}
-          - Prefab: {fileID: 0}
-            MainCollider: {fileID: 0}
-            subID: 0
-            _refMesh: {fileID: 0}
-            _refCol: {fileID: 0}
-          OverrideStampSet: {fileID: 0}
-          OverrideMultiSet: {fileID: 0}
-        - ParentMod: {fileID: 11400000, guid: 57b204e94cce9e942825580341b74f97, type: 2}
-          SetEnabled: 0
-          OverridePrefabs: []
-          OverrideStampSet: {fileID: 0}
-          OverrideMultiSet: {fileID: 0}
-      UtilityModsOverrides: []
-      OverrideCellSize: 0
-      OverridingCellSize: {x: 1, y: 1, z: 1}
-      ParentFieldPlanner: {fileID: 7552163925009018565, guid: bbfcb932451286d4a884b0ce5467ec1f, type: 2}
-      PlannerVariablesOverrides:
-      - Name: Height
-        v3Val: {x: 12, y: 0, z: 0}
-        colVal: {r: 0, g: 0, b: 0, a: 0}
-        str: 
-        mat: {fileID: 0}
-        gameObj: {fileID: 0}
-        curve:
-          serializedVersion: 2
-          m_Curve: []
-          m_PreInfinity: 2
-          m_PostInfinity: 2
-          m_RotationOrder: 4
-        unityObj: {fileID: 0}
-        helper: {x: 3, y: 36, z: 0}
-        additionalHelperRef: {fileID: 0}
-        ValueType: 1
-        helpForFieldCommand: 0
-        displayOnScene: 0
-        allowTransformFollow: 0
-        FloatSwitch: 1
-      InitShapes:
-      - {fileID: 1209982542}
-      Instances: 8
-    - UseComposition: 1
-      Owner: {fileID: 617798022}
-      OverrideEnabled: 1
-      Prepared: 0
-      Setup: {fileID: 11400000, guid: e38728c168f97b8499f6e32564b9f851, type: 2}
+      Prepared: 1
+      Setup: {fileID: 11400000, guid: eb509104d23f0a64980e00ee4d82c462, type: 2}
       Injections: []
       GenType: 1
       JustModPack: {fileID: 0}
@@ -400,7 +392,7 @@ MonoBehaviour:
         v3Val: {x: 1, y: 0, z: 0}
         colVal: {r: 0, g: 0, b: 0, a: 0}
         str: 
-        mat: {fileID: 0}
+        mat: {fileID: 2100000, guid: 94361b66b30d05d4baa2898162753d01, type: 2}
         gameObj: {fileID: 0}
         curve:
           serializedVersion: 2
@@ -417,11 +409,11 @@ MonoBehaviour:
         allowTransformFollow: 0
         FloatSwitch: 0
       FieldPackagesOverrides:
-      - ParentPack: {fileID: 4010537770972031752, guid: e38728c168f97b8499f6e32564b9f851, type: 2}
+      - ParentPack: {fileID: 4010537770972031752, guid: eb509104d23f0a64980e00ee4d82c462, type: 2}
         SetEnabled: 1
         PackVariablesOverrides: []
         PackModsOverrides:
-        - ParentMod: {fileID: -7524087098481071771, guid: e38728c168f97b8499f6e32564b9f851, type: 2}
+        - ParentMod: {fileID: -7524087098481071771, guid: eb509104d23f0a64980e00ee4d82c462, type: 2}
           SetEnabled: 1
           OverridePrefabs:
           - Prefab: {fileID: 0}
@@ -441,7 +433,7 @@ MonoBehaviour:
             _refCol: {fileID: 0}
           OverrideStampSet: {fileID: 0}
           OverrideMultiSet: {fileID: 0}
-        - ParentMod: {fileID: -8417504216931457559, guid: e38728c168f97b8499f6e32564b9f851, type: 2}
+        - ParentMod: {fileID: -8417504216931457559, guid: eb509104d23f0a64980e00ee4d82c462, type: 2}
           SetEnabled: 1
           OverridePrefabs:
           - Prefab: {fileID: 0}
@@ -456,7 +448,7 @@ MonoBehaviour:
             _refCol: {fileID: 0}
           OverrideStampSet: {fileID: 0}
           OverrideMultiSet: {fileID: 0}
-        - ParentMod: {fileID: 7906467318267168703, guid: e38728c168f97b8499f6e32564b9f851, type: 2}
+        - ParentMod: {fileID: 7906467318267168703, guid: eb509104d23f0a64980e00ee4d82c462, type: 2}
           SetEnabled: 1
           OverridePrefabs:
           - Prefab: {fileID: 0}
@@ -477,7 +469,7 @@ MonoBehaviour:
           OverrideStampSet: {fileID: 0}
           OverrideMultiSet: {fileID: 0}
       UtilityModsOverrides:
-      - ParentMod: {fileID: 8017177735639860324, guid: e38728c168f97b8499f6e32564b9f851, type: 2}
+      - ParentMod: {fileID: 8017177735639860324, guid: eb509104d23f0a64980e00ee4d82c462, type: 2}
         SetEnabled: 1
         OverridePrefabs:
         - Prefab: {fileID: 0}
@@ -488,55 +480,455 @@ MonoBehaviour:
         OverrideStampSet: {fileID: 0}
         OverrideMultiSet: {fileID: 0}
       OverrideCellSize: 0
-      OverridingCellSize: {x: 1, y: 1, z: 1}
-      ParentFieldPlanner: {fileID: -4160265220093370639, guid: bbfcb932451286d4a884b0ce5467ec1f, type: 2}
+      OverridingCellSize: {x: 2, y: 1, z: 2}
+      ParentFieldPlanner: {fileID: -6864742128524418641, guid: 9be85ece44ad8554aab434c1946693c7, type: 2}
       PlannerVariablesOverrides: []
       InitShapes:
-      - {fileID: 1729145592}
+      - {fileID: 1987600807}
+      Instances: 6
+    - UseComposition: 1
+      Owner: {fileID: 389626015}
+      OverrideEnabled: 1
+      Prepared: 1
+      Setup: {fileID: 11400000, guid: eb509104d23f0a64980e00ee4d82c462, type: 2}
+      Injections: []
+      GenType: 1
+      JustModPack: {fileID: 0}
+      JustMod: {fileID: 0}
+      OtherPlanner: {fileID: 0}
+      subSetup: {fileID: 0}
+      FieldSetupVariablesOverrides:
+      - Name: FloorMat
+        v3Val: {x: 1, y: 0, z: 0}
+        colVal: {r: 0, g: 0, b: 0, a: 0}
+        str: 
+        mat: {fileID: 2100000, guid: 60639655090ed8d428c1a487c703f1d8, type: 2}
+        gameObj: {fileID: 0}
+        curve:
+          serializedVersion: 2
+          m_Curve: []
+          m_PreInfinity: 2
+          m_PostInfinity: 2
+          m_RotationOrder: 4
+        unityObj: {fileID: 0}
+        helper: {x: 0, y: 0, z: 0}
+        additionalHelperRef: {fileID: 0}
+        ValueType: 3
+        helpForFieldCommand: 0
+        displayOnScene: 0
+        allowTransformFollow: 0
+        FloatSwitch: 0
+      FieldPackagesOverrides:
+      - ParentPack: {fileID: 4010537770972031752, guid: eb509104d23f0a64980e00ee4d82c462, type: 2}
+        SetEnabled: 1
+        PackVariablesOverrides: []
+        PackModsOverrides:
+        - ParentMod: {fileID: -7524087098481071771, guid: eb509104d23f0a64980e00ee4d82c462, type: 2}
+          SetEnabled: 1
+          OverridePrefabs:
+          - Prefab: {fileID: 0}
+            MainCollider: {fileID: 0}
+            subID: 0
+            _refMesh: {fileID: 0}
+            _refCol: {fileID: 0}
+          - Prefab: {fileID: 0}
+            MainCollider: {fileID: 0}
+            subID: 0
+            _refMesh: {fileID: 0}
+            _refCol: {fileID: 0}
+          - Prefab: {fileID: 0}
+            MainCollider: {fileID: 0}
+            subID: 0
+            _refMesh: {fileID: 0}
+            _refCol: {fileID: 0}
+          OverrideStampSet: {fileID: 0}
+          OverrideMultiSet: {fileID: 0}
+        - ParentMod: {fileID: -8417504216931457559, guid: eb509104d23f0a64980e00ee4d82c462, type: 2}
+          SetEnabled: 1
+          OverridePrefabs:
+          - Prefab: {fileID: 0}
+            MainCollider: {fileID: 0}
+            subID: 0
+            _refMesh: {fileID: 0}
+            _refCol: {fileID: 0}
+          - Prefab: {fileID: 0}
+            MainCollider: {fileID: 0}
+            subID: 0
+            _refMesh: {fileID: 0}
+            _refCol: {fileID: 0}
+          OverrideStampSet: {fileID: 0}
+          OverrideMultiSet: {fileID: 0}
+        - ParentMod: {fileID: 7906467318267168703, guid: eb509104d23f0a64980e00ee4d82c462, type: 2}
+          SetEnabled: 1
+          OverridePrefabs:
+          - Prefab: {fileID: 0}
+            MainCollider: {fileID: 0}
+            subID: 0
+            _refMesh: {fileID: 0}
+            _refCol: {fileID: 0}
+          - Prefab: {fileID: 0}
+            MainCollider: {fileID: 0}
+            subID: 0
+            _refMesh: {fileID: 0}
+            _refCol: {fileID: 0}
+          - Prefab: {fileID: 0}
+            MainCollider: {fileID: 0}
+            subID: 0
+            _refMesh: {fileID: 0}
+            _refCol: {fileID: 0}
+          OverrideStampSet: {fileID: 0}
+          OverrideMultiSet: {fileID: 0}
+      UtilityModsOverrides:
+      - ParentMod: {fileID: 8017177735639860324, guid: eb509104d23f0a64980e00ee4d82c462, type: 2}
+        SetEnabled: 1
+        OverridePrefabs:
+        - Prefab: {fileID: 0}
+          MainCollider: {fileID: 0}
+          subID: 0
+          _refMesh: {fileID: 0}
+          _refCol: {fileID: 0}
+        OverrideStampSet: {fileID: 0}
+        OverrideMultiSet: {fileID: 0}
+      OverrideCellSize: 0
+      OverridingCellSize: {x: 2, y: 1, z: 2}
+      ParentFieldPlanner: {fileID: -358100475155809339, guid: 9be85ece44ad8554aab434c1946693c7, type: 2}
+      PlannerVariablesOverrides: []
+      InitShapes:
+      - {fileID: 1268286139}
+      Instances: 4
+    - UseComposition: 1
+      Owner: {fileID: 389626015}
+      OverrideEnabled: 1
+      Prepared: 1
+      Setup: {fileID: 11400000, guid: eb509104d23f0a64980e00ee4d82c462, type: 2}
+      Injections: []
+      GenType: 1
+      JustModPack: {fileID: 0}
+      JustMod: {fileID: 0}
+      OtherPlanner: {fileID: 0}
+      subSetup: {fileID: 0}
+      FieldSetupVariablesOverrides:
+      - Name: FloorMat
+        v3Val: {x: 1, y: 0, z: 0}
+        colVal: {r: 0, g: 0, b: 0, a: 0}
+        str: 
+        mat: {fileID: 2100000, guid: d4be943f06a918e439e721053f29fc42, type: 2}
+        gameObj: {fileID: 0}
+        curve:
+          serializedVersion: 2
+          m_Curve: []
+          m_PreInfinity: 2
+          m_PostInfinity: 2
+          m_RotationOrder: 4
+        unityObj: {fileID: 0}
+        helper: {x: 0, y: 0, z: 0}
+        additionalHelperRef: {fileID: 0}
+        ValueType: 3
+        helpForFieldCommand: 0
+        displayOnScene: 0
+        allowTransformFollow: 0
+        FloatSwitch: 0
+      FieldPackagesOverrides:
+      - ParentPack: {fileID: 4010537770972031752, guid: eb509104d23f0a64980e00ee4d82c462, type: 2}
+        SetEnabled: 1
+        PackVariablesOverrides: []
+        PackModsOverrides:
+        - ParentMod: {fileID: -7524087098481071771, guid: eb509104d23f0a64980e00ee4d82c462, type: 2}
+          SetEnabled: 1
+          OverridePrefabs:
+          - Prefab: {fileID: 0}
+            MainCollider: {fileID: 0}
+            subID: 0
+            _refMesh: {fileID: 0}
+            _refCol: {fileID: 0}
+          - Prefab: {fileID: 0}
+            MainCollider: {fileID: 0}
+            subID: 0
+            _refMesh: {fileID: 0}
+            _refCol: {fileID: 0}
+          - Prefab: {fileID: 0}
+            MainCollider: {fileID: 0}
+            subID: 0
+            _refMesh: {fileID: 0}
+            _refCol: {fileID: 0}
+          OverrideStampSet: {fileID: 0}
+          OverrideMultiSet: {fileID: 0}
+        - ParentMod: {fileID: -8417504216931457559, guid: eb509104d23f0a64980e00ee4d82c462, type: 2}
+          SetEnabled: 1
+          OverridePrefabs:
+          - Prefab: {fileID: 0}
+            MainCollider: {fileID: 0}
+            subID: 0
+            _refMesh: {fileID: 0}
+            _refCol: {fileID: 0}
+          - Prefab: {fileID: 0}
+            MainCollider: {fileID: 0}
+            subID: 0
+            _refMesh: {fileID: 0}
+            _refCol: {fileID: 0}
+          OverrideStampSet: {fileID: 0}
+          OverrideMultiSet: {fileID: 0}
+        - ParentMod: {fileID: 7906467318267168703, guid: eb509104d23f0a64980e00ee4d82c462, type: 2}
+          SetEnabled: 1
+          OverridePrefabs:
+          - Prefab: {fileID: 0}
+            MainCollider: {fileID: 0}
+            subID: 0
+            _refMesh: {fileID: 0}
+            _refCol: {fileID: 0}
+          - Prefab: {fileID: 0}
+            MainCollider: {fileID: 0}
+            subID: 0
+            _refMesh: {fileID: 0}
+            _refCol: {fileID: 0}
+          - Prefab: {fileID: 0}
+            MainCollider: {fileID: 0}
+            subID: 0
+            _refMesh: {fileID: 0}
+            _refCol: {fileID: 0}
+          OverrideStampSet: {fileID: 0}
+          OverrideMultiSet: {fileID: 0}
+      UtilityModsOverrides:
+      - ParentMod: {fileID: 8017177735639860324, guid: eb509104d23f0a64980e00ee4d82c462, type: 2}
+        SetEnabled: 1
+        OverridePrefabs:
+        - Prefab: {fileID: 0}
+          MainCollider: {fileID: 0}
+          subID: 0
+          _refMesh: {fileID: 0}
+          _refCol: {fileID: 0}
+        OverrideStampSet: {fileID: 0}
+        OverrideMultiSet: {fileID: 0}
+      OverrideCellSize: 0
+      OverridingCellSize: {x: 2, y: 1, z: 2}
+      ParentFieldPlanner: {fileID: -8185201299390751086, guid: 9be85ece44ad8554aab434c1946693c7, type: 2}
+      PlannerVariablesOverrides: []
+      InitShapes:
+      - {fileID: 1412106914}
       Instances: 1
-    UseDuplicatesOverrides: 0000
+    - UseComposition: 1
+      Owner: {fileID: 389626015}
+      OverrideEnabled: 1
+      Prepared: 1
+      Setup: {fileID: 11400000, guid: eb509104d23f0a64980e00ee4d82c462, type: 2}
+      Injections: []
+      GenType: 1
+      JustModPack: {fileID: 0}
+      JustMod: {fileID: 0}
+      OtherPlanner: {fileID: 0}
+      subSetup: {fileID: 0}
+      FieldSetupVariablesOverrides:
+      - Name: FloorMat
+        v3Val: {x: 1, y: 0, z: 0}
+        colVal: {r: 0, g: 0, b: 0, a: 0}
+        str: 
+        mat: {fileID: 2100000, guid: 8fdc9ae3b534eb845837743737d60c94, type: 2}
+        gameObj: {fileID: 0}
+        curve:
+          serializedVersion: 2
+          m_Curve: []
+          m_PreInfinity: 2
+          m_PostInfinity: 2
+          m_RotationOrder: 4
+        unityObj: {fileID: 0}
+        helper: {x: 0, y: 0, z: 0}
+        additionalHelperRef: {fileID: 0}
+        ValueType: 3
+        helpForFieldCommand: 0
+        displayOnScene: 0
+        allowTransformFollow: 0
+        FloatSwitch: 0
+      FieldPackagesOverrides:
+      - ParentPack: {fileID: 4010537770972031752, guid: eb509104d23f0a64980e00ee4d82c462, type: 2}
+        SetEnabled: 1
+        PackVariablesOverrides: []
+        PackModsOverrides:
+        - ParentMod: {fileID: -7524087098481071771, guid: eb509104d23f0a64980e00ee4d82c462, type: 2}
+          SetEnabled: 1
+          OverridePrefabs:
+          - Prefab: {fileID: 0}
+            MainCollider: {fileID: 0}
+            subID: 0
+            _refMesh: {fileID: 0}
+            _refCol: {fileID: 0}
+          - Prefab: {fileID: 0}
+            MainCollider: {fileID: 0}
+            subID: 0
+            _refMesh: {fileID: 0}
+            _refCol: {fileID: 0}
+          - Prefab: {fileID: 0}
+            MainCollider: {fileID: 0}
+            subID: 0
+            _refMesh: {fileID: 0}
+            _refCol: {fileID: 0}
+          OverrideStampSet: {fileID: 0}
+          OverrideMultiSet: {fileID: 0}
+        - ParentMod: {fileID: -8417504216931457559, guid: eb509104d23f0a64980e00ee4d82c462, type: 2}
+          SetEnabled: 1
+          OverridePrefabs:
+          - Prefab: {fileID: 0}
+            MainCollider: {fileID: 0}
+            subID: 0
+            _refMesh: {fileID: 0}
+            _refCol: {fileID: 0}
+          - Prefab: {fileID: 0}
+            MainCollider: {fileID: 0}
+            subID: 0
+            _refMesh: {fileID: 0}
+            _refCol: {fileID: 0}
+          OverrideStampSet: {fileID: 0}
+          OverrideMultiSet: {fileID: 0}
+        - ParentMod: {fileID: 7906467318267168703, guid: eb509104d23f0a64980e00ee4d82c462, type: 2}
+          SetEnabled: 1
+          OverridePrefabs:
+          - Prefab: {fileID: 0}
+            MainCollider: {fileID: 0}
+            subID: 0
+            _refMesh: {fileID: 0}
+            _refCol: {fileID: 0}
+          - Prefab: {fileID: 0}
+            MainCollider: {fileID: 0}
+            subID: 0
+            _refMesh: {fileID: 0}
+            _refCol: {fileID: 0}
+          - Prefab: {fileID: 0}
+            MainCollider: {fileID: 0}
+            subID: 0
+            _refMesh: {fileID: 0}
+            _refCol: {fileID: 0}
+          OverrideStampSet: {fileID: 0}
+          OverrideMultiSet: {fileID: 0}
+      UtilityModsOverrides:
+      - ParentMod: {fileID: 8017177735639860324, guid: eb509104d23f0a64980e00ee4d82c462, type: 2}
+        SetEnabled: 1
+        OverridePrefabs:
+        - Prefab: {fileID: 0}
+          MainCollider: {fileID: 0}
+          subID: 0
+          _refMesh: {fileID: 0}
+          _refCol: {fileID: 0}
+        OverrideStampSet: {fileID: 0}
+        OverrideMultiSet: {fileID: 0}
+      OverrideCellSize: 0
+      OverridingCellSize: {x: 2, y: 1, z: 2}
+      ParentFieldPlanner: {fileID: 7899446760974058813, guid: 9be85ece44ad8554aab434c1946693c7, type: 2}
+      PlannerVariablesOverrides: []
+      InitShapes:
+      - {fileID: 1620108089}
+      Instances: 1
+    - UseComposition: 1
+      Owner: {fileID: 389626015}
+      OverrideEnabled: 1
+      Prepared: 1
+      Setup: {fileID: 11400000, guid: eb509104d23f0a64980e00ee4d82c462, type: 2}
+      Injections: []
+      GenType: 1
+      JustModPack: {fileID: 0}
+      JustMod: {fileID: 0}
+      OtherPlanner: {fileID: 0}
+      subSetup: {fileID: 0}
+      FieldSetupVariablesOverrides:
+      - Name: FloorMat
+        v3Val: {x: 1, y: 0, z: 0}
+        colVal: {r: 0, g: 0, b: 0, a: 0}
+        str: 
+        mat: {fileID: 2100000, guid: 99f26baea29b40646a495f5f96a13c1f, type: 2}
+        gameObj: {fileID: 0}
+        curve:
+          serializedVersion: 2
+          m_Curve: []
+          m_PreInfinity: 2
+          m_PostInfinity: 2
+          m_RotationOrder: 4
+        unityObj: {fileID: 0}
+        helper: {x: 0, y: 0, z: 0}
+        additionalHelperRef: {fileID: 0}
+        ValueType: 3
+        helpForFieldCommand: 0
+        displayOnScene: 0
+        allowTransformFollow: 0
+        FloatSwitch: 0
+      FieldPackagesOverrides:
+      - ParentPack: {fileID: 4010537770972031752, guid: eb509104d23f0a64980e00ee4d82c462, type: 2}
+        SetEnabled: 1
+        PackVariablesOverrides: []
+        PackModsOverrides:
+        - ParentMod: {fileID: -7524087098481071771, guid: eb509104d23f0a64980e00ee4d82c462, type: 2}
+          SetEnabled: 1
+          OverridePrefabs:
+          - Prefab: {fileID: 0}
+            MainCollider: {fileID: 0}
+            subID: 0
+            _refMesh: {fileID: 0}
+            _refCol: {fileID: 0}
+          - Prefab: {fileID: 0}
+            MainCollider: {fileID: 0}
+            subID: 0
+            _refMesh: {fileID: 0}
+            _refCol: {fileID: 0}
+          - Prefab: {fileID: 0}
+            MainCollider: {fileID: 0}
+            subID: 0
+            _refMesh: {fileID: 0}
+            _refCol: {fileID: 0}
+          OverrideStampSet: {fileID: 0}
+          OverrideMultiSet: {fileID: 0}
+        - ParentMod: {fileID: -8417504216931457559, guid: eb509104d23f0a64980e00ee4d82c462, type: 2}
+          SetEnabled: 1
+          OverridePrefabs:
+          - Prefab: {fileID: 0}
+            MainCollider: {fileID: 0}
+            subID: 0
+            _refMesh: {fileID: 0}
+            _refCol: {fileID: 0}
+          - Prefab: {fileID: 0}
+            MainCollider: {fileID: 0}
+            subID: 0
+            _refMesh: {fileID: 0}
+            _refCol: {fileID: 0}
+          OverrideStampSet: {fileID: 0}
+          OverrideMultiSet: {fileID: 0}
+        - ParentMod: {fileID: 7906467318267168703, guid: eb509104d23f0a64980e00ee4d82c462, type: 2}
+          SetEnabled: 1
+          OverridePrefabs:
+          - Prefab: {fileID: 0}
+            MainCollider: {fileID: 0}
+            subID: 0
+            _refMesh: {fileID: 0}
+            _refCol: {fileID: 0}
+          - Prefab: {fileID: 0}
+            MainCollider: {fileID: 0}
+            subID: 0
+            _refMesh: {fileID: 0}
+            _refCol: {fileID: 0}
+          - Prefab: {fileID: 0}
+            MainCollider: {fileID: 0}
+            subID: 0
+            _refMesh: {fileID: 0}
+            _refCol: {fileID: 0}
+          OverrideStampSet: {fileID: 0}
+          OverrideMultiSet: {fileID: 0}
+      UtilityModsOverrides:
+      - ParentMod: {fileID: 8017177735639860324, guid: eb509104d23f0a64980e00ee4d82c462, type: 2}
+        SetEnabled: 1
+        OverridePrefabs:
+        - Prefab: {fileID: 0}
+          MainCollider: {fileID: 0}
+          subID: 0
+          _refMesh: {fileID: 0}
+          _refCol: {fileID: 0}
+        OverrideStampSet: {fileID: 0}
+        OverrideMultiSet: {fileID: 0}
+      OverrideCellSize: 0
+      OverridingCellSize: {x: 2, y: 1, z: 2}
+      ParentFieldPlanner: {fileID: 8298042126427392309, guid: 9be85ece44ad8554aab434c1946693c7, type: 2}
+      PlannerVariablesOverrides: []
+      InitShapes:
+      - {fileID: 576972744}
+      Instances: 1
+    UseDuplicatesOverrides: 0000000000
     DuplicatesOverrides:
     - DuplicatesCompositions:
-      - UseComposition: 0
-        Owner: {fileID: 0}
-        OverrideEnabled: 1
-        Prepared: 0
-        Setup: {fileID: 0}
-        Injections: []
-        GenType: 1
-        JustModPack: {fileID: 0}
-        JustMod: {fileID: 0}
-        OtherPlanner: {fileID: 0}
-        subSetup: {fileID: 0}
-        FieldSetupVariablesOverrides: []
-        FieldPackagesOverrides: []
-        UtilityModsOverrides: []
-        OverrideCellSize: 0
-        OverridingCellSize: {x: 1, y: 1, z: 1}
-        ParentFieldPlanner: {fileID: 0}
-        PlannerVariablesOverrides: []
-        InitShapes: []
-        Instances: 1
-      - UseComposition: 0
-        Owner: {fileID: 0}
-        OverrideEnabled: 1
-        Prepared: 0
-        Setup: {fileID: 0}
-        Injections: []
-        GenType: 1
-        JustModPack: {fileID: 0}
-        JustMod: {fileID: 0}
-        OtherPlanner: {fileID: 0}
-        subSetup: {fileID: 0}
-        FieldSetupVariablesOverrides: []
-        FieldPackagesOverrides: []
-        UtilityModsOverrides: []
-        OverrideCellSize: 0
-        OverridingCellSize: {x: 1, y: 1, z: 1}
-        ParentFieldPlanner: {fileID: 0}
-        PlannerVariablesOverrides: []
-        InitShapes: []
-        Instances: 1
       - UseComposition: 0
         Owner: {fileID: 0}
         OverrideEnabled: 1
@@ -643,21 +1035,88 @@ MonoBehaviour:
       - {fileID: 0}
       - {fileID: 0}
       - {fileID: 0}
+    - DuplicatesCompositions:
+      - UseComposition: 0
+        Owner: {fileID: 0}
+        OverrideEnabled: 1
+        Prepared: 0
+        Setup: {fileID: 0}
+        Injections: []
+        GenType: 1
+        JustModPack: {fileID: 0}
+        JustMod: {fileID: 0}
+        OtherPlanner: {fileID: 0}
+        subSetup: {fileID: 0}
+        FieldSetupVariablesOverrides: []
+        FieldPackagesOverrides: []
+        UtilityModsOverrides: []
+        OverrideCellSize: 0
+        OverridingCellSize: {x: 1, y: 1, z: 1}
+        ParentFieldPlanner: {fileID: 0}
+        PlannerVariablesOverrides: []
+        InitShapes: []
+        Instances: 1
+      - UseComposition: 0
+        Owner: {fileID: 0}
+        OverrideEnabled: 1
+        Prepared: 0
+        Setup: {fileID: 0}
+        Injections: []
+        GenType: 1
+        JustModPack: {fileID: 0}
+        JustMod: {fileID: 0}
+        OtherPlanner: {fileID: 0}
+        subSetup: {fileID: 0}
+        FieldSetupVariablesOverrides: []
+        FieldPackagesOverrides: []
+        UtilityModsOverrides: []
+        OverrideCellSize: 0
+        OverridingCellSize: {x: 1, y: 1, z: 1}
+        ParentFieldPlanner: {fileID: 0}
+        PlannerVariablesOverrides: []
+        InitShapes: []
+        Instances: 1
+      - UseComposition: 0
+        Owner: {fileID: 0}
+        OverrideEnabled: 1
+        Prepared: 0
+        Setup: {fileID: 0}
+        Injections: []
+        GenType: 1
+        JustModPack: {fileID: 0}
+        JustMod: {fileID: 0}
+        OtherPlanner: {fileID: 0}
+        subSetup: {fileID: 0}
+        FieldSetupVariablesOverrides: []
+        FieldPackagesOverrides: []
+        UtilityModsOverrides: []
+        OverrideCellSize: 0
+        OverridingCellSize: {x: 1, y: 1, z: 1}
+        ParentFieldPlanner: {fileID: 0}
+        PlannerVariablesOverrides: []
+        InitShapes: []
+        Instances: 1
+      DuplicatesShapes:
       - {fileID: 0}
       - {fileID: 0}
+      - {fileID: 0}
+    - DuplicatesCompositions: []
+      DuplicatesShapes: []
+    - DuplicatesCompositions: []
+      DuplicatesShapes: []
     - DuplicatesCompositions: []
       DuplicatesShapes: []
   _generated: []
   Async: 0
   FlexibleGen: 0
-  Seed: 3865
+  Seed: -1720
   RandomSeed: 1
-  GenerateOnStart: 0
+  GenerateOnStart: 1
   RunAfterGenerating:
     m_PersistentCalls:
       m_Calls: []
   _plannerDraftsDirectory: {fileID: 102900000, guid: 0cf7a9679140ae84aa29385d0e1d7373, type: 3}
-  _Editor_SelectedSetup: 1
+  _Editor_SelectedSetup: 4
   _Editor_PreviewingShape: 0
   _Editor_drawInitShape: 1
   _Editor_drawMainVariables: 1
@@ -666,22 +1125,35 @@ MonoBehaviour:
   generatedGenerators: []
   generatedPainters: []
   generatedFlexiblePainters: []
---- !u!4 &617798023
+--- !u!4 &389626016
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 617798021}
+  m_GameObject: {fileID: 389626014}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: -17.51, y: 0, z: 1.5}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &961739749
+--- !u!114 &576972744
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 473b7da542094e445912c632b863b59a, type: 3}
+  m_Name: (Clone)
+  m_EditorClassIdentifier: 
+  _editorForceChanged: 0
+--- !u!1 &866477807
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -689,10 +1161,41 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 961739753}
-  - component: {fileID: 961739752}
-  - component: {fileID: 961739751}
-  - component: {fileID: 961739750}
+  - component: {fileID: 866477808}
+  m_Layer: 0
+  m_Name: PLEASE CHECK INFO ON GAME VIEW
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &866477808
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 866477807}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -4.2055283, y: -20.353233, z: -10.295307}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &950172281
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 950172284}
+  - component: {fileID: 950172283}
+  - component: {fileID: 950172282}
+  - component: {fileID: 950172285}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -700,69 +1203,25 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &961739750
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 961739749}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a79441f348de89743a2939f4d699eac1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_RenderShadows: 1
-  m_RequiresDepthTextureOption: 2
-  m_RequiresOpaqueTextureOption: 2
-  m_CameraType: 0
-  m_Cameras: []
-  m_RendererIndex: -1
-  m_VolumeLayerMask:
-    serializedVersion: 2
-    m_Bits: 1
-  m_VolumeTrigger: {fileID: 0}
-  m_VolumeFrameworkUpdateModeOption: 2
-  m_RenderPostProcessing: 1
-  m_Antialiasing: 1
-  m_AntialiasingQuality: 2
-  m_StopNaN: 0
-  m_Dithering: 1
-  m_ClearDepth: 1
-  m_AllowXRRendering: 1
-  m_AllowHDROutput: 1
-  m_UseScreenCoordOverride: 0
-  m_ScreenSizeOverride: {x: 0, y: 0, z: 0, w: 0}
-  m_ScreenCoordScaleBias: {x: 0, y: 0, z: 0, w: 0}
-  m_RequiresDepthTexture: 0
-  m_RequiresColorTexture: 0
-  m_Version: 2
-  m_TaaSettings:
-    quality: 3
-    frameInfluence: 0.1
-    jitterScale: 1
-    mipBias: 0
-    varianceClampScale: 0.9
-    contrastAdaptiveSharpening: 0
---- !u!81 &961739751
+--- !u!81 &950172282
 AudioListener:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 961739749}
+  m_GameObject: {fileID: 950172281}
   m_Enabled: 1
---- !u!20 &961739752
+--- !u!20 &950172283
 Camera:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 961739749}
+  m_GameObject: {fileID: 950172281}
   m_Enabled: 1
   serializedVersion: 2
-  m_ClearFlags: 1
-  m_BackGroundColor: {r: 0.19215687, g: 0.3019608, b: 0.4745098, a: 0}
+  m_ClearFlags: 2
+  m_BackGroundColor: {r: 0.21960784, g: 0.21960784, b: 0.21960784, a: 0}
   m_projectionMatrixMode: 1
   m_GateFitMode: 2
   m_FOVAxisMode: 0
@@ -785,7 +1244,7 @@ Camera:
     height: 1
   near clip plane: 0.3
   far clip plane: 1000
-  field of view: 60
+  field of view: 55.6
   orthographic: 0
   orthographic size: 5
   m_Depth: -1
@@ -803,22 +1262,39 @@ Camera:
   m_OcclusionCulling: 1
   m_StereoConvergence: 10
   m_StereoSeparation: 0.022
---- !u!4 &961739753
+--- !u!4 &950172284
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 961739749}
+  m_GameObject: {fileID: 950172281}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1, z: -10}
+  m_LocalRotation: {x: 0.27450657, y: 0.65396565, z: -0.27806017, w: 0.6478099}
+  m_LocalPosition: {x: -34.88, y: 27.9, z: 5.7}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &1160234425
+  m_LocalEulerAnglesHint: {x: 46, y: 90.499, z: -0.101}
+--- !u!114 &950172285
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 950172281}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2e401366475335a4c85c5431e4624158, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  SpeedMultiplier: 10
+  AccelerationSmothnessValue: 10
+  RotationSmothnessValue: 10
+  MouseSensitivity: 5
+  NeedRMB: 1
+--- !u!1 &1100866423
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -826,39 +1302,58 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 1160234427}
-  - component: {fileID: 1160234426}
+  - component: {fileID: 1100866426}
+  - component: {fileID: 1100866425}
+  - component: {fileID: 1100866424}
   m_Layer: 0
-  m_Name: Global Volume
+  m_Name: EventSystem
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &1160234426
+--- !u!114 &1100866424
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1160234425}
+  m_GameObject: {fileID: 1100866423}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 172515602e62fb746b5d573b38a5fe58, type: 3}
+  m_Script: {fileID: 11500000, guid: 4f231c4fb786f3946a6b90b886c48677, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_IsGlobal: 1
-  priority: 0
-  blendDistance: 0
-  weight: 1
-  sharedProfile: {fileID: 11400000, guid: fc1bdf71c621c45469747408b92a62bb, type: 2}
---- !u!4 &1160234427
+  m_SendPointerHoverToParent: 1
+  m_HorizontalAxis: Horizontal
+  m_VerticalAxis: Vertical
+  m_SubmitButton: Submit
+  m_CancelButton: Cancel
+  m_InputActionsPerSecond: 10
+  m_RepeatDelay: 0.5
+  m_ForceModuleActive: 0
+--- !u!114 &1100866425
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1100866423}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 76c392e42b5098c458856cdf6ecaaaa1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_FirstSelected: {fileID: 0}
+  m_sendNavigationEvents: 1
+  m_DragThreshold: 10
+--- !u!4 &1100866426
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1160234425}
+  m_GameObject: {fileID: 1100866423}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
@@ -867,7 +1362,233 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1209982542
+--- !u!1 &1230056714
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1230056716}
+  - component: {fileID: 1230056715}
+  - component: {fileID: 1230056717}
+  m_Layer: 0
+  m_Name: Directional Light
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!108 &1230056715
+Light:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1230056714}
+  m_Enabled: 1
+  serializedVersion: 10
+  m_Type: 1
+  m_Shape: 0
+  m_Color: {r: 1, g: 0.95686275, b: 0.8392157, a: 1}
+  m_Intensity: 2
+  m_Range: 10
+  m_SpotAngle: 30
+  m_InnerSpotAngle: 21.80208
+  m_CookieSize: 10
+  m_Shadows:
+    m_Type: 2
+    m_Resolution: -1
+    m_CustomResolution: -1
+    m_Strength: 0.609
+    m_Bias: 0
+    m_NormalBias: 0.39
+    m_NearPlane: 0.1
+    m_CullingMatrixOverride:
+      e00: 1
+      e01: 0
+      e02: 0
+      e03: 0
+      e10: 0
+      e11: 1
+      e12: 0
+      e13: 0
+      e20: 0
+      e21: 0
+      e22: 1
+      e23: 0
+      e30: 0
+      e31: 0
+      e32: 0
+      e33: 1
+    m_UseCullingMatrixOverride: 0
+  m_Cookie: {fileID: 0}
+  m_DrawHalo: 0
+  m_Flare: {fileID: 0}
+  m_RenderMode: 0
+  m_CullingMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_RenderingLayerMask: 1
+  m_Lightmapping: 4
+  m_LightShadowCasterMode: 0
+  m_AreaSize: {x: 1, y: 1}
+  m_BounceIntensity: 1
+  m_ColorTemperature: 6570
+  m_UseColorTemperature: 0
+  m_BoundingSphereOverride: {x: 0, y: 0, z: 0, w: 0}
+  m_UseBoundingSphereOverride: 0
+  m_UseViewFrustumForShadowCasterCull: 1
+  m_ShadowRadius: 0
+  m_ShadowAngle: 0
+--- !u!4 &1230056716
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1230056714}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0.51605606, y: 0.41499975, z: -0.31500193, w: 0.67987883}
+  m_LocalPosition: {x: -12.5, y: 3, z: 24.32}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 74.4, y: 62.8, z: 0}
+--- !u!114 &1230056717
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1230056714}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 474bcb49853aa07438625e644c072ee6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Version: 3
+  m_UsePipelineSettings: 1
+  m_AdditionalLightsShadowResolutionTier: 2
+  m_LightLayerMask: 1
+  m_RenderingLayers: 1
+  m_CustomShadowLayers: 0
+  m_ShadowLayerMask: 1
+  m_ShadowRenderingLayers: 1
+  m_LightCookieSize: {x: 1, y: 1}
+  m_LightCookieOffset: {x: 0, y: 0}
+  m_SoftShadowQuality: 0
+--- !u!114 &1268286139
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b11aa65450895324a9fe17af1094f4da, type: 3}
+  m_Name: (Clone)
+  m_EditorClassIdentifier: 
+  _editorForceChanged: 0
+  Width:
+    Min: 3
+    Max: 4
+  Depth:
+    Min: 3
+    Max: 4
+  YLevels:
+    Min: 1
+    Max: 1
+  OriginInCenter: 1
+--- !u!114 &1412106914
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: edfb7b9544d3e2249869e4d54f43f2bb, type: 3}
+  m_Name: (Clone)
+  m_EditorClassIdentifier: 
+  _editorForceChanged: 0
+  CellSets:
+  - Cells:
+    - {x: -1, y: 0, z: 1}
+    - {x: -1, y: 0, z: 0}
+    - {x: -1, y: 0, z: -1}
+    - {x: 1, y: 0, z: -1}
+    - {x: 1, y: 0, z: 0}
+    - {x: 1, y: 0, z: 1}
+    - {x: 1, y: 0, z: 2}
+    - {x: 0, y: 0, z: 2}
+    - {x: -1, y: 0, z: 2}
+    - {x: -1, y: 0, z: -2}
+    - {x: 0, y: 0, z: -2}
+    - {x: 1, y: 0, z: -2}
+    - {x: 0, y: 0, z: 0}
+    - {x: -2, y: 0, z: 2}
+    - {x: -2, y: 0, z: 1}
+    - {x: -2, y: 0, z: 0}
+    - {x: -2, y: 0, z: -1}
+    - {x: -2, y: 0, z: -2}
+    - {x: 2, y: 0, z: 2}
+    - {x: 2, y: 0, z: 1}
+    - {x: 2, y: 0, z: 0}
+    - {x: 2, y: 0, z: -1}
+    - {x: 2, y: 0, z: -2}
+  drawSize: 30
+  depthLevel: 0
+  selectedManualShape: 0
+--- !u!114 &1620108089
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 473b7da542094e445912c632b863b59a, type: 3}
+  m_Name: (Clone)
+  m_EditorClassIdentifier: 
+  _editorForceChanged: 0
+--- !u!1 &1787242732
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1787242733}
+  m_Layer: 0
+  m_Name: ------------------
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1787242733
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1787242732}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -4.2055283, y: -20.353233, z: -10.295307}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1987600807
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -890,24 +1611,15 @@ MonoBehaviour:
     Min: 1
     Max: 1
   OriginInCenter: 0
---- !u!114 &1729145592
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 473b7da542094e445912c632b863b59a, type: 3}
-  m_Name: (Clone)
-  m_EditorClassIdentifier: 
-  _editorForceChanged: 0
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
-  - {fileID: 961739753}
-  - {fileID: 203844589}
-  - {fileID: 1160234427}
-  - {fileID: 617798023}
+  - {fileID: 950172284}
+  - {fileID: 1230056716}
+  - {fileID: 1787242733}
+  - {fileID: 1100866426}
+  - {fileID: 361241812}
+  - {fileID: 866477808}
+  - {fileID: 169829418}
+  - {fileID: 389626016}

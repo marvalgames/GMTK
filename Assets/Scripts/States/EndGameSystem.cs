@@ -13,10 +13,11 @@ public partial class BasicWinnerSystem : SystemBase
 
     protected override void OnUpdate()
     {
+        if (LevelManager.instance == null) return;
+
         var currentLevelCompleted = LevelManager.instance.currentLevelCompleted;
         var totalGameLevels = LevelManager.instance.totalLevels;
         
-        if (LevelManager.instance == null) return;
         var query = GetEntityQuery(ComponentType.ReadOnly<EnemyComponent>());
         var enemyEntities = query.ToEntityArray(Allocator.TempJob);
         if (enemyEntities.Length < 1)

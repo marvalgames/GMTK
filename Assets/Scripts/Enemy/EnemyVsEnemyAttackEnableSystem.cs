@@ -21,6 +21,9 @@ public partial struct EnemiesAttackEnableableComponentSystem : ISystem
 
     public void OnUpdate(ref SystemState system)
     {
+        if (LevelManager.instance == null) return;
+
+        
         if (LevelManager.instance.endGame ||
             LevelManager.instance.currentLevelCompleted >= LevelManager.instance.totalLevels) return;
 
