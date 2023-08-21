@@ -17,25 +17,7 @@ MonoBehaviour:
   Global: 0
   Enabled: 1
   Ignore: 0
-  OwnerSpawner:
-    Enabled: 1
-    Name: HouseWallWide-Copy
-    SpawnerTag: 
-    StampPrefabID: 0
-    Parent: {fileID: -3041754169660501174}
-    Rules:
-    - {fileID: -150532769262212233}
-    - {fileID: 5478384343339374855}
-    - {fileID: -7523881592690949480}
-    Mode: 0
-    CellCheckMode: 0
-    GridScaling: 0
-    OnScalledGrid: 1
-    Repeat: 1
-    MultipleToSpawn: 0
-    ScaleAccess: 1
-    DisplayPreviewGUI: 1
-    IsSubSpawner: 0
+  _editor_drawRule: 1
   CellAllow: 1
   AllConditionsMet: 1
   MustHaveTag: Wall
@@ -47,6 +29,7 @@ MonoBehaviour:
   OffsetMode: 1
   DistanceMustBe: 0
   RemoveDistance: 0.5
+  FromOrigin: 0
 --- !u!114 &-7087234473644484831
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -64,28 +47,7 @@ MonoBehaviour:
   Global: 0
   Enabled: 1
   Ignore: 0
-  OwnerSpawner:
-    Enabled: 1
-    Name: HouseWallWide
-    SpawnerTag: 
-    StampPrefabID: 0
-    Parent: {fileID: -3041754169660501174}
-    Rules:
-    - {fileID: -1361211190022655549}
-    - {fileID: 4562735126173014457}
-    - {fileID: -7087234473644484831}
-    - {fileID: 1390829088472781405}
-    - {fileID: 7989467625854325233}
-    - {fileID: 855263770214880884}
-    Mode: 0
-    CellCheckMode: 0
-    GridScaling: 0
-    OnScalledGrid: 1
-    Repeat: 1
-    MultipleToSpawn: 0
-    ScaleAccess: 1
-    DisplayPreviewGUI: 1
-    IsSubSpawner: 0
+  _editor_drawRule: 1
   CellAllow: 1
   AllConditionsMet: 1
   MustHaveTag: Wall
@@ -97,6 +59,7 @@ MonoBehaviour:
   OffsetMode: 1
   DistanceMustBe: 0
   RemoveDistance: 0.5
+  FromOrigin: 0
 --- !u!114 &-6375812127886480632
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -114,32 +77,13 @@ MonoBehaviour:
   Global: 1
   Enabled: 1
   Ignore: 0
-  OwnerSpawner:
-    Enabled: 1
-    Name: HouseWallWide-Copy
-    SpawnerTag: 
-    StampPrefabID: 0
-    Parent: {fileID: -3041754169660501174}
-    Rules:
-    - {fileID: -150532769262212233}
-    - {fileID: 5478384343339374855}
-    - {fileID: -7523881592690949480}
-    Mode: 0
-    CellCheckMode: 0
-    GridScaling: 0
-    OnScalledGrid: 1
-    Repeat: 1
-    MultipleToSpawn: 0
-    ScaleAccess: 1
-    DisplayPreviewGUI: 1
-    IsSubSpawner: 0
+  _editor_drawRule: 1
   CellAllow: 1
   AllConditionsMet: 1
   GetFromTagged: Wall
   CheckMode: 0
-  GetRandomIfMulti: 0
-  OffsetMode: 0
   WorldOffset: {x: 0, y: 0, z: 0}
+  OffsetMode: 0
   DirectionalOffset: {x: 0, y: 0, z: 0}
   StackOffset: 0
   RotationEulerOffset: {x: 0, y: 0, z: 0}
@@ -152,6 +96,12 @@ MonoBehaviour:
   MultiplyGetted: {x: 1, y: 1, z: 1}
   DontSpawnIfNoTagged: 1
   RemoveTagged: 1
+  GetRandomIfMulti: 0
+  RunOnRepetition: 0
+  HelperMode: 0
+  _DrawOffsets: 1
+  _DrawRandomization: 0
+  _DrawAdditionals: 0
 --- !u!114 &-5663360582035189953
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -169,25 +119,7 @@ MonoBehaviour:
   Global: 1
   Enabled: 1
   Ignore: 0
-  OwnerSpawner:
-    Enabled: 1
-    Name: HouseWallWide-Copy
-    SpawnerTag: 
-    StampPrefabID: 0
-    Parent: {fileID: -3041754169660501174}
-    Rules:
-    - {fileID: -150532769262212233}
-    - {fileID: 5478384343339374855}
-    - {fileID: -7523881592690949480}
-    Mode: 0
-    CellCheckMode: 0
-    GridScaling: 0
-    OnScalledGrid: 1
-    Repeat: 1
-    MultipleToSpawn: 0
-    ScaleAccess: 1
-    DisplayPreviewGUI: 1
-    IsSubSpawner: 0
+  _editor_drawRule: 1
   CellAllow: 1
   AllConditionsMet: 1
   CheckedCellsMustBe: 2
@@ -206,6 +138,8 @@ MonoBehaviour:
     ld: 0
     d: 0
     rd: 0
+    UseAdvancedSetup: 0
+    AdvancedSetup: []
   quartRotor:
     q1: 1
     q2: 0
@@ -224,6 +158,16 @@ MonoBehaviour:
   GetNeightbourPos: 0
   GetNeightbourRot: 0
   GetNeightbourScale: 0
+  UseRestrictedDir: 0
+  CustomCellsCheck: 0
+  FullRotGet: 0
+  Check3DAngles: 0
+  RotationSpaceDisplay: 0
+  CheckPosit90: 1
+  CheckNeg90: 1
+  OverridePitchRotation: 1
+  InitPitchRotation: 0
+  NotCheckDefaultPitch: 0
 --- !u!114 &-5561743842977562203
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -241,25 +185,7 @@ MonoBehaviour:
   Global: 0
   Enabled: 1
   Ignore: 0
-  OwnerSpawner:
-    Enabled: 1
-    Name: HouseWallWide
-    SpawnerTag: 
-    StampPrefabID: 1
-    Parent: {fileID: 8928118278357733933}
-    Rules:
-    - {fileID: -4825812751572463987}
-    - {fileID: -5453649931950639393}
-    - {fileID: -4452662565443833406}
-    Mode: 0
-    CellCheckMode: 0
-    GridScaling: 1
-    OnScalledGrid: 1
-    Repeat: 1
-    MultipleToSpawn: 0
-    ScaleAccess: 1
-    DisplayPreviewGUI: 1
-    IsSubSpawner: 0
+  _editor_drawRule: 1
   CellAllow: 0
   AllConditionsMet: 1
   Mode: 7
@@ -269,6 +195,8 @@ MonoBehaviour:
   Range: {x: -3, y: 3}
   ValueMulVariable:
     name: 
+    requiredType: 1
+    Tooltip: 
 --- !u!114 &-5453649931950639393
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -286,33 +214,13 @@ MonoBehaviour:
   Global: 0
   Enabled: 1
   Ignore: 0
-  OwnerSpawner:
-    Enabled: 0
-    Name: HouseWallWide
-    SpawnerTag: 
-    StampPrefabID: 1
-    Parent: {fileID: 8928118278357733933}
-    Rules:
-    - {fileID: -4825812751572463987}
-    - {fileID: -5453649931950639393}
-    - {fileID: -4452662565443833406}
-    - {fileID: 3730383229103343800}
-    Mode: 0
-    CellCheckMode: 0
-    GridScaling: 1
-    OnScalledGrid: 1
-    Repeat: 1
-    MultipleToSpawn: 0
-    ScaleAccess: 1
-    DisplayPreviewGUI: 1
-    IsSubSpawner: 0
+  _editor_drawRule: 1
   CellAllow: 1
   AllConditionsMet: 1
   GetFromTagged: Wall
   CheckMode: 0
-  GetRandomIfMulti: 0
-  OffsetMode: 0
   WorldOffset: {x: 0, y: 0, z: 0}
+  OffsetMode: 0
   DirectionalOffset: {x: 0, y: 0, z: 0}
   StackOffset: 0
   RotationEulerOffset: {x: 0, y: 0, z: 0}
@@ -325,6 +233,12 @@ MonoBehaviour:
   MultiplyGetted: {x: 1, y: 1, z: 1}
   DontSpawnIfNoTagged: 1
   RemoveTagged: 1
+  GetRandomIfMulti: 0
+  RunOnRepetition: 0
+  HelperMode: 0
+  _DrawOffsets: 1
+  _DrawRandomization: 0
+  _DrawAdditionals: 0
 --- !u!114 &-4825812751572463987
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -342,26 +256,7 @@ MonoBehaviour:
   Global: 0
   Enabled: 0
   Ignore: 0
-  OwnerSpawner:
-    Enabled: 0
-    Name: HouseWallWide
-    SpawnerTag: 
-    StampPrefabID: 1
-    Parent: {fileID: 8928118278357733933}
-    Rules:
-    - {fileID: -4825812751572463987}
-    - {fileID: -5453649931950639393}
-    - {fileID: -4452662565443833406}
-    - {fileID: 3730383229103343800}
-    Mode: 0
-    CellCheckMode: 0
-    GridScaling: 1
-    OnScalledGrid: 1
-    Repeat: 1
-    MultipleToSpawn: 0
-    ScaleAccess: 1
-    DisplayPreviewGUI: 1
-    IsSubSpawner: 0
+  _editor_drawRule: 1
   CellAllow: 1
   AllConditionsMet: 1
   Mode: 7
@@ -371,6 +266,8 @@ MonoBehaviour:
   Range: {x: -3, y: 3}
   ValueMulVariable:
     name: 
+    requiredType: 1
+    Tooltip: 
 --- !u!114 &-4587144034726168248
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -388,25 +285,7 @@ MonoBehaviour:
   Global: 0
   Enabled: 0
   Ignore: 0
-  OwnerSpawner:
-    Enabled: 1
-    Name: HouseWallWide
-    SpawnerTag: 
-    StampPrefabID: 1
-    Parent: {fileID: 8928118278357733933}
-    Rules:
-    - {fileID: -4825812751572463987}
-    - {fileID: -5453649931950639393}
-    - {fileID: -4452662565443833406}
-    Mode: 0
-    CellCheckMode: 0
-    GridScaling: 1
-    OnScalledGrid: 1
-    Repeat: 1
-    MultipleToSpawn: 0
-    ScaleAccess: 1
-    DisplayPreviewGUI: 1
-    IsSubSpawner: 0
+  _editor_drawRule: 1
   CellAllow: 0
   AllConditionsMet: 1
   CheckedCellsMustBe: 2
@@ -425,6 +304,8 @@ MonoBehaviour:
     ld: 0
     d: 0
     rd: 0
+    UseAdvancedSetup: 0
+    AdvancedSetup: []
   quartRotor:
     q1: 1
     q2: 0
@@ -443,6 +324,16 @@ MonoBehaviour:
   GetNeightbourPos: 0
   GetNeightbourRot: 0
   GetNeightbourScale: 0
+  UseRestrictedDir: 0
+  CustomCellsCheck: 0
+  FullRotGet: 0
+  Check3DAngles: 0
+  RotationSpaceDisplay: 0
+  CheckPosit90: 1
+  CheckNeg90: 1
+  OverridePitchRotation: 1
+  InitPitchRotation: 0
+  NotCheckDefaultPitch: 0
 --- !u!114 &-4452662565443833406
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -460,26 +351,7 @@ MonoBehaviour:
   Global: 0
   Enabled: 1
   Ignore: 0
-  OwnerSpawner:
-    Enabled: 0
-    Name: HouseWallWide
-    SpawnerTag: 
-    StampPrefabID: 1
-    Parent: {fileID: 8928118278357733933}
-    Rules:
-    - {fileID: -4825812751572463987}
-    - {fileID: -5453649931950639393}
-    - {fileID: -4452662565443833406}
-    - {fileID: 3730383229103343800}
-    Mode: 0
-    CellCheckMode: 0
-    GridScaling: 1
-    OnScalledGrid: 1
-    Repeat: 1
-    MultipleToSpawn: 0
-    ScaleAccess: 1
-    DisplayPreviewGUI: 1
-    IsSubSpawner: 0
+  _editor_drawRule: 1
   CellAllow: 1
   AllConditionsMet: 1
   MustHaveTag: Wall
@@ -491,6 +363,7 @@ MonoBehaviour:
   OffsetMode: 0
   DistanceMustBe: 0
   RemoveDistance: 1
+  FromOrigin: 0
 --- !u!114 &-3630097541855476799
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -508,7 +381,36 @@ MonoBehaviour:
   - {fileID: -3041754169660501174}
   ParentPreset: {fileID: 11400000}
   DisableWholePackage: 0
+  SeedMode: 0
+  CustomSeed: 0
   ModPackType: 0
+  TagForAllSpawners: 
+  CombineSpawns: 0
+  Variables: []
+  CallOnAllMod: {fileID: 0}
+  CallOnAllSpawners:
+    Enabled: 0
+    Name: 
+    SpawnerTag: 
+    StampPrefabID: 0
+    Parent: {fileID: 0}
+    Rules: []
+    Mode: 0
+    CellCheckMode: 0
+    _Editor_SpawnerAdvancedOptionsFoldout: 0
+    OnScalledGrid: 0
+    Repeat: 0
+    DontInheritRotations: 0
+    SwitchSpawnedToStatic: 0
+    MultipleToSpawn: 0
+    UseGlobalRules: 0
+    UseParentPackageRules: 0
+    _wasEnablingGlobalRules: 0
+    ScaleAccess: 0
+    DisplayPreviewGUI: 0
+    IsSubSpawner: 0
+    _EditorDisplaySpawnerHeader: 0
+  _EditorDisplayCallOnAll: 0
 --- !u!114 &-3041754169660501174
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -525,6 +427,7 @@ MonoBehaviour:
   Enabled: 1
   ModTag: 
   DrawMeshAndBox: 0
+  Combine: 0
   RunEmittersIfContains: 0
   DrawSetupFor: 0
   OStamp: {fileID: 0}
@@ -532,9 +435,9 @@ MonoBehaviour:
   OMultiStamp: {fileID: 0}
   PrefabsList:
   - Prefab: {fileID: 380394148338534106, guid: dd68c8806dea11641a1b55a6bbf04873, type: 3}
+    MainCollider: {fileID: 0}
     subID: 0
-    _refMesh: {fileID: 5424247662609639860, guid: 3896b7b11bbaa964bb88aa7f924885f5,
-      type: 3}
+    _refMesh: {fileID: 5424247662609639860, guid: 3896b7b11bbaa964bb88aa7f924885f5, type: 3}
     _refCol: {fileID: 0}
   DrawMultiObjectStamps: 1
   Spawners:
@@ -552,13 +455,19 @@ MonoBehaviour:
     - {fileID: 855263770214880884}
     Mode: 0
     CellCheckMode: 0
-    GridScaling: 0
+    _Editor_SpawnerAdvancedOptionsFoldout: 0
     OnScalledGrid: 1
     Repeat: 1
+    DontInheritRotations: 0
+    SwitchSpawnedToStatic: 0
     MultipleToSpawn: 0
+    UseGlobalRules: 1
+    UseParentPackageRules: 1
+    _wasEnablingGlobalRules: 1
     ScaleAccess: 1
     DisplayPreviewGUI: 1
     IsSubSpawner: 0
+    _EditorDisplaySpawnerHeader: 0
   - Enabled: 1
     Name: HouseWallWide-Copy
     SpawnerTag: 
@@ -570,18 +479,27 @@ MonoBehaviour:
     - {fileID: -7523881592690949480}
     Mode: 0
     CellCheckMode: 0
-    GridScaling: 0
+    _Editor_SpawnerAdvancedOptionsFoldout: 0
     OnScalledGrid: 1
     Repeat: 1
+    DontInheritRotations: 0
+    SwitchSpawnedToStatic: 0
     MultipleToSpawn: 0
+    UseGlobalRules: 1
+    UseParentPackageRules: 1
+    _wasEnablingGlobalRules: 1
     ScaleAccess: 1
     DisplayPreviewGUI: 1
     IsSubSpawner: 0
+    _EditorDisplaySpawnerHeader: 0
+  SubSpawners: []
   VariantOf: {fileID: 0}
   _editor_drawStamp: 0
   _editor_drawSpawners: 1
-  _editor_shareSelected: 1
-  ParentPreset: {fileID: 11400000}
+  _editor_drawGlobalRules: 0
+  _editor_drawModPackRules: 0
+  _editor_shareSelected: 0
+  ParentPreset: {fileID: 0}
   ParentPack: {fileID: -3630097541855476799}
 --- !u!114 &-1361211190022655549
 MonoBehaviour:
@@ -600,29 +518,8 @@ MonoBehaviour:
   Global: 0
   Enabled: 1
   Ignore: 0
-  OwnerSpawner:
-    Enabled: 1
-    Name: HouseWallWide
-    SpawnerTag: 
-    StampPrefabID: 0
-    Parent: {fileID: -3041754169660501174}
-    Rules:
-    - {fileID: -1361211190022655549}
-    - {fileID: 4562735126173014457}
-    - {fileID: -7087234473644484831}
-    - {fileID: 1390829088472781405}
-    - {fileID: 7989467625854325233}
-    - {fileID: 855263770214880884}
-    Mode: 0
-    CellCheckMode: 0
-    GridScaling: 0
-    OnScalledGrid: 1
-    Repeat: 1
-    MultipleToSpawn: 0
-    ScaleAccess: 1
-    DisplayPreviewGUI: 1
-    IsSubSpawner: 0
-  CellAllow: 0
+  _editor_drawRule: 1
+  CellAllow: 1
   AllConditionsMet: 1
   Mode: 7
   Axis: 0
@@ -631,6 +528,8 @@ MonoBehaviour:
   Range: {x: -3, y: 3}
   ValueMulVariable:
     name: 
+    requiredType: 1
+    Tooltip: 
 --- !u!114 &-1055065794592724312
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -648,25 +547,7 @@ MonoBehaviour:
   Global: 0
   Enabled: 1
   Ignore: 0
-  OwnerSpawner:
-    Enabled: 1
-    Name: HouseWallWide
-    SpawnerTag: 
-    StampPrefabID: 1
-    Parent: {fileID: 8928118278357733933}
-    Rules:
-    - {fileID: -4825812751572463987}
-    - {fileID: -5453649931950639393}
-    - {fileID: -4452662565443833406}
-    Mode: 0
-    CellCheckMode: 0
-    GridScaling: 1
-    OnScalledGrid: 1
-    Repeat: 1
-    MultipleToSpawn: 0
-    ScaleAccess: 1
-    DisplayPreviewGUI: 1
-    IsSubSpawner: 0
+  _editor_drawRule: 1
   CellAllow: 1
   AllConditionsMet: 1
   Mode: 7
@@ -676,6 +557,8 @@ MonoBehaviour:
   Range: {x: -3, y: 3}
   ValueMulVariable:
     name: 
+    requiredType: 1
+    Tooltip: 
 --- !u!114 &-871184954968400829
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -693,25 +576,7 @@ MonoBehaviour:
   Global: 1
   Enabled: 1
   Ignore: 0
-  OwnerSpawner:
-    Enabled: 1
-    Name: HouseWallWide-Copy
-    SpawnerTag: 
-    StampPrefabID: 0
-    Parent: {fileID: -3041754169660501174}
-    Rules:
-    - {fileID: -150532769262212233}
-    - {fileID: 5478384343339374855}
-    - {fileID: -7523881592690949480}
-    Mode: 0
-    CellCheckMode: 0
-    GridScaling: 0
-    OnScalledGrid: 1
-    Repeat: 1
-    MultipleToSpawn: 0
-    ScaleAccess: 1
-    DisplayPreviewGUI: 1
-    IsSubSpawner: 0
+  _editor_drawRule: 1
   CellAllow: 1
   AllConditionsMet: 1
   MustHaveTag: Wall
@@ -723,6 +588,7 @@ MonoBehaviour:
   OffsetMode: 1
   DistanceMustBe: 0
   RemoveDistance: 0.5
+  FromOrigin: 0
 --- !u!114 &-535646698628160233
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -740,25 +606,7 @@ MonoBehaviour:
   Global: 0
   Enabled: 1
   Ignore: 0
-  OwnerSpawner:
-    Enabled: 1
-    Name: HouseWallWide
-    SpawnerTag: 
-    StampPrefabID: 1
-    Parent: {fileID: 8928118278357733933}
-    Rules:
-    - {fileID: -4825812751572463987}
-    - {fileID: -5453649931950639393}
-    - {fileID: -4452662565443833406}
-    Mode: 0
-    CellCheckMode: 0
-    GridScaling: 1
-    OnScalledGrid: 1
-    Repeat: 1
-    MultipleToSpawn: 0
-    ScaleAccess: 1
-    DisplayPreviewGUI: 1
-    IsSubSpawner: 0
+  _editor_drawRule: 1
   CellAllow: 1
   AllConditionsMet: 1
   Removing:
@@ -770,6 +618,14 @@ MonoBehaviour:
     RemoveWhen: 0
     UseSelfRotation: 0
     DegreesTolerance: 95
+    checkSetup:
+      UseRotor: 1
+      Rotor: 0
+      UseCondition: 0
+      Condition: 0
+      ToCheck:
+      - {x: 0, y: 0, z: 0}
+      EditorDisplayColor: {r: 0.4, g: 0.4, b: 1, a: 0.95}
   - AffectedTags: Wall
     CheckMode: 0
     RemoveCount: 1
@@ -778,6 +634,14 @@ MonoBehaviour:
     RemoveWhen: 0
     UseSelfRotation: 1
     DegreesTolerance: 45
+    checkSetup:
+      UseRotor: 1
+      Rotor: 0
+      UseCondition: 0
+      Condition: 0
+      ToCheck:
+      - {x: 0, y: 0, z: 0}
+      EditorDisplayColor: {r: 0.4, g: 0.4, b: 1, a: 0.95}
 --- !u!114 &-150532769262212233
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -795,25 +659,7 @@ MonoBehaviour:
   Global: 0
   Enabled: 1
   Ignore: 0
-  OwnerSpawner:
-    Enabled: 1
-    Name: HouseWallWide-Copy
-    SpawnerTag: 
-    StampPrefabID: 0
-    Parent: {fileID: -3041754169660501174}
-    Rules:
-    - {fileID: -150532769262212233}
-    - {fileID: 5478384343339374855}
-    - {fileID: -7523881592690949480}
-    Mode: 0
-    CellCheckMode: 0
-    GridScaling: 0
-    OnScalledGrid: 1
-    Repeat: 1
-    MultipleToSpawn: 0
-    ScaleAccess: 1
-    DisplayPreviewGUI: 1
-    IsSubSpawner: 0
+  _editor_drawRule: 1
   CellAllow: 0
   AllConditionsMet: 1
   Mode: 7
@@ -823,6 +669,8 @@ MonoBehaviour:
   Range: {x: -3, y: 3}
   ValueMulVariable:
     name: 
+    requiredType: 1
+    Tooltip: 
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -842,48 +690,82 @@ MonoBehaviour:
   Variables:
   - Name: Spawn Propability Multiplier
     v3Val: {x: 1, y: 0, z: 0}
+    colVal: {r: 0, g: 0, b: 0, a: 0}
     str: 
+    mat: {fileID: 0}
+    gameObj: {fileID: 0}
+    curve:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    unityObj: {fileID: 0}
     helper: {x: 0, y: 5, z: 0}
+    additionalHelperRef: {fileID: 0}
     ValueType: 1
+    helpForFieldCommand: 0
+    displayOnScene: 0
+    allowTransformFollow: 0
+    FloatSwitch: 0
   - Name: Spawn Count Multiplier
     v3Val: {x: 1, y: 0, z: 0}
+    colVal: {r: 0, g: 0, b: 0, a: 0}
     str: 
+    mat: {fileID: 0}
+    gameObj: {fileID: 0}
+    curve:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    unityObj: {fileID: 0}
     helper: {x: 0, y: 5, z: 0}
+    additionalHelperRef: {fileID: 0}
     ValueType: 1
+    helpForFieldCommand: 0
+    displayOnScene: 0
+    allowTransformFollow: 0
+    FloatSwitch: 0
   DoorsModificator: {fileID: 11400000, guid: 7500e28d48a8ac44da90dfc8719e91ef, type: 2}
-  EraseWallModificator: {fileID: 11400000, guid: c5bd286613ebcb24c932c8d5e7f79f9b,
-    type: 2}
+  EraseWallModificator: {fileID: 11400000, guid: c5bd286613ebcb24c932c8d5e7f79f9b, type: 2}
   CellsInstructions:
   - Title: Door Hole
     InstructionType: 1
-    TargetModification: {fileID: 11400000, guid: 7500e28d48a8ac44da90dfc8719e91ef,
-      type: 2}
+    TargetModification: {fileID: 11400000, guid: 7500e28d48a8ac44da90dfc8719e91ef, type: 2}
     Tags: Props
     InstructionArgument: 
+    Foldout: 1
+    extraMod: {fileID: 0}
+    extraPack: {fileID: 0}
   - Title: Clear Wall
     InstructionType: 3
-    TargetModification: {fileID: 11400000, guid: c5bd286613ebcb24c932c8d5e7f79f9b,
-      type: 2}
+    TargetModification: {fileID: 11400000, guid: c5bd286613ebcb24c932c8d5e7f79f9b, type: 2}
     Tags: 
     InstructionArgument: 
+    Foldout: 1
+    extraMod: {fileID: 0}
+    extraPack: {fileID: 0}
   RootPack: {fileID: -3630097541855476799}
+  UtilityModificators: []
   ModificatorPacks:
   - {fileID: -3630097541855476799}
   Ignores: []
   DontSpawnOn: 
+  SelfInjections: []
   disabledMods: []
+  CustomPostEvents: []
   AddReflectionProbes: 0
-  MainReflectionSettings: {fileID: 11400000, guid: dabe448206028124294db7edb02eed3f,
-    type: 2}
+  MainReflectionSettings: {fileID: 11400000, guid: dabe448206028124294db7edb02eed3f, type: 2}
   AddMultipleProbes: 0
-  SmallerReflSettings: {fileID: 11400000, guid: 290a908b3df7c6a4a84c21c932841cde,
-    type: 2}
+  SmallerReflSettings: {fileID: 11400000, guid: 290a908b3df7c6a4a84c21c932841cde, type: 2}
   MiniReflSettings: {fileID: 11400000, guid: b243a7973537dbf4faacf7bbda74dada, type: 2}
   SmallerReflLowerSpaceThan: 4
-  AddLightProbes: 0
-  ProbesPerCell: 1
+  LimitSingleProbeSize: 0
   TriggerColliderGeneration: 0
   TriggerGenSettings:
+    TriggersLayer: 0
     ScaleupTriggers: 1
     FillHeight: 1
     MaxCellChecks: 10
@@ -908,28 +790,7 @@ MonoBehaviour:
   Global: 1
   Enabled: 1
   Ignore: 0
-  OwnerSpawner:
-    Enabled: 1
-    Name: HouseWallWide
-    SpawnerTag: 
-    StampPrefabID: 0
-    Parent: {fileID: -3041754169660501174}
-    Rules:
-    - {fileID: -1361211190022655549}
-    - {fileID: 4562735126173014457}
-    - {fileID: -7087234473644484831}
-    - {fileID: 1390829088472781405}
-    - {fileID: 7989467625854325233}
-    - {fileID: 855263770214880884}
-    Mode: 0
-    CellCheckMode: 0
-    GridScaling: 0
-    OnScalledGrid: 1
-    Repeat: 1
-    MultipleToSpawn: 0
-    ScaleAccess: 1
-    DisplayPreviewGUI: 1
-    IsSubSpawner: 0
+  _editor_drawRule: 1
   CellAllow: 1
   AllConditionsMet: 1
   Remove:
@@ -941,6 +802,14 @@ MonoBehaviour:
     RemoveWhen: 0
     UseSelfRotation: 1
     DegreesTolerance: 45
+    checkSetup:
+      UseRotor: 1
+      Rotor: 0
+      UseCondition: 0
+      Condition: 0
+      ToCheck:
+      - {x: 0, y: 0, z: 0}
+      EditorDisplayColor: {r: 0.4, g: 0.4, b: 1, a: 0.95}
 --- !u!114 &1167853622518960372
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -958,35 +827,25 @@ MonoBehaviour:
   Global: 0
   Enabled: 1
   Ignore: 0
-  OwnerSpawner:
-    Enabled: 1
-    Name: HouseWall-Optim
-    SpawnerTag: Wall
-    StampPrefabID: 0
-    Parent: {fileID: 8928118278357733933}
-    Rules:
-    - {fileID: 1167853622518960372}
-    Mode: 0
-    CellCheckMode: 0
-    GridScaling: 0
-    OnScalledGrid: 1
-    Repeat: 1
-    MultipleToSpawn: 0
-    ScaleAccess: 1
-    DisplayPreviewGUI: 1
-    IsSubSpawner: 0
-  CellAllow: 1
+  _editor_drawRule: 1
+  CellAllow: 0
   AllConditionsMet: 1
   Module: 0
   CornerMode: 0
   CornerMode45: 0
   SpawnOnEachSide: 1
+  UseYLevel: -1
   AutoRemoveOverlaps: 1
+  SetGhosts: 0
+  OverlapDetectMode: 0
+  Version2: 0
+  ScaleBounds: 0.99
   Padding: 0
   YawOffset: 180
   DirectOffset: {x: 0, y: 0, z: 0.45}
   OffsetMode: 1
   IgnoreOtherMods: 1
+  DontCheckAdditionals: 0
 --- !u!114 &1390829088472781405
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1004,35 +863,13 @@ MonoBehaviour:
   Global: 1
   Enabled: 1
   Ignore: 0
-  OwnerSpawner:
-    Enabled: 1
-    Name: HouseWallWide
-    SpawnerTag: 
-    StampPrefabID: 0
-    Parent: {fileID: -3041754169660501174}
-    Rules:
-    - {fileID: -1361211190022655549}
-    - {fileID: 4562735126173014457}
-    - {fileID: -7087234473644484831}
-    - {fileID: 1390829088472781405}
-    - {fileID: 7989467625854325233}
-    - {fileID: 855263770214880884}
-    Mode: 0
-    CellCheckMode: 0
-    GridScaling: 0
-    OnScalledGrid: 1
-    Repeat: 1
-    MultipleToSpawn: 0
-    ScaleAccess: 1
-    DisplayPreviewGUI: 1
-    IsSubSpawner: 0
-  CellAllow: 1
+  _editor_drawRule: 1
+  CellAllow: 0
   AllConditionsMet: 1
   GetFromTagged: Wall
   CheckMode: 0
-  GetRandomIfMulti: 0
-  OffsetMode: 0
   WorldOffset: {x: 0, y: 0, z: 0}
+  OffsetMode: 0
   DirectionalOffset: {x: 0, y: 0, z: 0}
   StackOffset: 0
   RotationEulerOffset: {x: 0, y: 0, z: 0}
@@ -1045,6 +882,12 @@ MonoBehaviour:
   MultiplyGetted: {x: 1, y: 1, z: 1}
   DontSpawnIfNoTagged: 1
   RemoveTagged: 0
+  GetRandomIfMulti: 0
+  RunOnRepetition: 0
+  HelperMode: 0
+  _DrawOffsets: 1
+  _DrawRandomization: 0
+  _DrawAdditionals: 0
 --- !u!114 &1862474922832378688
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1062,25 +905,7 @@ MonoBehaviour:
   Global: 0
   Enabled: 1
   Ignore: 0
-  OwnerSpawner:
-    Enabled: 1
-    Name: HouseWallWide
-    SpawnerTag: 
-    StampPrefabID: 1
-    Parent: {fileID: 8928118278357733933}
-    Rules:
-    - {fileID: -4825812751572463987}
-    - {fileID: -5453649931950639393}
-    - {fileID: -4452662565443833406}
-    Mode: 0
-    CellCheckMode: 0
-    GridScaling: 1
-    OnScalledGrid: 1
-    Repeat: 1
-    MultipleToSpawn: 0
-    ScaleAccess: 1
-    DisplayPreviewGUI: 1
-    IsSubSpawner: 0
+  _editor_drawRule: 1
   CellAllow: 1
   AllConditionsMet: 1
   CheckedCellsMustBe: 1
@@ -1099,6 +924,8 @@ MonoBehaviour:
     ld: 0
     d: 0
     rd: 0
+    UseAdvancedSetup: 0
+    AdvancedSetup: []
   quartRotor:
     q1: 1
     q2: 1
@@ -1117,6 +944,16 @@ MonoBehaviour:
   GetNeightbourPos: 0
   GetNeightbourRot: 0
   GetNeightbourScale: 0
+  UseRestrictedDir: 0
+  CustomCellsCheck: 0
+  FullRotGet: 0
+  Check3DAngles: 0
+  RotationSpaceDisplay: 0
+  CheckPosit90: 1
+  CheckNeg90: 1
+  OverridePitchRotation: 1
+  InitPitchRotation: 0
+  NotCheckDefaultPitch: 0
 --- !u!114 &3730383229103343800
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1134,26 +971,7 @@ MonoBehaviour:
   Global: 0
   Enabled: 1
   Ignore: 0
-  OwnerSpawner:
-    Enabled: 0
-    Name: HouseWallWide
-    SpawnerTag: 
-    StampPrefabID: 1
-    Parent: {fileID: 8928118278357733933}
-    Rules:
-    - {fileID: -4825812751572463987}
-    - {fileID: -5453649931950639393}
-    - {fileID: -4452662565443833406}
-    - {fileID: 3730383229103343800}
-    Mode: 0
-    CellCheckMode: 0
-    GridScaling: 1
-    OnScalledGrid: 1
-    Repeat: 1
-    MultipleToSpawn: 0
-    ScaleAccess: 1
-    DisplayPreviewGUI: 1
-    IsSubSpawner: 0
+  _editor_drawRule: 1
   CellAllow: 0
   AllConditionsMet: 1
   RotationFrom: -44.67917
@@ -1175,29 +993,8 @@ MonoBehaviour:
   Global: 0
   Enabled: 1
   Ignore: 0
-  OwnerSpawner:
-    Enabled: 1
-    Name: HouseWallWide
-    SpawnerTag: 
-    StampPrefabID: 0
-    Parent: {fileID: -3041754169660501174}
-    Rules:
-    - {fileID: -1361211190022655549}
-    - {fileID: 4562735126173014457}
-    - {fileID: -7087234473644484831}
-    - {fileID: 1390829088472781405}
-    - {fileID: 7989467625854325233}
-    - {fileID: 855263770214880884}
-    Mode: 0
-    CellCheckMode: 0
-    GridScaling: 0
-    OnScalledGrid: 1
-    Repeat: 1
-    MultipleToSpawn: 0
-    ScaleAccess: 1
-    DisplayPreviewGUI: 1
-    IsSubSpawner: 0
-  CellAllow: 1
+  _editor_drawRule: 1
+  CellAllow: 0
   AllConditionsMet: 1
   CheckedCellsMustBe: 2
   NeightbourNeeds: 1
@@ -1215,6 +1012,8 @@ MonoBehaviour:
     ld: 0
     d: 1
     rd: 0
+    UseAdvancedSetup: 0
+    AdvancedSetup: []
   quartRotor:
     q1: 1
     q2: 0
@@ -1233,6 +1032,16 @@ MonoBehaviour:
   GetNeightbourPos: 0
   GetNeightbourRot: 0
   GetNeightbourScale: 0
+  UseRestrictedDir: 0
+  CustomCellsCheck: 0
+  FullRotGet: 0
+  Check3DAngles: 0
+  RotationSpaceDisplay: 0
+  CheckPosit90: 1
+  CheckNeg90: 1
+  OverridePitchRotation: 1
+  InitPitchRotation: 0
+  NotCheckDefaultPitch: 0
 --- !u!114 &5143276507388466387
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1250,25 +1059,7 @@ MonoBehaviour:
   Global: 0
   Enabled: 0
   Ignore: 0
-  OwnerSpawner:
-    Enabled: 1
-    Name: HouseWallWide
-    SpawnerTag: 
-    StampPrefabID: 1
-    Parent: {fileID: 8928118278357733933}
-    Rules:
-    - {fileID: -4825812751572463987}
-    - {fileID: -5453649931950639393}
-    - {fileID: -4452662565443833406}
-    Mode: 0
-    CellCheckMode: 0
-    GridScaling: 1
-    OnScalledGrid: 1
-    Repeat: 1
-    MultipleToSpawn: 0
-    ScaleAccess: 1
-    DisplayPreviewGUI: 1
-    IsSubSpawner: 0
+  _editor_drawRule: 1
   CellAllow: 1
   AllConditionsMet: 1
   Mode: 7
@@ -1278,6 +1069,8 @@ MonoBehaviour:
   Range: {x: -3, y: 3}
   ValueMulVariable:
     name: 
+    requiredType: 1
+    Tooltip: 
 --- !u!114 &5478384343339374855
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1295,26 +1088,8 @@ MonoBehaviour:
   Global: 0
   Enabled: 1
   Ignore: 0
-  OwnerSpawner:
-    Enabled: 1
-    Name: HouseWallWide-Copy
-    SpawnerTag: 
-    StampPrefabID: 0
-    Parent: {fileID: -3041754169660501174}
-    Rules:
-    - {fileID: -150532769262212233}
-    - {fileID: 5478384343339374855}
-    - {fileID: -7523881592690949480}
-    Mode: 0
-    CellCheckMode: 0
-    GridScaling: 0
-    OnScalledGrid: 1
-    Repeat: 1
-    MultipleToSpawn: 0
-    ScaleAccess: 1
-    DisplayPreviewGUI: 1
-    IsSubSpawner: 0
-  CellAllow: 1
+  _editor_drawRule: 1
+  CellAllow: 0
   AllConditionsMet: 1
   CheckedCellsMustBe: 2
   NeightbourNeeds: 1
@@ -1332,6 +1107,8 @@ MonoBehaviour:
     ld: 0
     d: 0
     rd: 0
+    UseAdvancedSetup: 0
+    AdvancedSetup: []
   quartRotor:
     q1: 1
     q2: 0
@@ -1350,6 +1127,16 @@ MonoBehaviour:
   GetNeightbourPos: 0
   GetNeightbourRot: 0
   GetNeightbourScale: 0
+  UseRestrictedDir: 0
+  CustomCellsCheck: 0
+  FullRotGet: 0
+  Check3DAngles: 0
+  RotationSpaceDisplay: 0
+  CheckPosit90: 1
+  CheckNeg90: 1
+  OverridePitchRotation: 1
+  InitPitchRotation: 0
+  NotCheckDefaultPitch: 0
 --- !u!114 &7989467625854325233
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1367,29 +1154,8 @@ MonoBehaviour:
   Global: 1
   Enabled: 1
   Ignore: 0
-  OwnerSpawner:
-    Enabled: 1
-    Name: HouseWallWide
-    SpawnerTag: 
-    StampPrefabID: 0
-    Parent: {fileID: -3041754169660501174}
-    Rules:
-    - {fileID: -1361211190022655549}
-    - {fileID: 4562735126173014457}
-    - {fileID: -7087234473644484831}
-    - {fileID: 1390829088472781405}
-    - {fileID: 7989467625854325233}
-    - {fileID: 855263770214880884}
-    Mode: 0
-    CellCheckMode: 0
-    GridScaling: 0
-    OnScalledGrid: 1
-    Repeat: 1
-    MultipleToSpawn: 0
-    ScaleAccess: 1
-    DisplayPreviewGUI: 1
-    IsSubSpawner: 0
-  CellAllow: 1
+  _editor_drawRule: 1
+  CellAllow: 0
   AllConditionsMet: 1
   CheckedCellsMustBe: 2
   NeightbourNeeds: 1
@@ -1407,6 +1173,8 @@ MonoBehaviour:
     ld: 0
     d: 0
     rd: 0
+    UseAdvancedSetup: 0
+    AdvancedSetup: []
   quartRotor:
     q1: 1
     q2: 0
@@ -1425,6 +1193,16 @@ MonoBehaviour:
   GetNeightbourPos: 0
   GetNeightbourRot: 0
   GetNeightbourScale: 0
+  UseRestrictedDir: 0
+  CustomCellsCheck: 0
+  FullRotGet: 0
+  Check3DAngles: 0
+  RotationSpaceDisplay: 0
+  CheckPosit90: 1
+  CheckNeg90: 1
+  OverridePitchRotation: 1
+  InitPitchRotation: 0
+  NotCheckDefaultPitch: 0
 --- !u!114 &8928118278357733933
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1441,22 +1219,22 @@ MonoBehaviour:
   Enabled: 1
   ModTag: 
   DrawMeshAndBox: 1
+  Combine: 0
   RunEmittersIfContains: 0
   DrawSetupFor: 0
   OStamp: {fileID: 0}
   DrawObjectStamps: 1
   OMultiStamp: {fileID: 0}
   PrefabsList:
-  - Prefab: {fileID: 2512584157235256944, guid: bafd28e77ae53ca43ae0828dbe3eb281,
-      type: 3}
+  - Prefab: {fileID: 2512584157235256944, guid: bafd28e77ae53ca43ae0828dbe3eb281, type: 3}
+    MainCollider: {fileID: 763939729144329992, guid: bafd28e77ae53ca43ae0828dbe3eb281, type: 3}
     subID: 0
-    _refMesh: {fileID: -1342113450020964371, guid: 31a8dce7596b6164cbd2617b47d0ab80,
-      type: 3}
-    _refCol: {fileID: 0}
+    _refMesh: {fileID: -1342113450020964371, guid: 31a8dce7596b6164cbd2617b47d0ab80, type: 3}
+    _refCol: {fileID: 763939729144329992, guid: bafd28e77ae53ca43ae0828dbe3eb281, type: 3}
   - Prefab: {fileID: 380394148338534106, guid: dd68c8806dea11641a1b55a6bbf04873, type: 3}
+    MainCollider: {fileID: 0}
     subID: 0
-    _refMesh: {fileID: 5424247662609639860, guid: 3896b7b11bbaa964bb88aa7f924885f5,
-      type: 3}
+    _refMesh: {fileID: 5424247662609639860, guid: 3896b7b11bbaa964bb88aa7f924885f5, type: 3}
     _refCol: {fileID: 0}
   DrawMultiObjectStamps: 1
   Spawners:
@@ -1469,13 +1247,19 @@ MonoBehaviour:
     - {fileID: 1167853622518960372}
     Mode: 0
     CellCheckMode: 0
-    GridScaling: 0
+    _Editor_SpawnerAdvancedOptionsFoldout: 0
     OnScalledGrid: 1
     Repeat: 1
+    DontInheritRotations: 0
+    SwitchSpawnedToStatic: 0
     MultipleToSpawn: 0
+    UseGlobalRules: 1
+    UseParentPackageRules: 1
+    _wasEnablingGlobalRules: 1
     ScaleAccess: 1
     DisplayPreviewGUI: 1
     IsSubSpawner: 0
+    _EditorDisplaySpawnerHeader: 0
   - Enabled: 0
     Name: HouseWallWide
     SpawnerTag: 
@@ -1488,16 +1272,25 @@ MonoBehaviour:
     - {fileID: 3730383229103343800}
     Mode: 0
     CellCheckMode: 0
-    GridScaling: 1
+    _Editor_SpawnerAdvancedOptionsFoldout: 0
     OnScalledGrid: 1
     Repeat: 1
+    DontInheritRotations: 0
+    SwitchSpawnedToStatic: 0
     MultipleToSpawn: 0
+    UseGlobalRules: 0
+    UseParentPackageRules: 0
+    _wasEnablingGlobalRules: 0
     ScaleAccess: 1
     DisplayPreviewGUI: 1
     IsSubSpawner: 0
+    _EditorDisplaySpawnerHeader: 0
+  SubSpawners: []
   VariantOf: {fileID: 0}
   _editor_drawStamp: 1
   _editor_drawSpawners: 1
-  _editor_shareSelected: 1
-  ParentPreset: {fileID: 11400000}
+  _editor_drawGlobalRules: 0
+  _editor_drawModPackRules: 0
+  _editor_shareSelected: 0
+  ParentPreset: {fileID: 0}
   ParentPack: {fileID: -3630097541855476799}

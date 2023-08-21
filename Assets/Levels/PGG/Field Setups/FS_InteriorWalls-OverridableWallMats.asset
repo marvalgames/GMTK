@@ -17,32 +17,7 @@ MonoBehaviour:
   Global: 1
   Enabled: 1
   Ignore: 0
-  OwnerSpawner:
-    Enabled: 1
-    Name: WallHoleLarge
-    SpawnerTag: 
-    StampPrefabID: 0
-    Parent: {fileID: -5326678166628730658}
-    Rules:
-    - {fileID: -524122246457563662}
-    - {fileID: 7621343996001163226}
-    - {fileID: -9216500874819315239}
-    - {fileID: 3531137461472628114}
-    - {fileID: 5015256641610393038}
-    Mode: 3
-    CellCheckMode: 0
-    _Editor_SpawnerAdvancedOptionsFoldout: 0
-    OnScalledGrid: 1
-    Repeat: 1
-    DontInheritRotations: 0
-    MultipleToSpawn: 0
-    UseGlobalRules: 1
-    UseParentPackageRules: 1
-    _wasEnablingGlobalRules: 1
-    ScaleAccess: 1
-    DisplayPreviewGUI: 1
-    IsSubSpawner: 0
-    _EditorDisplaySpawnerHeader: 0
+  _editor_drawRule: 1
   CellAllow: 1
   AllConditionsMet: 1
   MustHaveTag: Wall
@@ -54,6 +29,7 @@ MonoBehaviour:
   OffsetMode: 0
   DistanceMustBe: 0
   RemoveDistance: 0.35
+  FromOrigin: 0
 --- !u!114 &-7656842680995777183
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -71,30 +47,7 @@ MonoBehaviour:
   Global: 0
   Enabled: 1
   Ignore: 0
-  OwnerSpawner:
-    Enabled: 1
-    Name: Wall-EdgeSupport
-    SpawnerTag: Supp,Edge
-    StampPrefabID: 3
-    Parent: {fileID: 9063430128532023327}
-    Rules:
-    - {fileID: -727073997672980482}
-    - {fileID: -7656842680995777183}
-    - {fileID: 3120480432623670249}
-    Mode: 3
-    CellCheckMode: 0
-    _Editor_SpawnerAdvancedOptionsFoldout: 0
-    OnScalledGrid: 1
-    Repeat: 1
-    DontInheritRotations: 0
-    MultipleToSpawn: 0
-    UseGlobalRules: 1
-    UseParentPackageRules: 1
-    _wasEnablingGlobalRules: 1
-    ScaleAccess: 1
-    DisplayPreviewGUI: 1
-    IsSubSpawner: 0
-    _EditorDisplaySpawnerHeader: 0
+  _editor_drawRule: 1
   CellAllow: 1
   AllConditionsMet: 1
   OnlyOnSameFieldSetup: 1
@@ -117,29 +70,7 @@ MonoBehaviour:
   Global: 0
   Enabled: 1
   Ignore: 0
-  OwnerSpawner:
-    Enabled: 1
-    Name: Wall-Base
-    SpawnerTag: Wall
-    StampPrefabID: 0
-    Parent: {fileID: 9063430128532023327}
-    Rules:
-    - {fileID: 9034513453344007269}
-    - {fileID: 7787048315036503549}
-    Mode: 3
-    CellCheckMode: 0
-    _Editor_SpawnerAdvancedOptionsFoldout: 0
-    OnScalledGrid: 1
-    Repeat: 1
-    DontInheritRotations: 0
-    MultipleToSpawn: 0
-    UseGlobalRules: 0
-    UseParentPackageRules: 0
-    _wasEnablingGlobalRules: 0
-    ScaleAccess: 1
-    DisplayPreviewGUI: 1
-    IsSubSpawner: 0
-    _EditorDisplaySpawnerHeader: 0
+  _editor_drawRule: 1
   CellAllow: 1
   AllConditionsMet: 1
   Tag: Window,Hole
@@ -154,6 +85,7 @@ MonoBehaviour:
     Condition: 0
     ToCheck:
     - {x: 0, y: 0, z: 0}
+    EditorDisplayColor: {r: 0.4, g: 0.4, b: 1, a: 0.95}
 --- !u!114 &-6794889663769746049
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -171,28 +103,7 @@ MonoBehaviour:
   Global: 0
   Enabled: 1
   Ignore: 0
-  OwnerSpawner:
-    Enabled: 0
-    Name: Ceiling-Base
-    SpawnerTag: Ceil
-    StampPrefabID: 2
-    Parent: {fileID: 9063430128532023327}
-    Rules:
-    - {fileID: -6794889663769746049}
-    Mode: 3
-    CellCheckMode: 0
-    _Editor_SpawnerAdvancedOptionsFoldout: 0
-    OnScalledGrid: 1
-    Repeat: 1
-    DontInheritRotations: 0
-    MultipleToSpawn: 0
-    UseGlobalRules: 0
-    UseParentPackageRules: 0
-    _wasEnablingGlobalRules: 0
-    ScaleAccess: 1
-    DisplayPreviewGUI: 1
-    IsSubSpawner: 0
-    _EditorDisplaySpawnerHeader: 0
+  _editor_drawRule: 1
   CellAllow: 1
   AllConditionsMet: 1
   OverrideOffset: 1
@@ -202,6 +113,7 @@ MonoBehaviour:
   WorldOffset: {x: 0, y: 0.95, z: 0}
   OffsetMode: 1
   RandomWorldOffset: {x: 0, y: 0, z: 0}
+  RandomRange: {x: 0, y: 1}
 --- !u!114 &-5326678166628730658
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -218,18 +130,17 @@ MonoBehaviour:
   Enabled: 1
   ModTag: Hole
   DrawMeshAndBox: 0
+  Combine: 0
   RunEmittersIfContains: 0
   DrawSetupFor: 0
   OStamp: {fileID: 0}
   DrawObjectStamps: 1
   OMultiStamp: {fileID: 0}
   PrefabsList:
-  - Prefab: {fileID: 8824089715368532825, guid: 1e7058fa0a9b5de43883d475642534d6,
-      type: 3}
+  - Prefab: {fileID: 8824089715368532825, guid: 1e7058fa0a9b5de43883d475642534d6, type: 3}
     MainCollider: {fileID: 0}
     subID: 0
-    _refMesh: {fileID: 8568771882487935041, guid: 12bdb1582ddc2bd4d9248e99494e1b8e,
-      type: 3}
+    _refMesh: {fileID: 8568771882487935041, guid: 12bdb1582ddc2bd4d9248e99494e1b8e, type: 3}
     _refCol: {fileID: 0}
   DrawMultiObjectStamps: 1
   Spawners:
@@ -250,6 +161,7 @@ MonoBehaviour:
     OnScalledGrid: 1
     Repeat: 1
     DontInheritRotations: 0
+    SwitchSpawnedToStatic: 0
     MultipleToSpawn: 0
     UseGlobalRules: 1
     UseParentPackageRules: 1
@@ -258,13 +170,14 @@ MonoBehaviour:
     DisplayPreviewGUI: 1
     IsSubSpawner: 0
     _EditorDisplaySpawnerHeader: 0
+  SubSpawners: []
   VariantOf: {fileID: 0}
   _editor_drawStamp: 1
   _editor_drawSpawners: 1
   _editor_drawGlobalRules: 0
   _editor_drawModPackRules: 0
   _editor_shareSelected: 0
-  ParentPreset: {fileID: 11400000}
+  ParentPreset: {fileID: 0}
   ParentPack: {fileID: 8071460775553708166}
 --- !u!114 &-4228396920648482961
 MonoBehaviour:
@@ -283,33 +196,12 @@ MonoBehaviour:
   Global: 0
   Enabled: 1
   Ignore: 0
-  OwnerSpawner:
-    Enabled: 1
-    Name: Wall-Base
-    SpawnerTag: Wall
-    StampPrefabID: 0
-    Parent: {fileID: 9063430128532023327}
-    Rules:
-    - {fileID: 9034513453344007269}
-    - {fileID: 7787048315036503549}
-    Mode: 3
-    CellCheckMode: 0
-    _Editor_SpawnerAdvancedOptionsFoldout: 0
-    OnScalledGrid: 1
-    Repeat: 1
-    DontInheritRotations: 0
-    MultipleToSpawn: 0
-    UseGlobalRules: 0
-    UseParentPackageRules: 0
-    _wasEnablingGlobalRules: 0
-    ScaleAccess: 1
-    DisplayPreviewGUI: 1
-    IsSubSpawner: 0
-    _EditorDisplaySpawnerHeader: 0
+  _editor_drawRule: 1
   CellAllow: 1
   AllConditionsMet: 1
   Offset: {x: 0, y: 0, z: 1}
   RandomOffset: {x: 0, y: 0, z: 0}
+  RoundOffsetBy: {x: 0, y: 0, z: 0}
 --- !u!114 &-3817424969484538880
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -327,28 +219,7 @@ MonoBehaviour:
   Global: 0
   Enabled: 1
   Ignore: 0
-  OwnerSpawner:
-    Enabled: 1
-    Name: Empty Check Doors
-    SpawnerTag: 
-    StampPrefabID: 0
-    Parent: {fileID: -5326678166628730658}
-    Rules:
-    - {fileID: -3817424969484538880}
-    Mode: 3
-    CellCheckMode: 0
-    _Editor_SpawnerAdvancedOptionsFoldout: 0
-    OnScalledGrid: 1
-    Repeat: 1
-    DontInheritRotations: 0
-    MultipleToSpawn: 0
-    UseGlobalRules: 0
-    UseParentPackageRules: 0
-    _wasEnablingGlobalRules: 0
-    ScaleAccess: 1
-    DisplayPreviewGUI: 1
-    IsSubSpawner: 0
-    _EditorDisplaySpawnerHeader: 0
+  _editor_drawRule: 1
   CellAllow: 0
   AllConditionsMet: 1
   CheckedCellsMustBe: 0
@@ -390,6 +261,13 @@ MonoBehaviour:
   UseRestrictedDir: 0
   CustomCellsCheck: 0
   FullRotGet: 0
+  Check3DAngles: 0
+  RotationSpaceDisplay: 0
+  CheckPosit90: 1
+  CheckNeg90: 1
+  OverridePitchRotation: 1
+  InitPitchRotation: 0
+  NotCheckDefaultPitch: 0
 --- !u!114 &-3435036202957156001
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -407,31 +285,7 @@ MonoBehaviour:
   Global: 0
   Enabled: 1
   Ignore: 0
-  OwnerSpawner:
-    Enabled: 1
-    Name: WallHoleLarge
-    SpawnerTag: 
-    StampPrefabID: 0
-    Parent: {fileID: -5326678166628730658}
-    Rules:
-    - {fileID: -524122246457563662}
-    - {fileID: 5015256641610393038}
-    - {fileID: 7621343996001163226}
-    - {fileID: -9216500874819315239}
-    Mode: 3
-    CellCheckMode: 0
-    _Editor_SpawnerAdvancedOptionsFoldout: 0
-    OnScalledGrid: 1
-    Repeat: 1
-    DontInheritRotations: 0
-    MultipleToSpawn: 0
-    UseGlobalRules: 0
-    UseParentPackageRules: 0
-    _wasEnablingGlobalRules: 0
-    ScaleAccess: 1
-    DisplayPreviewGUI: 1
-    IsSubSpawner: 0
-    _EditorDisplaySpawnerHeader: 0
+  _editor_drawRule: 1
   CellAllow: 0
   AllConditionsMet: 1
   NewMaterial: {fileID: 0}
@@ -458,30 +312,7 @@ MonoBehaviour:
   Global: 0
   Enabled: 1
   Ignore: 0
-  OwnerSpawner:
-    Enabled: 1
-    Name: Wall-EdgeSupport-Copy
-    SpawnerTag: Supp,Edge
-    StampPrefabID: 3
-    Parent: {fileID: 9063430128532023327}
-    Rules:
-    - {fileID: 4449017047574542558}
-    - {fileID: -2873544828407137054}
-    - {fileID: -3206389834289351373}
-    Mode: 3
-    CellCheckMode: 0
-    _Editor_SpawnerAdvancedOptionsFoldout: 0
-    OnScalledGrid: 1
-    Repeat: 1
-    DontInheritRotations: 0
-    MultipleToSpawn: 0
-    UseGlobalRules: 1
-    UseParentPackageRules: 1
-    _wasEnablingGlobalRules: 1
-    ScaleAccess: 1
-    DisplayPreviewGUI: 1
-    IsSubSpawner: 0
-    _EditorDisplaySpawnerHeader: 0
+  _editor_drawRule: 1
   CellAllow: 1
   AllConditionsMet: 1
   NewMaterial: {fileID: 0}
@@ -508,30 +339,7 @@ MonoBehaviour:
   Global: 0
   Enabled: 1
   Ignore: 0
-  OwnerSpawner:
-    Enabled: 1
-    Name: Wall-EdgeSupport-Copy
-    SpawnerTag: Supp,Edge
-    StampPrefabID: 3
-    Parent: {fileID: 9063430128532023327}
-    Rules:
-    - {fileID: 4449017047574542558}
-    - {fileID: -2873544828407137054}
-    - {fileID: -3206389834289351373}
-    Mode: 3
-    CellCheckMode: 0
-    _Editor_SpawnerAdvancedOptionsFoldout: 0
-    OnScalledGrid: 1
-    Repeat: 1
-    DontInheritRotations: 0
-    MultipleToSpawn: 0
-    UseGlobalRules: 1
-    UseParentPackageRules: 1
-    _wasEnablingGlobalRules: 1
-    ScaleAccess: 1
-    DisplayPreviewGUI: 1
-    IsSubSpawner: 0
-    _EditorDisplaySpawnerHeader: 0
+  _editor_drawRule: 1
   CellAllow: 1
   AllConditionsMet: 1
   OnlyOnSameFieldSetup: 1
@@ -554,32 +362,7 @@ MonoBehaviour:
   Global: 0
   Enabled: 1
   Ignore: 0
-  OwnerSpawner:
-    Enabled: 1
-    Name: Wall Supports X
-    SpawnerTag: 
-    StampPrefabID: 0
-    Parent: {fileID: 0}
-    Rules:
-    - {fileID: 0}
-    - {fileID: 0}
-    - {fileID: 0}
-    - {fileID: 0}
-    - {fileID: 0}
-    Mode: 3
-    CellCheckMode: 0
-    _Editor_SpawnerAdvancedOptionsFoldout: 0
-    OnScalledGrid: 1
-    Repeat: 1
-    DontInheritRotations: 0
-    MultipleToSpawn: 0
-    UseGlobalRules: 0
-    UseParentPackageRules: 0
-    _wasEnablingGlobalRules: 0
-    ScaleAccess: 1
-    DisplayPreviewGUI: 1
-    IsSubSpawner: 0
-    _EditorDisplaySpawnerHeader: 0
+  _editor_drawRule: 1
   CellAllow: 1
   AllConditionsMet: 1
   OnlyOn: {fileID: 0}
@@ -602,30 +385,7 @@ MonoBehaviour:
   Global: 0
   Enabled: 1
   Ignore: 0
-  OwnerSpawner:
-    Enabled: 0
-    Name: Wall-Support
-    SpawnerTag: Supp,Prop
-    StampPrefabID: 3
-    Parent: {fileID: 9063430128532023327}
-    Rules:
-    - {fileID: 330736943241054000}
-    - {fileID: 0}
-    - {fileID: -1529223221998290247}
-    Mode: 3
-    CellCheckMode: 0
-    _Editor_SpawnerAdvancedOptionsFoldout: 0
-    OnScalledGrid: 1
-    Repeat: 1
-    DontInheritRotations: 0
-    MultipleToSpawn: 0
-    UseGlobalRules: 0
-    UseParentPackageRules: 0
-    _wasEnablingGlobalRules: 0
-    ScaleAccess: 1
-    DisplayPreviewGUI: 1
-    IsSubSpawner: 0
-    _EditorDisplaySpawnerHeader: 0
+  _editor_drawRule: 1
   CellAllow: 1
   AllConditionsMet: 1
   Mode: 7
@@ -654,30 +414,7 @@ MonoBehaviour:
   Global: 0
   Enabled: 1
   Ignore: 0
-  OwnerSpawner:
-    Enabled: 0
-    Name: Wall-Support
-    SpawnerTag: Supp,Prop
-    StampPrefabID: 3
-    Parent: {fileID: 9063430128532023327}
-    Rules:
-    - {fileID: 330736943241054000}
-    - {fileID: 0}
-    - {fileID: -1529223221998290247}
-    Mode: 3
-    CellCheckMode: 0
-    _Editor_SpawnerAdvancedOptionsFoldout: 0
-    OnScalledGrid: 1
-    Repeat: 1
-    DontInheritRotations: 0
-    MultipleToSpawn: 0
-    UseGlobalRules: 0
-    UseParentPackageRules: 0
-    _wasEnablingGlobalRules: 0
-    ScaleAccess: 1
-    DisplayPreviewGUI: 1
-    IsSubSpawner: 0
-    _EditorDisplaySpawnerHeader: 0
+  _editor_drawRule: 1
   CellAllow: 0
   AllConditionsMet: 1
   Mode: 7
@@ -706,29 +443,7 @@ MonoBehaviour:
   Global: 1
   Enabled: 1
   Ignore: 0
-  OwnerSpawner:
-    Enabled: 1
-    Name: Wall Supports Z
-    SpawnerTag: 
-    StampPrefabID: 0
-    Parent: {fileID: 0}
-    Rules:
-    - {fileID: 0}
-    - {fileID: 0}
-    Mode: 3
-    CellCheckMode: 0
-    _Editor_SpawnerAdvancedOptionsFoldout: 0
-    OnScalledGrid: 1
-    Repeat: 1
-    DontInheritRotations: 0
-    MultipleToSpawn: 0
-    UseGlobalRules: 0
-    UseParentPackageRules: 0
-    _wasEnablingGlobalRules: 0
-    ScaleAccess: 1
-    DisplayPreviewGUI: 1
-    IsSubSpawner: 0
-    _EditorDisplaySpawnerHeader: 0
+  _editor_drawRule: 1
   CellAllow: 0
   AllConditionsMet: 1
   OffsetCellMode: 0
@@ -736,13 +451,13 @@ MonoBehaviour:
   DistanceMustBe: 1
   IgnoreSelf: 1
   DistanceToTagged: Edge
+  CheckMode: 0
   Distance: 1.5
+  MeasureIn: 0
   DistanceMulVariable:
     name: 
     requiredType: 1
     Tooltip: 
-  CheckMode: 0
-  MeasureIn: 0
 --- !u!114 &-727073997672980482
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -760,31 +475,8 @@ MonoBehaviour:
   Global: 0
   Enabled: 1
   Ignore: 0
-  OwnerSpawner:
-    Enabled: 1
-    Name: Wall-EdgeSupport
-    SpawnerTag: Supp,Edge
-    StampPrefabID: 3
-    Parent: {fileID: 9063430128532023327}
-    Rules:
-    - {fileID: -727073997672980482}
-    - {fileID: -7656842680995777183}
-    - {fileID: 3120480432623670249}
-    Mode: 3
-    CellCheckMode: 0
-    _Editor_SpawnerAdvancedOptionsFoldout: 0
-    OnScalledGrid: 1
-    Repeat: 1
-    DontInheritRotations: 0
-    MultipleToSpawn: 0
-    UseGlobalRules: 1
-    UseParentPackageRules: 1
-    _wasEnablingGlobalRules: 1
-    ScaleAccess: 1
-    DisplayPreviewGUI: 1
-    IsSubSpawner: 0
-    _EditorDisplaySpawnerHeader: 0
-  CellAllow: 1
+  _editor_drawRule: 1
+  CellAllow: 0
   AllConditionsMet: 1
   Module: 3
   CornerMode: 0
@@ -792,7 +484,10 @@ MonoBehaviour:
   SpawnOnEachSide: 0
   UseYLevel: -1
   AutoRemoveOverlaps: 1
+  SetGhosts: 0
+  OverlapDetectMode: 0
   Version2: 0
+  ScaleBounds: 0.99
   Padding: 0
   YawOffset: 0
   DirectOffset: {x: -0.45, y: 0, z: -0.45}
@@ -816,32 +511,10 @@ MonoBehaviour:
   Global: 1
   Enabled: 1
   Ignore: 0
-  OwnerSpawner:
-    Enabled: 1
-    Name: Wall Supports Z
-    SpawnerTag: 
-    StampPrefabID: 0
-    Parent: {fileID: 0}
-    Rules:
-    - {fileID: 0}
-    - {fileID: 0}
-    Mode: 3
-    CellCheckMode: 0
-    _Editor_SpawnerAdvancedOptionsFoldout: 0
-    OnScalledGrid: 1
-    Repeat: 1
-    DontInheritRotations: 0
-    MultipleToSpawn: 0
-    UseGlobalRules: 0
-    UseParentPackageRules: 0
-    _wasEnablingGlobalRules: 0
-    ScaleAccess: 1
-    DisplayPreviewGUI: 1
-    IsSubSpawner: 0
-    _EditorDisplaySpawnerHeader: 0
+  _editor_drawRule: 1
   CellAllow: 1
   AllConditionsMet: 1
-  Override: 0
+  Append: 0
   Randomize: 0
   GetOffsetFromTagged: Untagged
   CheckMode: 0
@@ -865,30 +538,7 @@ MonoBehaviour:
   Global: 0
   Enabled: 1
   Ignore: 0
-  OwnerSpawner:
-    Enabled: 0
-    Name: Wall-Support
-    SpawnerTag: Supp,Prop
-    StampPrefabID: 3
-    Parent: {fileID: 9063430128532023327}
-    Rules:
-    - {fileID: 330736943241054000}
-    - {fileID: 0}
-    - {fileID: -1529223221998290247}
-    Mode: 3
-    CellCheckMode: 0
-    _Editor_SpawnerAdvancedOptionsFoldout: 0
-    OnScalledGrid: 1
-    Repeat: 1
-    DontInheritRotations: 0
-    MultipleToSpawn: 0
-    UseGlobalRules: 0
-    UseParentPackageRules: 0
-    _wasEnablingGlobalRules: 0
-    ScaleAccess: 1
-    DisplayPreviewGUI: 1
-    IsSubSpawner: 0
-    _EditorDisplaySpawnerHeader: 0
+  _editor_drawRule: 1
   CellAllow: 1
   AllConditionsMet: 1
   Mode: 7
@@ -917,32 +567,7 @@ MonoBehaviour:
   Global: 0
   Enabled: 1
   Ignore: 1
-  OwnerSpawner:
-    Enabled: 1
-    Name: WallHoleLarge
-    SpawnerTag: 
-    StampPrefabID: 0
-    Parent: {fileID: -5326678166628730658}
-    Rules:
-    - {fileID: -524122246457563662}
-    - {fileID: 7621343996001163226}
-    - {fileID: -9216500874819315239}
-    - {fileID: 3531137461472628114}
-    - {fileID: 5015256641610393038}
-    Mode: 3
-    CellCheckMode: 0
-    _Editor_SpawnerAdvancedOptionsFoldout: 0
-    OnScalledGrid: 1
-    Repeat: 1
-    DontInheritRotations: 0
-    MultipleToSpawn: 0
-    UseGlobalRules: 1
-    UseParentPackageRules: 1
-    _wasEnablingGlobalRules: 1
-    ScaleAccess: 1
-    DisplayPreviewGUI: 1
-    IsSubSpawner: 0
-    _EditorDisplaySpawnerHeader: 0
+  _editor_drawRule: 1
   CellAllow: 0
   AllConditionsMet: 1
   Info: Example of wall replacer without WallReplacer node rule
@@ -972,14 +597,26 @@ MonoBehaviour:
   Variables:
   - Name: Walls Material
     v3Val: {x: 1, y: 0, z: 0}
+    colVal: {r: 0, g: 0, b: 0, a: 0}
     str: 
     mat: {fileID: 0}
     gameObj: {fileID: 0}
+    curve:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    unityObj: {fileID: 0}
     helper: {x: 0, y: 0, z: 0}
+    additionalHelperRef: {fileID: 0}
     ValueType: 3
+    helpForFieldCommand: 0
+    displayOnScene: 0
+    allowTransformFollow: 0
+    FloatSwitch: 0
   DoorsModificator: {fileID: 11400000, guid: 7500e28d48a8ac44da90dfc8719e91ef, type: 2}
-  EraseWallModificator: {fileID: 11400000, guid: c5bd286613ebcb24c932c8d5e7f79f9b,
-    type: 2}
+  EraseWallModificator: {fileID: 11400000, guid: c5bd286613ebcb24c932c8d5e7f79f9b, type: 2}
   CellsInstructions:
   - Title: Door Hole
     InstructionType: 1
@@ -991,8 +628,7 @@ MonoBehaviour:
     extraPack: {fileID: 0}
   - Title: Clear Wall
     InstructionType: 3
-    TargetModification: {fileID: 11400000, guid: c5bd286613ebcb24c932c8d5e7f79f9b,
-      type: 2}
+    TargetModification: {fileID: 11400000, guid: c5bd286613ebcb24c932c8d5e7f79f9b, type: 2}
     Tags: 
     InstructionArgument: 
     Foldout: 1
@@ -1008,16 +644,14 @@ MonoBehaviour:
   SelfInjections: []
   disabledMods:
   - {fileID: 11400000, guid: 3b4e5513423863145ad2bba145e1e70d, type: 2}
+  CustomPostEvents: []
   AddReflectionProbes: 0
-  MainReflectionSettings: {fileID: 11400000, guid: dabe448206028124294db7edb02eed3f,
-    type: 2}
+  MainReflectionSettings: {fileID: 11400000, guid: dabe448206028124294db7edb02eed3f, type: 2}
   AddMultipleProbes: 0
-  SmallerReflSettings: {fileID: 11400000, guid: 290a908b3df7c6a4a84c21c932841cde,
-    type: 2}
+  SmallerReflSettings: {fileID: 11400000, guid: 290a908b3df7c6a4a84c21c932841cde, type: 2}
   MiniReflSettings: {fileID: 11400000, guid: b243a7973537dbf4faacf7bbda74dada, type: 2}
   SmallerReflLowerSpaceThan: 4
-  AddLightProbes: 0
-  ProbesPerCell: 1
+  LimitSingleProbeSize: 0
   TriggerColliderGeneration: 0
   TriggerGenSettings:
     TriggersLayer: 0
@@ -1045,30 +679,7 @@ MonoBehaviour:
   Global: 0
   Enabled: 1
   Ignore: 0
-  OwnerSpawner:
-    Enabled: 0
-    Name: Wall-Support
-    SpawnerTag: Supp,Prop
-    StampPrefabID: 3
-    Parent: {fileID: 9063430128532023327}
-    Rules:
-    - {fileID: 330736943241054000}
-    - {fileID: 0}
-    - {fileID: -1529223221998290247}
-    Mode: 3
-    CellCheckMode: 0
-    _Editor_SpawnerAdvancedOptionsFoldout: 0
-    OnScalledGrid: 1
-    Repeat: 1
-    DontInheritRotations: 0
-    MultipleToSpawn: 0
-    UseGlobalRules: 0
-    UseParentPackageRules: 0
-    _wasEnablingGlobalRules: 0
-    ScaleAccess: 1
-    DisplayPreviewGUI: 1
-    IsSubSpawner: 0
-    _EditorDisplaySpawnerHeader: 0
+  _editor_drawRule: 1
   CellAllow: 1
   AllConditionsMet: 1
   Tag: Supp
@@ -1083,6 +694,7 @@ MonoBehaviour:
     Condition: 0
     ToCheck:
     - {x: 0, y: 0, z: 0}
+    EditorDisplayColor: {r: 0.4, g: 0.4, b: 1, a: 0.95}
 --- !u!114 &2419594826917967729
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1100,32 +712,7 @@ MonoBehaviour:
   Global: 0
   Enabled: 1
   Ignore: 0
-  OwnerSpawner:
-    Enabled: 1
-    Name: Wall Supports X
-    SpawnerTag: 
-    StampPrefabID: 0
-    Parent: {fileID: 0}
-    Rules:
-    - {fileID: 0}
-    - {fileID: 0}
-    - {fileID: 0}
-    - {fileID: 0}
-    - {fileID: 0}
-    Mode: 3
-    CellCheckMode: 0
-    _Editor_SpawnerAdvancedOptionsFoldout: 0
-    OnScalledGrid: 1
-    Repeat: 1
-    DontInheritRotations: 0
-    MultipleToSpawn: 0
-    UseGlobalRules: 0
-    UseParentPackageRules: 0
-    _wasEnablingGlobalRules: 0
-    ScaleAccess: 1
-    DisplayPreviewGUI: 1
-    IsSubSpawner: 0
-    _EditorDisplaySpawnerHeader: 0
+  _editor_drawRule: 1
   CellAllow: 1
   AllConditionsMet: 1
   ToCenter: 0
@@ -1148,30 +735,7 @@ MonoBehaviour:
   Global: 0
   Enabled: 1
   Ignore: 0
-  OwnerSpawner:
-    Enabled: 1
-    Name: Wall-EdgeSupport
-    SpawnerTag: Supp,Edge
-    StampPrefabID: 3
-    Parent: {fileID: 9063430128532023327}
-    Rules:
-    - {fileID: -727073997672980482}
-    - {fileID: -7656842680995777183}
-    - {fileID: 3120480432623670249}
-    Mode: 3
-    CellCheckMode: 0
-    _Editor_SpawnerAdvancedOptionsFoldout: 0
-    OnScalledGrid: 1
-    Repeat: 1
-    DontInheritRotations: 0
-    MultipleToSpawn: 0
-    UseGlobalRules: 1
-    UseParentPackageRules: 1
-    _wasEnablingGlobalRules: 1
-    ScaleAccess: 1
-    DisplayPreviewGUI: 1
-    IsSubSpawner: 0
-    _EditorDisplaySpawnerHeader: 0
+  _editor_drawRule: 1
   CellAllow: 1
   AllConditionsMet: 1
   NewMaterial: {fileID: 0}
@@ -1198,32 +762,7 @@ MonoBehaviour:
   Global: 0
   Enabled: 1
   Ignore: 0
-  OwnerSpawner:
-    Enabled: 1
-    Name: Wall Supports X
-    SpawnerTag: 
-    StampPrefabID: 0
-    Parent: {fileID: 0}
-    Rules:
-    - {fileID: 0}
-    - {fileID: 0}
-    - {fileID: 0}
-    - {fileID: 0}
-    - {fileID: 0}
-    Mode: 3
-    CellCheckMode: 0
-    _Editor_SpawnerAdvancedOptionsFoldout: 0
-    OnScalledGrid: 1
-    Repeat: 1
-    DontInheritRotations: 0
-    MultipleToSpawn: 0
-    UseGlobalRules: 0
-    UseParentPackageRules: 0
-    _wasEnablingGlobalRules: 0
-    ScaleAccess: 1
-    DisplayPreviewGUI: 1
-    IsSubSpawner: 0
-    _EditorDisplaySpawnerHeader: 0
+  _editor_drawRule: 1
   CellAllow: 1
   AllConditionsMet: 1
   GetFromTagged: Wall
@@ -1265,32 +804,7 @@ MonoBehaviour:
   Global: 1
   Enabled: 1
   Ignore: 0
-  OwnerSpawner:
-    Enabled: 1
-    Name: WallHoleLarge
-    SpawnerTag: 
-    StampPrefabID: 0
-    Parent: {fileID: -5326678166628730658}
-    Rules:
-    - {fileID: -524122246457563662}
-    - {fileID: 7621343996001163226}
-    - {fileID: -9216500874819315239}
-    - {fileID: 3531137461472628114}
-    - {fileID: 5015256641610393038}
-    Mode: 3
-    CellCheckMode: 0
-    _Editor_SpawnerAdvancedOptionsFoldout: 0
-    OnScalledGrid: 1
-    Repeat: 1
-    DontInheritRotations: 0
-    MultipleToSpawn: 0
-    UseGlobalRules: 1
-    UseParentPackageRules: 1
-    _wasEnablingGlobalRules: 1
-    ScaleAccess: 1
-    DisplayPreviewGUI: 1
-    IsSubSpawner: 0
-    _EditorDisplaySpawnerHeader: 0
+  _editor_drawRule: 1
   CellAllow: 1
   AllConditionsMet: 1
   NewMaterial: {fileID: 0}
@@ -1317,30 +831,7 @@ MonoBehaviour:
   Global: 0
   Enabled: 1
   Ignore: 0
-  OwnerSpawner:
-    Enabled: 1
-    Name: Wall-EdgeSupport-Copy
-    SpawnerTag: Supp,Edge
-    StampPrefabID: 3
-    Parent: {fileID: 9063430128532023327}
-    Rules:
-    - {fileID: 4449017047574542558}
-    - {fileID: -2873544828407137054}
-    - {fileID: -3206389834289351373}
-    Mode: 3
-    CellCheckMode: 0
-    _Editor_SpawnerAdvancedOptionsFoldout: 0
-    OnScalledGrid: 1
-    Repeat: 1
-    DontInheritRotations: 0
-    MultipleToSpawn: 0
-    UseGlobalRules: 1
-    UseParentPackageRules: 1
-    _wasEnablingGlobalRules: 1
-    ScaleAccess: 1
-    DisplayPreviewGUI: 1
-    IsSubSpawner: 0
-    _EditorDisplaySpawnerHeader: 0
+  _editor_drawRule: 1
   CellAllow: 0
   AllConditionsMet: 1
   Module: 3
@@ -1349,7 +840,10 @@ MonoBehaviour:
   SpawnOnEachSide: 0
   UseYLevel: -1
   AutoRemoveOverlaps: 1
+  SetGhosts: 0
+  OverlapDetectMode: 0
   Version2: 0
+  ScaleBounds: 0.99
   Padding: 0
   YawOffset: 0
   DirectOffset: {x: -0.5, y: 0, z: -0.45}
@@ -1373,32 +867,7 @@ MonoBehaviour:
   Global: 0
   Enabled: 1
   Ignore: 0
-  OwnerSpawner:
-    Enabled: 1
-    Name: WallHoleLarge
-    SpawnerTag: 
-    StampPrefabID: 0
-    Parent: {fileID: -5326678166628730658}
-    Rules:
-    - {fileID: -524122246457563662}
-    - {fileID: 7621343996001163226}
-    - {fileID: -9216500874819315239}
-    - {fileID: 3531137461472628114}
-    - {fileID: 5015256641610393038}
-    Mode: 3
-    CellCheckMode: 0
-    _Editor_SpawnerAdvancedOptionsFoldout: 0
-    OnScalledGrid: 1
-    Repeat: 1
-    DontInheritRotations: 0
-    MultipleToSpawn: 0
-    UseGlobalRules: 1
-    UseParentPackageRules: 1
-    _wasEnablingGlobalRules: 1
-    ScaleAccess: 1
-    DisplayPreviewGUI: 1
-    IsSubSpawner: 0
-    _EditorDisplaySpawnerHeader: 0
+  _editor_drawRule: 1
   CellAllow: 1
   AllConditionsMet: 1
   CheckedCellsMustBe: 2
@@ -1440,6 +909,13 @@ MonoBehaviour:
   UseRestrictedDir: 1
   CustomCellsCheck: 0
   FullRotGet: 0
+  Check3DAngles: 0
+  RotationSpaceDisplay: 0
+  CheckPosit90: 1
+  CheckNeg90: 1
+  OverridePitchRotation: 1
+  InitPitchRotation: 0
+  NotCheckDefaultPitch: 0
 --- !u!114 &7247752788390386246
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1457,30 +933,7 @@ MonoBehaviour:
   Global: 0
   Enabled: 1
   Ignore: 0
-  OwnerSpawner:
-    Enabled: 1
-    Name: Wall-Base
-    SpawnerTag: Wall
-    StampPrefabID: 0
-    Parent: {fileID: 9063430128532023327}
-    Rules:
-    - {fileID: 9034513453344007269}
-    - {fileID: 7787048315036503549}
-    - {fileID: 7247752788390386246}
-    Mode: 3
-    CellCheckMode: 0
-    _Editor_SpawnerAdvancedOptionsFoldout: 0
-    OnScalledGrid: 1
-    Repeat: 1
-    DontInheritRotations: 0
-    MultipleToSpawn: 0
-    UseGlobalRules: 1
-    UseParentPackageRules: 1
-    _wasEnablingGlobalRules: 1
-    ScaleAccess: 1
-    DisplayPreviewGUI: 1
-    IsSubSpawner: 0
-    _EditorDisplaySpawnerHeader: 0
+  _editor_drawRule: 1
   CellAllow: 1
   AllConditionsMet: 1
   NewMaterial: {fileID: 0}
@@ -1507,32 +960,7 @@ MonoBehaviour:
   Global: 0
   Enabled: 0
   Ignore: 0
-  OwnerSpawner:
-    Enabled: 1
-    Name: Wall Supports X
-    SpawnerTag: 
-    StampPrefabID: 0
-    Parent: {fileID: 0}
-    Rules:
-    - {fileID: 0}
-    - {fileID: 0}
-    - {fileID: 0}
-    - {fileID: 0}
-    - {fileID: 0}
-    Mode: 3
-    CellCheckMode: 0
-    _Editor_SpawnerAdvancedOptionsFoldout: 0
-    OnScalledGrid: 1
-    Repeat: 1
-    DontInheritRotations: 0
-    MultipleToSpawn: 0
-    UseGlobalRules: 0
-    UseParentPackageRules: 0
-    _wasEnablingGlobalRules: 0
-    ScaleAccess: 1
-    DisplayPreviewGUI: 1
-    IsSubSpawner: 0
-    _EditorDisplaySpawnerHeader: 0
+  _editor_drawRule: 1
   CellAllow: 1
   AllConditionsMet: 1
   OverrideOffset: 1
@@ -1542,6 +970,7 @@ MonoBehaviour:
   WorldOffset: {x: 0, y: 0, z: 0.5}
   OffsetMode: 1
   RandomWorldOffset: {x: 0, y: 0, z: 0}
+  RandomRange: {x: 0, y: 1}
 --- !u!114 &7621343996001163226
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1559,35 +988,10 @@ MonoBehaviour:
   Global: 1
   Enabled: 1
   Ignore: 0
-  OwnerSpawner:
-    Enabled: 1
-    Name: WallHoleLarge
-    SpawnerTag: 
-    StampPrefabID: 0
-    Parent: {fileID: -5326678166628730658}
-    Rules:
-    - {fileID: -524122246457563662}
-    - {fileID: 7621343996001163226}
-    - {fileID: -9216500874819315239}
-    - {fileID: 3531137461472628114}
-    - {fileID: 5015256641610393038}
-    Mode: 3
-    CellCheckMode: 0
-    _Editor_SpawnerAdvancedOptionsFoldout: 0
-    OnScalledGrid: 1
-    Repeat: 1
-    DontInheritRotations: 0
-    MultipleToSpawn: 0
-    UseGlobalRules: 1
-    UseParentPackageRules: 1
-    _wasEnablingGlobalRules: 1
-    ScaleAccess: 1
-    DisplayPreviewGUI: 1
-    IsSubSpawner: 0
-    _EditorDisplaySpawnerHeader: 0
+  _editor_drawRule: 1
   CellAllow: 1
   AllConditionsMet: 1
-  Override: 0
+  Append: 0
   Randomize: 0
   GetOffsetFromTagged: 
   CheckMode: 0
@@ -1611,32 +1015,7 @@ MonoBehaviour:
   Global: 0
   Enabled: 0
   Ignore: 0
-  OwnerSpawner:
-    Enabled: 1
-    Name: Wall Supports X
-    SpawnerTag: 
-    StampPrefabID: 0
-    Parent: {fileID: 0}
-    Rules:
-    - {fileID: 0}
-    - {fileID: 0}
-    - {fileID: 0}
-    - {fileID: 0}
-    - {fileID: 0}
-    Mode: 3
-    CellCheckMode: 0
-    _Editor_SpawnerAdvancedOptionsFoldout: 0
-    OnScalledGrid: 1
-    Repeat: 1
-    DontInheritRotations: 0
-    MultipleToSpawn: 0
-    UseGlobalRules: 0
-    UseParentPackageRules: 0
-    _wasEnablingGlobalRules: 0
-    ScaleAccess: 1
-    DisplayPreviewGUI: 1
-    IsSubSpawner: 0
-    _EditorDisplaySpawnerHeader: 0
+  _editor_drawRule: 1
   CellAllow: 1
   AllConditionsMet: 1
   OnlyOn: {fileID: 0}
@@ -1659,31 +1038,8 @@ MonoBehaviour:
   Global: 0
   Enabled: 1
   Ignore: 0
-  OwnerSpawner:
-    Enabled: 1
-    Name: Wall-Base
-    SpawnerTag: Wall
-    StampPrefabID: 0
-    Parent: {fileID: 9063430128532023327}
-    Rules:
-    - {fileID: 9034513453344007269}
-    - {fileID: 7787048315036503549}
-    - {fileID: 7247752788390386246}
-    Mode: 3
-    CellCheckMode: 0
-    _Editor_SpawnerAdvancedOptionsFoldout: 0
-    OnScalledGrid: 1
-    Repeat: 1
-    DontInheritRotations: 0
-    MultipleToSpawn: 0
-    UseGlobalRules: 1
-    UseParentPackageRules: 1
-    _wasEnablingGlobalRules: 1
-    ScaleAccess: 1
-    DisplayPreviewGUI: 1
-    IsSubSpawner: 0
-    _EditorDisplaySpawnerHeader: 0
-  CellAllow: 1
+  _editor_drawRule: 1
+  CellAllow: 0
   AllConditionsMet: 1
   Module: 0
   CornerMode: 0
@@ -1691,7 +1047,10 @@ MonoBehaviour:
   SpawnOnEachSide: 1
   UseYLevel: -1
   AutoRemoveOverlaps: 1
+  SetGhosts: 0
+  OverlapDetectMode: 0
   Version2: 0
+  ScaleBounds: 0.99
   Padding: 0
   YawOffset: 180
   DirectOffset: {x: 0, y: 0, z: 0.475}
@@ -1718,6 +1077,7 @@ MonoBehaviour:
   CustomSeed: 0
   ModPackType: 0
   TagForAllSpawners: 
+  CombineSpawns: 0
   Variables: []
   CallOnAllMod: {fileID: 0}
   CallOnAllSpawners:
@@ -1733,6 +1093,7 @@ MonoBehaviour:
     OnScalledGrid: 0
     Repeat: 0
     DontInheritRotations: 0
+    SwitchSpawnedToStatic: 0
     MultipleToSpawn: 0
     UseGlobalRules: 0
     UseParentPackageRules: 0
@@ -1759,30 +1120,7 @@ MonoBehaviour:
   Global: 0
   Enabled: 1
   Ignore: 0
-  OwnerSpawner:
-    Enabled: 1
-    Name: Wall-Base
-    SpawnerTag: Wall
-    StampPrefabID: 0
-    Parent: {fileID: 9063430128532023327}
-    Rules:
-    - {fileID: 9034513453344007269}
-    - {fileID: 7787048315036503549}
-    - {fileID: 7247752788390386246}
-    Mode: 3
-    CellCheckMode: 0
-    _Editor_SpawnerAdvancedOptionsFoldout: 0
-    OnScalledGrid: 1
-    Repeat: 1
-    DontInheritRotations: 0
-    MultipleToSpawn: 0
-    UseGlobalRules: 1
-    UseParentPackageRules: 1
-    _wasEnablingGlobalRules: 1
-    ScaleAccess: 1
-    DisplayPreviewGUI: 1
-    IsSubSpawner: 0
-    _EditorDisplaySpawnerHeader: 0
+  _editor_drawRule: 1
   CellAllow: 0
   AllConditionsMet: 1
   Tag: Wall,Hole
@@ -1797,6 +1135,7 @@ MonoBehaviour:
     Condition: 0
     ToCheck:
     - {x: 0, y: 0, z: 0}
+    EditorDisplayColor: {r: 0.4, g: 0.4, b: 1, a: 0.95}
 --- !u!114 &9063430128532023327
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1813,44 +1152,33 @@ MonoBehaviour:
   Enabled: 1
   ModTag: 
   DrawMeshAndBox: 0
+  Combine: 0
   RunEmittersIfContains: 0
   DrawSetupFor: 0
   OStamp: {fileID: 0}
   DrawObjectStamps: 1
   OMultiStamp: {fileID: 0}
   PrefabsList:
-  - Prefab: {fileID: 1042461877549604795, guid: a543fbc54e2df2e4ead2232bba87c437,
-      type: 3}
+  - Prefab: {fileID: 1042461877549604795, guid: a543fbc54e2df2e4ead2232bba87c437, type: 3}
     MainCollider: {fileID: 0}
     subID: 0
-    _refMesh: {fileID: -5495902117074765545, guid: 64fcd2652b495ca44945c63b46553d57,
-      type: 3}
+    _refMesh: {fileID: -5495902117074765545, guid: 64fcd2652b495ca44945c63b46553d57, type: 3}
     _refCol: {fileID: 0}
-  - Prefab: {fileID: 5057260830621552475, guid: d2247b2165217c04b89641c6af103fe1,
-      type: 3}
-    MainCollider: {fileID: 7000868315334079291, guid: d2247b2165217c04b89641c6af103fe1,
-      type: 3}
+  - Prefab: {fileID: 5057260830621552475, guid: d2247b2165217c04b89641c6af103fe1, type: 3}
+    MainCollider: {fileID: 7000868315334079291, guid: d2247b2165217c04b89641c6af103fe1, type: 3}
     subID: 0
-    _refMesh: {fileID: -5495902117074765545, guid: 6c8146e3c8e6a5e4b9e35cb85452d0be,
-      type: 3}
-    _refCol: {fileID: 7000868315334079291, guid: d2247b2165217c04b89641c6af103fe1,
-      type: 3}
-  - Prefab: {fileID: 4580412978701899911, guid: 7fbbd54b9ae392e4f9eea9b6be574a58,
-      type: 3}
-    MainCollider: {fileID: 0}
+    _refMesh: {fileID: -5495902117074765545, guid: 6c8146e3c8e6a5e4b9e35cb85452d0be, type: 3}
+    _refCol: {fileID: 7000868315334079291, guid: d2247b2165217c04b89641c6af103fe1, type: 3}
+  - Prefab: {fileID: 4580412978701899911, guid: 7fbbd54b9ae392e4f9eea9b6be574a58, type: 3}
+    MainCollider: {fileID: 8304470515517136792, guid: 7fbbd54b9ae392e4f9eea9b6be574a58, type: 3}
     subID: 0
-    _refMesh: {fileID: -5495902117074765545, guid: 935dbe748c543774a828530f338c335c,
-      type: 3}
-    _refCol: {fileID: 0}
-  - Prefab: {fileID: 8200955041648577868, guid: 926ee9ebff943944e9f3cb2d291ff175,
-      type: 3}
-    MainCollider: {fileID: 3924580599932957594, guid: 926ee9ebff943944e9f3cb2d291ff175,
-      type: 3}
+    _refMesh: {fileID: -5495902117074765545, guid: 935dbe748c543774a828530f338c335c, type: 3}
+    _refCol: {fileID: 8304470515517136792, guid: 7fbbd54b9ae392e4f9eea9b6be574a58, type: 3}
+  - Prefab: {fileID: 8200955041648577868, guid: 926ee9ebff943944e9f3cb2d291ff175, type: 3}
+    MainCollider: {fileID: 3924580599932957594, guid: 926ee9ebff943944e9f3cb2d291ff175, type: 3}
     subID: 0
-    _refMesh: {fileID: -5495902117074765545, guid: 73f2b01dad0ebf34ea8d4dede18968fb,
-      type: 3}
-    _refCol: {fileID: 3924580599932957594, guid: 926ee9ebff943944e9f3cb2d291ff175,
-      type: 3}
+    _refMesh: {fileID: -5495902117074765545, guid: 73f2b01dad0ebf34ea8d4dede18968fb, type: 3}
+    _refCol: {fileID: 3924580599932957594, guid: 926ee9ebff943944e9f3cb2d291ff175, type: 3}
   DrawMultiObjectStamps: 1
   Spawners:
   - Enabled: 1
@@ -1868,6 +1196,7 @@ MonoBehaviour:
     OnScalledGrid: 1
     Repeat: 1
     DontInheritRotations: 0
+    SwitchSpawnedToStatic: 0
     MultipleToSpawn: 0
     UseGlobalRules: 1
     UseParentPackageRules: 1
@@ -1888,6 +1217,7 @@ MonoBehaviour:
     OnScalledGrid: 1
     Repeat: 1
     DontInheritRotations: 0
+    SwitchSpawnedToStatic: 0
     MultipleToSpawn: 0
     UseGlobalRules: 1
     UseParentPackageRules: 1
@@ -1909,10 +1239,11 @@ MonoBehaviour:
     OnScalledGrid: 1
     Repeat: 1
     DontInheritRotations: 0
+    SwitchSpawnedToStatic: 0
     MultipleToSpawn: 0
-    UseGlobalRules: 0
-    UseParentPackageRules: 0
-    _wasEnablingGlobalRules: 0
+    UseGlobalRules: 1
+    UseParentPackageRules: 1
+    _wasEnablingGlobalRules: 1
     ScaleAccess: 1
     DisplayPreviewGUI: 1
     IsSubSpawner: 0
@@ -1932,6 +1263,7 @@ MonoBehaviour:
     OnScalledGrid: 1
     Repeat: 1
     DontInheritRotations: 0
+    SwitchSpawnedToStatic: 0
     MultipleToSpawn: 0
     UseGlobalRules: 1
     UseParentPackageRules: 1
@@ -1940,7 +1272,7 @@ MonoBehaviour:
     DisplayPreviewGUI: 1
     IsSubSpawner: 0
     _EditorDisplaySpawnerHeader: 0
-  - Enabled: 1
+  - Enabled: 0
     Name: Wall-EdgeSupport-Copy
     SpawnerTag: Supp,Edge
     StampPrefabID: 3
@@ -1955,6 +1287,7 @@ MonoBehaviour:
     OnScalledGrid: 1
     Repeat: 1
     DontInheritRotations: 0
+    SwitchSpawnedToStatic: 0
     MultipleToSpawn: 0
     UseGlobalRules: 1
     UseParentPackageRules: 1
@@ -1963,11 +1296,12 @@ MonoBehaviour:
     DisplayPreviewGUI: 1
     IsSubSpawner: 0
     _EditorDisplaySpawnerHeader: 0
+  SubSpawners: []
   VariantOf: {fileID: 0}
   _editor_drawStamp: 1
   _editor_drawSpawners: 1
   _editor_drawGlobalRules: 0
   _editor_drawModPackRules: 0
-  _editor_shareSelected: 0
-  ParentPreset: {fileID: 11400000}
+  _editor_shareSelected: 1
+  ParentPreset: {fileID: 0}
   ParentPack: {fileID: 8071460775553708166}
