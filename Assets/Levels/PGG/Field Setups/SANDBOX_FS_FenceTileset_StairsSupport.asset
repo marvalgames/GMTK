@@ -94,7 +94,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   TemporaryContainer: {fileID: 0}
   Enabled: 1
-  ModTag: Fence
+  ModTag: Wall
   DrawMeshAndBox: 0
   Combine: 0
   RunEmittersIfContains: 0
@@ -169,7 +169,7 @@ MonoBehaviour:
   _editor_drawGlobalRules: 0
   _editor_drawModPackRules: 0
   _editor_shareSelected: 0
-  ParentPreset: {fileID: 11400000}
+  ParentPreset: {fileID: 0}
   ParentPack: {fileID: 4010537770972031752}
 --- !u!114 &-8036390951677653302
 MonoBehaviour:
@@ -188,7 +188,7 @@ MonoBehaviour:
   Global: 0
   Enabled: 1
   Ignore: 0
-  _editor_drawRule: 0
+  _editor_drawRule: 1
   CellAllow: 1
   AllConditionsMet: 1
   WallPlacementGuide: {x: 0, y: 1, z: 1}
@@ -237,20 +237,20 @@ MonoBehaviour:
   OMultiStamp: {fileID: 0}
   PrefabsList:
   - Prefab: {fileID: 5591483964658297579, guid: 65c0278b2d58a5f4f8fd3a1ae839bc53, type: 3}
-    MainCollider: {fileID: 5591483964658396232, guid: 65c0278b2d58a5f4f8fd3a1ae839bc53, type: 3}
+    MainCollider: {fileID: 0}
     subID: 0
     _refMesh: {fileID: -8814386876606807464, guid: 8f50acbdb7056ea40af34807460ba408, type: 3}
-    _refCol: {fileID: 5591483964658396232, guid: 65c0278b2d58a5f4f8fd3a1ae839bc53, type: 3}
+    _refCol: {fileID: 0}
   - Prefab: {fileID: 5591483964658297579, guid: 65c0278b2d58a5f4f8fd3a1ae839bc53, type: 3}
-    MainCollider: {fileID: 5591483964658396232, guid: 65c0278b2d58a5f4f8fd3a1ae839bc53, type: 3}
+    MainCollider: {fileID: 0}
     subID: 0
     _refMesh: {fileID: 5085965759457506131, guid: 8f50acbdb7056ea40af34807460ba408, type: 3}
-    _refCol: {fileID: 5591483964658396232, guid: 65c0278b2d58a5f4f8fd3a1ae839bc53, type: 3}
+    _refCol: {fileID: 0}
   - Prefab: {fileID: 5591483964658297579, guid: 65c0278b2d58a5f4f8fd3a1ae839bc53, type: 3}
-    MainCollider: {fileID: 5591483964658396232, guid: 65c0278b2d58a5f4f8fd3a1ae839bc53, type: 3}
+    MainCollider: {fileID: 0}
     subID: 0
     _refMesh: {fileID: -3268728532136532347, guid: 8f50acbdb7056ea40af34807460ba408, type: 3}
-    _refCol: {fileID: 5591483964658396232, guid: 65c0278b2d58a5f4f8fd3a1ae839bc53, type: 3}
+    _refCol: {fileID: 0}
   DrawMultiObjectStamps: 1
   Spawners:
   - Enabled: 1
@@ -283,7 +283,7 @@ MonoBehaviour:
   _editor_drawGlobalRules: 0
   _editor_drawModPackRules: 0
   _editor_shareSelected: 0
-  ParentPreset: {fileID: 11400000}
+  ParentPreset: {fileID: 0}
   ParentPack: {fileID: 4010537770972031752}
 --- !u!114 &-7057274667417803235
 MonoBehaviour:
@@ -472,6 +472,34 @@ MonoBehaviour:
   AllConditionsMet: 1
   RotationFrom: -90
   RotationTo: 90
+--- !u!114 &-6117342559042904134
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6c3eb05acb0b93347af77c10c419406a, type: 3}
+  m_Name: SR_DirectionalRemove-[FieldMod_ExampleWallRemover]
+  m_EditorClassIdentifier: 
+  Logic: 0
+  Negate: 0
+  Global: 0
+  Enabled: 1
+  Ignore: 0
+  _editor_drawRule: 1
+  CellAllow: 1
+  AllConditionsMet: 1
+  replaceOnTag: Wall
+  CheckMode: 0
+  LocalRemovePosition: {x: 0, y: 0.5, z: 0.5}
+  OffsetMode: 1
+  RemoveDistance: 0.5
+  DistanceSource: 2
+  ExecuteOnOffsettedCell: {x: 0, y: 0, z: 0}
+  DrawDebugGizmos: 0
 --- !u!114 &-6003335595119557452
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -504,7 +532,7 @@ MonoBehaviour:
     requiredType: 5
     Tooltip: Set Additive Vector3 Field Variable value to this property
   RotationOffset: {x: 0, y: 90, z: 0}
-  ScaleMultiplier: {x: 0.8, y: 2, z: 2}
+  ScaleMultiplier: {x: 0.9, y: 2.13, z: 1.98}
   RandomizeOffset: {x: 0, y: 0, z: 0}
   MaxDegreesSteps: {x: 1, y: 1, z: 1}
   InheritScaleOffset: 0
@@ -813,7 +841,7 @@ MonoBehaviour:
   Randomize: 0
   GetOffsetFromTagged: 
   CheckMode: 0
-  Offset: {x: 0, y: -2, z: -2}
+  Offset: {x: 0, y: -2.4, z: -2}
   OffsetMode: 0
   RandomOffset: {x: 0, y: 0, z: 0}
 --- !u!114 &-2328914806453490717
@@ -1261,7 +1289,7 @@ MonoBehaviour:
     extraPack: {fileID: 0}
   - Title: Clear Wall
     InstructionType: 3
-    TargetModification: {fileID: 11400000, guid: c5bd286613ebcb24c932c8d5e7f79f9b, type: 2}
+    TargetModification: {fileID: 4329741961383557463}
     Tags: 
     InstructionArgument: 
     Foldout: 1
@@ -1270,6 +1298,7 @@ MonoBehaviour:
   RootPack: {fileID: 4010537770972031752}
   UtilityModificators:
   - {fileID: 8017177735639860324}
+  - {fileID: 4329741961383557463}
   ModificatorPacks:
   - {fileID: 4010537770972031752}
   Ignores: []
@@ -1611,7 +1640,7 @@ MonoBehaviour:
   Enabled: 1
   Ignore: 0
   _editor_drawRule: 1
-  CellAllow: 1
+  CellAllow: 0
   AllConditionsMet: 1
   Module: 0
   CornerMode: 0
@@ -2080,6 +2109,62 @@ MonoBehaviour:
     In many causes you will not need this.'
   CommentInHeader: 0
   Padding: {x: 8, y: 8}
+--- !u!114 &4329741961383557463
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 671fd9c659a53a04eb310656f11c9125, type: 3}
+  m_Name: FieldMod_ExampleWallRemover(Clone)
+  m_EditorClassIdentifier: 
+  TemporaryContainer: {fileID: 0}
+  Enabled: 1
+  ModTag: Hole
+  DrawMeshAndBox: 0
+  Combine: 0
+  RunEmittersIfContains: 0
+  DrawSetupFor: 0
+  OStamp: {fileID: 0}
+  DrawObjectStamps: 1
+  OMultiStamp: {fileID: 0}
+  PrefabsList: []
+  DrawMultiObjectStamps: 1
+  Spawners:
+  - Enabled: 1
+    Name: Wall Remover
+    SpawnerTag: 
+    StampPrefabID: -2
+    Parent: {fileID: 4329741961383557463}
+    Rules:
+    - {fileID: -6117342559042904134}
+    Mode: 0
+    CellCheckMode: 0
+    _Editor_SpawnerAdvancedOptionsFoldout: 0
+    OnScalledGrid: 1
+    Repeat: 0
+    DontInheritRotations: 0
+    SwitchSpawnedToStatic: 0
+    MultipleToSpawn: 0
+    UseGlobalRules: 1
+    UseParentPackageRules: 1
+    _wasEnablingGlobalRules: 1
+    ScaleAccess: 1
+    DisplayPreviewGUI: 1
+    IsSubSpawner: 0
+    _EditorDisplaySpawnerHeader: 0
+  SubSpawners: []
+  VariantOf: {fileID: 0}
+  _editor_drawStamp: 1
+  _editor_drawSpawners: 1
+  _editor_drawGlobalRules: 0
+  _editor_drawModPackRules: 0
+  _editor_shareSelected: 0
+  ParentPreset: {fileID: 11400000}
+  ParentPack: {fileID: 4010537770972031752}
 --- !u!114 &4599134949047854073
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2304,7 +2389,7 @@ MonoBehaviour:
     requiredType: 5
     Tooltip: Set Additive Vector3 Field Variable value to this property
   RotationOffset: {x: 0, y: 90, z: 0}
-  ScaleMultiplier: {x: 1, y: 0.5, z: 0.25}
+  ScaleMultiplier: {x: 1, y: 0.5, z: 1}
   RandomizeOffset: {x: 0, y: 0, z: 0}
   MaxDegreesSteps: {x: 1, y: 1, z: 1}
   InheritScaleOffset: 0
@@ -2520,7 +2605,7 @@ MonoBehaviour:
   _editor_drawGlobalRules: 0
   _editor_drawModPackRules: 0
   _editor_shareSelected: 3
-  ParentPreset: {fileID: 11400000}
+  ParentPreset: {fileID: 0}
   ParentPack: {fileID: 4010537770972031752}
 --- !u!114 &8017177735639860324
 MonoBehaviour:
@@ -2546,10 +2631,10 @@ MonoBehaviour:
   OMultiStamp: {fileID: 0}
   PrefabsList:
   - Prefab: {fileID: 1027639662616582, guid: 3290b84ce73ca4e358f8ce5fb364281c, type: 3}
-    MainCollider: {fileID: 0}
+    MainCollider: {fileID: 64380515566751728, guid: 3290b84ce73ca4e358f8ce5fb364281c, type: 3}
     subID: 0
     _refMesh: {fileID: 8568771882487935041, guid: 12bdb1582ddc2bd4d9248e99494e1b8e, type: 3}
-    _refCol: {fileID: 0}
+    _refCol: {fileID: 64380515566751728, guid: 3290b84ce73ca4e358f8ce5fb364281c, type: 3}
   DrawMultiObjectStamps: 1
   Spawners:
   - Enabled: 1
