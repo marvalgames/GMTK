@@ -560,7 +560,43 @@ MonoBehaviour:
     requiredType: 5
     Tooltip: Set Additive Vector3 Field Variable value to this property
   RotationOffset: {x: 0, y: 90, z: 0}
-  ScaleMultiplier: {x: 0.9, y: 2.13, z: 1.98}
+  ScaleMultiplier: {x: 2, y: 2, z: 2}
+  RandomizeOffset: {x: 0, y: 0, z: 0}
+  MaxDegreesSteps: {x: 1, y: 1, z: 1}
+  InheritScaleOffset: 0
+--- !u!114 &-5941025764138318465
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b496837ae5a0c3b4786589d6fb51e8d5, type: 3}
+  m_Name: SR_MoveRotateScale-[Stairs]
+  m_EditorClassIdentifier: 
+  Logic: 0
+  Negate: 0
+  Global: 0
+  Enabled: 1
+  Ignore: 0
+  _editor_drawRule: 1
+  CellAllow: 1
+  AllConditionsMet: 1
+  EffectOn: 2
+  ApplyMode: 0
+  Space: 0
+  GetCoords: 
+  CheckMode: 0
+  PositionOffset: {x: 0, y: 0, z: 0}
+  OffsetMode: 1
+  OffsetPosVariable:
+    name: 
+    requiredType: 5
+    Tooltip: Set Additive Vector3 Field Variable value to this property
+  RotationOffset: {x: 0, y: 90, z: 0}
+  ScaleMultiplier: {x: 2, y: 2, z: 2}
   RandomizeOffset: {x: 0, y: 0, z: 0}
   MaxDegreesSteps: {x: 1, y: 1, z: 1}
   InheritScaleOffset: 0
@@ -1001,7 +1037,7 @@ MonoBehaviour:
   Randomize: 0
   GetOffsetFromTagged: 
   CheckMode: 0
-  Offset: {x: 0, y: -2.4, z: -2}
+  Offset: {x: 0, y: 2, z: 0}
   OffsetMode: 0
   RandomOffset: {x: 0, y: 0, z: 0}
 --- !u!114 &-2241661952690225057
@@ -2281,6 +2317,42 @@ MonoBehaviour:
   RandomizeOffset: {x: 0, y: 0, z: 0}
   MaxDegreesSteps: {x: 1, y: 1, z: 1}
   InheritScaleOffset: 0
+--- !u!114 &2999802771465279849
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b496837ae5a0c3b4786589d6fb51e8d5, type: 3}
+  m_Name: SR_MoveRotateScale-[Stairs]
+  m_EditorClassIdentifier: 
+  Logic: 0
+  Negate: 0
+  Global: 0
+  Enabled: 1
+  Ignore: 0
+  _editor_drawRule: 1
+  CellAllow: 1
+  AllConditionsMet: 1
+  EffectOn: 2
+  ApplyMode: 0
+  Space: 0
+  GetCoords: 
+  CheckMode: 0
+  PositionOffset: {x: 0, y: 0, z: 0}
+  OffsetMode: 1
+  OffsetPosVariable:
+    name: 
+    requiredType: 5
+    Tooltip: Set Additive Vector3 Field Variable value to this property
+  RotationOffset: {x: 0, y: 90, z: 0}
+  ScaleMultiplier: {x: 2, y: 2, z: 2}
+  RandomizeOffset: {x: 0, y: 0, z: 0}
+  MaxDegreesSteps: {x: 1, y: 1, z: 1}
+  InheritScaleOffset: 0
 --- !u!114 &3277330611074846594
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2399,7 +2471,7 @@ MonoBehaviour:
   _editor_drawRule: 1
   CellAllow: 1
   AllConditionsMet: 1
-  ScaleMultiplier: {x: -1, y: 1, z: 1}
+  ScaleMultiplier: {x: -2, y: 2, z: 2}
   ScaleMulVariable:
     name: 
     requiredType: 5
@@ -2803,7 +2875,7 @@ MonoBehaviour:
   _editor_drawGlobalRules: 0
   _editor_drawModPackRules: 0
   _editor_shareSelected: 0
-  ParentPreset: {fileID: 0}
+  ParentPreset: {fileID: 11400000}
   ParentPack: {fileID: 4010537770972031752}
 --- !u!114 &4599134949047854073
 MonoBehaviour:
@@ -2904,6 +2976,42 @@ MonoBehaviour:
   OverridePitchRotation: 1
   InitPitchRotation: 0
   NotCheckDefaultPitch: 0
+--- !u!114 &5026040017775582117
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b496837ae5a0c3b4786589d6fb51e8d5, type: 3}
+  m_Name: SR_MoveRotateScale-[Stairs]
+  m_EditorClassIdentifier: 
+  Logic: 0
+  Negate: 0
+  Global: 0
+  Enabled: 1
+  Ignore: 0
+  _editor_drawRule: 1
+  CellAllow: 1
+  AllConditionsMet: 1
+  EffectOn: 2
+  ApplyMode: 0
+  Space: 0
+  GetCoords: 
+  CheckMode: 0
+  PositionOffset: {x: 1.6, y: 2, z: 2}
+  OffsetMode: 1
+  OffsetPosVariable:
+    name: 
+    requiredType: 5
+    Tooltip: Set Additive Vector3 Field Variable value to this property
+  RotationOffset: {x: 0, y: 90, z: 0}
+  ScaleMultiplier: {x: 2, y: 2, z: 2}
+  RandomizeOffset: {x: 0, y: 0, z: 0}
+  MaxDegreesSteps: {x: 1, y: 1, z: 1}
+  InheritScaleOffset: 0
 --- !u!114 &5232660962027706083
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3038,6 +3146,42 @@ MonoBehaviour:
     Tooltip: 
   ReplaceOnly: {fileID: 0}
   ReplaceOnlyFirst: 1
+--- !u!114 &6502740344136068060
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b496837ae5a0c3b4786589d6fb51e8d5, type: 3}
+  m_Name: SR_MoveRotateScale-[Stairs]
+  m_EditorClassIdentifier: 
+  Logic: 0
+  Negate: 0
+  Global: 0
+  Enabled: 1
+  Ignore: 0
+  _editor_drawRule: 1
+  CellAllow: 1
+  AllConditionsMet: 1
+  EffectOn: 2
+  ApplyMode: 0
+  Space: 0
+  GetCoords: 
+  CheckMode: 0
+  PositionOffset: {x: 0, y: 0, z: 0}
+  OffsetMode: 1
+  OffsetPosVariable:
+    name: 
+    requiredType: 5
+    Tooltip: Set Additive Vector3 Field Variable value to this property
+  RotationOffset: {x: 0, y: 90, z: 0}
+  ScaleMultiplier: {x: 2, y: 2, z: 2}
+  RandomizeOffset: {x: 0, y: 0, z: 0}
+  MaxDegreesSteps: {x: 1, y: 1, z: 1}
+  InheritScaleOffset: 0
 --- !u!114 &6615972079416451501
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3132,7 +3276,7 @@ MonoBehaviour:
     subID: 0
     _refMesh: {fileID: -4303887579223004961, guid: 8f50acbdb7056ea40af34807460ba408, type: 3}
     _refCol: {fileID: 0}
-  - Prefab: {fileID: 1754892274946190, guid: bdc6eaf94b2144c8c8aa65b5a6c4c2be, type: 3}
+  - Prefab: {fileID: 6924196216273371695, guid: 03f8c445d9e72774698eb911fc6bb19e, type: 3}
     MainCollider: {fileID: 64936596353764930, guid: bdc6eaf94b2144c8c8aa65b5a6c4c2be, type: 3}
     subID: 0
     _refMesh: {fileID: -4303887579223004961, guid: 8f50acbdb7056ea40af34807460ba408, type: 3}
@@ -3151,6 +3295,7 @@ MonoBehaviour:
     Parent: {fileID: 7906467318267168703}
     Rules:
     - {fileID: 3277330611074846594}
+    - {fileID: -5941025764138318465}
     Mode: 0
     CellCheckMode: 0
     _Editor_SpawnerAdvancedOptionsFoldout: 0
@@ -3175,6 +3320,7 @@ MonoBehaviour:
     - {fileID: 4280704591889303905}
     - {fileID: 4599134949047854073}
     - {fileID: 530917911774950061}
+    - {fileID: 6502740344136068060}
     Mode: 0
     CellCheckMode: 0
     _Editor_SpawnerAdvancedOptionsFoldout: 0
@@ -3199,6 +3345,7 @@ MonoBehaviour:
     - {fileID: -4338009562461035965}
     - {fileID: -738158220595033468}
     - {fileID: 3718521197933611772}
+    - {fileID: 5026040017775582117}
     Mode: 0
     CellCheckMode: 0
     _Editor_SpawnerAdvancedOptionsFoldout: 0
@@ -3248,6 +3395,7 @@ MonoBehaviour:
     Rules:
     - {fileID: -9114840211473698919}
     - {fileID: 2339920366916454944}
+    - {fileID: 2999802771465279849}
     Mode: 0
     CellCheckMode: 0
     _Editor_SpawnerAdvancedOptionsFoldout: 0
@@ -3315,7 +3463,7 @@ MonoBehaviour:
   _editor_drawSpawners: 1
   _editor_drawGlobalRules: 0
   _editor_drawModPackRules: 0
-  _editor_shareSelected: 3
+  _editor_shareSelected: 0
   ParentPreset: {fileID: 0}
   ParentPack: {fileID: 4010537770972031752}
 --- !u!114 &8573593245528437758
@@ -3333,7 +3481,7 @@ MonoBehaviour:
   Logic: 0
   Negate: 0
   Global: 0
-  Enabled: 1
+  Enabled: 0
   Ignore: 0
   _editor_drawRule: 1
   CellAllow: 1
@@ -3349,7 +3497,7 @@ MonoBehaviour:
     name: 
     requiredType: 5
     Tooltip: Set Additive Vector3 Field Variable value to this property
-  RotationOffset: {x: 0, y: 180, z: 0}
+  RotationOffset: {x: 0, y: 0, z: 0}
   ScaleMultiplier: {x: 1, y: 1, z: 1}
   RandomizeOffset: {x: 0, y: 0, z: 0}
   MaxDegreesSteps: {x: 1, y: 1, z: 1}
