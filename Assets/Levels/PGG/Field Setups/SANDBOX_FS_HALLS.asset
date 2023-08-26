@@ -545,7 +545,7 @@ MonoBehaviour:
   Logic: 0
   Negate: 0
   Global: 0
-  Enabled: 0
+  Enabled: 1
   Ignore: 0
   _editor_drawRule: 1
   CellAllow: 1
@@ -562,7 +562,7 @@ MonoBehaviour:
     requiredType: 5
     Tooltip: Set Additive Vector3 Field Variable value to this property
   RotationOffset: {x: 0, y: 90, z: 0}
-  ScaleMultiplier: {x: 2, y: 2, z: 2}
+  ScaleMultiplier: {x: 0.98, y: 2, z: 1}
   RandomizeOffset: {x: 0, y: 0, z: 0}
   MaxDegreesSteps: {x: 1, y: 1, z: 1}
   InheritScaleOffset: 0
@@ -598,7 +598,7 @@ MonoBehaviour:
     requiredType: 5
     Tooltip: Set Additive Vector3 Field Variable value to this property
   RotationOffset: {x: 0, y: 90, z: 0}
-  ScaleMultiplier: {x: 2, y: 2, z: 2}
+  ScaleMultiplier: {x: 0.98, y: 2, z: 1}
   RandomizeOffset: {x: 0, y: 0, z: 0}
   MaxDegreesSteps: {x: 1, y: 1, z: 1}
   InheritScaleOffset: 0
@@ -676,7 +676,7 @@ MonoBehaviour:
   Logic: 0
   Negate: 1
   Global: 0
-  Enabled: 1
+  Enabled: 0
   Ignore: 0
   _editor_drawRule: 1
   CellAllow: 0
@@ -1030,7 +1030,7 @@ MonoBehaviour:
   Logic: 0
   Negate: 0
   Global: 0
-  Enabled: 0
+  Enabled: 1
   Ignore: 0
   _editor_drawRule: 1
   CellAllow: 1
@@ -1234,7 +1234,7 @@ MonoBehaviour:
     _refCol: {fileID: 64380515566751728, guid: 3290b84ce73ca4e358f8ce5fb364281c, type: 3}
   DrawMultiObjectStamps: 1
   Spawners:
-  - Enabled: 1
+  - Enabled: 0
     Name: dungeon-door-stone
     SpawnerTag: 
     StampPrefabID: 0
@@ -1264,7 +1264,7 @@ MonoBehaviour:
   _editor_drawGlobalRules: 0
   _editor_drawModPackRules: 0
   _editor_shareSelected: 0
-  ParentPreset: {fileID: 0}
+  ParentPreset: {fileID: 11400000}
   ParentPack: {fileID: 4010537770972031752}
 --- !u!114 &-1394717733352415955
 MonoBehaviour:
@@ -1645,7 +1645,7 @@ MonoBehaviour:
   AllConditionsMet: 1
   replaceOnTag: 
   CheckMode: 0
-  Offset: {x: 0, y: 0, z: 0.45}
+  Offset: {x: 0, y: 0, z: 0}
   OffsetMode: 1
   YawRotationOffset: 0
   RemoveDistance: 0.1
@@ -1748,20 +1748,20 @@ MonoBehaviour:
   DoorsModificator: {fileID: 11400000, guid: 7500e28d48a8ac44da90dfc8719e91ef, type: 2}
   EraseWallModificator: {fileID: 11400000, guid: c5bd286613ebcb24c932c8d5e7f79f9b, type: 2}
   CellsInstructions:
-  - Title: Door Hole
-    InstructionType: 1
-    TargetModification: {fileID: -1559995209233648242}
-    Tags: Props
-    InstructionArgument: 
-    Foldout: 1
-    extraMod: {fileID: 0}
-    extraPack: {fileID: 0}
   - Title: Clear Wall
     InstructionType: 3
     TargetModification: {fileID: 4329741961383557463}
     Tags: 
     InstructionArgument: 
     Foldout: 0
+    extraMod: {fileID: 0}
+    extraPack: {fileID: 0}
+  - Title: Door Hole
+    InstructionType: 1
+    TargetModification: {fileID: -1559995209233648242}
+    Tags: Props
+    InstructionArgument: 
+    Foldout: 1
     extraMod: {fileID: 0}
     extraPack: {fileID: 0}
   RootPack: {fileID: 4010537770972031752}
@@ -2937,6 +2937,42 @@ MonoBehaviour:
   _editor_shareSelected: 0
   ParentPreset: {fileID: 0}
   ParentPack: {fileID: 4010537770972031752}
+--- !u!114 &4570818116186750372
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b496837ae5a0c3b4786589d6fb51e8d5, type: 3}
+  m_Name: SR_MoveRotateScale-[Stairs]
+  m_EditorClassIdentifier: 
+  Logic: 0
+  Negate: 0
+  Global: 0
+  Enabled: 1
+  Ignore: 0
+  _editor_drawRule: 1
+  CellAllow: 1
+  AllConditionsMet: 1
+  EffectOn: 0
+  ApplyMode: 0
+  Space: 0
+  GetCoords: 
+  CheckMode: 0
+  PositionOffset: {x: 0, y: 0, z: 0}
+  OffsetMode: 1
+  OffsetPosVariable:
+    name: 
+    requiredType: 5
+    Tooltip: Set Additive Vector3 Field Variable value to this property
+  RotationOffset: {x: 0, y: 90, z: 0}
+  ScaleMultiplier: {x: 1, y: 1, z: 1}
+  RandomizeOffset: {x: 0, y: 0, z: 0}
+  MaxDegreesSteps: {x: 1, y: 1, z: 1}
+  InheritScaleOffset: 0
 --- !u!114 &4599134949047854073
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -3366,10 +3402,10 @@ MonoBehaviour:
   AllConditionsMet: 1
   replaceOnTag: 
   CheckMode: 0
-  Offset: {x: 0, y: 0, z: 0.5}
+  Offset: {x: 0, y: 0, z: 1}
   OffsetMode: 0
   YawRotationOffset: 0
-  RemoveDistance: 0.6
+  RemoveDistance: 0.5
   DistanceSource: 0
   DebugDirection: 0
   DrawDebugGizmos: 0
@@ -3457,6 +3493,7 @@ MonoBehaviour:
     Rules:
     - {fileID: 3277330611074846594}
     - {fileID: -5941025764138318465}
+    - {fileID: 4570818116186750372}
     Mode: 0
     CellCheckMode: 0
     _Editor_SpawnerAdvancedOptionsFoldout: 0
@@ -3624,7 +3661,7 @@ MonoBehaviour:
   _editor_drawSpawners: 1
   _editor_drawGlobalRules: 0
   _editor_drawModPackRules: 0
-  _editor_shareSelected: 3
+  _editor_shareSelected: 0
   ParentPreset: {fileID: 0}
   ParentPack: {fileID: 4010537770972031752}
 --- !u!114 &8573593245528437758
@@ -3642,7 +3679,7 @@ MonoBehaviour:
   Logic: 0
   Negate: 0
   Global: 0
-  Enabled: 0
+  Enabled: 1
   Ignore: 0
   _editor_drawRule: 1
   CellAllow: 1
