@@ -81,7 +81,7 @@ MonoBehaviour:
       isInput: 1
     initValueSet: 1
     initialized: 0
-    Value: {x: 2.9297276, y: 0, z: 0.9012766}
+    Value: {x: -0.91981435, y: 0, z: 0.88569355}
 --- !u!114 &-8925821672614482972
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -225,7 +225,7 @@ MonoBehaviour:
   _EditorSelectedVar: 0
   _EditorDisplayGizmosOnPlan: 1
   ParentBuildPlanner: {fileID: 11400000}
-  ShapeGenerator: {fileID: 4412035891177536516}
+  ShapeGenerator: {fileID: -1019203432822146553}
   DisableWholePlanner: 0
   tag: 
   proceduresBegin: {fileID: -2421669942736595307}
@@ -233,6 +233,7 @@ MonoBehaviour:
   FProcedures:
   - {fileID: -2421669942736595307}
   - {fileID: -1612979749215515072}
+  - {fileID: 7471785834909056807}
   FPostProcedures:
   - {fileID: -2620835114804414824}
   FSubGraphs:
@@ -260,10 +261,10 @@ MonoBehaviour:
   PreviewCellSize: {x: 1, y: 1, z: 1}
   RoundToScale: 1
   MaxRetries: 64
-  IndexOnPrint: 2
+  IndexOnPrint: 0
   IndexOfDuplicate: -1
   IndexOnPreset: 2
-  GraphView: 1
+  GraphView: 0
 --- !u!114 &-8119201081808046545
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -5183,9 +5184,13 @@ MonoBehaviour:
   IndividualID: -2147483647
   NameID: 
   wasCreated: 1
-  OutputConnections: []
+  OutputConnections:
+  - ConnectionFromID: -2147483647
+    ConnectionToID: -2147483645
+    ConnectionFrom_AlternativeID: -1
+    ConnectionTo_AlternativeID: -1
   InputConnections: []
-  NodePosition: {x: 670, y: 441}
+  NodePosition: {x: 480.60715, y: 341}
   NodeDrawOffset: {x: 0, y: 0}
   ResizedScale: {x: 200, y: 140}
   _EditorInContainedRange: []
@@ -7327,6 +7332,40 @@ MonoBehaviour:
   FrameColor: {r: 0.3, g: 0.3, b: 0.3, a: 1}
   TextColor: {r: 1, g: 1, b: 1, a: 0.95}
   AddSizeTweak: {x: 0, y: 0}
+--- !u!114 &-1019203432822146553
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: edfb7b9544d3e2249869e4d54f43f2bb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _editorForceChanged: 0
+  CellSets:
+  - Cells:
+    - {x: -2, y: 0, z: 2}
+    - {x: -1, y: 0, z: 2}
+    - {x: 0, y: 0, z: 2}
+    - {x: 1, y: 0, z: 2}
+    - {x: 2, y: 0, z: 2}
+    - {x: 2, y: 0, z: 1}
+    - {x: 2, y: 0, z: 0}
+    - {x: 2, y: 0, z: -1}
+    - {x: 2, y: 0, z: -2}
+    - {x: 1, y: 0, z: -2}
+    - {x: 0, y: 0, z: -2}
+    - {x: -1, y: 0, z: -2}
+    - {x: -2, y: 0, z: -2}
+    - {x: -2, y: 0, z: -1}
+    - {x: -2, y: 0, z: 0}
+    - {x: -2, y: 0, z: 1}
+  drawSize: 30
+  depthLevel: 0
+  selectedManualShape: 0
 --- !u!114 &-911023345927769028
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -11927,47 +11966,6 @@ MonoBehaviour:
   FrameColor: {r: 0.3, g: 0.3, b: 0.3, a: 1}
   TextColor: {r: 1, g: 1, b: 1, a: 0.95}
   AddSizeTweak: {x: 0, y: 0}
---- !u!114 &4412035891177536516
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: edfb7b9544d3e2249869e4d54f43f2bb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _editorForceChanged: 0
-  CellSets:
-  - Cells:
-    - {x: -1, y: 0, z: 1}
-    - {x: -1, y: 0, z: 0}
-    - {x: -1, y: 0, z: -1}
-    - {x: 1, y: 0, z: -1}
-    - {x: 1, y: 0, z: 0}
-    - {x: 1, y: 0, z: 1}
-    - {x: 1, y: 0, z: 2}
-    - {x: 0, y: 0, z: 2}
-    - {x: -1, y: 0, z: 2}
-    - {x: -1, y: 0, z: -2}
-    - {x: 0, y: 0, z: -2}
-    - {x: 1, y: 0, z: -2}
-    - {x: 0, y: 0, z: 0}
-    - {x: -2, y: 0, z: 2}
-    - {x: -2, y: 0, z: 1}
-    - {x: -2, y: 0, z: 0}
-    - {x: -2, y: 0, z: -1}
-    - {x: -2, y: 0, z: -2}
-    - {x: 2, y: 0, z: 2}
-    - {x: 2, y: 0, z: 1}
-    - {x: 2, y: 0, z: 0}
-    - {x: 2, y: 0, z: -1}
-    - {x: 2, y: 0, z: -2}
-  drawSize: 30
-  depthLevel: 0
-  selectedManualShape: 0
 --- !u!114 &4419247279677144639
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -13735,6 +13733,92 @@ MonoBehaviour:
     Switch_DontUsePlannerForCheckerReference: 0
   IgnoreThisField: 0
   GetSubFields: 0
+--- !u!114 &7471785834909056807
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a79cb06cab919fe45ba74cede40b4570, type: 3}
+  m_Name: (Clone)
+  m_EditorClassIdentifier: 
+  TriggerConnectionDrawMode: 0
+  IndividualID: -2147483645
+  NameID: 
+  wasCreated: 1
+  OutputConnections: []
+  InputConnections:
+  - ConnectionFromID: -2147483647
+    ConnectionToID: -2147483645
+    ConnectionFrom_AlternativeID: -1
+    ConnectionTo_AlternativeID: -1
+  NodePosition: {x: 792.7588, y: 335.79712}
+  NodeDrawOffset: {x: 0, y: 0}
+  ResizedScale: {x: 200, y: 140}
+  _EditorInContainedRange: []
+  IsContainedBy: {fileID: 0}
+  _EditorFoldout: 0
+  _EditorCollapse: 0
+  Enabled: 1
+  ParentPlanner: {fileID: 0}
+  ParentNodesContainer: {fileID: -8185201299390751086}
+  _editor_drawRule: 1
+  Position:
+    ParentNodeID: -2147483645
+    PortID: 0
+    ParentNode: {fileID: 7471785834909056807}
+    _E_LatestCorrectPortRect:
+      serializedVersion: 2
+      x: 815.7588
+      y: 371.79712
+      width: 27
+      height: 27
+    PortType: 0
+    NameDisplayMode: 1
+    ValueDisplayMode: 0
+    SlotMode: 0
+    DisplayName: Position
+    OverwriteName: 
+    _HelperFunctionsID: -1
+    ConnectionDisplay: 0
+    IsSendingSignals: 0
+    portConnections: []
+    initValueSet: 1
+    initialized: 0
+    Value: {x: 30, y: 0, z: 30}
+  CellSize: 0
+  Planner:
+    ParentNodeID: -2147483645
+    PortID: 1
+    ParentNode: {fileID: 7471785834909056807}
+    _E_LatestCorrectPortRect:
+      serializedVersion: 2
+      x: 0
+      y: 345.79712
+      width: 0
+      height: 0
+    PortType: 0
+    NameDisplayMode: 0
+    ValueDisplayMode: 0
+    SlotMode: 0
+    DisplayName: Port
+    OverwriteName: 
+    _HelperFunctionsID: -1
+    ConnectionDisplay: 0
+    IsSendingSignals: 0
+    portConnections: []
+    initValueSet: 1
+    initialized: 0
+    UniquePlannerID: -1
+    Editor_DisplayVariableName: 1
+    Switch_DisconnectedReturnsByID: 1
+    Switch_MinusOneReturnsMainField: 1
+    Switch_ReturnOnlyFieldPlanners: 0
+    Switch_ReturnOnlyCheckers: 0
+    Switch_DontUsePlannerForCheckerReference: 0
 --- !u!114 &7803766540695233686
 MonoBehaviour:
   m_ObjectHideFlags: 1
