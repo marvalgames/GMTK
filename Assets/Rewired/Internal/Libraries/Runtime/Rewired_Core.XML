@@ -21202,6 +21202,11 @@
             This is thread-safe and can be unsubcribed in a destructor.
             </summary>
         </member>
+        <member name="E:Rewired.ReInput.ApplicationPauseChangedEvent">
+            <summary>
+            This is thread-safe and can be unsubcribed in a destructor.
+            </summary>
+        </member>
         <member name="E:Rewired.ReInput.EarlyUpdateEvent">
             <summary>
             This fires every once every main Unity thread update at the beginning
@@ -21390,6 +21395,12 @@
             </summary>
         </member>
         <member name="M:Rewired.ReInput.ApplicationFocusChanged(System.Boolean)">
+            <summary>
+            This gets called regardless of whether or not Rewired is initialized.
+            Nothing else should be done here except to pass the event to UnityVariableWatcher.
+            </summary>
+        </member>
+        <member name="M:Rewired.ReInput.ApplicationPauseChanged(System.Boolean)">
             <summary>
             This gets called regardless of whether or not Rewired is initialized.
             Nothing else should be done here except to pass the event to UnityVariableWatcher.
