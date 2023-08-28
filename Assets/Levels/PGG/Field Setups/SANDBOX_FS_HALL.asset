@@ -103,7 +103,7 @@ MonoBehaviour:
   DrawObjectStamps: 1
   OMultiStamp: {fileID: 0}
   PrefabsList:
-  - Prefab: {fileID: 590834867647453412, guid: fd16764ac574d21468389d2da3cb8ef5, type: 3}
+  - Prefab: {fileID: 2443942117705228113, guid: 246e2341e08f8004bb50c66ac80668ba, type: 3}
     MainCollider: {fileID: -6402384711920371341, guid: 99dee7ecb74670f4e849b21dbeb6bf01, type: 3}
     subID: 0
     _refMesh: {fileID: 2863967534805457344, guid: 8f50acbdb7056ea40af34807460ba408, type: 3}
@@ -113,7 +113,7 @@ MonoBehaviour:
     subID: 0
     _refMesh: {fileID: 8415070989947970644, guid: 8f50acbdb7056ea40af34807460ba408, type: 3}
     _refCol: {fileID: 64795146647051626, guid: bf379ed01ecf8460ca91dbb20f7fbd9d, type: 3}
-  - Prefab: {fileID: 100000, guid: ed65b836aa4ab4550881480d05b12556, type: 3}
+  - Prefab: {fileID: 1898714744133788, guid: bf379ed01ecf8460ca91dbb20f7fbd9d, type: 3}
     MainCollider: {fileID: 0}
     subID: 0
     _refMesh: {fileID: 0}
@@ -127,8 +127,8 @@ MonoBehaviour:
     Parent: {fileID: -8417504216931457559}
     Rules:
     - {fileID: 2057876523405530320}
-    - {fileID: 3748029475139337245}
-    - {fileID: 1010598929532574872}
+    - {fileID: 2816606886496049303}
+    - {fileID: -1394717733352415955}
     Mode: 0
     CellCheckMode: 0
     _Editor_SpawnerAdvancedOptionsFoldout: 0
@@ -153,6 +153,7 @@ MonoBehaviour:
     - {fileID: -6931376291662543556}
     - {fileID: 4703532684880343429}
     - {fileID: -2241661952690225057}
+    - {fileID: -4720269183754229789}
     Mode: 0
     CellCheckMode: 0
     _Editor_SpawnerAdvancedOptionsFoldout: 0
@@ -168,7 +169,7 @@ MonoBehaviour:
     DisplayPreviewGUI: 1
     IsSubSpawner: 0
     _EditorDisplaySpawnerHeader: 1
-  - Enabled: 0
+  - Enabled: 1
     Name: dungeon-pillar-stone-round-tall
     SpawnerTag: 
     StampPrefabID: 1
@@ -199,51 +200,9 @@ MonoBehaviour:
   _editor_drawSpawners: 1
   _editor_drawGlobalRules: 0
   _editor_drawModPackRules: 0
-  _editor_shareSelected: 0
-  ParentPreset: {fileID: 11400000}
+  _editor_shareSelected: 2
+  ParentPreset: {fileID: 0}
   ParentPack: {fileID: 4010537770972031752}
---- !u!114 &-8036390951677653302
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4063782d37bf0384c95545f63c8cae23, type: 3}
-  m_Name: SR_DoubleDoorsHelper-[Door Hole - FenceTileset]
-  m_EditorClassIdentifier: 
-  Logic: 0
-  Negate: 0
-  Global: 0
-  Enabled: 0
-  Ignore: 0
-  _editor_drawRule: 1
-  CellAllow: 1
-  AllConditionsMet: 1
-  WallPlacementGuide: {x: 0, y: 1, z: 1}
-  MustBeCommandID: 0
-  DetectionTolerance: 1
-  RemoveTagged: Hole
-  CheckMode: 0
-  DebugDrawRays: 0
-  RemoveOnSelf: 1
-  CallSubspawnerOn: 0
-  SubSpawnerCaller:
-    CallSpawner: -1
-    InheritCoords: 0
-    PostCall: 0
-    UseTemps: 0
-    SubSpawnersOf: {fileID: 0}
-  checkSetup:
-    UseRotor: 1
-    Rotor: 0
-    UseCondition: 1
-    Condition: 0
-    ToCheck:
-    - {x: 0, y: 0, z: 0}
-    EditorDisplayColor: {r: 0.4, g: 0.4, b: 1, a: 0.95}
 --- !u!114 &-7524087098481071771
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -293,7 +252,9 @@ MonoBehaviour:
     - {fileID: 3391657039994221933}
     - {fileID: -238880922451240241}
     - {fileID: 1405991300298738416}
-    - {fileID: -190355513333522821}
+    - {fileID: -4551909891939978702}
+    - {fileID: 7017246861409055509}
+    - {fileID: 5723443139716653901}
     Mode: 0
     CellCheckMode: 0
     _Editor_SpawnerAdvancedOptionsFoldout: 0
@@ -316,7 +277,7 @@ MonoBehaviour:
   _editor_drawGlobalRules: 0
   _editor_drawModPackRules: 0
   _editor_shareSelected: 0
-  ParentPreset: {fileID: 11400000}
+  ParentPreset: {fileID: 0}
   ParentPack: {fileID: 4010537770972031752}
 --- !u!114 &-7057274667417803235
 MonoBehaviour:
@@ -372,7 +333,7 @@ MonoBehaviour:
     requiredType: 5
     Tooltip: Set Additive Vector3 Field Variable value to this property
   RotationOffset: {x: 0, y: 90, z: 0}
-  ScaleMultiplier: {x: 0.4, y: 0.25, z: 0.4}
+  ScaleMultiplier: {x: 0.5, y: 0.2, z: 0.5}
   RandomizeOffset: {x: 0, y: 0, z: 0}
   MaxDegreesSteps: {x: 1, y: 1, z: 1}
   InheritScaleOffset: 0
@@ -563,10 +524,10 @@ MonoBehaviour:
   AllConditionsMet: 1
   replaceOnTag: Wall
   CheckMode: 0
-  LocalRemovePosition: {x: 0, y: 0, z: 0}
-  OffsetMode: 1
-  RemoveDistance: 2
-  DistanceSource: 2
+  LocalRemovePosition: {x: 0, y: 0, z: 1}
+  OffsetMode: 0
+  RemoveDistance: 0.1
+  DistanceSource: 0
   ExecuteOnOffsettedCell: {x: 0, y: 0, z: 0}
   DrawDebugGizmos: 0
 --- !u!114 &-6003335595119557452
@@ -601,7 +562,43 @@ MonoBehaviour:
     requiredType: 5
     Tooltip: Set Additive Vector3 Field Variable value to this property
   RotationOffset: {x: 0, y: 90, z: 0}
-  ScaleMultiplier: {x: 0.5, y: 2.13, z: 1.98}
+  ScaleMultiplier: {x: 0.95, y: 2, z: 1}
+  RandomizeOffset: {x: 0, y: 0, z: 0}
+  MaxDegreesSteps: {x: 1, y: 1, z: 1}
+  InheritScaleOffset: 0
+--- !u!114 &-5941025764138318465
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b496837ae5a0c3b4786589d6fb51e8d5, type: 3}
+  m_Name: SR_MoveRotateScale-[Stairs]
+  m_EditorClassIdentifier: 
+  Logic: 0
+  Negate: 0
+  Global: 0
+  Enabled: 1
+  Ignore: 0
+  _editor_drawRule: 1
+  CellAllow: 1
+  AllConditionsMet: 1
+  EffectOn: 2
+  ApplyMode: 0
+  Space: 0
+  GetCoords: 
+  CheckMode: 0
+  PositionOffset: {x: 0, y: 0, z: 0}
+  OffsetMode: 1
+  OffsetPosVariable:
+    name: 
+    requiredType: 5
+    Tooltip: Set Additive Vector3 Field Variable value to this property
+  RotationOffset: {x: 0, y: 90, z: 0}
+  ScaleMultiplier: {x: 1, y: 2, z: 1}
   RandomizeOffset: {x: 0, y: 0, z: 0}
   MaxDegreesSteps: {x: 1, y: 1, z: 1}
   InheritScaleOffset: 0
@@ -679,7 +676,7 @@ MonoBehaviour:
   Logic: 0
   Negate: 1
   Global: 0
-  Enabled: 1
+  Enabled: 0
   Ignore: 0
   _editor_drawRule: 1
   CellAllow: 0
@@ -732,6 +729,30 @@ MonoBehaviour:
     ToCheck:
     - {x: 0, y: 0, z: 0}
     EditorDisplayColor: {r: 0.4, g: 0.4, b: 1, a: 0.95}
+--- !u!114 &-4720269183754229789
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 207e1eaa379db1743a31893a3b87cc58, type: 3}
+  m_Name: SR_BoundedOffset-[Fence Around]
+  m_EditorClassIdentifier: 
+  Logic: 0
+  Negate: 0
+  Global: 0
+  Enabled: 1
+  Ignore: 0
+  _editor_drawRule: 1
+  CellAllow: 1
+  AllConditionsMet: 1
+  WorldOffset: {x: 0, y: 0, z: 0}
+  DirectionalOffset: {x: 0, y: 0, z: 0}
+  DirectFrom: 
+  CheckMode: 0
 --- !u!114 &-4668992336619589161
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -755,6 +776,42 @@ MonoBehaviour:
   Info: Using 'Analyze Cell' with Cells Selector to check if there is cell above
   CommentInHeader: 1
   Padding: {x: 8, y: 8}
+--- !u!114 &-4551909891939978702
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b496837ae5a0c3b4786589d6fb51e8d5, type: 3}
+  m_Name: SR_MoveRotateScale-[Floor]
+  m_EditorClassIdentifier: 
+  Logic: 0
+  Negate: 0
+  Global: 0
+  Enabled: 1
+  Ignore: 0
+  _editor_drawRule: 1
+  CellAllow: 1
+  AllConditionsMet: 1
+  EffectOn: 2
+  ApplyMode: 0
+  Space: 0
+  GetCoords: 
+  CheckMode: 0
+  PositionOffset: {x: 0, y: 0, z: 0}
+  OffsetMode: 1
+  OffsetPosVariable:
+    name: 
+    requiredType: 5
+    Tooltip: Set Additive Vector3 Field Variable value to this property
+  RotationOffset: {x: 0, y: 90, z: 0}
+  ScaleMultiplier: {x: 0.5, y: 0.5, z: 0.5}
+  RandomizeOffset: {x: 0, y: 0, z: 0}
+  MaxDegreesSteps: {x: 1, y: 1, z: 1}
+  InheritScaleOffset: 0
 --- !u!114 &-4338009562461035965
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -886,6 +943,78 @@ MonoBehaviour:
   OffsetMode: 1
   RandomWorldOffset: {x: 0, y: 0, z: 0}
   RandomRange: {x: 0, y: 1}
+--- !u!114 &-2986058380138381604
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b496837ae5a0c3b4786589d6fb51e8d5, type: 3}
+  m_Name: SR_MoveRotateScale-[Fence Around]
+  m_EditorClassIdentifier: 
+  Logic: 0
+  Negate: 0
+  Global: 0
+  Enabled: 1
+  Ignore: 0
+  _editor_drawRule: 1
+  CellAllow: 1
+  AllConditionsMet: 1
+  EffectOn: 0
+  ApplyMode: 0
+  Space: 0
+  GetCoords: 
+  CheckMode: 0
+  PositionOffset: {x: 0, y: 0, z: 0}
+  OffsetMode: 1
+  OffsetPosVariable:
+    name: 
+    requiredType: 5
+    Tooltip: Set Additive Vector3 Field Variable value to this property
+  RotationOffset: {x: 0, y: 90, z: 0}
+  ScaleMultiplier: {x: 1, y: 1, z: 1}
+  RandomizeOffset: {x: 0, y: 0, z: 0}
+  MaxDegreesSteps: {x: 1, y: 1, z: 1}
+  InheritScaleOffset: 0
+--- !u!114 &-2959950264837168641
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b496837ae5a0c3b4786589d6fb51e8d5, type: 3}
+  m_Name: SR_MoveRotateScale-[Fence Around]
+  m_EditorClassIdentifier: 
+  Logic: 0
+  Negate: 0
+  Global: 0
+  Enabled: 1
+  Ignore: 0
+  _editor_drawRule: 1
+  CellAllow: 1
+  AllConditionsMet: 1
+  EffectOn: 0
+  ApplyMode: 0
+  Space: 0
+  GetCoords: 
+  CheckMode: 0
+  PositionOffset: {x: 0, y: 0, z: 0}
+  OffsetMode: 1
+  OffsetPosVariable:
+    name: 
+    requiredType: 5
+    Tooltip: Set Additive Vector3 Field Variable value to this property
+  RotationOffset: {x: 0, y: 90, z: 0}
+  ScaleMultiplier: {x: 1, y: 1, z: 1}
+  RandomizeOffset: {x: 0, y: 0, z: 0}
+  MaxDegreesSteps: {x: 1, y: 1, z: 1}
+  InheritScaleOffset: 0
 --- !u!114 &-2578806539607322669
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -910,38 +1039,9 @@ MonoBehaviour:
   Randomize: 0
   GetOffsetFromTagged: 
   CheckMode: 0
-  Offset: {x: 0, y: -2.4, z: -2}
-  OffsetMode: 0
-  RandomOffset: {x: 0, y: 0, z: 0}
---- !u!114 &-2328914806453490717
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 93fc507b1b266014ab43f9ce92622c2a, type: 3}
-  m_Name: SR_DoorwayPlacer-[FieldMod_ExampleDoorHole]
-  m_EditorClassIdentifier: 
-  Logic: 0
-  Negate: 0
-  Global: 0
-  Enabled: 1
-  Ignore: 0
-  _editor_drawRule: 1
-  CellAllow: 1
-  AllConditionsMet: 1
-  replaceOnTag: 
-  CheckMode: 0
-  Offset: {x: 0, y: 0, z: 0.5}
+  Offset: {x: 0, y: 1, z: 0}
   OffsetMode: 1
-  YawRotationOffset: 0
-  RemoveDistance: 0.1
-  DistanceSource: 2
-  DebugDirection: 0
-  DrawDebugGizmos: 1
+  RandomOffset: {x: 0, y: 0, z: 0}
 --- !u!114 &-2241661952690225057
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -979,6 +1079,71 @@ MonoBehaviour:
       ToCheck:
       - {x: 0, y: 0, z: 0}
       EditorDisplayColor: {r: 0.4, g: 0.4, b: 1, a: 0.95}
+--- !u!114 &-2238741227189444806
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 93fc507b1b266014ab43f9ce92622c2a, type: 3}
+  m_Name: SR_DoorwayPlacer-[DOOR Modificator]
+  m_EditorClassIdentifier: 
+  Logic: 0
+  Negate: 0
+  Global: 0
+  Enabled: 1
+  Ignore: 0
+  _editor_drawRule: 1
+  CellAllow: 1
+  AllConditionsMet: 1
+  replaceOnTag: 
+  CheckMode: 0
+  Offset: {x: 0, y: 0, z: 1}
+  OffsetMode: 0
+  YawRotationOffset: 0
+  RemoveDistance: 0.1
+  DistanceSource: 0
+  DebugDirection: 0
+  DrawDebugGizmos: 0
+--- !u!114 &-1994788415715440532
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b496837ae5a0c3b4786589d6fb51e8d5, type: 3}
+  m_Name: SR_MoveRotateScale-[Fence Around]
+  m_EditorClassIdentifier: 
+  Logic: 0
+  Negate: 0
+  Global: 0
+  Enabled: 1
+  Ignore: 0
+  _editor_drawRule: 1
+  CellAllow: 1
+  AllConditionsMet: 1
+  EffectOn: 0
+  ApplyMode: 0
+  Space: 0
+  GetCoords: 
+  CheckMode: 0
+  PositionOffset: {x: 0, y: 0, z: 0}
+  OffsetMode: 1
+  OffsetPosVariable:
+    name: 
+    requiredType: 5
+    Tooltip: Set Additive Vector3 Field Variable value to this property
+  RotationOffset: {x: 0, y: 90, z: 0}
+  ScaleMultiplier: {x: 1, y: 1, z: 1}
+  RandomizeOffset: {x: 0, y: 0, z: 0}
+  MaxDegreesSteps: {x: 1, y: 1, z: 1}
+  InheritScaleOffset: 0
 --- !u!114 &-1750418505263690936
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1068,6 +1233,104 @@ MonoBehaviour:
     EditorDisplayColor: {r: 1, g: 0.1, b: 0.1, a: 1}
   wasGenerated: 1
   doFullBreak: 0
+--- !u!114 &-1559995209233648242
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 671fd9c659a53a04eb310656f11c9125, type: 3}
+  m_Name: DOOR Modificator
+  m_EditorClassIdentifier: 
+  TemporaryContainer: {fileID: 0}
+  Enabled: 1
+  ModTag: Hole
+  DrawMeshAndBox: 1
+  Combine: 0
+  RunEmittersIfContains: 0
+  DrawSetupFor: 0
+  OStamp: {fileID: 0}
+  DrawObjectStamps: 1
+  OMultiStamp: {fileID: 0}
+  PrefabsList:
+  - Prefab: {fileID: 1027639662616582, guid: 3290b84ce73ca4e358f8ce5fb364281c, type: 3}
+    MainCollider: {fileID: 64380515566751728, guid: 3290b84ce73ca4e358f8ce5fb364281c, type: 3}
+    subID: 0
+    _refMesh: {fileID: 4300000, guid: 76de0bd0ef6254f0281d3e1d69b3d9f0, type: 3}
+    _refCol: {fileID: 64380515566751728, guid: 3290b84ce73ca4e358f8ce5fb364281c, type: 3}
+  DrawMultiObjectStamps: 1
+  Spawners:
+  - Enabled: 1
+    Name: dungeon-door-stone
+    SpawnerTag: 
+    StampPrefabID: 0
+    Parent: {fileID: -1559995209233648242}
+    Rules:
+    - {fileID: 3807602536340148534}
+    - {fileID: -2238741227189444806}
+    Mode: 0
+    CellCheckMode: 0
+    _Editor_SpawnerAdvancedOptionsFoldout: 0
+    OnScalledGrid: 0
+    Repeat: 1
+    DontInheritRotations: 0
+    SwitchSpawnedToStatic: 0
+    MultipleToSpawn: 0
+    UseGlobalRules: 1
+    UseParentPackageRules: 1
+    _wasEnablingGlobalRules: 1
+    ScaleAccess: 1
+    DisplayPreviewGUI: 1
+    IsSubSpawner: 0
+    _EditorDisplaySpawnerHeader: 1
+  SubSpawners: []
+  VariantOf: {fileID: 0}
+  _editor_drawStamp: 1
+  _editor_drawSpawners: 1
+  _editor_drawGlobalRules: 0
+  _editor_drawModPackRules: 0
+  _editor_shareSelected: 0
+  ParentPreset: {fileID: 0}
+  ParentPack: {fileID: 4010537770972031752}
+--- !u!114 &-1394717733352415955
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b496837ae5a0c3b4786589d6fb51e8d5, type: 3}
+  m_Name: SR_MoveRotateScale-[Fence Around]
+  m_EditorClassIdentifier: 
+  Logic: 0
+  Negate: 0
+  Global: 0
+  Enabled: 1
+  Ignore: 0
+  _editor_drawRule: 1
+  CellAllow: 1
+  AllConditionsMet: 1
+  EffectOn: 2
+  ApplyMode: 0
+  Space: 0
+  GetCoords: 
+  CheckMode: 0
+  PositionOffset: {x: 0, y: 0, z: 0}
+  OffsetMode: 1
+  OffsetPosVariable:
+    name: 
+    requiredType: 5
+    Tooltip: Set Additive Vector3 Field Variable value to this property
+  RotationOffset: {x: 0, y: 90, z: 0}
+  ScaleMultiplier: {x: 0.5, y: 0.5, z: 0.25}
+  RandomizeOffset: {x: 0, y: 0, z: 0}
+  MaxDegreesSteps: {x: 1, y: 1, z: 1}
+  InheritScaleOffset: 0
 --- !u!114 &-1198439533311874938
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1191,11 +1454,11 @@ MonoBehaviour:
     UseCondition: 0
     Condition: 0
     ToCheck:
-    - {x: 0, y: 0, z: 0}
-    - {x: 0, y: 0, z: -1}
     - {x: 0, y: 1, z: 0}
     - {x: 0, y: 2, z: 0}
     - {x: 0, y: 2, z: 1}
+    - {x: 0, y: 0, z: 0}
+    - {x: 0, y: 0, z: -1}
     EditorDisplayColor: {r: 0.4, g: 0.4, b: 1, a: 0.95}
   removeInCells:
     UseRotor: 0
@@ -1216,6 +1479,35 @@ MonoBehaviour:
     EditorDisplayColor: {r: 1, g: 0.1, b: 0.1, a: 1}
   wasGenerated: 1
   doFullBreak: 0
+--- !u!114 &-904529921568696225
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 93fc507b1b266014ab43f9ce92622c2a, type: 3}
+  m_Name: SR_DoorwayPlacer-[FieldMod_ExampleWallRemover(Clone)]
+  m_EditorClassIdentifier: 
+  Logic: 0
+  Negate: 0
+  Global: 0
+  Enabled: 1
+  Ignore: 0
+  _editor_drawRule: 1
+  CellAllow: 0
+  AllConditionsMet: 1
+  replaceOnTag: 
+  CheckMode: 0
+  Offset: {x: 0, y: 0, z: 0}
+  OffsetMode: 0
+  YawRotationOffset: 0
+  RemoveDistance: 0.1
+  DistanceSource: 0
+  DebugDirection: 0
+  DrawDebugGizmos: 0
 --- !u!114 &-738158220595033468
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1249,6 +1541,30 @@ MonoBehaviour:
     ToCheck:
     - {x: 0, y: 0, z: 0}
     EditorDisplayColor: {r: 0.4, g: 0.4, b: 1, a: 0.95}
+--- !u!114 &-624219306864933124
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 207e1eaa379db1743a31893a3b87cc58, type: 3}
+  m_Name: SR_BoundedOffset-[Fence Around]
+  m_EditorClassIdentifier: 
+  Logic: 0
+  Negate: 0
+  Global: 0
+  Enabled: 1
+  Ignore: 0
+  _editor_drawRule: 1
+  CellAllow: 1
+  AllConditionsMet: 1
+  WorldOffset: {x: 0, y: 0, z: 0}
+  DirectionalOffset: {x: 0, y: 0, z: 0}
+  DirectFrom: 
+  CheckMode: 0
 --- !u!114 &-530661070473652119
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1267,12 +1583,12 @@ MonoBehaviour:
   Enabled: 1
   Ignore: 0
   _editor_drawRule: 1
-  CellAllow: 0
+  CellAllow: 1
   AllConditionsMet: 1
   Module: 0
   CornerMode: 0
   CornerMode45: 0
-  SpawnOnEachSide: 0
+  SpawnOnEachSide: 1
   UseYLevel: -1
   AutoRemoveOverlaps: 1
   SetGhosts: 0
@@ -1280,11 +1596,35 @@ MonoBehaviour:
   Version2: 0
   ScaleBounds: 0.99
   Padding: 0
-  YawOffset: 0
-  DirectOffset: {x: 2, y: 0, z: 0}
+  YawOffset: 45
+  DirectOffset: {x: 0, y: 0, z: -1.5}
   OffsetMode: 0
   IgnoreOtherMods: 1
   DontCheckAdditionals: 0
+--- !u!114 &-486475600673122001
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 207e1eaa379db1743a31893a3b87cc58, type: 3}
+  m_Name: SR_BoundedOffset-[Fence Around]
+  m_EditorClassIdentifier: 
+  Logic: 0
+  Negate: 0
+  Global: 0
+  Enabled: 1
+  Ignore: 0
+  _editor_drawRule: 1
+  CellAllow: 1
+  AllConditionsMet: 1
+  WorldOffset: {x: 0, y: 0, z: 0}
+  DirectionalOffset: {x: 0, y: 0, z: 0}
+  DirectFrom: 
+  CheckMode: 0
 --- !u!114 &-238880922451240241
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1312,17 +1652,17 @@ MonoBehaviour:
     Tooltip: 
   ReplaceOnly: {fileID: 0}
   ReplaceOnlyFirst: 0
---- !u!114 &-190355513333522821
+--- !u!114 &-233864953558185146
 MonoBehaviour:
-  m_ObjectHideFlags: 1
+  m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b496837ae5a0c3b4786589d6fb51e8d5, type: 3}
-  m_Name: SR_MoveRotateScale-[Floor]
+  m_Script: {fileID: 11500000, guid: 93fc507b1b266014ab43f9ce92622c2a, type: 3}
+  m_Name: SR_DoorwayPlacer-[DOOR Modificator]
   m_EditorClassIdentifier: 
   Logic: 0
   Negate: 0
@@ -1332,22 +1672,15 @@ MonoBehaviour:
   _editor_drawRule: 1
   CellAllow: 1
   AllConditionsMet: 1
-  EffectOn: 2
-  ApplyMode: 0
-  Space: 0
-  GetCoords: 
+  replaceOnTag: 
   CheckMode: 0
-  PositionOffset: {x: 0, y: 0, z: 0}
+  Offset: {x: 0, y: 0, z: 0}
   OffsetMode: 1
-  OffsetPosVariable:
-    name: 
-    requiredType: 5
-    Tooltip: Set Additive Vector3 Field Variable value to this property
-  RotationOffset: {x: 0, y: 90, z: 0}
-  ScaleMultiplier: {x: 0.5, y: 0.5, z: 0.5}
-  RandomizeOffset: {x: 0, y: 0, z: 0}
-  MaxDegreesSteps: {x: 1, y: 1, z: 1}
-  InheritScaleOffset: 0
+  YawRotationOffset: 0
+  RemoveDistance: 0.1
+  DistanceSource: 0
+  DebugDirection: 0
+  DrawDebugGizmos: 0
 --- !u!114 &-132119742763460032
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1404,35 +1737,6 @@ MonoBehaviour:
     EditorDisplayColor: {r: 1, g: 0.1, b: 0.1, a: 1}
   wasGenerated: 1
   doFullBreak: 0
---- !u!114 &-96606917818625574
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 93fc507b1b266014ab43f9ce92622c2a, type: 3}
-  m_Name: SR_DoorwayPlacer-[FieldMod_ExampleWallRemover(Clone)]
-  m_EditorClassIdentifier: 
-  Logic: 0
-  Negate: 0
-  Global: 0
-  Enabled: 1
-  Ignore: 0
-  _editor_drawRule: 1
-  CellAllow: 1
-  AllConditionsMet: 1
-  replaceOnTag: 
-  CheckMode: 0
-  Offset: {x: 0, y: 0, z: 0.9}
-  OffsetMode: 0
-  YawRotationOffset: 0
-  RemoveDistance: 0.1
-  DistanceSource: 0
-  DebugDirection: 0
-  DrawDebugGizmos: 0
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1443,11 +1747,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 3b6c361108247f045b5087f48c0c7951, type: 3}
-  m_Name: SANDBOX_FS CUSTOM
+  m_Name: SANDBOX_FS_HALL
   m_EditorClassIdentifier: 
   CellSize: 2
-  NonUniformSize: 0
-  NonUniformCellSize: {x: 4, y: 2, z: 4}
+  NonUniformSize: 1
+  NonUniformCellSize: {x: 2, y: 1, z: 2}
   InfoText: 
   Variables:
   - Name: FloorMat
@@ -1475,10 +1779,10 @@ MonoBehaviour:
   CellsInstructions:
   - Title: Door Hole
     InstructionType: 1
-    TargetModification: {fileID: 8017177735639860324}
+    TargetModification: {fileID: -1559995209233648242}
     Tags: Props
     InstructionArgument: 
-    Foldout: 1
+    Foldout: 0
     extraMod: {fileID: 0}
     extraPack: {fileID: 0}
   - Title: Clear Wall
@@ -1491,8 +1795,8 @@ MonoBehaviour:
     extraPack: {fileID: 0}
   RootPack: {fileID: 4010537770972031752}
   UtilityModificators:
-  - {fileID: 8017177735639860324}
   - {fileID: 4329741961383557463}
+  - {fileID: -1559995209233648242}
   ModificatorPacks:
   - {fileID: 4010537770972031752}
   Ignores: []
@@ -1569,6 +1873,100 @@ MonoBehaviour:
     with forward and '
   CommentInHeader: 0
   Padding: {x: 8, y: 8}
+--- !u!114 &219751793129344800
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 93fc507b1b266014ab43f9ce92622c2a, type: 3}
+  m_Name: SR_DoorwayPlacer-[FieldMod_ExampleWallRemover(Clone)]
+  m_EditorClassIdentifier: 
+  Logic: 0
+  Negate: 0
+  Global: 0
+  Enabled: 1
+  Ignore: 0
+  _editor_drawRule: 1
+  CellAllow: 0
+  AllConditionsMet: 1
+  replaceOnTag: 
+  CheckMode: 0
+  Offset: {x: 1, y: 0, z: 0}
+  OffsetMode: 0
+  YawRotationOffset: 0
+  RemoveDistance: 0
+  DistanceSource: 0
+  DebugDirection: 0
+  DrawDebugGizmos: 0
+--- !u!114 &239836072947413390
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 93fc507b1b266014ab43f9ce92622c2a, type: 3}
+  m_Name: SR_DoorwayPlacer-[FieldMod_ExampleWallRemover(Clone)]
+  m_EditorClassIdentifier: 
+  Logic: 0
+  Negate: 0
+  Global: 0
+  Enabled: 1
+  Ignore: 0
+  _editor_drawRule: 1
+  CellAllow: 0
+  AllConditionsMet: 1
+  replaceOnTag: 
+  CheckMode: 0
+  Offset: {x: 0, y: 0, z: 0}
+  OffsetMode: 0
+  YawRotationOffset: 0
+  RemoveDistance: 0.1
+  DistanceSource: 0
+  DebugDirection: 0
+  DrawDebugGizmos: 0
+--- !u!114 &384225781716440811
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b496837ae5a0c3b4786589d6fb51e8d5, type: 3}
+  m_Name: SR_MoveRotateScale-[Fence Around]
+  m_EditorClassIdentifier: 
+  Logic: 0
+  Negate: 0
+  Global: 0
+  Enabled: 1
+  Ignore: 0
+  _editor_drawRule: 1
+  CellAllow: 1
+  AllConditionsMet: 1
+  EffectOn: 0
+  ApplyMode: 0
+  Space: 0
+  GetCoords: 
+  CheckMode: 0
+  PositionOffset: {x: 0, y: 0, z: 0}
+  OffsetMode: 1
+  OffsetPosVariable:
+    name: 
+    requiredType: 5
+    Tooltip: Set Additive Vector3 Field Variable value to this property
+  RotationOffset: {x: 0, y: 90, z: 0}
+  ScaleMultiplier: {x: 1, y: 1, z: 1}
+  RandomizeOffset: {x: 0, y: 0, z: 0}
+  MaxDegreesSteps: {x: 1, y: 1, z: 1}
+  InheritScaleOffset: 0
 --- !u!114 &530917911774950061
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1628,6 +2026,35 @@ MonoBehaviour:
     EditorDisplayColor: {r: 1, g: 0.1, b: 0.1, a: 1}
   wasGenerated: 1
   doFullBreak: 0
+--- !u!114 &600860086097765223
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 93fc507b1b266014ab43f9ce92622c2a, type: 3}
+  m_Name: SR_DoorwayPlacer-[Fence Around]
+  m_EditorClassIdentifier: 
+  Logic: 0
+  Negate: 0
+  Global: 0
+  Enabled: 1
+  Ignore: 0
+  _editor_drawRule: 1
+  CellAllow: 0
+  AllConditionsMet: 1
+  replaceOnTag: 
+  CheckMode: 0
+  Offset: {x: 0, y: 0, z: 0}
+  OffsetMode: 0
+  YawRotationOffset: 0
+  RemoveDistance: 0.1
+  DistanceSource: 0
+  DebugDirection: 0
+  DrawDebugGizmos: 0
 --- !u!114 &771774676255424031
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1667,42 +2094,6 @@ MonoBehaviour:
       - {x: 0, y: 1, z: 0}
       - {x: 0, y: 2, z: 0}
       EditorDisplayColor: {r: 0.4, g: 0.4, b: 1, a: 0.95}
---- !u!114 &1010598929532574872
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b496837ae5a0c3b4786589d6fb51e8d5, type: 3}
-  m_Name: SR_MoveRotateScale-[Fence Around]
-  m_EditorClassIdentifier: 
-  Logic: 0
-  Negate: 0
-  Global: 0
-  Enabled: 0
-  Ignore: 0
-  _editor_drawRule: 1
-  CellAllow: 1
-  AllConditionsMet: 1
-  EffectOn: 0
-  ApplyMode: 0
-  Space: 0
-  GetCoords: 
-  CheckMode: 0
-  PositionOffset: {x: 0, y: 0, z: 0}
-  OffsetMode: 1
-  OffsetPosVariable:
-    name: 
-    requiredType: 5
-    Tooltip: Set Additive Vector3 Field Variable value to this property
-  RotationOffset: {x: 0, y: 90, z: 0}
-  ScaleMultiplier: {x: 1, y: 1, z: 1}
-  RandomizeOffset: {x: 0, y: 0, z: 0}
-  MaxDegreesSteps: {x: 1, y: 1, z: 1}
-  InheritScaleOffset: 0
 --- !u!114 &1149536781078842903
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1796,13 +2187,13 @@ MonoBehaviour:
   Logic: 0
   Negate: 0
   Global: 0
-  Enabled: 0
+  Enabled: 1
   Ignore: 0
   _editor_drawRule: 1
   CellAllow: 1
   AllConditionsMet: 1
-  Mode: 1
-  AlignMode: 0
+  Mode: 0
+  AlignMode: 1
   YawOffset: 0
   DirectOffset: {x: 0, y: 0, z: 0}
   OffsetMode: 0
@@ -1979,6 +2370,78 @@ MonoBehaviour:
     EditorDisplayColor: {r: 1, g: 0.1, b: 0.1, a: 1}
   wasGenerated: 1
   doFullBreak: 0
+--- !u!114 &2816606886496049303
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b496837ae5a0c3b4786589d6fb51e8d5, type: 3}
+  m_Name: SR_MoveRotateScale-[Fence Around]
+  m_EditorClassIdentifier: 
+  Logic: 0
+  Negate: 0
+  Global: 0
+  Enabled: 0
+  Ignore: 0
+  _editor_drawRule: 1
+  CellAllow: 1
+  AllConditionsMet: 1
+  EffectOn: 0
+  ApplyMode: 1
+  Space: 0
+  GetCoords: 
+  CheckMode: 0
+  PositionOffset: {x: 0, y: 0, z: 0}
+  OffsetMode: 1
+  OffsetPosVariable:
+    name: 
+    requiredType: 5
+    Tooltip: Set Additive Vector3 Field Variable value to this property
+  RotationOffset: {x: 0, y: 90, z: 0}
+  ScaleMultiplier: {x: 1, y: 1, z: 1}
+  RandomizeOffset: {x: 0, y: 0, z: 0}
+  MaxDegreesSteps: {x: 1, y: 1, z: 1}
+  InheritScaleOffset: 0
+--- !u!114 &2999802771465279849
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b496837ae5a0c3b4786589d6fb51e8d5, type: 3}
+  m_Name: SR_MoveRotateScale-[Stairs]
+  m_EditorClassIdentifier: 
+  Logic: 0
+  Negate: 0
+  Global: 0
+  Enabled: 0
+  Ignore: 0
+  _editor_drawRule: 1
+  CellAllow: 1
+  AllConditionsMet: 1
+  EffectOn: 2
+  ApplyMode: 0
+  Space: 0
+  GetCoords: 
+  CheckMode: 0
+  PositionOffset: {x: 0, y: 0, z: 0}
+  OffsetMode: 1
+  OffsetPosVariable:
+    name: 
+    requiredType: 5
+    Tooltip: Set Additive Vector3 Field Variable value to this property
+  RotationOffset: {x: 0, y: 90, z: 0}
+  ScaleMultiplier: {x: 2, y: 2, z: 2}
+  RandomizeOffset: {x: 0, y: 0, z: 0}
+  MaxDegreesSteps: {x: 1, y: 1, z: 1}
+  InheritScaleOffset: 0
 --- !u!114 &3277330611074846594
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2011,12 +2474,9 @@ MonoBehaviour:
     Condition: 0
     ToCheck:
     - {x: 0, y: 0, z: 0}
+    - {x: 0, y: 0, z: 1}
     - {x: 0, y: 1, z: 1}
-    - {x: 0, y: 1, z: 0}
-    - {x: 0, y: 0, z: -1}
-    - {x: 0, y: 0, z: -1}
-    - {x: 0, y: 1, z: 0}
-    - {x: 0, y: 1, z: 1}
+    - {x: 0, y: 1, z: 2}
     EditorDisplayColor: {r: 0.4, g: 0.4, b: 1, a: 0.95}
   removeInCells:
     UseRotor: 0
@@ -2092,12 +2552,12 @@ MonoBehaviour:
   Logic: 0
   Negate: 0
   Global: 0
-  Enabled: 1
+  Enabled: 0
   Ignore: 0
   _editor_drawRule: 1
   CellAllow: 1
   AllConditionsMet: 1
-  ScaleMultiplier: {x: -1, y: 1, z: 1}
+  ScaleMultiplier: {x: -2, y: 2, z: 2}
   ScaleMulVariable:
     name: 
     requiredType: 5
@@ -2118,7 +2578,7 @@ MonoBehaviour:
   Logic: 0
   Negate: 0
   Global: 0
-  Enabled: 0
+  Enabled: 1
   Ignore: 0
   _editor_drawRule: 1
   CellAllow: 1
@@ -2191,7 +2651,7 @@ MonoBehaviour:
   doFullBreak: 0
 --- !u!114 &3748029475139337245
 MonoBehaviour:
-  m_ObjectHideFlags: 1
+  m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
@@ -2209,12 +2669,48 @@ MonoBehaviour:
   _editor_drawRule: 1
   CellAllow: 1
   AllConditionsMet: 1
-  ScaleMultiplier: {x: 0.5, y: 0.5, z: 0.5}
+  ScaleMultiplier: {x: 1, y: 0.5, z: 1}
   ScaleMulVariable:
     name: 
     requiredType: 5
     Tooltip: 
   RandomizeScale: {x: 0, y: 0, z: 0}
+--- !u!114 &3807602536340148534
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b496837ae5a0c3b4786589d6fb51e8d5, type: 3}
+  m_Name: SR_MoveRotateScale-[DOOR Modificator]
+  m_EditorClassIdentifier: 
+  Logic: 0
+  Negate: 0
+  Global: 0
+  Enabled: 1
+  Ignore: 0
+  _editor_drawRule: 1
+  CellAllow: 1
+  AllConditionsMet: 1
+  EffectOn: 2
+  ApplyMode: 0
+  Space: 0
+  GetCoords: 
+  CheckMode: 0
+  PositionOffset: {x: 0, y: 0, z: 0}
+  OffsetMode: 1
+  OffsetPosVariable:
+    name: 
+    requiredType: 5
+    Tooltip: Set Additive Vector3 Field Variable value to this property
+  RotationOffset: {x: 0, y: 90, z: 0}
+  ScaleMultiplier: {x: 0.5, y: 0.5, z: 0.25}
+  RandomizeOffset: {x: 0, y: 0, z: 0}
+  MaxDegreesSteps: {x: 1, y: 1, z: 1}
+  InheritScaleOffset: 0
 --- !u!114 &3917062528243416270
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2366,7 +2862,7 @@ MonoBehaviour:
   _editor_drawRule: 1
   CellAllow: 1
   AllConditionsMet: 1
-  EffectOn: 0
+  EffectOn: 1
   ApplyMode: 1
   Space: 0
   GetCoords: 
@@ -2442,7 +2938,7 @@ MonoBehaviour:
     Parent: {fileID: 4329741961383557463}
     Rules:
     - {fileID: -6117342559042904134}
-    - {fileID: -96606917818625574}
+    - {fileID: 6902358755388390115}
     Mode: 0
     CellCheckMode: 0
     _Editor_SpawnerAdvancedOptionsFoldout: 0
@@ -2465,8 +2961,44 @@ MonoBehaviour:
   _editor_drawGlobalRules: 0
   _editor_drawModPackRules: 0
   _editor_shareSelected: 0
-  ParentPreset: {fileID: 11400000}
+  ParentPreset: {fileID: 0}
   ParentPack: {fileID: 4010537770972031752}
+--- !u!114 &4570818116186750372
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b496837ae5a0c3b4786589d6fb51e8d5, type: 3}
+  m_Name: SR_MoveRotateScale-[Stairs]
+  m_EditorClassIdentifier: 
+  Logic: 0
+  Negate: 0
+  Global: 0
+  Enabled: 1
+  Ignore: 0
+  _editor_drawRule: 1
+  CellAllow: 1
+  AllConditionsMet: 1
+  EffectOn: 0
+  ApplyMode: 0
+  Space: 1
+  GetCoords: 
+  CheckMode: 0
+  PositionOffset: {x: 0, y: 0, z: 0}
+  OffsetMode: 1
+  OffsetPosVariable:
+    name: 
+    requiredType: 5
+    Tooltip: Set Additive Vector3 Field Variable value to this property
+  RotationOffset: {x: 0, y: 90, z: 0}
+  ScaleMultiplier: {x: 1, y: 1, z: 1}
+  RandomizeOffset: {x: 0, y: 0, z: 0}
+  MaxDegreesSteps: {x: 1, y: 1, z: 1}
+  InheritScaleOffset: 0
 --- !u!114 &4599134949047854073
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2518,7 +3050,7 @@ MonoBehaviour:
   Enabled: 1
   Ignore: 0
   _editor_drawRule: 1
-  CellAllow: 0
+  CellAllow: 1
   AllConditionsMet: 1
   CheckedCellsMustBe: 2
   NeightbourNeeds: 0
@@ -2566,6 +3098,42 @@ MonoBehaviour:
   OverridePitchRotation: 1
   InitPitchRotation: 0
   NotCheckDefaultPitch: 0
+--- !u!114 &5026040017775582117
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b496837ae5a0c3b4786589d6fb51e8d5, type: 3}
+  m_Name: SR_MoveRotateScale-[Stairs]
+  m_EditorClassIdentifier: 
+  Logic: 0
+  Negate: 0
+  Global: 0
+  Enabled: 1
+  Ignore: 0
+  _editor_drawRule: 1
+  CellAllow: 1
+  AllConditionsMet: 1
+  EffectOn: 2
+  ApplyMode: 0
+  Space: 0
+  GetCoords: 
+  CheckMode: 0
+  PositionOffset: {x: 1.6, y: 2, z: 2}
+  OffsetMode: 1
+  OffsetPosVariable:
+    name: 
+    requiredType: 5
+    Tooltip: Set Additive Vector3 Field Variable value to this property
+  RotationOffset: {x: 0, y: 90, z: 0}
+  ScaleMultiplier: {x: 1, y: 2, z: 1}
+  RandomizeOffset: {x: 0, y: 0, z: 0}
+  MaxDegreesSteps: {x: 1, y: 1, z: 1}
+  InheritScaleOffset: 0
 --- !u!114 &5232660962027706083
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2601,6 +3169,78 @@ MonoBehaviour:
   OutsideOnTag: 
   CheckOutMode: 0
   NegateOutsideCheck: 0
+--- !u!114 &5678779843912567014
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b496837ae5a0c3b4786589d6fb51e8d5, type: 3}
+  m_Name: SR_MoveRotateScale-[Fence Around]
+  m_EditorClassIdentifier: 
+  Logic: 0
+  Negate: 0
+  Global: 0
+  Enabled: 1
+  Ignore: 0
+  _editor_drawRule: 1
+  CellAllow: 1
+  AllConditionsMet: 1
+  EffectOn: 0
+  ApplyMode: 0
+  Space: 0
+  GetCoords: 
+  CheckMode: 0
+  PositionOffset: {x: 0, y: 0, z: 0}
+  OffsetMode: 1
+  OffsetPosVariable:
+    name: 
+    requiredType: 5
+    Tooltip: Set Additive Vector3 Field Variable value to this property
+  RotationOffset: {x: 0, y: 90, z: 0}
+  ScaleMultiplier: {x: 1, y: 1, z: 1}
+  RandomizeOffset: {x: 0, y: 0, z: 0}
+  MaxDegreesSteps: {x: 1, y: 1, z: 1}
+  InheritScaleOffset: 0
+--- !u!114 &5723443139716653901
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b496837ae5a0c3b4786589d6fb51e8d5, type: 3}
+  m_Name: SR_MoveRotateScale-[Floor]
+  m_EditorClassIdentifier: 
+  Logic: 0
+  Negate: 0
+  Global: 0
+  Enabled: 0
+  Ignore: 0
+  _editor_drawRule: 1
+  CellAllow: 1
+  AllConditionsMet: 1
+  EffectOn: 0
+  ApplyMode: 0
+  Space: 0
+  GetCoords: 
+  CheckMode: 0
+  PositionOffset: {x: 0, y: 0, z: 0}
+  OffsetMode: 1
+  OffsetPosVariable:
+    name: 
+    requiredType: 5
+    Tooltip: Set Additive Vector3 Field Variable value to this property
+  RotationOffset: {x: 0, y: 90, z: 0}
+  ScaleMultiplier: {x: 1, y: 1, z: 1}
+  RandomizeOffset: {x: 0, y: 0, z: 0}
+  MaxDegreesSteps: {x: 1, y: 1, z: 1}
+  InheritScaleOffset: 0
 --- !u!114 &5928586153800598110
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2664,6 +3304,42 @@ MonoBehaviour:
     Tooltip: 
   ReplaceOnly: {fileID: 0}
   ReplaceOnlyFirst: 1
+--- !u!114 &6502740344136068060
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b496837ae5a0c3b4786589d6fb51e8d5, type: 3}
+  m_Name: SR_MoveRotateScale-[Stairs]
+  m_EditorClassIdentifier: 
+  Logic: 0
+  Negate: 0
+  Global: 0
+  Enabled: 1
+  Ignore: 0
+  _editor_drawRule: 1
+  CellAllow: 1
+  AllConditionsMet: 1
+  EffectOn: 2
+  ApplyMode: 0
+  Space: 0
+  GetCoords: 
+  CheckMode: 0
+  PositionOffset: {x: 0, y: 0, z: 0}
+  OffsetMode: 1
+  OffsetPosVariable:
+    name: 
+    requiredType: 5
+    Tooltip: Set Additive Vector3 Field Variable value to this property
+  RotationOffset: {x: 0, y: 90, z: 0}
+  ScaleMultiplier: {x: 1, y: 2, z: 1}
+  RandomizeOffset: {x: 0, y: 0, z: 0}
+  MaxDegreesSteps: {x: 1, y: 1, z: 1}
+  InheritScaleOffset: 0
 --- !u!114 &6615972079416451501
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2730,7 +3406,7 @@ MonoBehaviour:
   OverridePitchRotation: 1
   InitPitchRotation: 0
   NotCheckDefaultPitch: 0
---- !u!114 &7845900760080538436
+--- !u!114 &6902358755388390115
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
@@ -2739,8 +3415,8 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b496837ae5a0c3b4786589d6fb51e8d5, type: 3}
-  m_Name: SR_MoveRotateScale-[Door Hole - FenceTileset]
+  m_Script: {fileID: 11500000, guid: 93fc507b1b266014ab43f9ce92622c2a, type: 3}
+  m_Name: SR_DoorwayPlacer-[FieldMod_ExampleWallRemover(Clone)]
   m_EditorClassIdentifier: 
   Logic: 0
   Negate: 0
@@ -2750,7 +3426,65 @@ MonoBehaviour:
   _editor_drawRule: 1
   CellAllow: 1
   AllConditionsMet: 1
-  EffectOn: 2
+  replaceOnTag: 
+  CheckMode: 0
+  Offset: {x: 0, y: 0, z: 1}
+  OffsetMode: 0
+  YawRotationOffset: 0
+  RemoveDistance: 0.1
+  DistanceSource: 0
+  DebugDirection: 0
+  DrawDebugGizmos: 0
+--- !u!114 &6955901533522174170
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 93fc507b1b266014ab43f9ce92622c2a, type: 3}
+  m_Name: SR_DoorwayPlacer-[FieldMod_ExampleWallRemover(Clone)]
+  m_EditorClassIdentifier: 
+  Logic: 0
+  Negate: 0
+  Global: 0
+  Enabled: 1
+  Ignore: 0
+  _editor_drawRule: 1
+  CellAllow: 1
+  AllConditionsMet: 1
+  replaceOnTag: 
+  CheckMode: 0
+  Offset: {x: 0, y: 0, z: 0.5}
+  OffsetMode: 0
+  YawRotationOffset: 0
+  RemoveDistance: 0.1
+  DistanceSource: 0
+  DebugDirection: 0
+  DrawDebugGizmos: 0
+--- !u!114 &7017246861409055509
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b496837ae5a0c3b4786589d6fb51e8d5, type: 3}
+  m_Name: SR_MoveRotateScale-[Floor]
+  m_EditorClassIdentifier: 
+  Logic: 0
+  Negate: 0
+  Global: 0
+  Enabled: 0
+  Ignore: 0
+  _editor_drawRule: 1
+  CellAllow: 1
+  AllConditionsMet: 1
+  EffectOn: 1
   ApplyMode: 0
   Space: 0
   GetCoords: 
@@ -2762,7 +3496,7 @@ MonoBehaviour:
     requiredType: 5
     Tooltip: Set Additive Vector3 Field Variable value to this property
   RotationOffset: {x: 0, y: 90, z: 0}
-  ScaleMultiplier: {x: 0.5, y: 0.5, z: 0.5}
+  ScaleMultiplier: {x: 1, y: 1, z: 1}
   RandomizeOffset: {x: 0, y: 0, z: 0}
   MaxDegreesSteps: {x: 1, y: 1, z: 1}
   InheritScaleOffset: 0
@@ -2794,7 +3528,7 @@ MonoBehaviour:
     subID: 0
     _refMesh: {fileID: -4303887579223004961, guid: 8f50acbdb7056ea40af34807460ba408, type: 3}
     _refCol: {fileID: 0}
-  - Prefab: {fileID: 1754892274946190, guid: bdc6eaf94b2144c8c8aa65b5a6c4c2be, type: 3}
+  - Prefab: {fileID: 6924196216273371695, guid: 03f8c445d9e72774698eb911fc6bb19e, type: 3}
     MainCollider: {fileID: 64936596353764930, guid: bdc6eaf94b2144c8c8aa65b5a6c4c2be, type: 3}
     subID: 0
     _refMesh: {fileID: -4303887579223004961, guid: 8f50acbdb7056ea40af34807460ba408, type: 3}
@@ -2806,13 +3540,15 @@ MonoBehaviour:
     _refCol: {fileID: 0}
   DrawMultiObjectStamps: 1
   Spawners:
-  - Enabled: 1
+  - Enabled: 0
     Name: SlopeTile
     SpawnerTag: S
     StampPrefabID: 0
     Parent: {fileID: 7906467318267168703}
     Rules:
     - {fileID: 3277330611074846594}
+    - {fileID: -5941025764138318465}
+    - {fileID: 4570818116186750372}
     Mode: 0
     CellCheckMode: 0
     _Editor_SpawnerAdvancedOptionsFoldout: 0
@@ -2828,7 +3564,7 @@ MonoBehaviour:
     DisplayPreviewGUI: 1
     IsSubSpawner: 0
     _EditorDisplaySpawnerHeader: 1
-  - Enabled: 1
+  - Enabled: 0
     Name: DenseYCellsUp
     SpawnerTag: S
     StampPrefabID: 0
@@ -2837,6 +3573,7 @@ MonoBehaviour:
     - {fileID: 4280704591889303905}
     - {fileID: 4599134949047854073}
     - {fileID: 530917911774950061}
+    - {fileID: 6502740344136068060}
     Mode: 0
     CellCheckMode: 0
     _Editor_SpawnerAdvancedOptionsFoldout: 0
@@ -2861,6 +3598,7 @@ MonoBehaviour:
     - {fileID: -4338009562461035965}
     - {fileID: -738158220595033468}
     - {fileID: 3718521197933611772}
+    - {fileID: 5026040017775582117}
     Mode: 0
     CellCheckMode: 0
     _Editor_SpawnerAdvancedOptionsFoldout: 0
@@ -2902,7 +3640,7 @@ MonoBehaviour:
     DisplayPreviewGUI: 1
     IsSubSpawner: 0
     _EditorDisplaySpawnerHeader: 1
-  - Enabled: 1
+  - Enabled: 0
     Name: PR_SlopeTile90 L
     SpawnerTag: 
     StampPrefabID: 2
@@ -2910,6 +3648,7 @@ MonoBehaviour:
     Rules:
     - {fileID: -9114840211473698919}
     - {fileID: 2339920366916454944}
+    - {fileID: 2999802771465279849}
     Mode: 0
     CellCheckMode: 0
     _Editor_SpawnerAdvancedOptionsFoldout: 0
@@ -2925,7 +3664,7 @@ MonoBehaviour:
     DisplayPreviewGUI: 1
     IsSubSpawner: 0
     _EditorDisplaySpawnerHeader: 1
-  - Enabled: 1
+  - Enabled: 0
     Name: PR_SlopeTile90 R
     SpawnerTag: 
     StampPrefabID: 2
@@ -2977,70 +3716,7 @@ MonoBehaviour:
   _editor_drawSpawners: 1
   _editor_drawGlobalRules: 0
   _editor_drawModPackRules: 0
-  _editor_shareSelected: 3
-  ParentPreset: {fileID: 11400000}
-  ParentPack: {fileID: 4010537770972031752}
---- !u!114 &8017177735639860324
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 671fd9c659a53a04eb310656f11c9125, type: 3}
-  m_Name: Door Hole - FenceTileset
-  m_EditorClassIdentifier: 
-  TemporaryContainer: {fileID: 0}
-  Enabled: 1
-  ModTag: Hole
-  DrawMeshAndBox: 1
-  Combine: 0
-  RunEmittersIfContains: 0
-  DrawSetupFor: 0
-  OStamp: {fileID: 0}
-  DrawObjectStamps: 1
-  OMultiStamp: {fileID: 0}
-  PrefabsList:
-  - Prefab: {fileID: 1027639662616582, guid: 3290b84ce73ca4e358f8ce5fb364281c, type: 3}
-    MainCollider: {fileID: 64380515566751728, guid: 3290b84ce73ca4e358f8ce5fb364281c, type: 3}
-    subID: 0
-    _refMesh: {fileID: 8568771882487935041, guid: 12bdb1582ddc2bd4d9248e99494e1b8e, type: 3}
-    _refCol: {fileID: 64380515566751728, guid: 3290b84ce73ca4e358f8ce5fb364281c, type: 3}
-  DrawMultiObjectStamps: 1
-  Spawners:
-  - Enabled: 1
-    Name: Door hole
-    SpawnerTag: 
-    StampPrefabID: 0
-    Parent: {fileID: 8017177735639860324}
-    Rules:
-    - {fileID: -2328914806453490717}
-    - {fileID: -8036390951677653302}
-    - {fileID: 7845900760080538436}
-    Mode: 3
-    CellCheckMode: 0
-    _Editor_SpawnerAdvancedOptionsFoldout: 0
-    OnScalledGrid: 1
-    Repeat: 1
-    DontInheritRotations: 0
-    SwitchSpawnedToStatic: 0
-    MultipleToSpawn: 0
-    UseGlobalRules: 1
-    UseParentPackageRules: 1
-    _wasEnablingGlobalRules: 1
-    ScaleAccess: 1
-    DisplayPreviewGUI: 1
-    IsSubSpawner: 0
-    _EditorDisplaySpawnerHeader: 0
-  SubSpawners: []
-  VariantOf: {fileID: 0}
-  _editor_drawStamp: 1
-  _editor_drawSpawners: 1
-  _editor_drawGlobalRules: 0
-  _editor_drawModPackRules: 0
-  _editor_shareSelected: 0
+  _editor_shareSelected: 1
   ParentPreset: {fileID: 0}
   ParentPack: {fileID: 4010537770972031752}
 --- !u!114 &8573593245528437758
@@ -3074,8 +3750,44 @@ MonoBehaviour:
     name: 
     requiredType: 5
     Tooltip: Set Additive Vector3 Field Variable value to this property
-  RotationOffset: {x: 0, y: 180, z: 0}
+  RotationOffset: {x: 0, y: 0, z: 0}
   ScaleMultiplier: {x: 1, y: 1, z: 1}
   RandomizeOffset: {x: 0, y: 0, z: 0}
   MaxDegreesSteps: {x: 1, y: 1, z: 1}
   InheritScaleOffset: 0
+--- !u!114 &8859776584118704051
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 893e62798003cfc4ba6de159ef003bf2, type: 3}
+  m_Name: SR_WallPlacer-[FieldMod_ExampleWallRemover(Clone)]
+  m_EditorClassIdentifier: 
+  Logic: 0
+  Negate: 0
+  Global: 0
+  Enabled: 1
+  Ignore: 0
+  _editor_drawRule: 1
+  CellAllow: 1
+  AllConditionsMet: 1
+  Module: 0
+  CornerMode: 0
+  CornerMode45: 0
+  SpawnOnEachSide: 0
+  UseYLevel: -1
+  AutoRemoveOverlaps: 1
+  SetGhosts: 0
+  OverlapDetectMode: 0
+  Version2: 0
+  ScaleBounds: 0.99
+  Padding: 0
+  YawOffset: 0
+  DirectOffset: {x: 0, y: 0, z: 0}
+  OffsetMode: 0
+  IgnoreOtherMods: 1
+  DontCheckAdditionals: 0

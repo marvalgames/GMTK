@@ -1,0 +1,149 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &-1924692001226938072
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 42d3514c4697cf541b2d647b9793695a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  TriggerConnectionDrawMode: 0
+  IndividualID: -2147483647
+  NameID: 
+  wasCreated: 1
+  OutputConnections: []
+  InputConnections: []
+  NodePosition: {x: 690, y: 430}
+  NodeDrawOffset: {x: 0, y: 0}
+  ResizedScale: {x: 200, y: 140}
+  _EditorInContainedRange: []
+  IsContainedBy: {fileID: 0}
+  _EditorFoldout: 0
+  _EditorCollapse: 0
+  Enabled: 1
+  ParentPlanner: {fileID: 0}
+  ParentNodesContainer: {fileID: 1610370072266098337}
+  _editor_drawRule: 1
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4674bb147e48a4f418520e682889d263, type: 3}
+  m_Name: BP_NewBuildPlanner1
+  m_EditorClassIdentifier: 
+  CustomInfo: 
+  BuildVariables: []
+  BuildLayers:
+  - Name: Build Layer
+    FieldPlanners:
+    - {fileID: 1610370072266098337}
+  AsyncGenerating: 0
+--- !u!114 &1610370072266098337
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 27cf1ba038a8c7349bf700113ce0725f, type: 3}
+  m_Name: First Field Planner
+  m_EditorClassIdentifier: 
+  _EditorDrawShape: 1
+  _EditorDrawParameters: 0
+  _EditorDrawLogics: 1
+  _EditorDrawPostLogics: 0
+  _EditorSelectedShape: 0
+  _EditorSelectedVar: 0
+  _EditorDisplayGizmosOnPlan: 1
+  ParentBuildPlanner: {fileID: 11400000}
+  ShapeGenerator: {fileID: 4674047269028315287}
+  DisableWholePlanner: 0
+  tag: 
+  proceduresBegin: {fileID: -1924692001226938072}
+  postProceduresBegin: {fileID: 6373153344760210491}
+  FProcedures:
+  - {fileID: -1924692001226938072}
+  FPostProcedures:
+  - {fileID: 6373153344760210491}
+  FSubGraphs: []
+  FVariables: []
+  ExposeShape: 1
+  FieldType: 0
+  DefaultFieldSetup: {fileID: 0}
+  Instances: 1
+  ExposeInstanceCount: 0
+  DisableCollision: 0
+  AlwaysPushOut: 1
+  AllowRotateBy90: 1
+  PreviewCellSize: {x: 1, y: 1, z: 1}
+  RoundToScale: 0
+  MaxRetries: 64
+  IndexOnPrint: 0
+  IndexOfDuplicate: -1
+  IndexOnPreset: 0
+  GraphView: 0
+--- !u!114 &4674047269028315287
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4c51f20aee773364b8d51fa23d9e5be3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _editorForceChanged: 0
+  BranchLength:
+    Min: 5
+    Max: 7
+  TargetBranches:
+    Min: 4
+    Max: 5
+  BranchThickness:
+    Min: 1
+    Max: 1
+  SeparationFactor: 5
+  AvoidOverlaps: 1
+--- !u!114 &6373153344760210491
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 42d3514c4697cf541b2d647b9793695a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  TriggerConnectionDrawMode: 0
+  IndividualID: -1
+  NameID: 
+  wasCreated: 1
+  OutputConnections: []
+  InputConnections: []
+  NodePosition: {x: 690, y: 430}
+  NodeDrawOffset: {x: 0, y: 0}
+  ResizedScale: {x: 200, y: 140}
+  _EditorInContainedRange: []
+  IsContainedBy: {fileID: 0}
+  _EditorFoldout: 0
+  _EditorCollapse: 0
+  Enabled: 1
+  ParentPlanner: {fileID: 0}
+  ParentNodesContainer: {fileID: 1610370072266098337}
+  _editor_drawRule: 1
