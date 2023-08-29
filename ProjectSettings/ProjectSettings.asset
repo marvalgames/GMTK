@@ -86,6 +86,7 @@ PlayerSettings:
   hideHomeButton: 0
   submitAnalytics: 1
   usePlayerLog: 1
+  dedicatedServerOptimizations: 0
   bakeCollisionMeshes: 0
   forceSingleInstance: 0
   useFlipModelSwapchain: 1
@@ -125,6 +126,7 @@ PlayerSettings:
   switchNVNMaxPublicTextureIDCount: 0
   switchNVNMaxPublicSamplerIDCount: 0
   switchNVNGraphicsFirmwareMemory: 32
+  switchMaxWorkerMultiple: 8
   stadiaPresentMode: 0
   stadiaTargetFramerate: 0
   vulkanNumSwapchainBuffers: 3
@@ -563,7 +565,7 @@ PlayerSettings:
   webGLPowerPreference: 2
   scriptingDefineSymbols:
     Android: CROSS_PLATFORM_INPUT;MOBILE_INPUT
-    Standalone: UNITY_PIPELINE_URP;TMP_PRESENT;UNITY_PHYSICS_CUSTOM
+    Standalone: UNITY_PIPELINE_URP;TMP_PRESENT;UNITY_PHYSICS_CUSTOM;GAIA_2_PRESENT;GAIA_MESH_PRESENT;CROSS_PLATFORM_INPUT;UPPipeline
     WebGL: UNITY_PHYSICS_CUSTOM;GAIA_MESH_PRESENT
     Windows Store Apps: MOBILE_INPUT
     iPhone: CROSS_PLATFORM_INPUT;MOBILE_INPUT
