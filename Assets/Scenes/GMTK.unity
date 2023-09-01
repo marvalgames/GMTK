@@ -20,11 +20,11 @@ RenderSettings:
   m_FogDensity: 0.0003
   m_LinearFogStart: 0
   m_LinearFogEnd: 300
-  m_AmbientSkyColor: {r: 1, g: 1, b: 1, a: 1}
+  m_AmbientSkyColor: {r: 0.8980392, g: 0.7647059, b: 0.88235295, a: 1}
   m_AmbientEquatorColor: {r: 0.47098613, g: 0.61487424, b: 0.6792453, a: 1}
   m_AmbientGroundColor: {r: 0.23549306, g: 0.30743712, b: 0.33962265, a: 1}
   m_AmbientIntensity: 1
-  m_AmbientMode: 1
+  m_AmbientMode: 3
   m_SubtractiveShadowColor: {r: 1, g: 0.83137256, b: 0.6392157, a: 1}
   m_SkyboxMaterial: {fileID: 2100000, guid: 3c3b2df971304f245ad572c0703ba78d, type: 2}
   m_HaloStrength: 0.5
@@ -19989,9 +19989,17 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5466907450648548357, guid: 29a81c085aba1b84ca20519ecf47c2cd, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5466907450648548358, guid: 29a81c085aba1b84ca20519ecf47c2cd, type: 3}
       propertyPath: m_Name
       value: vfxgraph_StylizedSmoke_v1_Arcane
+      objectReference: {fileID: 0}
+    - target: {fileID: 5466907450648548358, guid: 29a81c085aba1b84ca20519ecf47c2cd, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -52284,7 +52292,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1072378045}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.33298084, y: -0.00000001622448, z: 0.0000000057293974, w: 0.9429336}
+  m_LocalRotation: {x: 0.33298084, y: 0.000000016224472, z: -0.0000000057293947, w: 0.9429336}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -66112,7 +66120,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1293457237}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.38268346, y: 3e-45, z: -1e-45, w: 0.92387956}
+  m_LocalRotation: {x: 0.38268346, y: -1e-45, z: -0, w: 0.92387956}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -92061,7 +92069,7 @@ Light:
   m_Type: 1
   m_Shape: 0
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_Intensity: 1.5
+  m_Intensity: 2
   m_Range: 10
   m_SpotAngle: 30
   m_InnerSpotAngle: 21.80208
@@ -143235,7 +143243,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6741819120784291202}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.33298087, y: -0.000000032448952, z: 0.000000011458792, w: 0.9429336}
+  m_LocalRotation: {x: 0.33298087, y: 0.000000032448952, z: -0.000000011458792, w: 0.9429336}
   m_LocalPosition: {x: 5, y: 17, z: -20}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -143332,7 +143340,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &6775475100015674357
 Transform:
   m_ObjectHideFlags: 0
