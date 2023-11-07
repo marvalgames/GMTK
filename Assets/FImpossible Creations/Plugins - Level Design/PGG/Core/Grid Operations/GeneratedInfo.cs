@@ -15,7 +15,10 @@ namespace FIMSpace.Generating
 
         /// <summary> Field Setup which is generating objects within this Instantiated Field Info </summary>
         public FieldSetup InternalField;
+
+        /// <summary> Field Setup which is generating objects within this Instantiated Field Info </summary>
         public FieldSetup ParentSetup { get { if (InternalField) return InternalField; return FlexSetup.FieldPreset; } }
+        /// <summary> Flexible painter only field setup reference  </summary>
         public FieldSetup RunningFieldSetup { get { return FlexSetup.RuntimeFieldSetup; } }
 
         public CellsController GenController { get { return FlexSetup.CellsController; } }

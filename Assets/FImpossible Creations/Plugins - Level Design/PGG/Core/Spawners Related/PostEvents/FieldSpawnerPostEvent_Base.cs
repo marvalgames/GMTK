@@ -4,7 +4,14 @@ namespace FIMSpace.Generating
 {
     public abstract class FieldSpawnerPostEvent_Base : ScriptableObject
     {
-        [HideInInspector] public string PostEventInfo = ""; 
+        [HideInInspector] public string PostEventInfo = "";
+
+
+        /// <summary> Called before proceeding to run grid procedures </summary>
+        public virtual void OnBeforeRunningCall(FieldSetup.CustomPostEventHelper helper, FieldSetup preset)
+        {
+
+        }
 
         /// <summary> Called before proceeding objects spawn </summary>
         public virtual void OnBeforeGeneratingCall(FieldSetup.CustomPostEventHelper helper, InstantiatedFieldInfo generatedRef)

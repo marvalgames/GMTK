@@ -558,15 +558,15 @@ namespace FIMSpace.Generating
 
                                     EditorGUILayout.BeginHorizontal();
 
-                                    if (selected < spawnersList.Count)
-                                    {
-                                        if (spawnersList[selected].MultipleToSpawn == false)
-                                            spawnersList[selected].StampPrefabID = EditorGUILayout.IntPopup(new GUIContent("To Spawn"), spawnersList[selected].StampPrefabID, spawnersC, spawnersIds);
-                                        else
+                                    if (selected >= 0) if (selected < spawnersList.Count)
                                         {
-                                            spawnersList[selected].StampPrefabID = EditorGUILayout.MaskField(new GUIContent("To Spawn"), spawnersList[selected].StampPrefabID, spawnersM);
+                                            if (spawnersList[selected].MultipleToSpawn == false)
+                                                spawnersList[selected].StampPrefabID = EditorGUILayout.IntPopup(new GUIContent("To Spawn"), spawnersList[selected].StampPrefabID, spawnersC, spawnersIds);
+                                            else
+                                            {
+                                                spawnersList[selected].StampPrefabID = EditorGUILayout.MaskField(new GUIContent("To Spawn"), spawnersList[selected].StampPrefabID, spawnersM);
+                                            }
                                         }
-                                    }
 
                                     EditorGUIUtility.labelWidth = 6; EditorGUIUtility.fieldWidth = 32 - 6;
                                     spawner.MultipleToSpawn = EditorGUILayout.Toggle(new GUIContent(" ", "Switch this toggle to be able for selecting multiple prefabs for spawning which will be randomly choosed"), spawner.MultipleToSpawn, GUILayout.Width(32));

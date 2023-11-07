@@ -290,9 +290,10 @@ namespace FIMSpace.Generating
         /// </summary>
         public void FullGenerateStack()
         {
+            PostFilters_PreGenerateCheck();
+
             LatestGeneratedMeshes.Clear();
             LatestGeneratedMeshesMaterials.Clear();
-
 
             #region Prepare, generate all tile meshes
 
@@ -300,6 +301,8 @@ namespace FIMSpace.Generating
             {
                 var tile = TileMeshes[i];
                 tile.FullGenerateMesh();
+
+                PostFilters_AfterGeneratingOriginMesh(this, tile);
             }
 
             #endregion
@@ -337,6 +340,8 @@ namespace FIMSpace.Generating
                     if (inst.FlipNormals) { inst.RefreshModMesh(); FMeshUtils.FlipNormals(inst._ModMesh); }
 
                     AddInstanceTo(targetMat, inst, materialMeshes);
+
+                    PostFilters_OnTileInstanceAssignment(this, tile, inst);
                 }
 
             }
@@ -373,6 +378,9 @@ namespace FIMSpace.Generating
 
                 combined.CombineMeshes(combination.ToArray(), true, true, false);
                 combined.name = DesignName + indexer.ToString();
+
+                PostFilters_OnTilesCombined(this, item.Key, ref combined);
+
                 LatestGeneratedMeshes.Add(combined);
                 LatestGeneratedMeshesMaterials.Add(item.Key);
 
@@ -426,6 +434,9 @@ namespace FIMSpace.Generating
                 for (int i = 0; i < LatestGeneratedMeshes.Count; i++)
                 {
                     LatestGeneratedMeshes[i] = FMeshUtils.MeshesOperation(LatestGeneratedMeshes[i], removeCombination, Parabox.CSG.CSG.BooleanOp.Subtraction, flipAfterSubtract);
+                    //Mesh m = FMeshUtils.MeshesOperation(LatestGeneratedMeshes[i], removeCombination, Parabox.CSG.CSG.BooleanOp.Subtraction, flipAfterSubtract);
+                    //PostFilters_OnTilesCombined(this, ref m);
+                    //LatestGeneratedMeshes[i] = m;
                 }
             }
 
@@ -505,6 +516,9 @@ namespace FIMSpace.Generating
             }
 
             #endregion
+
+
+            PostFilters_OnFinalResult(LatestGeneratedMeshes, LatestGeneratedMeshesMaterials);
 
 
             RefreshGenerateMeshesInfo();
@@ -635,14 +649,23 @@ namespace FIMSpace.Generating
             _copyGameObjectSetFrom = this;
         }
 
+        public static TileDesign _copyColliderSetFrom = null;
+        internal void CopyColliderParameters()
+        {
+            _copyColliderSetFrom = this;
+        }
+#endif
+
         public static void PasteGameObjectParameters(TileDesign from, TileDesign to)
         {
             to.Static = from.Static;
             to.Layer = from.Layer;
             to.Tag = from.Tag;
 
-            to._editor_ToAttach.Clear();
             to._string_ToAttach.Clear();
+
+#if UNITY_EDITOR
+            to._editor_ToAttach.Clear();
 
             for (int i = 0; i < from._editor_ToAttach.Count; i++)
             {
@@ -650,6 +673,7 @@ namespace FIMSpace.Generating
             }
 
             to.Editor_SyncToAttach();
+#endif
 
             to.SendMessages.Clear();
 
@@ -661,11 +685,6 @@ namespace FIMSpace.Generating
             to.Tag = from.Tag;
         }
 
-        public static TileDesign _copyColliderSetFrom = null;
-        internal void CopyColliderParameters()
-        {
-            _copyColliderSetFrom = this;
-        }
 
         public static void PasteColliderParameters(TileDesign from, TileDesign to)
         {
@@ -677,6 +696,5 @@ namespace FIMSpace.Generating
             to.ScaleColliders = from.ScaleColliders;
             to.CollidersMaterial = from.CollidersMaterial;
         }
-#endif
     }
 }

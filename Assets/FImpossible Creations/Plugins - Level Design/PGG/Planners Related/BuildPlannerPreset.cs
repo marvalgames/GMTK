@@ -33,7 +33,7 @@ namespace FIMSpace.Generating.Planning
         /// It will exclude discarded and disabled planners.
         /// You can choose to gather duplicates.
         /// </summary>
-        public List<FieldPlanner> CollectAllAvailablePlanners(bool withDuplicates = true, bool newListInstance = true, bool withSubFields = true)
+        public List<FieldPlanner> CollectAllAvailablePlanners(bool withDuplicates = true, bool newListInstance = true, bool withSubFields = true, bool onlyAlreadyExecuted = false)
         {
             List<FieldPlanner> allPlanners;
 
@@ -50,21 +50,23 @@ namespace FIMSpace.Generating.Planning
             #endregion
 
             var basePlanners = BasePlanners;
-            
+
             for (int i = 0; i < basePlanners.Count; i++)
             {
                 FieldPlanner plan = basePlanners[i];
 
                 if (plan.DisableWholePlanner) continue;
                 if (plan.Discarded) continue;
+                if (onlyAlreadyExecuted) if (!plan.WasCalled) continue;
 
                 allPlanners.Add(plan);
-                
+
                 if (withSubFields)
                 {
                     for (int s = 0; s < plan.GetSubFieldsCount; s++)
                     {
                         if (FieldPlanner.CantExecute(plan.GetSubField(s))) { continue; }
+                        if (onlyAlreadyExecuted) if (!plan.GetSubField(s).WasCalled) continue;
                         allPlanners.Add(plan.GetSubField(s));
                     }
                 }
@@ -77,12 +79,14 @@ namespace FIMSpace.Generating.Planning
                         {
                             plan = duplicatesList[d];
                             if (plan.Discarded) continue;
+                            if (onlyAlreadyExecuted) if (!plan.WasCalled) continue;
                             allPlanners.Add(plan);
 
                             if (withSubFields)
                                 for (int s = 0; s < plan.GetSubFieldsCount; s++)
                                 {
                                     if (FieldPlanner.CantExecute(plan.GetSubField(s))) continue;
+                                    if (onlyAlreadyExecuted) if (!plan.GetSubField(s).WasCalled) continue;
                                     allPlanners.Add(plan.GetSubField(s));
                                 }
                         }
@@ -93,10 +97,11 @@ namespace FIMSpace.Generating.Planning
         }
 
         private static List<CheckerField3D> _CollectAllAvailablePlannersCheckersCache = new List<CheckerField3D>();
+        private static List<ICheckerReference> _CollectAllAvailableCheckersRefCache = new List<ICheckerReference>();
 
-        public List<CheckerField3D> CollectAllAvailablePlannersCheckers(bool withDuplicates = true, bool newListInstance = true, bool withSubFields = true)
+        public List<CheckerField3D> CollectAllAvailablePlannersCheckers(bool withDuplicates = true, bool newListInstance = true, bool withSubFields = true, bool onlyAlreadyExecuted = false)
         {
-            var planners = CollectAllAvailablePlanners(withDuplicates, newListInstance, withSubFields);
+            var planners = CollectAllAvailablePlanners(withDuplicates, newListInstance, withSubFields, onlyAlreadyExecuted);
 
             List<CheckerField3D> allCheckers;
             #region GC Cache for planners list if used
@@ -118,6 +123,32 @@ namespace FIMSpace.Generating.Planning
 
             return allCheckers;
         }
+
+        public List<ICheckerReference> CollectAllAvailablePlannersCheckerRefs(bool withDuplicates = true, bool newListInstance = true, bool withSubFields = true, bool onlyAlreadyExecuted = false)
+        {
+            var planners = CollectAllAvailablePlanners(withDuplicates, newListInstance, withSubFields, onlyAlreadyExecuted);
+
+            List<ICheckerReference> allCheckers;
+            #region GC Cache for planners list if used
+            if (newListInstance == false)
+            {
+                _CollectAllAvailableCheckersRefCache.Clear();
+                allCheckers = _CollectAllAvailableCheckersRefCache;
+            }
+            else
+            {
+                allCheckers = new List<ICheckerReference>();
+            }
+            #endregion
+
+            for (int p = 0; p < planners.Count; p++)
+            {
+                allCheckers.Add(planners[p].LatestChecker);
+            }
+
+            return allCheckers;
+        }
+
 
         public int CountAllAvailablePlanners(bool ignoreDisabledPlanners = true, bool ignoreDiscarded = false)
         {

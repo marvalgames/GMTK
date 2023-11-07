@@ -80,33 +80,81 @@ namespace FIMSpace.Generating
             if (BuildPlannerPreset == null) return changed;
 
             if (_plannerPrepare == null) _plannerPrepare = new PlannerPreparation();
+
             if (_plannerPrepare.FieldSetupCompositions.Count != BuildPlannerPreset.BasePlanners.Count)
             {
                 PGGUtils.AdjustCount(_plannerPrepare.FieldSetupCompositions, BuildPlannerPreset.BasePlanners.Count);
+
+                #region Define types inheriting planner setup
+
+                for (int i = 0; i < _plannerPrepare.FieldSetupCompositions.Count; i++)
+                {
+                    var compos = _plannerPrepare.FieldSetupCompositions[i];
+
+                    if (BuildPlannerPreset.BasePlanners[i])
+                    {
+                        if (BuildPlannerPreset.BasePlanners[i].FieldType == Planning.FieldPlanner.EFieldType.Prefab)
+                        {
+                            compos.GenType = EPGGGenType.Prefab;
+                            //compos.RefreshPrefabsSpawnSetup();
+                            //compos.CustomSpawn.SetSpawn(BuildPlannerPreset.BasePlanners[i].DefaultPrefab);
+                        }
+                    }
+
+                }
+
+                #endregion
+
                 changed = true;
             }
-
 
             if (_plannerPrepare.FieldSetupCompositions.Count == BuildPlannerPreset.BasePlanners.Count)
                 for (int i = 0; i < _plannerPrepare.FieldSetupCompositions.Count; i++)
                 {
-                    if (_plannerPrepare.FieldSetupCompositions[i].Setup == null)
+                    var compos = _plannerPrepare.FieldSetupCompositions[i];
+                    if (compos.ParentFieldPlanner != null) if ( compos.ParentFieldPlanner.FieldType == Planning.FieldPlanner.EFieldType.Prefab) compos.GenType = EPGGGenType.Prefab;
+
+
+                    if (compos.GenType == EPGGGenType.Prefab)
                     {
-                        if (BuildPlannerPreset.BasePlanners[i].DefaultFieldSetup != null)
+                        compos.RefreshWith(this, BuildPlannerPreset.BasePlanners[i]);
+                        //compos.RefreshPrefabsSpawnSetup();
+                        //if (compos.CustomSpawn.GetSpawn() == null)
+                        //{
+                            if (BuildPlannerPreset.BasePlanners[i].DefaultFieldSetup != null)
+                            {
+                                compos.PrepareWithPrefabList(this, BuildPlannerPreset.BasePlanners[i]);
+                                changed = true;
+                            }
+                        //}
+                    }
+                    else
+                    {
+                        if (compos.Setup == null)
                         {
-                            _plannerPrepare.FieldSetupCompositions[i].RefreshWith(this, BuildPlannerPreset.BasePlanners[i]);
-                            changed = true;
+                            if (BuildPlannerPreset.BasePlanners[i].DefaultFieldSetup != null)
+                            {
+                                compos.RefreshWith(this, BuildPlannerPreset.BasePlanners[i]);
+                                changed = true;
+                            }
+                            else if (BuildPlannerPreset.BasePlanners[i].FieldType == Planning.FieldPlanner.EFieldType.Prefab)
+                            {
+                                compos.RefreshWith(this, BuildPlannerPreset.BasePlanners[i]);
+                                changed = true;
+                            }
                         }
                     }
+
                     //else
                     {
                         if (BuildPlannerPreset.BasePlanners[i].ParentBuildPlanner != null)
                         {
-                            if (_plannerPrepare.FieldSetupCompositions[i].PlannerVariablesOverrides == null) _plannerPrepare.FieldSetupCompositions[i].PlannerVariablesOverrides = new List<FieldVariable>();
-                            FieldVariable.UpdateVariablesWith(_plannerPrepare.FieldSetupCompositions[i].PlannerVariablesOverrides, BuildPlannerPreset.BasePlanners[i].FVariables);
+                            if (compos.PlannerVariablesOverrides == null) compos.PlannerVariablesOverrides = new List<FieldVariable>();
+                            FieldVariable.UpdateVariablesWith(compos.PlannerVariablesOverrides, BuildPlannerPreset.BasePlanners[i].FVariables);
                         }
                     }
                 }
+
 
             if (_plannerPrepare.PlannerVariablesOverrides == null) _plannerPrepare.PlannerVariablesOverrides = new List<FieldVariable>();
             FieldVariable.UpdateVariablesWith(_plannerPrepare.PlannerVariablesOverrides, BuildPlannerPreset.BuildVariables);

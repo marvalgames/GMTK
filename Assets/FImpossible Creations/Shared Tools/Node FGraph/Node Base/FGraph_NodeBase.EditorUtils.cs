@@ -111,7 +111,7 @@ namespace FIMSpace.Graph
             return true;
         }
 
-        [NonSerialized] bool _editor_wasFirstRepaint = false;
+        //[NonSerialized] bool _editor_wasFirstRepaint = false;
 #endif
 
         /// <summary>

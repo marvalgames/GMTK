@@ -84,7 +84,7 @@ namespace FIMSpace.Generating.Planning.PlannerNodes.BuildSetup
             {
                 if (planners[c].Available == false) continue;
 
-                IterationField.SetIDsOfPlanner(planners[c]);
+                IterationField.Output_Provide_Planner(planners[c]);
 
                 CompareA.TriggerReadPort(true);
                 CompareA.Variable.SetValue(CompareA.GetPortValueSafe);
@@ -105,7 +105,7 @@ namespace FIMSpace.Generating.Planning.PlannerNodes.BuildSetup
             }
 
             if (choosen == null) return;
-            ChoosenField.SetIDsOfPlanner(choosen);
+            ChoosenField.Output_Provide_Planner(choosen);
             //FDebug.DrawBounds3D(choosen.LatestChecker.GetFullBoundsWorldSpace(), Color.yellow);
         }
 
@@ -120,7 +120,7 @@ namespace FIMSpace.Generating.Planning.PlannerNodes.BuildSetup
 
             for (int c = 0; c < checkers.Count; c++)
             {
-                IterationField.AssignCheckerField3D(checkers[c].CheckerReference);
+                IterationField.Output_Provide_Checker(checkers[c].CheckerReference);
 
                 CompareA.TriggerReadPort(true);
                 CompareA.Variable.SetValue(CompareA.GetPortValueSafe);
@@ -139,7 +139,7 @@ namespace FIMSpace.Generating.Planning.PlannerNodes.BuildSetup
             }
 
             if (choosen == null) return;
-            ChoosenField.AssignCheckerField3D(choosen);
+            ChoosenField.Output_Provide_Checker(choosen);
             //UnityEngine.Debug.Log("choosen = " + choosen.ChildPositionsCount);
         }
 

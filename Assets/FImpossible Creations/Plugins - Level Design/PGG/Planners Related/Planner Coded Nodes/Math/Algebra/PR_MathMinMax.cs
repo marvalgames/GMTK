@@ -25,13 +25,13 @@ namespace FIMSpace.Generating.Planning.PlannerNodes.Math.Algebra
         [Port(EPortPinType.Input, EPortNameDisplay.Default, EPortValueDisplay.HideValue, "A", 1, typeof(int))] public PGGUniversalPort InValA;
         [HideInInspector][Port(EPortPinType.Input, EPortNameDisplay.Default, EPortValueDisplay.HideValue, "B", 1, typeof(int))] public PGGUniversalPort InValB;
         [HideInInspector][Port(EPortPinType.Output, true)] public PGGUniversalPort OutVal;
-        bool wasReading = false;
+        //bool wasReading = false;
 
         public override void OnStartReadingNode()
         {
             InValA.TriggerReadPort(true);
             InValB.TriggerReadPort(true);
-            wasReading = true;
+            //wasReading = true;
 
             InValA.Variable.SetValue(InValA.GetPortValue);
             InValB.Variable.SetValue(InValB.GetPortValue);

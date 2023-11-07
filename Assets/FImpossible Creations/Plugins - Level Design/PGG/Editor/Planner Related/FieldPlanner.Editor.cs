@@ -20,6 +20,9 @@ namespace FIMSpace.Generating.Planning
         private FieldPlanner _get;
 
         public static SerializedObject sp_shapeSo;
+        public static SerializedProperty sp_fieldType = null;
+        public static SerializedProperty sp_fieldPrefab = null;
+        public static SerializedProperty sp_PreviewCellSize = null;
         //public static SerializedProperty sp_shapeSp;
         public static FieldPlanner latestViewed = null;
         public static Vector2 shapeScroll = Vector2.zero;
@@ -76,6 +79,17 @@ namespace FIMSpace.Generating.Planning
                     sp_shapeSo = new SerializedObject(field.ShapeGenerator);
                 }
             }
+
+            if (sp_fieldType != null) if (sp_fieldType.serializedObject != so)
+                {
+                    sp_fieldType = null;
+                    sp_fieldPrefab = null;
+                    sp_PreviewCellSize = null;
+                }
+
+            if (sp_fieldType == null) sp_fieldType = so.FindProperty("FieldType");
+            if (sp_fieldPrefab == null) sp_fieldPrefab = so.FindProperty("DefaultPrefab");
+            if (sp_PreviewCellSize == null) sp_PreviewCellSize = so.FindProperty("PreviewCellSize");
         }
 
 
@@ -104,7 +118,6 @@ namespace FIMSpace.Generating.Planning
 
             so.Update();
             RefreshFieldVariables(so, Get);
-
             EditorGUILayout.BeginHorizontal(GUILayout.Height(25));
             GUILayout.Label(PGGUtils._PlannerIcon, GUILayout.Height(24), GUILayout.Width(24));
 
@@ -154,8 +167,8 @@ namespace FIMSpace.Generating.Planning
             EditorGUIUtility.labelWidth = 0;
             EditorGUILayout.EndHorizontal();
 
-            SerializedProperty sp_params = so.FindProperty("FieldType");
-            SerializedProperty sp_PreviewCellSize = so.FindProperty("PreviewCellSize");
+            //SerializedProperty sp_params = so.FindProperty("FieldType");
+            //SerializedProperty sp_PreviewCellSize = so.FindProperty("PreviewCellSize");
             //SerializedProperty sp_params = so.FindProperty("DefaultFieldSetup");
 
             GUI.backgroundColor = new Color(.35f, .6f, 1f, 1f);
@@ -210,7 +223,7 @@ namespace FIMSpace.Generating.Planning
                 EditorGUILayout.BeginVertical(FGUI_Resources.BGInBoxStyle);
                 GUI.backgroundColor = preBg;
 
-                SerializedProperty sp = sp_params.Copy();
+                SerializedProperty sp = sp_fieldType.Copy();
 
                 GUILayout.Space(4);
 
@@ -218,22 +231,18 @@ namespace FIMSpace.Generating.Planning
                 EditorGUILayout.BeginHorizontal();
 
                 EditorGUIUtility.labelWidth = 40;
-                EditorGUILayout.PropertyField(sp, new GUIContent("Type:", "Field Type"), GUILayout.Width(142)); sp.Next(false);
+                int wdth = Get.FieldType == FieldPlanner.EFieldType.Prefab ? 114 : 142;
+                EditorGUILayout.PropertyField(sp, new GUIContent("Type:", "Field Type"), GUILayout.Width(wdth)); sp.Next(false);
 
-                if (Get.FieldType != FieldPlanner.EFieldType.FieldPlanner)
+                if (Get.FieldType == FieldPlanner.EFieldType.BuildField)
                 {
-                    if (Get.FieldType != FieldPlanner.EFieldType.InternalField)
-                    {
-                        Get.FieldType = FieldPlanner.EFieldType.FieldPlanner;
-                        UnityEngine.Debug.Log("[PGG] Field Types are not yet implemented!");
-                    }
+                    Get.FieldType = FieldPlanner.EFieldType.FieldPlanner;
+                    UnityEngine.Debug.Log("[PGG] BuildField is not yet implemented!");
                 }
 
                 GUI.color = new Color(1f, 1f, 1f, 0.5f);
                 GUILayout.Label(" | ", GUILayout.Width(12));
                 GUI.color = preBg;
-
-                EditorGUIUtility.labelWidth = 54;
 
                 if (Get.FieldType == FieldPlanner.EFieldType.InternalField)
                 {
@@ -241,11 +250,28 @@ namespace FIMSpace.Generating.Planning
                 }
                 else
                 {
-                    // Field for planner etc.
-                    EditorGUILayout.PropertyField(sp, new GUIContent("Default:", "Default Field Setup"));
-                    EditorGUILayout.LabelField("(Optional)", GUILayout.Width(56));
+                    if (Get.FieldType == FieldPlanner.EFieldType.Prefab)
+                    {
+                        Get.UpdateShapeGeneratorType();
+
+                        EditorGUIUtility.labelWidth = 94;
+                        EditorGUILayout.PropertyField(sp_fieldPrefab);
+                        var spc = sp_fieldPrefab.Copy(); spc.Next(false);
+                        //GUILayout.Space(12);
+                        //EditorGUIUtility.labelWidth = 64;
+                        //EditorGUILayout.PropertyField(spc, new GUIContent("Flat Grid", spc.tooltip));
+                        //EditorGUILayout.LabelField("(Optional)", GUILayout.Width(56));
+                    }
+                    else
+                    {
+                        // Field for planner etc.
+                        EditorGUIUtility.labelWidth = 74;
+                        EditorGUILayout.PropertyField(sp, new GUIContent("Default:", "Default Field Setup"));
+                        EditorGUILayout.LabelField("(Optional)", GUILayout.Width(56));
+                    }
                 }
 
+                EditorGUIUtility.labelWidth = 0;
                 EditorGUIUtility.labelWidth = 0;
                 EditorGUILayout.EndHorizontal();
 
@@ -351,26 +377,35 @@ namespace FIMSpace.Generating.Planning
                 }
 
                 EditorGUILayout.BeginHorizontal();
-                EditorGUILayout.LabelField("Shape Algorithm:", GUILayout.Width(110));
 
-                var content = new GUIContent(Get.ShapeGenerator.TitleName());
-                var rect = GUILayoutUtility.GetRect(content, EditorStyles.popup);
-
-                if (GUI.Button(rect, content, EditorStyles.popup))
-                //if ( GUILayout.Button(content, EditorStyles.popup ) )
+                if (Get.FieldType != FieldPlanner.EFieldType.Prefab)
                 {
-                    GenericMenu menu = new GenericMenu();
-                    AddShapeGeneratorContextMenuItems(menu, Get);
+                    EditorGUILayout.LabelField("Shape Algorithm:", GUILayout.Width(110));
+                    var content = new GUIContent(Get.ShapeGenerator.TitleName());
+                    var rect = GUILayoutUtility.GetRect(content, EditorStyles.popup);
 
-                    menu.AddItem(new GUIContent("+ Create Custom Shape Algorithm"), false, () =>
+                    if (GUI.Button(rect, content, EditorStyles.popup))
+                    //if ( GUILayout.Button(content, EditorStyles.popup ) )
                     {
-                        MonoScript script = MonoScript.FromScriptableObject(SG_NoShape.CreateInstance<SG_NoShape>());
-                        if (script) EditorGUIUtility.PingObject(script);
-                        EditorUtility.DisplayDialog("Custom Shape Generators", "There are not yet templates for custom shape generators.\n\nFor now you need to take a look on other generators in order to learn how to use them.", "Ok");
-                    });
+                        GenericMenu menu = new GenericMenu();
+                        AddShapeGeneratorContextMenuItems(menu, Get);
 
-                    menu.DropDown(rect);
+                        menu.AddItem(new GUIContent("+ Create Custom Shape Algorithm"), false, () =>
+                        {
+                            MonoScript script = MonoScript.FromScriptableObject(SG_NoShape.CreateInstance<SG_NoShape>());
+                            if (script) EditorGUIUtility.PingObject(script);
+                            EditorUtility.DisplayDialog("Custom Shape Generators", "There are not yet templates for custom shape generators.\n\nFor now you need to take a look on other generators in order to learn how to use them.", "Ok");
+                        });
+
+                        menu.DropDown(rect);
+                    }
+
                 }
+                else
+                {
+                    EditorGUILayout.HelpBox("Prefab Field is using only  ' Prefab To Grid ' Shape Generator", MessageType.None);
+                }
+
                 GUI.backgroundColor = preBg;
 
                 EditorGUILayout.EndHorizontal();
@@ -386,7 +421,7 @@ namespace FIMSpace.Generating.Planning
                     if (sp_shapeSo != null)
                     {
                         sp_shapeSo.Update();
-                        Get.ShapeGenerator.DrawGUI(sp_shapeSo);
+                        Get.ShapeGenerator.DrawGUI(sp_shapeSo, Get);
                         sp_shapeSo.ApplyModifiedProperties();
                     }
 
@@ -439,6 +474,7 @@ namespace FIMSpace.Generating.Planning
 
                 EditorGUILayout.EndVertical();
             }
+
 
             GUILayout.Space(4);
 
@@ -718,10 +754,10 @@ namespace FIMSpace.Generating.Planning
                         i = EditorGUILayout.IntPopup(i, names, parBuild.GetPlannersIDList(), GUILayout.MaxWidth(140));
 
                     //GUI.backgroundColor = Color.white;
-
                     if (pre != i)
                     {
                         FieldPlannerWindow.LatestFieldPlanner = parBuild.BasePlanners[i];
+                        FieldPlannerWindow.ForceSelectPlanner = FieldPlannerWindow.LatestFieldPlanner;
                     }
                 }
             }

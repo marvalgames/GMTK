@@ -58,7 +58,6 @@ namespace FIMSpace.Generating.Planning.PlannerNodes.SpecificSolutions
             base.OnCreated();
         }
 
-
         public override void Execute(PlanGenerationPrint print, PlannerResult newResult)
         {
             if (CurrentExecutingPlanner == null) return;
@@ -98,75 +97,9 @@ namespace FIMSpace.Generating.Planning.PlannerNodes.SpecificSolutions
                 ComputeDistanceBasedConnections(connWithPlanners);
             }
 
-            IgnoreTagged.TriggerReadPort(true);
-            string ignore = IgnoreTagged.GetInputValue;
-            bool ignoring = !string.IsNullOrEmpty(ignore);
-
             if (fieldCenters.Count > 0)
             {
-
-
-                // Main path connection
-                for (int v = 0; v < fieldCenters.Count; v++)
-                {
-                    DeloneField.Vertex<DeloneFindHelper> vert = fieldCenters[v] as DeloneField.Vertex<DeloneFindHelper>;
-                    if (vert != null)
-                    {
-                        DeloneFindHelper helper = vert.Item;
-                        CurrentA.Output_Provide_Planner(helper.planner);
-
-                        for (int m = 0; m < helper.mainConnections.Count; m++)
-                        {
-                            DeloneFindHelper other = helper.mainConnections[m].targetVertex.Item;
-
-                            if (ignoring)
-                            {
-                                if (
-                                helper.planner.IsTagged(ignore) && other.planner.IsTagged(ignore))
-                                    continue;
-                            }
-
-                            CurrentB.Output_Provide_Planner(other.planner);
-                            CallOtherExecutionWithConnector(1, print);
-                        }
-                    }
-                }
-
-                if (CallExtraConnections)
-                {
-                    for (int v = 0; v < fieldCenters.Count; v++)
-                    {
-                        // Extra pathways call
-                        DeloneField.Vertex<DeloneFindHelper> vertx = fieldCenters[v] as DeloneField.Vertex<DeloneFindHelper>;
-
-                        if (vertx != null)
-                        {
-                            DeloneFindHelper helper = vertx.Item;
-                            CurrentA.Output_Provide_Planner(helper.planner);
-                            ExtraConnectionsCount.Value = helper.secondaryConnections.Count;
-
-                            for (int m = 0; m < helper.secondaryConnections.Count; m++)
-                            {
-                                var conn = helper.secondaryConnections[m];
-                                if (conn.connectionEdge.Used) continue;
-
-                                DeloneFindHelper other = conn.targetVertex.Item;
-
-                                CurrentB.SetIDsOfPlanner(other.planner);
-
-                                if (CustomCondition.IsConnected)
-                                {
-                                    CustomCondition.TriggerReadPort(true);
-                                    if (CustomCondition.GetInputValue == false) continue;
-                                }
-
-                                CallOtherExecutionWithConnector(1, print);
-                                conn.connectionEdge.Used = true;
-                            }
-                        }
-                    }
-                }
-
+                DefineConnections(print);
             }
 
             #region Debugging Gizmos
@@ -224,9 +157,74 @@ namespace FIMSpace.Generating.Planning.PlannerNodes.SpecificSolutions
 #endif
             #endregion
 
+        }
 
+        protected virtual void DefineConnections(PlanGenerationPrint print)
+        {
+            IgnoreTagged.TriggerReadPort(true);
+            string ignore = IgnoreTagged.GetInputValue;
+            bool ignoring = !string.IsNullOrEmpty(ignore);
 
+            // Main path connection
+            for (int v = 0; v < fieldCenters.Count; v++)
+            {
+                DeloneField.Vertex<DeloneFindHelper> vert = fieldCenters[v] as DeloneField.Vertex<DeloneFindHelper>;
+                if (vert != null)
+                {
+                    DeloneFindHelper helper = vert.Item;
+                    CurrentA.Output_Provide_Planner(helper.planner);
 
+                    for (int m = 0; m < helper.mainConnections.Count; m++)
+                    {
+                        DeloneFindHelper other = helper.mainConnections[m].targetVertex.Item;
+
+                        if (ignoring)
+                        {
+                            if (
+                            helper.planner.IsTagged(ignore) && other.planner.IsTagged(ignore))
+                                continue;
+                        }
+
+                        CurrentB.Output_Provide_Planner(other.planner);
+                        CallOtherExecutionWithConnector(1, print);
+                    }
+                }
+            }
+
+            if (CallExtraConnections)
+            {
+                for (int v = 0; v < fieldCenters.Count; v++)
+                {
+                    // Extra pathways call
+                    DeloneField.Vertex<DeloneFindHelper> vertx = fieldCenters[v] as DeloneField.Vertex<DeloneFindHelper>;
+
+                    if (vertx != null)
+                    {
+                        DeloneFindHelper helper = vertx.Item;
+                        CurrentA.Output_Provide_Planner(helper.planner);
+                        ExtraConnectionsCount.Value = helper.secondaryConnections.Count;
+
+                        for (int m = 0; m < helper.secondaryConnections.Count; m++)
+                        {
+                            var conn = helper.secondaryConnections[m];
+                            if (conn.connectionEdge.Used) continue;
+
+                            DeloneFindHelper other = conn.targetVertex.Item;
+
+                            CurrentB.Output_Provide_Planner(other.planner);
+
+                            if (CustomCondition.IsConnected)
+                            {
+                                CustomCondition.TriggerReadPort(true);
+                                if (CustomCondition.GetInputValue == false) continue;
+                            }
+
+                            CallOtherExecutionWithConnector(1, print);
+                            conn.connectionEdge.Used = true;
+                        }
+                    }
+                }
+            }
         }
 
 
@@ -356,7 +354,7 @@ namespace FIMSpace.Generating.Planning.PlannerNodes.SpecificSolutions
         #region Delone Triangulation
 
 
-        class DeloneFindHelper
+        protected class DeloneFindHelper
         {
             public DeloneFindHelper(FieldPlanner plann)
             {
@@ -397,7 +395,7 @@ namespace FIMSpace.Generating.Planning.PlannerNodes.SpecificSolutions
             }
         }
 
-        struct DeloneConnection
+        protected struct DeloneConnection
         {
             public DeloneFindHelper parent;
             public DeloneField.Vertex<DeloneFindHelper> parentVertex;
@@ -408,7 +406,7 @@ namespace FIMSpace.Generating.Planning.PlannerNodes.SpecificSolutions
 
         DeloneField deloneField = null;
         List<DeloneField.Edge> deloneSinglePath = null;
-        List<DeloneField.Vertex> fieldCenters = new List<DeloneField.Vertex>();
+        protected List<DeloneField.Vertex> fieldCenters = new List<DeloneField.Vertex>();
         void CheckTriangulation(List<FieldPlanner> targets)
         {
             fieldCenters = new List<DeloneField.Vertex>();

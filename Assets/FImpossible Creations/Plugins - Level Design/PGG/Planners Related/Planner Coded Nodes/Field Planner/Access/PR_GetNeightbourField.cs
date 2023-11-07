@@ -34,7 +34,7 @@ namespace FIMSpace.Generating.Planning.PlannerNodes.Field.Access
             if (port != Selected) return;
 
             Selected.Clear();
-            Selected.MinusOneReturnsSelf = false;
+            Selected.Switch_MinusOneReturnsMainField = false;
             SearchIn.TriggerReadPort(true);
 
             List<FieldPlanner> checkMask = null;
@@ -78,7 +78,7 @@ namespace FIMSpace.Generating.Planning.PlannerNodes.Field.Access
                     if (checkMask[c].LatestChecker.ContainsWorld(wPos))
                     {
                         //UnityEngine.Debug.DrawLine(wPos, neightbourOf.LatestChecker.LocalToWorld(cell.Pos), Color.green, 1.01f);
-                        Selected.SetIDsOfPlanner(checkMask[c]);
+                        Selected.Output_Provide_Planner(checkMask[c]);
                         return;
                     }
                 }

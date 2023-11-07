@@ -15,7 +15,7 @@ namespace FIMSpace.Generating.Planning.ModNodes.Cells
         public override string GetNodeTooltipDescription { get { return "Checking for cells state in the line in all 4 directions.\nUseful for generating object with scale-aligned to reach wall on the other side of the grid."; } }
         public override Color GetNodeColor() { return new Color(0.64f, 0.9f, 0.0f, 0.9f); }
         public override bool IsFoldable { get { return true; } }
-        public override Vector2 NodeSize { get { return new Vector2(212, 140 + extraNodeHeight); } }
+        public override Vector2 NodeSize { get { return new Vector2(232, 140 + extraNodeHeight); } }
         int extraNodeHeight = 0;
 
         public override bool DrawInputConnector { get { return true; } }
@@ -23,20 +23,22 @@ namespace FIMSpace.Generating.Planning.ModNodes.Cells
 
         public enum EPurpose
         {
-            ChooseNearestDir, ChooseNearestDir_NoZero, ChooseFarthestDir
+            ChooseNearestDir, ChooseNearestDir_NoZero, ChooseFarthestDir, CustomDirection
         }
 
         public EPurpose CheckResult = EPurpose.ChooseNearestDir_NoZero;
 
-        [Port(EPortPinType.Output)] public PGGVector3Port Direction;
-        [Port(EPortPinType.Output)] public IntPort CellsDistance;
+        [Port(EPortPinType.Output, EPortNameDisplay.Default, EPortValueDisplay.NotEditable)] public IntPort CellsDistance;
         public ESR_Space StopAt = ESR_Space.OutOfGrid;
 
+        [HideInInspector][Port(EPortPinType.Output)] public PGGVector3Port Direction;
         [HideInInspector][Port(EPortPinType.Input)] public PGGStringPort Tag;
         [HideInInspector] public ESR_Details CheckMode = ESR_Details.Tag;
         [HideInInspector][Port(EPortPinType.Output)] public PGGModCellPort FinalCell;
         [HideInInspector][Tooltip("Checking only directions which back cell is out of grid")] public bool BackEmptyOnly = false;
+        [Tooltip("Max cells count check distance")]
         [HideInInspector] public int MaxDistance = 64;
+        [HideInInspector][Port(EPortPinType.Input)] public PGGVector3Port CustomDirection;
 
 
         float nearest = float.MaxValue;
@@ -45,6 +47,7 @@ namespace FIMSpace.Generating.Planning.ModNodes.Cells
         FieldCell preCell = null;
         FieldCell targetCell = null;
         FieldCell choosedCell = null;
+        bool wasOutOfGridCell = false;
 
 
         public override void Execute(PlanGenerationPrint print, PlannerResult newResult)
@@ -54,63 +57,103 @@ namespace FIMSpace.Generating.Planning.ModNodes.Cells
             nearest = int.MaxValue;
             farthest = int.MinValue;
             choosedCell = null;
+            wasOutOfGridCell = false;
             tag = "";
+            preCell = null;
+            targetCell = null;
+            FinalCell.Clear();
 
             Tag.TriggerReadPort(true);
             tag = Tag.GetInputValue;
 
-            for (int r = 0; r < 4; r++)
+            if (CheckResult == EPurpose.CustomDirection)
             {
-                preCell = null;
-                targetCell = null;
-
-                Vector3Int dir = new Vector3Int(0, 0, 0);
-
-                if (r == 0) dir.z = 1;
-                else if (r == 1) dir.x = 1;
-                else if (r == 2) dir.z = -1;
-                else if (r == 3) dir.x = -1;
-
+                CustomDirection.TriggerReadPort(true);
+                Vector3Int dir = CustomDirection.GetInputValue.V3toV3Int();
+                
+                bool skip = false;
                 if (BackEmptyOnly)
                 {
                     FieldCell bCell = MG_Grid.GetCell(MG_Cell.Pos - dir, false);
 
                     if (!FGenerators.IsNull(bCell))
+                        if (bCell.InTargetGridArea) skip = true;
+                }
+
+                if (!skip)
+                {
+                    for (int d = 1; d < MaxDistance; d++)
                     {
-                        if (bCell.InTargetGridArea) continue;
+                        bool breakCheck = CheckCellAt(dir, d);
+                        if (breakCheck) break;
+                    }
+
+                    if ( StopAt == ESR_Space.OutOfGrid && wasOutOfGridCell == false)
+                    {
+                        choosedCell = null;
+                    }
+                    else if (FGenerators.NotNull(preCell))
+                    {
+                        choosedCell = preCell;
                     }
                 }
 
-                for (int d = 1; d < MaxDistance; d++)
+            }
+            else
+            {
+                for (int r = 0; r < 4; r++)
                 {
-                    bool breakCheck = CheckCellAt(dir, d);
-                    if (breakCheck) break;
-                }
+                    preCell = null;
+                    targetCell = null;
+                    wasOutOfGridCell = false;
 
-                if (FGenerators.NotNull(preCell))
-                {
-                    float distance = (preCell.Pos - MG_Cell.Pos).magnitude;
+                    Vector3Int dir = new Vector3Int(0, 0, 0);
 
-                    if (CheckResult == EPurpose.ChooseFarthestDir)
+                    if (r == 0) dir.z = 1;
+                    else if (r == 1) dir.x = 1;
+                    else if (r == 2) dir.z = -1;
+                    else if (r == 3) dir.x = -1;
+
+                    if (BackEmptyOnly)
                     {
-                        if (CheckResult == EPurpose.ChooseNearestDir_NoZero) if (distance < 2) continue;
+                        FieldCell bCell = MG_Grid.GetCell(MG_Cell.Pos - dir, false);
 
-                        if (distance > farthest)
+                        if (!FGenerators.IsNull(bCell))
                         {
-                            choosedCell = preCell;
-                            farthest = distance;
+                            if (bCell.InTargetGridArea) continue;
                         }
                     }
-                    else
+
+                    for (int d = 1; d < MaxDistance; d++)
                     {
-                        if (distance < nearest)
+                        bool breakCheck = CheckCellAt(dir, d);
+                        if (breakCheck) break;
+                    }
+
+                    if (FGenerators.NotNull(preCell))
+                    {
+                        float distance = (preCell.Pos - MG_Cell.Pos).magnitude;
+
+                        if (CheckResult == EPurpose.ChooseFarthestDir)
                         {
-                            nearest = distance;
-                            choosedCell = preCell;
+                            if (CheckResult == EPurpose.ChooseNearestDir_NoZero) if (distance < 2) continue;
+
+                            if (distance > farthest)
+                            {
+                                choosedCell = preCell;
+                                farthest = distance;
+                            }
+                        }
+                        else
+                        {
+                            if (distance < nearest)
+                            {
+                                nearest = distance;
+                                choosedCell = preCell;
+                            }
                         }
                     }
                 }
-
             }
 
             if (FGenerators.NotNull(choosedCell))
@@ -133,8 +176,8 @@ namespace FIMSpace.Generating.Planning.ModNodes.Cells
 
             var cell = grid.GetCell(cellPos, false);
 
-            if (FGenerators.IsNull(cell)) { CheckCell(cell); return true; }
-            if (cell.InTargetGridArea == false) { CheckCell(cell); return true; }
+            if (FGenerators.IsNull(cell)) { CheckCell(cell); wasOutOfGridCell = true; return true; }
+            if (cell.InTargetGridArea == false) { CheckCell(cell); wasOutOfGridCell = true; return true; }
 
             CheckCell(cell);
 
@@ -170,13 +213,29 @@ namespace FIMSpace.Generating.Planning.ModNodes.Cells
 
         SerializedProperty sp = null;
         SerializedProperty spTag = null;
+        SerializedProperty spDir = null;
+        SerializedProperty spCustDir = null;
 
         public override void Editor_OnNodeBodyGUI(ScriptableObject setup)
         {
             base.Editor_OnNodeBodyGUI(setup);
             baseSerializedObject.Update();
-
+            Direction.AllowDragWire = false;
+            CustomDirection.AllowDragWire = false;
             extraNodeHeight = 0;
+
+            if (CheckResult == EPurpose.CustomDirection)
+            {
+                if (spCustDir == null) spCustDir = baseSerializedObject.FindProperty("CustomDirection");
+                EditorGUILayout.PropertyField(spCustDir);
+                CustomDirection.AllowDragWire = true;
+            }
+            else
+            {
+                if (spDir == null) spDir = baseSerializedObject.FindProperty("Direction");
+                EditorGUILayout.PropertyField(spDir);
+                Direction.AllowDragWire = true;
+            }
 
             if (StopAt == ESR_Space.InGrid || StopAt == ESR_Space.Occupied)
             {
@@ -184,7 +243,6 @@ namespace FIMSpace.Generating.Planning.ModNodes.Cells
                 EditorGUILayout.PropertyField(spTag);
                 var spc = spTag.Copy(); spc.Next(false);
                 EditorGUILayout.PropertyField(spc);
-
                 extraNodeHeight += 38;
             }
 
@@ -194,8 +252,9 @@ namespace FIMSpace.Generating.Planning.ModNodes.Cells
                 EditorGUILayout.PropertyField(sp);
                 var spc = sp.Copy(); spc.Next(false);
                 EditorGUILayout.PropertyField(spc);
+                spc.Next(false); EditorGUILayout.PropertyField(spc);
                 FinalCell.AllowDragWire = true;
-                extraNodeHeight += 38;
+                extraNodeHeight += 58;
             }
             else
             {

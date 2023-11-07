@@ -196,7 +196,7 @@ namespace FIMSpace.Generating
 
                 Handles.color = Color.white;
 
-                _previewRenderUtility.Render();
+                _previewRenderUtility.Render(true);
 
                 Texture resultRender = _previewRenderUtility.EndPreview();
                 GUI.DrawTexture(r, resultRender, ScaleMode.StretchToFill, false);

@@ -39,10 +39,9 @@ namespace FIMSpace.Generating.Planning.PlannerNodes.Cells.Actions
         {
             AddCellInstructionID,
             PreventSpawnTagged,
-            SetGhostCell
+            SetGhostCell,
+            AddCellStringData,
             //CellInstruction,
-            //AddCellData,
-            //CellData,
             //SetCellDirection,
             //InjectSpawn
         }
@@ -71,6 +70,8 @@ namespace FIMSpace.Generating.Planning.PlannerNodes.Cells.Actions
                 ID.TriggerReadPort(true);
             else if (Operation == ECellOperation.PreventSpawnTagged)
                 Tags.TriggerReadPort(true);
+            else if (Operation == ECellOperation.AddCellStringData)
+                DataString.TriggerReadPort(true);
 
             FieldCell cell = Cell.GetInputCellValue;
             CheckerField3D cellsShape = null;
@@ -149,7 +150,10 @@ namespace FIMSpace.Generating.Planning.PlannerNodes.Cells.Actions
             {
                 definition.InstructionType = InstructionDefinition.EInstruction.SetGhostCell;
             }
-
+            else if (Operation == ECellOperation.AddCellStringData)
+            {
+                definition.InstructionType = InstructionDefinition.EInstruction.InjectDataString;
+            }
         }
 
         void AddInstruction(FieldCell cell, FieldPlanner tgtOwner, PlannerResult reslt)
@@ -187,7 +191,7 @@ namespace FIMSpace.Generating.Planning.PlannerNodes.Cells.Actions
 
                         if (tgtOwner.LatestChecker != null)
                         {
-                            instr.rot = Quaternion.Inverse(tgtOwner.LatestChecker.RootRotation) * Quaternion.LookRotation( tgtDir);
+                            instr.rot = Quaternion.Inverse(tgtOwner.LatestChecker.RootRotation) * Quaternion.LookRotation(tgtDir);
                         }
                         else
                             instr.rot = Quaternion.LookRotation(tgtDir);
@@ -205,6 +209,11 @@ namespace FIMSpace.Generating.Planning.PlannerNodes.Cells.Actions
                 cell.IsGhostCell = true;
                 return;
             }
+            else if (Operation == ECellOperation.AddCellStringData)
+            {
+                cell.AddCustomData(DataString.GetInputValue);
+                return;
+            }
 
             if (reslt == null)
             {
@@ -214,7 +223,20 @@ namespace FIMSpace.Generating.Planning.PlannerNodes.Cells.Actions
 
             if (reslt.ContainsAlready(instr)) return;
 
-            reslt.CellsInstructions.Add(instr);
+            if (PreventDuplicates)
+            {
+                bool already = false;
+                for (int i = 0; i < reslt.CellsInstructions.Count; i++)
+                {
+                    var oinstr = reslt.CellsInstructions[i];
+                    if (instr.Id == oinstr.Id && instr.rot == oinstr.rot && instr.pos == oinstr.pos && instr.UseDirection == oinstr.UseDirection && instr.CustomDefinition == oinstr.CustomDefinition && instr.WorldRot == oinstr.WorldRot)
+                        already = true;
+                }
+
+                if (!already) reslt.CellsInstructions.Add(instr);
+            }
+            else
+                reslt.CellsInstructions.Add(instr);
         }
 
 
@@ -240,11 +262,13 @@ namespace FIMSpace.Generating.Planning.PlannerNodes.Cells.Actions
             spc.Next(false);
 
             Dir.AllowDragWire = UseDirection;
+            DataString.AllowDragWire = false;
+            Tags.AllowDragWire = false;
+            ID.AllowDragWire = false;
 
             if (Operation == ECellOperation.AddCellInstructionID)
             {
                 ID.AllowDragWire = true;
-                Tags.AllowDragWire = false;
                 EditorGUILayout.BeginHorizontal();
                 EditorGUILayout.PropertyField(spc, GUILayout.Width(NodeSize.x - 154));
                 EditorGUIUtility.labelWidth = 80;
@@ -262,9 +286,15 @@ namespace FIMSpace.Generating.Planning.PlannerNodes.Cells.Actions
             else if (Operation == ECellOperation.PreventSpawnTagged)
             {
                 Tags.AllowDragWire = true;
-                ID.AllowDragWire = false;
                 spc.Next(false);
                 spc.Next(false);
+                spc.Next(false);
+                spc.Next(false);
+                EditorGUILayout.PropertyField(spc);
+            }
+            else if (Operation == ECellOperation.AddCellStringData)
+            {
+                DataString.AllowDragWire = true;
                 spc.Next(false);
                 spc.Next(false);
                 EditorGUILayout.PropertyField(spc);

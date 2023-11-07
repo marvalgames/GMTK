@@ -39,43 +39,57 @@ namespace FIMSpace.Generating.Planning.PlannerNodes.Cells.Loops
 
         public override void Execute(PlanGenerationPrint print, PlannerResult newResult)
         {
-            CheckerField3D checker = null;
-            PlannerResult lastReslt = newResult;
             CellsOf.TriggerReadPort(true);
             BreakLoop.Value = false;
-
             IterationCell.Clear();
 
-            //if ( CellsOf.OnlyReferenceContainer && CellsOf.DefaultValueIsNumberedID)
-            //{
-            //    if (CellsOf.GetInputCheckerSafe == null) return;
-            //}
-
-            if (CellsOf.IsContaining_Checker)
+            if (CellsOf.IsContaining_MultiplePlanners || CellsOf.IsContaining_MultipleCheckers)
             {
-                checker = CellsOf.GetInputCheckerSafe;
+                var checkers = CellsOf.Get_GetMultipleCheckers;
+
+                for (int i = 0; i < checkers.Count; i++)
+                {
+                    CallCellIterationOn(checkers[i].CheckerReference, print, newResult);
+                }
             }
             else
             {
-                var planner = GetPlannerFromPort(CellsOf, false);
-                //UnityEngine.Debug.Log("Planner connection = " + Planner.BaseConnection.PortReference.GetPortValue + " vs " + Planner.GetPortValue);
-                //UnityEngine.Debug.Log("planner = " + planner.IndexOnPreset + ", " + planner.IndexOfDuplicate);
+                CheckerField3D checker = null;
+                PlannerResult lastReslt = newResult;
 
-                if (planner != null)
-                {
-                    lastReslt = planner.LatestResult;
-                    if (planner.LatestResult != null)
-                    {
-                        checker = planner.LatestChecker;
-                    }
-                }
-                else
+                if (CellsOf.IsContaining_Checker)
                 {
                     checker = CellsOf.GetInputCheckerSafe;
                 }
+                else
+                {
+                    var planner = GetPlannerFromPort(CellsOf, false);
+                    //UnityEngine.Debug.Log("Planner connection = " + Planner.BaseConnection.PortReference.GetPortValue + " vs " + Planner.GetPortValue);
+                    //UnityEngine.Debug.Log("planner = " + planner.IndexOnPreset + ", " + planner.IndexOfDuplicate);
+
+                    if (planner != null)
+                    {
+                        lastReslt = planner.LatestResult;
+                        if (planner.LatestResult != null)
+                        {
+                            checker = planner.LatestChecker;
+                        }
+                    }
+                    else
+                    {
+                        checker = CellsOf.GetInputCheckerSafe;
+                    }
+                }
+
+                CallCellIterationOn(checker, print, lastReslt);
             }
 
 
+        }
+
+
+        void CallCellIterationOn(CheckerField3D checker, PlanGenerationPrint print, PlannerResult lastReslt)
+        {
             if (checker != null)
             {
                 System.Collections.Generic.List<FieldCell> cellsToIterate = checker.CopyGridCellsList();
@@ -131,7 +145,6 @@ namespace FIMSpace.Generating.Planning.PlannerNodes.Cells.Loops
 
                 }
             }
-
         }
 
 

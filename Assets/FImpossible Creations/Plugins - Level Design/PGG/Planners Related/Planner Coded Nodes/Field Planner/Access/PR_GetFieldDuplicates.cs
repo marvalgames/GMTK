@@ -48,7 +48,7 @@ namespace FIMSpace.Generating.Planning.PlannerNodes.Field.Access
                     planners.Add(duplicate);
                 }
 
-            MultiplePlanners.AssignPlannersList(planners);
+            MultiplePlanners.Output_Provide_PlannersList(planners);
         }
 
 

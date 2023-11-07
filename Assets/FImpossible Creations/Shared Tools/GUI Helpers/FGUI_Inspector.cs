@@ -260,6 +260,12 @@ namespace FIMSpace.FEditor
             if (GUILayout.Button("<- Go Back To " + LastObjSelected.name, GUILayout.Height(26))) Selection.activeObject = LastObjSelected;
         }
 
+        public static void UnfocusControl()
+        {
+#if UNITY_EDITOR
+            GUI.FocusControl(null);
+#endif
+        }
 
     }
 }

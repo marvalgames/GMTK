@@ -47,7 +47,7 @@ namespace FIMSpace.Generating.Planning.PlannerNodes.Generating
 
             //checker.DebugLogDrawCellsInWorldSpace(Color.magenta);
             var inlideChecker = checker.GetInlineChecker(false, true, AddOutDirections, false, CopyCellReferences);
-            Inline.ProvideShape(inlideChecker);
+            Inline.Output_Provide_Checker(inlideChecker);
         }
 
 

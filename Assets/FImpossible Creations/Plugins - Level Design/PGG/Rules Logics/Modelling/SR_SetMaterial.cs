@@ -26,7 +26,7 @@ namespace FIMSpace.Generating.Rules.Modelling
 #endif
         #endregion
 
-        public override List<SpawnerVariableHelper> GetVariables() { return MatVariable.GetListedVariable();  }
+        public override List<SpawnerVariableHelper> GetVariables() { return MatVariable.GetListedVariable(); }
 
         [Header("Leave fields empty to not use them")]
         public Material ReplaceOnly = null;
@@ -35,13 +35,17 @@ namespace FIMSpace.Generating.Rules.Modelling
         public override void CellInfluence(FieldSetup preset, FieldModification mod, FieldCell cell, ref SpawnData spawn, FGenGraph<FieldCell, FGenPoint> grid, Vector3? restrictDirection = null)
         {
             Material targetMat = NewMaterial;
-            if ( MatVariable.IsType(FieldVariable.EVarType.Material) )
+
+            if (MatVariable.IsType(FieldVariable.EVarType.Material))
             {
                 Material varMat = MatVariable.GetMatValue();
                 if (varMat != null) targetMat = varMat;
             }
 
-            if (targetMat == null) return;
+            if (targetMat == null)
+            {
+                return;
+            }
 
             Action<GameObject> setMaterial =
             (o) =>

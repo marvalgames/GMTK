@@ -225,6 +225,7 @@ namespace FIMSpace.Generating
             }
             else
             {
+
                 ValueType = EVarType.None;
             }
 

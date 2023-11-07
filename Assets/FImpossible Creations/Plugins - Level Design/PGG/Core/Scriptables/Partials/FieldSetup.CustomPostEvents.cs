@@ -15,6 +15,11 @@ namespace FIMSpace.Generating
 
             [SerializeField] private List<FieldVariable> variables = new List<FieldVariable>();
 
+            /// <summary> Can be used for containing any parasable value or just strings </summary>
+            [SerializeField, HideInInspector] public List<string> customStringList = null;
+            /// <summary> Support for list of unity objects </summary>
+            [SerializeField, HideInInspector] public List<UnityEngine.Object> customObjectList = null;
+
             public FieldVariable RequestVariable(string name, object defaultValue)
             {
                 int hash = name.GetHashCode();
@@ -30,8 +35,6 @@ namespace FIMSpace.Generating
         }
 
         public List<CustomPostEventHelper> CustomPostEvents = new List<CustomPostEventHelper>();
-
-
     }
 
 }

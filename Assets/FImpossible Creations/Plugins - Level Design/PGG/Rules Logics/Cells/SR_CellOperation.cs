@@ -311,16 +311,16 @@ namespace FIMSpace.Generating.Rules.Cells
                 }
                 else if (Operation == EOperation.ClearAndOccupy)
                 {
-                    origin.OccupyOther(newCell);
+                    origin.OccupyOther(newCell, thisSpawn);
                 }
                 else if (Operation == EOperation.OccupyCell)
                 {
-                    origin.OccupyOther(newCell);
+                    origin.OccupyOther(newCell, thisSpawn);
                 }
                 else if (Operation == EOperation.ClearAllAndOccupy)
                 {
                     newCell.RemoveAllSpawnsFromCell();
-                    origin.OccupyOther(newCell);
+                    origin.OccupyOther(newCell, thisSpawn);
                 }
             }
             else
@@ -347,16 +347,16 @@ namespace FIMSpace.Generating.Rules.Cells
                     else if (Operation == EOperation.ClearAndOccupy)
                     {
                         newCell.RemoveSpawnFromCell(tgtSpawn);
-                        origin.OccupyOther(tgtSpawn.OwnerCell);
+                        origin.OccupyOther(tgtSpawn.OwnerCell, thisSpawn);
                     }
                     else if (Operation == EOperation.OccupyCell)
                     {
-                        origin.OccupyOther(tgtSpawn.OwnerCell);
+                        origin.OccupyOther(tgtSpawn.OwnerCell, thisSpawn);
                     }
                     else if (Operation == EOperation.ClearAllAndOccupy)
                     {
                         newCell.RemoveAllSpawnsFromCell();
-                        origin.OccupyOther(tgtSpawn.OwnerCell);
+                        origin.OccupyOther(tgtSpawn.OwnerCell, thisSpawn);
                     }
                 }
             }

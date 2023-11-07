@@ -124,7 +124,7 @@ namespace FIMSpace.Generating.Planning.PlannerNodes.Cells.Actions
                     }
                 }
 
-                if (nChecker.AllCells.Count > 0) CellsGroup.ProvideShape(nChecker);
+                if (nChecker.AllCells.Count > 0) CellsGroup.Output_Provide_Checker(nChecker);
 
                 #endregion
             }

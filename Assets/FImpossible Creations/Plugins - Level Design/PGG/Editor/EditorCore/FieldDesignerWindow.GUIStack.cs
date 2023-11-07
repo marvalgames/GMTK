@@ -447,7 +447,7 @@ namespace FIMSpace.Generating
                     if (projectPreset == null) GUI.backgroundColor = Color.green;
                     else GUI.backgroundColor = new Color(0.75f, 1f, 0.75f, 1f);
 
-                    if (GUILayout.Button(new GUIContent("New", "Generates new Field Setup file in the PGG drafts directory, after that you can move draft file into project directories with 'Move' button which will appear"), GUILayout.Width(44)))
+                    if (GUILayout.Button(new GUIContent("New", "Generates new Field Setup file in the PGG drafts directory, after that you can move draft file into project directories using button on the right."), GUILayout.Width(44)))
                     {
                         string path;
 
@@ -557,6 +557,7 @@ namespace FIMSpace.Generating
 
                         #endregion
 
+
                         draftsMenu.AddItem(new GUIContent("+ Create new FieldSetup in selected project directory"), false, () =>
                         {
                             var newPres = (FieldSetup)FGenerators.GenerateScriptable(CreateInstance<FieldSetup>(), "FS_");
@@ -566,6 +567,22 @@ namespace FIMSpace.Generating
                                     projectPreset = newPres;
                             }
                         });
+
+
+                        draftsMenu.AddItem(new GUIContent(""), false, () => { });
+                        draftsMenu.AddItem(new GUIContent(""), false, () => { });
+
+                        if (projectPreset != null)
+                            draftsMenu.AddItem(new GUIContent("X Completely Remove Current Preset File"), false, () =>
+                            {
+                                string path = AssetDatabase.GetAssetPath(projectPreset);
+                                if (!string.IsNullOrEmpty(path))
+                                {
+                                    AssetDatabase.DeleteAsset(path);
+                                    AssetDatabase.SaveAssets();
+                                    projectPreset = null;
+                                }
+                            });
 
                         draftsMenu.ShowAsContext();
 

@@ -57,10 +57,10 @@ namespace FIMSpace.Generating.Planning.GeneratingLogics
         }
 
 #if UNITY_EDITOR
-        public override void DrawGUI(SerializedObject so)
+        public override void DrawGUI(SerializedObject so, FieldPlanner parent)
         {
             EditorGUILayout.HelpBox("This Shape is providing multiple Sub-Fields inside the main Field!\n(Using 'Rectangle Packing' Algorithm)", MessageType.Info);
-            base.DrawGUI(so);
+            base.DrawGUI(so,parent);
         }
 #endif
 

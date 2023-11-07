@@ -34,7 +34,7 @@ namespace FIMSpace.Generating
 
         BuildPlannerPreset generatingInstance = null;
 
-
+        public System.Random GeneratingRandom { get; private set; } = null;
 
         public void ClearGenerated()
         {
@@ -70,18 +70,22 @@ namespace FIMSpace.Generating
             IsGenerating = true;
 
             if (RandomSeed) Seed = Random.Range(-9999, 9999);
+            GeneratingRandom = new System.Random(Seed);
 
             if (BuildPlannerReferences != null) BuildPlannerReferences.Clear();
             else BuildPlannerReferences = new List<BuildPlannerReference>();
+
 
             RefreshVariablesReferences();
             generatingInstance = BuildPlannerPreset.DeepCopy();
             generatingInstance.AsyncGenerating = Async;
 
+
             for (int i = 0; i < generatingInstance.BuildVariables.Count; i++)
             {
                 generatingInstance.BuildVariables[i].SetValue(_plannerPrepare.PlannerVariablesOverrides[i].GetValue());
             }
+
 
             AdjustDuplicatesCounts();
 
@@ -100,6 +104,13 @@ namespace FIMSpace.Generating
 
                 //plannerInst.CheckerScale = tgtCompos.GetCellSize();
                 plannerInst.PreviewCellSize = tgtCompos.GetCellSize();
+
+                if (tgtCompos.GenType == EPGGGenType.Prefab)
+                {
+                    tgtCompos.PrefabFieldHandler.PreparePlannerInstance(plannerInst);
+                }
+                else if (plannerInst.FieldType == FieldPlanner.EFieldType.Prefab) plannerInst.FieldType = FieldPlanner.EFieldType.FieldPlanner;
+
                 //plannerInst.UseCheckerScale = true;
                 plannerInst.DisableWholePlanner = !tgtCompos.OverrideEnabled;
                 plannerInst.ShapeGenerator = tgtCompos.InitShapes[0];
@@ -114,9 +125,7 @@ namespace FIMSpace.Generating
                 {
                     plannerInst.Variables[v].SetValue(tgtCompos.PlannerVariablesOverrides[v]);
                 }
-
             }
-
 
 
             var manager = generatingInstance.RunProceduresAndGeneratePrint(Seed);
@@ -164,14 +173,21 @@ namespace FIMSpace.Generating
             if (Application.isPlaying)
 #endif
             {
-
-                InvokeRepeating("UpdateGeneratingProgress", 0.001f, 0.01f);
+                updateGenerating = true;
             }
 
             #endregion
 
         }
 
+        /// <summary> I was using invoke repeating, but no matter what, it was influenced by time.timeScale </summary>
+        bool updateGenerating = false;
+
+        private void Update()
+        {
+            if ( !updateGenerating) return;
+            UpdateGeneratingProgress();
+        }
 
         PlannerDuplicatesSupport GetSupportFor(FieldPlanner planner)
         {
@@ -231,6 +247,8 @@ namespace FIMSpace.Generating
         private int? latestGeneratedPreviewSeed = null;
         public void Generate()
         {
+            EnsureFieldsInitialization();
+
             ClearGenerated();
             GeneratePreview();
 
@@ -244,6 +262,23 @@ namespace FIMSpace.Generating
 
             willInstantiateInCoroutine = false;
             if (generatingSet == EGenerating.FlexiblePainters) willInstantiateInCoroutine = true;
+        }
+
+        /// <summary> Added to prevent wrong generating for prefabed executors </summary>
+        public void EnsureFieldsInitialization()
+        {
+            ValidateSetups();
+            ResetPlannerComposition();
+            RefreshVariablesReferences();
+
+            if (BuildPlannerPreset == null) return;
+
+            for (int i = 0; i < PlannerPrepare.FieldSetupCompositions.Count; i++)
+            {
+                var compos = PlannerPrepare.FieldSetupCompositions[i];
+                if (compos.Prepared) continue;
+                compos.PrepareWithCurrentlyChoosed(this, compos.ParentFieldPlanner);
+            }
         }
 
         /// <summary>
@@ -325,6 +360,10 @@ namespace FIMSpace.Generating
                         StartCoroutine(IConvertGeneratedSchemeToFlexiblePainters());
 #endif
             }
+
+            // Generate prefabs if not using grids
+            if (generatingSet != EGenerating.JustPreview)
+                GeneratedSchemesToPrefabs();
         }
 
         public void GenerateFieldSetupsOnGeneratedScheme()
@@ -353,13 +392,16 @@ namespace FIMSpace.Generating
         }
 
         int seedIteration;
+
         public void ConvertGeneratedSchemeToGridPainters()
         {
             seedIteration = 0;
+
             for (int i = 0; i < generatingInstance.BasePlanners.Count; i++)
             {
                 var planner = generatingInstance.BasePlanners[i];
                 if (planner.DontGenerateIt) continue;
+                if (planner.FieldType == FieldPlanner.EFieldType.Prefab) continue;
 
                 GenerateGridPainterWithPlanner(planner);
 
@@ -495,9 +537,9 @@ namespace FIMSpace.Generating
             {
                 var planner = generatingInstance.BasePlanners[i];
                 if (planner.DontGenerateIt) continue;
+                if (planner.FieldType == FieldPlanner.EFieldType.Prefab) continue;
 
                 FlexibleGenerator painter = GenerateFlexiblePainterWithPlanner(planner);
-
                 var duplicates = planner.GetDuplicatesPlannersList();
 
                 if (duplicates != null)
@@ -673,6 +715,34 @@ namespace FIMSpace.Generating
             return painter;
         }
 
+
+        public void GeneratedSchemesToPrefabs()
+        {
+            for (int i = 0; i < generatingInstance.BasePlanners.Count; i++)
+            {
+                var planner = generatingInstance.BasePlanners[i];
+                if (planner.DontGenerateIt) continue;
+                if (planner.FieldType != FieldPlanner.EFieldType.Prefab) continue;
+
+                InstantiatePrefabField(planner);
+                for (int d = 0; d < planner.Duplicates; d++) InstantiatePrefabField(planner.GetDuplicatesPlannersList()[d]);
+                for (int s = 0; s < planner.GetSubFieldsCount; s++) InstantiatePrefabField(planner.GetSubField(s));
+            }
+        }
+
+        void InstantiatePrefabField(FieldPlanner planner)
+        {
+            if (planner == null) return;
+            if (planner.DefaultPrefab == null) return;
+
+            GameObject created = FGenerators.InstantiateObject(planner.DefaultPrefab);
+            created.transform.SetParent(transform, true);
+            created.transform.localPosition = (planner.LatestResult.Checker.RootPosition);
+            created.transform.localRotation = planner.LatestResult.Checker.RootRotation;
+            Generated.Add(created);
+        }
+
+
         public List<BuildPlannerReference> BuildPlannerReferences { get; private set; }
         void AddPlannerReference(FieldPlanner planner, PGGGeneratorRoot root)
         {
@@ -749,7 +819,7 @@ namespace FIMSpace.Generating
 #endif
                 #endregion
 
-                CancelInvoke("UpdateGeneratingProgress");
+                updateGenerating = false;
 
                 latestGeneratedPreviewSeed = Seed;
 
@@ -795,6 +865,36 @@ namespace FIMSpace.Generating
             }
 
             if (RunAfterGenerating != null) RunAfterGenerating.Invoke();
+        }
+
+
+        /// <summary>
+        /// Returns the field generator which was generated by the build planner.
+        /// </summary>
+        public PGGGeneratorRoot GetGeneratedGenerator(string name)
+        {
+            for (int i = 0; i < generatedGenerators.Count; i++)
+            {
+                if (generatedGenerators[i].name == name) return generatedGenerators[i];
+            }
+
+            return null;
+        }
+
+        /// <summary>
+        /// Returns first field planner preparation composition with provided field planner name
+        /// </summary>
+        public FieldSetupComposition GetFieldPlannerSetup(string name)
+        {
+            for (int p = 0; p < PlannerPrepare.FieldSetupCompositions.Count; p++)
+            {
+                if (PlannerPrepare.FieldSetupCompositions[p].ParentFieldPlanner.name == name)
+                {
+                    return PlannerPrepare.FieldSetupCompositions[p];
+                }
+            }
+
+            return null;
         }
 
         #endregion

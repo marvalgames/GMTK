@@ -33,27 +33,29 @@ namespace FIMSpace.Generating.Planning.PlannerNodes.Field.Access
             rootPlanner = GetPlannerFromPort(SubFieldsOf);
             if (rootPlanner.Available == false) rootPlanner = null;
 
-            if (rootPlanner == null) return;
+            if (rootPlanner == null) { return; }
 
-            if (rootPlanner.GetSubFieldsCount == 0) return;
+            if (rootPlanner.GetSubFieldsCount == 0) { return; }
 
             List<FieldPlanner> planners = new List<FieldPlanner>();
 
             for (int s = 0; s < rootPlanner.GetSubFieldsCount; s++)
             {
                 var sub = rootPlanner.GetSubField(s);
-                if (sub == null) continue;
-                if (!sub.Available) continue;
+
+                if (sub == null) { continue; }
+                if (!sub.Available) { continue; }
                 planners.Add(sub);
             }
 
+            if (_EditorDebugMode) UnityEngine.Debug.Log("providing " + planners.Count + " vs " + rootPlanner.GetSubFieldsCount);
             if (RandomizeOrder) planners.Shuffle();
 
-            if (_EditorDebugMode)
-                for (int g = 0; g < planners.Count; g++)
-                    UnityEngine.Debug.Log("Getted [" + g + "] " + planners[g].ArrayNameString);
+            //if (_EditorDebugMode)
+            //    for (int g = 0; g < planners.Count; g++)
+            //        UnityEngine.Debug.Log("Getted [" + g + "] " + planners[g].ArrayNameString);
 
-            MultiplePlanners.AssignPlannersList(planners);
+            MultiplePlanners.Output_Provide_PlannersList(planners);
         }
 
 

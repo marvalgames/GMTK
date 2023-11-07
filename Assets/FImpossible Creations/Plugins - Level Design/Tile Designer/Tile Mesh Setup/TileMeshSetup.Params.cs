@@ -1,22 +1,20 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace FIMSpace.Generating
 {
     public partial class TileMeshSetup
     {
-        public enum EMeshGenerator { Loft, Lathe, Extrude, Sweep, CustomMeshAndExtras, Primitive }
+        public enum EMeshGenerator { Loft, Lathe, Extrude, Sweep, Advanced, Primitive }
         public EMeshGenerator GenTechnique = EMeshGenerator.Loft;
 
-        public enum EOrigin { Unchanged, BottomCenter, Center, BottomLeft, TopCenter, BottomCenterBack, BottomCenterFront }
+        //public enum EOrigin { Unchanged, BottomCenter, Center, BottomLeft, TopCenter, BottomCenterBack, BottomCenterFront }
         public EOrigin Origin = EOrigin.Unchanged;
 
-        public enum EUVFit { FitX, FitY, FitXY }
+        //public enum EUVFit { FitX, FitY, FitXY }
         public EUVFit UVFit = EUVFit.FitXY;
 
         public Vector2 UVMul = Vector2.one;
+        public Vector3 RotateResult = Vector3.zero;
 
 
         public enum ENormalsMode { NormalsAsSubdivView, HardNormals }
@@ -25,7 +23,6 @@ namespace FIMSpace.Generating
 
         public enum ESubdivideCompute { AngleLimit, LengthLimit }
         public ESubdivideCompute SubdivMode = ESubdivideCompute.AngleLimit;
-
 
         public float width = 1.5f;
         public float height = 2f;

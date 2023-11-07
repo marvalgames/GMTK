@@ -120,7 +120,7 @@ namespace FIMSpace.Generating.Planning.PlannerNodes.Generating
                 }
             }
 
-            FattenExtraCells.ProvideShape(fattening);
+            FattenExtraCells.Output_Provide_Checker(fattening);
         }
 
 

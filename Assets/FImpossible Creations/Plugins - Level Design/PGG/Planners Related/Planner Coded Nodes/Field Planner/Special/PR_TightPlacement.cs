@@ -106,29 +106,31 @@ namespace FIMSpace.Generating.Planning.PlannerNodes.Field.Special
             checker = field.LatestChecker;
             _checkerBackup = checker.Copy(); // Save current checker state
 
+
             for (int a = 0; a < _snapTo.Count; a++)
             {
+                if (FieldPlanner.CurrentGraphExecutingPlanner == null) return;
+                if (FieldPlanner.CurrentGraphExecutingPlanner.ParentBuildPlanner == null) return;
+
                 if (_snapTo[a] == FieldPlanner.CurrentGraphExecutingPlanner)
                 {
-                    if (_snapTo.Count == 1)
+                    if (_snapTo.Count == 1) // only self on the list o_O
                     {
                         found = true;
                         if (Debugging) foundOn = null;
                     }
 
-                    continue; // Snap to self
+                    continue; // Snap to self skip
                 }
 
-                if (found) break;
-                alignTo = _snapTo[a];
+                if (found) break; // If found good placement, dont check other alignTo[]s
 
+                alignTo = _snapTo[a];
                 alignToChecker = alignTo.LatestChecker;
 
-                if (alignToChecker == null) return;
-                if (alignToChecker.AllCells.Count == 0) return;
+                if (alignToChecker == null) continue;
+                if (alignToChecker.AllCells.Count == 0) continue;
 
-                if (FieldPlanner.CurrentGraphExecutingPlanner == null) return;
-                if (FieldPlanner.CurrentGraphExecutingPlanner.ParentBuildPlanner == null) return;
 
                 #endregion
 
@@ -141,7 +143,8 @@ namespace FIMSpace.Generating.Planning.PlannerNodes.Field.Special
                     _rotedcheckerBackup.RootRotation = Quaternion.Euler(0, 90, 0);
                 }
 
-                List<CheckerField3D> currentCheckers = print.GetCurrentCheckersList();
+                List<CheckerField3D> currentCheckers = ParentPlanner.ParentBuildPlanner.CollectAllAvailablePlannersCheckers(true, true, true, true);
+                currentCheckers.Remove(field.LatestChecker);
 
                 // Collect just edge cells of target checker to be aligned with to avoid checking not wanted cells which are deep inside field body
                 CheckerField3D checkerEdges = alignToChecker.GetInlineChecker(false, true, true, false);
@@ -296,7 +299,6 @@ namespace FIMSpace.Generating.Planning.PlannerNodes.Field.Special
                 field.LatestChecker.RootPosition = smallestRootPos;
                 field.LatestChecker.RootRotation = smallestRootRot;
             }
-
 
             if (!found)
             {

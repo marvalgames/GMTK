@@ -10,7 +10,7 @@ namespace FIMSpace.Generating.Rules.QuickSolutions.Alpha
 {
     public class SR_CablesSpawner : SpawnRuleBase, ISpawnProcedureType
     {
-        public override string TitleName() { return "Cables Spawner"; }
+        public override string TitleName() { return "Cables Spawner (Deprecated)"; }
         public override string Tooltip() { return "Spawning multiple instances of choosed prefab in line until reaching desired spawn"; }
         public EProcedureType Type { get { return EProcedureType.Coded; } }
 
@@ -200,7 +200,7 @@ namespace FIMSpace.Generating.Rules.QuickSolutions.Alpha
             Gizmos.color = new Color(0.2f, 1f, 0.2f, 0.6f);
 
             Quaternion spawnRot = spawn.GetRotationOffset();
-            Vector3 pos = spawn.GetWorldPositionWithFullOffset() + spawnRot * CollisionOrigin;
+            Vector3 pos = spawn.GetWorldPositionWithFullOffset(preset) + spawnRot * CollisionOrigin;
 
             float size = 0.5f;
             Gizmos.DrawCube(pos, Vector3.one * size);

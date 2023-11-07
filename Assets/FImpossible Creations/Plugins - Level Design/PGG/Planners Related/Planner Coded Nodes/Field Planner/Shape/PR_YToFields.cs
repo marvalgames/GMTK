@@ -26,8 +26,8 @@ namespace FIMSpace.Generating.Planning.PlannerNodes.Field.Shape
         public override void OnCreated()
         {
             base.OnCreated();
-            ResultingSplits.OnlyReferenceContainer = true;
-            ToSplit.OnlyReferenceContainer = false;
+            ResultingSplits.Switch_ReturnOnlyCheckers = true;
+            ToSplit.Switch_ReturnOnlyCheckers = false;
         }
 
         public override void OnStartReadingNode()
@@ -35,10 +35,10 @@ namespace FIMSpace.Generating.Planning.PlannerNodes.Field.Shape
             ResultingSplits.Clear();
 
             ToSplit.TriggerReadPort(true);
-            ResultingSplits.OnlyReferenceContainer = true;
+            ResultingSplits.Switch_ReturnOnlyCheckers = true;
 
             FieldPlanner plan = GetPlannerFromPort(ToSplit, false);
-            ToSplit.OnlyReferenceContainer = false;
+            ToSplit.Switch_ReturnOnlyCheckers = false;
 
             CheckerField3D myChe = null;
 
@@ -68,7 +68,7 @@ namespace FIMSpace.Generating.Planning.PlannerNodes.Field.Shape
                 if (sub.ChildPositionsCount > 0) chLevels.Add(sub);
             }
 
-            ResultingSplits.AssignCheckersList(chLevels);
+            ResultingSplits.Output_Provide_CheckerList(chLevels);
         }
 
 

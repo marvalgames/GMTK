@@ -33,6 +33,8 @@ namespace FIMSpace.Generating.Rules.Cells.Legacy
         [HideInInspector]
         public bool FromOrigin = false;
 
+        [Tooltip("If your prefabs has pivot in corners, you should switch to RendererCenter mode")]
+        public ESR_Origin MeasureMode = ESR_Origin.SpawnPosition;
 
 
 
@@ -60,9 +62,10 @@ namespace FIMSpace.Generating.Rules.Cells.Legacy
             if (FGenerators.CheckIfIsNull(targetCell)) return;
 
             Vector3 cellPosition = Vector3.zero;
-            if (FromOrigin ) cellPosition = preset.GetCellWorldPosition(cell);
+            if (FromOrigin) cellPosition = preset.GetCellWorldPosition(cell);
 
             Vector3 thisPos = thisSpawn.GetPosWithFullOffset(true);
+            Vector3 centerPos = SpawnRuleBase.GetSpawnCenterPositionCellSpace(thisSpawn, MeasureMode);
 
             if (UseSelfRotation != ESR_DirectionMode.NoOffset)
             {
@@ -75,12 +78,14 @@ namespace FIMSpace.Generating.Rules.Cells.Legacy
 
                 fullOffset = GetUnitOffset(fullOffset, OffsetMode, preset);
                 thisPos += fullOffset;
+                centerPos += fullOffset;
             }
 
             thisPos += cellPosition;
+            centerPos += cellPosition;
 
             var spawns = targetCell.CollectSpawns(OwnerSpawner.ScaleAccess, true); // New list for removing from owner cell list
-            if (FromOrigin ) cellPosition = preset.GetCellWorldPosition(targetCell);
+            if (FromOrigin) cellPosition = preset.GetCellWorldPosition(targetCell);
 
             for (int s = 0; s < spawns.Count; s++)
             {
@@ -96,7 +101,13 @@ namespace FIMSpace.Generating.Rules.Cells.Legacy
                 Vector3 spawnPos = spawns[s].GetPosWithFullOffset(true);
                 spawnPos += cellPosition;
 
-                float distance = Vector3.Distance(thisPos, spawnPos);
+                float distance;
+                if (MeasureMode == ESR_Origin.SpawnPosition) distance = Vector3.Distance(thisPos, spawnPos);
+                else
+                {
+                    distance = Vector3.Distance(centerPos, cellPosition + SpawnRuleBase.GetSpawnCenterPositionCellSpace(spawns[s], MeasureMode));
+                    //UnityEngine.Debug.DrawLine(centerPos, (cellPosition + SpawnRuleBase.GetSpawnCenterPositionCellSpace(spawns[s], MeasureMode)), Color.green, 1.01f);
+                }
 
                 if (DistanceMustBe == ESR_DistanceRule.Equal)
                 {

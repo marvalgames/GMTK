@@ -288,6 +288,11 @@ namespace FIMSpace.Generating
         public static bool SpawnHaveTag(SpawnData spawn, string tag)
         {
             if (string.IsNullOrEmpty(tag)) return false;
+            if (spawn.OwnerMod == null)
+            {
+                UnityEngine.Debug.Log("Null Mod! " + spawn.Prefab);
+                return false;
+            }
 
             // Checking all tags with semicolon splitter from source tag
             string[] splitted = tag.Split(',');
@@ -296,6 +301,11 @@ namespace FIMSpace.Generating
             {
                 bool have = HaveTags(spawn.OwnerMod.ModTag, splitted);
                 if (have) return true;
+            }
+
+            if ( spawn.Spawner == null)
+            {
+                UnityEngine.Debug.Log("NULL SPAWNER! " + spawn.Prefab + " from " + spawn.ExecutedFrom + " f " + spawn.OwnerRule + " x " + spawn.OwnerMod + " msh = " + spawn.PreviewMesh + " ownercellpos " + spawn.OwnerCellPos);
             }
 
             if (!string.IsNullOrEmpty(spawn.Spawner.SpawnerTag))

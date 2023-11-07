@@ -39,7 +39,7 @@ namespace FIMSpace.Generating.Planning.PlannerNodes.Field.Access
 
             if (planner.Instances == 1)
             {
-                Planner.SetIDsOfPlanner(planner);
+                Planner.Output_Provide_Planner(planner);
             }
             else
             {
@@ -47,7 +47,7 @@ namespace FIMSpace.Generating.Planning.PlannerNodes.Field.Access
                 {
                     if (ind == 0)
                     {
-                        Planner.SetIDsOfPlanner(planner);
+                        Planner.Output_Provide_Planner(planner);
                         return;
                     }
 
@@ -58,7 +58,7 @@ namespace FIMSpace.Generating.Planning.PlannerNodes.Field.Access
                 if (pln == null) return;
                 if (pln.Count == 0) return;
 
-                Planner.SetIDsOfPlanner(pln[Mathf.Min(pln.Count - 1, ind)]);
+                Planner.Output_Provide_Planner(pln[Mathf.Min(pln.Count - 1, ind)]);
             }
         }
 

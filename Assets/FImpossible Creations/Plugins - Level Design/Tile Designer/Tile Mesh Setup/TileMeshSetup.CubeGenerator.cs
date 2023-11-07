@@ -24,6 +24,7 @@ namespace FIMSpace.Generating
             public bool FaceBottom;
             public bool FaceLeft;
             public bool FaceRight;
+            public Vector3 RotateResult = Vector3.zero;
 
             public class CubePlane
             {
@@ -325,6 +326,7 @@ namespace FIMSpace.Generating
 
                 // Generate Cube Mesh
                 Mesh mesh = new Mesh();
+                FMeshUtils.RotateVertices(RotateResult, verts);
                 mesh.SetVertices(verts);
                 mesh.SetTriangles(tris, 0);
                 mesh.SetNormals(normals);
@@ -384,6 +386,7 @@ namespace FIMSpace.Generating
 
 
             List<int> _toAddTris = new List<int>();
+
             void ConnectEdgePoly(int startIndex, List<int> edgeA, List<int> edgeB, List<int> finalTris, bool reverse = false)
             {
                 _toAddTris.Clear();

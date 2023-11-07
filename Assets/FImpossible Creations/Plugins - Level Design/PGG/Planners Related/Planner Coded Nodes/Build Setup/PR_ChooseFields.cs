@@ -8,12 +8,12 @@ namespace FIMSpace.Generating.Planning.PlannerNodes.BuildSetup
     public class PR_ChooseFields : PlannerRuleBase
     {
         public override string GetDisplayName(float maxWidth = 120) { return wasCreated ? "Choose Fields" : "Choose Fields with Condition"; }
-        public override string GetNodeTooltipDescription { get { return "Checking provided group of fields and re-grouping them using some condition"; } }
+        public override string GetNodeTooltipDescription { get { return "Checking provided group of fields and re-grouping them using some condition. (input connector is optional, node will call calculations on read if execute port is not connected)"; } }
         public override EPlannerNodeType NodeType { get { return EPlannerNodeType.ReadData; } }
         public override Color GetNodeColor() { return new Color(1.0f, 0.75f, 0.25f, 0.9f); }
         public override Vector2 NodeSize { get { return new Vector2(246, 142); } }
 
-        public override bool DrawInputConnector { get { return false; } }
+        public override bool DrawInputConnector { get { return true; } }
         public override bool DrawOutputConnector { get { return false; } }
 
         [Port(EPortPinType.Input, EPortNameDisplay.Default, EPortValueDisplay.Default, "Fields to Check")] public PGGPlannerPort FieldsToIterate;
@@ -31,7 +31,13 @@ namespace FIMSpace.Generating.Planning.PlannerNodes.BuildSetup
         public override void DONT_USE_IT_YET_OnReadPort(IFGraphPort port)
         {
             if (port != ChoosenFields) return;
+            if (InputConnections.Count > 0) return;
 
+            Execute(null, null);
+        }
+
+        public override void Execute(PlanGenerationPrint print, PlannerResult newResult)
+        {
             AddCondition.Value = false;
             ChoosenFields.Clear();
 
@@ -61,14 +67,14 @@ namespace FIMSpace.Generating.Planning.PlannerNodes.BuildSetup
             {
                 if (planners[c].Available == false) continue;
 
-                IterationField.SetIDsOfPlanner(planners[c]);
+                IterationField.Output_Provide_Planner(planners[c]);
                 //IterationField.SetIDsOfPlanner(planners[c]);
 
                 AddCondition.TriggerReadPort(true);
                 if (AddCondition.GetInputValue) choosen.Add(planners[c]);
             }
 
-            ChoosenFields.AssignPlannersList(choosen);
+            ChoosenFields.Output_Provide_PlannersList(choosen);
         }
 
 

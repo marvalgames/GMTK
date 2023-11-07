@@ -2,7 +2,6 @@
 using UnityEngine;
 using FIMSpace.Generating.Checker;
 using System.Collections.Generic;
-using System.Linq;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
@@ -79,7 +78,7 @@ namespace FIMSpace.Generating.Planning.PlannerNodes.Cells
             else
             {
                 FieldPlanner plan = StartCell.GetInputPlannerIfPossible;
-                if (plan == null) CheckIn.GetPlannerFromPort(false);
+                if (plan == null) plan = CheckIn.GetPlannerFromPort(false);
                 if (plan == null) { plan = CurrentExecutingPlanner; if (plan == null) return; }
 
                 result = plan.LatestResult;
@@ -91,7 +90,7 @@ namespace FIMSpace.Generating.Planning.PlannerNodes.Cells
             MaxDistance.TriggerReadPort(true);
             int dist = MaxDistance.GetInputValue;
 
-            if (dist <= 0) return;
+            //if (dist <= 0) return;
 
             Vector3Int startLocPos = checker.WorldToLocal(startCellWPos).V3toV3Int();
 
@@ -106,94 +105,59 @@ namespace FIMSpace.Generating.Planning.PlannerNodes.Cells
             float nearest = float.MaxValue;
             float maxDist = (float)dist;
 
-            if (!CheckY)
+
+            if (maxDist == 0)
             {
-                for (int d = 0; d <= dist; d++)
+                var foundCell = checker.GetCell(startLocPos);
+
+                if (FGenerators.NotNull(foundCell))
                 {
-
-                    for (int x = -d; x <= d; x += 1)
+                    for (int s = 0; s < multiData.Count; s++)
                     {
-                        for (int z = -d; z <= d; z += 1)
+                        if (foundCell.HaveCustomData(multiData[s]))
                         {
-                            //if (x == 0 && z == 0) continue;
-
-                            if (Mathf.Abs(x) != d && Mathf.Abs(z) != d) continue;
-                            Vector3Int off = new Vector3Int(x, 0, z);
-
-                            if (off.magnitude > maxDist) continue;
-
-                            var foundCell = checker.GetCell(startLocPos + off);
-
-                            if (FGenerators.NotNull(foundCell))
-                            {
-                                //checker.DebugLogDrawCellInWorldSpace(foundCell, Color.yellow);
-
-                                for (int s = 0; s < multiData.Count; s++)
-                                {
-                                    if (foundCell.HaveCustomData(multiData[s]))
-                                    {
-                                        //checker.DebugLogDrawCellInWorldSpace(foundCell, Color.red);
-                                        float cDist = Vector3.SqrMagnitude(startLocPos - foundCell.Pos);
-                                        if (cDist < nearest)
-                                        {
-                                            nearest = cDist;
-                                            nearestFound = foundCell;
-                                            break;
-                                        }
-                                    }
-                                }
-
-                            }
-
+                            nearestFound = foundCell;
+                            break;
                         }
                     }
-
-                    if (FGenerators.NotNull(nearestFound))
-                    {
-                        Found.Value = true;
-                        break;
-                    }
-
                 }
 
+                if (FGenerators.NotNull(nearestFound))
+                {
+                    Found.Value = true;
+                }
             }
             else
             {
 
-                // Y Level Check included
-
-                for (int d = 0; d <= dist; d++)
+                if (!CheckY)
                 {
-
-                    for (int x = -d; x <= d; x += 1)
+                    for (int d = 0; d <= dist; d++)
                     {
-                        for (int y = -d; y <= d; y += 1)
+
+                        for (int x = -d; x <= d; x += 1)
                         {
                             for (int z = -d; z <= d; z += 1)
                             {
-                                //if (x == 0 && z == 0 && y == 0) continue;
+                                //if (x == 0 && z == 0) continue;
 
-                                if (Mathf.Abs(x) != d && Mathf.Abs(z) != d && Mathf.Abs(y) != d) continue;
-                                Vector3Int off = new Vector3Int(x, y, z);
+                                if (Mathf.Abs(x) != d && Mathf.Abs(z) != d) continue;
+                                Vector3Int off = new Vector3Int(x, 0, z);
 
                                 if (off.magnitude > maxDist) continue;
 
-                                //if (startLocPos == new Vector3Int(4, 0, 0)) UnityEngine.Debug.Log("checking in " + off);
-
                                 var foundCell = checker.GetCell(startLocPos + off);
-
-                                //checker.DebugLogDrawCellInWorldSpace(startLocPos + off, Color.green);
 
                                 if (FGenerators.NotNull(foundCell))
                                 {
-                                    //checker.DebugLogDrawCellInWorldSpace(startLocPos + off, Color.green);
+                                    //checker.DebugLogDrawCellInWorldSpace(foundCell, Color.yellow);
 
                                     for (int s = 0; s < multiData.Count; s++)
                                     {
                                         if (foundCell.HaveCustomData(multiData[s]))
                                         {
+                                            //checker.DebugLogDrawCellInWorldSpace(foundCell, Color.red);
                                             float cDist = Vector3.SqrMagnitude(startLocPos - foundCell.Pos);
-
                                             if (cDist < nearest)
                                             {
                                                 nearest = cDist;
@@ -202,23 +166,85 @@ namespace FIMSpace.Generating.Planning.PlannerNodes.Cells
                                             }
                                         }
                                     }
+
                                 }
 
                             }
                         }
 
+                        if (FGenerators.NotNull(nearestFound))
+                        {
+                            Found.Value = true;
+                            break;
+                        }
+
                     }
 
-                    if (FGenerators.NotNull(nearestFound))
+                }
+                else
+                {
+
+                    // Y Level Check included
+
+                    for (int d = 0; d <= dist; d++)
                     {
-                        Found.Value = true;
-                        break;
+
+                        for (int x = -d; x <= d; x += 1)
+                        {
+                            for (int y = -d; y <= d; y += 1)
+                            {
+                                for (int z = -d; z <= d; z += 1)
+                                {
+                                    //if (x == 0 && z == 0 && y == 0) continue;
+
+                                    if (Mathf.Abs(x) != d && Mathf.Abs(z) != d && Mathf.Abs(y) != d) continue;
+                                    Vector3Int off = new Vector3Int(x, y, z);
+
+                                    if (off.magnitude > maxDist) continue;
+
+                                    //if (startLocPos == new Vector3Int(4, 0, 0)) UnityEngine.Debug.Log("checking in " + off);
+
+                                    var foundCell = checker.GetCell(startLocPos + off);
+
+                                    //checker.DebugLogDrawCellInWorldSpace(startLocPos + off, Color.green);
+
+                                    if (FGenerators.NotNull(foundCell))
+                                    {
+                                        //checker.DebugLogDrawCellInWorldSpace(startLocPos + off, Color.green);
+
+                                        for (int s = 0; s < multiData.Count; s++)
+                                        {
+                                            if (foundCell.HaveCustomData(multiData[s]))
+                                            {
+                                                float cDist = Vector3.SqrMagnitude(startLocPos - foundCell.Pos);
+
+                                                if (cDist < nearest)
+                                                {
+                                                    nearest = cDist;
+                                                    nearestFound = foundCell;
+                                                    break;
+                                                }
+                                            }
+                                        }
+                                    }
+
+                                }
+                            }
+
+                        }
+
+                        if (FGenerators.NotNull(nearestFound))
+                        {
+                            Found.Value = true;
+                            break;
+                        }
+
                     }
 
                 }
 
-
             }
+
 
             DetectedCell.ProvideFullCellData(nearestFound, checker, result);
 

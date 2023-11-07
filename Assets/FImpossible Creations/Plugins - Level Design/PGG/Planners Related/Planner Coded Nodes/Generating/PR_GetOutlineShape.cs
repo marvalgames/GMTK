@@ -49,7 +49,7 @@ namespace FIMSpace.Generating.Planning.PlannerNodes.Generating
             int thickn = Mathf.Max(OutlineThickness.GetInputValue, 1);
             
             var outlineChecker = checker.GetOutlineChecker(thickn, Style, false, CopyCellReferences);
-            Outline.ProvideShape(outlineChecker);
+            Outline.Output_Provide_Checker(outlineChecker);
         }
 
 

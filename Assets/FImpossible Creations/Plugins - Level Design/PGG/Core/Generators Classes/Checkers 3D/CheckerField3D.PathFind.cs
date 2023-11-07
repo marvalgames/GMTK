@@ -671,7 +671,7 @@ namespace FIMSpace.Generating.Checker
                 }
 
                 FieldCell nextToFinishCell = null;
-                float nrstDist = float.MaxValue;
+                //float nrstDist = float.MaxValue;
                 Vector3 checkOriginPos = nextC.GetWorldPos(nextCcell);
 
                 for (int d = 0; d < findParams.directions.Count; d++)
@@ -773,7 +773,7 @@ namespace FIMSpace.Generating.Checker
 
                         if (start.ContainsWorld(fromOrigPos + start.ScaleV3(startToEnd * dir)))
                         {
-                            if ( !start.ContainsWorld(fromOrigPos - start.ScaleV3(startToEnd * dir))
+                            if (!start.ContainsWorld(fromOrigPos - start.ScaleV3(startToEnd * dir))
                                 || !target.ContainsWorld(toOrigPos - target.ScaleV3(startToEnd * dir))
                                 )
                             {
@@ -1170,6 +1170,33 @@ namespace FIMSpace.Generating.Checker
             Vector3 pathScale = pathChecker.RootScale;
             var targetInvMX = targetChecker.MatrixInverse;
 
+            if (findParams.ConnectOnAnyContact)
+            {
+                bool check = true;
+                if (originNode._PathFind_LastUsedStep != null) if (originNode._PathFind_LastUsedStep.DisallowFinishOn) check = false;
+
+                if (check)
+                    for (int i = 0; i < findParams.directions.Count; i++)
+                    {
+                        LineFindHelper findDir = findParams.directions[i];
+                        if (findDir.DisallowFinishOn) continue;
+
+                        Vector3Int offsettedPosGridLocal = nodeOriginInGridLocal + findDir.Dir;
+                        FieldCell checkedPathCell = pathChecker.Grid.GetEmptyCell(offsettedPosGridLocal);
+                        Vector3 checkedWorldPos = pathChecker.GetWorldPos(checkedPathCell);
+
+                        if (targetChecker.ContainsWorld(checkedWorldPos, targetInvMX, false))
+                        {
+                            _pathFind_cheapestCost = -1f;
+                            _pathFind_cheapestNodeC = pathChecker.AddWorld(checkedWorldPos);
+                            _GeneratePathFindTowards_OtherTargetCell = targetChecker.GetCellInWorldPos(checkedWorldPos, true, targetInvMX);
+                            _PathFindValidateNode(startChecker, checkedWorldPos, originNode, checkedPathCell, targetPathEndLocalPos, findParams.directions[i], findParams);
+                            return;
+                        }
+                    }
+            }
+
+
             // Searching for nearest point towards target
             for (int i = 0; i < findParams.directions.Count; i++)
             {
@@ -1228,7 +1255,6 @@ namespace FIMSpace.Generating.Checker
 
                     if (collisionY) continue;
                 }
-
 
 
                 // Reaching target checker field
@@ -1473,7 +1499,7 @@ namespace FIMSpace.Generating.Checker
         {
             if (!target.ContainsWorld(checkedworldpos)) return;
 
-            float cost = PathFind_ComputeStepCost(originNode, checkedPathCell, targetPathEndLocalPos, direction, parameters);
+            float cost = PathFind_ComputeStepCost(originNode, checkedPathCell, targetPathEndLocalPos, direction, parameters, checkedworldpos);
 
             if (cost < _pathFind_cheapestDiscardedCost)
             {
@@ -1521,7 +1547,7 @@ namespace FIMSpace.Generating.Checker
             checkedPathCell._PathFind_status = 1;
             checkedPathCell.ParentCell = originNode;
 
-            float stepCost = PathFind_ComputeStepCost(originNode, checkedPathCell, targetPathEndLocalPos, direction, parameters);
+            float stepCost = PathFind_ComputeStepCost(originNode, checkedPathCell, targetPathEndLocalPos, direction, parameters, targetWorldPos);
 
             if (parameters.StartOnSide) // Ensureing that cells which would go through inside field are not prioritized
             {
@@ -1558,7 +1584,7 @@ namespace FIMSpace.Generating.Checker
             _pathFind_openListC.Add(checkedPathCell);
         }
 
-        float PathFind_ComputeStepCost(FieldCell originNode, FieldCell checkedPathCell, Vector3Int targetPathEndLocalPos, LineFindHelper direction, PathFindParams parameters)
+        float PathFind_ComputeStepCost(FieldCell originNode, FieldCell checkedPathCell, Vector3Int targetPathEndLocalPos, LineFindHelper direction, PathFindParams parameters, Vector3 checkedWorld)
         {
             float stepCost = direction.Cost;
 
@@ -1613,6 +1639,14 @@ namespace FIMSpace.Generating.Checker
 
             stepCost += originNode._PathFind_movementCost;
 
+
+            if (parameters.ExistingCellsCostMul != 1f)
+                if (ContainsWorld(checkedWorld))
+                {
+                    stepCost *= parameters.ExistingCellsCostMul;
+                }
+
+
             return stepCost;
         }
 
@@ -1665,6 +1699,10 @@ namespace FIMSpace.Generating.Checker
 
             public bool SphericalDistanceMeasure;
             public bool PrioritizePerpendicular;
+            public bool ConnectOnAnyContact;
+
+            public float ExistingCellsCostMul;
+            public float ExistingCellsCheckRange;
 
             /// <summary> x is above, y is below : both positive </summary>
             public Vector2 CollisionYMargins;
@@ -1693,6 +1731,10 @@ namespace FIMSpace.Generating.Checker
                 DontAllowFinishDist = 0f;
                 SnapToInstructionsOnDistance = 0f;
                 DontAllowStartToo = false;
+                ConnectOnAnyContact = false;
+
+                ExistingCellsCheckRange = 1f;
+                ExistingCellsCostMul = 1f;
 
                 LogWarnings = true;
 

@@ -82,6 +82,10 @@ namespace FIMSpace.Generating
             {
                 return Setup.GetCellUnitSize();
             }
+            else if (GenType == EPGGGenType.Prefab)
+            {
+                return PrefabFieldHandler.GetCellSize();
+            }
 
             return Vector3.one;
         }
@@ -301,10 +305,10 @@ namespace FIMSpace.Generating
                 pack.FieldModificators[m] = ScriptableObject.Instantiate(sourcePack.FieldModificators[m]);
                 var mod = pack.FieldModificators[m];
 
-                if (overrides.PackModsOverrides[m].SetEnabled == false)
-                {
-                    pack.FieldModificators[m].Enabled = false;
-                }
+                if (overrides.PackModsOverrides.ContainsIndex(m)) if (overrides.PackModsOverrides[m].SetEnabled == false)
+                    {
+                        pack.FieldModificators[m].Enabled = false;
+                    }
 
                 if (Setup != null)
                     if (Setup.IsModDisabledForThisSetup(sourcePack.FieldModificators[m]))
@@ -314,6 +318,7 @@ namespace FIMSpace.Generating
 
                 for (int s = 0; s < mod.PrefabsList.Count; s++)
                 {
+                    if (overrides.PackModsOverrides.ContainsIndex(m) == false) break;
                     var modOverr = overrides.PackModsOverrides[m];
                     ApplyOverridesOf(mod, modOverr);
                 }

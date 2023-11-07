@@ -34,18 +34,18 @@ namespace FIMSpace.Generating.Planning
 
                     if (manager.ComputeUsingAsync)
                     {
-                        try
+                        //try // Prepare needs to be not async since 1.6.0
+                        //{
+                        //    currentPrepareThread = new FieldPlannerPrepareThread(manager, planner);
+                        //    currentPrepareThread.Start();
+                        //}
+                        //catch (System.Exception e)
                         {
-                            currentPrepareThread = new FieldPlannerPrepareThread(manager, planner);
-                            currentPrepareThread.Start();
-                        }
-                        catch (System.Exception e)
-                        {
-                            manager.ComputeUsingAsync = false;
-                            if (planner.ParentBuildPlanner) planner.ParentBuildPlanner.AsyncGenerating = false;
+                            //manager.ComputeUsingAsync = false;
+                            //if (planner.ParentBuildPlanner) planner.ParentBuildPlanner.AsyncGenerating = false;
                             currentPrepareThread = null;
-                            UnityEngine.Debug.Log("[Planner Generator Async Break]");
-                            UnityEngine.Debug.LogException(e);
+                            //UnityEngine.Debug.Log("[Planner Generator Async Break]");
+                            //UnityEngine.Debug.LogException(e);
                             planner.PrepareForGenerating(manager._currentComputingI, manager._currentPreparingI, manager.Planner.LatestGenerated);
                         }
                     }
@@ -151,7 +151,7 @@ namespace FIMSpace.Generating.Planning
 
                                 if (duplPlan.Discarded == false)
                                 {
-                                    if (duplPlan.WasExecuted == false)
+                                    if (duplPlan.WasPreExecuted == false)
                                     {
                                         duplPlan.PreRunProcedures(manager.Planner.LatestGenerated);
 

@@ -44,13 +44,13 @@ namespace FIMSpace.Generating.Planning.PlannerNodes.Generating
             {
                 sameScaleDetected = true;
                 CheckerField3D oChecker = portPlan.LatestChecker.Copy();
-                Converted.ProvideShape(oChecker);
+                Converted.Output_Provide_Checker(oChecker);
                 return;
             }
 
             CheckerField3D convertedChecker = portChecker.GenerateCheckerConvertedToNewScale(myPlan.LatestChecker.RootScale, ConvertingSelf ? myPlan.LatestChecker : null);
             RootOffset.Value = portChecker.GetScaleConversionRootOffset(myPlan.LatestChecker.RootScale);
-            Converted.ProvideShape(convertedChecker);
+            Converted.Output_Provide_Checker(convertedChecker);
         }
 
 #if UNITY_EDITOR

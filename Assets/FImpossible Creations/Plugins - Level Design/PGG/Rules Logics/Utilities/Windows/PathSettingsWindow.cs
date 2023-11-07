@@ -29,6 +29,7 @@ namespace FIMSpace.Generating
 
         //public int AllowChangeDirectionEvery = 1;
         public bool SphericalDistanceMeasuring = false;
+        public bool OnAnyContact = false;
         public bool PrioritizePerpendicular = false;
         public bool PrioritizeTargetYLevel = true;
 
@@ -55,6 +56,8 @@ namespace FIMSpace.Generating
 
         public bool DiscardIfAligning = false;
 
+        public float ExistingCellsCostMultiplier = 1f;
+        public float SelfCellsExtraSearchRange = 1f;
 
 
         public enum EPathFindCategory { MainSettings, Handling, ExtraConditions }
@@ -388,10 +391,17 @@ namespace FIMSpace.Generating
                 //TryStartCentered = EditorGUILayout.Toggle(_guiC, TryStartCentered);
 
                 GUILayout.Space(5);
+                EditorGUILayout.BeginHorizontal();
 
                 EditorGUIUtility.labelWidth = 194;
                 _guiC.text = "Spherical Distance Measure:"; _guiC.tooltip = "Measuring distance to drive path finding using Rectangular distance (manhattan) or spherical (sqrt).";
                 SphericalDistanceMeasuring = EditorGUILayout.Toggle(_guiC, SphericalDistanceMeasuring);
+
+                GUILayout.FlexibleSpace();
+                EditorGUIUtility.labelWidth = 154;
+                _guiC.text = "Connect On Any Contact:"; _guiC.tooltip = "Skipping all basic rules and connecting to target field on first contact.";
+                OnAnyContact = EditorGUILayout.Toggle(_guiC, OnAnyContact);
+                EditorGUILayout.EndHorizontal();
 
                 EditorGUILayout.BeginHorizontal();
 
@@ -476,6 +486,18 @@ namespace FIMSpace.Generating
 
                 _guiC.text = "Discard If Targets Aligning:"; _guiC.tooltip = "If fields are just next to each other it will discard path creations in favor custom handling connection";
                 DiscardIfAligning = EditorGUILayout.Toggle(_guiC, DiscardIfAligning);
+
+                GUILayout.Space(4);
+
+                ExistingCellsCostMultiplier = EditorGUILayout.FloatField(new GUIContent("Existing Cells Step Cost Multiplier:", "Its cost multiplier. When path search encounters cell which already belongs to the path (during extra search) then it can prioritize choosing this cell for path shape."), ExistingCellsCostMultiplier);
+                if (ExistingCellsCostMultiplier < 0f) ExistingCellsCostMultiplier = 0f;
+                //if ( ExistingCellsCostMultiplier != 1f)
+                //{
+                //    EditorGUI.indentLevel++;
+                //    SelfCellsExtraSearchRange = EditorGUILayout.FloatField("Self Cells Search Range:", SelfCellsExtraSearchRange);
+                //    if (SelfCellsExtraSearchRange < 1f) SelfCellsExtraSearchRange = 1f;
+                //    EditorGUI.indentLevel--;
+                //}
 
                 GUILayout.Space(4);
             }
@@ -663,6 +685,7 @@ namespace FIMSpace.Generating
             pathParams.SearchStepIterationLimit = SearchStepsLimit;
             //pathParams.KeepDirectionFor = AllowChangeDirectionEvery;
             pathParams.SphericalDistanceMeasure = SphericalDistanceMeasuring;
+            pathParams.ConnectOnAnyContact = OnAnyContact;
             pathParams.PrioritizeTargetedYLevel = PrioritizeTargetYLevel;
             pathParams.PrioritizePerpendicular = PrioritizePerpendicular;
 
@@ -673,6 +696,9 @@ namespace FIMSpace.Generating
             pathParams.ConnectEvenDiscarded = ConnectEvenDiscarded;
             pathParams.DiscardIfAligning = DiscardIfAligning;
             pathParams.SnapToInstructionsOnDistance = SnapToInstructionsOnDistance;
+
+            pathParams.ExistingCellsCostMul = ExistingCellsCostMultiplier;
+            pathParams.ExistingCellsCheckRange = SelfCellsExtraSearchRange;
 
             if (TryEndCentered)
             {

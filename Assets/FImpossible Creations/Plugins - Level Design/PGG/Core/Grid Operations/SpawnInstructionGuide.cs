@@ -20,6 +20,7 @@ namespace FIMSpace.Generating
         public SpawnInstruction GenerateGuide(FieldSetup preset, SpawnRestrictionsGroup group)
         {
             SpawnInstruction i = new SpawnInstruction();
+            i.HelperID = Id;
 
             if (CustomDefinition == null)
             {

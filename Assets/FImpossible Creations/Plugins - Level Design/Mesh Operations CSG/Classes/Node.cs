@@ -60,6 +60,8 @@ namespace Parabox.CSG
         // Convert solid space to empty space and empty space to solid space.
         public void Invert()
         {
+            if (this.polygons == null) return;
+
             for (int i = 0; i < this.polygons.Count; i++)
                 this.polygons[i].Flip();
 
@@ -131,6 +133,9 @@ namespace Parabox.CSG
         // Recursively remove all polygons in `polygons` that are inside this BSP tree.
         public List<Polygon> ClipPolygons(List<Polygon> list)
         {
+            if (this.plane == null) return list;
+            if (list == null) return list;
+
             if (!this.plane.Valid())
             {
                 return list;
@@ -191,6 +196,7 @@ namespace Parabox.CSG
 
             return list;
         }
+
 
         void FlipNormals(List<Polygon> polygons)
         {

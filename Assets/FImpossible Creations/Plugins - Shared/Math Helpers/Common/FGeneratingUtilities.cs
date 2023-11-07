@@ -399,6 +399,13 @@ public static class FGeneratingUtilities
         return list[GetRandom(0, list.Count)];
     }
 
+    public static T GetRandomElement<T>(this List<T> list, System.Random rand)
+    {
+        if (list == null) return default(T);
+        if (list.Count == 1) return list[0];
+        return list[rand.Next(0, list.Count)];
+    }
+
     #endregion
 
 }

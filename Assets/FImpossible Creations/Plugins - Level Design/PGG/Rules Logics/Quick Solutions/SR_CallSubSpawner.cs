@@ -88,7 +88,10 @@ namespace FIMSpace.Generating.Rules.QuickSolutions
             public void OnConditionsMetAction(ref SpawnData thisSpawn, FieldSetup preset, FieldCell cell, FGenGraph<FieldCell, FGenPoint> grid)
             {
 
-                if (!PostCall) ApplySpawnerCall(cell, thisSpawn, grid, preset);
+                if (!PostCall)
+                {
+                    ApplySpawnerCall(cell, thisSpawn, grid, preset);
+                }
                 else
                 {
                     SpawnData spawn = thisSpawn;
@@ -135,13 +138,17 @@ namespace FIMSpace.Generating.Rules.QuickSolutions
                 var data = targetSubSpawner.RunSpawnerOnCell(parentMod, preset, cell, grid, Vector3.zero, null, true);
 
                 if (data != null)
+                {
                     if (InheritCoords)
                     {
+                        data.SpawnSpace = spawn.SpawnSpace;
                         data.Offset += spawn.Offset;
                         data.DirectionalOffset += spawn.DirectionalOffset;
                         data.RotationOffset += spawn.RotationOffset;
                         data.LocalRotationOffset += spawn.LocalRotationOffset;
+                        if (_Debug) UnityEngine.Debug.Log("Spawner Call Result " + data.Prefab);
                     }
+                }
             }
 
 
@@ -210,7 +217,7 @@ namespace FIMSpace.Generating.Rules.QuickSolutions
 
                     EditorGUIUtility.labelWidth = 0;
 
-                    if (GUILayout.Button("Show Sub-Spawneres", GUILayout.MaxWidth(150))) { FieldModification._subDraw = 1; }
+                    if (GUILayout.Button("Show Sub-Spawners", GUILayout.MaxWidth(150))) { /*if (SubSpawnersOf != null) { SeparatedModWindow.SelectMod(toDraw.FieldModificators[i]); }*/ FieldModification._subDraw = 1; }
                     if (GUILayout.Button(new GUIContent("+", "Add next sub-spawner and draw sub spawners list"), GUILayout.Width(22))) { parentMod.AddSubSpawner(); }
 
                     EditorGUILayout.EndHorizontal();
@@ -251,6 +258,7 @@ namespace FIMSpace.Generating.Rules.QuickSolutions
 
             #endregion
 
+            public static bool _Debug = false;
 
         }
 
@@ -386,6 +394,7 @@ namespace FIMSpace.Generating.Rules.QuickSolutions
         public override void OnConditionsMetAction(FieldModification mod, ref SpawnData thisSpawn, FieldSetup preset, FieldCell cell, FGenGraph<FieldCell, FGenPoint> grid)
         {
             if (SubCaller.targetSubSpawner == null) return;
+
             SubCaller.OnConditionsMetAction(ref thisSpawn, preset, cell, grid);
         }
 

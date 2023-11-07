@@ -17,7 +17,7 @@ namespace FIMSpace.Generating.Planning.PlannerNodes.Field.Checker
         public override Vector2 NodeSize { get { return new Vector2(222, _EditorFoldout ? 126 : 102); } }
         public override bool IsFoldable { get { return true; } }
         public override bool DrawInputConnector { get { return true; } }
-        public override bool DrawOutputConnector { get { return false; } }
+        public override bool DrawOutputConnector { get { return InputConnections.Count > 0; } }
 
 
         [Port(EPortPinType.Input, 1)] public PGGPlannerPort AligningWith;
@@ -56,6 +56,10 @@ namespace FIMSpace.Generating.Planning.PlannerNodes.Field.Checker
 
             IsAligning.Value = alignDetect;
 
+
+            #region Debugging Gizmos
+#if UNITY_EDITOR
+
             //if (Debugging)
             //{
             //    if (alignDetect)
@@ -69,6 +73,27 @@ namespace FIMSpace.Generating.Planning.PlannerNodes.Field.Checker
 
             //    print._debugLatestExecuted = myPlanner.LatestResult.Checker;
             //}
+
+            if (Debugging)
+            {
+                DebuggingInfo = "Checking Fields Alignment";
+                CheckerField3D myChec = myPlanner.CheckerReference.Copy(false);
+                CheckerField3D oChec = bPlanner.CheckerReference.Copy(false);
+
+                var aCell = CheckerField3D._IsAnyCellAligning_MyCell;
+
+                DebuggingGizmoEvent = () =>
+                {
+                    Gizmos.color = new Color(0f, 1f, 0f, 0.5f);
+                    myChec.DrawFieldGizmos(true, false);
+                    Gizmos.DrawCube(myChec.LocalToWorld(aCell.Pos), myChec.RootScale);
+                    Gizmos.color = new Color(0f, 0f, 1f, 0.5f);
+                    oChec.DrawFieldGizmos(true, false);
+                };
+            }
+#endif
+            #endregion
+
         }
 
 

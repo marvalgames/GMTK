@@ -95,7 +95,7 @@ namespace FIMSpace.Generating.Planning
 
             for (int i = 0; i < PlannerResults.Count; i++)
             {
-                if (PlannerResults[i].ParentFieldPlanner.WasExecuted == true)
+                if (PlannerResults[i].ParentFieldPlanner.WasPreExecuted == true)
                 {
                     if (PlannerResults[i].ParentFieldPlanner != toIgnore)
                         _checkersList.Add(PlannerResults[i].Checker);
@@ -105,7 +105,7 @@ namespace FIMSpace.Generating.Planning
                     for (int d = 0; d < PlannerResults[i].DuplicateResults.Count; d++)
                     {
                         var dupl = PlannerResults[i].DuplicateResults[d];
-                        if (dupl.ParentFieldPlanner.WasExecuted == false) continue;
+                        if (dupl.ParentFieldPlanner.WasPreExecuted == false) continue;
                         if (dupl.ParentFieldPlanner == toIgnore) continue;
                         if (PlannerResults[i].ParentFieldPlanner == toIgnore) continue;
 
@@ -122,7 +122,7 @@ namespace FIMSpace.Generating.Planning
 
             for (int i = 0; i < PlannerResults.Count; i++)
             {
-                if (PlannerResults[i].ParentFieldPlanner.WasExecuted == true)
+                if (PlannerResults[i].ParentFieldPlanner.WasPreExecuted == true)
                 {
                     if (PlannerResults[i].Checker != relationTo)
                     {
@@ -135,7 +135,7 @@ namespace FIMSpace.Generating.Planning
                     for (int d = 0; d < PlannerResults[i].DuplicateResults.Count; d++)
                     {
                         var dupl = PlannerResults[i].DuplicateResults[d];
-                        if (dupl.ParentFieldPlanner.WasExecuted == false) continue;
+                        if (dupl.ParentFieldPlanner.WasPreExecuted == false) continue;
                         if (dupl.Checker == relationTo) continue;
                         if (PlannerResults[i].Checker == relationTo) continue;
 
@@ -154,7 +154,7 @@ namespace FIMSpace.Generating.Planning
 
             for (int i = 0; i < PlannerResults.Count; i++)
             {
-                if (PlannerResults[i].ParentFieldPlanner.WasExecuted == true)
+                if (PlannerResults[i].ParentFieldPlanner.WasPreExecuted == true)
                 {
                     if (PlannerResults[i].ParentFieldPlanner != toIgnore)
                     {
@@ -166,7 +166,7 @@ namespace FIMSpace.Generating.Planning
                     for (int d = 0; d < PlannerResults[i].DuplicateResults.Count; d++)
                     {
                         var dupl = PlannerResults[i].DuplicateResults[d];
-                        if (dupl.ParentFieldPlanner.WasExecuted == false) continue;
+                        if (dupl.ParentFieldPlanner.WasPreExecuted == false) continue;
                         if (dupl.ParentFieldPlanner == toIgnore) continue;
                         if (PlannerResults[i].ParentFieldPlanner == toIgnore) continue;
 

@@ -1,7 +1,7 @@
 __________________________________________________________________________________________
 
 Package "Procedural Generation Grid"
-Version 1.6.6.1 (Beta)
+Version 1.6.6.1.5 (Beta)
 
 Made by FImpossible Creations - Filip Moeglich
 https://www.FilipMoeglich.pl
@@ -63,8 +63,80 @@ Description:
 
 __________________________________________________________________________________________
 
+Beta Version 1.6.6.1.5:
+- Hotfix for part of Buid Planner Executor not initializing planner fields when dropping prefabed executor on scene
+- Few small changes in mod graph nodes
+
+Beta Version 1.6.6.1.4:
+- Hotfix for 'Add' node when using Planners inputs, now list of grouped planners will clear in each generate call
+- 'Add Cell Instruction' BP node now have new option "Add String Data"
+- 'Iterate Cells' BP node now supports multiple planners input, so you don't need to use 'Iterate Planners' node.
+- Cell Data refresh hotfix for Grid Painter
+
+Beta Version 1.6.6.1.3:
+- Get Coordinates FS Node's "Run On Repetition" feature now will inherit use of rules of the spawner (but still needs more testing)
+- Add Cell Data FS Node now implements cells selector
+- New Simple Dungeon Game Demo Scene
+- Roof Plane Generator FS node : new "Thickness" feature
+- Tile Designer - Advanced -> new 'Stacker' Generator
+- Tile Designer FS Node - Multiple Meshes -> To generate new mesh for each spawn (useful for random tile design generators like Stacker, Cables Generator or for the Post Filters)
+- Tile Designer FS Node - 'collider' mode string command
+- Changed logic of 'Run on repetition' parameter, of "Get Coordinates" FS node
+- Few small fixes in logic
+
+Beta Version 1.6.6.1.2:
+- New Expand Bounds Size FS Node
+- Fix for Prefab Field GUI in Build Planner Window
+- Extra options for Prefab to Bounds Shape Generator
+
+Beta Version 1.6.6.1.1:
+- Object Stamper Emitter - Overrider Implementation: Now you can use one stamper file and swap prefabs to spawn in the Object Stamp Emitter component window
+- Walls Destroyer feature for the Stairs Placer FS Node.
+- Edges Placer FS Node.
+- Now Grid Painter's 'Cell Data Strings' are cleared properly.
+
 Beta Version 1.6.6.1:
+IF YOU USE ASSEMBLY DEFINITIONS: It's recommended to remove Fimpossible Creations/Plugins - Level Design
+directory and import package again, (some files moved and package importer will not handle it properly)
+and importing updated assembly definition packs.
+
+- Possibility to display grid painter's cells as aligned boxes
 - Fix for Grid Painter not saving cells after unity close
+- Updated planner nodes methods to prevent displaying deprecated warning messages
+- Few other fixes
+
+> Field Setup:
+- Randomize Field Variable Post Event (in contrary to "Post Event" name, it's actually pre-generating-event)
+
+: Roof Generator Nodes (using new Volume Spawner API)
+- Roof Plane Generator (Generating plane in roof shape aligned with grid size)
+- Roof Side Wall Generator (Generating polygonal shape, filling gap on the roof sides)
+- Roof Generator - Placer (to spawn prefabs like single roof plates)
+- Roof Generator - Edges Placer (to spawn prefabs around roof edges/top edge)
+
+- Mod Spawner API allows now to spawn prefabs no only in cells space, but also in generator space and world space
+
+> Tile Designer:
+- Tile Designer node now offers using project file preset for generating tile mesh in Field Spawning Setup
+- Tile Designer custom commands implementation for setting basic changes in Tile Design for one tile generating purposes
+- Implemented generated meshes Post Filters
+- Fixed Project file Tile Design Preset handling on scripts recompilation during opened Tile Designer window
+
+> Build Planner:
+- Field Planners now can be 'Prefab' type
+- Prefab to Grid shape generator
+- Build Planner Executor now can spawn prefabs instead of just grid painters
+- New Utility Node: Windows Placer
+- New Node: Quick Align (using different algorithm than other nodes)
+- New Node: Iterate List (can iterate List<object>)
+
+> Other minor changes:
+- Sub Spawners properties which was using variables, wasn't prepared properly : fixed
+
+> For coders:
+- IF you're using Assembly Definitions, please read info on the top of the changelog!
+- If you was using shape generator 'DrawGUI()' now you need to provide extra argument of type FieldPlanner : override void DrawGUI(SerializedObject so, FieldPlanner parent)
+> This changelog will be added as summary of the the upcoming 1.6.7 update
 
 Beta Version 1.6.6:
 

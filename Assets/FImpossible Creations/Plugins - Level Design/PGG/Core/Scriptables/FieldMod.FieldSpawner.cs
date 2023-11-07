@@ -185,106 +185,9 @@ namespace FIMSpace.Generating
 
         private static List<SpawnRuleBase> _RulesToCheck;
 
-        /// <summary>
-        /// Running spawner and it's rules on grid's cell
-        /// </summary>
-        public SpawnData RunSpawnerOnCell(FieldModification mod, FieldSetup preset, FieldCell cell, FGenGraph<FieldCell, FGenPoint> grid, Vector3 desiredDirection, FieldModification childMod, bool dontUseGlobalRules = false, bool ignoreRestrictions = false, bool isAsync = false)
+        public SpawnData GenerateSpawnerSpawnData(FieldModification mod, FieldSetup preset, FieldCell cell, FieldModification childMod = null, bool isAsync = false)
         {
-            _EditorRefreshSpawner();
-
-            #region Checking for restrictions
-
-            #region Debugging drawing
-            //if (IGeneration.Debugging)
-            //{
-            //    if (restrictions != null)
-            //    {
-            //        int cells = 0;
-            //        for (int i = 0; i < restrictions.Count; i++)
-            //        {
-            //            cells += restrictions[i].Cells.Count;
-            //            for (int c = 0; c < restrictions[i].Cells.Count; c++)
-            //            {
-            //                Debug.DrawRay(IGeneration.V2ToV3(restrictions[i].Cells[c].cellPosition) * 2f, SpawnData.GetPlacementDirection(restrictions[i].Cells[c].placement), Color.yellow, 1.1f);
-            //            }
-            //        }
-            //        UnityEngine.Debug.Log("rCount = " + restrictions.Count + " cells = " + cells);
-            //    }
-            //    else
-            //        UnityEngine.Debug.Log("rCount = NULL"); // Guides
-            //}
-            #endregion
-
-
-            if (!ignoreRestrictions)
-            {
-                if (cell.HaveInstructions())
-                {
-                    for (int i = 0; i < cell.GetInstructions().Count; i++)
-                    {
-                        var instr = cell.GetInstructions()[i];
-                        if (instr.IsPreSpawn == false && instr.definition.InstructionType != InstructionDefinition.EInstruction.DoorHole) continue;
-
-                        // No tag needed, just dont spawn anything here
-                        if (instr.definition.InstructionType == InstructionDefinition.EInstruction.PreventAllSpawn)
-                        {
-                            return null;
-                        }
-                        else
-                        {
-                            if (instr.definition.InstructionType == InstructionDefinition.EInstruction.PreventSpawnSelective || instr.definition.InstructionType == InstructionDefinition.EInstruction.DoorHole)
-                            {
-
-                                //UnityEngine.Debug.Log("jojojo");
-                                //UnityEngine.Debug.DrawRay(cell.WorldPos(), Vector3.up, Color.green, 1.01f);
-                                bool isTagged;
-
-
-                                // Searching for tags
-                                if (string.IsNullOrEmpty(instr.definition.Tags)) isTagged = false;
-                                else
-                                {
-                                    string[] splitted = instr.definition.Tags.Split(',');
-                                    isTagged = SpawnRuleBase.HaveTags(mod.ModTag, splitted);
-                                    if (!isTagged) isTagged = SpawnRuleBase.HaveTags(SpawnerTag, splitted);
-                                    if (!isTagged) if (HasPackageTag()) isTagged = SpawnRuleBase.HaveTags(GetPackageTag(false), splitted);
-                                }
-
-                                // Prevent spawning selective mods or mod packs
-                                if (!isTagged)
-                                    if (instr.definition.InstructionType == InstructionDefinition.EInstruction.PreventSpawnSelective)
-                                    {
-                                        if (instr.definition.extraMod != null || instr.definition.extraPack != null)
-                                        {
-                                            if (instr.definition.extraMod != null)
-                                                if (FGenerators.CheckIfExist_NOTNULL(SpawnRuleBase.CellSpawnsHaveModificator(cell, instr.definition.extraMod)))
-                                                    isTagged = true;
-
-                                            if (!isTagged)
-                                                if (instr.definition.extraPack != null)
-                                                    if (FGenerators.CheckIfExist_NOTNULL(SpawnRuleBase.CellSpawnsHaveModPack(cell, instr.definition.extraPack)))
-                                                        isTagged = true;
-                                        }
-                                    }
-
-
-                                if (isTagged)
-                                {
-                                    // Found cell and it have tag required for restriction to be applied
-                                    return null;
-                                }
-
-                            }
-
-                        }
-                    }
-                }
-            }
-
-            #endregion
-
-
-            SpawnData spawnData = null;
+            SpawnData data = null;
 
             if (TemporaryPrefabOverride == null)
             {
@@ -292,23 +195,38 @@ namespace FIMSpace.Generating
                 {
                     var selected = FEngineering.GetLayermaskValues(StampPrefabID, mod.GetPRSpawnOptionsCount());
                     if (selected.Length > 0)
-                        spawnData = SpawnData.GenerateSpawn(this, childMod == null ? mod : childMod, cell, selected[FGenerators.GetRandom(0, selected.Length)], null, null, null, null, SpawnData.ESpawnMark.Omni, !isAsync);
+                        data = SpawnData.GenerateSpawn(this, childMod == null ? mod : childMod, cell, selected[FGenerators.GetRandom(0, selected.Length)], null, null, null, null, SpawnData.ESpawnMark.Omni, !isAsync);
                 }
             }
 
-            if (spawnData == null) spawnData = SpawnData.GenerateSpawn(this, childMod == null ? mod : childMod, cell, StampPrefabID, null, null, null, null, SpawnData.ESpawnMark.Omni, !isAsync);
-            spawnData.OwnerMod.ParentPreset = preset;
-            spawnData.ExecutedFrom = preset;
+            if (data == null) data = SpawnData.GenerateSpawn(this, childMod == null ? mod : childMod, cell, StampPrefabID, null, null, null, null, SpawnData.ESpawnMark.Omni, !isAsync);
 
-            var spawns = cell.CollectSpawns();
+            data.OwnerMod.ParentPreset = preset;
+            data.ExecutedFrom = preset;
 
-            // Init spawn parameters like rotation etc.
-            if (InheritRotations) if (spawns.Count > 0) spawnData.RotationOffset = spawns[spawns.Count - 1].RotationOffset;
+            return data;
+        }
 
+        /// <summary> Can be used for custom spawn processing.
+        /// Returns null if spawn data should be discarded by the checked rules.
+        /// It's called by RunSpawnerOnCell also. </summary>
+        public SpawnData RunSpawnerRulesFor(SpawnData spawnData, FieldModification mod, FieldSetup preset, FieldCell cell, FGenGraph<FieldCell, FGenPoint> grid, Vector3? desiredDirection, FieldModification childMod, bool dontUseGlobalRules = false, SpawnRuleBase skipRule = null, bool newListInstance = false)
+        {
             // Preparing rule list to check logics to allow spawn-injection
-            if (_RulesToCheck == null) _RulesToCheck = new List<SpawnRuleBase>();
-            else _RulesToCheck.Clear();
+            List<SpawnRuleBase> collectedRulesToCheck = new List<SpawnRuleBase>();
 
+            if (newListInstance)
+            {
+                collectedRulesToCheck = new List<SpawnRuleBase>();
+            }
+            else
+            {
+                if (_RulesToCheck == null) _RulesToCheck = new List<SpawnRuleBase>();
+                else _RulesToCheck.Clear();
+                collectedRulesToCheck = _RulesToCheck;
+            }
+
+            //if (skipRule) backup = FGenerators.CopyList(_RulesToCheck);
 
             // Check for nulls
             PGGUtils.CheckForNulls(Rules);
@@ -324,20 +242,18 @@ namespace FIMSpace.Generating
                     {
                         mod._tempGlobalRulesPre[i].Refresh();
                         mod._tempGlobalRulesPre[i].CheckRuleOn(mod, ref spawnData, preset, cell, grid, desiredDirection);
-                        _RulesToCheck.Add(mod._tempGlobalRulesPre[i]);
+                        collectedRulesToCheck.Add(mod._tempGlobalRulesPre[i]);
                     }
 
             bool breakSooner = false;
-
 
             // Main spawner rules --------------------------
             for (int i = 0; i < Rules.Count; i++)
             {
                 Rules[i].SetOwner(this);
 
-                if (Rules[i].Enabled == false || Rules[i].Ignore) continue;
+                if (Rules[i].Enabled == false || Rules[i].Ignore || skipRule == Rules[i]) continue;
                 if (Rules[i].Global == true) continue;
-
                 Rules[i].Refresh();
 
                 ISpawnProcedureType t = Rules[i] as ISpawnProcedureType;
@@ -349,7 +265,7 @@ namespace FIMSpace.Generating
                 //if (t != null) if (t.Type == SpawnRuleBase.EProcedureType.Rule || t.Type == SpawnRuleBase.EProcedureType.Coded) if (Rules[i].CellAllow == false) 
                 //        { UnityEngine.Debug.Log("break on " + Rules[i].TitleName()); breakSooner = true; break; }
 
-                _RulesToCheck.Add(Rules[i]);
+                collectedRulesToCheck.Add(Rules[i]);
             }
 
 
@@ -366,7 +282,7 @@ namespace FIMSpace.Generating
                     {
                         mod._tempGlobablRulesPost[i].Refresh();
                         mod._tempGlobablRulesPost[i].CheckRuleOn(mod, ref spawnData, preset, cell, grid, desiredDirection);
-                        _RulesToCheck.Add(mod._tempGlobablRulesPost[i]);
+                        collectedRulesToCheck.Add(mod._tempGlobablRulesPost[i]);
                     }
 
 
@@ -382,7 +298,7 @@ namespace FIMSpace.Generating
                             rl.Refresh();
                             rl.SetOwner(this);
                             rl.CheckRuleOn(mod, ref spawnData, preset, cell, grid, desiredDirection);
-                            _RulesToCheck.Add(rl);
+                            collectedRulesToCheck.Add(rl);
                         }
                 }
 
@@ -391,11 +307,11 @@ namespace FIMSpace.Generating
 
 
 
-                if (_RulesToCheck.Count == 0) allRequirementsMet = true; // No rules then just inject-spawn
+                if (collectedRulesToCheck.Count == 0) allRequirementsMet = true; // No rules then just inject-spawn
                 else
-                    for (int i = 0; i < _RulesToCheck.Count; i++) // Check all rules logic requirements
+                    for (int i = 0; i < collectedRulesToCheck.Count; i++) // Check all rules logic requirements
                     {
-                        SpawnRuleBase rule = _RulesToCheck[i];
+                        SpawnRuleBase rule = collectedRulesToCheck[i];
                         if (rule == null) continue;
 
                         // We must know if we can stop and spawn or we just stop without spawn or we continue checking (or set spawn and continue?)
@@ -410,7 +326,7 @@ namespace FIMSpace.Generating
                         }
                         else if (result == SpawnRuleBase.EGRuleResult.Continue) // Mostly used
                         {
-                            if (i == _RulesToCheck.Count - 1) allRequirementsMet = true; // Last continue check then allow (all requirements met)
+                            if (i == collectedRulesToCheck.Count - 1) allRequirementsMet = true; // Last continue check then allow (all requirements met)
                             continue;
                         }
                         else if (result == SpawnRuleBase.EGRuleResult.Stop)
@@ -525,7 +441,6 @@ namespace FIMSpace.Generating
                     }
                 }
 
-
                 #region Checking post spawn instructions
 
                 if (cell.HaveInstructions())
@@ -567,13 +482,127 @@ namespace FIMSpace.Generating
 
             }
 
-
-            if (allRequirementsMet == false) spawnData = null;
-
+            if (allRequirementsMet == false)
+            {
+                spawnData = null;
+            }
 
             return spawnData;
         }
 
+        /// <summary>
+        /// Running spawner and it's rules on grid's cell
+        /// </summary>
+        public SpawnData RunSpawnerOnCell(FieldModification mod, FieldSetup preset, FieldCell cell, FGenGraph<FieldCell, FGenPoint> grid, Vector3 desiredDirection, FieldModification childMod, bool dontUseGlobalRules = false, bool ignoreRestrictions = false, bool isAsync = false)
+        {
+            _EditorRefreshSpawner();
+
+            #region Checking for restrictions
+
+            #region Debugging drawing
+            //if (IGeneration.Debugging)
+            //{
+            //    if (restrictions != null)
+            //    {
+            //        int cells = 0;
+            //        for (int i = 0; i < restrictions.Count; i++)
+            //        {
+            //            cells += restrictions[i].Cells.Count;
+            //            for (int c = 0; c < restrictions[i].Cells.Count; c++)
+            //            {
+            //                Debug.DrawRay(IGeneration.V2ToV3(restrictions[i].Cells[c].cellPosition) * 2f, SpawnData.GetPlacementDirection(restrictions[i].Cells[c].placement), Color.yellow, 1.1f);
+            //            }
+            //        }
+            //        UnityEngine.Debug.Log("rCount = " + restrictions.Count + " cells = " + cells);
+            //    }
+            //    else
+            //        UnityEngine.Debug.Log("rCount = NULL"); // Guides
+            //}
+            #endregion
+
+
+            if (!ignoreRestrictions)
+            {
+                if (cell.HaveInstructions())
+                {
+                    for (int i = 0; i < cell.GetInstructions().Count; i++)
+                    {
+                        var instr = cell.GetInstructions()[i];
+                        if (instr.IsPreSpawn == false && instr.definition.InstructionType != InstructionDefinition.EInstruction.DoorHole) continue;
+
+                        // No tag needed, just dont spawn anything here
+                        if (instr.definition.InstructionType == InstructionDefinition.EInstruction.PreventAllSpawn)
+                        {
+                            return null;
+                        }
+                        else
+                        {
+                            if (instr.definition.InstructionType == InstructionDefinition.EInstruction.PreventSpawnSelective || instr.definition.InstructionType == InstructionDefinition.EInstruction.DoorHole)
+                            {
+
+                                //UnityEngine.Debug.Log("jojojo");
+                                //UnityEngine.Debug.DrawRay(cell.WorldPos(), Vector3.up, Color.green, 1.01f);
+                                bool isTagged;
+
+
+                                // Searching for tags
+                                if (string.IsNullOrEmpty(instr.definition.Tags)) isTagged = false;
+                                else
+                                {
+                                    string[] splitted = instr.definition.Tags.Split(',');
+                                    isTagged = SpawnRuleBase.HaveTags(mod.ModTag, splitted);
+                                    if (!isTagged) isTagged = SpawnRuleBase.HaveTags(SpawnerTag, splitted);
+                                    if (!isTagged) if (HasPackageTag()) isTagged = SpawnRuleBase.HaveTags(GetPackageTag(false), splitted);
+                                }
+
+                                // Prevent spawning selective mods or mod packs
+                                if (!isTagged)
+                                    if (instr.definition.InstructionType == InstructionDefinition.EInstruction.PreventSpawnSelective)
+                                    {
+                                        if (instr.definition.extraMod != null || instr.definition.extraPack != null)
+                                        {
+                                            if (instr.definition.extraMod != null)
+                                                if (FGenerators.CheckIfExist_NOTNULL(SpawnRuleBase.CellSpawnsHaveModificator(cell, instr.definition.extraMod)))
+                                                    isTagged = true;
+
+                                            if (!isTagged)
+                                                if (instr.definition.extraPack != null)
+                                                    if (FGenerators.CheckIfExist_NOTNULL(SpawnRuleBase.CellSpawnsHaveModPack(cell, instr.definition.extraPack)))
+                                                        isTagged = true;
+                                        }
+                                    }
+
+
+                                if (isTagged)
+                                {
+                                    // Found cell and it have tag required for restriction to be applied
+                                    return null;
+                                }
+
+                            }
+
+                        }
+                    }
+                }
+            }
+
+            #endregion
+
+            SpawnData spawnData = GenerateSpawnerSpawnData(mod, preset, cell, childMod, isAsync);
+
+            // Init spawn parameters like rotation etc.
+            if (InheritRotations) CheckSpawnInheritCoordsFor(cell, spawnData);
+
+            spawnData = RunSpawnerRulesFor(spawnData, mod, preset, cell, grid, desiredDirection, childMod, dontUseGlobalRules, null);
+
+            return spawnData;
+        }
+
+        public void CheckSpawnInheritCoordsFor(FieldCell cell, SpawnData spawnData)
+        {
+            var spawns = cell.CollectSpawns();
+            if (spawns.Count > 0) spawnData.RotationOffset = spawns[spawns.Count - 1].RotationOffset;
+        }
 
         public void OnAfterModificatorsCall()
         {

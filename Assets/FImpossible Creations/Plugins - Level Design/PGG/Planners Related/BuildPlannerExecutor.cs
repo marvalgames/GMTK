@@ -20,7 +20,6 @@ namespace FIMSpace.Generating
         public List<GameObject> Generated { get { return _generated; } }
         [HideInInspector, SerializeField] private List<GameObject> _generated = new List<GameObject>();
 
-
         [Tooltip("Generating Build Planner's scheme asynchronously (without lags)\nBeware! Some of the presets will not support this.")] public bool Async = false;
         [Tooltip("Triggering generation with use of 'Flexible Generators' to call rules or instantiate target objects in coroutine.")] public bool FlexibleGen = false;
         public int Seed = 0;

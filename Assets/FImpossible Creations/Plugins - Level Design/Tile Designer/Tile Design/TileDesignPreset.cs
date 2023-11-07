@@ -8,6 +8,7 @@ using UnityEngine;
 
 namespace FIMSpace.Generating
 {
+    [CreateAssetMenu(fileName = "TD_TileDesign", menuName = "FImpossible Creations/Procedural Generation/Create Tile Design File", order = 1201)]
     public partial class TileDesignPreset : ScriptableObject
     {
         public TileDesign BaseDesign

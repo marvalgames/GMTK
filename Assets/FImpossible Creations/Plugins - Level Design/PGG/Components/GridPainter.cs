@@ -165,7 +165,7 @@ namespace FIMSpace.Generating
         [HideInInspector] public int _Editor_YLevel = 0;
         [HideInInspector] public int _Editor_CommandsPage = 0;
 
-        public enum EPaintSpaceMode { XZ, XY_2D }
+        public enum EPaintSpaceMode { XZ, XY_2D, XZ_Box }
         [HideInInspector] public EPaintSpaceMode _Editor_PaintSpaceMode = EPaintSpaceMode.XZ;
 
         [HideInInspector] public string _Editor_Instruction = "0";
@@ -275,6 +275,7 @@ namespace FIMSpace.Generating
                 guide.desiredDirection = new Vector3Int(Mathf.RoundToInt(dir.x), 0, Mathf.RoundToInt(dir.z));
                 guide.gridPosition = new Vector3Int(instr.pos.x, instr.pos.y, instr.pos.z);
                 guide.useDirection = CellsInstructions[i].UseDirection;
+                guide.HelperID = CellsInstructions[i].Id;
 
                 if (instr.CustomDefinition == null)
                 {
@@ -351,6 +352,9 @@ namespace FIMSpace.Generating
                     CellsInstructions.Remove(AcquireCellDataFrom[i].CellsInstructions[a]);
 
             base.GenerateObjects();
+
+            // Refresh after generating if was adding cell datas with field setup nodes
+            for (int g = 0; g < grid.AllApprovedCells.Count; g++) if (grid.AllApprovedCells[g].cellCustomData != null) grid.AllApprovedCells[g].cellCustomData.Clear();
 
             //GeneratingPreparation prep = new GeneratingPreparation();
             //GenerationScheme scheme = new GenerationScheme(prep, generatingSetup, grid);
@@ -461,7 +465,11 @@ namespace FIMSpace.Generating
                             Gizmos.DrawWireCube(genPosition + new Vector3(0, cSize.y * 0.5f, 0), new Vector3(cSize.x, cSize.y, cSize.z * 0.2f));
                         else
                         {
-                            Gizmos.DrawWireCube(genPosition, new Vector3(cSize.x, cSize.y * 0.2f, cSize.z));
+                            if (_Editor_PaintSpaceMode == EPaintSpaceMode.XZ_Box)
+                                Gizmos.DrawWireCube(genPosition + new Vector3(0f, cSize.y / 2f, 0f), new Vector3(cSize.x, cSize.y, cSize.z));
+                            else
+                                Gizmos.DrawWireCube(genPosition, new Vector3(cSize.x, cSize.y * 0.2f, cSize.z));
+
                             if (cell.IsGhostCell) Gizmos.DrawCube(genPosition, new Vector3(cSize.x * 0.8f, cSize.y * 0.2f, cSize.z * 0.8f));
                         }
 
@@ -507,7 +515,12 @@ namespace FIMSpace.Generating
                         if (is2D)
                             Gizmos.DrawWireCube(genPosition + new Vector3(0, cSize.y * 0.5f, 0), new Vector3(cSize.x * 0.9f, cSize.y * 0.9f, cSize.z * 0.05f));
                         else
-                            Gizmos.DrawWireCube(genPosition, new Vector3(cSize.x * 0.9f, cSize.y * 0.05f, cSize.z * 0.9f));
+                        {
+                            if (_Editor_PaintSpaceMode == EPaintSpaceMode.XZ_Box)
+                                Gizmos.DrawWireCube(genPosition + new Vector3(0f, cSize.y * 0.45f, 0f), new Vector3(cSize.x * 0.9f, cSize.y * 0.9f, cSize.z * 0.9f));
+                            else
+                                Gizmos.DrawWireCube(genPosition, new Vector3(cSize.x * 0.9f, cSize.y * 0.05f, cSize.z * 0.9f));
+                        }
 
                         Gizmos.color = new Color(1f, 1f, 1f, 0.1f);
                     }
@@ -554,8 +567,16 @@ namespace FIMSpace.Generating
                                 Gizmos.DrawLine(mousePos, mousePos + Vector3.up * 1);
                                 Vector3 gridPos = FVectorMethods.FlattenVector(mousePos, cSize);
 
-                                Gizmos.DrawWireCube(gridPos, new Vector3(cSize.x, cSize.y * 0.2f, cSize.z));
-                                Gizmos.DrawWireCube(gridPos, new Vector3(cSize.x, cSize.y * 0.2f, cSize.z));
+                                if (_Editor_PaintSpaceMode == EPaintSpaceMode.XZ_Box)
+                                {
+                                    Gizmos.DrawWireCube(gridPos + new Vector3(0, cSize.y * 0.5f, 0f), new Vector3(cSize.x, cSize.y * 1f, cSize.z));
+                                    Gizmos.DrawWireCube(gridPos + new Vector3(0, cSize.y * 0.5f, 0f), new Vector3(cSize.x, cSize.y * 1f, cSize.z));
+                                }
+                                else
+                                {
+                                    Gizmos.DrawWireCube(gridPos, new Vector3(cSize.x, cSize.y * 0.2f, cSize.z));
+                                    Gizmos.DrawWireCube(gridPos, new Vector3(cSize.x, cSize.y * 0.2f, cSize.z));
+                                }
 
                                 if (_Editor_PaintRadius > 1 || _Editor_RadiusY > 1)
                                 {
@@ -992,6 +1013,7 @@ namespace FIMSpace.Generating
             private GridPainter _get;
 
             SerializedProperty sp_Lists;
+            SerializedProperty sp_Editor_PaintSpaceMode;
             SerializedObject basSerializedObject;
             public override bool RequiresConstantRepaint()
             {
@@ -1003,6 +1025,7 @@ namespace FIMSpace.Generating
                 base.OnEnable();
 
                 if (Get.LoadCount > 1) Get.LoadCells();
+                sp_Editor_PaintSpaceMode = serializedObject.FindProperty("_Editor_PaintSpaceMode");
 
                 sp_Lists = serializedObject.FindProperty("AdditionalFieldSetups");
                 _ignore.Add("AdditionalFieldSetups");
@@ -1018,6 +1041,10 @@ namespace FIMSpace.Generating
             protected override void DrawGUIBody()
             {
                 base.DrawGUIBody();
+
+                EditorGUIUtility.labelWidth = 90;
+                EditorGUILayout.PropertyField(sp_Editor_PaintSpaceMode, new GUIContent("Display Mode:"));
+                EditorGUIUtility.labelWidth = 0;
 
                 FGUI_Inspector.LastGameObjectSelected = Get.gameObject;
 
@@ -1493,9 +1520,10 @@ namespace FIMSpace.Generating
                 }
 
                 bRect = new Rect(x + 20 * dpiH, y + 31 * dpiH, 120, 20);
-                bool is2D = Get._Editor_PaintSpaceMode == GridPainter.EPaintSpaceMode.XY_2D;
-                is2D = GUI.Toggle(bRect, is2D, " Paint 2D");
-                Get._Editor_PaintSpaceMode = is2D ? GridPainter.EPaintSpaceMode.XY_2D : GridPainter.EPaintSpaceMode.XZ;
+                //bool is2D = Get._Editor_PaintSpaceMode == GridPainter.EPaintSpaceMode.XY_2D;
+                //is2D = GUI.Toggle(bRect, is2D, " Paint 2D");
+                //Get._Editor_PaintSpaceMode = is2D ? GridPainter.EPaintSpaceMode.XY_2D : GridPainter.EPaintSpaceMode.XZ;
+                bool is2D = Get._Editor_PaintSpaceMode == EPaintSpaceMode.XY_2D;
 
                 //bRect = new Rect(x + 200, y - 7 * dpiH, 300, 100);
                 //GUI.Label(bRect, "If you don't see 'Paint' button on the bottom of\nscene view then you must change dpi settings\nof unity editor and restart it.");

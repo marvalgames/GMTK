@@ -1,9 +1,7 @@
 ﻿#if UNITY_EDITOR
-using FIMSpace.FEditor;
 using UnityEditor;
 #endif
 using UnityEngine;
-using System;
 using System.Collections.Generic;
 
 namespace FIMSpace.Generating.Rules.QuickSolutions
@@ -33,6 +31,10 @@ namespace FIMSpace.Generating.Rules.QuickSolutions
         [HideInInspector] public CheckCellsSelectorSetup removeInCells = new CheckCellsSelectorSetup(false, false);
         [HideInInspector] public CheckCellsSelectorSetup breakOnCells = new CheckCellsSelectorSetup(false, false);
 
+        /// <summary> [0] Left [1] Right [2] Front [3] Back </summary>
+        [HideInInspector] public List<CheckCellsSelectorSetup> customRemovers = new List<CheckCellsSelectorSetup>();
+
+
         [HideInInspector] public bool wasGenerated = false;
         [Tooltip("If 'Hard Break' should completely prevent spawning any tile at any rotation.")]
         [HideInInspector] public bool doFullBreak = false;
@@ -43,7 +45,7 @@ namespace FIMSpace.Generating.Rules.QuickSolutions
 #if UNITY_EDITOR
 
         SerializedProperty sp = null;
-        SerializedProperty spdoFullBreak = null;
+        //SerializedProperty spdoFullBreak = null;
         GUIContent _guic = null;
 
         public override void NodeBody(SerializedObject so)
@@ -143,7 +145,75 @@ namespace FIMSpace.Generating.Rules.QuickSolutions
             GUI.backgroundColor = Color.white;
 
             EditorGUILayout.EndHorizontal();
+
+            GUILayout.Space(6);
+            EditorGUILayout.BeginHorizontal();
+
+            EditorGUILayout.LabelField("Sides Removers:", GUILayout.Width(118));
+
+            AdjustSideRemoversCount();
+
+            EditorGUIUtility.labelWidth = 38;
+            bool use = customRemovers[0].ToCheck.Count > 0;
+            use = EditorGUILayout.Toggle("Left", use, GUILayout.Width(60));
+            if (!use) customRemovers[0].ToCheck.Clear(); else if (customRemovers[0].ToCheck.Count == 0) customRemovers[0].ToCheck.Add(Vector3Int.zero);
+            GUILayout.Space(6);
+            use = customRemovers[1].ToCheck.Count > 0;
+            use = EditorGUILayout.Toggle("Right", use, GUILayout.Width(60));
+            if (!use) customRemovers[1].ToCheck.Clear(); else if (customRemovers[1].ToCheck.Count == 0) customRemovers[1].ToCheck.Add(Vector3Int.zero);
+            GUILayout.Space(6);
+            use = customRemovers[2].ToCheck.Count > 0;
+            use = EditorGUILayout.Toggle("Front", use, GUILayout.Width(60));
+            if (!use) customRemovers[2].ToCheck.Clear(); else if (customRemovers[2].ToCheck.Count == 0) customRemovers[2].ToCheck.Add(Vector3Int.zero);
+            GUILayout.Space(6);
+            use = customRemovers[3].ToCheck.Count > 0;
+            use = EditorGUILayout.Toggle("Back", use, GUILayout.Width(60));
+            if (!use) customRemovers[3].ToCheck.Clear(); else if (customRemovers[3].ToCheck.Count == 0) customRemovers[3].ToCheck.Add(Vector3Int.zero);
+            EditorGUIUtility.labelWidth = 0;
+
+            EditorGUILayout.EndHorizontal();
+            GUILayout.Space(5);
+
+            if (customRemovers[0].ToCheck.Count > 0) DrawSideDestroyer(customRemovers[0], "  Destroy On The Left (" + customRemovers[0].ToCheck.Count + ")", 0);
+            if (customRemovers[1].ToCheck.Count > 0) DrawSideDestroyer(customRemovers[1], "  Destroy On The Right (" + customRemovers[1].ToCheck.Count + ")", 1);
+            if (customRemovers[2].ToCheck.Count > 0) DrawSideDestroyer(customRemovers[2], "  Destroy In Front (" + customRemovers[2].ToCheck.Count + ")", 2);
+            if (customRemovers[3].ToCheck.Count > 0) DrawSideDestroyer(customRemovers[3], "  Destroy Back (" + customRemovers[3].ToCheck.Count + ")", 3);
+            GUI.backgroundColor = Color.white;
+
             base.NodeBody(so);
+        }
+
+        void DrawSideDestroyer(CheckCellsSelectorSetup setup, string title, int sideID)
+        {
+            EditorGUILayout.BeginHorizontal();
+
+            setup.UseRotor = false;
+            setup.UseCondition = false;
+            setup.EditorDisplayColor = new Color(0.9f, 0.8f, 0.4f, 0.75f);
+            _guic.text = title;
+            GUILayout.Space(5);
+            GUI.backgroundColor = new Color(1f, 1f, 0.65f, 1f);
+
+            Matrix4x4 boxMx;
+            if (sideID == 0) boxMx = Matrix4x4.TRS(new Vector3(-0.5f, 0.5f, 0f), Quaternion.identity, new Vector3(0.1f, 1f, 1f));
+            else if (sideID == 1) boxMx = Matrix4x4.TRS(new Vector3(0.5f, 0.5f, 0f), Quaternion.identity, new Vector3(0.1f, 1f, 1f));
+            else if (sideID == 2) boxMx = Matrix4x4.TRS(new Vector3(0f, 0.5f, 0.5f), Quaternion.identity, new Vector3(1f, 1f, 0.1f));
+            else if (sideID == 3) boxMx = Matrix4x4.TRS(new Vector3(0f, 0.5f, -0.5f), Quaternion.identity, new Vector3(1f, 1f, 0.1f));
+            else boxMx = Matrix4x4.identity;
+
+            if (GUILayout.Button(_guic)) { CheckCellsSelectorWindow.Init(setup.ToCheck, boxMx, OwnerSpawner, setup); }
+
+            EditorGUI.BeginChangeCheck();
+            EditorGUIUtility.labelWidth = 106;
+            GUILayout.Space(4);
+            setup.ExtraString = EditorGUILayout.TextField("Destroy Tagged:", setup.ExtraString);
+            GUILayout.Space(4);
+            EditorGUIUtility.labelWidth = 84;
+            setup.ExtraValue = EditorGUILayout.FloatField("Tolerance:", setup.ExtraValue);
+            if (EditorGUI.EndChangeCheck()) EditorUtility.SetDirty(this);
+            EditorGUIUtility.labelWidth = 0;
+
+            EditorGUILayout.EndHorizontal();
         }
 
 
@@ -162,7 +232,6 @@ namespace FIMSpace.Generating.Rules.QuickSolutions
 
                 for (int i = 0; i < checkSetup.ToCheck.Count; i++)
                     Handles.CubeHandleCap(0, checkSetup.ToCheck[i], Quaternion.identity, 0.75f, EventType.Repaint);
-
 
 
                 Handles.color = new Color(0.9f, 0.6f, 0.3f, 0.5f);
@@ -186,6 +255,18 @@ namespace FIMSpace.Generating.Rules.QuickSolutions
 
                 Handles.color = new Color(0.8f, 0.8f, 1f, 0.5f);
                 Handles.DrawWireCube(Vector3.zero, new Vector3(1f, 0.1f, 1f));
+
+                Handles.color = new Color(0.8f, 0.8f, 1f, 0.04f);
+                Handles.DrawWireCube(new Vector3(1, 0, 0), new Vector3(1f, 0.1f, 1f));
+                Handles.DrawWireCube(new Vector3(-1, 0, 0), new Vector3(1f, 0.1f, 1f));
+                Handles.DrawWireCube(new Vector3(0, 0, 1), new Vector3(1f, 0.1f, 1f));
+                Handles.DrawWireCube(new Vector3(0, 0, -1), new Vector3(1f, 0.1f, 1f));
+
+                Handles.DrawWireCube(new Vector3(1, 0, 1), new Vector3(1f, 0.1f, 1f));
+                Handles.DrawWireCube(new Vector3(-1, 0, 1), new Vector3(1f, 0.1f, 1f));
+                Handles.DrawWireCube(new Vector3(1, 0, -1), new Vector3(1f, 0.1f, 1f));
+                Handles.DrawWireCube(new Vector3(-1, 0, -1), new Vector3(1f, 0.1f, 1f));
+
             };
 
             previewIn3D.UpdateInput = r.Contains(Event.current.mousePosition);
@@ -199,7 +280,6 @@ namespace FIMSpace.Generating.Rules.QuickSolutions
 #endif
 
         #endregion
-
 
         List<FieldCell> toRemove = null;
         int foundAtRotation = -1;
@@ -266,6 +346,17 @@ namespace FIMSpace.Generating.Rules.QuickSolutions
                 offset = Vector3.Scale(offset, preset.GetCellUnitSize());
                 ProceedRemovingInCell(rCell, offset, centeredMainSpawnPosition);
             }
+
+
+            if (customRemovers == null) return;
+            if (customRemovers.Count < 4) return;
+            if (customRemovers[0] == null) return;
+
+            // Sides Destroy
+            if (customRemovers[0].ToCheck.Count > 0) ProceedSideRemoval(customRemovers[0], grid, cell, preset, new Vector3(-1f, 0f, 0f), rot, centeredMainSpawnPosition);
+            if (customRemovers[1].ToCheck.Count > 0) ProceedSideRemoval(customRemovers[1], grid, cell, preset, new Vector3(1f, 0f, 0f), rot, centeredMainSpawnPosition);
+            if (customRemovers[2].ToCheck.Count > 0) ProceedSideRemoval(customRemovers[2], grid, cell, preset, new Vector3(0f, 0f, 1f), rot, centeredMainSpawnPosition);
+            if (customRemovers[3].ToCheck.Count > 0) ProceedSideRemoval(customRemovers[3], grid, cell, preset, new Vector3(0f, 0f, -1f), rot, centeredMainSpawnPosition);
         }
 
 
@@ -305,6 +396,41 @@ namespace FIMSpace.Generating.Rules.QuickSolutions
                 }
             }
         }
+
+        void ProceedSideRemoval(CheckCellsSelectorSetup setup, FGenGraph<FieldCell, FGenPoint> grid, FieldCell cell, FieldSetup preset, Vector3 sideDir, Quaternion rot, Vector3 centeredMainSpawnPosition)
+        {
+            for (int r = 0; r < setup.ToCheck.Count; r++)
+            {
+                Vector3 offset = (rot * setup.ToCheck[r]).V3toV3Int(); // Get Cell according to selected with cell selector window
+                Vector3Int targetCellPos = cell.Pos + offset.V3toV3Int();
+                FieldCell rCell = grid.GetCell(targetCellPos, false);
+                if (!FieldCell.IsAvailableForExecution(rCell)) continue;
+
+                // Cell exist, find spawn inside this cell and remove spawns nearest to the side cell position
+                offset = Vector3.Scale(preset.GetCellUnitSize(), rot * (sideDir * 0.5f));
+                SideRemovalInCell(rCell, offset, centeredMainSpawnPosition, setup.ExtraString, setup.ExtraValue);
+            }
+
+        }
+
+        void SideRemovalInCell(FieldCell cell, Vector3 dirOffset, Vector3 centeredMainSpawnPosition, string tags, float tolerance)
+        {
+            var spawns = cell.CollectSpawns();
+
+            for (int s = spawns.Count - 1; s >= 0; s--)
+            {
+                if (!string.IsNullOrEmpty(RemoveTagged)) if (!SpawnHaveSpecifics(spawns[s], tags, CheckMode)) continue; // No wanted tag
+
+                Vector3 spawnPosition = GetCenteredSpawnPosition(spawns[s], ESR_Origin.RendererCenter);
+                //spawnPosition += dirOffset;
+
+                float distance = Vector3.Distance(centeredMainSpawnPosition + dirOffset, spawnPosition);
+                if (distance > Mathf.Max(0.01f, tolerance)) continue;
+
+                spawns.RemoveAt(s);
+            }
+        }
+
 
         bool GetCellsAt(Quaternion rotation, FieldCell originCell, FGenGraph<FieldCell, FGenPoint> grid)
         {
@@ -354,6 +480,12 @@ namespace FIMSpace.Generating.Rules.QuickSolutions
             return true;
         }
 
+        void AdjustSideRemoversCount()
+        {
+            if (customRemovers == null) customRemovers = new List<CheckCellsSelectorSetup>();
+            while (customRemovers.Count < 4) customRemovers.Add(new CheckCellsSelectorSetup(false, false));
+            while (customRemovers.Count > 4) customRemovers.RemoveAt(customRemovers.Count - 1);
+        }
 
     }
 }

@@ -9,6 +9,7 @@ namespace FIMSpace.Generating
         public bool _extrudeMirror = true;
         public bool _extrudeFrontCap = false;
         public bool _extrudeBackCap = false;
+        public bool _extrudeFlip = false;
 
         public float _extrude_SubdivLimit = 30f;
 

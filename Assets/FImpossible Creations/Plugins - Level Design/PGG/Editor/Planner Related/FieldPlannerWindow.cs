@@ -122,6 +122,13 @@ namespace FIMSpace.Generating.Planning
             EditorGUILayout.EndHorizontal();
             //EditorGUILayout.HelpBox("  Field Planner: Generator and placer of grid to run Field Setup on", MessageType.None);
 
+            if (ForceSelectPlanner != null)
+            {
+                AssetDatabase.OpenAsset(ForceSelectPlanner);
+                ForceSelectPlanner = null;
+            }
+
+
             if (LatestFieldPlanner == null)
                 if (Selection.activeObject is FieldPlanner)
                 {
@@ -224,6 +231,8 @@ namespace FIMSpace.Generating.Planning
         private SerializedObject so_currentSetup = null;
         private PlannerGraphDrawer BuildPlannerGraphDraw = null;
         internal bool drawGraph = true;
+
+        public static FieldPlanner ForceSelectPlanner = null;
 
         //public static bool AutoRefreshInitialShapePreview = true;
 
@@ -350,7 +359,7 @@ namespace FIMSpace.Generating.Planning
                 if (graphView == FieldPlanner.EViewGraph.PostProcedures_Cells)
                 { BuildPlannerGraphDraw.Tex_Net = FieldPlannerWindow.Get.Tex_Net2; }
                 if (graphView == FieldPlanner.EViewGraph.Procedures_CustomGraphs)
-                { 
+                {
                     if (Get.Tex_Net3 != null) BuildPlannerGraphDraw.Tex_Net = FieldPlannerWindow.Get.Tex_Net3;
                     FieldPlanner.SubGraph subGr = container as FieldPlanner.SubGraph;
                     if (subGr != null) BuildPlannerGraphDraw.CustomGraphName = subGr.GetDisplayName();

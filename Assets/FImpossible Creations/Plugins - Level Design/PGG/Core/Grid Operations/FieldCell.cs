@@ -40,6 +40,10 @@ namespace FIMSpace.Generating
         [NonSerialized] public List<FieldCell> ChildCells;
         public List<Vector3Int> ChildCellsPos;
 
+        /// <summary> If it's parent cell, it can contain there spawns which stared to occupy child cells </summary>
+        public List<SpawnData> ParentCellOccupiedBy { get; private set; }
+
+
         private Vector3 _helperPos = Vector3.zero;
         private Vector4 _helperValue = Vector4.zero;
 
@@ -377,9 +381,10 @@ namespace FIMSpace.Generating
             if (cellCustomData != null) { cellCustomData.Clear(); cellCustomData = null; }
             Spawns.Clear();
             if (CellInstructions != null) CellInstructions.Clear();
+            if ( ParentCellOccupiedBy != null) ParentCellOccupiedBy.Clear();
         }
 
-        public void OccupyOther(FieldCell child)
+        public void OccupyOther(FieldCell child, SpawnData occupyingSpawn)
         {
             if (FGenerators.CheckIfIsNull(child)) return;
 
@@ -397,6 +402,9 @@ namespace FIMSpace.Generating
 
             child.haveParentCell = true;
             child.ParentCell = this;
+
+            if (ParentCellOccupiedBy == null) ParentCellOccupiedBy = new List<SpawnData>();
+            ParentCellOccupiedBy.Add(occupyingSpawn);
         }
 
         public void UnOccupyOther(FieldCell child)
@@ -500,18 +508,18 @@ namespace FIMSpace.Generating
                 }
 
                 List<SpawnData> datas = new List<SpawnData>();
-                StreamSpawnListToOther(ParentCell.Spawns, datas);
+                if (ParentCell.ParentCellOccupiedBy != null) StreamSpawnListToOther(ParentCell.ParentCellOccupiedBy, datas);
 
-                for (int i = 0; i < ParentCell.ChildCells.Count; i++)
-                {
-                    if (FGenerators.CheckIfIsNull(ParentCell.ChildCells[i])) continue;
-                    FieldCell chld = ParentCell.ChildCells[i];
+                //for (int i = 0; i < ParentCell.ChildCells.Count; i++)
+                //{
+                //    if (FGenerators.CheckIfIsNull(ParentCell.ChildCells[i])) continue;
+                //    FieldCell chld = ParentCell.ChildCells[i];
 
-                    for (int s = 0; s < chld.Spawns.Count; s++)
-                        if (FGenerators.CheckIfExist_NOTNULL(chld.Spawns[s]))
-                            if (chld.Spawns[s].Enabled)
-                                datas.Add(chld.Spawns[s]);
-                }
+                //    for (int s = 0; s < chld.Spawns.Count; s++)
+                //        if (FGenerators.CheckIfExist_NOTNULL(chld.Spawns[s]))
+                //            if (chld.Spawns[s].Enabled)
+                //                datas.Add(chld.Spawns[s]);
+                //}
 
                 StreamSpawnListToOther(Spawns, datas, true);
 

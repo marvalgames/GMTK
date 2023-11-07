@@ -750,6 +750,7 @@ namespace FIMSpace.Generating
                 {
                     EditorGUI.indentLevel++;
 
+                    if (injection.Overrides == null) injection.Overrides = new List<FieldVariable>();
                     PGGUtils.AdjustCount(injection.Overrides, toOverride.Count, true);
 
                     for (int o = 0; o < injection.Overrides.Count; o++)

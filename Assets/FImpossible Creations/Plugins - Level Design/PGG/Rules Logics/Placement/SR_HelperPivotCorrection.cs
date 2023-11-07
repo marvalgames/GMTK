@@ -69,7 +69,7 @@ namespace FIMSpace.Generating.Rules.Placement
             Quaternion rot = Quaternion.Euler(spawn.GetFullRotationOffset() );
           
             Vector3 nodeOffset = GetUnitOffset(PositionCorrection, OffsetMode, preset);
-            Vector3 ppos = spawn.GetWorldPositionWithFullOffset() + rot * nodeOffset;
+            Vector3 ppos = spawn.GetWorldPositionWithFullOffset(preset) + rot * nodeOffset;
 
             Gizmos.DrawLine(pos, ppos);
             Gizmos.DrawWireSphere(ppos, size.x * 0.05f);

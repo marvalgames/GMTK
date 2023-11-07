@@ -320,6 +320,8 @@ namespace FIMSpace.Generating
                     if (rule.Enabled == false) continue;
                     rule.CommandOnAfterAllCommandsCall(grid, modificator, this, guide);
                 }
+
+                spawner.OnAfterModificatorsCall();
             }
         }
 

@@ -19,6 +19,8 @@ namespace FIMSpace.Generating
 
         public OStampPhysicalPlacementSetup PhysicalPlacement;
 
+        public OStamperSet.StamperSetOverrider Overrider;
+
         // Spawning related
         public ObjectStamperEmittedInfo spawningInfo;
 
@@ -41,7 +43,7 @@ namespace FIMSpace.Generating
             {
                 if (RandomizeOnStart)
                 {
-                    spawningInfo = PrefabsSet.Emit(false, transform.parent); // Random emission from set
+                    spawningInfo = GetEmit(false, transform.parent); // Random emission from set
                 }
 
                 SpawnedObject = SpawnEmitPrefab();
@@ -52,10 +54,23 @@ namespace FIMSpace.Generating
                 SpawnedObject = _editorPreview;
         }
 
+        public virtual ObjectStamperEmittedInfo GetEmit(bool noRepetition, Transform parent)
+        {
+            var emissionSet = PrefabsSet;
+            if (Overrider != null)
+            {
+                emissionSet = Overrider.GetOverridedSetup();
+                if (emissionSet == null) emissionSet = PrefabsSet;
+            }
+
+            if (emissionSet == null) return new ObjectStamperEmittedInfo();
+            return emissionSet.Emit(noRepetition, parent);
+        }
+
 
         public void Generate()
         {
-            if (RandomizeOnStart || spawningInfo.ChoosedPrefab == null) spawningInfo = PrefabsSet.Emit(false, transform.parent); // Random emission from set
+            if (RandomizeOnStart || spawningInfo.ChoosedPrefab == null) spawningInfo = GetEmit(false, transform.parent); // Random emission from set
             SpawnEmitPrefab();
         }
 
@@ -68,7 +83,7 @@ namespace FIMSpace.Generating
 
         protected override ObjectStamperEmittedInfo GetSpawnInfo()
         {
-            if (spawningInfo.ChoosedPrefab == null) spawningInfo = PrefabsSet.Emit(false, transform.parent);
+            if (spawningInfo.ChoosedPrefab == null) spawningInfo = GetEmit(false, transform.parent);
             return spawningInfo;
         }
 
@@ -182,8 +197,8 @@ namespace FIMSpace.Generating
             Handles.color = new Color(1f, 0.4f, 0.4f, 0.5f);
 
             // Draw Preview basing on choosed spawn info
-            if (spawningInfo.ChoosedPrefab == null) spawningInfo = PrefabsSet.Emit(false, transform.parent);
-            else if (spawningInfo.SetReference != PrefabsSet) spawningInfo = PrefabsSet.Emit(false, transform.parent);
+            if (spawningInfo.ChoosedPrefab == null) spawningInfo = GetEmit(false, transform.parent);
+            else if (spawningInfo.SetReference != PrefabsSet) spawningInfo = GetEmit(false, transform.parent);
 
             Bounds refBounds = PrefabsSet.ReferenceBounds;
             if (spawningInfo.ChoosedPrefab != null) refBounds = spawningInfo.PrefabReference.ReferenceBounds;
@@ -492,10 +507,20 @@ namespace FIMSpace.Generating
             #endregion Drawing Scriptable Stamper Set Inspector Preview
 
 
+            GUILayout.Space(5);
+
+            Get.Overrider.Source = Get.PrefabsSet;
+            if (OStamperSet.Editor_DrawCompositionGUI(Get.Overrider, false))
+            {
+                EditorUtility.SetDirty(Get);
+            }
+
+            GUILayout.Space(5);
+
             if (GUILayout.Button(new GUIContent("  Randomize Preview", FGUI_Resources.Tex_Refresh), GUILayout.Height(22)))
             {
                 if (Get._editorPreview) FGenerators.DestroyObject(Get._editorPreview);
-                Get.spawningInfo = Get.PrefabsSet.Emit(false, Get.transform.parent);
+                Get.spawningInfo = Get.GetEmit(false, Get.transform.parent);
                 repaint = true;
             }
 
@@ -509,7 +534,7 @@ namespace FIMSpace.Generating
             if (GUILayout.Button(new GUIContent("  Emit and Detach", FGUI_Resources.Tex_Movement), GUILayout.Height(22)))
             {
                 Get._EditorEmitAndDetach();
-                Get.spawningInfo = Get.PrefabsSet.Emit(false, Get.transform.parent);
+                Get.spawningInfo = Get.GetEmit(false, Get.transform.parent);
                 repaint = true;
             }
             EditorGUILayout.EndHorizontal();

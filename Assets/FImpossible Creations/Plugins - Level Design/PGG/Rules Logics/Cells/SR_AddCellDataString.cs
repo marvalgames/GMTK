@@ -1,8 +1,4 @@
-﻿using System.Collections.Generic;
-#if UNITY_EDITOR
-using UnityEditor;
-#endif
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace FIMSpace.Generating.Rules.Cells
 {
@@ -15,7 +11,28 @@ namespace FIMSpace.Generating.Rules.Cells
 
         public EProcedureType Type { get { return EProcedureType.OnConditionsMet; } }
 
+        [HideInInspector] public CheckCellsSelectorSetup checkSetup = new CheckCellsSelectorSetup(true, false);
+
+
+        #region Editor stuff
+#if UNITY_EDITOR
+
+        public override void NodeHeader()
+        {
+            base.NodeHeader();
+            checkSetup.UseCondition = false;
+            DrawMultiCellSelector(checkSetup, OwnerSpawner);
+        }
+#endif
+        #endregion
+
+
         public override void OnConditionsMetAction(FieldModification mod, ref SpawnData thisSpawn, FieldSetup preset, FieldCell cell, FGenGraph<FieldCell, FGenPoint> grid)
+        {
+            CellSelector_Execute(checkSetup, grid, cell, cell, thisSpawn, (FieldCell c, SpawnData s) => AddData(c) );
+        }
+
+        public void AddData(FieldCell cell)
         {
             cell.AddCustomData(CellDataString);
         }

@@ -29,7 +29,7 @@ namespace FIMSpace.Generating.Planning.PlannerNodes.Field.Shape
             if (ToAdd.IsNotConnected) return;
 
             ToAdd.TriggerReadPort(true);
-            var oChe = ToAdd.GetAllInputCheckers(true);
+            var oChe = ToAdd.Get_GetMultipleCheckers;
             if (oChe == null) { return; }
             if (oChe.Count == 0) { return; }
 
@@ -90,7 +90,7 @@ namespace FIMSpace.Generating.Planning.PlannerNodes.Field.Shape
                 baseSerializedObject.ApplyModifiedProperties();
             }
 
-            ToAdd.DefaultValueIsNumberedID = false;
+            ToAdd.Switch_DisconnectedReturnsByID = false;
         }
 
         //public override void Editor_OnAdditionalInspectorGUI()

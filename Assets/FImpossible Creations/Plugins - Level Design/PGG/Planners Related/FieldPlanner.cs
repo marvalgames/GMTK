@@ -41,7 +41,8 @@ namespace FIMSpace.Generating.Planning
         {
             FieldPlanner,
             BuildField,
-            InternalField
+            InternalField,
+            Prefab
         }
 
         [HideInInspector] public BuildPlannerPreset ParentBuildPlanner;
@@ -71,6 +72,10 @@ namespace FIMSpace.Generating.Planning
 
         [Tooltip("You can assign other FieldSetups later, in the BuildPlannerExecutor component")]
         [HideInInspector] public FieldSetup DefaultFieldSetup = null;
+        [Tooltip("If using 'Prefab' field type - prefab to be used for grid field preview")]
+        [HideInInspector] public GameObject DefaultPrefab = null;
+        //[Tooltip("If 'prefab to grid' should calcaulate Y Level cells")]
+        //[HideInInspector] public bool PrefabField_FlatGrid = false;
 
         [Space(4)]
         [PGG_SingleLineTwoProperties("ExposeInstanceCount", 86, 140, 18)] public int Instances = 1;
@@ -526,11 +531,12 @@ namespace FIMSpace.Generating.Planning
         public void RunStartProcedures(PlanGenerationPrint gen)
         {
             ExecutionWasStarted = true;
-            WasExecuted = true;
+            WasPreExecuted = true;
 
             if (proceduresBegin == null)
             {
                 CompleteGenerating();
+                WasCalled = true;
                 return;
             }
 
@@ -538,16 +544,16 @@ namespace FIMSpace.Generating.Planning
             {
                 SubGraphsInstanceExecution(gen, SubGraph.EExecutionOrder.AfterEachInstance);
                 CompleteGenerating();
+                WasCalled = true;
                 return;
             }
-
-
 
             PlannerRuleBase operation = proceduresBegin.FirstOutputConnection as PlannerRuleBase;
             if (operation == null)
             {
                 SubGraphsInstanceExecution(gen, SubGraph.EExecutionOrder.AfterEachInstance);
                 CompleteGenerating();
+                WasCalled = true;
                 return;
             }
 
@@ -557,6 +563,7 @@ namespace FIMSpace.Generating.Planning
             SubGraphsInstanceExecution(gen, SubGraph.EExecutionOrder.AfterEachInstance);
 
             CompleteGenerating();
+            WasCalled = true;
         }
 
 
@@ -564,7 +571,8 @@ namespace FIMSpace.Generating.Planning
         public void RunMidProcedures(PlanGenerationPrint gen)
         {
             MidExecutionWasStarted = true;
-            WasExecuted = true;
+            WasPreExecuted = true;
+            WasCalled = true;
             SubGraphsInstanceExecution(gen, SubGraph.EExecutionOrder.Default);
             CompleteMidGenerating();
         }
@@ -714,8 +722,12 @@ namespace FIMSpace.Generating.Planning
                     {
                         if (FGenerators.NotNull(LatestResult.CellsInstructions[c].HelperCellRef)) continue;
 
-                        FieldCell setCellRef =
-                            LatestResult.Checker.GetCell(LatestResult.CellsInstructions[c].HelperCellRef.Pos);
+                        FieldCell setCellRef;
+
+                        if (LatestResult.CellsInstructions[c].HelperCellRef != null)
+                            setCellRef = LatestResult.Checker.GetCell(LatestResult.CellsInstructions[c].HelperCellRef.Pos);
+                        else
+                            setCellRef = LatestResult.Checker.GetCell(LatestResult.CellsInstructions[c].pos);
 
                         LatestResult.CellsInstructions[c].HelperCellRef = setCellRef;
                     }

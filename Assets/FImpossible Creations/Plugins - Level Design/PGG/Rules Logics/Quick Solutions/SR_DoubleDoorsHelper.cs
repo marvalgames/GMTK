@@ -3,7 +3,6 @@ using FIMSpace.FEditor;
 using UnityEditor;
 #endif
 using UnityEngine;
-using System;
 using System.Collections.Generic;
 
 namespace FIMSpace.Generating.Rules.QuickSolutions
@@ -26,8 +25,11 @@ namespace FIMSpace.Generating.Rules.QuickSolutions
         public string RemoveTagged = "";
         [HideInInspector] public ESR_Details CheckMode = ESR_Details.Tag;
 
+        //[PGG_SingleLineTwoProperties("DebugDrawRays")]
+        //[Tooltip("Prevent spawn if there are no two commands next to each other")]
+        //public bool BeCondition = false;
         [Tooltip("Displaying measuring positions debug rays for about a second, after calling generating.\nGreen is 'WallPlacementGuide' position and yellow are spawns detected positions.\nGenerator need to be placed in zero position and zero rotation to align. To test it best will be Grid Painter component.")]
-        public bool DebugDrawRays = false;
+        /*[HideInInspector]*/ public bool DebugDrawRays = false;
 
         [Tooltip("Removing wall/door on the side  PLUS  removing check on the command cell  -  can be used to spawn completely new prefab using sub-spawner")]
         [HideInInspector] public bool RemoveOnSelf = false;
@@ -94,12 +96,6 @@ namespace FIMSpace.Generating.Rules.QuickSolutions
             SubSpawnerCaller.RefreshCaller(OwnerSpawner);
         }
 
-        public override void CheckRuleOn(FieldModification mod, ref SpawnData spawn, FieldSetup preset, FieldCell cell, FGenGraph<FieldCell, FGenPoint> grid, Vector3? restrictDirection = null)
-        {
-            base.CheckRuleOn(mod, ref spawn, preset, cell, grid, restrictDirection);
-            CellAllow = true;
-        }
-
         void CallSubSpawner(FieldSetup preset, FieldCell cell, FGenGraph<FieldCell, FGenPoint> grid, FieldModification mod, Quaternion rot)
         {
             if (SubSpawnerCaller.CallSpawner < 0) return;
@@ -118,16 +114,63 @@ namespace FIMSpace.Generating.Rules.QuickSolutions
 
         static List<FieldCell> toCheck = null;
         bool anythingDetected = false;
+        SpawnData ownedSpawn;
+
+        public override void CheckRuleOn(FieldModification mod, ref SpawnData spawn, FieldSetup preset, FieldCell cell, FGenGraph<FieldCell, FGenPoint> grid, Vector3? restrictDirection = null)
+        {
+            base.CheckRuleOn(mod, ref spawn, preset, cell, grid, restrictDirection);
+            CellAllow = true;
+            //if (BeCondition) ownedSpawn = spawn;
+            //spawn.AddCustomStigma(GetInstanceID().ToString());
+        }
 
         public override void CommandOnAfterAllCommandsCall(FGenGraph<FieldCell, FGenPoint> grid, FieldModification mod, FieldSetup preset, SpawnInstruction guide)
         {
-            if (guide.useDirection == false) return;
+            CheckOutput check = DoCheck(grid, guide, preset);
+
+            if (check.found == false)
+            {
+                //if (BeCondition)
+                //{
+                //    ownedSpawn.Prefab = null;
+                //    ownedSpawn.Enabled = false;
+                //}
+
+                return;
+            }
+
+            if (RemoveOnSelf)
+            {
+                ExecuteOn(check.cell, check.dir, check.rot, preset);
+            }
+
+            if (CallSubspawnerOn)
+            {
+                CallSubSpawner(preset, check.cell, grid, mod, check.rot);
+            }
+        }
+
+        struct CheckOutput
+        {
+            public bool found;
+            public FieldCell cell;
+            public Quaternion rot;
+            public Vector3 dir;
+        }
+
+        CheckOutput DoCheck(FGenGraph<FieldCell, FGenPoint> grid, SpawnInstruction guide, FieldSetup preset)
+        {
+            anythingDetected = false;
+            CheckOutput output = new CheckOutput();
+            output.found = false;
+
+            if (guide.useDirection == false) return output;
 
             FieldCell cell = grid.GetCell(guide.gridPosition);
-            if (FGenerators.IsNull(cell)) return;
+            if (FGenerators.IsNull(cell)) return output;
 
             Vector3 commandDirection = guide.desiredDirection;
-            if (commandDirection == Vector3.zero) return;
+            if (commandDirection == Vector3.zero) return output;
 
             if (toCheck == null) toCheck = new List<FieldCell>();
             toCheck.Clear();
@@ -135,7 +178,6 @@ namespace FIMSpace.Generating.Rules.QuickSolutions
             Quaternion rot = Quaternion.LookRotation(commandDirection);
 
             bool deflt = false;
-
             if (checkSetup.ToCheck.Count == 0) deflt = true;
             else
             if (checkSetup.ToCheck.Count == 1) if (checkSetup.ToCheck[0] == Vector3Int.zero) deflt = true;
@@ -143,7 +185,8 @@ namespace FIMSpace.Generating.Rules.QuickSolutions
             if (deflt)
             {
                 FieldCell targetCell = grid.GetCell(cell.Pos + (rot * Vector3.left).V3toV3Int(), false);
-                if (FGenerators.IsNull(targetCell)) return;
+                //if (FGenerators.IsNull(targetCell)) targetCell = grid.GetCell(cell.Pos + (rot * Vector3.right).V3toV3Int(), false);
+                if (FGenerators.IsNull(targetCell)) return output;
                 toCheck.Add(targetCell);
             }
             else
@@ -151,7 +194,7 @@ namespace FIMSpace.Generating.Rules.QuickSolutions
                 for (int i = 0; i < checkSetup.ToCheck.Count; i++)
                 {
                     Vector3 offset = checkSetup.ToCheck[i];
-                    FieldCell nCell = null;
+                    FieldCell nCell;
                     if (checkSetup.UseRotor) nCell = grid.GetCell(cell.Pos + (rot * offset).V3toV3Int(), false);
                     else nCell = grid.GetCell(cell.Pos + (offset).V3toV3Int(), false);
 
@@ -159,9 +202,9 @@ namespace FIMSpace.Generating.Rules.QuickSolutions
                 }
             }
 
-            if (toCheck.Count == 0) return;
-            if (SR_ModGraph.Graph_Instructions == null) return;
-            if (SR_ModGraph.Graph_Instructions.Count == 0) return;
+            if (toCheck.Count == 0) return output;
+            if (SR_ModGraph.Graph_Instructions == null) return output;
+            if (SR_ModGraph.Graph_Instructions.Count == 0) return output;
 
             anythingDetected = false;
 
@@ -170,18 +213,14 @@ namespace FIMSpace.Generating.Rules.QuickSolutions
                 ExecuteOn(toCheck[i], commandDirection, rot, preset);
             }
 
-            if (anythingDetected)
-            {
-                if (RemoveOnSelf)
-                {
-                    ExecuteOn(cell, commandDirection, rot, preset);
-                }
+            if (!anythingDetected) return output;
 
-                if (CallSubspawnerOn)
-                {
-                    CallSubSpawner(preset, cell, grid, mod, rot);
-                }
-            }
+            output.cell = cell;
+            output.rot = rot;
+            output.dir = commandDirection;
+            output.found = true;
+
+            return output;
         }
 
         void ExecuteOn(FieldCell cell, Vector3 rootDirection, Quaternion rot, FieldSetup preset)
@@ -237,9 +276,6 @@ namespace FIMSpace.Generating.Rules.QuickSolutions
 
             return distance < DetectionTolerance;
         }
-
-
-
 
         public override void PreGenerateResetRule(FGenGraph<FieldCell, FGenPoint> grid, FieldSetup preset, FieldSpawner callFrom)
         {

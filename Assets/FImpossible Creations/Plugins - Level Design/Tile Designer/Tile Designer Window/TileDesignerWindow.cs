@@ -2,11 +2,14 @@
 using UnityEngine;
 using UnityEditor;
 using FIMSpace.FEditor;
+using UnityEditor.PackageManager.UI;
 
 namespace FIMSpace.Generating
 {
     public partial class TileDesignerWindow : EditorWindow
     {
+        public Object SaveDirectory;
+
         private enum EMode { Setup, MeshEditor, Combine }
         private EMode EditorMode = EMode.Setup;
 
@@ -33,7 +36,7 @@ namespace FIMSpace.Generating
 
         private TileDesign ProjectDesign = null;
         private TileDesign _editorWindowDesignTemp = null;
-
+        
         private TileDesign EditedDesign
         {
             get
@@ -49,7 +52,7 @@ namespace FIMSpace.Generating
         #endregion
 
         private TileMeshSetup EditedTileSetup = null;
-        UnityEngine.Object ToDirty = null;
+        public UnityEngine.Object ToDirty = null;
 
         [MenuItem("Window/FImpossible Creations/Level Design/Tile Designer Window", false, 251)]
         static void Init()
@@ -58,6 +61,7 @@ namespace FIMSpace.Generating
             window.titleContent = new GUIContent("Tile Designer");
             window.Show();
             _maximizedCurve = null;
+            window.ToDirty = null;
 
             if (EditorGUIUtility.isProSkin == false)
             {
@@ -90,6 +94,13 @@ namespace FIMSpace.Generating
 
         }
 
+        void RefreshPresetDesign()
+        {
+            if (ToDirty == null) return;
+            if (!(ToDirty is TileDesignPreset)) return;
+            TileDesignPreset preset = (TileDesignPreset)ToDirty;
+            ProjectDesign = preset.BaseDesign;
+        }
 
         private void OnDestroy()
         {
@@ -144,6 +155,7 @@ namespace FIMSpace.Generating
             #endregion
 
             GUILayout.Space(7);
+            RefreshPresetDesign();
 
             if (EditorMode == EMode.Setup)
             {

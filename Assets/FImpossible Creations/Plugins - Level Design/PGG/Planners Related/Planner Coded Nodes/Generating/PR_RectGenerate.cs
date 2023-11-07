@@ -38,7 +38,7 @@ namespace FIMSpace.Generating.Planning.PlannerNodes.Generating
             Depth.TriggerReadPort(true);
             CenterOrigin.TriggerReadPort(true);
 
-            RectShape.DefaultValueIsNumberedID = false;
+            RectShape.Switch_DisconnectedReturnsByID = false;
 
             CheckerField3D rectChecker = new CheckerField3D();
             CheckerField3D myChecker = ParentPlanner.LatestChecker;
@@ -48,7 +48,7 @@ namespace FIMSpace.Generating.Planning.PlannerNodes.Generating
 
             //UnityEngine.Debug.Log("cells = " + rectChecker.ChildPositionsCount);
             //rectChecker.DebugLogDrawCellsInWorldSpace(Color.red);
-            RectShape.ProvideShape(rectChecker);
+            RectShape.Output_Provide_Checker(rectChecker);
         }
     }
 }

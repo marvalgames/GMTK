@@ -11,10 +11,10 @@ namespace FIMSpace.Generating.Planning.PlannerNodes.Field.Shape
     public class PR_GenerateEmptyShape : PlannerRuleBase
     {
         public override string GetDisplayName(float maxWidth = 120) { return wasCreated ? "Generate Empty Shape" : "Generate Empty Shape"; }
-        public override string GetNodeTooltipDescription { get { return "Can be used as list of cells."; } }
+        public override string GetNodeTooltipDescription { get { return "Can be used as list of cells.\nExeute to generate new instance (helpful for iterative generating)"; } }
         public override Color GetNodeColor() { return new Color(1.0f, 0.75f, 0.25f, 0.9f); }
         public override bool IsFoldable { get { return false; } }
-        public override bool DrawInputConnector { get { return false; } }
+        public override bool DrawInputConnector { get { return true; } }
         public override bool DrawOutputConnector { get { return false; } }
         public override Vector2 NodeSize { get { return new Vector2(210, _EditorFoldout ? 106 : 84); } }
         public override EPlannerNodeType NodeType { get { return EPlannerNodeType.CellsManipulation; } }
@@ -35,6 +35,12 @@ namespace FIMSpace.Generating.Planning.PlannerNodes.Field.Shape
             ShapeField.Switch_MinusOneReturnsMainField = false;
             ShapeField.Switch_ReturnOnlyCheckers = true;
             ShapeField.Editor_DefaultValueInfo = "(New)";
+        }
+
+        public override void Execute(PlanGenerationPrint print, PlannerResult newResult)
+        {
+            latelyServedPlanner = null;
+            ResetPlannerPort();
         }
 
         public override void OnCreated()

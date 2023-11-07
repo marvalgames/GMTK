@@ -45,11 +45,11 @@ namespace FIMSpace.Generating.Planning.PlannerNodes.Math.Algebra
                 IFGraphPort _bPort = InValB.GetConnectedPortOfType(typeof(PGGPlannerPort));
                 if (_bPort != null) bPort = _bPort as PGGPlannerPort;
 
-                List<FieldPlanner> planners = GetPlannersFromPort(aPort, false);
+                List<FieldPlanner> planners = GetPlannersFromPort(aPort, true);
 
                 if (bPort != null)
                 {
-                    var bPlanners = GetPlannersFromPort(bPort, false);
+                    var bPlanners = GetPlannersFromPort(bPort, true);
                     foreach (var item in bPlanners) planners.Add(item);
                 }
 

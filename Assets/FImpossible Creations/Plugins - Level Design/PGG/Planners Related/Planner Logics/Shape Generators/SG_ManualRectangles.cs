@@ -37,7 +37,7 @@ namespace FIMSpace.Generating.Planning.GeneratingLogics
         {
         }
 
-        public override void DrawGUI(SerializedObject so)
+        public override void DrawGUI(SerializedObject so, FieldPlanner parent)
         {
             if (CellSets == null)
             {

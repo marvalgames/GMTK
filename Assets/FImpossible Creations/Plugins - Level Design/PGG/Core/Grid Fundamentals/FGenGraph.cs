@@ -242,7 +242,6 @@ namespace FIMSpace.Generating
             }
         }
 
-
         public T1 AnalyzeGridForMaxX()
         {
             if (AllApprovedCells.Count == 0) return null;
@@ -725,7 +724,7 @@ namespace FIMSpace.Generating
             return newCell;
         }
 
-        public Vector3 GetCenterUnrounded()
+        public Vector3 GetGridMarginsDiff()
         {
             float xx = MaxX.Pos.x - MinX.Pos.x;// Mathf.Lerp(MinX.Pos.x, MaxX.Pos.x, 0.5f);
             float yy = MaxY.Pos.y - MinY.Pos.y;//Mathf.Lerp(MinY.Pos.y, MaxY.Pos.y, 0.5f);
@@ -887,17 +886,28 @@ namespace FIMSpace.Generating
             float y = 0f;
             float z = 0f;
 
-            Vector3 center = GetCenterUnrounded();
+            Vector3 margDiff = GetGridMarginsDiff();
 
-            if (Mathf.RoundToInt(center.x * 2) % 2 == 0)
+            if (Mathf.RoundToInt(margDiff.x) % 2 != 0)
                 x += 1f / 2f;
 
-            if (Mathf.RoundToInt(center.z * 2) % 2 == 0)
+            if (Mathf.RoundToInt(margDiff.z) % 2 != 0)
                 z += 1f / 2f;
 
             return Vector3.Scale(new Vector3(x, y, z), cellSize);
         }
 
+        public Bounds GetBounds(bool cellExpansion = true)
+        {
+            Vector3Int getMin = GetMin();
+            Vector3Int getMax = GetMax();
+
+            Vector3 expansionOffsset = cellExpansion ? new Vector3(0.5f, 0f, 0.5f) : Vector3.zero;
+
+            Bounds bounds = new Bounds(getMin.V3IntToV3() - expansionOffsset, Vector3.zero);
+            bounds.Encapsulate(getMax.V3IntToV3() + expansionOffsset);
+            return bounds;
+        }
 
     }
 }

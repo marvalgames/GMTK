@@ -48,7 +48,10 @@ namespace FIMSpace.Generating.Rules.QuickSolutions
         [Space(7)]
         [HideInInspector] public bool DontSpawnIfNoTagged = false;
         /*[PGG_SingleLineTwoProperties("AdditiveOffset")] */
+        [PGG_SingleLineTwoProperties("TransformLikeChild")]
         [HideInInspector] public bool RemoveTagged = false;
+        [Tooltip("Transforming this object like it's child of the gathered spawn's tranform. Can help moving object accordingly to the gathered spawn rotation.")]
+        [HideInInspector] public bool TransformLikeChild = false;
         //[Tooltip("If target offsets should be added to previous offsets instead of overriding coords")] [HideInInspector] public bool AdditiveOffset = false;
         //[HideInInspector] [Tooltip("If you work with rotations with local position offset and you notice something moves like in old rotation space translation, then toggling it will force node to be executed before events and may sync better in some situations")]
         //public bool RunBeforeEvents = false;
@@ -145,9 +148,10 @@ namespace FIMSpace.Generating.Rules.QuickSolutions
                 GUILayout.Space(3);
                 sp.Next(false); EditorGUILayout.PropertyField(sp);
                 sp.Next(false); EditorGUILayout.PropertyField(sp);
+                sp.Next(false); EditorGUILayout.PropertyField(sp);
 
                 sp.Next(false); EditorGUILayout.PropertyField(sp);
-                sp.Next(false); EditorGUILayout.PropertyField(sp); /*sp.Next(false);*/
+                sp.Next(false); //EditorGUILayout.PropertyField(sp); /*sp.Next(false);*/
                 sp.Next(false); if (!string.IsNullOrEmpty(GetFromTagged)) EditorGUILayout.PropertyField(sp); sp.Next(false);
                 GUILayout.Space(3);
                 sp.Next(false); EditorGUILayout.PropertyField(sp);
@@ -193,8 +197,11 @@ namespace FIMSpace.Generating.Rules.QuickSolutions
                 {
                     if (FGenerators.CheckIfExist_NOTNULL(gettedSpwn))
                     {
-                        spawn.TempRotationOffset = gettedSpwn.RotationOffset + gettedSpwn.OutsideRotationOffset + RotationEulerOffset;
+                        //Vector3 directionalOffset = GetUnitOffset(DirectionalOffset, OffsetMode, preset);
+                        //Vector3 worldOffset = GetUnitOffset(WorldOffset, OffsetMode, preset);
                         spawn.TempPositionOffset = gettedSpwn.Offset + Quaternion.Euler(gettedSpwn.RotationOffset) * gettedSpwn.GetDirectionalOffsetWithMods();
+                        spawn.TempRotationOffset = gettedSpwn.RotationOffset + gettedSpwn.OutsideRotationOffset + RotationEulerOffset;
+                        AddTempData(gettedSpwn, null);
                         //spawn.TempPositionOffset = GetUnitOffset(spawn.TempPositionOffset, OffsetMode, preset);
                         getted.Add(gettedSpwn);
                     }
@@ -203,9 +210,8 @@ namespace FIMSpace.Generating.Rules.QuickSolutions
                 {
                     if (FGenerators.CheckIfExist_NOTNULL(gettedSpwn))
                     {
-                        spawn.TempRotationOffset = gettedSpwn.RotationOffset + gettedSpwn.OutsideRotationOffset + RotationEulerOffset;
                         spawn.TempPositionOffset = gettedSpwn.Offset + Quaternion.Euler(gettedSpwn.RotationOffset) * gettedSpwn.GetDirectionalOffsetWithMods();
-
+                        spawn.TempRotationOffset = gettedSpwn.RotationOffset + gettedSpwn.OutsideRotationOffset + RotationEulerOffset;
                         AddTempData(gettedSpwn, null);
                         getted.Add(gettedSpwn);
                     }
@@ -232,6 +238,31 @@ namespace FIMSpace.Generating.Rules.QuickSolutions
 
             }
 
+
+            if (RunOnRepetition)
+            {
+                Vector3 directionalOffset = GetUnitOffset(DirectionalOffset, OffsetMode, preset);
+                Vector3 worldOffset = GetUnitOffset(WorldOffset, OffsetMode, preset);
+
+                // Calling spawner rules on extra detected instances
+                for (int i = getted.Count - 1; i > 0; i--)
+                {
+                    var sp = getted[i]; // Extra detected coord object in the single cell
+                    var newSpawn = OwnerSpawner.GenerateSpawnerSpawnData(mod, preset, cell, null, true);
+                    if (OwnerSpawner.InheritRotations) OwnerSpawner.CheckSpawnInheritCoordsFor(cell, newSpawn);
+                    //newSpawn.TempRotationOffset = sp.RotationOffset + sp.OutsideRotationOffset + RotationEulerOffset;
+                    //newSpawn.TempPositionOffset = sp.Offset + Quaternion.Euler(sp.RotationOffset) * sp.GetDirectionalOffsetWithMods();
+                    ApplySpawn(sp, newSpawn, worldOffset, directionalOffset);
+                    newSpawn = OwnerSpawner.RunSpawnerRulesFor(newSpawn, mod, preset, cell, grid, null, null, false, this, true);
+
+                    if (newSpawn == null) getted.RemoveAt(i);
+                    //else
+                    //{
+                    //    getted[i] = newSpawn;
+                    //}
+                }
+            }
+
         }
 
         public override void CellInfluence(FieldSetup preset, FieldModification mod, FieldCell cell, ref SpawnData spawn, FGenGraph<FieldCell, FGenPoint> grid, Vector3? restrictDirection = null)
@@ -239,87 +270,22 @@ namespace FIMSpace.Generating.Rules.QuickSolutions
             Vector3 directionalOffset = GetUnitOffset(DirectionalOffset, OffsetMode, preset);
             Vector3 worldOffset = GetUnitOffset(WorldOffset, OffsetMode, preset);
 
-            SpawnData spawnBackup = spawn.Copy();
-            ApplySpawn(getted[0], spawn, worldOffset, directionalOffset );
+            //SpawnData spawnBackup = spawn.Copy();
+            ApplySpawn(getted[0], spawn, worldOffset, directionalOffset);
 
-
-            #region Hard coded use of spawn count rule and spawn propability on repetition
-
-            /* Hard Coded Part - Needs to be solved better way */
-            Count.SR_LimitSpawnCount spawnCountRule = null;
-            for (int s = 0; s < OwnerSpawner.Rules.Count; s++) { if (OwnerSpawner.Rules[s] is Count.SR_LimitSpawnCount) { spawnCountRule = OwnerSpawner.Rules[s] as Count.SR_LimitSpawnCount; if (spawnCountRule.Enabled == false) { spawnCountRule = null; } else break; } }
-            if ( spawnCountRule != null) if ( spawnCountRule.CellAllow == false)
-                {
-                    //spawnCountRule.CellAllow = true;
-                    //spawn.DontSpawnMainPrefab = true;
-                    return;
-                }
-
-            Count.SR_SpawningPropability spawnPropabilityRule = null;
-            for (int s = 0; s < OwnerSpawner.Rules.Count; s++) { if (OwnerSpawner.Rules[s] is Count.SR_SpawningPropability) { spawnPropabilityRule = OwnerSpawner.Rules[s] as Count.SR_SpawningPropability; if (spawnPropabilityRule.Enabled == false) { spawnPropabilityRule = null; } else break; } }
-            if (spawnPropabilityRule != null) if (spawnPropabilityRule.CellAllow == false)
-                {
-
-                    //spawnPropabilityRule.CellAllow = true;
-                    //spawn.DontSpawnMainPrefab = true;
-                    return;
-                }
-
-            /* Hard Coded Part End */
-
-
-            if (RunOnRepetition)
-            {
-                for (int i = getted.Count - 1; i > 0; i--)
-                {
-                    /* Hard Coded Part - Needs to be solved better way */
-                    var sp = getted[i];
-
-                    if (spawnPropabilityRule != null)
-                    {
-                        float mul = spawnPropabilityRule.PropabilityMulVariable.GetValue(1f);
-
-                        if (FGenerators.GetRandom(0f, 1f) > spawnPropabilityRule.Propability * mul)
-                        {
-                            getted.RemoveAt(i);
-                            continue;
-                        }
-                    }
-
-                    if (spawnCountRule != null)
-                    {
-                        spawnCountRule.CheckRuleOn(mod, ref sp, preset, cell, grid, restrictDirection);
-
-                        if (spawnCountRule.CellAllow == false || spawnCountRule.created + 1 >= spawnCountRule.Count.Max)
-                        {
-                            getted.RemoveAt(i);
-                            continue;
-                        }
-
-                        spawnCountRule.OnAddSpawnUsingRule(mod, sp, cell, grid);
-                    }
-
-                    /* Hard Coded Part End */
-                }
-            }
-
-            #endregion
-
-
-            for (int i = 1; i < getted.Count; i++)
-            {
-                SpawnData getSpawn = getted[i]; // CellSpawnsHaveTag(cell, GetFromTagged, spawn, GetRandomIfMulti);
-                SpawnData thisSpawn = spawnBackup.Copy();
-
-                thisSpawn.TempPositionOffset = getSpawn.RotationOffset + getSpawn.OutsideRotationOffset + RotationEulerOffset;
-                thisSpawn.TempRotationOffset = getSpawn.Offset + Quaternion.Euler(getSpawn.RotationOffset) * getSpawn.GetDirectionalOffsetWithMods(); 
-                
-                cell.AddSpawnToCell(thisSpawn);
-                ApplySpawn(getSpawn, thisSpawn, worldOffset, directionalOffset);
-                AddTempData(thisSpawn, null);
-            }
-
+            // Call on extra instances
+            //for (int i = 1; i < getted.Count; i++)
+            //{
+            //    SpawnData getSpawn = getted[i]; // CellSpawnsHaveTag(cell, GetFromTagged, spawn, GetRandomIfMulti);
+            //    SpawnData thisSpawn = getSpawn;// spawnBackup.Copy();
+            //    thisSpawn.TempPositionOffset = getSpawn.RotationOffset + getSpawn.OutsideRotationOffset + RotationEulerOffset;
+            //    thisSpawn.TempRotationOffset = getSpawn.Offset + Quaternion.Euler(getSpawn.RotationOffset) * getSpawn.GetDirectionalOffsetWithMods();
+            //    cell.AddSpawnToCell(thisSpawn);
+            //    AddTempData(thisSpawn, null);
+            //}
         }
+
+
 
         private void ApplySpawn(SpawnData getSpawn, SpawnData thisSpawn, Vector3 worldOffset, Vector3 directionalOffset)
         {
@@ -333,15 +299,27 @@ namespace FIMSpace.Generating.Rules.QuickSolutions
                 if (MultiplyGetted != Vector3.one) getOff = Vector3.Scale(getOff, MultiplyGetted);
                 if (MultiplyGetted != Vector3.one) getDirOff = Vector3.Scale(getDirOff, MultiplyGetted);
 
-                thisSpawn.Offset = getOff + worldOffset;
+                if (!TransformLikeChild)
+                    thisSpawn.Offset = getOff + worldOffset;
+                else
+                {
+                    Matrix4x4 mx = Matrix4x4.TRS(getSpawn.GetFullOffset(), Quaternion.Euler(getSpawn.GetFullRotationOffset()), getSpawn.LocalScaleMul);
+                    thisSpawn.Offset = mx.MultiplyPoint3x4(worldOffset);
+                }
 
                 if (StackOffset)
                 {
-                    thisSpawn.DirectionalOffset = getDirOff;
+                    if (!TransformLikeChild)
+                        thisSpawn.DirectionalOffset = getDirOff;
                     thisSpawn.Offset += Quaternion.Euler(thisSpawn.RotationOffset) * directionalOffset;
                 }
                 else
-                    thisSpawn.DirectionalOffset = getDirOff + directionalOffset;
+                {
+                    if (!TransformLikeChild)
+                        thisSpawn.DirectionalOffset = getDirOff + directionalOffset;
+                    else
+                        thisSpawn.DirectionalOffset = directionalOffset;
+                }
 
                 thisSpawn.RotationOffset = getSpawn.RotationOffset + getSpawn.OutsideRotationOffset + RotationEulerOffset;
 
@@ -427,7 +405,7 @@ namespace FIMSpace.Generating.Rules.QuickSolutions
         {
             if (getted != null)
             {
-                if (RemoveTagged) 
+                if (RemoveTagged)
                     if (string.IsNullOrEmpty(GetFromTagged) == false)
                     {
                         for (int i = 0; i < getted.Count; i++)

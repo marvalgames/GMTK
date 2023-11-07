@@ -12,11 +12,14 @@ namespace FIMSpace.Generating.Planning
         /// <summary> If this planner is an duplicate, then parent will be the source planner </summary>
         [System.NonSerialized] public FieldPlanner DuplicateParent = null;
         [System.NonSerialized] private List<FieldPlanner> duplicatePlanners = null;
-        [System.NonSerialized] public bool WasExecuted = false;
+        /// <summary> True on procedures execution start </summary>
+        [System.NonSerialized] public bool WasPreExecuted = false;
+        /// <summary> True after first executions </summary>
+        [System.NonSerialized] public bool WasCalled = false;
         [System.NonSerialized] public bool Discarded = false;
 
         /// <summary> If preapred, already executed and not discarded </summary>
-        public bool Available { get { return !DisableWholePlanner && WasExecuted && !Discarded; } }
+        public bool Available { get { return !DisableWholePlanner && WasPreExecuted && !Discarded; } }
 
         /// <summary> If preapred and not discarded </summary>
         public bool AvailableBypassWasExecuted { get { return !DisableWholePlanner && !Discarded; } }
@@ -137,7 +140,7 @@ namespace FIMSpace.Generating.Planning
         public bool IsValid()
         {
             if (DisableWholePlanner) return false;
-            if (WasExecuted == false) return false;
+            if (WasPreExecuted == false) return false;
             if (Discarded) return false;
             return true;
         }
@@ -160,7 +163,8 @@ namespace FIMSpace.Generating.Planning
             PostExecutionDoneFlag = false;
             PostExecutionWasStarted = false;
 
-            WasExecuted = false;
+            WasPreExecuted = false;
+            WasCalled = false;
             Discarded = false;
 
             previewChecker = null;

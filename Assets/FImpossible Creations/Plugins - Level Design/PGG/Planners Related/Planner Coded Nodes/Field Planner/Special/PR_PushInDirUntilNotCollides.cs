@@ -51,7 +51,7 @@ namespace FIMSpace.Generating.Planning.PlannerNodes.Field.Special
                     {
                         var bp = ParentPlanner.ParentBuildPlanner;
 
-                        List<CheckerField3D> all = bp.CollectAllAvailablePlannersCheckers(true, true);
+                        List<CheckerField3D> all = bp.CollectAllAvailablePlannersCheckers(true, true, true, true);
                         all.Remove(checker);
 
                         checker.StepPushOutOfCollision(all, pushDir, 256, StayInside);

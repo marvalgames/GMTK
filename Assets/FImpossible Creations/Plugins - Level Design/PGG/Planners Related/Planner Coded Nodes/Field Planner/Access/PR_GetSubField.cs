@@ -25,7 +25,7 @@ namespace FIMSpace.Generating.Planning.PlannerNodes.Field.Access
         public override void OnCreated()
         {
             base.OnCreated();
-            Planner.DefaultValueIsNumberedID = false;
+            Planner.Switch_DisconnectedReturnsByID = false;
         }
 
         bool DrawInstInd { get { return Planner.PortState() == EPortPinState.Connected; } }
@@ -34,7 +34,7 @@ namespace FIMSpace.Generating.Planning.PlannerNodes.Field.Access
         {
             Index.TriggerReadPort(true);
             Planner.Clear();
-            Planner.DefaultValueIsNumberedID = false;
+            Planner.Switch_DisconnectedReturnsByID = false;
             int instId = 0;
 
             if (Planner.PortState() == EPortPinState.Connected)
@@ -57,7 +57,7 @@ namespace FIMSpace.Generating.Planning.PlannerNodes.Field.Access
 
             if (p == null) return;
 
-            Planner.SetIDsOfPlanner(p);
+            Planner.Output_Provide_Planner(p);
         }
 
 

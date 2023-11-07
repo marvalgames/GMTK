@@ -28,6 +28,7 @@ namespace FIMSpace.Generating.Rules
     public enum ESR_Measuring { Units, Cells }
     public enum ESR_Transforming { Position, Rotation, Scale }
     public enum ESR_RotationOrScale { Rotation, Scale }
+    public enum ESR_TileScaleAxis { X, Y, Z }
 
     public enum ESR_Origin
     {

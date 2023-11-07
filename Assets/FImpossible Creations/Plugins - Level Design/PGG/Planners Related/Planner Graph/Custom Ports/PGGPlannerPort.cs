@@ -99,7 +99,7 @@ namespace FIMSpace.Graph
         }
 
 
-        void DecodeAndAssignValue(object val, bool inputMultipleConnections = false)
+        public void DecodeAndAssignValue(object val, bool inputMultipleConnections = false)
         {
             #region Numbered Read (Ints, floats, vectors)
 
@@ -678,7 +678,7 @@ namespace FIMSpace.Graph
             Output_Provide_Checker(checkerField3D);
         }
 
-        [System.Obsolete("Use Input_InterpretateValue instead")]
+        [System.Obsolete("Use DecodeAndAssignValue instead")]
         public void ProvideValueToPort(object val)
         {
             DecodeAndAssignValue(val);
@@ -947,7 +947,6 @@ namespace FIMSpace.Graph
 
 
 
-
         /// <summary> Returns contained checker or checker out of the contained planner </summary>
         public static CheckerField3D GetCheckerFromPort(PGGPlannerPort port, bool callRead = true)
         {
@@ -967,6 +966,7 @@ namespace FIMSpace.Graph
 
             return planner.LatestChecker;
         }
+
 
         /// <summary> Returns contained checkers or checkers out of the contained planners </summary>
         public static List<ICheckerReference> GetCheckersFromPort(PGGPlannerPort port, bool callRead = true)

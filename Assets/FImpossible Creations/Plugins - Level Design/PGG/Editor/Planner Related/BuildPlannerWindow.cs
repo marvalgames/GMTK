@@ -455,6 +455,23 @@ namespace FIMSpace.Generating
                         });
 
 
+
+                        draftsMenu.AddItem(new GUIContent(""), false, () => { });
+                        draftsMenu.AddItem(new GUIContent(""), false, () => { });
+
+                        if (projectPreset != null)
+                            draftsMenu.AddItem(new GUIContent("X Completely Remove Current Preset File"), false, () =>
+                            {
+                                string path = AssetDatabase.GetAssetPath(projectPreset);
+                                if (!string.IsNullOrEmpty(path))
+                                {
+                                    AssetDatabase.DeleteAsset(path);
+                                    AssetDatabase.SaveAssets();
+                                    projectPreset = null;
+                                }
+                            });
+
+
                         draftsMenu.ShowAsContext();
                     }
                 }
@@ -510,6 +527,15 @@ namespace FIMSpace.Generating
                 {
                     DrawFieldLayersList();
                 }
+
+                //if (ForceSelectPlanner != -1)
+                //{
+                //    if (ForceSelectPlanner < projectPreset.GetPlanners(_selectBuildLayer).Count)
+                //    {
+                //        _selectField = projectPreset.GetPlanners(_selectBuildLayer)[ForceSelectPlanner];
+                //    }
+                //    ForceSelectPlanner = -1;
+                //}
 
                 _selectField = DrawFieldPlannersList(projectPreset.GetPlanners(_selectBuildLayer), projectPreset, FGUI_Resources.BGInBoxStyle, "Field Planners", ref drawPlanners);
 
@@ -933,6 +959,7 @@ namespace FIMSpace.Generating
 
                         Color plannerColor = PlanGenerationPrint.GeneratePlannerColor(i);
 
+
                         if (GUILayout.Button(lbl, GUILayout.Width(wdth + 8)))
                         {
                             //if (Selection.activeObject is ModificatorsPack) Selection.activeObject = null;
@@ -1080,7 +1107,6 @@ namespace FIMSpace.Generating
 
             EditorUtility.SetDirty(planner);
             //AssetDatabase.SaveAssets();
-
         }
 
 

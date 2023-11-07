@@ -1,6 +1,5 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
-using FIMSpace.Generating.Planning.PlannerNodes.Field;
 using System;
 using FIMSpace.Generating.Checker;
 
@@ -89,11 +88,14 @@ namespace FIMSpace.Generating.Planning
             subField.LatestResult.Checker = sourceChecker;
             subField.DuplicateParent = this;
             subField.IsSubField = true;
+            subField.DisableWholePlanner = false;
             
-            subField.WasExecuted = true;
+            subField.WasCalled = true;
+            subField.WasPreExecuted = true;
             subField.Discarded = false;
 
             SubFields.Add(subField);
+
             return subField;
         }
     }

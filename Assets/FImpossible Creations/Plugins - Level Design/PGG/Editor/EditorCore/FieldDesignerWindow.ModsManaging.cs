@@ -342,6 +342,7 @@ namespace FIMSpace.Generating
                                     if (modd)
                                         menu.AddItem(new GUIContent("Prepare for Copy"), false, () => { ModificatorsPackEditor.PrepareForCopy(modd); });
 
+
                                     if (ModificatorsPackEditor.PreparedToCopyModReference != null)
                                     {
                                         InstructionDefinition src = toDraw[i];
@@ -354,6 +355,9 @@ namespace FIMSpace.Generating
                                             AssetDatabase.SaveAssets();
                                         });
                                     }
+
+                                    if (modd)
+                                        menu.AddItem(new GUIContent("Move To Utility Mods"), false, () => { ModificatorsPackEditor.PrepareForCopy(modd); });
 
                                     FGenerators.DropDownMenu(menu);
                                 }

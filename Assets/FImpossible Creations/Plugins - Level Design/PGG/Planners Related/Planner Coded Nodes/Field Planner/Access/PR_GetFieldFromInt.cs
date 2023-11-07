@@ -28,13 +28,13 @@ namespace FIMSpace.Generating.Planning.PlannerNodes.Field.Access
             if ( ID.IsConnected)
             {
                 var val = ID.Connections[0].PortReference.GetPortValue;
-                if (val is Vector3) { Planner.ProvideValueToPort(val); return; }
-                if (val is Vector3Int) { Planner.ProvideValueToPort(val); return; }
-                if (val is Vector2) { Planner.ProvideValueToPort(val); return; }
-                if (val is Vector2Int) { Planner.ProvideValueToPort(val); return; }
+                if (val is Vector3) { Planner.DecodeAndAssignValue(val); return; }
+                if (val is Vector3Int) { Planner.DecodeAndAssignValue(val); return; }
+                if (val is Vector2) { Planner.DecodeAndAssignValue(val); return; }
+                if (val is Vector2Int) { Planner.DecodeAndAssignValue(val); return; }
             }
 
-            Planner.ProvideValueToPort(new Vector3Int(ID.GetInputValue, -1, -1)) ;
+            Planner.DecodeAndAssignValue(new Vector3Int(ID.GetInputValue, -1, -1)) ;
         }
 
 #if UNITY_EDITOR

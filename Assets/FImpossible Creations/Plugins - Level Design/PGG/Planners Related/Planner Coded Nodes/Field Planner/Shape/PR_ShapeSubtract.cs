@@ -39,7 +39,7 @@ namespace FIMSpace.Generating.Planning.PlannerNodes.Field.Shape
             CheckerField3D nChecker = checker.Copy();
             nChecker.RemoveCellsCollidingWith(oChecker);
 
-            Result.ProvideShape(nChecker);
+            Result.Output_Provide_Checker(nChecker);
         }
     }
 }

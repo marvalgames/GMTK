@@ -35,6 +35,26 @@ namespace FIMSpace.Generating
 #endif
         }
 
+        public static void ClearGenerated<T>(List<T> generated) where T : UnityEngine.Object
+        {
+            if (generated == null) return;
+            for (int i = 0; i < generated.Count; i++)
+            {
+                if (generated[i] == null) continue;
+
+                if (generated[i] is Component)
+                {
+                    Component comp = generated[i] as Component;
+                    DestroyObject(comp);
+                    continue;
+                }
+
+                DestroyObject(generated[i]);
+            }
+
+            generated.Clear();
+        }
+
         public static bool CheckIfIsNull(object o)
         {
 #if UNITY_2018_1_OR_NEWER
@@ -133,33 +153,38 @@ namespace FIMSpace.Generating
 
             public float GetRandom()
             {
-                return (float)random.NextDouble();
+                return FGenerators.GetRandom(random);
             }
 
             public float GetRandom(float from, float to)
             {
-                return from + (float)random.NextDouble() * (to - from);
+                return FGenerators.GetRandom(from, to, random);
+            }
+
+            public float GetRandomPlusMinus(float range)
+            {
+                return FGenerators.GetRandomPlusMinus(range, random);
             }
 
             /// <summary> To is exclusive, dedicated for arrays </summary>
             public int GetRandom(int from, int to)
             {
-                return random.Next(from, to);
+                return FGenerators.GetRandom(from, to, random);
             }
 
             public int GetRandomInclusive(int from, int to)
             {
-                return random.Next(from, to + 1);
+                return FGenerators.GetRandomInclusive(from, to, random);
             }
 
             public int GetRandom(MinMax minMax)
             {
-                return (int)(minMax.Min + (float)random.NextDouble() * ((minMax.Max + 1) - minMax.Min));
+                return FGenerators.GetRandom(minMax, random);
             }
 
             public bool GetRandomFlip()
             {
-                return GetRandom(0, 2) == 1;
+                return FGenerators.GetRandomFlip( random);
             }
 
             #endregion
@@ -167,6 +192,7 @@ namespace FIMSpace.Generating
 
 
         static System.Random random = new System.Random();
+        public static System.Random GlobalRandomInstance { get { return random; } }
         public static int LatestSeed { get; private set; }
 
         public static void SetSeed(int seed)
@@ -177,12 +203,32 @@ namespace FIMSpace.Generating
 
         public static bool GetRandomFlip()
         {
-            return GetRandom(0, 2) == 1;
+            return GetRandomFlip(random);
+        }
+
+        public static bool GetRandomFlip(System.Random rand)
+        {
+            return GetRandom(0, 2, rand) == 1;
         }
 
         public static float GetRandom()
         {
-            return (float)random.NextDouble();
+            return GetRandom(random);
+        }
+
+        public static int GetRandomInclusive(int from, int to)
+        {
+            return GetRandomInclusive(from, to, random);
+        }
+
+        public static int GetRandomInclusive(int from, int to, System.Random rand)
+        {
+            return rand.Next(from, to + 1);
+        }
+
+        public static float GetRandom(System.Random rand)
+        {
+            return (float)rand.NextDouble();
         }
 
         public static Vector2 SwampToBeRising(Vector2 minMax)
@@ -198,7 +244,7 @@ namespace FIMSpace.Generating
         }
 
         /// <summary> Ensuring 'from' is lower value </summary>
-        public static float GetRandomSwap(float from, float to)
+        public static float GetRandomSwap(float from, float to, System.Random rand)
         {
             if (from > to)
             {
@@ -207,36 +253,67 @@ namespace FIMSpace.Generating
                 to = swapTo;
             }
 
-            return GetRandom(from, to);
+            return GetRandom(from, to, rand);
         }
 
-        public static float GetRandom(float plusminus)
+        /// <summary> Ensuring 'from' is lower value </summary>
+        public static float GetRandomSwap(float from, float to)
         {
-            return GetRandom(-plusminus, plusminus);
+            return GetRandomSwap(from, to, random);
+        }
+
+        public static float GetRandomPlusMinus(float plusminus)
+        {
+            return GetRandomPlusMinus(plusminus, random);
+        }
+
+        public static float GetRandomPlusMinus(float plusminus, System.Random rand)
+        {
+            return GetRandom(-plusminus, plusminus, rand);
         }
 
         public static float GetRandom(float from, float to)
         {
-            return from + (float)random.NextDouble() * (to - from);
+            return GetRandom(from, to, random);
+        }
+
+        public static float GetRandom(float from, float to, System.Random rand)
+        {
+            return from + (float)rand.NextDouble() * (to - from);
         }
 
         public static Vector3 GetRandom(Vector3 plusMinusRangesPerAxis)
         {
+            return GetRandom(plusMinusRangesPerAxis, random);
+        }
+
+        public static Vector3 GetRandom(Vector3 plusMinusRangesPerAxis, System.Random rand)
+        {
             Vector3 p = plusMinusRangesPerAxis;
-            p.x = GetRandom(-p.x, p.x);
-            p.y = GetRandom(-p.y, p.y);
-            p.z = GetRandom(-p.z, p.z);
+            p.x = GetRandom(-p.x, p.x, rand);
+            p.y = GetRandom(-p.y, p.y, rand);
+            p.z = GetRandom(-p.z, p.z, rand);
             return p;
         }
 
         public static int GetRandom(int from, int to)
         {
-            return random.Next(from, to);
+            return GetRandom(from, to, random);
+        }
+
+        public static int GetRandom(int from, int to, System.Random rand)
+        {
+            return rand.Next(from, to);
         }
 
         public static int GetRandom(MinMax minMax)
         {
-            return (int)(minMax.Min + (float)random.NextDouble() * ((minMax.Max + 1) - minMax.Min));
+            return GetRandom(minMax, random);
+        }
+
+        public static int GetRandom(MinMax minMax, System.Random rand)
+        {
+            return (int)(minMax.Min + (float)rand.NextDouble() * ((minMax.Max + 1) - minMax.Min));
         }
 
         #endregion
@@ -950,16 +1027,16 @@ return 1f;
 
             Rect drawRect = new Rect(-1000, 0, 2, 2);
 
-            if ( fullCheck)
+            if (fullCheck)
             {
                 while (refreshIterator.Next(false))
                 {
                     EditorGUI.PropertyField(drawRect, refreshIterator, true);
 
                     var deppIter = refreshIterator.Copy();
-                    if ( deppIter.Next(true))
+                    if (deppIter.Next(true))
                     {
-                        while(deppIter.Next(false))
+                        while (deppIter.Next(false))
                         {
                             EditorGUI.PropertyField(drawRect, deppIter, true);
                         }
@@ -981,12 +1058,13 @@ return 1f;
                 }
             }
         }
+
 #endif
 
-#endregion
+        #endregion
 
 
-#endregion
+        #endregion
 
     }
 

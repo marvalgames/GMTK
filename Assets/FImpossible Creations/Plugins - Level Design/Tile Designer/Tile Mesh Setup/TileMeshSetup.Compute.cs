@@ -23,7 +23,7 @@ namespace FIMSpace.Generating
             else if (GenTechnique == EMeshGenerator.Loft) LoftQuickUpdate();
             else if (GenTechnique == EMeshGenerator.Extrude) ExtrudeQuickUpdate();
             else if (GenTechnique == EMeshGenerator.Sweep) SweepQuickUpdate();
-            else if (GenTechnique == EMeshGenerator.CustomMeshAndExtras) CustomAndExtraQuickUpdate();
+            else if (GenTechnique == EMeshGenerator.Advanced) CustomAndExtraQuickUpdate();
         }
 
 

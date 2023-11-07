@@ -137,6 +137,19 @@ namespace FIMSpace.Generating
 
             if (EditedTileSetup == null)
             {
+                if (ProjectDesign != null)
+                {
+                    if (ProjectDesign.TileMeshes.Count == 0)
+                    {
+                        ProjectDesign.TileMeshes.Add(new TileMeshSetup("Tile"));
+                    }
+
+                    EditedTileSetup = ProjectDesign.TileMeshes[0];
+                }
+            }
+
+            if (EditedTileSetup == null)
+            {
                 EditorGUILayout.HelpBox("No Tile Mesh to Edit!", MessageType.Error);
                 return;
             }
@@ -265,7 +278,7 @@ namespace FIMSpace.Generating
                     GUI_ExtrudeTopPanel();
                 else if (GenTechnique == EMeshGenerator.Sweep)
                     GUI_SweepTopPanel();
-                else if (GenTechnique == EMeshGenerator.CustomMeshAndExtras)
+                else if (GenTechnique == EMeshGenerator.Advanced)
                     GUI_CustomMeshTopPanel();
                 else if (GenTechnique == EMeshGenerator.Primitive)
                     GUI_PrimitiveTopPanel();
@@ -343,7 +356,7 @@ namespace FIMSpace.Generating
                         else if (GenTechnique == EMeshGenerator.Lathe) DrawLatheEditor(editorRect, displayRect);
                         else if (GenTechnique == EMeshGenerator.Extrude) DrawExtrudeEditor(editorRect, displayRect);
                         else if (GenTechnique == EMeshGenerator.Sweep) DrawSweepEditor(editorRect, displayRect);
-                        else if (GenTechnique == EMeshGenerator.CustomMeshAndExtras) DrawCustomMeshEditor(editorRect, displayRect);
+                        else if (GenTechnique == EMeshGenerator.Advanced) DrawCustomMeshEditor(editorRect, displayRect);
                         else if (GenTechnique == EMeshGenerator.Primitive) DrawPrimitiveEditor(editorRect, displayRect);
 
                         CheckGeneratorUpdate();
@@ -554,15 +567,23 @@ namespace FIMSpace.Generating
             }
         }
 
+        static Mesh nullMesh
+        {
+            get { return new Mesh(); }
+        }
 
         void TilePreviewDisplay(Rect? rect, Mesh setMesh = null, Material setMat = null)
         {
             if (tileMeshPreviewEditor == null)
             {
+                if (generatedMesh == null) generatedMesh = nullMesh;
                 tileMeshPreviewEditor = (TilePreviewWindow)Editor.CreateEditor(generatedMesh, typeof(TilePreviewWindow));
             }
 
-            if (rect == null) return;
+            if (rect == null)
+            {
+                return;
+            }
 
             if (tileMeshPreviewEditor != null)
             {

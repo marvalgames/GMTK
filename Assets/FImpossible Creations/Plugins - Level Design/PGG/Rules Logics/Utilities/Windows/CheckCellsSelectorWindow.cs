@@ -45,6 +45,7 @@ namespace FIMSpace.Generating
         static GUIStyle boxStyle = null;
         static GUIStyle boxStyleSel = null;
         static int depthLevel = 0;
+        Matrix4x4 boxMatrix;
 
         enum ERotor { ZeroDegrees_BaseSetup, Rot_90_CounterClockwise, Rot_180_CCW, Rot_270_CCW }
         static ERotor rotorPreview = ERotor.ZeroDegrees_BaseSetup;
@@ -54,7 +55,7 @@ namespace FIMSpace.Generating
 
         static int drawSize = 30;
 
-        public static void Init(List<Vector3Int> placements, FieldSpawner spawner = null, CheckCellsSelectorSetup setup = null)
+        public static void Init(List<Vector3Int> placements, Matrix4x4 boxMx, FieldSpawner spawner = null, CheckCellsSelectorSetup setup = null)
         {
             if (FGenerators.CheckIfIsNull(placements) && FGenerators.CheckIfIsNull(setup))
             {
@@ -76,6 +77,12 @@ namespace FIMSpace.Generating
             window.minSize = new Vector2(300, 320);
             Get = window;
             SingleMode = false;
+            window.boxMatrix = boxMx;
+        }
+
+        public static void Init(List<Vector3Int> placements, FieldSpawner spawner = null, CheckCellsSelectorSetup setup = null)
+        {
+            Init(placements, Matrix4x4.identity, spawner, setup);
         }
 
         static PGGVector3Port editedPortValue = null;
@@ -359,14 +366,30 @@ namespace FIMSpace.Generating
             previewIn3D.HandlesAction = () =>
             {
                 Handles.color = handlesColor;
+                bool useMx = boxMatrix != Matrix4x4.identity;
+                if (useMx) Handles.matrix = boxMatrix;
 
                 for (int i = 0; i < lastEdited.Count; i++)
                 {
-                    Handles.CubeHandleCap(0, rot * lastEdited[i], Quaternion.identity, 0.9f, EventType.Repaint);
+                    Vector3 scl = Vector3.one;
+                    if ( useMx) scl = boxMatrix.inverse.ScaleFromMatrix();
+                    Handles.CubeHandleCap(0, rot * Vector3.Scale(scl, lastEdited[i]), Quaternion.identity, 0.9f, EventType.Repaint);
                 }
 
+                Handles.matrix = Matrix4x4.identity;
                 Handles.color = new Color(0.8f, 0.8f, 1f, 0.5f);
                 Handles.DrawWireCube(Vector3.zero, new Vector3(1f, 0.1f, 1f));
+
+                Handles.color = new Color(0.8f, 0.8f, 1f, 0.05f);
+                Handles.DrawWireCube(new Vector3(1, 0, 0), new Vector3(1f, 0.1f, 1f));
+                Handles.DrawWireCube(new Vector3(-1, 0, 0), new Vector3(1f, 0.1f, 1f));
+                Handles.DrawWireCube(new Vector3(0, 0, 1), new Vector3(1f, 0.1f, 1f));
+                Handles.DrawWireCube(new Vector3(0, 0, -1), new Vector3(1f, 0.1f, 1f));
+
+                Handles.DrawWireCube(new Vector3(1, 0, 1), new Vector3(1f, 0.1f, 1f));
+                Handles.DrawWireCube(new Vector3(-1, 0, 1), new Vector3(1f, 0.1f, 1f));
+                Handles.DrawWireCube(new Vector3(1, 0, -1), new Vector3(1f, 0.1f, 1f));
+                Handles.DrawWireCube(new Vector3(-1, 0, -1), new Vector3(1f, 0.1f, 1f));
             };
 
             previewIn3D.UpdateInput = false;

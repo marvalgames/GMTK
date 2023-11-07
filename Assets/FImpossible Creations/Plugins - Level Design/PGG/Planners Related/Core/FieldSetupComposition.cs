@@ -12,7 +12,7 @@ namespace FIMSpace.Generating
 {
     public enum EPGGGenType
     {
-        None, FieldSetup, Modificator, ModPack
+        None, FieldSetup, Modificator, ModPack, Prefab
     }
 
     /// <summary>
@@ -34,6 +34,28 @@ namespace FIMSpace.Generating
         public ModificatorsPack JustModPack;
         public FieldModification JustMod;
         public BuildPlannerPreset OtherPlanner;
+        //public CustomBuildSpawnSetup CustomSpawn;
+        public PrefabFieldHelper PrefabFieldHandler = new PrefabFieldHelper();
+
+        [System.Serializable]
+        public class PrefabFieldHelper
+        {
+            public GameObject DefaultPrefab = null;
+            public bool UniformCellSize = true;
+            public Vector3 CellSize = Vector3.one;
+            public bool Validated { get { return true; } }
+
+            internal Vector3 GetCellSize()
+            {
+                return UniformCellSize ? (Vector3.one * CellSize.x) : CellSize;
+            }
+
+            internal void PreparePlannerInstance(FieldPlanner plannerInst)
+            {
+                plannerInst.FieldType = FieldPlanner.EFieldType.Prefab;
+                plannerInst.PreviewCellSize = GetCellSize();
+            }
+        }
 
         /// <summary> Parent field setup of mod pack or field modificator if not using field setup </summary>
         public FieldSetup subSetup = null;
@@ -45,11 +67,11 @@ namespace FIMSpace.Generating
                 if (GenType == EPGGGenType.FieldSetup) return Setup;
                 else
                 {
-                    if ( subSetup == null)
+                    if (subSetup == null)
                     {
                         subSetup = FieldSetup.CreateInstance<FieldSetup>();
                         subSetup.name = "Composition";
-                        if ( OverrideCellSize) subSetup.NonUniformCellSize = OverridingCellSize;
+                        if (OverrideCellSize) subSetup.NonUniformCellSize = OverridingCellSize;
                     }
 
                     return subSetup;
@@ -77,6 +99,7 @@ namespace FIMSpace.Generating
                 if (GenType == EPGGGenType.FieldSetup) { if (Setup != null) return true; }
                 else if (GenType == EPGGGenType.Modificator) { if (JustMod != null) return true; }
                 else if (GenType == EPGGGenType.ModPack) { if (JustModPack != null) return true; }
+                else if (GenType == EPGGGenType.Prefab) { if (PrefabFieldHandler.Validated) return true; }
                 return false;
             }
         }
@@ -100,6 +123,7 @@ namespace FIMSpace.Generating
             if (GenType == EPGGGenType.FieldSetup) PrepareWith(owner, fieldPlanner, Setup);
             else if (GenType == EPGGGenType.Modificator) PrepareWith(owner, fieldPlanner, JustMod);
             else if (GenType == EPGGGenType.ModPack) PrepareWith(owner, fieldPlanner, JustModPack);
+            else if (GenType == EPGGGenType.Prefab) PrepareWithPrefabList(owner, fieldPlanner);
         }
 
         public void PrepareWith(UnityEngine.Object owner, FieldPlanner fieldPlanner, FieldSetup setup)
@@ -158,6 +182,18 @@ namespace FIMSpace.Generating
             }
         }
 
+        public void PrepareWithPrefabList(UnityEngine.Object owner, FieldPlanner fieldPlanner)
+        {
+            ResetSetup(fieldPlanner);
+            GenType = EPGGGenType.Prefab;
+            PrefabFieldHandler.CellSize = fieldPlanner.PreviewCellSize;
+            PrefabFieldHandler.DefaultPrefab = fieldPlanner.DefaultPrefab;
+            RefreshPrefabsSpawnSetup();
+            //CustomSpawn.CellSize = fieldPlanner.PreviewCellSize;
+            //if (CustomSpawn.GetSpawn() == null) CustomSpawn.Spawns[0].PrefabReference = fieldPlanner.DefaultPrefab;
+            Owner = owner;
+        }
+
         void ResetSetup(FieldPlanner fieldPlanner)
         {
             if (fieldPlanner != null) GenType = EPGGGenType.None;
@@ -213,7 +249,6 @@ namespace FIMSpace.Generating
                 Setup = setup;
             }
 
-
             RefreshPlannerShapesSupport(fieldPlanner);
 
 
@@ -223,7 +258,7 @@ namespace FIMSpace.Generating
             {
                 RefreshVariablesWith(setup);
                 if (FieldPackagesOverrides == null) FieldPackagesOverrides = new List<PackOverrideHelper>();
-                
+
                 AdjustModPacksCount();
 
                 if (UtilityModsOverrides == null) UtilityModsOverrides = new List<ModOverrideHelper>();
@@ -235,7 +270,6 @@ namespace FIMSpace.Generating
             #endregion
 
             Prepared = true;
-            //UnityEngine.Debug.Log("prepared true");
         }
 
         public void RefreshVariablesWith(FieldSetup fieldSetup)
@@ -330,6 +364,16 @@ namespace FIMSpace.Generating
         private static readonly double lastCheckedIn = -1;
 
 
+
+        public void RefreshPrefabsSpawnSetup()
+        {
+            if (PrefabFieldHandler == null) PrefabFieldHandler = new PrefabFieldHelper();
+            //CustomSpawn.RefreshSpawnList();
+            //if (CustomSpawn.GetSpawn() == null) if (ParentFieldPlanner) CustomSpawn.SetSpawn(ParentFieldPlanner.DefaultPrefab);
+        }
+
+
+
         #region Just field planners related
 
         /// <summary>
@@ -337,7 +381,10 @@ namespace FIMSpace.Generating
         /// </summary>
         private void ValidatePlanner()
         {
-            if (ParentFieldPlanner == null) return;
+            if (ParentFieldPlanner == null)
+            {
+                return;
+            }
 
             if (InitShapes.Count == 0)
             {
@@ -347,7 +394,7 @@ namespace FIMSpace.Generating
             {
                 for (int s = 0; s < InitShapes.Count; s++)
                 {
-                    if (InitShapes[s] == null)
+                    if (InitShapes[s] == null || (s == 0 && ParentFieldPlanner.ExposeShape == false))
                     {
                         InitShapes[s] = GetShape(ParentFieldPlanner);
                     }
@@ -608,9 +655,9 @@ namespace FIMSpace.Generating
                     }
 
                 }
-                else
+                else if (selected.GenType == EPGGGenType.Prefab)
                 {
-                    EditorGUILayout.HelpBox("Null Field Modification", MessageType.None);
+                    selected.RefreshPrefabsSpawnSetup();
                 }
 
             }
@@ -623,6 +670,56 @@ namespace FIMSpace.Generating
             if (composition.GenType == EPGGGenType.FieldSetup) EditorGUILayout.ObjectField(composition.Setup, typeof(FieldSetup), true);
             else if (composition.GenType == EPGGGenType.ModPack) EditorGUILayout.ObjectField(composition.JustModPack, typeof(ModificatorsPack), true);
             else if (composition.GenType == EPGGGenType.Modificator) EditorGUILayout.ObjectField(composition.JustMod, typeof(FieldModification), true);
+            else if (composition.GenType == EPGGGenType.Prefab) { composition.RefreshPrefabsSpawnSetup(); /*composition.PrefabsSpawnProperty();*/ }
+        }
+
+        //private void PrefabsSpawnProperty()
+        //{
+        //    RefreshPrefabsSpawnSetup();
+        //    EditorGUILayout.ObjectField(CustomSpawn.GetSpawn(), typeof(GameObject), true);
+        //}
+
+        GUIContent _prButtGC = null;
+
+        internal bool PrefabsFieldTypeSelector(bool full = true)
+        {
+            bool changed = false;
+            GameObject p = PrefabFieldHandler.DefaultPrefab;
+            GameObject newObj = p;
+
+            if (_prButtGC == null || _prButtGC.image == null) _prButtGC = new GUIContent("  Prepare Prefab Spawn Below ", EditorGUIUtility.IconContent("Prefab Icon").image);
+
+            if (full)
+            {
+                GUILayout.Space(4);
+                EditorGUILayout.LabelField(_prButtGC, EditorStyles.boldLabel);
+                //newObj = (GameObject)EditorGUILayout.ObjectField(p, typeof(GameObject), false, GUILayout.MaxWidth(140));
+
+                GUILayout.Space(6);
+
+                EditorGUIUtility.labelWidth = 64;
+
+                if (PrefabFieldHandler.UniformCellSize)
+                    PrefabFieldHandler.CellSize.x = EditorGUILayout.FloatField("Cell Size:", PrefabFieldHandler.CellSize.x, GUILayout.MaxWidth(90));
+                else
+                    PrefabFieldHandler.CellSize = EditorGUILayout.Vector3Field("Cell Size:", PrefabFieldHandler.CellSize, GUILayout.MinWidth(160));
+
+                GUILayout.Space(6);
+
+                if (GUILayout.Button(EditorGUIUtility.IconContent(PrefabFieldHandler.UniformCellSize ? "Linked" : "UnLinked"), EditorStyles.label, GUILayout.Width(22))) { PrefabFieldHandler.UniformCellSize = !PrefabFieldHandler.UniformCellSize; }
+                EditorGUIUtility.labelWidth = 0;
+
+                GUILayout.Space(6);
+            }
+            else
+            {
+                GUILayout.Space(4);
+                EditorGUILayout.LabelField(_prButtGC, EditorStyles.boldLabel);
+                //newObj = (GameObject)EditorGUILayout.ObjectField(p, typeof(GameObject), false, GUILayout.MaxWidth(140));
+            }
+
+            if (p != newObj || changed) return true;
+            return false;
         }
 
         public void Clear()

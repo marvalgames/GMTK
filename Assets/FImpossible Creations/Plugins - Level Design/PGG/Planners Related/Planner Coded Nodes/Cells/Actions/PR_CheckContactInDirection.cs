@@ -10,11 +10,11 @@ namespace FIMSpace.Generating.Planning.PlannerNodes.Cells.Actions
 
     public class PR_CheckContactInDirection : PlannerRuleBase
     {
-        public override string GetDisplayName(float maxWidth = 120) { return wasCreated ? "  Contact In Direction" : "Check Cell Contact In Direction"; }
+        public override string GetDisplayName(float maxWidth = 120) { return wasCreated ? "Contact In Direction" : "Check Cell Contact In Direction"; }
         public override string GetNodeTooltipDescription { get { return "Checking if there is collision with other field in choosed direction"; } }
         public override EPlannerNodeType NodeType { get { return EPlannerNodeType.CellsManipulation; } }
         public override Color GetNodeColor() { return new Color(0.2f, 0.9f, 0.3f, 0.9f); }
-        public override Vector2 NodeSize { get { return new Vector2(254, _EditorFoldout ? 161 : 141); } }
+        public override Vector2 NodeSize { get { return new Vector2(254, _EditorFoldout ? 181 : 141); } }
         public override bool IsFoldable { get { return true; } }
         public override bool DrawInputConnector { get { return true; } }
         public override bool DrawOutputConnector { get { return true; } }
@@ -23,6 +23,10 @@ namespace FIMSpace.Generating.Planning.PlannerNodes.Cells.Actions
         [Port(EPortPinType.Input)] public PGGVector3Port Direction;
         [Port(EPortPinType.Input)] public PGGPlannerPort CheckContactWith;
         [Port(EPortPinType.Output, EPortValueDisplay.HideValue)] public PGGCellPort Contact;
+
+        [Space(3)]
+        [Tooltip("Distance measured in cells. Max 100 cells, value lower than 1 is using 32 cells by default.")]
+        [HideInInspector][Port(EPortPinType.Input)] public IntPort MaxDistance;
 
         [Tooltip("Stopping checking if there is self cell on direction step check.")]
         [HideInInspector] public bool StopOnSelfCollision = false;
@@ -33,21 +37,6 @@ namespace FIMSpace.Generating.Planning.PlannerNodes.Cells.Actions
         {
             latestCaller = null;
             base.Prepare(print);
-        }
-
-        public override void OnStartReadingNode()
-        {
-            base.OnStartReadingNode();
-
-            if (CurrentExecutingPlanner == null) return;
-
-            if (InputConnections.Count == 0)
-            {
-                if ( Contact.IsConnected)
-                {
-                    Execute(null, CurrentExecutingPlanner.LatestResult);
-                }
-            }
         }
 
         public override void Execute(PlanGenerationPrint print, PlannerResult newResult)
@@ -87,6 +76,11 @@ namespace FIMSpace.Generating.Planning.PlannerNodes.Cells.Actions
 
             FieldPlanner cellPlanner = Cell.GetInputPlannerIfPossible;
 
+            MaxDistance.TriggerReadPort(true);
+            int maxCells = MaxDistance.GetInputValue;
+            if (maxCells < 1) maxCells = 32;
+            if (maxCells > 100) maxCells = 100;
+
             if (cellPlanner)
             {
                 if (contactMask.Count == 1 && contactMask[0] == cellPlanner && CheckContactWith.PortState() == EPortPinState.Connected)
@@ -99,15 +93,13 @@ namespace FIMSpace.Generating.Planning.PlannerNodes.Cells.Actions
                     contactMask.Remove(cellPlanner);
             }
 
-
             for (int i = 0; i < contactMask.Count; i++)
             {
                 Checker.CheckerField3D othChecker = contactMask[i].LatestResult.Checker;
 
-                if (myChecker.CheckCollisionInDirection(myCell, dir, othChecker, 32, true, CallbackCheck))
+                if (myChecker.CheckCollisionInDirection(myCell, dir, othChecker, maxCells, true, CallbackCheck))
                 {
                     if (_breakIt) break;
-
                     FieldCell oCell = myChecker._CheckCollisionInDirection_OtherCell;
 
                     float dist = (othChecker.GetWorldPos(oCell) - myChecker.GetWorldPos(myCell)).sqrMagnitude;
@@ -119,6 +111,8 @@ namespace FIMSpace.Generating.Planning.PlannerNodes.Cells.Actions
                     }
                 }
             }
+
+
 
             #region Debugging Gizmos
 #if UNITY_EDITOR
@@ -156,6 +150,7 @@ namespace FIMSpace.Generating.Planning.PlannerNodes.Cells.Actions
 
         }
 
+
         bool _breakIt = false;
         CheckerField3D _selfChecker = null;
         void CallbackCheck(Vector3 pos)
@@ -171,26 +166,29 @@ namespace FIMSpace.Generating.Planning.PlannerNodes.Cells.Actions
 
 #if UNITY_EDITOR
 
-        public override void Editor_OnAdditionalInspectorGUI()
-        {
-            EditorGUILayout.LabelField("Debugging:", EditorStyles.helpBox);
-            GUILayout.Label("Cell: " + Cell.GetPortValueSafe);
-        }
-
+        SerializedProperty sp = null;
         SerializedProperty sp_Extra = null;
         public override void Editor_OnNodeBodyGUI(ScriptableObject setup)
         {
             base.Editor_OnNodeBodyGUI(setup);
-
-            baseSerializedObject.Update();
-
+           
             if ( _EditorFoldout)
             {
-                if (sp_Extra == null) sp_Extra = baseSerializedObject.FindProperty("StopOnSelfCollision");
-                EditorGUILayout.PropertyField(sp_Extra);
-            }
+                baseSerializedObject.Update();
 
-            baseSerializedObject.ApplyModifiedProperties();
+                if (sp_Extra == null) sp_Extra = baseSerializedObject.FindProperty("StopOnSelfCollision");
+                if (sp == null) sp = baseSerializedObject.FindProperty("MaxDistance");
+                EditorGUILayout.PropertyField(sp);
+                EditorGUILayout.PropertyField(sp_Extra);
+
+                baseSerializedObject.ApplyModifiedProperties();
+            }
+        }
+
+        public override void Editor_OnAdditionalInspectorGUI()
+        {
+            EditorGUILayout.LabelField("Debugging:", EditorStyles.helpBox);
+            GUILayout.Label("Cell: " + Cell.GetPortValueSafe);
         }
 
 #endif

@@ -37,6 +37,19 @@ namespace FIMSpace.Generating
         public Vector3 LocalScaleMul = Vector3.one;
         public Vector3 DirectionalOffset = Vector3.zero;
 
+        public enum ESpawnSpace
+        {
+            [Tooltip("Generating in single cell space")]
+            CellSpace,
+            [Tooltip("Generating in parent generator space (ignoring local rotation offset and directional offset variables)")]
+            GeneratorSpace, 
+            [Tooltip("Generating in world space (ignoring local rotation offset and directional offset variables)")]
+            WorldSpace
+        }
+
+        /// <summary> Use 'Offset' 'RotationOffset' in container local space during spawning instead of cell local space </summary>
+        public ESpawnSpace SpawnSpace = ESpawnSpace.CellSpace;
+
         /// <summary> Assigned during 'Check' and before 'CellInfluence' </summary>
         public Vector3 TempPositionOffset;
         /// <summary> Assigned during 'Check' and before 'CellInfluence' </summary>
@@ -332,13 +345,20 @@ namespace FIMSpace.Generating
         /// <summary>
         /// Returning offset calculated out of spawn's world offset and directional offset
         /// </summary>
-        public Vector3 GetWorldPositionWithFullOffset(FieldSetup preset = null, bool useTemp = false)
+        public Vector3 GetWorldPositionWithFullOffset(FieldSetup preset, bool useTemp = false)
         {
-            if (preset == null) if (ExecutedFrom != null) { preset = ExecutedFrom; } else return Vector3.zero;
+            Vector3 cellSize = Vector3.one;
+            if (preset != null) cellSize = preset.GetCellUnitSize();
 
-            Vector3 off = OwnerCell.WorldPos(preset.CellSize);
-            if (Offset != Vector3.zero) off += Offset; else if (useTemp) if (TempPositionOffset != Vector3.zero) off += Offset;
+            Vector3 off = OwnerCell.WorldPos(cellSize);
+            if (Offset != Vector3.zero)
+            {
+                off += Offset;
+            }
+            else if (useTemp) if (TempPositionOffset != Vector3.zero) off += TempPositionOffset;
+
             if (DirectionalOffset != Vector3.zero) off += Quaternion.Euler(RotationOffset) * DirectionalOffset;
+            
             return off;
         }
 
@@ -465,6 +485,34 @@ namespace FIMSpace.Generating
             }
 
             return b;
+        }
+
+        /// <summary>
+        /// Spawning in generator's space (like world space but within generator) instead of cell space
+        /// </summary>
+        public void SetGeneratorSpaceCoords(Vector3 pos, Quaternion rot)
+        {
+            SpawnSpace = ESpawnSpace.GeneratorSpace;
+            Offset = pos;
+            RotationOffset = rot.eulerAngles;
+        }
+
+        /// <summary>
+        /// Spawning in world space, instead of cell space
+        /// </summary>
+        public void SetWorldSpaceCoords(Vector3 pos, Quaternion rot)
+        {
+            SpawnSpace = ESpawnSpace.WorldSpace;
+            Offset = pos;
+            RotationOffset = rot.eulerAngles;
+        }
+
+        internal void GeneratorSpaceToCellSpace(FieldSetup setup, FieldCell nCell, Vector3 pos)
+        {
+            Matrix4x4 invMx = Matrix4x4.TRS(nCell.WorldPos(setup), Quaternion.identity, Vector3.one).inverse;
+            //Matrix4x4 invMx = Matrix4x4.TRS(nCell.WorldPos(setup), Quaternion.Euler(RotationOffset), Vector3.one).inverse;
+            Offset = invMx.MultiplyPoint3x4(pos);
+            SpawnSpace = ESpawnSpace.CellSpace;
         }
 
     }

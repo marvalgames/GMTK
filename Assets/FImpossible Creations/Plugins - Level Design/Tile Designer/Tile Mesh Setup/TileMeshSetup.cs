@@ -10,6 +10,9 @@ namespace FIMSpace.Generating
         public string Name = "Tile Mesh";
         public string OverrideTag = "Untagged";
 
+        [Tooltip("ID which can be used by post filters")]
+        public string CustomID = "";
+
         public TileMeshSetup(string name = "")
         {
             if (name != "") Name = name;
@@ -80,10 +83,12 @@ namespace FIMSpace.Generating
                 to._primitive_scale = _primitive_scale;
                 to._primitive_Type = _primitive_Type;
             }
-            else if (GenTechnique == EMeshGenerator.CustomMeshAndExtras)
+            else if (GenTechnique == EMeshGenerator.Advanced)
             {
                 to._customMeshOverwriteVertexColor = _customMeshOverwriteVertexColor;
                 to._customMeshOverwriteVertexColorValues = _customMeshOverwriteVertexColorValues;
+                to.ExtraMesh = ExtraMesh;
+                to._StackerSetup = _StackerSetup.Copy();
             }
         }
 
@@ -124,12 +129,12 @@ namespace FIMSpace.Generating
 
         public bool DrawSnappingPX()
         {
-            return GenTechnique != EMeshGenerator.CustomMeshAndExtras && GenTechnique != EMeshGenerator.Primitive;
+            return GenTechnique != EMeshGenerator.Advanced && GenTechnique != EMeshGenerator.Primitive;
         }
 
         public bool DrawMeshOptions()
         {
-            return GenTechnique != EMeshGenerator.CustomMeshAndExtras;
+            return GenTechnique != EMeshGenerator.Advanced;
         }
 
 

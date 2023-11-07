@@ -13,7 +13,7 @@ namespace FIMSpace.Generating
             int available = Prefabs.Count;
             if (available == 0) return new ObjectStamperEmittedInfo();
             if (available == 1) return GenerateInfoForPrefab(Prefabs[0], parentSpace);
-
+            
             float propSum = 0f;
             for (int i = 0; i < available; i++) propSum += Prefabs[i].Propability;
 

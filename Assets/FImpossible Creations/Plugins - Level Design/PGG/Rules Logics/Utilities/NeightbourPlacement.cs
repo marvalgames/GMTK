@@ -33,6 +33,11 @@ namespace FIMSpace.Generating
         public bool UseCondition = false;
         public ESR_NeightbourCondition Condition = ESR_NeightbourCondition.AllNeeded;
 
+        /// <summary> For custom uses (like stairs helper node remove tags) </summary>
+        [HideInInspector] public string ExtraString = "";
+        /// <summary> For custom uses (like stairs helper node remove tolerance) </summary>
+        [HideInInspector] public float ExtraValue = 0f;
+
         [HideInInspector] public List<Vector3Int> ToCheck = new List<Vector3Int>() { new Vector3Int(0, 0, 0) };
         [HideInInspector] public Color EditorDisplayColor = new Color(0.4f, 0.4f, 1f, .95f);
     }

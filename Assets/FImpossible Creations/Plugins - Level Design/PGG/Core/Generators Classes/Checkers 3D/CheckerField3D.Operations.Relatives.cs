@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 namespace FIMSpace.Generating.Checker
@@ -229,6 +228,49 @@ namespace FIMSpace.Generating.Checker
                 }
             }
         }
+
+
+        public void StepPushOutOfCollision(List<ICheckerReference> other, Vector3Int pushDir, int maxIters = 128, bool stayInside = false)
+        {
+            bool pushed = false;
+            CheckerField3D latestPush = null;
+
+            Vector3 prePosition = RootPosition;
+
+            for (int i = 0; i < maxIters; i++)
+            {
+                bool collided = false;
+
+                for (int c = 0; c < other.Count; c++)
+                {
+                    bool checkRnd = RootScale != other[c].CheckerReference.RootScale;
+
+                    if (IsCollidingWith(other[c].CheckerReference, checkRnd))
+                    {
+                        prePosition = RootPosition;
+                        RootPosition += ScaleV3(pushDir);
+                        latestPush = other[c].CheckerReference;
+                        pushed = true;
+                        collided = true;
+                    }
+                }
+
+                if (!collided)
+                {
+                    if (stayInside) RootPosition = prePosition;
+                    break;
+                }
+            }
+
+            if (pushed)
+            {
+                if (latestPush != null)
+                {
+                    RootPosition -= (latestPush.ScaleV3(pushDir) - ScaleV3(pushDir)) / 2f;
+                }
+            }
+        }
+
 
 
         public void StepPushToAlignCollision(List<Planning.FieldPlanner> other, Vector3Int pushDir, int maxIters = 128)
@@ -624,7 +666,7 @@ namespace FIMSpace.Generating.Checker
 
         private List<FieldCell> _CollisionCells = new List<FieldCell>();
         /// <summary> Copy result if needed multiple list instances!  </summary>
-        List<FieldCell> GetCollisionCellsWith(CheckerField3D other)
+        public List<FieldCell> GetCollisionCellsWith(CheckerField3D other)
         {
             _CollisionCells.Clear();
 
@@ -655,6 +697,63 @@ namespace FIMSpace.Generating.Checker
             }
 
             return _CollisionCells;
+        }
+
+        static List<FieldCell> _GetCellsOnEdge_toRemove = null;
+
+        /// <summary> </summary>
+        /// <param name="justExtremeSide"> If checker shape creates multiple edges on the side, algoritm will use one edge, the one in farthest position in desired direction. </param>
+        public List<FieldCell> GetCellsOnEdge(Vector3Int side, bool justExtremeSide = false)
+        {
+            List<FieldCell> selectedCells = new List<FieldCell>();
+            Vector3 sideWorld = ScaleV3(side);
+
+            for (int i = 0; i < ChildPositionsCount; i++)
+            {
+                Vector3 checkPos = GetWorldPos(i);
+                checkPos += sideWorld;
+                if (!ContainsWorld(checkPos)) selectedCells.Add(GetCell(i));
+            }
+
+            if (justExtremeSide)
+            {
+                Bounds gBounds = new Bounds(GetWorldPos(selectedCells[0]), Vector3.zero);
+                for (int i = 0; i < selectedCells.Count; i++) gBounds.Encapsulate(GetWorldPos(selectedCells[i]));
+
+                float edgeVal = 0f;
+                if (side.x > 0) edgeVal = gBounds.max.x;
+                else if (side.x < 0) edgeVal = gBounds.min.x;
+                else if (side.z > 0) edgeVal = gBounds.max.z;
+                else if (side.z < 0) edgeVal = gBounds.min.z;
+                else if (side.y > 0) edgeVal = gBounds.max.y;
+                else if (side.y < 0) edgeVal = gBounds.min.y;
+
+                if (_GetCellsOnEdge_toRemove == null) _GetCellsOnEdge_toRemove = new List<FieldCell>();
+                else _GetCellsOnEdge_toRemove.Clear();
+
+                float rootScaleRange = ExtractAxisValue(RootScale, side) * 0.4f;
+
+                for (int i = 0; i < selectedCells.Count; i++)
+                {
+                    float eVal = ExtractAxisValue(GetWorldPos(selectedCells[i]), side);
+                    if (Mathf.Abs(eVal - edgeVal) > rootScaleRange) _GetCellsOnEdge_toRemove.Add(selectedCells[i]);
+                }
+
+                for (int i = 0; i < _GetCellsOnEdge_toRemove.Count; i++)
+                {
+                    selectedCells.Remove(_GetCellsOnEdge_toRemove[i]);
+                }
+            }
+
+            return selectedCells;
+        }
+
+        float ExtractAxisValue(Vector3 pos, Vector3 side)
+        {
+            if (side.x != 0) return pos.x;
+            else if (side.z != 0) return pos.z;
+            else if (side.y != 0) return pos.y;
+            return 0f;
         }
 
         public void DebugLogDrawCellInWorldSpace(FieldCell cell, Color color, float drawDur = 1.1f)

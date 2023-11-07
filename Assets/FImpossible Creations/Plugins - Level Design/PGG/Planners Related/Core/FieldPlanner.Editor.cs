@@ -31,7 +31,7 @@ namespace FIMSpace.Generating.Planning
             if (_tempOverrideShape != null)
             {
                 if (previewChecker == null)
-                previewChecker = _tempOverrideShape.GetChecker(this);
+                    previewChecker = _tempOverrideShape.GetChecker(this);
             }
             else
             {
@@ -71,6 +71,49 @@ namespace FIMSpace.Generating.Planning
             return fRef;
         }
 
+        public void UpdateShapeGeneratorType()
+        {
+            if (FieldType == EFieldType.Prefab)
+            {
+                if (ShapeGenerator == null || (ShapeGenerator is SG_PrefabToGrid) == false)
+                {
+                    SG_PrefabToGrid sg = CreateInstance<SG_PrefabToGrid>();
+                    sg.DisplayPrefabField = false;
+                    sg.SetDefaultPrefab(DefaultPrefab);
+                    SetShapeGenerator(sg);
+                }
+                else
+                {
+                    SG_PrefabToGrid sg = ShapeGenerator as SG_PrefabToGrid;
+                    if (sg) sg.SetDefaultPrefab(DefaultPrefab);
+                }
+            }
+
+        }
+
+        public void SetShapeGenerator(ShapeGeneratorBase rule)
+        {
+            if (ShapeGenerator != null)
+            {
+                if (rule != ShapeGenerator)
+                {
+                    DestroyImmediate(ShapeGenerator, true);
+                    ShapeGenerator = null;
+                }
+            }
+
+            rule.hideFlags = HideFlags.HideInHierarchy;
+            ShapeGenerator = rule;
+
+#if UNITY_EDITOR
+            FGenerators.AddScriptableTo(rule, ParentBuildPlanner, false, false);
+            EditorUtility.SetDirty(rule);
+            EditorUtility.SetDirty(ParentBuildPlanner);
+            //AssetDatabase.SaveAssets();
+#endif
+        }
+
+
 #if UNITY_EDITOR
 
         static Color _mildDisableCol = new Color(1f, 1f, .55f, 1f);
@@ -89,24 +132,6 @@ namespace FIMSpace.Generating.Planning
             if (GUI.backgroundColor == _mildDisableCol) GUI.backgroundColor = preBg;
         }
 
-        public void SetShapeGenerator(ShapeGeneratorBase rule)
-        {
-            if (ShapeGenerator != null)
-            {
-                if (rule != ShapeGenerator)
-                {
-                    DestroyImmediate(ShapeGenerator, true);
-                    ShapeGenerator = null;
-                }
-            }
-
-            rule.hideFlags = HideFlags.HideInHierarchy;
-            ShapeGenerator = rule;
-            FGenerators.AddScriptableTo(rule, ParentBuildPlanner, false, false);
-            EditorUtility.SetDirty(rule);
-            EditorUtility.SetDirty(ParentBuildPlanner);
-            //AssetDatabase.SaveAssets();
-        }
 
         public void AddRuleToPlanner(PlannerRuleBase rule, bool postProcedure = false)
         {

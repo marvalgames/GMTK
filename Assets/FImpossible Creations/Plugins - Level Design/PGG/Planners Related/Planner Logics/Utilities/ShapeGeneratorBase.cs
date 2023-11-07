@@ -48,7 +48,7 @@ namespace FIMSpace.Generating.Planning.GeneratingLogics
         /// <summary>
         /// Returns true if something changed in GUI - using EditorGUI.BeginChangeCheck();
         /// </summary>
-        public virtual void DrawGUI(UnityEditor.SerializedObject so)
+        public virtual void DrawGUI(UnityEditor.SerializedObject so, FieldPlanner parent)
         {
             try
             {

@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace FIMSpace.Generating
@@ -22,16 +23,17 @@ namespace FIMSpace.Generating
         public TileCableGenerator.CableTexturingSettings _CableTexturingSettings;
         public TileCableGenerator.CableClonerSettings _CableClonerSettings;
         public TileCableGenerator.CableRandomizationSettings _CableRandomizationSettings;
+        public StackedTileGenerator.StackSetup _StackerSetup;
 
         public enum ECableView { Mesh, Texturing, Cloner, Randomization, CablePoints }
         public ECableView _CableView = ECableView.Mesh;
 
 
-        public Mesh LatestGeneratedMesh { get; private set; }
+        public Mesh LatestGeneratedMesh { get; internal set; }
 
         public Mesh FullGenerateMesh()
         {
-            if (GenTechnique == EMeshGenerator.CustomMeshAndExtras)
+            if (GenTechnique == EMeshGenerator.Advanced)
             {
                 if (ExtraMesh == EExtraMesh.CustomMesh)
                 {
@@ -56,10 +58,10 @@ namespace FIMSpace.Generating
             if (GenTechnique == EMeshGenerator.Lathe)
                 LatestGeneratedMesh = GenerateLathe(previewShape, new Vector2(width, height), Mathf.RoundToInt(_lathe_xSubdivCount), _lathe_fillAngle, HardNormals, UVMul, UVFit, NormalsMode);
             else if (GenTechnique == EMeshGenerator.Loft)
-                LatestGeneratedMesh = GenerateLoft(previewShape, previewShape2, new Vector3(width, height, (width + height) * _loftDepthCurveWidener), HardNormals, UVMul, UVFit, NormalsMode, _loft_depthDim, _loft_height);
+                LatestGeneratedMesh = GenerateLoft(previewShape, previewShape2, new Vector3(width, height, _loft_forceDepth ? depth : ((width + height) * _loftDepthCurveWidener)), HardNormals, UVMul, UVFit, NormalsMode, _loft_depthDim, _loft_height);
             else if (GenTechnique == EMeshGenerator.Extrude)
                 LatestGeneratedMesh = GenerateExtrude(previewShape, new Vector3(width, height, depth), _extrudeFrontCap, _extrudeBackCap, HardNormals, UVMul, UVFit, NormalsMode, _extrudeMirror);
-            else if (GenTechnique == EMeshGenerator.CustomMeshAndExtras)
+            else if (GenTechnique == EMeshGenerator.Advanced)
                 LatestGeneratedMesh = GenerateCustomMesh();
             else if (GenTechnique == EMeshGenerator.Primitive)
                 LatestGeneratedMesh = GeneratePrimitiveMesh();
@@ -101,7 +103,7 @@ namespace FIMSpace.Generating
 
             // Reference 2D shape for distributed mesh creation
             float lowestY = float.MaxValue, highestY = float.MinValue;
-
+            float zWay = 0f;
             for (int s = 0; s < shape.Count; s++)
             {
                 MeshShapePoint sh = shape[s];
@@ -118,9 +120,13 @@ namespace FIMSpace.Generating
                 if (m.pos.y > highestY) highestY = m.pos.y;
 
                 shapeZY.Add(m);
-                if (s > 0) zyLength += Vector3.Distance(m.pos, shapeZY[s - 1].pos);
+                if (s > 0)
+                {
+                    zyLength += Vector3.Distance(m.pos, shapeZY[s - 1].pos);
+                    if (_loft_forceDepth)
+                        zWay += Mathf.Abs(shapeZY[s - 1].pos.z - m.pos.z);
+                }
             }
-
 
             #endregion
 
@@ -301,6 +307,7 @@ namespace FIMSpace.Generating
             }
 
             Mesh mesh = new Mesh();
+            FMeshUtils.RotateVertices(RotateResult, verts);
             mesh.SetVertices(verts);
             mesh.SetColors(vCol);
             mesh.SetTriangles(tris, 0);
@@ -478,6 +485,7 @@ namespace FIMSpace.Generating
             vCol.Reverse();
 
             Mesh mesh = new Mesh();
+            FMeshUtils.RotateVertices(RotateResult, verts);
             mesh.SetVertices(verts);
             mesh.SetColors(vCol);
             mesh.SetTriangles(tris, 0);
@@ -506,7 +514,6 @@ namespace FIMSpace.Generating
 
             mesh = FMeshUtils.AdjustOrigin(mesh, Origin);
 
-            ;
             mesh.RecalculateBounds();
 
             return mesh;
@@ -753,6 +760,7 @@ namespace FIMSpace.Generating
             }
 
             Mesh mesh = new Mesh();
+            FMeshUtils.RotateVertices(RotateResult, verts);
             mesh.SetVertices(verts);
             mesh.SetColors(vCol);
             mesh.SetTriangles(tris, 0);
@@ -1142,7 +1150,7 @@ namespace FIMSpace.Generating
 
                 #endregion
 
-                vGenPoints.Reverse();
+                if (!_extrudeFlip) vGenPoints.Reverse();
 
                 for (int p = 0; p < vGenPoints.Count; p++)
                 {
@@ -1173,11 +1181,7 @@ namespace FIMSpace.Generating
 
                     if (extrudeFrontCap)
                     {
-                        for (int i = frontCapTris.Count - 1; i >= 0; i--)
-                        //for (int i = 0; i < frontCapTris.Count; i++)
-                        {
-                            tris.Add(frontCapTris[i]);
-                        }
+                        for (int i = frontCapTris.Count - 1; i >= 0; i--) tris.Add(frontCapTris[i]);
                     }
 
                     #endregion
@@ -1189,27 +1193,51 @@ namespace FIMSpace.Generating
                 if (dimensions.z != 0f)
                 {
                     int depthOff = vGenPoints.Count;
-                    for (int i = 0; i < vGenPoints.Count - 1; i += 1)
+
+                    if (!_extrudeFlip)
                     {
-                        // generating triangle bridge
-                        // u -> uf   uf -> d   d -> df
-                        tris.Add(vGenPoints[i].index);
-                        tris.Add(vGenPoints[i].index + depthOff + 1);
-                        tris.Add(vGenPoints[i].index + 1);
+                        for (int i = 0; i < vGenPoints.Count - 1; i += 1)
+                        {
+                            // generating triangle bridge
+                            // u -> uf   uf -> d   d -> df
+                            tris.Add(vGenPoints[i].index);
+                            tris.Add(vGenPoints[i].index + depthOff + 1);
+                            tris.Add(vGenPoints[i].index + 1);
 
-                        tris.Add(vGenPoints[i].index + depthOff + 1);
-                        tris.Add(vGenPoints[i].index);
-                        tris.Add(vGenPoints[i].index + depthOff);
+                            tris.Add(vGenPoints[i].index + depthOff + 1);
+                            tris.Add(vGenPoints[i].index);
+                            tris.Add(vGenPoints[i].index + depthOff);
+                        }
+
+                        // Loop last poly
+                        tris.Add(vGenPoints[vGenPoints.Count - 1].index);
+                        tris.Add(depthOff);
+                        tris.Add(0);
+
+                        tris.Add(depthOff);
+                        tris.Add(vGenPoints[vGenPoints.Count - 1].index);
+                        tris.Add(vGenPoints[vGenPoints.Count - 1].index + depthOff);
                     }
+                    else
+                    {
+                        for (int i = 0; i < vGenPoints.Count - 1; i += 1)
+                        {
+                            tris.Add(vGenPoints[i].index + depthOff);
+                            tris.Add(vGenPoints[i].index);
+                            tris.Add(vGenPoints[i].index + depthOff + 1);
 
-                    // Loop last poly
-                    tris.Add(vGenPoints[vGenPoints.Count - 1].index);
-                    tris.Add(depthOff);
-                    tris.Add(0);
+                            tris.Add(vGenPoints[i].index + 1);
+                            tris.Add(vGenPoints[i].index + depthOff + 1);
+                            tris.Add(vGenPoints[i].index);
+                        }
 
-                    tris.Add(depthOff);
-                    tris.Add(vGenPoints[vGenPoints.Count - 1].index);
-                    tris.Add(vGenPoints[vGenPoints.Count - 1].index + depthOff);
+                        tris.Add(vGenPoints[vGenPoints.Count - 1].index + depthOff);
+                        tris.Add(vGenPoints[vGenPoints.Count - 1].index);
+                        tris.Add(depthOff);
+                        tris.Add(0);
+                        tris.Add(depthOff);
+                        tris.Add(vGenPoints[vGenPoints.Count - 1].index);
+                    }
                 }
 
                 #endregion
@@ -1250,7 +1278,7 @@ namespace FIMSpace.Generating
                         vCol.Add(shape[vGenPoints[v].helpIndex].c);
                         Vector2 uvVal = new Vector2();
                         uvVal.x = FLogicMethods.InverseLerpUnclamped(mostLeft, mostRight, shape[vGenPoints[v].helpIndex].p.x);
-                        uvVal.y = FLogicMethods.InverseLerpUnclamped(lowestY + uvDepth, highestY + uvDepth, shape[vGenPoints[v].helpIndex].p.y);
+                        uvVal.y = FLogicMethods.InverseLerpUnclamped((lowestY + uvDepth), (highestY + uvDepth), shape[vGenPoints[v].helpIndex].p.y);
                         uvs.Add(uvVal);
                     }
                 }
@@ -1264,8 +1292,11 @@ namespace FIMSpace.Generating
 
             }
 
+            FMeshUtils.RotateVertices(RotateResult, verts);
+
             Mesh mesh = new Mesh();
             mesh.SetVertices(verts);
+
             mesh.SetTriangles(tris, 0);
             mesh.SetUVs(0, uvs);
             mesh.SetColors(vCol);
@@ -1320,6 +1351,12 @@ namespace FIMSpace.Generating
 
                 return m;
             }
+            else if (ExtraMesh == EExtraMesh.Stacker)
+            {
+                Mesh m = StackedTileGenerator.GenerateStack(_StackerSetup);
+                if (Origin != EOrigin.Unchanged) FMeshUtils.AdjustOrigin(m, Origin);
+                return m;
+            }
 
 
             return null;
@@ -1356,6 +1393,7 @@ namespace FIMSpace.Generating
                 cube.FaceRight = _primitive_cube_rightFace;
                 cube.FaceFront = _primitive_cube_frontFace;
                 cube.FaceBack = _primitive_cube_backFace;
+                cube.RotateResult = RotateResult;
 
                 #endregion
 
@@ -1405,6 +1443,7 @@ namespace FIMSpace.Generating
                         verts[v] = Vector3.Scale(verts[v], _primitive_scale);
                     }
 
+            FMeshUtils.RotateVertices(RotateResult, verts);
             mesh.SetVertices(verts);
             mesh.SetTriangles(tris, 0);
             mesh.SetUVs(0, uvs);
@@ -1467,6 +1506,7 @@ namespace FIMSpace.Generating
                         );
             }
 
+            FMeshUtils.RotateVertices(RotateResult, verts);
             mesh.SetVertices(verts);
 
             if (NormalsMode != ENormalsMode.NormalsAsSubdivView)

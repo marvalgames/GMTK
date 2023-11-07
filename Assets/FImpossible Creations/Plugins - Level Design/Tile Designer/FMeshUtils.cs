@@ -1,8 +1,5 @@
 ﻿using Parabox.CSG;
-using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 
 namespace FIMSpace.Generating
@@ -82,12 +79,12 @@ namespace FIMSpace.Generating
         }
 
 
-        public static Mesh AdjustOrigin(Mesh m, TileMeshSetup.EOrigin origin)
+        public static Mesh AdjustOrigin(Mesh m, EOrigin origin)
         {
             m.RecalculateBounds();
 
-            if (origin == TileMeshSetup.EOrigin.Unchanged) return m;
-            else if (origin == TileMeshSetup.EOrigin.Center)
+            if (origin == EOrigin.Unchanged) return m;
+            else if (origin == EOrigin.Center)
             {
                 Vector3 off = -m.bounds.center;
                 var verts = m.vertices;
@@ -98,7 +95,7 @@ namespace FIMSpace.Generating
 
                 m.SetVerticesUnity2018(verts);
             }
-            else if (origin == TileMeshSetup.EOrigin.BottomCenter)
+            else if (origin == EOrigin.BottomCenter)
             {
                 Vector3 off = new Vector3(-m.bounds.center.x, -m.bounds.min.y, -m.bounds.center.z);
 
@@ -107,7 +104,7 @@ namespace FIMSpace.Generating
 
                 m.SetVerticesUnity2018(verts);
             }
-            else if (origin == TileMeshSetup.EOrigin.TopCenter)
+            else if (origin == EOrigin.TopCenter)
             {
                 Vector3 off = new Vector3(-m.bounds.center.x, -m.bounds.max.y, -m.bounds.center.z);
 
@@ -116,7 +113,7 @@ namespace FIMSpace.Generating
 
                 m.SetVerticesUnity2018(verts);
             }
-            else if (origin == TileMeshSetup.EOrigin.BottomLeft)
+            else if (origin == EOrigin.BottomLeft)
             {
                 Vector3 off = new Vector3(-m.bounds.min.x, -m.bounds.min.y, -m.bounds.min.z);
 
@@ -125,7 +122,7 @@ namespace FIMSpace.Generating
 
                 m.SetVerticesUnity2018(verts);
             }
-            else if (origin == TileMeshSetup.EOrigin.BottomCenterBack)
+            else if (origin == EOrigin.BottomCenterBack)
             {
                 Vector3 off = new Vector3(-m.bounds.center.x, -m.bounds.min.y, -m.bounds.min.z);
 
@@ -134,7 +131,7 @@ namespace FIMSpace.Generating
 
                 m.SetVerticesUnity2018(verts);
             }
-            else if (origin == TileMeshSetup.EOrigin.BottomCenterFront)
+            else if (origin == EOrigin.BottomCenterFront)
             {
                 Vector3 off = new Vector3(-m.bounds.center.x, -m.bounds.min.y, -m.bounds.max.z);
 
@@ -283,6 +280,7 @@ namespace FIMSpace.Generating
 
             mesh.normals = normals;
         }
+
 
     }
 }

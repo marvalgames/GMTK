@@ -11,6 +11,7 @@ namespace FIMSpace.Generating
         public float _loft_DepthSubdivLimit = 30;
         public float _loft_DistribSubdivLimit = 30f;
         public float _loft_Collapse = 0f;
+        public bool _loft_forceDepth = false;
 
         public List<CurvePoint> _loft_depth = new List<CurvePoint>();
         public List<CurvePoint> _loft_distribute = new List<CurvePoint>();

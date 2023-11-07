@@ -254,7 +254,7 @@ namespace FIMSpace.Generating.Rules.Operations
         Matrix4x4 GetMatrix(SpawnData spawn)
         {
             Quaternion spawnRot = spawn.GetRotationOffset();
-            Vector3 pos = spawn.GetWorldPositionWithFullOffset();
+            Vector3 pos = spawn.GetWorldPositionWithFullOffset(spawn.ExecutedFrom);
             return Matrix4x4.TRS(pos, spawnRot, Vector3.one);
         }
 

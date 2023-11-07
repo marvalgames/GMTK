@@ -31,9 +31,9 @@ namespace FIMSpace.Generating.Planning.PlannerNodes.Field.Access
 
             int id = FGenerators.GetRandom(0, planner.Instances+1);
 
-            if (id == 0 || (id-1) >= planner.GetDuplicatesPlannersList().Count) ChoosedInstance.SetIDsOfPlanner(planner);
+            if (id == 0 || (id-1) >= planner.GetDuplicatesPlannersList().Count) ChoosedInstance.Output_Provide_Planner(planner);
             else
-                ChoosedInstance.SetIDsOfPlanner(planner.GetDuplicatesPlannersList()[id-1]);
+                ChoosedInstance.Output_Provide_Planner(planner.GetDuplicatesPlannersList()[id-1]);
 
         }
     }

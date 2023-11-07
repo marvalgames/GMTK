@@ -24,6 +24,7 @@ namespace FIMSpace.Generating.Rules.Modelling
 
         public override void PreGenerateResetRule(FGenGraph<FieldCell, FGenPoint> grid, FieldSetup preset, FieldSpawner callFrom)
         {
+
             if (RandomMeshes.Count == 0) return;
 
             if (callFrom.TemporaryPrefabOverride != null)
@@ -33,7 +34,11 @@ namespace FIMSpace.Generating.Rules.Modelling
 
             if (preparedScheme) { FGenerators.DestroyObject(preparedScheme); }
 
-            preparedScheme = new GameObject(OwnerSpawner.Name + "-RandomMesh");
+            string name = "";
+            if (OwnerSpawner != null) name = OwnerSpawner.Name + "-RandomMesh";
+            else name = "RandomMesh";
+
+            preparedScheme = new GameObject(name);
             preparedScheme.layer = TargetLayer;
             preparedScheme.isStatic = Static;
             preparedScheme.AddComponent<MeshFilter>();
@@ -49,7 +54,7 @@ namespace FIMSpace.Generating.Rules.Modelling
             if (RandomMeshes.Count == 0) return;
 
             Mesh randMesh = RandomMeshes[FGenerators.GetRandom(0, RandomMeshes.Count)];
-
+            
             spawn.OnGeneratedEvents.Add(o =>
             {
                 o.GetComponent<MeshFilter>().sharedMesh = randMesh;

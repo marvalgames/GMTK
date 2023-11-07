@@ -51,6 +51,7 @@ namespace FIMSpace.Generating.Planning.PlannerNodes.Field.Shape
 
                 myChe.RemoveCellsCollidingWith(oChe);
                 if (plan) plan.LatestResult.Checker = myChe;
+                return; // Just With Cell Port- avoid removing using all cells of this cell owner
             }
 
             // Implementing removing cells out of multiple planners if provided (without using 'iterate fields' node)
@@ -60,6 +61,13 @@ namespace FIMSpace.Generating.Planning.PlannerNodes.Field.Shape
             {
                 if (removeFrom[i].CheckerReference == null) continue;
                 removeFrom[i].CheckerReference.RemoveCellsCollidingWith(oChe);
+            }
+
+            var toRemove = ToRemove.Get_GetMultipleCheckers;
+            for (int i = 0; i < toRemove.Count; i++)
+            {
+                if (toRemove[i].CheckerReference == null) continue;
+                myChe.RemoveCellsCollidingWith(toRemove[i].CheckerReference);
             }
         }
 

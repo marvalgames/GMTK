@@ -61,6 +61,7 @@ namespace FIMSpace.Generating
 
                     PreGenerateSpawnersRefresh(spawner.Parent.Spawners, grid, preset, true);
                     PreGenerateSpawnersRefresh(spawner.Parent.SubSpawners, grid, preset, false);
+                    PreGeneratePrepareUtilitySpawners(grid, preset);
 
                     spawner.RunSpawnerOnCell(this, preset, cell, grid, desiredDirection == null ? Vector3.zero : desiredDirection.Value, null, false, ignoreRestrictions);
 
@@ -88,73 +89,86 @@ namespace FIMSpace.Generating
             for (int s = 0; s < Spawners.Count; s++)
             {
                 if (FGenerators.CheckIfIsNull(Spawners[s])) continue;
+                PrepareSpawnerVariables(Spawners[s], preset, getParentIfExists, overrider);
+            }
 
-                for (int r = 0; r < Spawners[s].Rules.Count; r++)
+            if (SubSpawners == null) SubSpawners = new List<FieldSpawner>();
+            for (int s = 0; s < SubSpawners.Count; s++)
+            {
+                if (FGenerators.CheckIfIsNull(SubSpawners[s])) continue;
+                PrepareSpawnerVariables(SubSpawners[s], preset, getParentIfExists, overrider);
+            }
+        }
+
+        void PrepareSpawnerVariables(FieldSpawner spawner, FieldSetup preset, bool getParentIfExists, InjectionSetup overrider = null)
+        {
+            for (int r = 0; r < spawner.Rules.Count; r++)
+            {
+                if (FGenerators.CheckIfIsNull(spawner.Rules[r])) continue;
+                if (spawner.Rules[r].VariablesPrepared) continue;
+
+                var spawnerVariables = spawner.Rules[r].GetVariables();
+                if (spawnerVariables == null) continue;
+
+                for (int vr = 0; vr < spawnerVariables.Count; vr++)
                 {
-                    if (FGenerators.CheckIfIsNull(Spawners[s].Rules[r])) continue;
-                    if (Spawners[s].Rules[r].VariablesPrepared) continue;
+                    var spawnerVar = spawnerVariables[vr];
 
-                    var spawnerVariables = Spawners[s].Rules[r].GetVariables();
-                    if (spawnerVariables == null) continue;
+                    if (string.IsNullOrEmpty(spawnerVar.name)) continue;
 
-                    for (int vr = 0; vr < spawnerVariables.Count; vr++)
+                    FieldSetup parent = preset;
+                    ModificatorsPack pack = null;
+
+                    if (getParentIfExists)
                     {
-                        var spawnerVar = spawnerVariables[vr];
+                        parent = TryGetParentSetup();
+                        if (parent == null) parent = preset;
+                    }
 
-                        if (string.IsNullOrEmpty(spawnerVar.name)) continue;
+                    pack = ParentPack;
+                    if (parent) if (ParentPack == parent.RootPack) pack = null;
 
-                        FieldSetup parent = preset;
-                        ModificatorsPack pack = null;
+                    var pVar = parent.GetVariable(spawnerVar.name);
 
-                        if (getParentIfExists)
+                    if (pack)
+                    {
+                        if (FGenerators.CheckIfIsNull(pVar))
                         {
-                            parent = TryGetParentSetup();
-                            if (parent == null) parent = preset;
+                            pVar = pack.GetVariable(spawnerVar.name);
                         }
+                    }
 
-                        pack = ParentPack;
-                        if (parent) if (ParentPack == parent.RootPack) pack = null;
+                    if (FGenerators.CheckIfIsNull(pVar)) continue;
 
-                        var pVar = parent.GetVariable(spawnerVar.name);
-
-                        if (pack)
+                    bool overrided = false;
+                    if (FGenerators.CheckIfExist_NOTNULL(overrider))
+                    {
+                        if (overrider.OverrideVariables)
                         {
-                            if (FGenerators.CheckIfIsNull(pVar))
-                            {
-                                pVar = pack.GetVariable(spawnerVar.name);
-                            }
-                        }
-
-                        if (FGenerators.CheckIfIsNull(pVar)) continue;
-
-                        bool overrided = false;
-                        if (FGenerators.CheckIfExist_NOTNULL(overrider))
-                        {
-                            if (overrider.OverrideVariables)
-                            {
-                                if (overrider.Overrides != null)
-                                    for (int ov = 0; ov < overrider.Overrides.Count; ov++)
+                            if (overrider.Overrides != null)
+                                for (int ov = 0; ov < overrider.Overrides.Count; ov++)
+                                {
+                                    if (overrider.Overrides[ov].Name == pVar.Name)
                                     {
-                                        if (overrider.Overrides[ov].Name == pVar.Name)
-                                        {
-                                            pVar.Prepared = true;
-                                            spawnerVar.reference = overrider.Overrides[ov];
-                                            overrided = true;
-                                            Spawners[s].Rules[r].VariablesPrepared = true;
-                                            break;
-                                        }
+                                        pVar.Prepared = true;
+                                        spawnerVar.reference = overrider.Overrides[ov];
+                                        overrided = true;
+                                        spawner.Rules[r].VariablesPrepared = true;
+                                        break;
                                     }
-                            }
+                                }
                         }
+                    }
 
-                        if (!overrided)
-                        {
-                            spawnerVar.reference = pVar;
-                        }
+                    if (!overrided)
+                    {
+                        spawnerVar.reference = pVar;
                     }
                 }
             }
+
         }
+
 
         internal List<SpawnRuleBase> _tempGlobalRulesPre = new List<SpawnRuleBase>();
         internal List<SpawnRuleBase> _tempGlobablRulesPost = new List<SpawnRuleBase>();
@@ -203,6 +217,7 @@ namespace FIMSpace.Generating
 
                 PreGenerateSpawnersRefresh(Spawners, grid, preset, true);
                 PreGenerateSpawnersRefresh(SubSpawners, grid, preset, false);
+                PreGeneratePrepareUtilitySpawners(grid, preset);
 
                 for (int s = 0; s < Spawners.Count; s++) // Checking all mod's spawners on all cells
                 {
@@ -381,6 +396,7 @@ namespace FIMSpace.Generating
 
             PreGenerateSpawnersRefresh(Spawners, grid, preset, true);
             PreGenerateSpawnersRefresh(SubSpawners, grid, preset, false);
+            PreGeneratePrepareUtilitySpawners(grid, preset);
 
 
             for (int s = 0; s < Spawners.Count; s++) // Checking all mod's spawners on all cells
@@ -481,6 +497,19 @@ namespace FIMSpace.Generating
                     SpawnData data = spawner.RunSpawnerOnCell(this, cellsContr.RuntimeFieldSetup, cells[i], cellsContr.Grid, Vector3.zero, childMod, false, false, cellsContr.AsyncIsRunning);
                     //if (FGenerators.CheckIfExist_NOTNULL(data)) scheme._DebugSpawns.Add(data);
                 }
+            }
+        }
+
+
+        void PreGeneratePrepareUtilitySpawners( FGenGraph<FieldCell, FGenPoint> grid, FieldSetup preset)
+        {
+            if (preset == null) return;
+            for (int i = 0; i < preset.UtilityModificators.Count; i++)
+            {
+                var uMod = preset.UtilityModificators[i];
+                if (uMod == null) continue;
+                PreGenerateSpawnersRefresh(uMod.Spawners, grid, preset, false);
+                PreGenerateSpawnersRefresh(uMod.SubSpawners, grid, preset, false);
             }
         }
 

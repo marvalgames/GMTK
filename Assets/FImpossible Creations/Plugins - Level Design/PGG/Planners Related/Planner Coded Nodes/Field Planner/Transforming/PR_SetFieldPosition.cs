@@ -79,7 +79,15 @@ namespace FIMSpace.Generating.Planning.PlannerNodes.Field.Transforming
             if (sp == null) sp = baseSerializedObject.FindProperty("CellSize");
             SerializedProperty spc = sp.Copy();
             EditorGUILayout.PropertyField(spc); spc.Next(false);
-            if (_EditorFoldout) EditorGUILayout.PropertyField(spc);
+
+            if (_EditorFoldout)
+            {
+                EditorGUILayout.PropertyField(spc);
+                Planner.AllowDragWire = true;
+            }
+            else
+                Planner.AllowDragWire = false;
+
             EditorGUIUtility.labelWidth = 0;
             baseSerializedObject.ApplyModifiedProperties();
         }

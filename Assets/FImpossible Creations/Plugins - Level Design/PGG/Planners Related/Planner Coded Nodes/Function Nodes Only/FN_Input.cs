@@ -110,7 +110,7 @@ namespace FIMSpace.Generating.Planning.PlannerNodes.FunctionNode
 
                 if (o is CheckerField3D)
                 {
-                    p.AssignCheckerField3D(o as CheckerField3D);
+                    p.Output_Provide_Checker(o as CheckerField3D);
                     return;
                 }
 

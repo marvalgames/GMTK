@@ -40,7 +40,7 @@ namespace FIMSpace.Generating.Planning.PlannerNodes.Field.Shape
             CheckerField3D nChecker = checker.Copy();
             nChecker.AddCellsOfOther(oChecker);
 
-            Result.ProvideShape(nChecker);
+            Result.Output_Provide_Checker(nChecker);
         }
 
     }

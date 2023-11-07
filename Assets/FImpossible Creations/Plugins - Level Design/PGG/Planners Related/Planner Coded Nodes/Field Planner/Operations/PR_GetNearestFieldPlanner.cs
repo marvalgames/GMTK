@@ -172,7 +172,7 @@ namespace FIMSpace.Generating.Planning.PlannerNodes.Field.Operations
                 }
             }
 
-            Planner.SetIDsOfPlanner(null);
+            Planner.Output_Provide_Planner(null);
 
             if (nearest != null)
             {
@@ -185,7 +185,7 @@ namespace FIMSpace.Generating.Planning.PlannerNodes.Field.Operations
                     OtherNearestCell.ProvideFullCellData(targetOtherNearestCell, nearest.LatestChecker, nearest.LatestResult);
                 }
 
-                Planner.SetIDsOfPlanner(nearest);
+                Planner.Output_Provide_Planner(nearest);
             }
 
             isSearching = false;
@@ -210,7 +210,7 @@ namespace FIMSpace.Generating.Planning.PlannerNodes.Field.Operations
 
             if (CustomCondition.IsConnected)
             {
-                Planner.SetIDsOfPlanner(plan);
+                Planner.Output_Provide_Planner(plan);
                 CustomCondition.TriggerReadPort(true);
                 if (CustomCondition.GetInputValue == false) return false;
             }

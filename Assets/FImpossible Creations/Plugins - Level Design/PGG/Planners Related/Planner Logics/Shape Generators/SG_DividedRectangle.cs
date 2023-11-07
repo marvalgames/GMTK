@@ -1,6 +1,7 @@
 ﻿using FIMSpace.Generating.Checker;
 using UnityEngine;
 using System.Collections.Generic;
+using System.Drawing;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
@@ -39,8 +40,6 @@ namespace FIMSpace.Generating.Planning.GeneratingLogics
         static List<int> clusterWidthDivs = new List<int>();
         static List<int> clusterDepthDivs = new List<int>();
 
-        Vector2Int clustersCount;
-
         public override CheckerField3D GetChecker(FieldPlanner planner)
         {
             if (ClusterWidthRange.Min < 1) ClusterWidthRange.Min = 1;
@@ -58,6 +57,44 @@ namespace FIMSpace.Generating.Planning.GeneratingLogics
             CheckerField3D checker = new CheckerField3D();
             Vector3Int size = new Vector3Int(ZoneWidth.GetRandom(), 1, ZoneDepth.GetRandom());
             checker.SetSize(size.x, 1, size.z);
+            checker.RootScale = planner.PreviewCellSize;
+
+
+            var divs = GenerateDivides(checker, ClusterWidthRange, ClusterDepthRange, OverrideColumnsCount, OverrideRowsCount, RandomizeRects,
+                AdvancedMode, RandomizeDepth, MinMaxWidthsDivs, MinMaxDepthDivs);
+
+            foreach (var chec in divs) planner.AddSubField(chec);
+
+
+            checker = new CheckerField3D(); // It's container for sub fields so default checker gets empty
+            checker.RootScale = planner.PreviewCellSize;
+
+            return checker;
+        }
+
+
+
+        public static List<CheckerField3D> GenerateDivides(CheckerField3D source, MinMax ClusterWidthRange, MinMax ClusterDepthRange, int OverrideColumnsCount, int OverrideRowsCount,
+            bool RandomizeRects, bool AdvancedMode = false, bool RandomizeDepth = true, MinMax? minMaxWidthsDivs = null, MinMax? minMaxDepthDivs = null)
+        {
+            List<CheckerField3D> divides = new List<CheckerField3D>();
+
+            clusterList.Clear();
+            clusterWidthDivs.Clear();
+            clusterDepthDivs.Clear();
+
+            Vector2Int clustersCount = Vector2Int.zero;
+            Vector3 srcMin = source.Grid.GetMin();
+            Vector3 srcMax = source.Grid.GetMax();
+            Vector3Int size = new Vector3Int(Mathf.Abs(srcMax.x - srcMin.x).ToInt() + 1, 1, Mathf.Abs(srcMax.z - srcMin.z).ToInt() + 1);
+
+            #region Prepare
+
+            MinMax MinMaxWidthsDivs, MinMaxDepthDivs;
+            if (minMaxWidthsDivs == null) MinMaxWidthsDivs = new MinMax(0, 10000); else MinMaxWidthsDivs = minMaxWidthsDivs.Value;
+            if (minMaxDepthDivs == null) MinMaxDepthDivs = new MinMax(0, 10000); else MinMaxDepthDivs = minMaxDepthDivs.Value;
+
+            #endregion
 
 
             #region Width dividing
@@ -83,10 +120,11 @@ namespace FIMSpace.Generating.Planning.GeneratingLogics
 
                 if (AdvancedMode)
                 {
-                    targetColumnsCount = Mathf.RoundToInt(Mathf.Max(targetColumnsCount, MinMaxDepthDivs.Min));
-                    if (MinMaxDepthDivs.Max > 0) targetColumnsCount = Mathf.RoundToInt(Mathf.Min(targetColumnsCount, MinMaxDepthDivs.Max));
+                    targetColumnsCount = Mathf.RoundToInt(Mathf.Max(targetColumnsCount, MinMaxWidthsDivs.Min));
+                    if (MinMaxWidthsDivs.Max > 0) targetColumnsCount = Mathf.RoundToInt(Mathf.Min(targetColumnsCount, MinMaxWidthsDivs.Max));
                 }
             }
+
 
             clusterWidthDivs.Clear();
             ComputeDivs(clusterWidthDivs, size.x, targetColumnsCount);
@@ -110,6 +148,7 @@ namespace FIMSpace.Generating.Planning.GeneratingLogics
             }
 
             #endregion
+
 
             #region Depth Divides
 
@@ -139,7 +178,7 @@ namespace FIMSpace.Generating.Planning.GeneratingLogics
                     if (AdvancedMode)
                     {
                         targetRowsCount = Mathf.RoundToInt(Mathf.Max(targetRowsCount, MinMaxDepthDivs.Min));
-                        if ( MinMaxDepthDivs.Max > 0 ) targetRowsCount = Mathf.RoundToInt(Mathf.Min(targetRowsCount, MinMaxDepthDivs.Max));
+                        if (MinMaxDepthDivs.Max > 0) targetRowsCount = Mathf.RoundToInt(Mathf.Min(targetRowsCount, MinMaxDepthDivs.Max));
                     }
                 }
 
@@ -178,7 +217,6 @@ namespace FIMSpace.Generating.Planning.GeneratingLogics
             }
 
             #endregion
-
 
 
             #region Randomize Rectangles
@@ -330,27 +368,26 @@ namespace FIMSpace.Generating.Planning.GeneratingLogics
             #endregion
 
 
-
             // Apply all calculated rects
-            float scaleMul = planner.PreviewCellSize.x;
+            float scaleMul = source.RootScale.x;
 
             for (int s = 0; s < clusterList.Count; s++)
             {
                 var cluster = clusterList[s];
                 CheckerField3D shapeChecker = new CheckerField3D();
                 shapeChecker.SetSize(cluster.Width, 1, cluster.Depth);
-                shapeChecker.RootPosition = new Vector3(cluster.Position.x, 0, cluster.Position.y) * scaleMul;
-                shapeChecker.RootScale = planner.PreviewCellSize;
+                shapeChecker.RootPosition = new Vector3(cluster.Position.x, source.RootPosition.y, cluster.Position.y) * scaleMul;
+                shapeChecker.RootScale = source.RootScale;
 
-                planner.AddSubField(shapeChecker);
+                divides.Add(shapeChecker);
             }
 
-            checker = new CheckerField3D(); // It's container for sub fields so default checker gets empty
-
-            return checker;
+            return divides;
         }
 
-        private void AdjustDivCount(List<int> divs, int space, MinMax range)
+
+
+        static void AdjustDivCount(List<int> divs, int space, MinMax range)
         {
             int sum = 0;
             for (int i = 0; i < divs.Count; i++) sum += divs[i];
@@ -394,14 +431,14 @@ namespace FIMSpace.Generating.Planning.GeneratingLogics
         }
 
 
-        public int GetClusterIndex(Vector2Int pos)
+        static int GetClusterIndex(Vector2Int pos)
         {
             for (int c = 0; c < clusterList.Count; c++) if (clusterList[c].ClusterID == pos) return c;
             return -1;
         }
 
 
-        void ComputeDivs(List<int> divsList, int availableSpace, int divsCount)
+        static void ComputeDivs(List<int> divsList, int availableSpace, int divsCount)
         {
             if (divsCount <= 0) return;
 
@@ -443,12 +480,12 @@ namespace FIMSpace.Generating.Planning.GeneratingLogics
 #if UNITY_EDITOR
 
         SerializedProperty sp = null;
-        public override void DrawGUI(SerializedObject so)
+        public override void DrawGUI(SerializedObject so, FieldPlanner parent)
         {
             so.Update();
 
             EditorGUILayout.HelpBox("This Shape is providing multiple Sub-Fields inside the main Field!\nIt's dedicated for house interior rooms layout generating.\n(It's different than 'Shattered Rectangle', this shape is Using Custom Algorithm)", MessageType.Info);
-            base.DrawGUI(so);
+            base.DrawGUI(so,parent);
 
             if (AdvancedMode)
             {

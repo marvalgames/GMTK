@@ -112,10 +112,19 @@ namespace FIMSpace.Generating.Checker
         }
 
         private List<FieldCell> _tempHelpCellsList = new List<FieldCell>();
-        public List<FieldCell> BoundsToCells(Bounds localBounds, bool getRounded = true, bool generateIfOut = false/*, bool worldMatrix = true*/)
+        public List<FieldCell> BoundsToCells(Bounds localBounds, bool getRounded = true, bool generateIfOut = false, bool newListInstance = true/*, bool worldMatrix = true*/)
         {
-            _tempHelpCellsList.Clear();
-            List<FieldCell> cells = _tempHelpCellsList;
+            List<FieldCell> cells;
+
+            if (newListInstance)
+            {
+                cells = new List<FieldCell>();
+            }
+            else
+            {
+                _tempHelpCellsList.Clear();
+                cells = _tempHelpCellsList;
+            }
 
             //localBounds = LimitLocalBoundsToGrid(localBounds);
             int lX, rX, uZ, dZ, uY, dY;
@@ -344,7 +353,7 @@ namespace FIMSpace.Generating.Checker
                 //if (boundsMultiplier != 1f) boundForCells.size *= boundsMultiplier;
 
                 // Checking cells in bounds intersect area
-                var intersAreaCells = BoundsToCells(boundForCells);
+                var intersAreaCells = BoundsToCells(boundForCells, true, false);
                 Matrix4x4 tMx = Matrix;
                 Matrix4x4 otMx = other.MatrixInverse;
 

@@ -75,18 +75,34 @@ namespace FIMSpace.Generating
                                 if (spawned == null)
                                 {
                                     spawned = FGenerators.InstantiateObject(spawn.Prefab);
+                                    spawned.hideFlags = HideFlags.None;
                                 }
 
+                                if (spawned.activeInHierarchy == false) spawned.SetActive(true);
                                 spawned.transform.SetParent(targetContainer, true);
 
-                                Vector3 targetPosition = preset.GetCellWorldPosition(cell);
+                                if (spawn.SpawnSpace == SpawnData.ESpawnSpace.CellSpace)
+                                {
+                                    Vector3 targetPosition = preset.GetCellWorldPosition(cell);
+                                    Quaternion rotation = spawn.Prefab.transform.rotation * Quaternion.Euler(spawn.RotationOffset);
 
-                                Quaternion rotation = spawn.Prefab.transform.rotation * Quaternion.Euler(spawn.RotationOffset);
+                                    spawned.transform.position = matrix.MultiplyPoint(targetPosition + spawn.Offset + rotation * spawn.DirectionalOffset);
+                                    if (spawn.LocalRotationOffset != Vector3.zero) rotation *= Quaternion.Euler(spawn.LocalRotationOffset);
+                                    spawned.transform.rotation = matrix.rotation * rotation;
+                                }
+                                else
+                                if (spawn.SpawnSpace == SpawnData.ESpawnSpace.GeneratorSpace)
+                                {
+                                    spawned.transform.position = matrix.MultiplyPoint(spawn.Offset);
+                                    spawned.transform.rotation = matrix.rotation * Quaternion.Euler(spawn.RotationOffset);
+                                }
+                                else
+                                if (spawn.SpawnSpace == SpawnData.ESpawnSpace.WorldSpace)
+                                {
+                                    spawned.transform.position = (spawn.Offset);
+                                    spawned.transform.rotation = Quaternion.Euler(spawn.RotationOffset);
+                                }
 
-                                spawned.transform.position = matrix.MultiplyPoint(targetPosition + spawn.Offset + rotation * spawn.DirectionalOffset);
-
-                                if (spawn.LocalRotationOffset != Vector3.zero) rotation *= Quaternion.Euler(spawn.LocalRotationOffset);
-                                spawned.transform.rotation = matrix.rotation * rotation;
                                 spawned.transform.localScale = Vector3.Scale(spawn.LocalScaleMul, spawn.Prefab.transform.lossyScale);
 
                                 if (spawn.ForceSetStatic)
@@ -351,7 +367,7 @@ namespace FIMSpace.Generating
 
             #endregion
 
-
+            CustomPostEvents_BeforeGenerating(gen);
             PreparePresetVariables(preset);
 
 
@@ -658,6 +674,24 @@ namespace FIMSpace.Generating
             }
         }
 
+        private static void CustomPostEvents_BeforeRunning(FieldSetup setup)
+        {
+            #region Initial Check
+
+            if (setup == null) return;
+            if (setup.CustomPostEvents == null) return;
+
+            #endregion
+
+            for (int i = 0; i < setup.CustomPostEvents.Count; i++)
+            {
+                var cpe = setup.CustomPostEvents[i];
+                if (cpe.PostEvent == null) continue;
+                if (cpe.Enabled == false) continue;
+                cpe.PostEvent.OnBeforeRunningCall(cpe, setup);
+            }
+        }
+
 
         #endregion
 
@@ -824,6 +858,7 @@ namespace FIMSpace.Generating
 
                             // Combine final mesh with sub meshes
                             combined.CombineMeshes(combination.ToArray(), false, true, false);
+                            NameMeshWithVertexCount(combined);
 
                             combinationObjects.Add(GenerateCombinedDrawer(item.Key.sharedMaterials[0].name + "-Combined",
                                 item.Value[0].gameObject, combined, item.Key, putGeneratedIn, setStatic));
@@ -883,6 +918,7 @@ namespace FIMSpace.Generating
 
                     // Combine final mesh with sub meshes
                     combined.CombineMeshes(combination.ToArray(), false, true, false);
+                    NameMeshWithVertexCount(combined);
 
                     combinationObjects.Add(GenerateCombinedDrawer(item.Key.sharedMaterials[0].name + "-Combined",
                         item.Value[0].gameObject, combined, item.Key, putGeneratedIn, setStatic));
@@ -901,6 +937,7 @@ namespace FIMSpace.Generating
                         if (verts + comb.mesh.vertexCount >= 65535) // Max verts for combined mesh
                         {
                             combined.CombineMeshes(combination.ToArray(), true, true, false);
+                            NameMeshWithVertexCount(combined);
                             combinationObjects.Add(GenerateCombinedDrawer(item.Key.name + "-Combined",
                             item.Value[0].gameObject, combined, item.Key, putGeneratedIn, setStatic));
                             verts = 0;
@@ -917,6 +954,7 @@ namespace FIMSpace.Generating
                     }
 
                     combined.CombineMeshes(combination.ToArray(), true, true, false);
+                    NameMeshWithVertexCount(combined);
 
                     combinationObjects.Add(GenerateCombinedDrawer(item.Key.name + "-Combined",
                         item.Value[0].gameObject, combined, item.Key, putGeneratedIn, setStatic));
@@ -940,11 +978,19 @@ namespace FIMSpace.Generating
             return combinationObjects;
         }
 
-
+        static void NameMeshWithVertexCount(Mesh m)
+        {
+#if UNITY_EDITOR
+            if (string.IsNullOrWhiteSpace(m.name))
+                m.name = "Verts=" + m.vertexCount;
+            else
+                m.name += " Verts=" + m.vertexCount;
+#endif
+        }
 
         static GameObject GenerateCombinedDrawer(string name, GameObject reference, Mesh targetMesh, CombineMaterialComparer mat, Transform putGeneratedIn, bool setStatic, int setSubMaterial = -1)
         {
-            GameObject combinedDrawer = new GameObject(name);
+            GameObject combinedDrawer = new GameObject(name); 
             combinedDrawer.transform.SetParent(putGeneratedIn, true);
             combinedDrawer.transform.ResetCoords();
             combinedDrawer.tag = reference.tag;

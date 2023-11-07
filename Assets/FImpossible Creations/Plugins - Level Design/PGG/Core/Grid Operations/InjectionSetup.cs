@@ -32,7 +32,7 @@ namespace FIMSpace.Generating
         public EGridCall Call = EGridCall.Post;
         public bool OverrideVariables = false;
 
-        [HideInInspector] public List<FieldVariable> Overrides;
+        [HideInInspector] public List<FieldVariable> Overrides = new List<FieldVariable>();
 
         public InjectionSetup(FieldModification mod, EGridCall call)
         {

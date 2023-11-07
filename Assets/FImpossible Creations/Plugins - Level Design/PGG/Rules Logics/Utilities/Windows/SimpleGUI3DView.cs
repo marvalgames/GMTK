@@ -103,11 +103,11 @@ namespace FIMSpace.Generating
                 Handles.SetCamera(_previewRenderUtility.camera);
 
                 Handles.color = Color.gray * 0.7f;
-                Handles.DrawLine(new Vector3(-1, 0, -5), new Vector3(-1, 0, 5));
-                Handles.DrawLine(new Vector3(1, 0, -5), new Vector3(1, 0, 5));
+                Handles.DrawLine(new Vector3(-1.5f, 0, -5), new Vector3(-1.5f, 0, 5));
+                Handles.DrawLine(new Vector3(1.5f, 0, -5), new Vector3(1.5f, 0, 5));
 
-                Handles.DrawLine(new Vector3(-5, 0, 1), new Vector3(5, 0, 1));
-                Handles.DrawLine(new Vector3(-5, 0, -1), new Vector3(5, 0, -1));
+                Handles.DrawLine(new Vector3(-5, 0, 1.5f), new Vector3(5, 0, 1.5f));
+                Handles.DrawLine(new Vector3(-5, 0, -1.5f), new Vector3(5, 0, -1.5f));
 
 
                 //Handles.color = Color.gray * 0.6f;

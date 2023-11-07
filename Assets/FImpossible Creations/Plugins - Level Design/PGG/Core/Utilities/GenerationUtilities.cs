@@ -111,6 +111,7 @@ namespace FIMSpace.Generating
         /// </summary>
         public static void PreparePresetVariables(FieldSetup preset)
         {
+            CustomPostEvents_BeforeRunning(preset);
 
             #region Preparing all rules variables if used
 

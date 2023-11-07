@@ -110,8 +110,15 @@ namespace FIMSpace.Generating
             }
 
             EditorGUILayout.BeginHorizontal();
+            EditorGUIUtility.labelWidth = 150;
             if (sp_disWh == null) sp_disWh = serializedObject.FindProperty("DisableWholePackage");
             EditorGUILayout.PropertyField(sp_disWh);
+
+            GUILayout.Space(4);
+            GUI.enabled = false;
+            EditorGUILayout.ObjectField(Get.ParentPreset, typeof(FieldSetup), true, GUILayout.MaxWidth(40));
+            GUI.enabled = true;
+            GUILayout.Space(4);
 
             SerializedProperty sp = sp_disWh.Copy(); sp.Next(false);
             EditorGUIUtility.labelWidth = 72;
@@ -782,7 +789,8 @@ namespace FIMSpace.Generating
 
                                     if (toDraw.ParentPreset)
                                     {
-                                        if (modd.ParentPreset == null || modd.ParentPreset == toDraw.ParentPreset)
+                                        if (toDraw.ParentPreset != null)
+                                            //if (modd.ParentPreset == null || modd.ParentPreset == toDraw.ParentPreset)
                                             menu.AddItem(new GUIContent("Move Modificator to Utility List"), false, () => { toDraw.ParentPreset.MoveModificatorToUtilityList(modd); });
                                     }
 
@@ -1663,6 +1671,28 @@ namespace FIMSpace.Generating
 
             if (pack.CallOnAllMod) used.Add(pack.CallOnAllMod);
             used.Add(pack);
+
+            if (pack.ParentPreset)
+            {
+                if (pack.ParentPreset.UtilityModificators != null)
+                {
+                    for (int i = 0; i < pack.ParentPreset.UtilityModificators.Count; i++)
+                    {
+                        used.Add(pack.ParentPreset.UtilityModificators[i]);
+
+                        for (int j = 0; j < pack.ParentPreset.UtilityModificators[i].Spawners.Count; j++)
+                        {
+                            if (pack.ParentPreset.UtilityModificators[i].Spawners[j] == null) continue;
+
+                            for (int s = 0; s < pack.ParentPreset.UtilityModificators[i].Spawners[j].Rules.Count; s++)
+                            {
+                                if (pack.ParentPreset.UtilityModificators[i].Spawners[j].Rules[s] == null) continue;
+                                used.Add(pack.ParentPreset.UtilityModificators[i].Spawners[j].Rules[s]);
+                            }
+                        }
+                    }
+                }
+            }
 
             for (int i = 0; i < pack.FieldModificators.Count; i++)
             {

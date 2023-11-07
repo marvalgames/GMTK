@@ -13,6 +13,13 @@ namespace FIMSpace.Generating
 
         [HideInInspector] public Object _plannerDraftsDirectory;
 
+        public void ResetSetups()
+        {
+            ClearGenerated();
+            _plannerPrepare = null;
+            ResetPlannerComposition();
+        }
+
 
         #region Editor Related
 
@@ -91,13 +98,6 @@ namespace FIMSpace.Generating
             return _SetupsNames;
         }
 
-        public void ResetSetups()
-        {
-            ClearGenerated();
-            _plannerPrepare = null;
-            ResetPlannerComposition();
-        }
-
 
         #endregion
 
@@ -153,9 +153,7 @@ namespace FIMSpace.Generating
             sp_Seed = serializedObject.FindProperty("Seed");
             sp_GenerateOnStart = serializedObject.FindProperty("GenerateOnStart");
 
-            Get.ValidateSetups();
-            Get.ResetPlannerComposition();
-            Get.RefreshVariablesReferences();
+            Get.EnsureFieldsInitialization();
         }
 
 
@@ -465,6 +463,21 @@ namespace FIMSpace.Generating
                                 Get.BuildPlannerPreset = newPres;
                         }
                     });
+
+                    draftsMenu.AddItem(new GUIContent(""), false, () => { });
+                    draftsMenu.AddItem(new GUIContent(""), false, () => { });
+
+                    if (Get.BuildPlannerPreset != null)
+                        draftsMenu.AddItem(new GUIContent("X Completely Remove Current Preset File"), false, () =>
+                        {
+                            string path = AssetDatabase.GetAssetPath(Get.BuildPlannerPreset);
+                            if (!string.IsNullOrEmpty(path))
+                            {
+                                AssetDatabase.DeleteAsset(path);
+                                AssetDatabase.SaveAssets();
+                                Get.BuildPlannerPreset = null;
+                            }
+                        });
 
 
                     draftsMenu.ShowAsContext();
@@ -947,7 +960,7 @@ namespace FIMSpace.Generating
                                                             GUILayout.Space(7);
 
                                                             EditorGUI.BeginChangeCheck();
-                                                            shape.DrawGUI(selShape);
+                                                            shape.DrawGUI(selShape, viewPlanner);
 
                                                             if (EditorGUI.EndChangeCheck())
                                                             {
@@ -1240,6 +1253,10 @@ namespace FIMSpace.Generating
                 ModificatorsPack p = compos.JustModPack; compos.JustModPack = (ModificatorsPack)EditorGUILayout.ObjectField(compos.JustModPack, typeof(ModificatorsPack), true);
                 if (p != compos.JustModPack) changed = true;
             }
+            else if (compos.GenType == EPGGGenType.Prefab)
+            {
+                changed = compos.PrefabsFieldTypeSelector();
+            }
 
             if (changed)
             {
@@ -1432,6 +1449,19 @@ namespace FIMSpace.Generating
             if (compos.GenType == EPGGGenType.FieldSetup) { FieldSetup p = compos.Setup; compos.Setup = (FieldSetup)EditorGUILayout.ObjectField(compos.Setup, typeof(FieldSetup), false); if (compos.Setup != null) ready = true; if (p != compos.Setup) _drawGenTypeChanged = true; }
             else if (compos.GenType == EPGGGenType.Modificator) { FieldModification p = compos.JustMod; compos.JustMod = (FieldModification)EditorGUILayout.ObjectField(compos.JustMod, typeof(FieldModification), false); if (compos.JustMod != null) ready = true; if (p != compos.JustMod) _drawGenTypeChanged = true; }
             else if (compos.GenType == EPGGGenType.ModPack) { ModificatorsPack p = compos.JustModPack; compos.JustModPack = (ModificatorsPack)EditorGUILayout.ObjectField(compos.JustModPack, typeof(ModificatorsPack), false); if (compos.JustModPack != null) ready = true; if (p != compos.JustModPack) _drawGenTypeChanged = true; }
+            else if (compos.GenType == EPGGGenType.Prefab) 
+            {
+                EditorGUI.BeginChangeCheck();
+
+                //compos.RefreshPrefabsSpawnSetup();
+                GameObject preObj = compos.PrefabFieldHandler.DefaultPrefab;
+                compos.PrefabsFieldTypeSelector(false);
+                GameObject newObj = compos.PrefabFieldHandler.DefaultPrefab;
+                if (newObj != null) ready = true;
+                if (preObj != newObj) _drawGenTypeChanged = true;
+
+                if (EditorGUI.EndChangeCheck()) EditorUtility.SetDirty(this);
+            }
 
 
             if (compos.IsSettedUp == false)
@@ -1449,14 +1479,12 @@ namespace FIMSpace.Generating
                     }
                 }
 
-
             if (ready) GUI.backgroundColor = new Color(0.5f, 0.9f, 0.5f, 1f);
             ComposSetupType(compos);
             if (ready) GUI.backgroundColor = preBg;
             if (_drawGenTypeChanged)
             {
                 compos.RefreshPlannerShapesSupport(compos.ParentFieldPlanner);
-
                 compos.Clear();
                 //UnityEngine.Debug.Log("change");
             }

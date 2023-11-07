@@ -5,6 +5,7 @@ using FIMSpace.FEditor;
 using static FIMSpace.Generating.TileMeshSetup;
 using System.Collections.Generic;
 using System;
+using UnityEditor.Presets;
 
 namespace FIMSpace.Generating
 {
@@ -80,7 +81,41 @@ namespace FIMSpace.Generating
 
                 EditorGUILayout.HelpBox("Editing design which is not saved in the project, save to new file if you want to keep it!", MessageType.None);
 
-                if (GUILayout.Button("Save", GUILayout.Width(48)))
+                if (SaveDirectory)
+                {
+                    GUI.backgroundColor = new Color(0.5f, 1f, 0.5f, 1f);
+
+                    if (GUILayout.Button(new GUIContent("Save", "Save in the project default saves directory"), GUILayout.Width(48)))
+                    {
+                        string path;
+
+                        path = AssetDatabase.GetAssetPath(SaveDirectory);
+                        var files = System.IO.Directory.GetFiles(path, "*.asset");
+                        path += "/Tile Design " + (files.Length + 1) + ".asset";
+
+                        TileDesignPreset npreset = CreateInstance<TileDesignPreset>();
+
+                        if (string.IsNullOrEmpty(path))
+                            path = FGenerators.GenerateScriptablePath(npreset, "Tile Design ");
+
+                        if (!string.IsNullOrEmpty(path))
+                        {
+                            UnityEditor.AssetDatabase.CreateAsset(npreset, path);
+                            AssetDatabase.SaveAssets();
+                            ToDirty = npreset;
+                            RefreshPresetDesign();
+
+                            if (npreset.Designs == null) npreset.Designs = new List<TileDesign>();
+                            if (npreset.Designs.Count == 0) npreset.Designs.Add(new TileDesign());
+                            npreset.Designs[0].PasteEverythingFrom(EditedDesign);
+                            Init(npreset.Designs[0], npreset);
+                        }
+                    }
+
+                    GUI.backgroundColor = Color.white;
+                }
+
+                if (GUILayout.Button(new GUIContent( " Save", FGUI_Resources.Tex_SearchDirectory), GUILayout.Width(78), GUILayout.Height(18)))
                 {
                     TileDesignPreset gen = (TileDesignPreset)FGeneratingUtilities.GenerateScriptable(CreateInstance<TileDesignPreset>(), "Tile Design");
 
@@ -103,6 +138,7 @@ namespace FIMSpace.Generating
                     GUI.enabled = false;
                     EditorGUILayout.ObjectField("", ToDirty, typeof(TileDesignPreset), false);
                     GUI.enabled = true;
+                    EditorUtility.SetDirty(ToDirty);
                 }
 
             if (GUILayout.Button("Tile Designer", FGUI_Resources.HeaderStyle)) { DesignGenericMenu(); }
@@ -188,6 +224,12 @@ namespace FIMSpace.Generating
                 GUILayout.BeginHorizontal();
                 sel.Name = EditorGUILayout.TextField("Name:", sel.Name);
 
+                GUILayout.Space(6);
+                EditorGUIUtility.labelWidth = 28;
+                sel.CustomID = EditorGUILayout.TextField(new GUIContent("ID:", "Custom ID title which can be used by post filters"), sel.CustomID, GUILayout.Width(64));
+                EditorGUIUtility.labelWidth = 0;
+                GUILayout.Space(6);
+
                 GUI.enabled = d.TileMeshes.Count > 1;
                 GUI.backgroundColor = new Color(1f, 0.6f, 0.6f, 1f);
                 if (GUILayout.Button(FGUI_Resources.GUIC_Remove, FGUI_Resources.ButtonStyle, GUILayout.Width(25), GUILayout.Height(19))) { toRemove = _selectedTileMesh; }
@@ -199,7 +241,7 @@ namespace FIMSpace.Generating
                 GUILayout.Space(3);
 
                 if (EditedTileSetup != null)
-                    if (EditedTileSetup.GenTechnique == EMeshGenerator.CustomMeshAndExtras)
+                    if (EditedTileSetup.GenTechnique == EMeshGenerator.Advanced)
                     {
                         EditedTileSetup.CustomMesh = (Mesh)EditorGUILayout.ObjectField("Custom Mesh:", EditedTileSetup.CustomMesh, typeof(Mesh), false);
                     }
@@ -521,6 +563,10 @@ namespace FIMSpace.Generating
 
                 EditorGUILayout.EndVertical();
 
+
+                DiplayPostFilters();
+
+
                 if (_foldout_finalizeSetup != wasFolded)
                 {
                     if (EditedDesign.IsSomethingGenerated == false || _comb_autoRefresh)
@@ -825,29 +871,61 @@ namespace FIMSpace.Generating
             if (ToDirty != null) EditorUtility.SetDirty(ToDirty);
         }
 
+        GameObject _lastGenObj = null;
+
         private void GenerateSceneObject()
         {
             var d = EditedDesign;
-
             d.FullGenerateStack();
 
             Vector3 preScenePos = Vector3.zero;
+            Quaternion preSceneRot = Quaternion.identity;
+            Vector3 preSceneScale = Vector3.one;
+
+            bool selectGen = false;
+            if (Selection.activeGameObject != null)
+            {
+                if (Selection.activeGameObject.name == EditedDesign.DesignName)
+                {
+                    _generated_sceneObjRef = Selection.activeGameObject;
+                    _generated_sceneObjParentRef = EditedDesign;
+                    selectGen = true;
+                }
+            }
+
+            bool frameIt = true;
+            if (_generated_sceneObjRef == _lastGenObj)
+            {
+                frameIt = false;
+            }
 
             if (SceneMeshIsSame())
             {
                 preScenePos = _generated_sceneObjRef.transform.position;
+                preSceneRot = _generated_sceneObjRef.transform.rotation;
+                preSceneScale = _generated_sceneObjRef.transform.localScale;
                 FGenerators.DestroyObject(_generated_sceneObjRef);
             }
 
             _generated_sceneObjRef = d.GeneratePrefab();
             _generated_sceneObjRef.transform.position = preScenePos;
+            _generated_sceneObjRef.transform.rotation = preSceneRot;
+            _generated_sceneObjRef.transform.localScale = preSceneScale;
             _generated_sceneObjParentRef = d;
 
-            if (SceneView.lastActiveSceneView)
+            if (selectGen)
             {
-                Selection.activeObject = _generated_sceneObjRef;
-                SceneView.lastActiveSceneView.FrameSelected();
+                Selection.activeGameObject = _generated_sceneObjRef;
+                _lastGenObj = _generated_sceneObjRef;
             }
+
+            if (frameIt)
+                if (SceneView.lastActiveSceneView)
+                {
+                    Selection.activeObject = _generated_sceneObjRef;
+                    SceneView.lastActiveSceneView.FrameSelected();
+                    _lastGenObj = _generated_sceneObjRef;
+                }
         }
 
         bool SceneMeshIsSame()
@@ -1134,14 +1212,22 @@ namespace FIMSpace.Generating
 
             if (combinedMeshDisplay == null)
             {
-                if (rect == null) return;
+                if (rect == null)
+                {
+                    return;
+                }
             }
 
             if (combinedMeshDisplay != null)
             {
                 combinedMeshDisplay.selectedInstance = _lastEditedCombInstance;
                 combinedMeshDisplay.UpdateMesh(EditedDesign);
-                if (rect == null) return;
+
+                if (rect == null)
+                {
+                    return;
+                }
+
                 combinedMeshDisplay.OnInteractivePreviewGUI(rect.Value, EditorStyles.textArea);
             }
         }
@@ -1150,6 +1236,7 @@ namespace FIMSpace.Generating
         {
             if (combinedMeshDisplay == null)
             {
+                if (generatedMesh == null) generatedMesh = nullMesh;
                 combinedMeshDisplay = (TilePreviewWindow)Editor.CreateEditor(generatedMesh, typeof(TilePreviewWindow));
             }
         }
@@ -1188,7 +1275,7 @@ namespace FIMSpace.Generating
         {
             EditedDesign.FullGenerateStack();
 
-            if (EditedDesign.IsSomethingGenerated)
+            if (EditedDesign.IsSomethingGenerated && generatedMesh != null)
             {
                 CombinePreviewDisplay(null);
             }
@@ -2072,7 +2159,7 @@ namespace FIMSpace.Generating
             EditedTileSetup.ExtraMesh = (EExtraMesh)EditorGUILayout.EnumPopup("Type: ", EditedTileSetup.ExtraMesh);
             if (EditedTileSetup.ExtraMesh == EExtraMesh.CustomMesh)
             {
-                EditorGUILayout.HelpBox("Use custom mesh or other tile mesh to join it with the tile design in the 'Combiner' menu.", MessageType.Info);
+                EditorGUILayout.HelpBox("Utility generator just to use external mesh for the Combiner. It also can be used to adjust custom mesh vertex color and origin.", MessageType.Info);
 
                 GUILayout.Space(8);
 
@@ -2180,8 +2267,18 @@ namespace FIMSpace.Generating
 
                 GUILayout.Space(8);
             }
+            else if (EditedTileSetup.ExtraMesh == EExtraMesh.Stacker)
+            {
+                if (s._StackerSetup == null) s._StackerSetup = new StackedTileGenerator.StackSetup();
 
-            GUILayout.Space(5);
+                if (StackedTileGenerator._Editor_DisplayStackerSettings(s._StackerSetup))
+                {
+                    _SetDirty();
+                }
+            }
+
+            FGUI_Inspector.DrawUILineCommon(8);
+
             EditedTileSetup.Origin = (EOrigin)EditorGUILayout.EnumPopup("Origin:", s.Origin);
             GUILayout.Space(8);
         }

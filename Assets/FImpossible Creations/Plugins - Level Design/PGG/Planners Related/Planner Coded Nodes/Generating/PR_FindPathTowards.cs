@@ -17,7 +17,6 @@ namespace FIMSpace.Generating.Planning.PlannerNodes.Generating
         public override Vector2 NodeSize { get { return new Vector2(262, 172 + extraHeight); } }
         public override Color GetNodeColor() { return new Color(0.3f, 0.7f, .9f, 0.95f); }
 
-
         [Port(EPortPinType.Input)] public PGGPlannerPort StartOn;
         [Port(EPortPinType.Input)] public PGGPlannerPort SearchTowards;
         [Port(EPortPinType.Input)] public PGGPlannerPort CollideWith;
@@ -33,6 +32,10 @@ namespace FIMSpace.Generating.Planning.PlannerNodes.Generating
 
         [Tooltip("Base checker setup reference for the generated path (path scale, origin, rotation etc.). Leave empty if you want to base on graph's planner.")]
         [HideInInspector][Port(EPortPinType.Input, EPortValueDisplay.Default, "Path Base")] public PGGPlannerPort PathBase;
+
+        [Tooltip("Enabling interpreting inputted Vector3 values into StartOn and SearchTowards values as target pathfind positions.")]
+        [HideInInspector, SerializeField] private bool PositionsMode = false;
+
         [Tooltip("Use to execute different doorway generation (From Start - Towards End) if path without shape was found. Without shape, so fields was aligning with each other, generating direct connection.")]
         [HideInInspector][Port(EPortPinType.Output, EPortValueDisplay.HideValue, "Towards End Cell:")] public BoolPort SingleStepPath;
 
@@ -66,7 +69,7 @@ namespace FIMSpace.Generating.Planning.PlannerNodes.Generating
 
             SingleStepPath.Value = false;
             CollideWith.Editor_DefaultValueInfo = "(None)";
-            CollideWith.MinusOneReturnsSelf = false;
+            CollideWith.Switch_MinusOneReturnsMainField = false;
             searchTowardsPosition = null;
 
             #endregion
@@ -83,11 +86,44 @@ namespace FIMSpace.Generating.Planning.PlannerNodes.Generating
             PathShape.Clear();
             PathShape.Switch_DisconnectedReturnsByID = false;
 
-            FieldPlanner a = GetPlannerFromPort(StartOn, false);
-            FieldPlanner b = GetPlannerFromPort(SearchTowards, false);
+            FieldPlanner a;
+            CheckerField3D aChecker = null;
+            FieldPlanner b;
+            CheckerField3D bChecker = null;
 
-            if (a == null) return;
-            if (b == null) return;
+            a = GetPlannerFromPort(StartOn, false);
+            b = GetPlannerFromPort(SearchTowards, false);
+
+            if (a != null) aChecker = a.LatestChecker;
+            if (b != null) bChecker = b.LatestChecker;
+
+            if (PositionsMode)
+            {
+                object aValue = StartOn.GetInputValueSafe;
+                if (aValue is Vector3)
+                {
+                    Vector3 targetPosition = (Vector3)aValue;
+
+                    aChecker = new CheckerField3D();
+                    aChecker.CopyParamsFrom(newResult.Checker);
+                    aChecker.RootPosition = targetPosition;
+                    aChecker.AddLocal(Vector3.zero);
+                }
+
+                object bValue = StartOn.GetInputValueSafe;
+                if (bValue is Vector3)
+                {
+                    Vector3 targetPosition = (Vector3)bValue;
+
+                    bChecker = new CheckerField3D();
+                    bChecker.CopyParamsFrom(newResult.Checker);
+                    bChecker.RootPosition = targetPosition;
+                    bChecker.AddLocal(Vector3.zero);
+                }
+            }
+
+            if (aChecker == null) return;
+            if (bChecker == null) return;
 
             CheckerField3D bChec = null;
 
@@ -134,7 +170,7 @@ namespace FIMSpace.Generating.Planning.PlannerNodes.Generating
 
             List<FieldPlanner> coll = GetPlannersFromPort(CollideWith, false, false);
             List<CheckerField3D> masks = new List<CheckerField3D>();
-            
+
             for (int c = 0; c < coll.Count; c++)
             {
                 masks.Add(coll[c].LatestChecker);
@@ -195,10 +231,11 @@ namespace FIMSpace.Generating.Planning.PlannerNodes.Generating
 
             #endregion
 
+
             if (_EditorDebugMode) CheckerField3D.DebugHelper = true;
 
-            var generateFrom = a.LatestChecker;
-            var path = coreChecker.GeneratePathFindTowards(a.LatestChecker, bChec, masks, PathfindSetup.ToCheckerFieldPathFindParams(), a, b, true);
+            var generateFrom = aChecker;
+            var path = coreChecker.GeneratePathFindTowards(aChecker, bChec, masks, PathfindSetup.ToCheckerFieldPathFindParams(), a, b, true);
 
             if (_EditorDebugMode) CheckerField3D.DebugHelper = false;
 
@@ -207,7 +244,7 @@ namespace FIMSpace.Generating.Planning.PlannerNodes.Generating
                 //coreChecker = path;
 
                 FieldCell cell = coreChecker._GeneratePathFindTowards_FromStartCell; // Start checker cell
-                if (cell != null) From_StartCell.ProvideFullCellData(cell, generateFrom, a.LatestResult);
+                if (cell != null) From_StartCell.ProvideFullCellData(cell, generateFrom, a == null ? newResult : a.LatestResult);
 
 
                 //path.DebugLogDrawCellInWorldSpace(path.GetCell(0), Color.red);
@@ -228,14 +265,13 @@ namespace FIMSpace.Generating.Planning.PlannerNodes.Generating
                     {
                         //FieldCell pathCell = cell;// new FieldCell();
                         //pathCell.Pos = coreChecker.WorldToLocal(path.LocalToWorld(cell.Pos)).V3toV3Int();
-                        Path_EndCell.ProvideFullCellData(cell, coreChecker, coreResult);
-                        //Path_EndCell.ProvideFullCellData(cell, path, a.LatestResult);
+                        Path_EndCell.ProvideFullCellData(cell, coreChecker, coreResult); 
                     }
 
                 }
 
                 cell = coreChecker._GeneratePathFindTowards_OtherTargetCell; // End checker cell
-                if (cell != null) Towards_EndCell.ProvideFullCellData(cell, b.LatestChecker, b.LatestResult);
+                if (cell != null) Towards_EndCell.ProvideFullCellData(cell, bChecker, b == null ? null : b.LatestResult);
 
 
                 if (path.AllCells.Count == 0) // else -> zero cells path (aligning checkers)
@@ -246,7 +282,7 @@ namespace FIMSpace.Generating.Planning.PlannerNodes.Generating
                     //if (cell != null) Path_StartCell.ProvideFullCellData(cell, b.LatestChecker, b.LatestResult);
 
                     // If using all connections, don't provide data here to avoid inconsistences
-                    if ( (From_StartCell.IsConnected && Path_StartCell.IsConnected && Path_EndCell.IsConnected) || SingleStepPath.IsConnected)
+                    if ((From_StartCell.IsConnected && Path_StartCell.IsConnected && Path_EndCell.IsConnected) || SingleStepPath.IsConnected)
                     {
 
                     }
@@ -270,7 +306,7 @@ namespace FIMSpace.Generating.Planning.PlannerNodes.Generating
                 }
 
 
-                PathShape.ProvideShape(path);
+                PathShape.Output_Provide_Checker(path);
 
                 pathWasFound = true;
 
@@ -282,7 +318,10 @@ namespace FIMSpace.Generating.Planning.PlannerNodes.Generating
 
             if (Debugging)
             {
-                DebuggingInfo = "Generating path from " + a.name + "(" + a.ArrayNameString + ") " + " towards " + b.name + "(" + b.ArrayNameString + ")";
+                if (a != null)
+                    DebuggingInfo = "Generating path from " + a.name + "(" + a.ArrayNameString + ") " + " towards " + b.name + "(" + b.ArrayNameString + ")";
+                else
+                    DebuggingInfo = "Generating path from " + aChecker.RootPosition + " towards " + bChecker.RootPosition;
 
                 if (path == null)
                 {
@@ -290,8 +329,8 @@ namespace FIMSpace.Generating.Planning.PlannerNodes.Generating
                     return;
                 }
 
-                Bounds ba = a.LatestChecker.GetFullBoundsWorldSpace();
-                Bounds bb = b.LatestChecker.GetFullBoundsWorldSpace();
+                Bounds ba = aChecker.GetFullBoundsWorldSpace();
+                Bounds bb = bChecker.GetFullBoundsWorldSpace();
 
                 CheckerField3D pathChe = path;
 
@@ -369,8 +408,9 @@ namespace FIMSpace.Generating.Planning.PlannerNodes.Generating
 
                 if (displayExtra)
                 {
-                    extraHeight += 28;
+                    extraHeight += 48;
                     GUILayout.Space(8);
+                    spc.Next(false); EditorGUILayout.PropertyField(spc);
                     spc.Next(false); EditorGUILayout.PropertyField(spc);
                 }
             }

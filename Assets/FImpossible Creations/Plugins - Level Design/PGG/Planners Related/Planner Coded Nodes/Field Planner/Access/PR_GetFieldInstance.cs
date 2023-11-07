@@ -37,7 +37,7 @@ namespace FIMSpace.Generating.Planning.PlannerNodes.Field.Access
             if (CurrentExecutingPlanner.ParentBuildPlanner == null) return;
 
             FieldPlanner p = CurrentExecutingPlanner.ParentBuildPlanner.GetPlannerByIteration(instId);
-            Planner.SetIDsOfPlanner(p);
+            Planner.Output_Provide_Planner(p);
         }
 
 #if UNITY_EDITOR
