@@ -583,15 +583,6 @@ namespace Rewired.Integration.UnityUI {
             // Determine if touch is supported
             isTouchSupported = defaultTouchInputSource.touchSupported;
 
-            // Deactivate the TouchInputModule because it has been deprecated in 5.3. Functionality was moved into here on all versions.
-            TouchInputModule tim = GetComponent<TouchInputModule>();
-            if (tim != null) {
-                tim.enabled = false;
-#if UNITY_EDITOR
-                Debug.LogWarning("The TouchInputModule is no longer used as the functionality has been moved into the RewiredStandaloneInputModule. Please remove the TouchInputModule component.");
-#endif
-            }
-
             Rewired.ReInput.InitializedEvent += OnRewiredInitialized;
 
             // Initialize Rewired

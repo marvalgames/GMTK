@@ -636,6 +636,13 @@
             <param name="openSpaceEquals">Definition of an open space</param>
             <returns>Index where item added. -1 if not added.</returns>
         </member>
+        <member name="T:Rewired.Utils.Classes.Data.MappedArray`1">
+            <summary>
+            An array which can have its indices remapped.
+            Cannot be expanded.
+            </summary>
+            <typeparam name="T">Type</typeparam>
+        </member>
         <member name="P:Rewired.Utils.Classes.Data.SerializedObject.Item(System.Int32)">
             <summary>
             Returns the original values.
@@ -1021,6 +1028,21 @@
             </summary>
             <typeparam name="T">Contained object type.</typeparam>
         </member>
+        <member name="T:Rewired.Utils.Classes.Utility.SpinLock">
+            <summary>
+            A replacement for Monitor.Wait/Enter / lock implemented with SpinWait.
+            Lock is incredibly slow on Windows IL2CPP builds (not Mono) but SpinWait has nearly no overhead.
+            This is NOT RECURSIVE.
+            Use with the dispose pattern: 
+            using(_lock.Lock()) { }
+            </summary>
+        </member>
+        <member name="M:Rewired.Utils.Classes.Utility.SpinLock.Lock">
+            <summary>
+            Use in Dispose pattern: using(_lock.Lock()) { }.
+            WARNING: Dispose MUST be called when finished, so the Dispose pattern is recommended.
+            </summary>
+        </member>
         <member name="P:Rewired.Utils.Classes.Utility.ThreadHelper.isRunning">
             <summary>
             Is the thread currently running?
@@ -1129,114 +1151,6 @@
             <param name="threadAutoKillTimeoutMS">Time in MS before the thread will auto-destruct if no messages are received. 0 = Do not auto-destruct.</param>
             <param name="threadBlockOnStartAndStop">Block the calling thread until the thread is started or stopped?</param>
             <param name="messageReceiverDelegate">Delegate to receive the message from the thread. Must be threadsafe!</param>
-        </member>
-        <member name="T:Rewired.Utils.Classes.Utility.ThreadedRingReportBuffer">
-            <summary>
-            Creates a thread to retrieve data and store it in a ring buffer.
-            Data is stored in reports/pages of a fixed size.
-            The data can then be read from another thread.
-            </summary>
-        </member>
-        <member name="M:Rewired.Utils.Classes.Utility.ThreadedRingReportBuffer.#ctor(System.Int32,System.Int32,System.Int32,System.Int32,System.Boolean,System.Action{System.Byte[]})">
-            <summary>
-            Creates a threaded ring buffer.
-            </summary>
-            <param name="entryByteLength">Size in bytes of each data entry.</param>
-            <param name="entryCapacity">Number of data entries that the buffer can hold before overflowing.</param>
-            <param name="threadRefreshRateFPS">Update rate of the thread. 0 = Do not thread sleep.</param>
-            <param name="threadAutoKillTimeoutMS">Time in MS before the thread will auto-destruct if no messages are received. 0 = Do not auto-destruct.</param>
-            <param name="threadBlockOnStartAndStop">Block the calling thread until the thread is started or stopped?</param>
-            <param name="threadRetrieveDataDelegate">Delegate to retrieve data. This will be called by the thread.</param>
-        </member>
-        <member name="M:Rewired.Utils.Classes.Utility.ThreadedRingReportBuffer.Read">
-            <summary>
-            Call StartRead before reading to fill the buffer with new data.
-            Read data into the ReadBuffer property.
-            </summary>
-            <returns>Number of bytes read</returns>
-        </member>
-        <member name="M:Rewired.Utils.Classes.Utility.ThreadedRingReportBuffer.Read(System.Byte[])">
-            <summary>
-            Call StartRead before reading to fill the buffer with new data.
-            </summary>
-            <param name="buffer">Buffer to fill with data</param>
-            <returns>Number of bytes read</returns>
-        </member>
-        <member name="M:Rewired.Utils.Classes.Utility.ThreadedRingReportBuffer.Read(System.IntPtr,System.Int32)">
-            <summary>
-            Call StartRead before reading to fill the buffer with new data.
-            </summary>
-            <param name="buffer">Buffer to fill with data</param>
-            <returns>Number of bytes read</returns>
-        </member>
-        <member name="M:Rewired.Utils.Classes.Utility.ThreadedRingReportBuffer.StartRead">
-            <summary>
-            Call StartRead before reading to fill the buffer with new data.
-            </summary>
-            <returns>Number of bytes in the buffer</returns>
-        </member>
-        <member name="T:Rewired.Utils.Classes.Utility.DualRingReportBuffer">
-            <summary>
-            A pair of ring buffers, input and output. Writing can be done from another thread.
-            Data is stored in reports/pages of a fixed size.
-            </summary>
-        </member>
-        <member name="M:Rewired.Utils.Classes.Utility.DualRingReportBuffer.#ctor(System.Int32,System.Int32)">
-            <summary>
-            </summary>
-            <param name="entryByteLength">Size in bytes of each data entry.</param>
-            <param name="entryCapacity">Number of data entries that the buffer can hold before overflowing.</param>
-        </member>
-        <member name="M:Rewired.Utils.Classes.Utility.DualRingReportBuffer.StartRead">
-            <summary>
-            Call StartRead before reading to fill the buffer with new data.
-            </summary>
-            <returns>Number of bytes in the buffer</returns>
-        </member>
-        <member name="M:Rewired.Utils.Classes.Utility.DualRingReportBuffer.Read">
-            <summary>
-            Read data into the ReadBuffer array.
-            Call StartRead before reading to fill the buffer with new data.
-            </summary>
-            <returns>Number of bytes read</returns>
-        </member>
-        <member name="M:Rewired.Utils.Classes.Utility.DualRingReportBuffer.Read(System.Byte[],System.Int32)">
-            <summary>
-            Read data from the buffer into the incoming buffer array.
-            Call StartRead before reading to fill the buffer with new data.
-            </summary>
-            <param name="buffer">Buffer to fill with data</param>
-            <param name="numBytesToRead">Number of bytes to read into the buffer</param>
-            <returns>Number of bytes read</returns>
-        </member>
-        <member name="M:Rewired.Utils.Classes.Utility.DualRingReportBuffer.Read(System.IntPtr,System.Int32,System.Int32)">
-            <summary>
-            Read data from the buffer into the incoming buffer pointer.
-            Call StartRead before reading to fill the buffer with new data.
-            </summary>
-            <param name="buffer">Buffer to fill with data</param>
-            <param name="bufferLength">The length of the buffer in bytes.</param>
-            <param name="numBytesToRead">Number of bytes to read into the buffer</param>
-            <returns>Number of bytes read</returns>
-        </member>
-        <member name="M:Rewired.Utils.Classes.Utility.DualRingReportBuffer.Write(System.Byte[],System.Int32)">
-            <summary>
-            Write data to the buffer from the incoming buffer array.
-            This can be called by a separate thread.
-            </summary>
-            <param name="buffer">Buffer from which to write.</param>
-            <param name="numBytesToWrite">Number of bytes to write to the buffer.</param>
-            <returns>Number of bytes written</returns>
-        </member>
-        <member name="M:Rewired.Utils.Classes.Utility.DualRingReportBuffer.Write(System.IntPtr,System.Int32,System.Int32)">
-            <summary>
-            Write data to the buffer from the incoming buffer array.
-            This can be called by a separate thread.
-            </summary>
-            <param name="buffer">Buffer from which to write.</param>
-            <param name="bufferLength">The length of the buffer in bytes.</param>
-            <param name="numBytesToWrite">Number of bytes to write to the buffer.</param>
-            <returns>Number of bytes written</returns>
         </member>
         <member name="T:Rewired.Utils.Classes.Utility.ObjectInstanceTracker">
             <summary>
@@ -1349,6 +1263,20 @@
             <summary>
             Clear the object.
             </summary>
+        </member>
+        <member name="T:Rewired.Utils.Classes.Utility.ThreadSafeObjectPool`1">
+            <summary>
+            A thread-safe object pool.
+            Uses SpinWait and Interlocked for MUCH faster performance on Windows IL2CPP builds vs lock.
+            </summary>
+            <typeparam name="T">Object Type</typeparam>
+        </member>
+        <member name="M:Rewired.Utils.Classes.Utility.ThreadSafeObjectPool`1.Return(System.Collections.Generic.IList{`0})">
+            <summary>
+            Returns all items to the pool and clears the list.
+            </summary>
+            <param name="items">Items to return.</param>
+            <returns>False if an error occurred.</returns>
         </member>
         <member name="T:Rewired.Utils.Classes.Utility.SetAndRestoreVar`1">
             <summary>
@@ -7565,6 +7493,40 @@
             </summary>
             <param name="elementId">The id of the Button. The id can be found in the Rewired Input Manager Custom Controller properties.</param>
         </member>
+        <member name="T:Rewired.ControllerExtensions.IDualSenseExtension">
+            <summary>
+            Common interface for PS5 platform and desktop platform DualSense Controller Extensions.
+            </summary>
+        </member>
+        <member name="M:Rewired.ControllerExtensions.IDualSenseExtension.SetTriggerEffect(Rewired.ControllerExtensions.DualSenseTriggerType,Rewired.ControllerExtensions.IDualSenseTriggerEffect)">
+            <summary>
+            Sets a trigger effect.
+            </summary>
+            <param name="trigger">The trigger which will play the effect.</param>
+            <param name="effect">The trigger effect.</param>
+            <returns>True on success, false if an error occurred.</returns>
+        </member>
+        <member name="M:Rewired.ControllerExtensions.IDualSenseExtension.GetTriggerEffectStates">
+            <summary>
+            Gets the current trigger effect states.
+            </summary>
+            <returns>Trigger effect states.</returns>
+        </member>
+        <member name="T:Rewired.ControllerExtensions.DualSenseTriggerType">
+            <summary>
+            Trigger type.
+            </summary>
+        </member>
+        <member name="F:Rewired.ControllerExtensions.DualSenseTriggerType.Left">
+            <summary>
+            The left trigger.
+            </summary>
+        </member>
+        <member name="F:Rewired.ControllerExtensions.DualSenseTriggerType.Right">
+            <summary>
+            The right trigger.
+            </summary>
+        </member>
         <member name="T:Rewired.ControllerExtensions.DualSenseMicrophoneLightMode">
             <summary>
             Dual Sense controller microphone light mode.
@@ -7643,6 +7605,7 @@
         <member name="T:Rewired.ControllerExtensions.DualSenseExtension">
             <summary>
             Allows access to controller-specific functions such as vibration.
+            This extension only applies to desktop platforms. For the PS5 platform, see the PS5 plugin documentation.
             </summary>
         </member>
         <member name="P:Rewired.ControllerExtensions.DualSenseExtension.vibrationMotorCount">
@@ -7947,6 +7910,367 @@
             Is the battery charging?
             </summary>
         </member>
+        <member name="M:Rewired.ControllerExtensions.DualSenseExtension.SetTriggerEffect(Rewired.ControllerExtensions.DualSenseTriggerType,Rewired.ControllerExtensions.IDualSenseTriggerEffect)">
+            <summary>
+            Sets a trigger effect.
+            </summary>
+            <param name="trigger">The trigger which will play the effect.</param>
+            <param name="effect">The trigger effect.</param>
+            <returns>True on success, false if an error occurred.</returns>
+        </member>
+        <member name="M:Rewired.ControllerExtensions.DualSenseExtension.GetTriggerEffectStates">
+            <summary>
+            Gets the current trigger effect states.
+            </summary>
+            <returns>Trigger effect states.</returns>
+        </member>
+        <member name="P:Rewired.ControllerExtensions.DualSenseExtension.Rewired#ControllerExtensions#IHIDControllerExtension#vendorId">
+            <summary>
+            The vendor id of the device.
+            </summary>
+        </member>
+        <member name="P:Rewired.ControllerExtensions.DualSenseExtension.Rewired#ControllerExtensions#IHIDControllerExtension#productId">
+            <summary>
+            The product id of the device.
+            </summary>
+        </member>
+        <member name="P:Rewired.ControllerExtensions.DualSenseExtension.Rewired#ControllerExtensions#IHIDControllerExtension#productName">
+            <summary>
+            The product name of the device.
+            </summary>
+        </member>
+        <member name="P:Rewired.ControllerExtensions.DualSenseExtension.Rewired#ControllerExtensions#IHIDControllerExtension#manufacturer">
+            <summary>
+            The manufacturer of the device.
+            </summary>
+        </member>
+        <member name="P:Rewired.ControllerExtensions.DualSenseExtension.Rewired#ControllerExtensions#IHIDControllerExtension#usagePage">
+            <summary>
+            The usage page of the device.
+            </summary>
+        </member>
+        <member name="P:Rewired.ControllerExtensions.DualSenseExtension.Rewired#ControllerExtensions#IHIDControllerExtension#usage">
+            <summary>
+            The usage of the device.
+            </summary>
+        </member>
+        <member name="T:Rewired.ControllerExtensions.DualSenseTriggerEffectType">
+            <summary>
+            Trigger effect types.
+            </summary>
+        </member>
+        <member name="F:Rewired.ControllerExtensions.DualSenseTriggerEffectType.Off">
+            <summary>
+            Stops effect.
+            </summary>
+        </member>
+        <member name="F:Rewired.ControllerExtensions.DualSenseTriggerEffectType.Feedback">
+            <summary>
+            Feedback effect.
+            </summary>
+        </member>
+        <member name="F:Rewired.ControllerExtensions.DualSenseTriggerEffectType.Weapon">
+            <summary>
+            Weapon effect.
+            </summary>
+        </member>
+        <member name="F:Rewired.ControllerExtensions.DualSenseTriggerEffectType.Vibration">
+            <summary>
+            Vibration effect.
+            </summary>
+        </member>
+        <member name="F:Rewired.ControllerExtensions.DualSenseTriggerEffectType.MultiplePositionFeedback">
+            <summary>
+            MultiplePositionFeedback effect.
+            </summary>
+        </member>
+        <member name="F:Rewired.ControllerExtensions.DualSenseTriggerEffectType.SlopeFeedback">
+            <summary>
+            SlopeFeedback effect.
+            </summary>
+        </member>
+        <member name="F:Rewired.ControllerExtensions.DualSenseTriggerEffectType.MultiplePositionVibration">
+            <summary>
+            MultiplePositionVibration effect.
+            </summary>
+        </member>
+        <member name="T:Rewired.ControllerExtensions.DualSenseTriggerEffectState">
+            <summary>
+            Trigger effect states.
+            </summary>
+        </member>
+        <member name="F:Rewired.ControllerExtensions.DualSenseTriggerEffectState.Unknown">
+            <summary>
+            Unknown.
+            </summary>
+        </member>
+        <member name="F:Rewired.ControllerExtensions.DualSenseTriggerEffectState.Off">
+            <summary>
+            No trigger effect.
+            </summary>
+        </member>
+        <member name="F:Rewired.ControllerExtensions.DualSenseTriggerEffectState.FeedbackIdle">
+            <summary>
+            Feedback mode with no force being applied.
+            </summary>
+        </member>
+        <member name="F:Rewired.ControllerExtensions.DualSenseTriggerEffectState.FeedbackApplyingForce">
+            <summary>
+            Feedback mode with force being applied.
+            </summary>
+        </member>
+        <member name="F:Rewired.ControllerExtensions.DualSenseTriggerEffectState.WeaponIdle">
+            <summary>
+            Weapon mode idle waiting to fire.
+            </summary>
+        </member>
+        <member name="F:Rewired.ControllerExtensions.DualSenseTriggerEffectState.WeaponFiring">
+            <summary>
+            Weapon mode currently being fired.
+            </summary>
+        </member>
+        <member name="F:Rewired.ControllerExtensions.DualSenseTriggerEffectState.WeaponFired">
+            <summary>
+            Weapon mode after being fired.
+            </summary>
+        </member>
+        <member name="F:Rewired.ControllerExtensions.DualSenseTriggerEffectState.VibrationIdle">
+            <summary>
+            Vibration mode with no vibration being applied.
+            </summary>
+        </member>
+        <member name="F:Rewired.ControllerExtensions.DualSenseTriggerEffectState.VibrationVibrating">
+            <summary>
+            Vibration mode with vibration being applied.
+            </summary>
+        </member>
+        <member name="T:Rewired.ControllerExtensions.DualSenseTriggerEffectStates">
+            <summary>
+            Information about trigger effect states.
+            </summary>
+        </member>
+        <member name="F:Rewired.ControllerExtensions.DualSenseTriggerEffectStates.leftTrigger">
+            <summary>
+            Trigger effect state for the left trigger.
+            </summary>
+        </member>
+        <member name="F:Rewired.ControllerExtensions.DualSenseTriggerEffectStates.rightTrigger">
+            <summary>
+            Trigger effect state for the right trigger.
+            </summary>
+        </member>
+        <member name="T:Rewired.ControllerExtensions.DualSenseTriggerEffect">
+            <summary>
+            Trigger effect constants.
+            </summary>
+        </member>
+        <member name="F:Rewired.ControllerExtensions.DualSenseTriggerEffect.strengthMin">
+            <summary>
+            Minimum Strength value.
+            </summary>
+        </member>
+        <member name="F:Rewired.ControllerExtensions.DualSenseTriggerEffect.strengthMax">
+            <summary>
+            Maximum Strength value.
+            </summary>
+        </member>
+        <member name="F:Rewired.ControllerExtensions.DualSenseTriggerEffect.amplitudeMin">
+            <summary>
+            Minimum Amplitude value.
+            </summary>
+        </member>
+        <member name="F:Rewired.ControllerExtensions.DualSenseTriggerEffect.amplitudeMax">
+            <summary>
+            Maximum Amplitude value.
+            </summary>
+        </member>
+        <member name="F:Rewired.ControllerExtensions.DualSenseTriggerEffect.frequencyMin">
+            <summary>
+            Minimum Frequency value.
+            </summary>
+        </member>
+        <member name="F:Rewired.ControllerExtensions.DualSenseTriggerEffect.frequencyMax">
+            <summary>
+            Maximum Frequency value.
+            </summary>
+        </member>
+        <member name="F:Rewired.ControllerExtensions.DualSenseTriggerEffect.positionCount">
+            <summary>
+            Number of Positions.
+            </summary>
+        </member>
+        <member name="F:Rewired.ControllerExtensions.DualSenseTriggerEffect.positionMin">
+            <summary>
+            Minimum Position value.
+            </summary>
+        </member>
+        <member name="F:Rewired.ControllerExtensions.DualSenseTriggerEffect.positionMax">
+            <summary>
+            Maximum Position value.
+            </summary>
+        </member>
+        <member name="T:Rewired.ControllerExtensions.DualSenseTriggerEffectPositionValueSet">
+            <summary>
+            A set of values that correspond to trigger positions for use in trigger effects.
+            </summary>
+        </member>
+        <member name="P:Rewired.ControllerExtensions.DualSenseTriggerEffectPositionValueSet.Item(System.Int32)">
+            <summary>
+            Gets or sets value at position index.
+            </summary>
+            <param name="index">Position index.</param>
+            <returns>Value at position index.</returns>
+            <exception cref="T:System.ArgumentOutOfRangeException"></exception>
+        </member>
+        <member name="M:Rewired.ControllerExtensions.DualSenseTriggerEffectPositionValueSet.ToArray">
+            <summary>
+            Converts this to a byte array.
+            </summary>
+            <returns>Array of values</returns>
+        </member>
+        <member name="M:Rewired.ControllerExtensions.DualSenseTriggerEffectPositionValueSet.CopyTo(System.Byte[])">
+            <summary>
+            Copys values to desination array.
+            </summary>
+            <param name="destination">Array to which the values will be copied.</param>
+        </member>
+        <member name="T:Rewired.ControllerExtensions.IDualSenseTriggerEffect">
+            <summary>
+            Interface for a DualSense trigger effect.
+            </summary>
+        </member>
+        <member name="T:Rewired.ControllerExtensions.DualSenseTriggerEffectOff">
+            <summary>
+            Trigger effect that stops all effects.
+            </summary>
+        </member>
+        <member name="T:Rewired.ControllerExtensions.DualSenseTriggerEffectFeedback">
+            <summary>
+            Feedback trigger effect.
+            Trigger will resist movement beyond the start position.
+            </summary>
+        </member>
+        <member name="P:Rewired.ControllerExtensions.DualSenseTriggerEffectFeedback.position">
+            <summary>
+            The starting zone of the trigger effect.
+            [Valid values: 0-9]
+            </summary>
+        </member>
+        <member name="P:Rewired.ControllerExtensions.DualSenseTriggerEffectFeedback.strength">
+            <summary>
+            The force of the resistance.
+            [Valid values: 0-8]
+            </summary>
+        </member>
+        <member name="T:Rewired.ControllerExtensions.DualSenseTriggerEffectWeapon">
+            <summary>
+            Weapon trigger effect.
+            Trigger will resist movement beyond the start position until the end position.
+            Can be used to simulate a gun trigger, for example.
+            </summary>
+        </member>
+        <member name="P:Rewired.ControllerExtensions.DualSenseTriggerEffectWeapon.startPosition">
+            <summary>
+            The starting zone of the trigger effect.
+            [Valid values: 2-7]
+            </summary>
+        </member>
+        <member name="P:Rewired.ControllerExtensions.DualSenseTriggerEffectWeapon.endPosition">
+            <summary>
+            The ending zone of the trigger effect.
+            [Valid values: startPosition + 1 to 8]
+            </summary>
+        </member>
+        <member name="P:Rewired.ControllerExtensions.DualSenseTriggerEffectWeapon.strength">
+            <summary>
+            The force of the resistance.
+            [Valid values: 0-8]
+            </summary>
+        </member>
+        <member name="T:Rewired.ControllerExtensions.DualSenseTriggerEffectVibration">
+            <summary>
+            Vibration trigger effect.
+            Trigger will vibrate with the input amplitude and frequency beyond the start position.
+            </summary>
+        </member>
+        <member name="P:Rewired.ControllerExtensions.DualSenseTriggerEffectVibration.position">
+            <summary>
+            The starting zone of the trigger effect.
+            [Valid values: 0-9]
+            </summary>
+        </member>
+        <member name="P:Rewired.ControllerExtensions.DualSenseTriggerEffectVibration.amplitude">
+            <summary>
+            Strength of the vibration motor.
+            [Valid values: 0-8]
+            </summary>
+        </member>
+        <member name="P:Rewired.ControllerExtensions.DualSenseTriggerEffectVibration.frequency">
+            <summary>
+            Frequency of the vibration motor.
+            [Valid values: 0-255 Hz]
+            </summary>
+        </member>
+        <member name="T:Rewired.ControllerExtensions.DualSenseTriggerEffectMultiplePositionFeedback">
+            <summary>
+            Multiple Position Feedback trigger effect.
+            Trigger will resist movement at varying strengths in 10 regions.
+            </summary>
+        </member>
+        <member name="P:Rewired.ControllerExtensions.DualSenseTriggerEffectMultiplePositionFeedback.strength">
+            <summary>
+            Strength [0-8] of the trigger motor at each position index [0-9].
+            Example: strength[0] = 8 sets maximum strength at trigger position index 0.
+            </summary>
+        </member>
+        <member name="T:Rewired.ControllerExtensions.DualSenseTriggerEffectSlopeFeedback">
+            <summary>
+            Slope Feedback trigger effect.
+            Trigger will resist movement at a linear range of strengths.
+            </summary>
+        </member>
+        <member name="P:Rewired.ControllerExtensions.DualSenseTriggerEffectSlopeFeedback.startPosition">
+            <summary>
+            The starting zone of the trigger effect.
+            [Valid values: 0-endPosition]
+            </summary>
+        </member>
+        <member name="P:Rewired.ControllerExtensions.DualSenseTriggerEffectSlopeFeedback.endPosition">
+            <summary>
+            The ending zone of the trigger effect.
+            [Valid values: startPosition + 1 to 9]
+            </summary>
+        </member>
+        <member name="P:Rewired.ControllerExtensions.DualSenseTriggerEffectSlopeFeedback.startStrength">
+            <summary>
+            The force of the resistance at the start.
+            [Valid values: 1-8]
+            </summary>
+        </member>
+        <member name="P:Rewired.ControllerExtensions.DualSenseTriggerEffectSlopeFeedback.endStrength">
+            <summary>
+            The force of the resistance at the end.
+            [Valid values: 1-8]
+            </summary>
+        </member>
+        <member name="T:Rewired.ControllerExtensions.DualSenseTriggerEffectMultiplePositionVibration">
+            <summary>
+            Multiple Position Vibration trigger effect.
+            Trigger will vibrate movement at varying amplitudes and one frequency in 10 regions.
+            </summary>
+        </member>
+        <member name="P:Rewired.ControllerExtensions.DualSenseTriggerEffectMultiplePositionVibration.frequency">
+            <summary>
+            Frequency of the vibration motor.
+            [Valid values: 0-255 Hz]
+            </summary>
+        </member>
+        <member name="P:Rewired.ControllerExtensions.DualSenseTriggerEffectMultiplePositionVibration.amplitude">
+            <summary>
+            Vibration amplitude [0-8] of the trigger motor at each position index [0-9].
+            Example: amplitude[0] = 8 sets maximum amplitude at trigger position index 0.
+            </summary>
+        </member>
         <member name="T:Rewired.ControllerExtensions.IDualShock4Extension">
             <summary>
             Common interface for PS4 platform and desktop platform DualShock 4 Controller Extensions.
@@ -8080,6 +8404,7 @@
         <member name="T:Rewired.ControllerExtensions.DualShock4Extension">
             <summary>
             Allows access to controller-specific functions such as vibration.
+            This extension only applies to desktop platforms. For the PS4 platform, see the PS4 plugin documentation.
             </summary>
         </member>
         <member name="P:Rewired.ControllerExtensions.DualShock4Extension.vibrationMotorCount">
@@ -8376,6 +8701,36 @@
             Battery level as a percentage. [0 - 100]
             </summary>
         </member>
+        <member name="P:Rewired.ControllerExtensions.DualShock4Extension.Rewired#ControllerExtensions#IHIDControllerExtension#vendorId">
+            <summary>
+            The vendor id of the device.
+            </summary>
+        </member>
+        <member name="P:Rewired.ControllerExtensions.DualShock4Extension.Rewired#ControllerExtensions#IHIDControllerExtension#productId">
+            <summary>
+            The product id of the device.
+            </summary>
+        </member>
+        <member name="P:Rewired.ControllerExtensions.DualShock4Extension.Rewired#ControllerExtensions#IHIDControllerExtension#productName">
+            <summary>
+            The product name of the device.
+            </summary>
+        </member>
+        <member name="P:Rewired.ControllerExtensions.DualShock4Extension.Rewired#ControllerExtensions#IHIDControllerExtension#manufacturer">
+            <summary>
+            The manufacturer of the device.
+            </summary>
+        </member>
+        <member name="P:Rewired.ControllerExtensions.DualShock4Extension.Rewired#ControllerExtensions#IHIDControllerExtension#usagePage">
+            <summary>
+            The usage page of the device.
+            </summary>
+        </member>
+        <member name="P:Rewired.ControllerExtensions.DualShock4Extension.Rewired#ControllerExtensions#IHIDControllerExtension#usage">
+            <summary>
+            The usage of the device.
+            </summary>
+        </member>
         <member name="T:Rewired.ControllerExtensions.DualShock4MotorType">
             <summary>
             Dual Shock 4 game pad motors. Used for vibration.
@@ -8399,6 +8754,325 @@
         <member name="F:Rewired.ControllerExtensions.DualShock4MotorType.WeakMotor">
             <summary>
             Right motor (weaker motor)
+            </summary>
+        </member>
+        <member name="T:Rewired.ControllerExtensions.IHIDControllerExtension">
+            <summary>
+            Interface for a HID controller extension.
+            </summary>
+        </member>
+        <member name="P:Rewired.ControllerExtensions.IHIDControllerExtension.vendorId">
+            <summary>
+            The vendor id of the device.
+            </summary>
+        </member>
+        <member name="P:Rewired.ControllerExtensions.IHIDControllerExtension.productId">
+            <summary>
+            The product id of the device.
+            </summary>
+        </member>
+        <member name="P:Rewired.ControllerExtensions.IHIDControllerExtension.productName">
+            <summary>
+            The product name of the device.
+            </summary>
+        </member>
+        <member name="P:Rewired.ControllerExtensions.IHIDControllerExtension.manufacturer">
+            <summary>
+            The manufacturer of the device.
+            </summary>
+        </member>
+        <member name="P:Rewired.ControllerExtensions.IHIDControllerExtension.usagePage">
+            <summary>
+            The usage page of the device.
+            </summary>
+        </member>
+        <member name="P:Rewired.ControllerExtensions.IHIDControllerExtension.usage">
+            <summary>
+            The usage of the device.
+            </summary>
+        </member>
+        <member name="T:Rewired.ControllerExtensions.NintendoSwitchGamepadVibration">
+            <summary>
+            Nintendo Switch gamepad vibration motor state.
+            </summary>
+        </member>
+        <member name="F:Rewired.ControllerExtensions.NintendoSwitchGamepadVibration.amplitudeLow">
+            <summary>
+            The low bandwidth amplitude [0.0 - 1.0]
+            </summary>
+        </member>
+        <member name="F:Rewired.ControllerExtensions.NintendoSwitchGamepadVibration.frequencyLow">
+            <summary>
+            The low bandwidth frequency [40.875885 - 626.286133 Hz]
+            </summary>
+        </member>
+        <member name="F:Rewired.ControllerExtensions.NintendoSwitchGamepadVibration.amplitudeHigh">
+            <summary>
+            The high bandwidth amplitude [0.0 - 1.0]
+            </summary>
+        </member>
+        <member name="F:Rewired.ControllerExtensions.NintendoSwitchGamepadVibration.frequencyHigh">
+            <summary>
+            The high bandwidth frequency (Hz) [81.75177 - 1252.572266 Hz]
+            </summary>
+        </member>
+        <member name="M:Rewired.ControllerExtensions.NintendoSwitchGamepadVibration.Create">
+            <summary>
+            Creates a new vibration with the default settings..
+            </summary>
+        </member>
+        <member name="M:Rewired.ControllerExtensions.NintendoSwitchGamepadVibration.Create(System.Single,System.Single,System.Single,System.Single)">
+            <summary>
+            Creates a new vibration with the specified settings.
+            </summary>
+            <param name="amplitudeLow">The low band amplitude.</param>
+            <param name="frequencyLow">The low band frequency.</param>
+            <param name="amplitudeHigh">The high band amplitude.</param>
+            <param name="frequencyHigh">The high band frequency.</param>
+        </member>
+        <member name="M:Rewired.ControllerExtensions.NintendoSwitchGamepadVibration.Create(System.Single,System.Single)">
+            <summary>
+            Creates a new vibration with the specified amplitudes and the default frequencies.
+            </summary>
+            <param name="amplitudeLow">The low band amplitude.</param>
+            <param name="amplitudeHigh">The high band amplitude.</param>
+        </member>
+        <member name="T:Rewired.ControllerExtensions.NintendoSwitchJoyConType">
+            <summary>
+            Types of Joy-Cons.
+            </summary>
+        </member>
+        <member name="F:Rewired.ControllerExtensions.NintendoSwitchJoyConType.Left">
+            <summary>
+            The left Joy-Con.
+            </summary>
+        </member>
+        <member name="F:Rewired.ControllerExtensions.NintendoSwitchJoyConType.Right">
+            <summary>
+            The right Joy-Con.
+            </summary>
+        </member>
+        <member name="T:Rewired.ControllerExtensions.NintendoSwitchJoyConGripStyle">
+            <summary>
+            Grip styles of Joy-Cons.
+            </summary>
+        </member>
+        <member name="F:Rewired.ControllerExtensions.NintendoSwitchJoyConGripStyle.Vertical">
+            <summary>
+            Joy-Con held like a remote control using one hand with L/R and ZL/ZR facing forward/up.
+            </summary>
+        </member>
+        <member name="F:Rewired.ControllerExtensions.NintendoSwitchJoyConGripStyle.Horizontal">
+            <summary>
+            Joy-Con held like a gamepad with SL and SR facing forward/up.
+            </summary>
+        </member>
+        <member name="T:Rewired.ControllerExtensions.NintendoSwitchGamepadExtension">
+            <summary>
+            Allows access to Nintendo Switch Controller specific functions such as vibration.
+            This extension only applies to desktop platforms. For the Nintendo Switch platform, see the Nintendo Switch plugin documentation.
+            </summary>
+        </member>
+        <member name="P:Rewired.ControllerExtensions.NintendoSwitchGamepadExtension.vibrationMotorCount">
+            <summary>
+            The number of vibration motors.
+            </summary>
+        </member>
+        <member name="M:Rewired.ControllerExtensions.NintendoSwitchGamepadExtension.GetVibration(System.Int32)">
+            <summary>
+            Gets the current vibration value from the controller.
+            </summary>
+            <param name="motorIndex">The index of the vibration motor</param>
+            <returns>VibrationValue</returns>
+        </member>
+        <member name="M:Rewired.ControllerExtensions.NintendoSwitchGamepadExtension.SetVibration(System.Int32,System.Single,System.Single,System.Single,System.Single)">
+            <summary>
+            Sets vibration in the controller.
+            </summary>
+            <param name="motorIndex">The index of the vibration motor</param>
+            <param name="amplitudeLow">The low band amplitude (using a unit where the maximum is 1.0f)</param>
+            <param name="frequencyLow">The low band frequency (using Hz units)</param>
+            <param name="amplitudeHigh">The high band amplitude (using a unit where the maximum is 1.0f</param>
+            <param name="frequencyHigh">The high band frequency (using Hz units)</param>
+        </member>
+        <member name="M:Rewired.ControllerExtensions.NintendoSwitchGamepadExtension.SetVibration(System.Int32,System.Single,System.Single,System.Single,System.Single,System.Boolean)">
+            <summary>
+            Sets vibration in the controller.
+            </summary>
+            <param name="motorIndex">The index of the vibration motor</param>
+            <param name="amplitudeLow">The low band amplitude (using a unit where the maximum is 1.0f)</param>
+            <param name="frequencyLow">The low band frequency (using Hz units)</param>
+            <param name="amplitudeHigh">The high band amplitude (using a unit where the maximum is 1.0f</param>
+            <param name="frequencyHigh">The high band frequency (using Hz units)</param>
+            <param name="stopOtherMotors">Stop other motors?</param>
+        </member>
+        <member name="M:Rewired.ControllerExtensions.NintendoSwitchGamepadExtension.SetVibration(System.Int32,System.Single,System.Single,System.Single,System.Single,System.Single)">
+            <summary>
+            Sets vibration in the controller.
+            </summary>
+            <param name="motorIndex">The index of the vibration motor</param>
+            <param name="amplitudeLow">The low band amplitude (using a unit where the maximum is 1.0f)</param>
+            <param name="frequencyLow">The low band frequency (using Hz units)</param>
+            <param name="amplitudeHigh">The high band amplitude (using a unit where the maximum is 1.0f</param>
+            <param name="frequencyHigh">The high band frequency (using Hz units)</param>
+            <param name="duration">Length of time in seconds to activate the motor before it stops. [0 = Infinite]</param>
+        </member>
+        <member name="M:Rewired.ControllerExtensions.NintendoSwitchGamepadExtension.SetVibration(System.Int32,System.Single,System.Single,System.Single,System.Single,System.Single,System.Boolean)">
+            <summary>
+            Sets vibration in the controller.
+            </summary>
+            <param name="motorIndex">The index of the vibration motor</param>
+            <param name="amplitudeLow">The low band amplitude (using a unit where the maximum is 1.0f)</param>
+            <param name="frequencyLow">The low band frequency (using Hz units)</param>
+            <param name="amplitudeHigh">The high band amplitude (using a unit where the maximum is 1.0f</param>
+            <param name="frequencyHigh">The high band frequency (using Hz units)</param>
+            <param name="duration">Length of time in seconds to activate the motor before it stops. [0 = Infinite]</param>
+            <param name="stopOtherMotors">Stop other motors?</param>
+        </member>
+        <member name="M:Rewired.ControllerExtensions.NintendoSwitchGamepadExtension.SetVibration(System.Int32,Rewired.ControllerExtensions.NintendoSwitchGamepadVibration)">
+            <summary>
+            Sets vibration in the controller.
+            </summary>
+            <param name="motorIndex">The index of the vibration motor</param>
+            <param name="vibration">The vibration data.</param>
+        </member>
+        <member name="M:Rewired.ControllerExtensions.NintendoSwitchGamepadExtension.SetVibration(System.Int32,Rewired.ControllerExtensions.NintendoSwitchGamepadVibration,System.Single)">
+            <summary>
+            Sets vibration in the controller.
+            </summary>
+            <param name="motorIndex">The index of the vibration motor</param>
+            <param name="vibration">The vibration data.</param>
+            <param name="duration">Length of time in seconds to activate the motor before it stops. [0 = Infinite]</param>
+        </member>
+        <member name="M:Rewired.ControllerExtensions.NintendoSwitchGamepadExtension.SetVibration(System.Int32,Rewired.ControllerExtensions.NintendoSwitchGamepadVibration,System.Single,System.Boolean)">
+            <summary>
+            Sets vibration in the controller.
+            </summary>
+            <param name="motorIndex">The index of the vibration motor</param>
+            <param name="vibration">The vibration data.</param>
+            <param name="duration">Length of time in seconds to activate the motor before it stops. [0 = Infinite]</param>
+            <param name="stopOtherMotors">Stop other motors?</param>
+        </member>
+        <member name="M:Rewired.ControllerExtensions.NintendoSwitchGamepadExtension.SetVibration(System.Int32,Rewired.ControllerExtensions.NintendoSwitchGamepadVibration,System.Boolean)">
+            <summary>
+            Sets vibration in the controller.
+            </summary>
+            <param name="motorIndex">The index of the vibration motor</param>
+            <param name="vibration">The vibration data.</param>
+            <param name="stopOtherMotors">Stop other motors?</param>
+        </member>
+        <member name="M:Rewired.ControllerExtensions.NintendoSwitchGamepadExtension.StopVibration(System.Int32)">
+            <summary>
+            Stops vibration and cancels vibration file playback in the specified vibration motor.
+            </summary>
+        </member>
+        <member name="M:Rewired.ControllerExtensions.NintendoSwitchGamepadExtension.StopVibration">
+            <summary>
+            Stops vibration and cancels vibration file playback in all vibration motors.
+            </summary>
+        </member>
+        <member name="M:Rewired.ControllerExtensions.NintendoSwitchGamepadExtension.Rewired#Interfaces#IControllerVibrator#SetVibration(System.Int32,System.Single)">
+            <summary>
+            Sets vibration level for a motor at a specified index.
+            </summary>
+            <param name="motorIndex">Motor index</param>
+            <param name="motorLevel">Motor level [float: 0.0 - 1.0]</param>
+        </member>
+        <member name="M:Rewired.ControllerExtensions.NintendoSwitchGamepadExtension.Rewired#Interfaces#IControllerVibrator#SetVibration(System.Int32,System.Single,System.Single)">
+            <summary>
+            Sets vibration level for a motor at a specified index with a timeout.
+            </summary>
+            <param name="motorIndex">Motor index</param>
+            <param name="motorLevel">Motor level [float: 0.0 - 1.0]</param>
+            <param name="duration">Length of time in seconds to activate the motor before it stops. [0 = Infinite]</param>
+        </member>
+        <member name="M:Rewired.ControllerExtensions.NintendoSwitchGamepadExtension.Rewired#Interfaces#IControllerVibrator#SetVibration(System.Int32,System.Single,System.Boolean)">
+            <summary>
+            Sets vibration level for a motor at a specified index.
+            </summary>
+            <param name="motorIndex">Motor index</param>
+            <param name="motorLevel">Motor level [float: 0.0 - 1.0]</param>
+            <param name="stopOtherMotors">Stop other motors?</param>
+        </member>
+        <member name="M:Rewired.ControllerExtensions.NintendoSwitchGamepadExtension.Rewired#Interfaces#IControllerVibrator#SetVibration(System.Int32,System.Single,System.Single,System.Boolean)">
+            <summary>
+            Sets vibration level for a motor at a specified index with a timeout.
+            </summary>
+            <param name="motorIndex">Motor index</param>
+            <param name="motorLevel">Motor level [float: 0.0 - 1.0]</param>
+            <param name="duration">Length of time in seconds to activate the motor before it stops. [0 = Infinite]</param>
+            <param name="stopOtherMotors">Stop other motors?</param>
+        </member>
+        <member name="M:Rewired.ControllerExtensions.NintendoSwitchGamepadExtension.Rewired#Interfaces#IControllerVibrator#GetVibration(System.Int32)">
+            <summary>
+            Gets vibration level for a motor at a specified index.
+            </summary>
+            <param name="motorIndex">Motor index</param>
+            <returns>Motor level [float: 0.0 - 1.0]</returns>
+        </member>
+        <member name="P:Rewired.ControllerExtensions.NintendoSwitchGamepadExtension.Rewired#ControllerExtensions#IHIDControllerExtension#vendorId">
+            <summary>
+            The vendor id of the device.
+            </summary>
+        </member>
+        <member name="P:Rewired.ControllerExtensions.NintendoSwitchGamepadExtension.Rewired#ControllerExtensions#IHIDControllerExtension#productId">
+            <summary>
+            The product id of the device.
+            </summary>
+        </member>
+        <member name="P:Rewired.ControllerExtensions.NintendoSwitchGamepadExtension.Rewired#ControllerExtensions#IHIDControllerExtension#productName">
+            <summary>
+            The product name of the device.
+            </summary>
+        </member>
+        <member name="P:Rewired.ControllerExtensions.NintendoSwitchGamepadExtension.Rewired#ControllerExtensions#IHIDControllerExtension#manufacturer">
+            <summary>
+            The manufacturer of the device.
+            </summary>
+        </member>
+        <member name="P:Rewired.ControllerExtensions.NintendoSwitchGamepadExtension.Rewired#ControllerExtensions#IHIDControllerExtension#usagePage">
+            <summary>
+            The usage page of the device.
+            </summary>
+        </member>
+        <member name="P:Rewired.ControllerExtensions.NintendoSwitchGamepadExtension.Rewired#ControllerExtensions#IHIDControllerExtension#usage">
+            <summary>
+            The usage of the device.
+            </summary>
+        </member>
+        <member name="T:Rewired.ControllerExtensions.NintendoSwitchProControllerExtension">
+            <summary>
+            Allows access to Nintendo Switch Pro Controller specific functions such as vibration.
+            This extension only applies to desktop platforms. For the Nintendo Switch platform, see the Nintendo Switch plugin documentation.
+            </summary>
+        </member>
+        <member name="F:Rewired.ControllerExtensions.NintendoSwitchProControllerExtension.motorIndexLeft">
+            <summary>
+            Motor index of the left vibration motor.
+            </summary>
+        </member>
+        <member name="F:Rewired.ControllerExtensions.NintendoSwitchProControllerExtension.motorIndexRight">
+            <summary>
+            Motor index of the right vibration motor.
+            </summary>
+        </member>
+        <member name="T:Rewired.ControllerExtensions.NintendoSwitchJoyConExtension">
+            <summary>
+            Allows access to Nintendo Switch Joy-Con specific functions such as vibration.
+            This extension only applies to desktop platforms. For the Nintendo Switch platform, see the Nintendo Switch plugin documentation.
+            </summary>
+        </member>
+        <member name="P:Rewired.ControllerExtensions.NintendoSwitchJoyConExtension.joyConType">
+            <summary>
+            Gets the Joy-Con type.
+            This can be used do determine if this is a Left or Right Joy-Con.
+            </summary>
+        </member>
+        <member name="P:Rewired.ControllerExtensions.NintendoSwitchJoyConExtension.joyConGripStyle">
+            <summary>
+            Gets or sets the current Joy-Cons grip style.
+            Horizontal: Joy-Con held like a remote control using one hand with L/R and ZL/ZR facing forward/up.
+            Vertical: Joy-Con held like a gamepad with SL and SR facing forward/up.
             </summary>
         </member>
         <member name="T:Rewired.ControllerExtensions.RailDriverExtension">
@@ -8425,6 +9099,36 @@
             <param name="digit1BitValues">A byte containing 7 bits, 1 for each element in the 1st display digit. (Like an old LCD clock, plus a period.)</param>
             <param name="digit2BitValues">A byte containing 7 bits, 1 for each element in the 2nd display digit. (Like an old LCD clock, plus a period.)</param>
             <param name="digit3BitValues">A byte containing 7 bits, 1 for each element in the 3rd display digit. (Like an old LCD clock, plus a period.)</param>
+        </member>
+        <member name="P:Rewired.ControllerExtensions.RailDriverExtension.Rewired#ControllerExtensions#IHIDControllerExtension#vendorId">
+            <summary>
+            The vendor id of the device.
+            </summary>
+        </member>
+        <member name="P:Rewired.ControllerExtensions.RailDriverExtension.Rewired#ControllerExtensions#IHIDControllerExtension#productId">
+            <summary>
+            The product id of the device.
+            </summary>
+        </member>
+        <member name="P:Rewired.ControllerExtensions.RailDriverExtension.Rewired#ControllerExtensions#IHIDControllerExtension#productName">
+            <summary>
+            The product name of the device.
+            </summary>
+        </member>
+        <member name="P:Rewired.ControllerExtensions.RailDriverExtension.Rewired#ControllerExtensions#IHIDControllerExtension#manufacturer">
+            <summary>
+            The manufacturer of the device.
+            </summary>
+        </member>
+        <member name="P:Rewired.ControllerExtensions.RailDriverExtension.Rewired#ControllerExtensions#IHIDControllerExtension#usagePage">
+            <summary>
+            The usage page of the device.
+            </summary>
+        </member>
+        <member name="P:Rewired.ControllerExtensions.RailDriverExtension.Rewired#ControllerExtensions#IHIDControllerExtension#usage">
+            <summary>
+            The usage of the device.
+            </summary>
         </member>
         <member name="T:Rewired.ControllerExtensions.SteamControllerExtension">
             <summary>
@@ -9067,6 +9771,13 @@
         <member name="T:Rewired.Data.Mapping.HardwareJoystickMap.Platform_WindowsUWP_Base.Axis">
             <exclude></exclude>
         </member>
+        <member name="T:Rewired.Data.Mapping.HardwareJoystickMap.Platform_WindowsUWP_Base.DeviceType">
+            <exclude></exclude>
+            <summary>
+            DO NOT CHANGE THESE VALUES.
+            MUST MATCH TO THE UWPDeviceType enum
+            </summary>
+        </member>
         <member name="T:Rewired.Data.Mapping.HardwareJoystickMap.Platform_WindowsUWP">
             <exclude></exclude>
         </member>
@@ -9340,6 +10051,31 @@
         <member name="T:Rewired.Data.Mapping.HardwareJoystickMap.Platform_AppleGCController">
             <exclude></exclude>
         </member>
+        <member name="T:Rewired.Data.Mapping.HardwareJoystickMap.Platform_WindowsWGI_Base">
+            <exclude></exclude>
+        </member>
+        <member name="T:Rewired.Data.Mapping.HardwareJoystickMap.Platform_WindowsWGI_Base.MatchingCriteria">
+            <exclude></exclude>
+        </member>
+        <member name="T:Rewired.Data.Mapping.HardwareJoystickMap.Platform_WindowsWGI_Base.Elements">
+            <exclude></exclude>
+        </member>
+        <member name="T:Rewired.Data.Mapping.HardwareJoystickMap.Platform_WindowsWGI_Base.Button">
+            <exclude></exclude>
+        </member>
+        <member name="T:Rewired.Data.Mapping.HardwareJoystickMap.Platform_WindowsWGI_Base.Axis">
+            <exclude></exclude>
+        </member>
+        <member name="T:Rewired.Data.Mapping.HardwareJoystickMap.Platform_WindowsWGI_Base.DeviceType">
+            <exclude></exclude>
+            <summary>
+            DO NOT CHANGE THESE VALUES.
+            MUST MATCH TO THE WGIDeviceType enum
+            </summary>
+        </member>
+        <member name="T:Rewired.Data.Mapping.HardwareJoystickMap.Platform_WindowsWGI">
+            <exclude></exclude>
+        </member>
         <member name="T:Rewired.Data.Mapping.HardwareControllerTemplateMap">
             <summary>
             Base class for controller template maps.
@@ -9464,6 +10200,11 @@
             Runtime only!
             </summary>
         </member>
+        <member name="M:Rewired.Data.ConfigVars.GetPlatformVar_useWindowsGamingInput">
+            <summary>
+            Runtime only!
+            </summary>
+        </member>
         <member name="M:Rewired.Data.ConfigVars.SetPlatformVar_ignoreInputWhenAppNotInFocus(System.Boolean)">
             <summary>
             Runtime only!
@@ -9495,6 +10236,11 @@
             </summary>
         </member>
         <member name="M:Rewired.Data.ConfigVars.SetPlatformVar_useAppleGameController(System.Boolean)">
+            <summary>
+            Runtime only!
+            </summary>
+        </member>
+        <member name="M:Rewired.Data.ConfigVars.SetPlatformVar_useWindowsGamingInput(System.Boolean)">
             <summary>
             Runtime only!
             </summary>
@@ -11593,7 +12339,12 @@
         </member>
         <member name="F:Rewired.Platforms.WindowsStandalonePrimaryInputSource.XInput">
             <summary>
-            Use XInput for the input source. This will use XInput only. All non-XInput compatible controllers will be non-functional. To support both XInput and non-XInput controllers, use Raw Input or Direct Input instead and enable the Use XInput option. Installation of DirectX end-user runtimes is required on Windows XP.
+            Use XInput for the input source. This will use XInput only. All non-XInput compatible controllers will be non-functional. To support both XInput and non-XInput controllers, use Raw Input or Direct Input instead and enable the Use XInput option. Supports XBox Controller 2-motor vibration, independent trigger values, but only supports 4 XInput-compatible controllers at once. Installation of DirectX end-user runtimes is required on Windows XP.
+            </summary>
+        </member>
+        <member name="F:Rewired.Platforms.WindowsStandalonePrimaryInputSource.WindowsGamingInput">
+            <summary>
+            Use Windows.Gaming.Input for the input source. This will use Windows.Gaming.Input only for controllers. All non-WindowsGamingInput compatible controllers will be non-functional. At the present time, only Gamepads are supported. To support all controller types, use Raw Input or Direct Input instead and enable the Use Windows Gaming Input option. Supports XBox Controller 4-motor vibration, independent trigger values, and supports more than 4 XInput-compatible controllers at once. (Requires Windows 10, October 2018 Update version 1809 (10.0.17763.0) or greater. Will fall back to other input sources on older versions of Windows.)
             </summary>
         </member>
         <member name="F:Rewired.Platforms.WindowsStandalonePrimaryInputSource.SDL2">
@@ -12661,72 +13412,6 @@
         <member name="M:Rewired.Interfaces.IPoolableObject.Return">
             <summary>
             Returns the object to its pool if it is a member of one.
-            </summary>
-        </member>
-        <member name="M:Rewired.HID.Drivers.DualSenseDriver.ComplementaryFilter(UnityEngine.Vector3,UnityEngine.Vector3)">
-            <param name="processedAcceleration">"Gravity" vector in right-handed coordinate system.</param>
-        </member>
-        <member name="M:Rewired.HID.Drivers.DualSenseDriver.GetTwist(UnityEngine.Quaternion,UnityEngine.Vector3)">
-                       Decompose the rotation on to 2 parts.
-                       1. Twist - rotation around the "direction" vector
-                       2. Swing - rotation around axis that is perpendicular to "direction" vector
-                       The rotation can be composed back by 
-                       rotation = swing * twist
-            
-                       has singularity in case of swing_rotation close to 180 degrees rotation.
-                       if the input quaternion is of non-unit length, the outputs are non-unit as well
-                       otherwise, outputs are both unit
-        </member>
-        <member name="M:Rewired.HID.Drivers.DualSenseDriver.GetAccelerometerAngle(UnityEngine.Vector3,System.Single)">
-            <param name="gravity">"Gravity" vector in right-handed coordinate system.</param>
-        </member>
-        <member name="M:Rewired.HID.Drivers.DualSenseDriver.GetAccelerometerOrientation(UnityEngine.Vector3,System.Single)">
-            <param name="processedAcceleration">"Gravity" vector in right-handed coordinate system.</param>
-        </member>
-        <member name="M:Rewired.HID.Drivers.DualShock4Driver.ComplementaryFilter(UnityEngine.Vector3,UnityEngine.Vector3)">
-            <param name="processedAcceleration">"Gravity" vector in right-handed coordinate system.</param>
-        </member>
-        <member name="M:Rewired.HID.Drivers.DualShock4Driver.GetTwist(UnityEngine.Quaternion,UnityEngine.Vector3)">
-                       Decompose the rotation on to 2 parts.
-                       1. Twist - rotation around the "direction" vector
-                       2. Swing - rotation around axis that is perpendicular to "direction" vector
-                       The rotation can be composed back by 
-                       rotation = swing * twist
-            
-                       has singularity in case of swing_rotation close to 180 degrees rotation.
-                       if the input quaternion is of non-unit length, the outputs are non-unit as well
-                       otherwise, outputs are both unit
-        </member>
-        <member name="M:Rewired.HID.Drivers.DualShock4Driver.GetAccelerometerAngle(UnityEngine.Vector3,System.Single)">
-            <param name="gravity">"Gravity" vector in right-handed coordinate system.</param>
-        </member>
-        <member name="M:Rewired.HID.Drivers.DualShock4Driver.GetAccelerometerOrientation(UnityEngine.Vector3,System.Single)">
-            <param name="gravity">"Gravity" vector in right-handed coordinate system.</param>
-        </member>
-        <member name="T:Rewired.HID.HidOutputReportHandler">
-            <summary>
-            Creates a dedicated thread to send output reports.
-            This is unbuffered and can only be used for a single HID device.
-            </summary>
-        </member>
-        <member name="M:Rewired.HID.HidOutputReportHandler.#ctor(Rewired.HID.HidOutputReportHandler.WriteReportDelegate)">
-            <param name="writeReportDelegate">Delegate to send HID report to the device. Must be threadsafe!</param>
-        </member>
-        <member name="M:Rewired.HID.HidOutputReportHandler.WriteReport(Rewired.HID.OutputReport)">
-            <summary>
-            Enqueue a report to send to the device. The incoming report data is copied before sending, so the buffer does not need to be unique.
-            </summary>
-        </member>
-        <member name="M:Rewired.HID.HidOutputReportHandler.Dispose(System.Boolean)">
-            <summary>
-            Dispose should only be called on the same thread that instantiated this and
-            the same thread that is sending the output reports.
-            </summary>
-            <param name="disposing"></param>
-        </member>
-        <member name="M:Rewired.HID.SpecialDevices.SpecialDeviceInfo.IsMatch(System.UInt16,System.UInt16,System.String)">
-            <summary>
-            Matches on VID/PID or Product Name. Does not require all 3 to match.
             </summary>
         </member>
         <member name="T:Rewired.InputManager_Base">
@@ -16452,6 +17137,12 @@
             The conflict will be ignored and polling will continue.
             </summary>
         </member>
+        <member name="F:Rewired.InputMapper.ConflictResponse.Swap">
+            <summary>
+            The conflicting mapping will be swapped with the assignment.
+            Check <see cref="M:Rewired.InputMapper.ConflictFoundEventData.IsSwapAllowed(System.Int32)"/> to see if swap is allowed for the current assignment before using this response type.
+            </summary>
+        </member>
         <member name="T:Rewired.InputMapper.EventData">
             <summary>
             Base class for event data.
@@ -16526,6 +17217,29 @@
             <summary>
             Is one or more of the conflicting maps protected from removal?
             </summary>
+        </member>
+        <member name="M:Rewired.InputMapper.ConflictFoundEventData.IsSwapAllowed(System.Int32)">
+            <summary>
+            Is swapping allowed for the current assignment?
+            You must check this before passing <see cref="F:Rewired.InputMapper.ConflictResponse.Swap"/> to <see cref="F:Rewired.InputMapper.ConflictFoundEventData.responseCallback"/>.
+            Do not pass <see cref="F:Rewired.InputMapper.ConflictResponse.Swap"/> to <see cref="F:Rewired.InputMapper.ConflictFoundEventData.responseCallback"/> if this function returns false.
+            Swapping is only allowed if all of the following conditions are met:
+            1. Assignment must be a replacement assignment of an existing mapping.
+            2. Only one conflicting mapping was found.
+            3. Conflicting mapping is not protected.
+            4. Conflicting mapping belongs to the same Player as the new assignment.
+            Due to the complexity of swapping full-axis and split-axis / button mappings, some swap operations may result in
+            the creation of additional positive-pole mappings to an Axis-type Action. To avoid creation of more mappings than
+            can be displayed in the UI, pass the maximum number of columns your UI supports for the specific controller type to
+            maxInputFieldCount to prevent this. If there is no more room for a new mapping visually, this function will return false.
+            To ignore input field count limits, pass 0 to maxInputFieldCount.
+            </summary>
+            <param name="maxInputFieldCount">The maximum number of input mapping fields per-Action visible to the user for the current controller type.
+            Example: If your UI displays two columns of input mapping fields for a Joystick, set this value to 2. If a swap operation
+            would result in the creation of extra mappings that would overflow the visible space for mappings
+            (swapping between a full-axis mapping and a button for example), this function will return false and swap will not be allowed.
+            If the UI has no column limit or you want to allow swap regardless of the UI limit, set this value to 0.</param>
+            <returns>True if swap is allowed, false if not.</returns>
         </member>
         <member name="P:Rewired.InputMapper.options">
             <summary>
@@ -21422,6 +22136,11 @@
             Toggles the use of XInput in Windows Standalone and Windows UWP during runtime. Rewired will be completely reset if this value is changed.
             </summary>
         </member>
+        <member name="P:Rewired.ReInput.ConfigHelper.useWindowsGamingInput">
+            <summary>
+            Toggles the use of WindowsGamingInput in Windows Standalone and Windows UWP during runtime. Rewired will be completely reset if this value is changed.
+            </summary>
+        </member>
         <member name="P:Rewired.ReInput.ConfigHelper.updateLoop">
             <summary>
             Changes the Update Loop setting during runtime. Rewired will be completely reset if this value is changed.
@@ -21457,6 +22176,14 @@
             Rewired will be completely reset if this value is changed.
             </summary>
         </member>
+        <member name="P:Rewired.ReInput.ConfigHelper.windowsUWPSupportGamepads">
+            <summary>
+            Use Windows.Gaming.Input.Gamepad for compatible devices.
+            Also enables special features for compatible devices such as vibration.
+            Rewired will be completely reset if this value is changed.
+            </summary>
+        </member>
+        <!-- Badly formed XML comment ignored for member "P:Rewired.ReInput.ConfigHelper.useAppleGameControllerFramework" -->
         <member name="P:Rewired.ReInput.ConfigHelper.xboxOnePrimaryInputSource">
             <summary>
             Changes the primary input source in Xbox One during runtime. Rewired will be completely reset if this value is changed.
@@ -21502,7 +22229,7 @@
             <summary>
             The joystick refresh rate in frames per second. [0 - 2000] [0 = Default]
             Set this to a higher value if you need higher precision input timing at high frame rates such as for a music beat game. Higher values result in higher CPU usage. Note that setting this to a very high value when the game is running at a low frame rate will not result in higher precision input.
-            This settings only applies to input sources that use a separate thread to poll for joystick input values (currently XInput and Direct Input). This setting does not apply to event-based input sources such as Raw Input.
+            This settings only applies to input sources that use a separate thread to poll for joystick input values (currently Direct Input, XInput, and Windows Gaming Input). This setting does not apply to event-based input sources such as Raw Input.
             This setting can be changed without resetting Rewired.
             </summary>
         </member>

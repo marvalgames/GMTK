@@ -1,3 +1,115 @@
+1.1.49.0:
+
+  Changes:
+    - Added Use Physical Keys (Unity) option in Rewired Input Manager to detect Unity Physical Keys setting and to display warning to users about implications of using this setting. (Unity 2021.2+)
+    - Native Keyboard Handling is disabled if Unity Physical Keys setting is enabled.
+    
+  API Changes:
+    - Added Rewired.Platforms.MacOS.IOKit.IOKitControllerExtension class.
+    - Added Rewired.Platforms.Linux.UDev.UdevControllerExtension class.
+    - Added Rewired.Platforms.Windows.XInput.XInputControllerExtension class.
+    - Added Rewired.Platforms.Windows.XInput.CapabilityFlags enum.
+    - Added Rewired.Platforms.Windows.XInput.DeviceType enum.
+    - Added Rewired.Platforms.Windows.XInput.DeviceSubType enum.
+    - Added Rewired.Platforms.Microsoft.WindowsGamingInput.WindowsGamingInputControllerExtension class.
+    - Added Rewired.Platforms.Microsoft.WindowsGamingInput.DeviceType enum.
+    - Added Rewired.Platforms.UWP.HID.HIDControllerExtension class.
+
+1.1.48.0:
+  
+  Changes:
+    - Linux Standalone, Native: Added Enhanced Device Support option. Special device features such as Sony DualSense vibration, IMU, and trigger haptics now work on Linux. (See documentation for Linux permissions issues.)
+    - Linux Standalone, Native: Modified format of joystick.HardwareIdentifier string.
+    - Windows Standalone, Raw Input: Modified format of joystick.HardwareIdentifier string for consistency.
+    - Windows Standalone, Direct Input: Modified format of joystick.HardwareIdentifier string for consistency.
+    - MacOS, Native: Modified format of joystick.HardwareIdentifier string for consistency.
+    - Enhanced Device Support, Sony DualSense: Changed to vibration compatibility mode v2 for proper vibration intensity ramp, removed workaround.
+    - MacOS Standalone, Native, Enhanced Device Support: Sony DualSense special features now work when connected via Bluetooth.
+    - MacOS Standalone, Native, Enhanced Device Support: Sony DualShock 4 special features now work when connected via Bluetooth.
+
+  Controller Definitions:
+    - Sony DualSense, Linux Native: Added more device identifiers for matching.
+    - Nintendo Pro Controller, Linux Native: Added variant for newer versions of Ubuntu.
+    - Nintendo Left Joy-Con, Linux Native: Added variant for newer versions of Ubuntu.
+    - Nintendo Right Joy-Con, Linux Native: Added variant for newer versions of Ubuntu.
+
+  Bug Fixes:
+    - Windows Standalone, Raw Input + Enhanced Device Support: Fixed possible issue with cleanup of resources for devices supported by Enhanced Device Support.
+    - Windows Standalone, Raw Input + Enhanced Device Support: Fixed Sony DualShock 4 special features no longer working via Bluetooth (bug introduced in 1.1.47.0).
+
+1.1.47.0:
+  
+  Changes:
+    - Windows Standalone: Added support for Windows.Gaming.Input input source (Requires Windows 10, October 2018 Update version 1809 (10.0.17763.0) or greater. Will fall back to other input sources on older versions of Windows.) Note: This option is now enabled by default on newly created Rewired Input Managers, but existing instances are not modified and the option must be manually enabled in Rewired Editor -> Settings -> Windows.
+    - Added Rewired_WindowsGamingInput.dll native library.
+    - Windows Standalone Raw Input, MacOS Native, Enhanced Device Support: Added DualSense trigger effect support.
+    - MacOS Game Controller Framework: Added DualSense trigger effect support.
+    - MacOS Game Controller Framework: Excluded Nintendo Switch Joy-Cons due to devices not functioning correctly through Game Controller Framework.
+    - Added DualSense Edge support (not tested).
+    - Android: Improved keyfile detection of Dual Shock 4 and Dual Sense controllers due to problems caused by Android fragementation.
+    - Windows UWP, Native: Improved filtering of non-XInput compatible HID controllers that are supported by Windows.Gaming.Input.Gamepad to prevent duplicate devices from appearing when both Gamepad API and HID API are enabled.
+    - Windows UWP, Native: Xbox 360 and Xbox One Controllers and now recognized as distinct controller types instead of being identified as "XInput Gamepad" with limited.
+    - Windows UWP, Native: Added device type and HID product name to joystick.HardwareIdentifier string.
+    - Windows UWP, Native: Updated minimum supported windows version to Windows 10, Fall Creators Update version 1709 (10.0.16299.0).
+    - Rewired Editor: Changed some terminology under Settings -> Windows UWP.
+    - Windows Standalone Raw Input, OSX Native, Enhanced Device Support: Added internal drivers for Nintendo Switch Pro Controller and Joy-Cons to support vibration and certain special controller features.
+    - Windows Standalone Raw Input, OSX Native, Enhanced Device Support: Added workaround for lack of perceptible vibration ramp on Dual Sense.
+    - Added more information to Debug Information.
+  
+  API Changes:
+    - Added ReInput.ConfigHelper.useWindowsGamingInput property.
+    - Added Rewired.ControllerExtensions.IDualSenseExtension interface.
+    - Added Rewired.ControllerExtensions.IDualSenseGamepadTriggerEffect interface.
+    - Added Rewired.ControllerExtensions.DualSenseGamepadTriggerType enum.
+    - Added Rewired.ControllerExtensions.DualSenseGamepadTriggerEffectType enum.
+    - Added Rewired.ControllerExtensions.DualSenseGamepadTriggerEffectState enum.
+    - Added Rewired.ControllerExtensions.DualSenseGamepadTriggerEffectPositionValueSet struct.
+    - Added Rewired.ControllerExtensions.DualSenseGamepadTriggerEffectOff struct.
+    - Added Rewired.ControllerExtensions.DualSenseGamepadTriggerEffectFeedback struct.
+    - Added Rewired.ControllerExtensions.DualSenseGamepadTriggerEffectWeapon struct.
+    - Added Rewired.ControllerExtensions.DualSenseGamepadTriggerEffectVibration struct.
+    - Added Rewired.ControllerExtensions.DualSenseGamepadTriggerEffectMultiplePositionFeedback struct.
+    - Added Rewired.ControllerExtensions.DualSenseGamepadTriggerEffectSlopeFeedback struct.
+    - Added Rewired.ControllerExtensions.DualSenseGamepadTriggerEffectMultiplePositionVibration struct.
+    - Added Rewired.ControllerExtensions.DualSenseGamepadExtension.SetTriggerEffect function.
+    - Added Rewired.ControllerExtensions.IHIDControllerExtension interface.
+    - Added Rewired.ControllerExtensions.NintendoSwitchGamepadExtension class.
+    - Added Rewired.ControllerExtensions.NintendoSwitchProControllerExtension class.
+    - Added Rewired.ControllerExtensions.NintendoSwitchJoyConExtension class.
+    - Added Rewired.ControllerExtensions.NintendoSwitchGamepadVibration struct.
+    - Added Rewired.ControllerExtensions.NintendoSwitchJoyConType enum.
+    - Added Rewired.ControllerExtensions.NintendoSwitchJoyConGripStyle enum.
+    - Added Rewired.Platforms.Apple.GameController.GCControllerDualSenseExtension.SetTriggerEffect function.
+    - Added Rewired.Platforms.Windows.RawInput.RawInputControllerExtension class.
+    - Added Rewired.Platforms.Windows.DirectInput.DirectInputControllerExtension class.
+    - Added ReInput.ConfigHelper.windowsUWPSupportGamepads property.
+    - Added ReInput.ConfigHelper.useAppleGameControllerFramework property.
+    - Added Rewired.ControllerExtensions.IHIDControllerExtension interface to Rewired.ControllerExtensions.DualSenseExtension, Rewired.ControllerExtensions.DualShock4Extension, and Rewired.ControllerExtensions.RailDriverExtension.
+
+  Controller Definitions:
+    - Nintendo Switch Pro Controlller, Apple Game Controller Framework: Added definition.
+    - Windows, Windows Gaming Input: Added Steam-configured variants to Xbox 360 Controller, Xbox One Controller, Sony DualShock 4, Sony DualSense, Nintendo Pro Controller, Nintendo Joy-Con (L), Nintendo Joy-Con (R), Steam Controller.
+    
+  Bug fixes:
+    - Windows Standalone, Raw Input: Fixed bug introduced in 1.1.45.2 causing Raw Input events to not be forwarded to UnityEngine.Input until the application first lost and then received focus again. This only affected UnityEngine.Input mouse axis values.
+
+1.1.46.0:
+
+  Changes:
+    - Changed Rewired Editor colors and bolded controller names that have an existing controller map due to Unity editor default skin changes at some unknown Unity version in the past causing skin colors to be off.
+  
+  API Changes:
+    - Added InputMapper.ConflictResponse.Swap enum value.
+    - Added InputMapper.ConflictFoundEventData.IsSwapAllowed function.
+    
+  Modified Controller Definitions:
+    - Apple MFI Controller, iOS Fallback: Added Left Stick Button and Right Stick Button mappings for Xbox and Sony controllers. NOTE: Only works in versions of Unity that support these additional buttons. It is not known at what version the button mappings were added to Unity.
+
+1.1.45.3:
+
+  Changes:
+    - Removed reference to TouchInputModule class in RewiredStandaloneInputModule due to deprecation and removal of class in some unknown update version of Unity UI causing compiler errors on a fresh install.
+
 1.1.45.2:
 
   Changes:
