@@ -141,7 +141,10 @@ Shader "Lux URP/Particles/Simple Lit"
             // Lightmode matches the ShaderPassName set in LightweightRenderPipeline.cs. SRPDefaultUnlit and passes with
             // no LightMode tag are also rendered by Lightweight Render Pipeline
             Name "ForwardLit"
-            Tags {"LightMode" = "UniversalForward"}
+            Tags
+            {
+                "LightMode" = "UniversalForward"
+            }
             
             BlendOp[_BlendOp]
             Blend[_SrcBlend][_DstBlend]
@@ -188,7 +191,12 @@ Shader "Lux URP/Particles/Simple Lit"
             #pragma multi_compile _ _LIGHT_LAYERS
             #pragma multi_compile_fragment _ _LIGHT_COOKIES
             #pragma multi_compile _ _FORWARD_PLUS
-            
+
+            #if UNITY_VERSION >= 202320
+                #include_with_pragmas "Packages/com.unity.render-pipelines.core/ShaderLibrary/FoveatedRenderingKeywords.hlsl"
+            #endif
+            #include_with_pragmas "Packages/com.unity.render-pipelines.universal/ShaderLibrary/RenderingLayers.hlsl"
+
         //  When using Forward+ we skip per vertex shadows :(
             #if !defined(_FORWARD_PLUS)
                 #if defined(_SHADOWS_SOFT) && defined(_PERVERTEX_SHADOWS)
@@ -201,15 +209,16 @@ Shader "Lux URP/Particles/Simple Lit"
                 #endif
             #endif
             
-
             //--------------------------------------
             // GPU Instancing
             #pragma multi_compile_instancing
-            // #pragma multi_compile _ DOTS_INSTANCING_ON // needs shader target 4.5
+            #pragma instancing_options renderinglayer
+            #include_with_pragmas "Packages/com.unity.render-pipelines.universal/ShaderLibrary/DOTS.hlsl"
 
             // -------------------------------------
             // Unity defined keywords
             #pragma multi_compile_fog
+            #include_with_pragmas "Packages/com.unity.render-pipelines.universal/ShaderLibrary/ProbeVolumeVariants.hlsl"
             
             #pragma vertex ParticlesLitVertex
             #pragma fragment ParticlesLitFragment

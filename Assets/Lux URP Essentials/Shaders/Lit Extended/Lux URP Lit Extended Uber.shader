@@ -187,7 +187,6 @@
             "RenderPipeline" = "UniversalPipeline"
             "UniversalMaterialType" = "Lit"
             "IgnoreProjector" = "True"
-            "ShaderModel"="4.5"
         }
         LOD 300
 
@@ -195,7 +194,10 @@
         Pass
         {
             Name "ForwardLit"
-            Tags{"LightMode" = "UniversalForward"}
+            Tags
+            {
+                "LightMode" = "UniversalForward"
+            }
 
             Stencil {
                 Ref   [_Stencil]
@@ -214,8 +216,7 @@
             Cull[_Cull]
 
             HLSLPROGRAM
-            #pragma exclude_renderers gles gles3 glcore
-            #pragma target 4.5
+            #pragma target 2.0
 
             // -------------------------------------
             // Material Keywords
@@ -250,15 +251,20 @@
             // Universal Pipeline keywords
             #pragma multi_compile _ _MAIN_LIGHT_SHADOWS _MAIN_LIGHT_SHADOWS_CASCADE _MAIN_LIGHT_SHADOWS_SCREEN
             #pragma multi_compile _ _ADDITIONAL_LIGHTS_VERTEX _ADDITIONAL_LIGHTS
+            #pragma multi_compile _ EVALUATE_SH_MIXED EVALUATE_SH_VERTEX
             #pragma multi_compile_fragment _ _ADDITIONAL_LIGHT_SHADOWS
-            #pragma multi_compile_fragment _ _SHADOWS_SOFT
-            #pragma multi_compile_fragment _ _SCREEN_SPACE_OCCLUSION
-            #pragma multi_compile_fragment _ _DBUFFER_MRT1 _DBUFFER_MRT2 _DBUFFER_MRT3
             #pragma multi_compile_fragment _ _REFLECTION_PROBE_BLENDING
             #pragma multi_compile_fragment _ _REFLECTION_PROBE_BOX_PROJECTION
-            #pragma multi_compile_fragment _ _LIGHT_LAYERS
+            #pragma multi_compile_fragment _ _SHADOWS_SOFT _SHADOWS_SOFT_LOW _SHADOWS_SOFT_MEDIUM _SHADOWS_SOFT_HIGH
+            #pragma multi_compile_fragment _ _SCREEN_SPACE_OCCLUSION
+            #pragma multi_compile_fragment _ _DBUFFER_MRT1 _DBUFFER_MRT2 _DBUFFER_MRT3
             #pragma multi_compile_fragment _ _LIGHT_COOKIES
+            #pragma multi_compile _ _LIGHT_LAYERS
             #pragma multi_compile _ _FORWARD_PLUS
+            #if UNITY_VERSION >= 202320
+                #include_with_pragmas "Packages/com.unity.render-pipelines.core/ShaderLibrary/FoveatedRenderingKeywords.hlsl"
+            #endif
+            #include_with_pragmas "Packages/com.unity.render-pipelines.universal/ShaderLibrary/RenderingLayers.hlsl"
 
             // -------------------------------------
             // Unity defined keywords
@@ -270,12 +276,13 @@
             #pragma multi_compile_fragment _ LOD_FADE_CROSSFADE
             #pragma multi_compile_fog
             #pragma multi_compile_fragment _ DEBUG_DISPLAY
+            #include_with_pragmas "Packages/com.unity.render-pipelines.universal/ShaderLibrary/ProbeVolumeVariants.hlsl"
 
             //--------------------------------------
             // GPU Instancing
             #pragma multi_compile_instancing
             #pragma instancing_options renderinglayer
-            #pragma multi_compile _ DOTS_INSTANCING_ON
+            #include_with_pragmas "Packages/com.unity.render-pipelines.universal/ShaderLibrary/DOTS.hlsl"
 
             #pragma vertex LitPassVertexUber
             #pragma fragment LitPassFragmentUber
@@ -290,7 +297,10 @@
         Pass
         {
             Name "ShadowCaster"
-            Tags{"LightMode" = "ShadowCaster"}
+            Tags
+            {
+                "LightMode" = "ShadowCaster"
+            }
 
             ZWrite On
             ZTest [_ZTest]
@@ -298,13 +308,12 @@
             Cull [_Cull]
 
             HLSLPROGRAM
-            #pragma exclude_renderers gles gles3 glcore
-            #pragma target 4.5
+            #pragma target 2.0
 
             //--------------------------------------
             // GPU Instancing
             #pragma multi_compile_instancing
-            #pragma multi_compile _ DOTS_INSTANCING_ON
+            #include_with_pragmas "Packages/com.unity.render-pipelines.universal/ShaderLibrary/DOTS.hlsl"
 
             // -------------------------------------
             // Material Keywords
@@ -323,11 +332,12 @@
 
             // -------------------------------------
             // Universal Pipeline keywords
-            #pragma multi_compile_vertex _ _CASTING_PUNCTUAL_LIGHT_SHADOW
 
             // -------------------------------------
             // Unity defined keywords
             #pragma multi_compile_fragment _ LOD_FADE_CROSSFADE
+
+            #pragma multi_compile_vertex _ _CASTING_PUNCTUAL_LIGHT_SHADOW
 
             #pragma vertex ShadowPassVertex
             #pragma fragment ShadowPassFragment
@@ -342,15 +352,18 @@
         Pass
         {
             Name "GBuffer"
-            Tags{"LightMode" = "UniversalGBuffer"}
+            Tags
+            {
+                "LightMode" = "UniversalGBuffer"
+            }
 
             ZWrite[_ZWrite]
             ZTest LEqual
             Cull [_Cull]
 
             HLSLPROGRAM
-            #pragma exclude_renderers gles gles3 glcore
             #pragma target 4.5
+            #pragma exclude_renderers gles3 glcore
 
             // -------------------------------------
             // Material Keywords
@@ -384,12 +397,14 @@
             // -------------------------------------
             // Universal Pipeline keywords
             #pragma multi_compile _ _MAIN_LIGHT_SHADOWS _MAIN_LIGHT_SHADOWS_CASCADE _MAIN_LIGHT_SHADOWS_SCREEN
+            //#pragma multi_compile _ _ADDITIONAL_LIGHTS_VERTEX _ADDITIONAL_LIGHTS
+            //#pragma multi_compile _ _ADDITIONAL_LIGHT_SHADOWS
             #pragma multi_compile_fragment _ _REFLECTION_PROBE_BLENDING
             #pragma multi_compile_fragment _ _REFLECTION_PROBE_BOX_PROJECTION
-            #pragma multi_compile_fragment _ _SHADOWS_SOFT
+            #pragma multi_compile_fragment _ _SHADOWS_SOFT _SHADOWS_SOFT_LOW _SHADOWS_SOFT_MEDIUM _SHADOWS_SOFT_HIGH
             #pragma multi_compile_fragment _ _DBUFFER_MRT1 _DBUFFER_MRT2 _DBUFFER_MRT3
-            #pragma multi_compile_fragment _ _WRITE_RENDERING_LAYERS
             #pragma multi_compile_fragment _ _RENDER_PASS_ENABLED
+            #include_with_pragmas "Packages/com.unity.render-pipelines.universal/ShaderLibrary/RenderingLayers.hlsl"
 
             // -------------------------------------
             // Unity defined keywords
@@ -400,12 +415,13 @@
             #pragma multi_compile _ DYNAMICLIGHTMAP_ON
             #pragma multi_compile_fragment _ LOD_FADE_CROSSFADE
             #pragma multi_compile_fragment _ _GBUFFER_NORMALS_OCT
+            #include_with_pragmas "Packages/com.unity.render-pipelines.universal/ShaderLibrary/ProbeVolumeVariants.hlsl"
 
             //--------------------------------------
             // GPU Instancing
             #pragma multi_compile_instancing
             #pragma instancing_options renderinglayer
-            #pragma multi_compile _ DOTS_INSTANCING_ON
+            #include_with_pragmas "Packages/com.unity.render-pipelines.universal/ShaderLibrary/DOTS.hlsl"
 
             #pragma vertex LitGBufferPassVertex
             #pragma fragment LitGBufferPassFragment
@@ -420,315 +436,17 @@
         Pass
         {
             Name "DepthOnly"
-            Tags{"LightMode" = "DepthOnly"}
-
-            ZWrite On
-            ZTest [_ZTest]
-            ColorMask R
-            Cull [_Cull]
-
-            HLSLPROGRAM
-            #pragma exclude_renderers gles gles3 glcore
-            #pragma target 4.5
-
-            #pragma vertex DepthOnlyVertex
-            #pragma fragment DepthOnlyFragment
-
-            // -------------------------------------
-            // Material Keywords
-
-            #define _UBER
-
-            #pragma shader_feature_local _ALPHATEST_ON
-            #pragma shader_feature_local_fragment _SMOOTHNESS_TEXTURE_ALBEDO_CHANNEL_A
-
-            #pragma shader_feature_local _PARALLAX
-            #pragma shader_feature_local_fragment _FADING_ON
-
-            #if defined (_PARALLAX) && !defined(_NORMALMAP)
-                #define _NORMALMAP
-            #endif
-
-            // -------------------------------------
-            // Unity defined keywords
-            #pragma multi_compile_fragment _ LOD_FADE_CROSSFADE
-
-            //--------------------------------------
-            // GPU Instancing
-            #pragma multi_compile_instancing
-            #pragma multi_compile _ DOTS_INSTANCING_ON
-
-            #include "Includes/Lux URP Lit Extended Inputs.hlsl"
-            #include "Includes/Lux URP Uber DepthOnly Pass.hlsl"
-
-            ENDHLSL
-        }
-
-    //  Depth Normal --------------------------------------------------------
-        Pass
-        {
-            Name "DepthNormals"
-            Tags{"LightMode" = "DepthNormals"}
-
-            ZWrite On
-            ZTest [_ZTest]
-            Cull [_Cull]
-
-            HLSLPROGRAM
-            #pragma exclude_renderers gles gles3 glcore
-            #pragma target 4.5
-
-            #pragma vertex DepthNormalsVertex
-            #pragma fragment DepthNormalsFragment
-
-            // -------------------------------------
-            // Material Keywords
-
-            #define _UBER
-
-            #pragma shader_feature_local _ALPHATEST_ON
-            #pragma shader_feature_local_fragment _SMOOTHNESS_TEXTURE_ALBEDO_CHANNEL_A
-
-            //#pragma shader_feature _NORMALMAP
-            #pragma shader_feature_local _PARALLAX
-            #pragma shader_feature_local _FADING_ON
-
-            #if defined (_PARALLAX) && !defined(_NORMALMAP)
-                #define _NORMALMAP
-            #endif
-
-            //--------------------------------------
-            // GPU Instancing
-            #pragma multi_compile_instancing
-            #pragma multi_compile _ DOTS_INSTANCING_ON
-
-            // -------------------------------------
-            // Unity defined keywords
-            #pragma multi_compile_fragment _ LOD_FADE_CROSSFADE
-            
-            // -------------------------------------
-            // Universal Pipeline keywords
-            #pragma multi_compile_fragment _ _WRITE_RENDERING_LAYERS
-
-            #include "Includes/Lux URP Lit Extended Inputs.hlsl"
-            #include "Includes/Lux URP Uber DepthNormal Pass.hlsl"
-
-            ENDHLSL
-        }        
-
-    //  Meta -------------------------------------------------------------
-        Pass
-        {
-            Name "Meta"
-            Tags{"LightMode" = "Meta"}
-
-            Cull Off
-
-            HLSLPROGRAM
-            #pragma exclude_renderers gles gles3 glcore
-            #pragma target 4.5
-
-            #pragma vertex UniversalVertexMeta
-            #pragma fragment UniversalFragmentMetaLit
-
-            #define _UBER
-
-            #define _PARALLAX
-
-            #pragma shader_feature_local_fragment _SPECULAR_SETUP
-            #pragma shader_feature_local_fragment _EMISSION
-            #pragma shader_feature_local_fragment _METALLICSPECGLOSSMAP
-            #pragma shader_feature_local_fragment _ALPHATEST_ON
-            #pragma shader_feature_local_fragment _ _SMOOTHNESS_TEXTURE_ALBEDO_CHANNEL_A
-            #pragma shader_feature_local _ _DETAIL_MULX2 _DETAIL_SCALED
-
-            #pragma shader_feature_local_fragment _SPECGLOSSMAP
-
-            #include "Includes/Lux URP Lit Extended Inputs.hlsl"
-            //#include "Packages/com.unity.render-pipelines.universal/Shaders/LitInput.hlsl"
-            #include "Packages/com.unity.render-pipelines.universal/Shaders/LitMetaPass.hlsl"
-
-            ENDHLSL
-        }
-
-    }
-
-
-//  ---------------------------------------------------------------------------    
-
-    SubShader
-    {
-        Tags{
-            "RenderType" = "Opaque"
-            "RenderPipeline" = "UniversalPipeline"
-            "UniversalMaterialType" = "Lit" 
-            "IgnoreProjector" = "True"
-            "ShaderModel"="2.0"
-        }
-        LOD 300
-
-    //  Forward pass --------------------------------------------------------
-        Pass
-        {
-            // Lightmode matches the ShaderPassName set in LightweightRenderPipeline.cs. SRPDefaultUnlit and passes with
-            // no LightMode tag are also rendered by Lightweight Render Pipeline
-            Name "ForwardLit"
-            Tags{"LightMode" = "UniversalForward"}
-
-            Stencil {
-                Ref   [_Stencil]
-                ReadMask [_ReadMask]
-                WriteMask [_WriteMask]
-                Comp  [_StencilComp]
-                Pass  [_StencilOp]
-                Fail  [_StencilFail]
-                ZFail [_StencilZFail]
-                //replace
+            Tags
+            {
+                "LightMode" = "DepthOnly"
             }
 
-            Blend[_SrcBlend][_DstBlend], [_SrcBlendAlpha][_DstBlendAlpha]
-			ZTest [_ZTest]
-            ZWrite[_ZWrite]
-            Cull[_Cull]
-
-            HLSLPROGRAM
-            #pragma only_renderers gles gles3 glcore d3d11
-            #pragma target 2.0
-
-            // -------------------------------------
-            // Material Keywords
-
-            #define _UBER
-
-            #pragma shader_feature_local _NORMALMAP
-            #pragma shader_feature_local _PARALLAX
-            #pragma shader_feature_local _BENTNORMAL
-            #pragma shader_feature_local _ _DETAIL_MULX2 _DETAIL_SCALED
-
-            #pragma shader_feature_local_fragment _SAMPLENORMAL
-            #pragma shader_feature_local_fragment _ENABLE_GEOMETRIC_SPECULAR_AA
-            #pragma shader_feature_local_fragment _ENABLE_AO_FROM_GI
-            #pragma shader_feature_local_fragment _RIMLIGHTING
-            #pragma shader_feature_local_fragment _FADING_ON
-
-            #pragma shader_feature_local_fragment _ALPHATEST_ON
-            #pragma shader_feature_local_fragment _ _ALPHAPREMULTIPLY_ON _ALPHAMODULATE_ON
-            #pragma shader_feature_local_fragment _EMISSION            
-            #pragma shader_feature_local_fragment _METALLICSPECGLOSSMAP
-            #pragma shader_feature_local_fragment _SMOOTHNESS_TEXTURE_ALBEDO_CHANNEL_A
-            #pragma shader_feature_local_fragment _OCCLUSIONMAP
-
-            #pragma shader_feature_local_fragment _SURFACE_TYPE_TRANSPARENT
-            #pragma shader_feature_local_fragment _SPECULARHIGHLIGHTS_OFF
-            #pragma shader_feature_local_fragment _ENVIRONMENTREFLECTIONS_OFF
-            #pragma shader_feature_local_fragment _SPECULAR_SETUP
-            #pragma shader_feature_local _RECEIVE_SHADOWS_OFF
-
-            // -------------------------------------
-            // Universal Pipeline keywords
-            #pragma multi_compile _ _MAIN_LIGHT_SHADOWS _MAIN_LIGHT_SHADOWS_CASCADE _MAIN_LIGHT_SHADOWS_SCREEN
-            #pragma multi_compile _ _ADDITIONAL_LIGHTS_VERTEX _ADDITIONAL_LIGHTS
-            #pragma multi_compile_fragment _ _ADDITIONAL_LIGHT_SHADOWS
-            #pragma multi_compile_fragment _ _SHADOWS_SOFT
-            #pragma multi_compile_fragment _ _SCREEN_SPACE_OCCLUSION
-            #pragma multi_compile_fragment _ _DBUFFER_MRT1 _DBUFFER_MRT2 _DBUFFER_MRT3
-            #pragma multi_compile_fragment _ _REFLECTION_PROBE_BLENDING
-            #pragma multi_compile_fragment _ _REFLECTION_PROBE_BOX_PROJECTION
-            #pragma multi_compile_fragment _ _LIGHT_LAYERS
-            #pragma multi_compile_fragment _ _LIGHT_COOKIES
-            #pragma multi_compile _ _FORWARD_PLUS
-
-            // -------------------------------------
-            // Unity defined keywords
-            #pragma multi_compile _ LIGHTMAP_SHADOW_MIXING
-            #pragma multi_compile _ SHADOWS_SHADOWMASK
-            #pragma multi_compile _ DIRLIGHTMAP_COMBINED
-            #pragma multi_compile _ LIGHTMAP_ON
-            #pragma multi_compile_fog
-            #pragma multi_compile_fragment _ DEBUG_DISPLAY
-
-            //--------------------------------------
-            // GPU Instancing
-            #pragma multi_compile_instancing
-            #pragma instancing_options renderinglayer
-            #pragma multi_compile _ DOTS_INSTANCING_ON
-            #pragma target 3.5 DOTS_INSTANCING_ON
-
-            #pragma multi_compile_fragment _ LOD_FADE_CROSSFADE
-
-            #pragma vertex LitPassVertexUber
-            #pragma fragment LitPassFragmentUber
-
-            #include "Includes/Lux URP Lit Extended Inputs.hlsl"
-            #include "Includes/Lux URP Uber ForwardLit Pass.hlsl"
-
-            ENDHLSL
-        }
-
-    //  Shadow Caster --------------------------------------------------------
-        Pass
-        {
-            Name "ShadowCaster"
-            Tags{"LightMode" = "ShadowCaster"}
-
-            ZWrite On
-            ZTest [_ZTest]
-            ColorMask 0
-            Cull [_Cull]
-
-            HLSLPROGRAM
-            #pragma only_renderers gles gles3 glcore d3d11
-            #pragma target 2.0
-
-            //--------------------------------------
-            // GPU Instancing
-            #pragma multi_compile_instancing
-            #pragma multi_compile _ DOTS_INSTANCING_ON
-            #pragma target 3.5 DOTS_INSTANCING_ON
-
-            // -------------------------------------
-            // Material Keywords
-            
-            #define _UBER
-
-            #pragma shader_feature_local _ALPHATEST_ON
-            #pragma shader_feature_local_fragment _SMOOTHNESS_TEXTURE_ALBEDO_CHANNEL_A
-
-            #pragma shader_feature_local _PARALLAXSHADOWS
-            #pragma shader_feature_local _FADING_SHADOWS_ON
-
-            #if defined (_PARALLAXSHADOWS) && !defined(_NORMALMAP)
-                #define _NORMALMAP
-            #endif
-
-            // -------------------------------------
-            // Universal Pipeline keywords
-            #pragma multi_compile_vertex _ _CASTING_PUNCTUAL_LIGHT_SHADOW
-
-            #pragma multi_compile_fragment _ LOD_FADE_CROSSFADE
-
-            #pragma vertex ShadowPassVertex
-            #pragma fragment ShadowPassFragment
-
-            #include "Includes/Lux URP Lit Extended Inputs.hlsl"
-            #include "Includes/Lux URP Uber ShadowCaster Pass.hlsl"
-            
-            ENDHLSL
-        }
-
-    //  Depth Only --------------------------------------------------------
-        Pass
-        {
-            Name "DepthOnly"
-            Tags{"LightMode" = "DepthOnly"}
-
             ZWrite On
             ZTest [_ZTest]
             ColorMask R
             Cull [_Cull]
 
             HLSLPROGRAM
-            #pragma only_renderers gles gles3 glcore d3d11
             #pragma target 2.0
 
             #pragma vertex DepthOnlyVertex
@@ -742,7 +460,6 @@
             #pragma shader_feature_local _ALPHATEST_ON
             #pragma shader_feature_local_fragment _SMOOTHNESS_TEXTURE_ALBEDO_CHANNEL_A
 
-            //#pragma shader_feature _NORMALMAP
             #pragma shader_feature_local _PARALLAX
             #pragma shader_feature_local_fragment _FADING_ON
 
@@ -750,13 +467,14 @@
                 #define _NORMALMAP
             #endif
 
+            // -------------------------------------
+            // Unity defined keywords
+            #pragma multi_compile_fragment _ LOD_FADE_CROSSFADE
+
             //--------------------------------------
             // GPU Instancing
             #pragma multi_compile_instancing
-            #pragma multi_compile _ DOTS_INSTANCING_ON
-            #pragma target 3.5 DOTS_INSTANCING_ON
-
-            #pragma multi_compile_fragment _ LOD_FADE_CROSSFADE
+            #include_with_pragmas "Packages/com.unity.render-pipelines.universal/ShaderLibrary/DOTS.hlsl"
 
             #include "Includes/Lux URP Lit Extended Inputs.hlsl"
             #include "Includes/Lux URP Uber DepthOnly Pass.hlsl"
@@ -768,14 +486,16 @@
         Pass
         {
             Name "DepthNormals"
-            Tags{"LightMode" = "DepthNormals"}
+            Tags
+            {
+                "LightMode" = "DepthNormals"
+            }
 
             ZWrite On
             ZTest [_ZTest]
             Cull [_Cull]
 
             HLSLPROGRAM
-            #pragma only_renderers gles gles3 glcore d3d11
             #pragma target 2.0
 
             #pragma vertex DepthNormalsVertex
@@ -800,10 +520,15 @@
             //--------------------------------------
             // GPU Instancing
             #pragma multi_compile_instancing
-            #pragma multi_compile _ DOTS_INSTANCING_ON
-            #pragma target 3.5 DOTS_INSTANCING_ON
+            #include_with_pragmas "Packages/com.unity.render-pipelines.universal/ShaderLibrary/DOTS.hlsl"
 
+            // -------------------------------------
+            // Unity defined keywords
             #pragma multi_compile_fragment _ LOD_FADE_CROSSFADE
+            
+            // -------------------------------------
+            // Universal Pipeline keywords
+            #include_with_pragmas "Packages/com.unity.render-pipelines.universal/ShaderLibrary/RenderingLayers.hlsl"
 
             #include "Includes/Lux URP Lit Extended Inputs.hlsl"
             #include "Includes/Lux URP Uber DepthNormal Pass.hlsl"
@@ -815,12 +540,14 @@
         Pass
         {
             Name "Meta"
-            Tags{"LightMode" = "Meta"}
+            Tags
+            {
+                "LightMode" = "Meta"
+            }
 
             Cull Off
 
             HLSLPROGRAM
-            #pragma only_renderers gles gles3 glcore d3d11
             #pragma target 2.0
 
             #pragma vertex UniversalVertexMeta

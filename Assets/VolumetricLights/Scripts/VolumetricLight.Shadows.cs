@@ -157,7 +157,7 @@ namespace VolumetricLights {
                     }
                     break;
 
-                case LightType.Area:
+                case LightType.Rectangle:
                 case LightType.Disc:
                     cam.transform.localRotation = Quaternion.identity;
                     cam.orthographic = true;

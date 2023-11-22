@@ -85,7 +85,7 @@
             inout half4 result,
         #endif
         inout float2 uv1, inout float2 uv2, inout float2 uv3,
-        inout half w1, inout half w2, inout half w3, inout float2 duvdx, inout float2 duvdy)
+        inout float w1, inout float w2, inout float w3, inout float2 duvdx, inout float2 duvdy)
     {
         float2 uvScaled = uv * 3.464 * _ProceduralScale;
         const float2x2 gridToSkewedGrid = float2x2(1.0, 0.0, -0.57735027, 1.15470054);
@@ -161,16 +161,15 @@
 
     //  Get weights using float!
         float exponent = 1.0f + _ProceduralBlend * 15.0f;
-        float fw1 = pow((float)w1, exponent);
-        float fw2 = pow((float)w2, exponent);
-        float fw3 = pow((float)w3, exponent);
-        //float sum = 1.0f / (max(0.0001, fw1 + fw2 + fw3));
-        float sum = saturate(fw1 + fw2 + fw3);
-        sum = (sum == 0.0f) ? 0.0f : 1.0f / sum;
+        w1 = pow(w1, exponent);
+        w2 = pow(w2, exponent);
+        w3 = pow(w3, exponent);
+        float sum = saturate(w1 + w2 + w3);
+        sum = (sum == 0.0f) ? 0.0f : rcp(sum);
 
-        w1 = fw1 * sum;
-        w2 = fw2 * sum;
-        w3 = fw3 * sum;
+        w1 = w1 * sum;
+        w2 = w2 * sum;
+        w3 = w3 * sum;
         
     //  Result
         result = w1 * G1 + w2 * G2 + w3 * G3;
@@ -619,7 +618,7 @@
                 #if defined(_PROCEDURALTEXTURING)
                     half proceduralHeight;
                     float2 uv1, uv2, uv3;
-                    half w1, w2, w3;
+                    float w1, w2, w3;
                     float2 duvdx, duvdy;
                     GetProceduralBaseSample(_HeightMaps, sampler_Splat0, IN.uvSplat01.xy, proceduralHeight, uv1, uv2, uv3, w1, w2, w3, duvdx, duvdy);
                     heights.x = proceduralHeight;

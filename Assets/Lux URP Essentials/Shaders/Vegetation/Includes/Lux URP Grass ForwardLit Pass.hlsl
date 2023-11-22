@@ -59,6 +59,7 @@ struct Varyings
 Varyings LitPassVertex(Attributes input)
 {
     Varyings output = (Varyings)0;
+    
     UNITY_SETUP_INSTANCE_ID(input);
     UNITY_TRANSFER_INSTANCE_ID(input, output);
     UNITY_INITIALIZE_VERTEX_OUTPUT_STEREO(output);
@@ -104,13 +105,25 @@ Varyings LitPassVertex(Attributes input)
     output.fadeOcclusion.y = lerp(1.0h, vocclusion, _Occlusion);
 
     half3 vertexLight = VertexLighting(positionWS, normalWS);
-    half fogFactor = ComputeFogFactor(vertexInput.positionCS.z);
+    
+    half fogFactor = 0;
+    #if !defined(_FOG_FRAGMENT)
+        fogFactor = ComputeFogFactor(vertexInput.positionCS.z);
+    #endif
 
     OUTPUT_LIGHTMAP_UV(input.staticLightmapUV, unity_LightmapST, output.staticLightmapUV);
     #ifdef DYNAMICLIGHTMAP_ON
         output.dynamicLightmapUV = input.dynamicLightmapUV.xy * unity_DynamicLightmapST.xy + unity_DynamicLightmapST.zw;
     #endif
-    OUTPUT_SH(output.normalWS, output.vertexSH);
+    
+    #if UNITY_VERSION >= 202317
+        OUTPUT_SH4(vertexInput.positionWS, output.normalWS.xyz, GetWorldSpaceNormalizeViewDir(vertexInput.positionWS), output.vertexSH);
+    #elif UNITY_VERSION >= 202310
+        OUTPUT_SH(vertexInput.positionWS, output.normalWS.xyz, GetWorldSpaceNormalizeViewDir(vertexInput.positionWS), output.vertexSH);
+    #else 
+        OUTPUT_SH(output.normalWS.xyz, output.vertexSH);
+    #endif
+    
     #ifdef _ADDITIONAL_LIGHTS_VERTEX
         output.fogFactorAndVertexLight = half4(fogFactor, vertexLight);
     #else
@@ -176,6 +189,12 @@ void InitializeInputData(Varyings input, half3 normalTS, out InputData inputData
     #endif
     #if defined(DYNAMICLIGHTMAP_ON)
         inputData.bakedGI = SAMPLE_GI(input.staticLightmapUV, input.dynamicLightmapUV, input.vertexSH, inputData.normalWS);
+    #elif !defined(LIGHTMAP_ON) && (defined(PROBE_VOLUMES_L1) || defined(PROBE_VOLUMES_L2))
+        inputData.bakedGI = SAMPLE_GI(input.vertexSH,
+            GetAbsolutePositionWS(inputData.positionWS),
+            inputData.normalWS,
+            inputData.viewDirectionWS,
+            inputData.positionCS.xy);
     #else
         inputData.bakedGI = SAMPLE_GI(input.staticLightmapUV, input.vertexSH, inputData.normalWS);
     #endif

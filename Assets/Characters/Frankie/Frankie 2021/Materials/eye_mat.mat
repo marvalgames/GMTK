@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d0353a89b1f911e48b9e16bdc9f2e058, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  version: 7
+  version: 9
 --- !u!21 &2100000
 Material:
   serializedVersion: 8
@@ -35,7 +35,8 @@ Material:
   m_CustomRenderQueue: -1
   stringTagMap:
     RenderType: Opaque
-  disabledShaderPasses: []
+  disabledShaderPasses:
+  - MOTIONVECTORS
   m_LockedProperties: 
   m_SavedProperties:
     serializedVersion: 3
@@ -148,8 +149,7 @@ Material:
     - _ZWrite: 1
     m_Colors:
     - Color_0469036dd0044d59bd5c0473e3d27abe: {r: 0, g: 0, b: 0, a: 0}
-    - Color_2a9126cc97f4417697940287382aecef: {r: 1367.12, g: 1367.12, b: 1367.12,
-        a: 0}
+    - Color_2a9126cc97f4417697940287382aecef: {r: 1367.12, g: 1367.12, b: 1367.12, a: 0}
     - Vector2_53f79c228a134f82a5cf47fc4aab799c: {r: 1, g: 1, b: 0, a: 0}
     - Vector2_53f79c_Tiling: {r: 1, g: 1, b: 0, a: 0}
     - Vector2_998d73d8edf048e3851b55f71a31e980: {r: 0, g: 0, b: 0, a: 0}
@@ -162,3 +162,4 @@ Material:
     - _Tiling: {r: 1, g: 1, b: 0, a: 0}
     - _scrollSpeed: {r: 0, g: 0, b: 0, a: 0}
   m_BuildTextureStacks: []
+  m_AllowLocking: 1

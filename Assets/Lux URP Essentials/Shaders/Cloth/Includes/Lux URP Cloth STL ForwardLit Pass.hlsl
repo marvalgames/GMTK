@@ -83,7 +83,14 @@ Varyings LitPassVertex(Attributes input)
     #ifdef DYNAMICLIGHTMAP_ON
         output.dynamicLightmapUV = input.dynamicLightmapUV.xy * unity_DynamicLightmapST.xy + unity_DynamicLightmapST.zw;
     #endif
-    OUTPUT_SH(output.normalWS.xyz, output.vertexSH);
+
+    #if UNITY_VERSION >= 202317
+        OUTPUT_SH4(vertexInput.positionWS, output.normalWS.xyz, GetWorldSpaceNormalizeViewDir(vertexInput.positionWS), output.vertexSH);
+    #elif UNITY_VERSION >= 202310
+        OUTPUT_SH(vertexInput.positionWS, output.normalWS.xyz, GetWorldSpaceNormalizeViewDir(vertexInput.positionWS), output.vertexSH);
+    #else 
+        OUTPUT_SH(output.normalWS.xyz, output.vertexSH);
+    #endif
     
     output.fogFactorAndVertexLight = half4(fogFactor, vertexLight);
 
@@ -177,6 +184,12 @@ void InitializeInputData(Varyings input, half3 normalTS, half facing, out InputD
     inputData.vertexLighting = input.fogFactorAndVertexLight.yzw;
     #if defined(DYNAMICLIGHTMAP_ON)
         inputData.bakedGI = SAMPLE_GI(input.staticLightmapUV, input.dynamicLightmapUV, input.vertexSH, inputData.normalWS);
+    #elif !defined(LIGHTMAP_ON) && (defined(PROBE_VOLUMES_L1) || defined(PROBE_VOLUMES_L2))
+        inputData.bakedGI = SAMPLE_GI(input.vertexSH,
+            GetAbsolutePositionWS(inputData.positionWS),
+            inputData.normalWS,
+            inputData.viewDirectionWS,
+            inputData.positionCS.xy);
     #else
         inputData.bakedGI = SAMPLE_GI(input.staticLightmapUV, input.vertexSH, inputData.normalWS);
     #endif

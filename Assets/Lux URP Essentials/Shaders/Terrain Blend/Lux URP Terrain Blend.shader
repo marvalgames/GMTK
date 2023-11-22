@@ -154,7 +154,10 @@ Shader "Lux URP/Terrain/Blend"
             #pragma multi_compile_fragment _ _LIGHT_LAYERS
             #pragma multi_compile_fragment _ _LIGHT_COOKIES
             #pragma multi_compile _ _FORWARD_PLUS
-            #pragma multi_compile_fragment _ _WRITE_RENDERING_LAYERS
+            
+            #include_with_pragmas "Packages/com.unity.render-pipelines.core/ShaderLibrary/FoveatedRenderingKeywords.hlsl"
+            #include_with_pragmas "Packages/com.unity.render-pipelines.universal/ShaderLibrary/RenderingLayers.hlsl"
+
 
 
 // #if !defined(_ADDITIONAL_LIGHT_SHADOWS)
@@ -190,7 +193,7 @@ Shader "Lux URP/Terrain/Blend"
 
             inline float DecodeFloatRG( float2 enc ) {
                 float2 kDecodeDot = float2(1.0, 1/255.0);
-                return dot( enc, kDecodeDot );
+                return dot(enc, kDecodeDot);
             }
 
             VertexOutput LitPassVertex(VertexInput input)
@@ -246,8 +249,15 @@ Shader "Lux URP/Terrain/Blend"
                 #endif
 
                 OUTPUT_LIGHTMAP_UV(input.lightmapUV, unity_LightmapST, output.lightmapUV);
-                OUTPUT_SH(output.normalWS.xyz, output.vertexSH);
                 
+                #if UNITY_VERSION >= 202317
+                    OUTPUT_SH4(vertexInput.positionWS, output.normalWS.xyz, GetWorldSpaceNormalizeViewDir(vertexInput.positionWS), output.vertexSH);
+                #elif UNITY_VERSION >= 202310
+                    OUTPUT_SH(vertexInput.positionWS, output.normalWS.xyz, GetWorldSpaceNormalizeViewDir(vertexInput.positionWS), output.vertexSH);
+                #else 
+                    OUTPUT_SH(output.normalWS.xyz, output.vertexSH);
+                #endif
+    
                 output.fogFactorAndVertexLight = half4(fogFactor, vertexLight);
 
                 //#ifdef _ADDITIONAL_LIGHTS
@@ -347,9 +357,8 @@ Shader "Lux URP/Terrain/Blend"
 
             //  Get terrain height
                 float2 terrainUV = (input.positionWS.xz - _TerrainPos.xz) / _TerrainSize.xz;
-                terrainUV = (terrainUV * (_TerrainHeightNormal_TexelSize.zw - 1.0f) + 0.5 ) * _TerrainHeightNormal_TexelSize.xy;
-
-                half4 terrainSample = SAMPLE_TEXTURE2D_LOD(_TerrainHeightNormal, sampler_TerrainHeightNormal, terrainUV, 0);
+                terrainUV = (terrainUV * (_TerrainHeightNormal_TexelSize.zw - 1.0) + 0.5 ) * _TerrainHeightNormal_TexelSize.xy;
+                float4 terrainSample = SAMPLE_TEXTURE2D_LOD(_TerrainHeightNormal, sampler_TerrainHeightNormal, terrainUV, 0.0).rgba;
                 float terrainHeight = DecodeFloatRG(terrainSample.rg) * _TerrainSize.y + _TerrainPos.y;
 
                 surfaceData.alpha = smoothstep(0.0h, 1.0h, 1.0h - saturate( (terrainHeight - input.positionWS.y + _AlphaShift) * _AlphaWidth ) );   
@@ -402,6 +411,7 @@ Shader "Lux URP/Terrain/Blend"
 
             //  Add fog
                 color.rgb = MixFog(color.rgb, inputData.fogCoord);
+
                 return color;
             }
 

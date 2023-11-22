@@ -17,16 +17,28 @@
 #endif
 
 #if !defined(SHADERGRAPH_PREVIEW)
-    half3 LightingPhysicallyBasedWrapped(BRDFData brdfData, half3 lightColor, half3 lightDirectionWS, half lightAttenuation, half3 normalWS, half3 viewDirectionWS, half NdotL)
+    half3 LightingPhysicallyBasedWrapped(BRDFData brdfData, half3 lightColor, half3 lightDirectionWS, half lightAttenuation, half3 normalWS, half3 viewDirectionWS, half NdotL, bool specularHighlightsOff)
     {
     //  NdotL is wrapped... not correct for specular
         half3 radiance = lightColor * (lightAttenuation * NdotL);
-        return DirectBDRF(brdfData, normalWS, lightDirectionWS, viewDirectionWS) * radiance;
+        
+        #if UNITY_VERSION >= 202310
+            half3 brdf = brdfData.diffuse;
+            #ifndef _SPECULARHIGHLIGHTS_OFF
+                [branch] if (!specularHighlightsOff)
+                {
+                    brdf += brdfData.specular * DirectBRDFSpecular(brdfData, normalWS, lightDirectionWS, viewDirectionWS);
+                }
+            #endif
+            return brdf * radiance;
+        #else 
+            return DirectBDRF(brdfData, normalWS, lightDirectionWS, viewDirectionWS) * radiance;
+        #endif
     }
 
-    half3 LightingPhysicallyBasedWrapped(BRDFData brdfData, Light light, half3 normalWS, half3 viewDirectionWS, half NdotL)
+    half3 LightingPhysicallyBasedWrapped(BRDFData brdfData, Light light, half3 normalWS, half3 viewDirectionWS, half NdotL, bool specularHighlightsOff)
     {
-        return LightingPhysicallyBasedWrapped(brdfData, light.color, light.direction, light.distanceAttenuation * light.shadowAttenuation, normalWS, viewDirectionWS, NdotL);
+        return LightingPhysicallyBasedWrapped(brdfData, light.color, light.direction, light.distanceAttenuation * light.shadowAttenuation, normalWS, viewDirectionWS, NdotL, specularHighlightsOff);
     }
 #endif
 
@@ -86,6 +98,12 @@ void Lighting_half(
 #else
 
 //  Real Lighting
+
+    #if defined(_SPECULARHIGHLIGHTS_OFF)
+        bool specularHighlightsOff = true;
+    #else
+        bool specularHighlightsOff = false;
+    #endif
 
     if (enableNormalMapping) {
         normalWS = TransformTangentToWorld(normalTS, half3x3(tangentWS.xyz, bitangentWS.xyz, normalWS.xyz));
@@ -206,7 +224,7 @@ void Lighting_half(
 
     //  Wrapped Diffuse   
         NdotL = saturate((dot(inputData.normalWS, mainLight.direction) + w) * WrappedNormalization );
-        lightingData.mainLightColor = LightingPhysicallyBasedWrapped(brdfData, mainLight, inputData.normalWS, inputData.viewDirectionWS, NdotL);
+        lightingData.mainLightColor = LightingPhysicallyBasedWrapped(brdfData, mainLight, inputData.normalWS, inputData.viewDirectionWS, NdotL, specularHighlightsOff);
     
     //  Translucency
         half transPower = transmissionPower;
@@ -235,15 +253,12 @@ void Lighting_half(
                 //  Wrapped Diffuse
                     NdotL = saturate((dot(inputData.normalWS, light.direction) + w) * WrappedNormalization );
                     lightingData.additionalLightsColor += LightingPhysicallyBasedWrapped(
-                        brdfData, light, inputData.normalWS, inputData.viewDirectionWS, NdotL);
+                        brdfData, light, inputData.normalWS, inputData.viewDirectionWS, NdotL, specularHighlightsOff);
                 //  Translucency
                     half3 lightColor = light.color;
                 //  Mask by incoming shadow strength
-                    #if USE_CLUSTERED_LIGHTING
-                        int index = lightIndex;
-                    #else
-                        int index = GetPerObjectLightIndex(lightIndex);
-                    #endif
+                    int index = lightIndex;
+
                     half4 shadowParams = GetAdditionalLightShadowParams(index);
                     #if !defined(ADDITIONAL_LIGHT_CALCULATE_SHADOWS)
                         lightColor *= lerp(1, 0, transmissionMaskByShadowstrength);
@@ -274,15 +289,16 @@ void Lighting_half(
                 //  Wrapped Diffuse
                     NdotL = saturate((dot(inputData.normalWS, light.direction) + w) * WrappedNormalization );
                     lightingData.additionalLightsColor += LightingPhysicallyBasedWrapped(
-                        brdfData, light, inputData.normalWS, inputData.viewDirectionWS, NdotL);
+                        brdfData, light, inputData.normalWS, inputData.viewDirectionWS, NdotL, specularHighlightsOff);
                 //  Translucency
                     half3 lightColor = light.color;
                 //  Mask by incoming shadow strength
-                    #if USE_CLUSTERED_LIGHTING
+                    #if USE_FORWARD_PLUS
                         int index = lightIndex;
                     #else
                         int index = GetPerObjectLightIndex(lightIndex);
                     #endif
+
                     half4 shadowParams = GetAdditionalLightShadowParams(index);
                     #if !defined(ADDITIONAL_LIGHT_CALCULATE_SHADOWS)
                         lightColor *= lerp(1, 0, transmissionMaskByShadowstrength);

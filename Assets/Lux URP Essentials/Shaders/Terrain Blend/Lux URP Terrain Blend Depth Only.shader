@@ -239,8 +239,15 @@
                 #ifdef DYNAMICLIGHTMAP_ON
                     output.dynamicLightmapUV = input.dynamicLightmapUV.xy * unity_DynamicLightmapST.xy + unity_DynamicLightmapST.zw;
                 #endif
-                OUTPUT_SH(output.normalWS.xyz, output.vertexSH);
-
+                
+                #if UNITY_VERSION >= 202317
+                    OUTPUT_SH4(vertexInput.positionWS, output.normalWS.xyz, GetWorldSpaceNormalizeViewDir(vertexInput.positionWS), output.vertexSH);
+                #elif UNITY_VERSION >= 202310
+                    OUTPUT_SH(vertexInput.positionWS, output.normalWS.xyz, GetWorldSpaceNormalizeViewDir(vertexInput.positionWS), output.vertexSH);
+                #else 
+                    OUTPUT_SH(output.normalWS.xyz, output.vertexSH);
+                #endif
+    
                 return output;
             }
 

@@ -128,7 +128,16 @@ Varyings LitPassVertex(Attributes input)
         #endif
 
         OUTPUT_LIGHTMAP_UV(input.staticLightmapUV, unity_LightmapST, output.staticLightmapUV);
-        OUTPUT_SH(output.normalWS.xyz, output.vertexSH);
+    
+    //  Slightly different markup!    
+        #if UNITY_VERSION >= 202317
+            OUTPUT_SH4(output.positionWS, output.normalWS.xyz, GetWorldSpaceNormalizeViewDir(output.positionWS), output.vertexSH);
+        #elif UNITY_VERSION >= 202310
+            OUTPUT_SH(output.positionWS, output.normalWS.xyz, GetWorldSpaceNormalizeViewDir(output.positionWS), output.vertexSH);
+        #else 
+            OUTPUT_SH(output.normalWS.xyz, output.vertexSH);
+        #endif
+    
     #endif
 
     

@@ -59,7 +59,10 @@ Shader "Lux URP/FX/Lightbeam"
         Pass
         {
             Name "StandardUnlit"
-            Tags{"LightMode" = "UniversalForward"}
+            Tags
+            {
+                "LightMode" = "UniversalForward"
+            }
 
 
             Blend SrcAlpha OneMinusSrcAlpha
@@ -76,18 +79,19 @@ Shader "Lux URP/FX/Lightbeam"
             #pragma shader_feature_local ORTHO_SUPPORT
 
             // -------------------------------------
-            // Lightweight Pipeline keywords
+            // Universal Pipeline keywords
 
             // -------------------------------------
             // Unity defined keywords
             #pragma multi_compile_fog
+            #include_with_pragmas "Packages/com.unity.render-pipelines.universal/ShaderLibrary/RenderingLayers.hlsl"
 
             //--------------------------------------
             // GPU Instancing
             #pragma multi_compile_instancing
-            #pragma multi_compile _ DOTS_INSTANCING_ON
-            #pragma target 3.5 DOTS_INSTANCING_ON
-            
+            #pragma instancing_options renderinglayer
+            #include_with_pragmas "Packages/com.unity.render-pipelines.universal/ShaderLibrary/DOTS.hlsl"
+
             #pragma vertex vert
             #pragma fragment frag
 

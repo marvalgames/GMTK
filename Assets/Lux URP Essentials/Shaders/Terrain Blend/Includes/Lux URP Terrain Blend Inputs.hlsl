@@ -51,7 +51,10 @@
 //  Additional textures
     //TEXTURE2D(_TopDownBaseMap); SAMPLER(sampler_TopDownBaseMap);
     //TEXTURE2D(_TopDownNormalMap); SAMPLER(sampler_TopDownNormalMap);
-    TEXTURE2D(_TerrainHeightNormal); SAMPLER(sampler_TerrainHeightNormal);
+    
+    TEXTURE2D_FLOAT(_TerrainHeightNormal); SAMPLER(sampler_TerrainHeightNormal);
+
+    SAMPLER(lux_linear_clamp_sampler);
 
 
 //  Global Inputs

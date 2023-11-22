@@ -11,7 +11,8 @@
 
 
 //  Toon
-    TEXTURE2D(_GradientMap); float4 _GradientMap_TexelSize;
+    // TEXTURE2D(_GradientMap); float4 _GradientMap_TexelSize; // Moved to inputs
+    // Already defined since URP 16? Only in the Beta!
     SAMPLER(s_point_clamp_sampler);
     SAMPLER(s_linear_clamp_sampler);
 
@@ -116,7 +117,7 @@ half4 LuxURPToonFragmentPBR(InputData inputData,
 
     BRDFData brdfData;
 //  We can't use our specular here as it can be anything. So we simply use the default dielectric value here.
-    InitializeBRDFData(albedo, metallic, kDieletricSpec.rgb, smoothness, alpha, brdfData);
+    InitializeBRDFData(albedo, metallic, kDielectricSpec.rgb, smoothness, alpha, brdfData);
 
 //  Decals Part 1
 //  Here we get the decals' albedo and combine it with brdfData.diffuse as this is used by GI

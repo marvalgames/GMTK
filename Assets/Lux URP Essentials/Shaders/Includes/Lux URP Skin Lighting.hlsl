@@ -96,7 +96,7 @@ half4 LuxURPSkinFragmentPBR(InputData inputData, SurfaceData surfaceData,
             half3 transLightDir = mainLight.direction + inputData.normalWS * translucency.w;
             half transDot = dot( transLightDir, -inputData.viewDirectionWS );
             transDot = exp2(saturate(transDot) * transPower - transPower);
-            lightingData.mainLightColor += skinMask * subsurfaceColor * transDot * (1.0h - saturate(NdotLUnclamped)) * mainLightColor * lerp(1.0h, mainLight.shadowAttenuation, translucency.z) * translucency.x;
+            lightingData.mainLightColor += skinMask * subsurfaceColor * transDot * (1.0 - saturate(NdotLUnclamped)) * mainLightColor * lerp(1.0, mainLight.shadowAttenuation, translucency.z) * translucency.x;
     
         }
 
@@ -131,7 +131,7 @@ half4 LuxURPSkinFragmentPBR(InputData inputData, SurfaceData surfaceData,
                     half3 transLightDirA = light.direction + inputData.normalWS * translucency.w;
                     half transDotA = dot( transLightDirA, -inputData.viewDirectionWS );
                     transDotA = exp2(saturate(transDotA) * transPower - transPower);
-                    lightingData.additionalLightsColor += skinMask * subsurfaceColor * transDotA * (1.0h - saturate(NdotLUnclamped)) * lightColor * lerp(1.0h, light.shadowAttenuation, translucency.z) * light.distanceAttenuation * translucency.x;
+                    lightingData.additionalLightsColor += skinMask * subsurfaceColor * transDotA * (1.0 - saturate(NdotLUnclamped)) * lightColor * lerp(1.0, light.shadowAttenuation, translucency.z) * light.distanceAttenuation * translucency.x;
                 }
             }
         #endif
@@ -164,7 +164,7 @@ half4 LuxURPSkinFragmentPBR(InputData inputData, SurfaceData surfaceData,
                 half3 transLightDirA = light.direction + inputData.normalWS * translucency.w;
                 half transDotA = dot( transLightDirA, -inputData.viewDirectionWS );
                 transDotA = exp2(saturate(transDotA) * transPower - transPower);
-                lightingData.additionalLightsColor += skinMask * subsurfaceColor * transDotA * (1.0h - saturate(NdotLUnclamped)) * lightColor * lerp(1.0h, light.shadowAttenuation, translucency.z) * light.distanceAttenuation * translucency.x;
+                lightingData.additionalLightsColor += skinMask * subsurfaceColor * transDotA * (1.0 - saturate(NdotLUnclamped)) * lightColor * lerp(1.0, light.shadowAttenuation, translucency.z) * light.distanceAttenuation * translucency.x;
             }
         LIGHT_LOOP_END
     #endif

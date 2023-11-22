@@ -43,7 +43,9 @@ struct Varyings
 
     float4 positionCS                   : SV_POSITION;
     
-    half fade                           : TEXCOORD8;
+    #if defined(_DISTANCEFADE)
+        nointerpolation half fade       : TEXCOORD8;
+    #endif
 
     UNITY_VERTEX_INPUT_INSTANCE_ID
     UNITY_VERTEX_OUTPUT_STEREO
@@ -65,8 +67,6 @@ Varyings LitPassVertex(Attributes input)
         float3 diff = (_WorldSpaceCameraPos - worldInstancePos);
         float dist = dot(diff, diff);
         output.fade = saturate( (_DistanceFade.x - dist) * _DistanceFade.y );
-    #else
-        output.fade = 1.0h;
     #endif
 
     VertexPositionInputs vertexInput = GetVertexPositionInputs(input.positionOS.xyz);
@@ -74,7 +74,7 @@ Varyings LitPassVertex(Attributes input)
 
     half3 vertexLight = VertexLighting(vertexInput.positionWS, normalInput.normalWS);
 
-    half fogFactor = 0.0h;
+    half fogFactor = 0.0;
     #if !defined(_FOG_FRAGMENT)
         fogFactor = ComputeFogFactor(vertexInput.positionCS.z);
     #endif
@@ -92,7 +92,14 @@ Varyings LitPassVertex(Attributes input)
     #ifdef DYNAMICLIGHTMAP_ON
         output.dynamicLightmapUV = input.dynamicLightmapUV.xy * unity_DynamicLightmapST.xy + unity_DynamicLightmapST.zw;
     #endif
-    OUTPUT_SH(output.normalWS.xyz, output.vertexSH);
+    
+    #if UNITY_VERSION >= 202317
+        OUTPUT_SH4(vertexInput.positionWS, output.normalWS.xyz, GetWorldSpaceNormalizeViewDir(vertexInput.positionWS), output.vertexSH);
+    #elif UNITY_VERSION >= 202310
+        OUTPUT_SH(vertexInput.positionWS, output.normalWS.xyz, GetWorldSpaceNormalizeViewDir(vertexInput.positionWS), output.vertexSH);
+    #else 
+        OUTPUT_SH(output.normalWS.xyz, output.vertexSH);
+    #endif
     
     #ifdef _ADDITIONAL_LIGHTS_VERTEX
         output.fogFactorAndVertexLight = half4(fogFactor, vertexLight);
@@ -217,10 +224,14 @@ void InitializeInputData(Varyings input, half3 normalTS, half3 diffuseNormalTS, 
     #endif
 
     #if defined(DYNAMICLIGHTMAP_ON)
-        //inputData.bakedGI = SAMPLE_GI(input.staticLightmapUV, input.dynamicLightmapUV, input.vertexSH, inputData.normalWS);
         inputData.bakedGI = SAMPLE_GI(input.staticLightmapUV, input.dynamicLightmapUV, input.vertexSH, diffuseNormalWS);
+    #elif !defined(LIGHTMAP_ON) && (defined(PROBE_VOLUMES_L1) || defined(PROBE_VOLUMES_L2))
+        inputData.bakedGI = SAMPLE_GI(input.vertexSH,
+            GetAbsolutePositionWS(inputData.positionWS),
+            inputData.normalWS,
+            inputData.viewDirectionWS,
+            input.positionCS.xy);
     #else
-        //inputData.bakedGI = SAMPLE_GI(input.staticLightmapUV, input.vertexSH, inputData.normalWS);
         inputData.bakedGI = SAMPLE_GI(input.staticLightmapUV, input.vertexSH, diffuseNormalWS);
     #endif
 
@@ -260,7 +271,13 @@ void LitPassFragment(
 //  Get the surface description
     SurfaceData surfaceData;
     AdditionalSurfaceData additionalSurfaceData;
-    InitializeSkinLitSurfaceData(input.uv.xy, input.fade, surfaceData, additionalSurfaceData);
+
+    #if defined(_DISTANCEFADE)
+        half distanceFade = input.fade;
+    #else 
+        half distanceFade = 1.0;
+    #endif
+    InitializeSkinLitSurfaceData(input.uv.xy, distanceFade, surfaceData, additionalSurfaceData);
 
 //  Prepare surface data (like bring normal into world space and get missing inputs like gi
     half3 diffuseNormalWS;
@@ -279,18 +296,18 @@ void LitPassFragment(
     #if defined(_RECEIVEDECALS)
         half3 albedo = surfaceData.albedo;
         ApplyDecalToSurfaceData(input.positionCS, surfaceData, inputData);
-        half suppression = 1.0h - saturate( abs( dot(albedo, albedo) - dot(surfaceData.albedo, surfaceData.albedo) ) * 256.0h );
+        half suppression = 1.0 - saturate( abs( dot(albedo, albedo) - dot(surfaceData.albedo, surfaceData.albedo) ) * 256.0 );
         additionalSurfaceData.skinMask *= suppression;
         additionalSurfaceData.translucency *= lerp(suppression, 1, _DecalTransmission);
     #endif
 #endif
 
     #if defined(_RIMLIGHTING)
-        half rim = saturate(1.0h - saturate( dot(inputData.normalWS, inputData.viewDirectionWS) ) );
+        half rim = saturate(1.0 - saturate( dot(inputData.normalWS, inputData.viewDirectionWS) ) );
         half power = _RimPower;
         if(_RimFrequency > 0 ) {
-            half perPosition = lerp(0.0h, 1.0h, dot(1.0h, frac(UNITY_MATRIX_M._m03_m13_m23) * 2.0h - 1.0h ) * _RimPerPositionFrequency ) * 3.1416h;
-            power = lerp(power, _RimMinPower, (1.0h + sin(_Time.y * _RimFrequency + perPosition) ) * 0.5h );
+            half perPosition = lerp(0.0, 1.0, dot(1.0, frac(UNITY_MATRIX_M._m03_m13_m23) * 2.0 - 1.0 ) * _RimPerPositionFrequency ) * half(PI);
+            power = lerp(power, _RimMinPower, (1.0 + sin(_Time.y * _RimFrequency + perPosition) ) * 0.5 );
         }
         surfaceData.emission += pow(rim, power) * _RimColor.rgb * _RimColor.a;
     #endif
@@ -313,7 +330,7 @@ void LitPassFragment(
         _SubsurfaceColor.rgb,
         (_SampleCurvature) ? additionalSurfaceData.curvature * _Curvature : lerp(additionalSurfaceData.translucency, 1, _Curvature),
     //  Lerp lighting towards standard according the distance fade
-        additionalSurfaceData.skinMask * input.fade,
+        additionalSurfaceData.skinMask * distanceFade,
         _MaskByShadowStrength,
         _Backscatter
         );    

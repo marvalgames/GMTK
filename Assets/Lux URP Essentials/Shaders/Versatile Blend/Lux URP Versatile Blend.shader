@@ -128,16 +128,20 @@ Shader "Lux URP/Versatile Blend"
             // Universal Pipeline keywords
             #pragma multi_compile _ _MAIN_LIGHT_SHADOWS _MAIN_LIGHT_SHADOWS_CASCADE _MAIN_LIGHT_SHADOWS_SCREEN
             #pragma multi_compile _ _ADDITIONAL_LIGHTS_VERTEX _ADDITIONAL_LIGHTS
+            #pragma multi_compile _ EVALUATE_SH_MIXED EVALUATE_SH_VERTEX
             #pragma multi_compile_fragment _ _ADDITIONAL_LIGHT_SHADOWS
             #pragma multi_compile_fragment _ _REFLECTION_PROBE_BLENDING
             #pragma multi_compile_fragment _ _REFLECTION_PROBE_BOX_PROJECTION
-            #pragma multi_compile_fragment _ _SHADOWS_SOFT
+            #pragma multi_compile_fragment _ _SHADOWS_SOFT _SHADOWS_SOFT_LOW _SHADOWS_SOFT_MEDIUM _SHADOWS_SOFT_HIGH
             #pragma multi_compile_fragment _ _SCREEN_SPACE_OCCLUSION
             #pragma multi_compile_fragment _ _DBUFFER_MRT1 _DBUFFER_MRT2 _DBUFFER_MRT3
-            #pragma multi_compile_fragment _ _LIGHT_LAYERS
             #pragma multi_compile_fragment _ _LIGHT_COOKIES
+            #pragma multi_compile _ _LIGHT_LAYERS
             #pragma multi_compile _ _FORWARD_PLUS
-            #pragma multi_compile_fragment _ _WRITE_RENDERING_LAYERS
+            #if UNITY_VERSION >= 202320
+                #include_with_pragmas "Packages/com.unity.render-pipelines.core/ShaderLibrary/FoveatedRenderingKeywords.hlsl"
+            #endif
+            #include_with_pragmas "Packages/com.unity.render-pipelines.universal/ShaderLibrary/RenderingLayers.hlsl"
 
             // -------------------------------------
             // Unity defined keywords
@@ -149,13 +153,14 @@ Shader "Lux URP/Versatile Blend"
             #pragma multi_compile_fragment _ LOD_FADE_CROSSFADE
             #pragma multi_compile_fog
             #pragma multi_compile_fragment _ DEBUG_DISPLAY
+            #include_with_pragmas "Packages/com.unity.render-pipelines.universal/ShaderLibrary/ProbeVolumeVariants.hlsl"
 
             //--------------------------------------
             // GPU Instancing
             #pragma multi_compile_instancing
             #pragma instancing_options renderinglayer
-            #pragma multi_compile _ DOTS_INSTANCING_ON
-            #pragma target 3.5 DOTS_INSTANCING_ON
+            #include_with_pragmas "Packages/com.unity.render-pipelines.universal/ShaderLibrary/DOTS.hlsl"
+
 
         //  Include base inputs and all other needed "base" includes
             #include "Includes/Lux URP Versatile Blend Inputs.hlsl"
@@ -206,8 +211,15 @@ Shader "Lux URP/Versatile Blend"
                 #endif
 
                 OUTPUT_LIGHTMAP_UV(input.lightmapUV, unity_LightmapST, output.lightmapUV);
-                OUTPUT_SH(output.normalWS.xyz, output.vertexSH);
-                
+
+                #if UNITY_VERSION >= 202317
+                    OUTPUT_SH4(vertexInput.positionWS, output.normalWS.xyz, GetWorldSpaceNormalizeViewDir(vertexInput.positionWS), output.vertexSH);
+                #elif UNITY_VERSION >= 202310
+                    OUTPUT_SH(vertexInput.positionWS, output.normalWS.xyz, GetWorldSpaceNormalizeViewDir(vertexInput.positionWS), output.vertexSH);
+                #else 
+                    OUTPUT_SH(output.normalWS.xyz, output.vertexSH);
+                #endif
+    
                 output.fogFactorAndVertexLight = half4(fogFactor, vertexLight);
 
                 //#if defined(REQUIRES_WORLD_SPACE_POS_INTERPOLATOR)
@@ -271,9 +283,20 @@ Shader "Lux URP/Versatile Blend"
 
                 inputData.fogCoord = input.fogFactorAndVertexLight.x;
                 inputData.vertexLighting = input.fogFactorAndVertexLight.yzw;
-                inputData.bakedGI = SAMPLE_GI(input.lightmapUV, input.vertexSH * occlusion, inputData.normalWS);
+                
+                #if defined(DYNAMICLIGHTMAP_ON)
+                    inputData.bakedGI = SAMPLE_GI(input.staticLightmapUV, input.dynamicLightmapUV, input.vertexSH, inputData.normalWS);
+                #elif !defined(LIGHTMAP_ON) && (defined(PROBE_VOLUMES_L1) || defined(PROBE_VOLUMES_L2))
+                    inputData.bakedGI = SAMPLE_GI(input.vertexSH,
+                        GetAbsolutePositionWS(inputData.positionWS),
+                        inputData.normalWS,
+                        inputData.viewDirectionWS,
+                        input.positionCS.xy);
+                #else
+                    inputData.bakedGI = SAMPLE_GI(input.staticLightmapUV, input.vertexSH, inputData.normalWS);
+                #endif
 
-//  this shader is transparent so it will never write to depth normal...
+            //  this shader is transparent so it will never write to depth normal...
                 inputData.normalizedScreenSpaceUV = GetNormalizedScreenSpaceUV(input.positionCS);
                 inputData.shadowMask = SAMPLE_SHADOWMASK(input.lightmapUV);
             }
@@ -382,7 +405,10 @@ Shader "Lux URP/Versatile Blend"
         Pass
         {
             Name "ShadowCaster"
-            Tags{"LightMode" = "ShadowCaster"}
+            Tags
+            {
+                "LightMode" = "ShadowCaster"
+            }
 
             ZWrite On
             ZTest LEqual
@@ -400,14 +426,12 @@ Shader "Lux URP/Versatile Blend"
             //--------------------------------------
             // GPU Instancing
             #pragma multi_compile_instancing
-            #pragma multi_compile _ DOTS_INSTANCING_ON
-            #pragma target 3.5 DOTS_INSTANCING_ON
+            #include_with_pragmas "Packages/com.unity.render-pipelines.universal/ShaderLibrary/DOTS.hlsl"
 
             // -------------------------------------
             // Unity defined keywords
             #pragma multi_compile_fragment _ LOD_FADE_CROSSFADE
 
-            // This is used during shadow map generation to differentiate between directional and punctual light shadows, as they use different formulas to apply Normal Bias
             #pragma multi_compile_vertex _ _CASTING_PUNCTUAL_LIGHT_SHADOW
 
             #pragma vertex ShadowPassVertex
@@ -456,7 +480,6 @@ Shader "Lux URP/Versatile Blend"
             half4 ShadowPassFragment(VertexOutput input) : SV_TARGET
             {
                 UNITY_SETUP_INSTANCE_ID(input);
-                UNITY_SETUP_STEREO_EYE_INDEX_POST_VERTEX(input);
 
                 #ifdef LOD_FADE_CROSSFADE
                     LODFadeCrossFade(input.positionCS);
@@ -477,7 +500,11 @@ Shader "Lux URP/Versatile Blend"
 
         Pass
         {
-            Tags{"LightMode" = "DepthOnly"}
+            Name "DepthOnly"
+            Tags
+            {
+                "LightMode" = "DepthOnly"
+            }
 
             ZWrite On
             ColorMask R
@@ -493,14 +520,21 @@ Shader "Lux URP/Versatile Blend"
             // Material Keywords
             // #pragma shader_feature _ALPHATEST_ON
 
+            // -------------------------------------
+            // Unity defined keywords
+            #pragma multi_compile_fragment _ LOD_FADE_CROSSFADE
+
             //--------------------------------------
             // GPU Instancing
             #pragma multi_compile_instancing
-            #pragma multi_compile _ DOTS_INSTANCING_ON
-            #pragma target 3.5 DOTS_INSTANCING_ON
-            
+            #include_with_pragmas "Packages/com.unity.render-pipelines.universal/ShaderLibrary/DOTS.hlsl"
+
             #define DEPTHONLYPASS
             #include "Includes/Lux URP Versatile Blend Inputs.hlsl"
+
+            #if defined(LOD_FADE_CROSSFADE)
+                #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/LODCrossFade.hlsl"
+            #endif
 
             VertexOutput DepthOnlyVertex(VertexInput input)
             {
@@ -519,6 +553,10 @@ Shader "Lux URP/Versatile Blend"
             half4 DepthOnlyFragment(VertexOutput input) : SV_TARGET
             {
                 UNITY_SETUP_STEREO_EYE_INDEX_POST_VERTEX(input);
+
+                #ifdef LOD_FADE_CROSSFADE
+                    LODFadeCrossFade(input.positionCS);
+                #endif
 
                 #if defined(_ALPHATEST_ON)
                     half mask = SAMPLE_TEXTURE2D(_BaseMap, sampler_BaseMap, input.uv.xy).a;

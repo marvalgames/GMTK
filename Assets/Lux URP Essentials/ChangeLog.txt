@@ -1,6 +1,40 @@
 ## Link to the latest version of the documentation:
 https://docs.google.com/document/d/1ck3hmPzKUdewHfwsvmPYwSPCP8azwtpzN7aOLJHvMqE/edit#
 
+
+## Version 1.98
+
+### Added
+- Preview for URP 16.0.4 added.
+
+### Fixed
+- Translucent Lighting: Fixed in Forward+.
+- Toon & Outline: Batching fixed.
+- Fast Outline AlphaTested: Fixed on Metal.
+- Foliage Shader: Custom transmission color fixed in deferred, debug added.
+- Tree Creator Leaves: Cross fading fixed in deferred.
+- Billboard: Fixed compile error on Metal.
+
+
+## Version 1.97
+
+### Fixed
+- Skin shader on iOS
+
+
+## Version 1.96b
+
+### Added
+- Experimental Shader Graph function for "Best fitting Normals" added. 
+
+
+## Version 1.96a
+
+### Fixed
+- Mismatching macro definitions fixed for the different versions of URP 15.0.6.
+- Fixed procedural texturing node when switching the build platform to Android.
+
+
 ## Version 1.96
 
 ### Added
@@ -26,7 +60,7 @@ https://docs.google.com/document/d/1ck3hmPzKUdewHfwsvmPYwSPCP8azwtpzN7aOLJHvMqE/
 ## Version 1.95
 
 ### Changed
-- Skin Shader Graph: If you let the lighting function sample the normals it will now take the original samplers (whih reflect your texture import settings when it comes to trilinear or anisotropic filtering).
+- Skin Shader Graph: If you let the lighting function sample the normals it will now take the original samplers (which reflects your texture import settings when it comes to trilinear or anisotropic filtering).
 
 
 ## Version 1.94

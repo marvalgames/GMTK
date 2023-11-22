@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d0353a89b1f911e48b9e16bdc9f2e058, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  version: 7
+  version: 9
 --- !u!21 &2100000
 Material:
   serializedVersion: 8
@@ -33,7 +33,8 @@ Material:
   m_CustomRenderQueue: -1
   stringTagMap:
     RenderType: Opaque
-  disabledShaderPasses: []
+  disabledShaderPasses:
+  - MOTIONVECTORS
   m_LockedProperties: 
   m_SavedProperties:
     serializedVersion: 3
@@ -214,8 +215,7 @@ Material:
     - Color_556a7f3ec2574371b6ed8cc72b63d486: {r: 1, g: 0, b: 0, a: 1}
     - Color_64a92cfe5dbd4c13b18d6f8eb9e4a4f5: {r: 1, g: 1, b: 1, a: 1}
     - Color_739e06b2c4ff42e6ad944a00618943df: {r: 0, g: 0, b: 0, a: 1}
-    - Color_a7fc3f6cb07a40d29596b05667130bdb: {r: 0.2784314, g: 0.3647059, b: 0.5058824,
-        a: 1}
+    - Color_a7fc3f6cb07a40d29596b05667130bdb: {r: 0.2784314, g: 0.3647059, b: 0.5058824, a: 1}
     - Color_efdaa08a30cf4bcab4f0ba1d4b1f8a6f: {r: 0, g: 0, b: 0, a: 0}
     - Color_f5363a58c2dc4e4e8e8ecc3ab6d851de: {r: 1, g: 1, b: 1, a: 0}
     - Vector2_5400dd44f9844606bafd1a0ba3560024: {r: 0, g: 0, b: 0, a: 0}
@@ -229,3 +229,4 @@ Material:
     - _Specular: {r: 0, g: 0, b: 0, a: 0}
     - _TextureTiling: {r: 1, g: 1, b: 1, a: 0}
   m_BuildTextureStacks: []
+  m_AllowLocking: 1

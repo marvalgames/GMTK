@@ -91,7 +91,15 @@ Varyings LitGBufferPassVertex (Attributes input)
     #ifdef DYNAMICLIGHTMAP_ON
         output.dynamicLightmapUV = input.dynamicLightmapUV.xy * unity_DynamicLightmapST.xy + unity_DynamicLightmapST.zw;
     #endif
-    OUTPUT_SH(output.normalWS.xyz, output.vertexSH);
+    
+        #if UNITY_VERSION >= 202317
+        OUTPUT_SH4(vertexInput.positionWS, output.normalWS.xyz, GetWorldSpaceNormalizeViewDir(vertexInput.positionWS), output.vertexSH);
+    #elif UNITY_VERSION >= 202310
+        OUTPUT_SH(vertexInput.positionWS, output.normalWS.xyz, GetWorldSpaceNormalizeViewDir(vertexInput.positionWS), output.vertexSH);
+    #else 
+        OUTPUT_SH(output.normalWS.xyz, output.vertexSH);
+    #endif
+    
 
     #ifdef _ADDITIONAL_LIGHTS_VERTEX
         half3 vertexLight = VertexLighting(vertexInput.positionWS, normalInput.normalWS);
@@ -166,6 +174,12 @@ FragmentOutput LitGBufferPassFragment(Varyings input)
     
     #if defined(DYNAMICLIGHTMAP_ON)
         inputData.bakedGI = SAMPLE_GI(input.staticLightmapUV, input.dynamicLightmapUV, input.vertexSH, inputData.normalWS);
+    #elif !defined(LIGHTMAP_ON) && (defined(PROBE_VOLUMES_L1) || defined(PROBE_VOLUMES_L2))
+        inputData.bakedGI = SAMPLE_GI(input.vertexSH,
+            GetAbsolutePositionWS(inputData.positionWS),
+            inputData.normalWS,
+            inputData.viewDirectionWS,
+            input.positionCS.xy);
     #else
         inputData.bakedGI = SAMPLE_GI(input.staticLightmapUV, input.vertexSH, inputData.normalWS);
     #endif

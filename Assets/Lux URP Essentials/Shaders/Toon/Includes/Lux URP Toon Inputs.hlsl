@@ -5,7 +5,10 @@
 //  defines a bunch of helper functions (like lerpwhiteto)
     #include "Packages/com.unity.render-pipelines.core/ShaderLibrary/CommonMaterial.hlsl"  
 //  defines SurfaceData, textures and the functions Alpha, SampleAlbedoAlpha, SampleNormal, SampleEmission
-    #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/SurfaceInput.hlsl"
+    // #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/SurfaceInput.hlsl"
+    // We must not include the file above as it declares _BaseMap_TexelSize outside the CBuffer and thus breaks the batcher...
+    // SO we include out copy:
+    #include "Lux URP Toon SurfaceInputs.hlsl"
 
 //  Must be declared before we can include Lighting.hlsl
     struct AdditionalSurfaceData
@@ -17,7 +20,7 @@
 //  defines e.g. "DECLARE_LIGHTMAP_OR_SH"
     #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Lighting.hlsl"
  
-    #include "../Includes/Lux URP Toon Lighting.hlsl"
+
 
     #include "Packages/com.unity.render-pipelines.core/ShaderLibrary/Color.hlsl"
     #include "Packages/com.unity.render-pipelines.core/ShaderLibrary/UnityInstancing.hlsl"
@@ -81,6 +84,10 @@
         half    _Surface;
         half    _LuxSurface;
         half    _LuxBlend;
+
+        float4  _GradientMap_TexelSize;
+        float4  _BaseMap_TexelSize;
+
     CBUFFER_END
 
 //  Additional textures
@@ -91,6 +98,12 @@
     #if defined(_MASKMAP)
         TEXTURE2D(_MaskMap); SAMPLER(sampler_MaskMap);
     #endif
+
+    TEXTURE2D(_GradientMap); 
+
+
+    #include "../Includes/Lux URP Toon Lighting.hlsl"
+
 
 //  Global Inputs
 

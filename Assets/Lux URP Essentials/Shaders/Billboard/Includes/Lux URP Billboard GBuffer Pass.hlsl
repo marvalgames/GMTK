@@ -46,9 +46,10 @@ struct Varyings
     #endif
     float4 positionCS                   : SV_POSITION;
 
-    #if defined(SHADER_STAGE_FRAGMENT)
-        FRONT_FACE_TYPE cullFace        : FRONT_FACE_SEMANTIC;
-    #endif
+//  Not supported in URP - and not needed :)
+    // #if defined(SHADER_STAGE_FRAGMENT)
+    //     FRONT_FACE_TYPE cullFace        : FRONT_FACE_SEMANTIC;
+    // #endif
 
     UNITY_VERTEX_INPUT_INSTANCE_ID
     UNITY_VERTEX_OUTPUT_STEREO
@@ -179,6 +180,12 @@ FragmentOutput LitGBufferPassFragment(Varyings input)
     
     #if defined(DYNAMICLIGHTMAP_ON)
         inputData.bakedGI = SAMPLE_GI(input.staticLightmapUV, input.dynamicLightmapUV, input.vertexSH, inputData.normalWS);
+    #elif !defined(LIGHTMAP_ON) && (defined(PROBE_VOLUMES_L1) || defined(PROBE_VOLUMES_L2))
+        inputData.bakedGI = SAMPLE_GI(input.vertexSH,
+            GetAbsolutePositionWS(inputData.positionWS),
+            inputData.normalWS,
+            inputData.viewDirectionWS,
+            inputData.positionCS.xy);
     #else
         inputData.bakedGI = SAMPLE_GI(input.staticLightmapUV, input.vertexSH, inputData.normalWS);
     #endif

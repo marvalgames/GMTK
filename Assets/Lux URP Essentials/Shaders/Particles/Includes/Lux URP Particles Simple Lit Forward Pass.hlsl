@@ -199,8 +199,14 @@ VaryingsParticleLux ParticlesLitVertex(AttributesParticleLux input)
         output.tangentWS = half4(normalInput.tangentWS.xyz, sign);
     #endif
 
-    OUTPUT_SH(output.normalWS.xyz, output.vertexSH);
-
+    #if UNITY_VERSION >= 202317
+        OUTPUT_SH4(vertexInput.positionWS, output.normalWS.xyz, GetWorldSpaceNormalizeViewDir(vertexInput.positionWS), output.vertexSH);
+    #elif UNITY_VERSION >= 202310
+        OUTPUT_SH(vertexInput.positionWS, output.normalWS.xyz, GetWorldSpaceNormalizeViewDir(vertexInput.positionWS), output.vertexSH);
+    #else 
+        OUTPUT_SH(output.normalWS.xyz, output.vertexSH);
+    #endif
+    
     output.positionWS.xyz = vertexInput.positionWS.xyz;
 //  NOTE: output.positionWS.w contains fog!
     output.positionWS.w = ComputeFogFactor(vertexInput.positionCS.z);

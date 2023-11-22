@@ -53,6 +53,10 @@ struct Varyings
     #endif
 
     float4 positionCS                   : SV_POSITION;
+
+    #if defined(_DEBUG)
+        half4 color                     : COLOR;
+    #endif
         
     UNITY_VERTEX_INPUT_INSTANCE_ID
     UNITY_VERTEX_OUTPUT_STEREO
@@ -118,7 +122,14 @@ Varyings LitGBufferPassVertex(Attributes input)
     #ifdef DYNAMICLIGHTMAP_ON
         output.dynamicLightmapUV = input.dynamicLightmapUV.xy * unity_DynamicLightmapST.xy + unity_DynamicLightmapST.zw;
     #endif
-    OUTPUT_SH(output.normalWS.xyz, output.vertexSH);
+    
+        #if UNITY_VERSION >= 202317
+        OUTPUT_SH4(vertexInput.positionWS, output.normalWS.xyz, GetWorldSpaceNormalizeViewDir(vertexInput.positionWS), output.vertexSH);
+    #elif UNITY_VERSION >= 202310
+        OUTPUT_SH(vertexInput.positionWS, output.normalWS.xyz, GetWorldSpaceNormalizeViewDir(vertexInput.positionWS), output.vertexSH);
+    #else 
+        OUTPUT_SH(output.normalWS.xyz, output.vertexSH);
+    #endif
 
     #ifdef _ADDITIONAL_LIGHTS_VERTEX
         half3 vertexLight = VertexLighting(vertexInput.positionWS, normalInput.normalWS);
@@ -134,6 +145,10 @@ Varyings LitGBufferPassVertex(Attributes input)
     #endif
 
     output.positionCS = vertexInput.positionCS;
+
+    #if defined(_DEBUG)
+        output.color = input.color;
+    #endif
 
     return output;
 }
@@ -193,6 +208,12 @@ void InitializeInputData(Varyings input, half3 normalTS, half facing, out InputD
     #endif
     #if defined(DYNAMICLIGHTMAP_ON)
         inputData.bakedGI = SAMPLE_GI(input.staticLightmapUV, input.dynamicLightmapUV, input.vertexSH, inputData.normalWS);
+    #elif !defined(LIGHTMAP_ON) && (defined(PROBE_VOLUMES_L1) || defined(PROBE_VOLUMES_L2))
+        inputData.bakedGI = SAMPLE_GI(input.vertexSH,
+            GetAbsolutePositionWS(inputData.positionWS),
+            inputData.normalWS,
+            inputData.viewDirectionWS,
+            input.positionCS.xy);
     #else
         inputData.bakedGI = SAMPLE_GI(input.staticLightmapUV, input.vertexSH, inputData.normalWS);
     #endif
@@ -249,12 +270,13 @@ FragmentOutput LitGBufferPassFragment(Varyings input, half facing : VFACE)
                     mainLight1.color *= float4(cookieColor, 1);
                 #endif
 
+                half3 transmissionColor = (_OverrideTransmission) ? _TransmissionColor.rgb : surfaceData.albedo;
                 surfaceData.emission +=
                     transDot 
                   * (1.0h - saturate(dot(mainLight1.direction, inputData.normalWS)))
                   * mainLight1.color * lerp(1, mainLight1.shadowAttenuation, _ShadowStrength)
                   * additionalSurfaceData.translucency * _TranslucencyStrength
-                  * surfaceData.albedo;
+                  * transmissionColor;
 
                 // Light unityLight;
                 // unityLight = GetMainLight();
@@ -269,6 +291,26 @@ FragmentOutput LitGBufferPassFragment(Varyings input, half facing : VFACE)
         #if defined(_LIGHT_LAYERS)
             }
         #endif
+    #endif
+
+    #if defined(_DEBUG)
+        surfaceData.specular = 0;
+        surfaceData.albedo = 0;
+        surfaceData.occlusion = 0;
+
+        if(_DebugVertexColor == 0) {
+            surfaceData.emission = half3(input.color.r, 0, 0);
+        }
+        else if(_DebugVertexColor == 1) {
+            surfaceData.emission = half3(0, input.color.g, 0);
+        }
+        else if(_DebugVertexColor == 2) {
+            surfaceData.emission = half3(0, 0, input.color.b);
+        }
+        else {
+            surfaceData.emission = input.color.aaa;
+        }
+        surfaceData.emission *= _DebugBrightness;
     #endif
 
     BRDFData brdfData;

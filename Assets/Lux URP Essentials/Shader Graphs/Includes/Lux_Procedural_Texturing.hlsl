@@ -64,7 +64,10 @@ void StochasticSample_half(
     int2 baseId = int2(floor(skewedCoord));
     float3 temp = float3(frac(skewedCoord), 0);
     temp.z = 1.0 - temp.x - temp.y;
-    half w1, w2, w3;
+    
+//  Needs to be float
+    float w1, w2, w3;
+    
     int2 vertex1, vertex2, vertex3;
     if (temp.z > 0.0) {
         w1 = temp.z;
@@ -98,24 +101,33 @@ void StochasticSample_half(
     float2 duvdx = ddx(uv);
     float2 duvdy = ddy(uv);
 
-//  Get weights
-    half exponent = 1.0h + Blend * 15.0h;
+// //  Get weights
+//     half exponent = 1.0h + Blend * 15.0h;
+//     w1 = pow(w1, exponent);
+//     w2 = pow(w2, exponent);
+//     w3 = pow(w3, exponent);
+
+// //  Lets help the compiler here:
+//     half sum = 1.0h / (w1 + w2 + w3);
+//     w1 = w1 * sum;
+//     w2 = w2 * sum;
+//     w3 = w3 * sum;
+
+//  Get weights using float!
+    float exponent = 1.0f + Blend * 15.0f;
+#pragma warning (disable : 3571)
     w1 = pow(w1, exponent);
     w2 = pow(w2, exponent);
     w3 = pow(w3, exponent);
-//  As all pows use the same exponent we can help the compiler:
-//  Why does this introduce artifacts?
-    //exponent = log(exponent);
-    //w1 = exp(w1 * exponent);
-    //w2 = exp(w2 * exponent);
-    //w3 = exp(w3 * exponent);
+#pragma warning (enable : 3571)
+    //float sum = 1.0f / (max(0.0001, fw1 + fw2 + fw3));
+    float sum = saturate(w1 + w2 + w3);
+    sum = (sum == 0.0f) ? 0.0f : 1.0f / sum;
 
-//  Lets help the compiler here:
-    half sum = 1.0h / (w1 + w2 + w3);
     w1 = w1 * sum;
     w2 = w2 * sum;
     w3 = w3 * sum;
-
+    
     half wrsrqt = rsqrt(w1 * w1 + w2 * w2 + w3 * w3);
     
 //  Albedo – Sample Gaussion values from transformed input

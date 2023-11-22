@@ -59,7 +59,10 @@ Shader "Lux URP/Fast Outline AlphaTested"
         Pass
         {
             Name "StandardUnlit"
-            Tags{"LightMode" = "UniversalForward"}
+            Tags
+            {
+                "LightMode" = "UniversalForward"
+            }
 
             Stencil {
                 Ref      [_StencilRef]
@@ -81,7 +84,7 @@ Shader "Lux URP/Fast Outline AlphaTested"
             // Material Keywords
             #define _ALPHATEST_ON
             #pragma shader_feature_local_fragment _ADAPTIVEOUTLINE
-            #pragma shader_feature_local_fragment _APPLYFOG
+            #pragma shader_feature _APPLYFOG                  // not per fragment!
 
             // -------------------------------------
             // Unity defined keywords
@@ -90,10 +93,8 @@ Shader "Lux URP/Fast Outline AlphaTested"
             //--------------------------------------
             // GPU Instancing
             #pragma multi_compile_instancing
-            #pragma multi_compile _ DOTS_INSTANCING_ON
-            #pragma target 3.5 DOTS_INSTANCING_ON
+            #include_with_pragmas "Packages/com.unity.render-pipelines.universal/ShaderLibrary/DOTS.hlsl"
 
-        //  Include base inputs and all other needed "base" includes
             #include "Includes/Lux URP Fast Outlines AlphaTested Inputs.hlsl"
 
             #pragma vertex LitPassVertex
@@ -111,10 +112,11 @@ Shader "Lux URP/Fast Outline AlphaTested"
 
                 VertexPositionInputs vertexInput;
                 vertexInput = GetVertexPositionInputs(input.positionOS.xyz);
-                #if defined(_APPLYFOG)
+                //#if defined(_APPLYFOG)
                     output.fogFactor = ComputeFogFactor(vertexInput.positionCS.z);
-                #endif
+                //#endif
                 output.uv = TRANSFORM_TEX(input.texcoord, _BaseMap);
+                output.positionWS = vertexInput.positionWS;
                 output.positionCS = vertexInput.positionCS;
                 return output;
             }
@@ -161,7 +163,7 @@ Shader "Lux URP/Fast Outline AlphaTested"
             {
                 inputData = (InputData)0;
                 #if defined(_APPLYFOG)
-                    inputData.fogCoord = input.fogFactor;
+                    inputData.fogCoord = InitializeInputDataFog(float4(input.positionWS, 1.0), input.fogFactor);
                 #endif
             }
 

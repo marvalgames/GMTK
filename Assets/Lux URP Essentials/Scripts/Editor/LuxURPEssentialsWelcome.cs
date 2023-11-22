@@ -40,7 +40,7 @@ namespace LuxURPEssentials
 			GUILayout.BeginHorizontal();
 				GUILayout.Space(16);
 				EditorGUILayout.LabelField(
-					"Currently installed: Version 1.96 for Unity 2022.2.16 and URP 14.0.7", _style_bodytxt);
+					"Currently installed: Version 1.98 for Unity 2023.2.0f1 and URP 16.0.4", _style_bodytxt);
 				GUILayout.Space(16);
 			GUILayout.EndHorizontal();
 
@@ -57,7 +57,7 @@ namespace LuxURPEssentials
 			GUILayout.BeginHorizontal();
 				GUILayout.Space(16);
 				EditorGUILayout.LabelField(
-					"The package you have downloaded from the asset store installed shaders compatible with URP 14.0.7. " + 
+					"The package you have downloaded from the asset store installed shaders compatible with URP 15.0.6. " + 
 					"In case you got any compilation errors this most likely is caused by the fact that you are using a different version of URP.\n" + 
 					"If so please have a look at the included sub packages and install the one you need.", _style_bodytxt);
 				GUILayout.Space(16);

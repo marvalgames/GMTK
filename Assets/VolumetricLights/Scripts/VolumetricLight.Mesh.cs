@@ -56,8 +56,8 @@ namespace VolumetricLights {
                         return true;
                     }
                     break;
-                case LightType.Area:
-                    if (needMesh || generatedType != LightType.Area || customRange != generatedRange || areaWidth != generatedAreaWidth || areaHeight != generatedAreaHeight || frustumAngle != generatedAreaFrustumAngle) {
+                case LightType.Rectangle:
+                    if (needMesh || generatedType != LightType.Rectangle || customRange != generatedRange || areaWidth != generatedAreaWidth || areaHeight != generatedAreaHeight || frustumAngle != generatedAreaFrustumAngle) {
                         GenerateCubeMesh();
                         return true;
                     }
@@ -236,7 +236,7 @@ namespace VolumetricLights {
 
             NormalizeScale();
 
-            generatedType = LightType.Area;
+            generatedType = LightType.Rectangle;
             generatedRange = customRange;
             generatedAreaWidth = areaWidth;
             generatedAreaHeight = areaHeight;

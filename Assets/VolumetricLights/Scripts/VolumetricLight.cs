@@ -276,14 +276,14 @@ namespace VolumetricLights {
             }
             mat.SetVector(ShaderParams.BoundsCenter, adjustedBounds.center);
             mat.SetVector(ShaderParams.BoundsExtents, adjustedBounds.extents);
-            if (generatedType == LightType.Area || generatedType == LightType.Disc) {
+            if (generatedType == LightType.Rectangle || generatedType == LightType.Disc) {
                 if (mf != null && mf.sharedMesh != null) {
                     Bounds meshBounds = mf.sharedMesh.bounds; // non transformed real bounds
                     mat.SetVector(ShaderParams.MeshBoundsCenter, meshBounds.center);
                     mat.SetVector(ShaderParams.MeshBoundsExtents, meshBounds.extents);
                 }
                 float baseMultiplierComputed = (generatedAreaFrustumMultiplier - 1f) / generatedRange;
-                if (generatedType == LightType.Area) {
+                if (generatedType == LightType.Rectangle) {
                     mat.SetVector(ShaderParams.AreaExtents, new Vector4(areaWidth * 0.5f, areaHeight * 0.5f, generatedRange, baseMultiplierComputed));
                 } else {
                     mat.SetVector(ShaderParams.AreaExtents, new Vector4(areaWidth * areaWidth, areaHeight, generatedRange, baseMultiplierComputed));
@@ -402,7 +402,7 @@ namespace VolumetricLights {
                     }
                     break;
                 case LightType.Point: keywords.Add(ShaderParams.SKW_POINT); break;
-                case LightType.Area: keywords.Add(ShaderParams.SKW_AREA_RECT); break;
+                case LightType.Rectangle: keywords.Add(ShaderParams.SKW_AREA_RECT); break;
                 case LightType.Disc: keywords.Add(ShaderParams.SKW_AREA_DISC); break;
             }
             if (attenuationMode == AttenuationMode.Quadratic) {

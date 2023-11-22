@@ -118,7 +118,7 @@ namespace StylizedWater2
                 EditorGUILayout.LabelField("Status: " + (waterObjectsVisible && currentCamera ? $"Rendering (camera: {currentCamera.name})" : "Not rendering (water not in view for any camera)"), EditorStyles.miniLabel);
             }
             
-            UI.DrawNotification(UnityEngine.Rendering.XRGraphics.enabled, "Not supported with VR rendering", MessageType.Error);
+            //UI.DrawNotification(UnityEngine.Rendering.XRGraphics.enabled, "Not supported with VR rendering", MessageType.Error);
             
             UI.DrawNotification(PlanarReflectionRenderer.AllowReflections == false, "Reflections have been globally disabled by an external script", MessageType.Warning);
             

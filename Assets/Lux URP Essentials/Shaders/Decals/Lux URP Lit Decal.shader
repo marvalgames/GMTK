@@ -71,7 +71,10 @@
         Pass
         {
             Name "ForwardLit"
-            Tags{"LightMode" = "UniversalForward"}
+            Tags
+            {  
+                "LightMode" = "UniversalForward"
+            }
 
             Stencil {
                 Ref  [_StencilRef]
@@ -79,7 +82,6 @@
                 WriteMask [_WriteMask]
                 Comp [_StencilCompare]
             }
-
 
             Blend SrcAlpha OneMinusSrcAlpha
 
@@ -115,26 +117,33 @@
             // -------------------------------------
             // Universal Pipeline keywords
             #pragma multi_compile _ _MAIN_LIGHT_SHADOWS _MAIN_LIGHT_SHADOWS_CASCADE _MAIN_LIGHT_SHADOWS_SCREEN
-            #pragma multi_compile _ _ADDITIONAL_LIGHTS
+            #pragma multi_compile _ _ADDITIONAL_LIGHTS_VERTEX _ADDITIONAL_LIGHTS
+            #pragma multi_compile _ EVALUATE_SH_MIXED EVALUATE_SH_VERTEX
             #pragma multi_compile_fragment _ _ADDITIONAL_LIGHT_SHADOWS
             #pragma multi_compile_fragment _ _REFLECTION_PROBE_BLENDING
             #pragma multi_compile_fragment _ _REFLECTION_PROBE_BOX_PROJECTION
             #pragma multi_compile_fragment _ _SHADOWS_SOFT
             #pragma multi_compile_fragment _ _SCREEN_SPACE_OCCLUSION
 
-            #pragma multi_compile_fragment _ _LIGHT_LAYERS
             #pragma multi_compile_fragment _ _LIGHT_COOKIES
+            #pragma multi_compile _ _LIGHT_LAYERS
             #pragma multi_compile _ _FORWARD_PLUS
+
+            #if UNITY_VERSION >= 202320
+                #include_with_pragmas "Packages/com.unity.render-pipelines.core/ShaderLibrary/FoveatedRenderingKeywords.hlsl"
+            #endif
+            #include_with_pragmas "Packages/com.unity.render-pipelines.universal/ShaderLibrary/RenderingLayers.hlsl"
 
             // -------------------------------------
             // Unity defined keywords
             #pragma multi_compile_fog
+            #include_with_pragmas "Packages/com.unity.render-pipelines.universal/ShaderLibrary/ProbeVolumeVariants.hlsl"
 
             //--------------------------------------
             // GPU Instancing
             #pragma multi_compile_instancing
-            #pragma multi_compile _ DOTS_INSTANCING_ON
-            #pragma target 3.5 DOTS_INSTANCING_ON
+            #pragma instancing_options renderinglayer
+            #include_with_pragmas "Packages/com.unity.render-pipelines.universal/ShaderLibrary/DOTS.hlsl"
             
             #pragma vertex vert
             #pragma fragment frag
@@ -201,6 +210,8 @@
                 #endif
 
                 half fade : TEXCOORD7;
+
+                DECLARE_LIGHTMAP_OR_SH(staticLightmapUV, vertexSH, 8);
             };
 
             VertexOutput vert (VertexInput v)
@@ -211,6 +222,11 @@
                 UNITY_INITIALIZE_VERTEX_OUTPUT_STEREO(output);
 
                 output.positionCS = TransformObjectToHClip(v.vertex.xyz);
+
+                float3 positionWS = TransformObjectToWorld(v.vertex.xyz);
+                half3 normalWS = TransformObjectToWorldNormal(half3(0.0h, 1.0h, 0.0h));
+
+                OUTPUT_SH4( positionWS, normalWS, GetWorldSpaceNormalizeViewDir(positionWS), output.vertexSH);
 
             //  We do all calculations in Object Space
                 float4 positionVS = mul(UNITY_MATRIX_V, mul(UNITY_MATRIX_M, v.vertex));
@@ -240,7 +256,7 @@
                 }
 
                 #if defined(_NORMALMAP) || defined(_DECALNORMAL)
-                    output.normalWS = TransformObjectToWorldNormal(half3(0.0h, 1.0h, 0.0h));
+                    output.normalWS = normalWS;
                 #endif
 
                 #if defined(_NORMALMAP)
@@ -466,7 +482,7 @@
                         //positionWS = mul(GetObjectToWorldMatrix(), float4(positionOS, 1)).xyz;
                         float3 RayWS = mul((float3x3)GetObjectToWorldMatrix(), input.viewRayOS.xyz);
                         //float3 posWS = _WorldSpaceCameraPos + RayWS * min(depthX.x, min(depthX.y, min(depthY.x, depthY.y)));
-                        float3 posWS = _WorldSpaceCameraPos + normalize(RayWS) * (depthX.x + depthX.y + depthY.x +depthY.y) / 4;
+                        float3 posWS = _WorldSpaceCameraPos + normalize(RayWS) * (depthX.x + depthX.y + depthY.x + depthY.y) / 4;
                         posWS = (posWS + positionWS) / 2;
 
                         RayWS = normalize(RayWS);
@@ -517,7 +533,17 @@
              // We can't calculate per vertex lighting
                 inputData.vertexLighting = 0;
             //  So we have to sample SH fully per pixel
-                inputData.bakedGI = SampleSH(inputData.normalWS);
+
+                #if !defined(LIGHTMAP_ON) && (defined(PROBE_VOLUMES_L1) || defined(PROBE_VOLUMES_L2))
+                    inputData.bakedGI = SAMPLE_GI(input.vertexSH,
+                        GetAbsolutePositionWS(inputData.positionWS),
+                        inputData.normalWS,
+                        inputData.viewDirectionWS,
+                        input.positionCS.xy);
+                #else
+                    //inputData.bakedGI = SampleSH(inputData.normalWS);
+                    inputData.bakedGI = SAMPLE_GI(input.staticLightmapUV, input.vertexSH, inputData.normalWS);
+                #endif
 
                 // col = UniversalFragmentPBR(
                 //     inputData, 

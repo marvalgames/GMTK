@@ -7,8 +7,6 @@
     #define _CUSTOMDBUFFER
 #endif
 
-
-
 #if !defined(SHADERGRAPH_PREVIEW) || defined(UNIVERSAL_LIGHTING_INCLUDED)
 
 //  As we do not have access to the vertex lights we will make the shader always sample add lights per pixel
@@ -243,7 +241,7 @@ void Lighting_half(
     BRDFData brdfData;
 //  We can't use our specular here as it can be anything. So we simply use the default dielectric value here.
     float alpha = 1;
-    InitializeBRDFData(albedo, 0, kDieletricSpec.rgb, smoothness, alpha, brdfData);
+    InitializeBRDFData(albedo, 0, kDielectricSpec.rgb, smoothness, alpha, brdfData);
 
 //  Rim Lighting
     half3 rimLighting = 0;
