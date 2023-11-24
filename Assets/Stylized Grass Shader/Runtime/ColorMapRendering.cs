@@ -48,20 +48,24 @@ namespace StylizedGrass
         private static UniversalRendererData rendererData;
         #endif
         private static Camera renderCam;
-        
-        private static Texture2D render;
+
+        private static RenderTexture renderTarget;
+        private static Texture2D bakedTexture;
 
         private struct TerrainState
         {
             public Terrain terrain;
             public bool drawInstanced;
             public float basemapDistance;
-            public float worldSpaceHeightPos;
             public Material material;
             public bool renderFoliage;
         }
         private static Dictionary<GameObject, TerrainState> originalTerrainStates = new Dictionary<GameObject, TerrainState>();
         
+        //Copy the RenderTexture (GPU) to a Texture2D (CPU), with the intent on saving the data to disk.
+        private static bool CopyBuffer => Application.isPlaying == false;
+        //private static bool CopyBuffer => true;
+    
         #region Rendering Setup
         public static void Render(GrassColorMapRenderer renderer)
         {
@@ -127,8 +131,6 @@ namespace StylizedGrass
                 {
                     terrain = terrain
                 };
-
-                state.worldSpaceHeightPos = item.transform.position.y;
                 
                 if (terrain)
                 {
@@ -361,10 +363,11 @@ namespace StylizedGrass
                 return;
             }
             
+            if(renderTarget) RenderTexture.ReleaseTemporary(renderTarget);
             //Set up render texture
-            RenderTexture rt = new RenderTexture(renderer.resolution, renderer.resolution, 8, RenderTextureFormat.ARGB32, RenderTextureReadWrite.Linear);
-            renderCam.targetTexture = rt;
-            RenderTexture.active = rt;
+            renderTarget = RenderTexture.GetTemporary(renderer.resolution, renderer.resolution, 8, RenderTextureFormat.ARGB32, RenderTextureReadWrite.Linear);
+            renderCam.targetTexture = renderTarget;
+            RenderTexture.active = renderTarget;
             
             Shader.SetGlobalInt("_ColormapMipLevel", DetailPercentageToMipLevel(renderer.textureDetail));
 
@@ -372,23 +375,31 @@ namespace StylizedGrass
             renderCam.Render();
 
             //Generate heightmap from terrain layers
-            GenerateScalemap(terrains, renderer, rt);
+            GenerateScalemap(terrains, renderer, renderTarget);
 
-            Graphics.SetRenderTarget(rt);
+            if (CopyBuffer)
+            {
+                Graphics.SetRenderTarget(renderTarget);
+
+                bakedTexture = new Texture2D(renderer.resolution, renderer.resolution, TextureFormat.ARGB32, false, true);
+
+                bakedTexture.ReadPixels(new Rect(0, 0, renderer.resolution, renderer.resolution), 0, 0);
+                bakedTexture.Apply();
+
+                #if UNITY_EDITOR
+                EditorUtility.SetDirty(renderer.colorMap);
+                #endif
+            }
             
-            render = new Texture2D(renderer.resolution, renderer.resolution, TextureFormat.ARGB32, false, true);
-
-            render.ReadPixels(new Rect(0, 0, renderer.resolution, renderer.resolution), 0, 0);
-            render.Apply();
-
-            #if UNITY_EDITOR
-            EditorUtility.SetDirty(renderer.colorMap);
-            #endif
-
             //Cleanup
             renderCam.targetTexture = null;
             RenderTexture.active = null;
-            Object.DestroyImmediate(rt);
+
+            if (CopyBuffer)
+            {
+                //Contents are now stored in a Texture2D, so can dispose this
+                RenderTexture.ReleaseTemporary(renderTarget);
+            }
         }
         #endregion
         
@@ -453,59 +464,65 @@ namespace StylizedGrass
         #region Saving
         private static void Save(GrassColorMapRenderer renderer, GrassColorMap colorMap)
         {
-            #if UNITY_EDITOR
-            if (EditorUtility.IsPersistent(colorMap))
+            if (CopyBuffer)
             {
-                string colorMapAssetPath = AssetDatabase.GetAssetPath(colorMap);
-                
-                GrassColorMap existingFile = (GrassColorMap)AssetDatabase.LoadAssetAtPath(colorMapAssetPath, typeof(GrassColorMap));
-                EditorUtility.CopySerialized(colorMap, existingFile);
-
-                { //Update from <= v1.3.4
-                    //Also check for sub-assets, are to be removed!
-                    Object[] subAssets = AssetDatabase.LoadAllAssetsAtPath(colorMapAssetPath);
-                    if (subAssets.Length > 0)
-                    {
-                        for (int i = 0; i < subAssets.Length; i++)
-                        {
-                            if (AssetDatabase.IsMainAsset(subAssets[i])) continue;
-
-                            Object.DestroyImmediate(subAssets[i], true);
-                        }
-                    }
-                }
-
-                EditorUtility.SetDirty(existingFile);
-            }
-            
-            if (colorMap.overrideTexture == false)
-            {
-                InitializeTexture(colorMap, renderer.resolution);
-                
+                #if UNITY_EDITOR
                 if (EditorUtility.IsPersistent(colorMap))
                 {
-                    SaveTextureData(renderer, colorMap);
+                    string colorMapAssetPath = AssetDatabase.GetAssetPath(colorMap);
+
+                    GrassColorMap existingFile = (GrassColorMap)AssetDatabase.LoadAssetAtPath(colorMapAssetPath, typeof(GrassColorMap));
+                    EditorUtility.CopySerialized(colorMap, existingFile);
+
+                    {
+                        //Update from <= v1.3.4
+                        //Also check for sub-assets, are to be removed!
+                        Object[] subAssets = AssetDatabase.LoadAllAssetsAtPath(colorMapAssetPath);
+                        if (subAssets.Length > 0)
+                        {
+                            for (int i = 0; i < subAssets.Length; i++)
+                            {
+                                if (AssetDatabase.IsMainAsset(subAssets[i])) continue;
+
+                                Object.DestroyImmediate(subAssets[i], true);
+                            }
+                        }
+                    }
+
+                    EditorUtility.SetDirty(existingFile);
                 }
-                else
+
+                if (colorMap.overrideTexture == false)
                 {
-                    //Embedded as an instance of the component, simply copy the data
-                    Graphics.CopyTexture(render, colorMap.texture);
+                    InitializeTexture(colorMap, renderer.resolution);
+
+                    if (EditorUtility.IsPersistent(colorMap))
+                    {
+                        SaveTextureData(renderer, colorMap);
+                    }
+                    else
+                    {
+                        //Embedded as an instance of the component, simply copy the data
+                        Graphics.CopyTexture(bakedTexture, colorMap.texture);
+                    }
                 }
+                #else
+                Graphics.CopyTexture(bakedTexture, colorMap.texture);
+                #endif
             }
-            #else
-            Graphics.CopyTexture(render, colorMap.texture);
-            #endif
+            else
+            {
+                colorMap.texture = renderTarget;
+            }
         }
 
         private static void InitializeTexture(GrassColorMap colorMap, int resolution)
         {
             if (!colorMap.texture || (colorMap.texture.width != resolution))
             {
-                //if(colorMap.texture) Debug.Log($"Recreating texture file, resized. Old:{colorMap.texture.width} New:{resolution}");
+                //if(colorMap.texture) Debug.Log($"Recreating texture object, resized. Old:{colorMap.texture.width} New:{resolution}");
 
                 colorMap.texture = new Texture2D(resolution, resolution, TextureFormat.ARGB32, false, true);
-                colorMap.texture.minimumMipmapLevel = 8;
-                colorMap.texture.Apply();
                 colorMap.texture.name = colorMap.name + " Texture";
             }
         }
@@ -513,29 +530,32 @@ namespace StylizedGrass
         public static void SaveColorMapToAsset(GrassColorMapRenderer renderer, GrassColorMap colorMap)
         {
             #if UNITY_EDITOR
-            string destFolder = EditorUtility.SaveFolderPanel("Asset destination folder", "Assets/", "");
-            
-            //Dialog cancelled
-            if (destFolder == string.Empty)
+            if (CopyBuffer)
             {
-                return;
-            }
+                string destFolder = EditorUtility.SaveFolderPanel("Asset destination folder", "Assets/", "");
 
-            destFolder = destFolder.Replace(Application.dataPath, "Assets");
-            string colorMapAssetPath = destFolder + "/" + colorMap.name + ".asset";
-            
-            AssetDatabase.CreateAsset(colorMap, colorMapAssetPath);
-            
-            Debug.Log("Saved Colormap asset to <i>" + destFolder + "</i> folder");
-            
-            //Now load it back
-            colorMap = (GrassColorMap)AssetDatabase.LoadAssetAtPath(colorMapAssetPath, typeof(GrassColorMap));
+                //Dialog cancelled
+                if (destFolder == string.Empty)
+                {
+                    return;
+                }
 
-            if (colorMap.overrideTexture == false)
-            {
-                InitializeTexture(colorMap, renderer.resolution);
-                
-                SaveTextureData(renderer, colorMap);
+                destFolder = destFolder.Replace(Application.dataPath, "Assets");
+                string colorMapAssetPath = destFolder + "/" + colorMap.name + ".asset";
+
+                AssetDatabase.CreateAsset(colorMap, colorMapAssetPath);
+
+                Debug.Log("Saved Colormap asset to <i>" + destFolder + "</i> folder");
+
+                //Now load it back
+                colorMap = (GrassColorMap)AssetDatabase.LoadAssetAtPath(colorMapAssetPath, typeof(GrassColorMap));
+
+                if (colorMap.overrideTexture == false)
+                {
+                    InitializeTexture(colorMap, renderer.resolution);
+
+                    SaveTextureData(renderer, colorMap);
+                }
             }
             #endif
         }
@@ -556,14 +576,14 @@ namespace StylizedGrass
             //Debug.Log($"Saving to texture at: {textureAssetPath}");
 
             //Saving the color map to an asset file, whilst no render was made
-            if (!render)
+            if (!bakedTexture)
             {
-                render = new Texture2D(colorMap.texture.width, colorMap.texture.height, TextureFormat.ARGB32, false, true);
+                bakedTexture = new Texture2D(colorMap.texture.width, colorMap.texture.height, TextureFormat.ARGB32, false, true);
             }
 
-            var bytes = render.EncodeToPNG();
+            var bytes = bakedTexture.EncodeToPNG();
             System.IO.File.WriteAllBytes(textureAssetPath, bytes);
-            Object.DestroyImmediate(render);
+            Object.DestroyImmediate(bakedTexture);
 
             AssetDatabase.Refresh();
 

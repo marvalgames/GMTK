@@ -9,16 +9,10 @@
 #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/UnityGBuffer.hlsl"
 #endif
 
-#if UNITY_VERSION >= 202120
-#define bakedLightmapUV staticLightmapUV
-#else
-#define bakedLightmapUV lightmapUV
-#endif
-
 struct Varyings
 {
 	float4 uv                       : TEXCOORD0;
-	DECLARE_LIGHTMAP_OR_SH(bakedLightmapUV, vertexSH, 1); //Called staticLightmapUV in URP12+
+	DECLARE_LIGHTMAP_OR_SH(staticLightmapUV, vertexSH, 1);
 	
 //#if defined(REQUIRES_WORLD_SPACE_POS_INTERPOLATOR) //Always needed
 	float3 positionWS               : TEXCOORD2;
@@ -57,8 +51,8 @@ Varyings LitPassVertex(Attributes input)
 
 	float posOffset = ObjectPosRand01();
 
-	WindSettings wind = PopulateWindSettings(_WindAmbientStrength, _WindSpeed, _WindDirection, _WindSwinging, BEND_MASK, _WindObjectRand, _WindVertexRand, _WindRandStrength, _WindGustStrength, _WindGustFreq, _WindGustSpeed);
-	BendSettings bending = PopulateBendSettings(_BendMode, BEND_MASK, _BendPushStrength, _BendFlattenStrength, _PerspectiveCorrection);
+	WindSettings wind = PopulateWindSettings(_WindAmbientStrength, _WindSpeed, _WindDirection, _WindSwinging, input.color[_VertexColorWindChannel], _WindObjectRand, _WindVertexRand, _WindRandStrength, _WindGustStrength, _WindGustFreq, _WindGustSpeed);
+	BendSettings bending = PopulateBendSettings(_BendMode, input.color[_VertexColorBendingChannel], _BendPushStrength, _BendFlattenStrength, _PerspectiveCorrection);
 
 	//Object space position, normals (and tangents)
 	VertexInputs vertexInputs = GetVertexInputs(input, _NormalFlattening);
@@ -66,7 +60,7 @@ Varyings LitPassVertex(Attributes input)
 	//Original vertex normals should be perpendicular to the vertex face!
 	//For lighting, force the normals straight up. Later in the LitPassVertex the normals can be modified through parameters
 
-	vertexInputs.normalOS = lerp(vertexInputs.normalOS, normalize(vertexInputs.positionOS.xyz), _NormalSpherify * lerp(1, BEND_MASK, _NormalSpherifyMask));
+	vertexInputs.normalOS = lerp(vertexInputs.normalOS, normalize(vertexInputs.positionOS.xyz), _NormalSpherify * lerp(1, input.color[_VertexColorShadingChannel], _NormalSpherifyMask));
 	//Apply transformations and bending/wind (Can't use GetVertexPositionInputs, because it would amount to double matrix transformations)
 	VertexOutput vertexData = GetVertexOutput(vertexInputs, posOffset, wind, bending);
 	
@@ -76,9 +70,9 @@ Varyings LitPassVertex(Attributes input)
 	output.normalWS = vertexData.normalWS;
 	
 	//Vertex color
-	output.color.rgb = ApplyVertexColor(input.positionOS.xyz, vertexData.positionWS.xyz, _BaseColor.rgb, COLOR_MASK, _OcclusionStrength, _VertexDarkening, posOffset);
+	output.color.rgb = ApplyVertexColor(input.positionOS.xyz, vertexData.positionWS.xyz, _BaseColor.rgb, input.color[_VertexColorShadingChannel], _OcclusionStrength, _VertexDarkening, posOffset);
 	//Pass vertex color alpha-channel to fragment stage. Used in some shading functions such as translucency
-	output.color.a = COLOR_MASK;
+	output.color.a = input.color[_VertexColorShadingChannel];
 
 	//output.color.a *= vertexInputs.positionOS.y;
 	
@@ -98,14 +92,13 @@ Varyings LitPassVertex(Attributes input)
 	output.viewDirTS = viewDirTS;
 #endif
 
-	//Lightmap UV resolves to "staticLightmapUV" in URP12+
-	OUTPUT_LIGHTMAP_UV(input.bakedLightmapUV, unity_LightmapST, output.bakedLightmapUV);
+	OUTPUT_LIGHTMAP_UV(input.staticLightmapUV, unity_LightmapST, output.staticLightmapUV);
 	#ifdef DYNAMICLIGHTMAP_ON
 	output.dynamicLightmapUV = input.dynamicLightmapUV.xy * unity_DynamicLightmapST.xy + unity_DynamicLightmapST.zw;
 	#endif
 
-	#if UNITY_VERSION >= 202310
-	OUTPUT_SH(vertexData.positionWS, output.normalWS, GetWorldSpaceNormalizeViewDir(vertexData.positionWS), output.vertexSH);
+	#if UNITY_VERSION >= 202320 //Note: actually available from 2023.1.7+ (URP 15.0.8)
+	OUTPUT_SH4(vertexData.positionWS, output.normalWS.xyz, GetWorldSpaceNormalizeViewDir(vertexData.positionWS), output.vertexSH);
 	#else
 	OUTPUT_SH(output.normalWS.xyz, output.vertexSH);
 	#endif
@@ -243,14 +236,16 @@ void PopulateLightingInputData(Varyings input, half3 normalTS, out InputData inp
 	inputData.vertexLighting = input.fogFactorAndVertexLight.yzw;
 	
 	#if defined(DYNAMICLIGHTMAP_ON) && UNITY_VERSION >= 202120
-	inputData.bakedGI = SAMPLE_GI(input.bakedLightmapUV, input.dynamicLightmapUV, input.vertexSH, inputData.normalWS);
+	inputData.bakedGI = SAMPLE_GI(input.staticLightmapUV, input.dynamicLightmapUV.xy, input.vertexSH, inputData.normalWS);
+	#elif !defined(LIGHTMAP_ON) && (defined(PROBE_VOLUMES_L1) || defined(PROBE_VOLUMES_L2))
+	inputData.bakedGI = SAMPLE_GI(input.vertexSH, GetAbsolutePositionWS(inputData.positionWS), inputData.normalWS, inputData.viewDirectionWS, input.positionCS.xy);
 	#else
-	inputData.bakedGI = SAMPLE_GI(input.bakedLightmapUV, input.vertexSH, inputData.normalWS);
+	inputData.bakedGI = SAMPLE_GI(input.staticLightmapUV, input.vertexSH, inputData.normalWS);
 	#endif
 	
 #if UNITY_VERSION >= 202030
 	inputData.normalizedScreenSpaceUV = GetNormalizedScreenSpaceUV(input.positionCS);
-	inputData.shadowMask = SAMPLE_SHADOWMASK(input.bakedLightmapUV);
+	inputData.shadowMask = SAMPLE_SHADOWMASK(input.staticLightmapUV);
 #endif
 
 	#if defined(DEBUG_DISPLAY) && UNITY_VERSION >= 202120//URP 12+
@@ -258,7 +253,7 @@ void PopulateLightingInputData(Varyings input, half3 normalTS, out InputData inp
 	inputData.dynamicLightmapUV = input.dynamicLightmapUV;
 	#endif
 	#if defined(LIGHTMAP_ON)
-	inputData.bakedLightmapUV = input.bakedLightmapUV;
+	inputData.staticLightmapUV = input.staticLightmapUV;
 	#else
 	inputData.vertexSH = input.vertexSH;
 	#endif
@@ -282,7 +277,7 @@ void LightingPassFragment(Varyings input, out half4 outColor : SV_Target0
 	WindSettings wind = (WindSettings)0;
 	if(_WindGustTint > 0)
 	{
-		wind = PopulateWindSettings(_WindAmbientStrength, _WindSpeed, _WindDirection, _WindSwinging, BEND_MASK, _WindObjectRand, _WindVertexRand, _WindRandStrength, _WindGustStrength, _WindGustFreq, _WindGustSpeed);
+		wind = PopulateWindSettings(_WindAmbientStrength, _WindSpeed, _WindDirection, _WindSwinging, input.color[_VertexColorWindChannel], _WindObjectRand, _WindVertexRand, _WindRandStrength, _WindGustStrength, _WindGustFreq, _WindGustSpeed);
 	}
 	SurfaceData surfaceData;
 	//Can't use standard function, since including LitInput.hlsl breaks the SRP batcher

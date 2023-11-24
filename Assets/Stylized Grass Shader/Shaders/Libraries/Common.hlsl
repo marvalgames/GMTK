@@ -27,14 +27,9 @@ float4 _PlayerSphere;
 #undef _NORMALMAP
 #endif
 
-//Vertex color channels used as masks
-#define COLOR_MASK input.color.r
-#define BEND_MASK input.color.r
-
 #if UNITY_VERSION >= 202120
-#define bakedLightmapUV staticLightmapUV
 #else
-#define bakedLightmapUV lightmapUV
+#define staticLightmapUV lightmapUV
 #endif
 
 //Attributes shared per pass, varyings declared separately per pass
@@ -54,7 +49,7 @@ struct Attributes
 	float2 uv           : TEXCOORD0;
 #endif
 	
-	float2 bakedLightmapUV   : TEXCOORD1;
+	float2 staticLightmapUV   : TEXCOORD1;
 	float2 dynamicLightmapUV  : TEXCOORD2;
 
 	UNITY_VERTEX_INPUT_INSTANCE_ID
@@ -68,7 +63,7 @@ struct Attributes
 float ObjectPosRand01()
 {
 	#if defined(UNITY_DOTS_INSTANCING_ENABLED)
-	return _Seed;
+	return saturate(frac(UNITY_MATRIX_M[0][2] + UNITY_MATRIX_M[1][2] + UNITY_MATRIX_M[2][2]));
 	#else
 	return frac(UNITY_MATRIX_M[0][3] + UNITY_MATRIX_M[1][3] + UNITY_MATRIX_M[2][3]);
 	#endif
@@ -132,12 +127,7 @@ void ApplyLODCrossfade(float2 clipPos)
 
 	float sign = CopySign(hash, unity_LODFade.x);
 	
-	#if defined(SHADERPASS_SHADOWCASTER)
-	//Uncertain what is happening here, shadow casting pass doesn't appear to set up the correct unity_LODFade values
-	float f = lerp(hash, unity_LODFade.x - sign, sign);
-	#else
 	float f = unity_LODFade.x - sign;
-	#endif
 
 	clip(f);
 	#endif
@@ -199,7 +189,7 @@ void AlphaClip(float alpha, float3 clipPos, float3 wPos)
 
 	#if defined(SHADERPASS_SHADOWCASTER)
 	//Using clip-space position causes pixel swimming as the camera moves
-	ApplyLODCrossfade(wPos.xz * 32.0);
+	ApplyLODCrossfade(wPos.xz * 32);
 	#else
 	ApplyLODCrossfade(clipPos.xy);
 	#endif

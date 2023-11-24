@@ -1,5 +1,30 @@
+1.4.2
+Minimum supported version is now Unity 2021.3.16f1.
+
+Added:
+- Parameters to choose which vertex color channel is used for shading, wind and bending features.
+
+Changed:
+- Optimization improvement for runtime usage of color map baking (~22-60% faster). The render result is now kept in memory and the GPU->CPU coping normally done for saving is skipped.
+- Shader code no longer requires editing to support DOTS instancing.
+
+Fixed:
+- Entity Graphics rendering not having any effect in a build in Unity 2022.3+.
+- Shader error when Probes Volumes was enabled.
+
+1.4.1
+This is the last update supporting Unity 2020 LTS
+
+Added:
+- LOD Crossfading support for cast shadows in Unity 2022.2+
+
+Fixed:
+- Script compile error in Unity 2022.2 (only) 
+- Shader error in Unity 2023.1.7+ (URP v15.0.8) due to now backported code from Unity 2023.2
+- Grass turning black when Entity Graphics was in use without MaterialProperty components to define a color
+
 1.4.0
-Verified support for Unity 2023.1.f1
+Verified support for Unity 2023.1.1f1
 
 Added:
 - New general Grass Render Feature, this now handles Bending, Perspective Correction and Dithering in one render feature.

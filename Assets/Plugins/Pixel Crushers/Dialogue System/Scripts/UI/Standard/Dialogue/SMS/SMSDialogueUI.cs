@@ -279,7 +279,7 @@ namespace PixelCrushers.DialogueSystem
             var panel = go.GetComponent<StandardUISubtitlePanel>();
             if (panel.addSpeakerName)
             {
-                subtitle.formattedText.text = string.Format(panel.addSpeakerNameFormat, new object[] { subtitle.speakerInfo.Name, subtitle.formattedText.text });
+                subtitle.formattedText.text = FormattedText.Parse(string.Format(panel.addSpeakerNameFormat, new object[] { subtitle.speakerInfo.Name, subtitle.formattedText.text })).text;
             }
             if (dialogueActor != null && dialogueActor.standardDialogueUISettings.setSubtitleColor)
             {
@@ -311,6 +311,7 @@ namespace PixelCrushers.DialogueSystem
         public override void ShowContinueButton(Subtitle subtitle)
         {
             shouldShowContinueButton = true;
+            if (continueButton != null) continueButton.gameObject.SetActive(true);
         }
 
         public override void OnContinueConversation()
@@ -574,5 +575,43 @@ namespace PixelCrushers.DialogueSystem
         {
             records.Clear();
         }
+
+        /// <summary>
+        /// Saves the current conversation history to a Dialogue System variable.
+        /// </summary>
+        public virtual void SaveConversation()
+        {
+            if (!isOpen) return;
+            OnRecordPersistentData();
+        }
+
+        /// <summary>
+        /// Resumes or starts a conversation. If conversation is blank, tries to use the 
+        /// conversation title stored in the DS variable named "Conversation".
+        /// If the conversation's history was previously saved by a call to SaveConversation(),
+        /// resumes the conversation at that point. Otherwise starts from the beginning.
+        /// </summary>
+        /// <param name="conversation">The conversation title.</param>
+        public virtual void ResumeConversation(string conversation = null)
+        {
+            if (isOpen) return;
+            if (!string.IsNullOrEmpty(conversation))
+            {
+                DialogueLua.SetVariable("Conversation", conversation);
+            }
+            if (DialogueLua.DoesVariableExist(currentDialogueEntryRecords))
+            {
+                OnApplyPersistentData();
+            }
+            else 
+            {
+                if (string.IsNullOrEmpty(conversation))
+                {
+                    conversation = DialogueLua.GetVariable("Conversation").asString;
+                }
+                DialogueManager.StartConversation(conversation);
+            }
+        }
+
     }
 }

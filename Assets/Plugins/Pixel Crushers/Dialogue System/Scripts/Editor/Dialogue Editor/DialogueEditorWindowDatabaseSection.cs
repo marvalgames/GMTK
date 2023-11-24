@@ -28,6 +28,7 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
             public bool export = false;
             public bool localization = false;
             public bool stats = false;
+            public bool checkIssues = false;
             public bool editorSettings = false;
             public bool AI = false;
         }
@@ -131,6 +132,8 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
             if (databaseFoldouts.localization) DrawLocalizationSection();
             databaseFoldouts.stats = EditorGUILayout.Foldout(databaseFoldouts.stats, new GUIContent("Database Stats", "Stats on word count and asset count."));
             if (databaseFoldouts.stats) DrawStatsSection();
+            databaseFoldouts.checkIssues = EditorGUILayout.Foldout(databaseFoldouts.checkIssues, new GUIContent("Check For Issues", "Check for issues in the database."));
+            if (databaseFoldouts.checkIssues) DrawCheckForIssuesSection();
             databaseFoldouts.AI = DrawAIDatabaseFoldout(databaseFoldouts.AI);
             databaseFoldouts.editorSettings = EditorGUILayout.Foldout(databaseFoldouts.editorSettings, new GUIContent("Editor Settings", "Editor settings."));
             if (databaseFoldouts.editorSettings) DrawEditorSettings();
@@ -254,7 +257,7 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
             if (globalSearchSpecificConversation)
             {
                 ValidateConversationMenuTitleIndex();
-                if (conversationTitles == null) conversationTitles = GetConversationTitles();
+                if (conversationTitles == null) RecordConversationTitles();
                 globalSearchConversationIndex = EditorGUILayout.Popup(globalSearchConversationIndex, conversationTitles, GUILayout.Height(30));
             }
             var ready = database != null && !string.IsNullOrEmpty(globalSearchText) &&
@@ -343,6 +346,8 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
                         }
                     }
                 }
+
+                customGlobalSearch?.Invoke(database, specificConversation, globalSearchText, ref result);
 
                 Debug.Log(result);
             }
@@ -471,6 +476,8 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
                         }
                     }
                 }
+
+                customGlobalSearchAndReplace?.Invoke(database, specificConversation, globalSearchText, globalReplaceText);
 
             }
             finally

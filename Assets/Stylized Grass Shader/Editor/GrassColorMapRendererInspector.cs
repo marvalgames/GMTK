@@ -325,6 +325,11 @@ namespace StylizedGrass
                     EditorGUILayout.Space();
                 }
 
+                if (colorMap.objectReferenceValue && Application.isPlaying)
+                {
+                    EditorGUILayout.HelpBox("[Play mode] To improve runtime baking performance, no rendering data will be saved to disk. Instead the render result will be kept in memory and sent directly to the shader.", MessageType.Info);
+                }
+                
                 if (GUILayout.Button(RenderButtonContent, GUILayout.Height(30f)))
                 {
                     script.Render();

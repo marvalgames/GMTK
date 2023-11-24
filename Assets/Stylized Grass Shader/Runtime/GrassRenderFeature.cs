@@ -260,7 +260,7 @@ namespace StylizedGrass
                     ditheringScaleOffset.x = 1f / settings.ditheringNoise.width;
                     ditheringScaleOffset.y = 1f / settings.ditheringNoise.height;
 
-                    #if UNITY_2022_2_OR_NEWER
+                    #if UNITY_2022_3_OR_NEWER
                     if (settings.animateDithering && renderingData.cameraData.antialiasing == AntialiasingMode.TemporalAntiAliasing)
                     {
                         //Jitter the UV coordinates to perform stochastic sampling of the dithering pattern

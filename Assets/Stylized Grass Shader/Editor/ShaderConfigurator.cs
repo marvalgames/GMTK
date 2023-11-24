@@ -251,10 +251,6 @@ namespace StylizedGrass
             excludedKeywords = new List<ShaderKeyword> 
             { 
                 //new ShaderKeyword("DEBUG"),
-                #if !ENABLE_HYBRID_RENDERER_V2 || !DOTS_INSTANCING
-                new ShaderKeyword("DOTS_INSTANCING_ON"),
-                #endif
-                
                 #if !UNITY_2020_2_OR_NEWER
                 new ShaderKeyword("LIGHTMAP_SHADOW_MIXING"),
                 new ShaderKeyword("SHADOWS_SHADOWMASK"),

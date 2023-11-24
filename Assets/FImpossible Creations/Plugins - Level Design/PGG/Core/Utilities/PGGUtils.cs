@@ -145,12 +145,12 @@ namespace FIMSpace.Generating
         /// <summary>
         /// Resetting local position, rotation, scale to zero on 1,1,1 (defaults)
         /// </summary>
-        public static void ResetCoords(this Transform t)
-        {
-            t.localPosition = Vector3.zero;
-            t.localRotation = Quaternion.identity;
-            t.localScale = Vector3.one;
-        }
+        //public static void ResetCoords(this Transform t)
+        //{
+        //    t.localPosition = Vector3.zero;
+        //    t.localRotation = Quaternion.identity;
+        //    t.localScale = Vector3.one;
+        //}
 
         public static Vector3 V3Divide(this Vector3 v, Vector3 divBy)
         {

@@ -6,7 +6,7 @@ namespace StylizedGrass
     {
         public Bounds bounds;
         public Vector4 uv;
-        public Texture2D texture;
+        public Texture texture;
         public bool hasScalemap = false;
         
         [Tooltip("When enabled, a custom color map texture can be used")]

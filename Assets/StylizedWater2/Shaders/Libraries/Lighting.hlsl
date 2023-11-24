@@ -50,6 +50,7 @@ float3 SampleReflections(float3 reflectionVector, float smoothness, float mask, 
 //Reusable for every light
 struct TranslucencyData
 {
+	bool directionalLight;
 	float3 subsurfaceColor;
 	float3 lightColor;
 	float3 lightDir;
@@ -58,29 +59,39 @@ struct TranslucencyData
 	float curvature;
 	float mask; //Actually the 'thickness'
 	float strength;
+	float strengthIncident;
 	float exponent;
 
 };
 
-TranslucencyData PopulateTranslucencyData(float3 subsurfaceColor, float3 lightDir, float3 lightColor, float3 viewDir, float3 WorldNormal, float3 worldTangentNormal, float mask, float strength, float exponent, float offet)
+TranslucencyData PopulateTranslucencyData(float3 subsurfaceColor, float3 lightDir, float3 lightColor, float3 viewDir, float3 WorldNormal, float3 worldTangentNormal, float mask, float strength, float incidentStrength, float exponent, float offset, bool directionalLight)
 {
 	TranslucencyData d = (TranslucencyData)0;
+	d.directionalLight = directionalLight;
 	d.subsurfaceColor = subsurfaceColor;
 	d.lightColor = lightColor;
 	d.lightDir = lightDir;
-	
+
 	#if _ADVANCED_SHADING
-	d.normal = lerp(WorldNormal, worldTangentNormal, 0.2);
+	//Slightly include high frequency details
+	d.normal = normalize(WorldNormal + (worldTangentNormal * 0.1));
 	#else
 	d.normal = WorldNormal;
 	#endif
-	d.curvature = offet;
+	d.curvature = offset;
 	d.mask = mask; //Shadows, foam, intersection, etc
 	d.strength = strength;
+	d.strengthIncident = incidentStrength;
 	d.viewDir = viewDir;
 	d.exponent = exponent;
 
 	return d;
+}
+
+//Backwards compatibility for <v1.5.2
+TranslucencyData PopulateTranslucencyData(float3 subsurfaceColor, float3 lightDir, float3 lightColor, float3 viewDir, float3 WorldNormal, float3 worldTangentNormal, float mask, float strength, float exponent, float offset)
+{
+	return PopulateTranslucencyData(subsurfaceColor, lightDir, lightColor, viewDir, WorldNormal, worldTangentNormal, mask, strength, 0.0, exponent, offset, true);
 }
 
 //Single channel overlay
@@ -95,58 +106,62 @@ float3 BlendOverlay(float3 a, float3 b)
 	return float3(BlendOverlay(a.r, b.r), BlendOverlay(a.g, b.g), BlendOverlay(a.b, b.b));
 }
 
-void ApplyTranslucency(float3 subsurfaceColor, float3 lightDir, float3 lightColor, float3 viewDir, float3 normal, float mask, float strength, float exponent, float offset, inout float3 emission)
+//In URP light intensity is pre-multiplied with the HDR color, extract via magnitude of color "vector"
+float GetLightIntensity(float3 lightColor)
 {
-	#if _TRANSLUCENCY
+	//Luminance equals HDR output
+	return (lightColor.r * 0.3 + lightColor.g * 0.59 + lightColor.b * 0.11);
+}
 
-	float attenuation = 1;
+float GetLightIntensity(Light light) { return GetLightIntensity(light.color); }
 
-	//Perturb the light vector towards the normal. Pushes the effect towards the rim of the surface
-	const float3 lightHalfVec = normalize(lightDir + (normal * offset));
+void ApplyTranslucency(float3 subsurfaceColor, float3 lightDir, float3 lightColor, float3 viewDir, float3 normal, float occlusion, float strength, float incidentStrength, float exponent, float offset, bool directionalLight, inout float3 emission)
+{
 	//Coefficient describing how much the surface orientation is between the camera and the direction of/to the light  
-	float VdotL = saturate(dot(-viewDir, lightHalfVec));
+	half transmittance = saturate(dot(-viewDir, lightDir));
 	//Exponentiate to tighten the falloff
-	VdotL = saturate(pow(VdotL, exponent));
+	transmittance = saturate(pow(transmittance, exponent)) * strength;
+	
+	half incident = 0;
+	if(directionalLight)
+	{
+		incident = saturate(dot(lightDir, normal)) * incidentStrength;
+	}
 
-	#if _ADVANCED_SHADING
-	//Fade the effect out as the sun approaches the horizon (80 to 90 degrees)
-	half sunAngle = saturate(dot(float3(0, 1, 0), lightDir));
-	half angleMask = saturate(sunAngle * 10); /* 1.0/0.10 = 10 */
-	VdotL *= angleMask;
-	#endif
+	//Mask by normals facing away from the light (backfaces, in light-space)
+	const half curvature = saturate(lerp(1.0, dot(normal, -lightDir), offset));
+	transmittance *= curvature;
 
-	float lightIntensity = length(lightColor);
-	attenuation = VdotL * mask;
+	const float lightIntensity = GetLightIntensity(lightColor);
+
+	half attenuation = (transmittance + incident) * occlusion * lightIntensity;
 
 #if _ADVANCED_SHADING
+	if(directionalLight)
+	{
+		//Fade the effect out as the sun approaches the horizon (80 to 90 degrees)
+		half sunAngle = saturate(dot(float3(0, 1, 0), lightDir));
+		half angleMask = saturate(sunAngle * 10); /* 1.0/0.10 = 10 */
+		attenuation *= angleMask;
+	}
+	
 	//Modulate with light color to better match dynamic lighting conditions
-	subsurfaceColor = BlendOverlay(lightColor, subsurfaceColor);
-	subsurfaceColor *= lightIntensity * strength;
+	subsurfaceColor = BlendOverlay(saturate(lightColor), subsurfaceColor);
 	
 	emission += subsurfaceColor * attenuation;
 #else //Simple shading
-	subsurfaceColor *= lightIntensity * strength;
-	
 	emission += lerp(emission, subsurfaceColor, attenuation);
 #endif
-
-	#endif
 }
 
 void ApplyTranslucency(TranslucencyData translucencyData, inout float3 emission)
 {
-	ApplyTranslucency(translucencyData.subsurfaceColor, translucencyData.lightDir, translucencyData.lightColor, translucencyData.viewDir, translucencyData.normal, translucencyData.mask, translucencyData.strength, translucencyData.exponent, translucencyData.curvature, emission);
+	ApplyTranslucency(translucencyData.subsurfaceColor, translucencyData.lightDir, translucencyData.lightColor, translucencyData.viewDir, translucencyData.normal, translucencyData.mask, translucencyData.strength, translucencyData.strengthIncident, translucencyData.exponent, translucencyData.curvature, translucencyData.directionalLight, emission);
 }
 
 void AdjustShadowStrength(inout Light light, float strength, float vFace)
 {
 	light.shadowAttenuation = saturate(light.shadowAttenuation + (1.0 - (strength * vFace)));
-}
-
-//In URP light intensity is pre-multiplied with the HDR color, extract via magnitude of color "vector"
-float GetLightIntensity(Light light)
-{
-	return length(light.color);
 }
 
 //Specular Blinn-phong reflection in world-space
@@ -155,7 +170,7 @@ float3 SpecularReflection(Light light, float3 viewDirectionWS, float3 geometryNo
 	//Blend between geometry/wave normals and normals from normal map (aka distortion)
 	normalWS = lerp(geometryNormalWS, normalWS, perturbation);
 
-	const float3 halfVec = SafeNormalize(light.direction + viewDirectionWS + (normalWS * perturbation));
+	const float3 halfVec = normalize(light.direction + viewDirectionWS + (normalWS * perturbation));
 	half NdotH = saturate(dot(geometryNormalWS, halfVec));
 
 	float specular = pow(NdotH, exponent);
@@ -186,11 +201,11 @@ float3 ApplyLighting(inout SurfaceData surfaceData, inout float3 sceneColor, Lig
 	ApplyTranslucency(translucencyData, surfaceData.emission.rgb);
 
 	#if _CAUSTICS
-	float causticsAttentuation = 1;
+	float causticsAttentuation = 1.0;
 	#endif
 	
 #ifdef LIT
-	#if _CAUSTICS
+	#if _CAUSTICS && !defined(LIGHTMAP_ON)
 	causticsAttentuation = GetLightIntensity(mainLight) * (mainLight.distanceAttenuation * mainLight.shadowAttenuation);
 	#endif
 	
@@ -242,9 +257,11 @@ float3 ApplyLighting(inout SurfaceData surfaceData, inout float3 sceneColor, Lig
 			
 			#if _TRANSLUCENCY
 			//Keep settings from main light pass, override these
+			translucencyData.directionalLight = false;
 			translucencyData.lightDir = light.direction;
 			translucencyData.lightColor = light.color * light.distanceAttenuation;
 			translucencyData.strength *= light.shadowAttenuation;
+			translucencyData.exponent *= light.distanceAttenuation;
 				
 			ApplyTranslucency(translucencyData, surfaceData.emission.rgb);
 			#endif

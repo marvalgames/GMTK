@@ -80,6 +80,10 @@ namespace StylizedGrass
         private MaterialProperty _Billboard;
 
         private MaterialProperty _CurvedWorldBendSettings;
+
+        private MaterialProperty _VertexColorShadingChannel;
+        private MaterialProperty _VertexColorWindChannel;
+        private MaterialProperty _VertexColorBendingChannel;
         
         private UI.Material.Section renderingSection;
         private UI.Material.Section mapsSection;
@@ -168,7 +172,11 @@ namespace StylizedGrass
             _Scalemap = FindProperty("_Scalemap", props);
             _Billboard = FindProperty("_Billboard", props);
             _FadeAngleThreshold = FindProperty("_FadeAngleThreshold", props);
-  
+            
+            _VertexColorShadingChannel = FindProperty("_VertexColorShadingChannel", props);
+            _VertexColorWindChannel = FindProperty("_VertexColorWindChannel", props);
+            _VertexColorBendingChannel = FindProperty("_VertexColorBendingChannel", props);
+            
             if(material.HasProperty("_CurvedWorldBendSettings")) _CurvedWorldBendSettings = FindProperty("_CurvedWorldBendSettings", props);
         }
 
@@ -400,6 +408,7 @@ namespace StylizedGrass
                 materialEditor.ShaderProperty(_HueVariationHeight, "Height", 1);
                 materialEditor.ShaderProperty(_EmissionColor, new GUIContent(_EmissionColor.displayName, "Color is added on top of everything, and contributes to HDR"));
                 
+                materialEditor.ShaderProperty(_VertexColorShadingChannel, new GUIContent("Vertex Color Shading Channel", "Vertex color used for masking Ambient Occlusion, translucency, color variation and color map height"));
                 EditorGUILayout.Space();
                 
                 materialEditor.ShaderProperty(_OcclusionStrength, new GUIContent(_OcclusionStrength.displayName, "Darkens the mesh based on the red vertex color painted into the mesh"));
@@ -500,6 +509,8 @@ namespace StylizedGrass
                     EditorGUILayout.Space();
                 }
                  
+                materialEditor.ShaderProperty(_VertexColorBendingChannel, new GUIContent("Vertex Color Mask", "Vertex color used for denote parts of the mesh that will be influenced by bending"));
+
                 materialEditor.ShaderProperty(_BendMode, new GUIContent(_BendMode.displayName, "Per-vertex: Bending is applied on a per-vertex basis\n\nUniform: Applied to all vertices at once, use this for plants/flowers to avoid distorting the mesh"));
 
                 materialEditor.ShaderProperty(_BendPushStrength, new GUIContent(_BendPushStrength.displayName, "The amount of pushing the material should receive by Grass Benders"));
@@ -546,6 +557,7 @@ namespace StylizedGrass
                 {
                     StylizedGrassGUI.DrawActionBox("  Wind strength and speed are influenced by a Wind Zone component", "Select Wind Zone", MessageType.Info, () => Selection.activeObject = StylizedGrassRenderer.Instance.windZone);
                 }
+                materialEditor.ShaderProperty(_VertexColorWindChannel, new GUIContent("Vertex Color Mask", "Vertex color used for denote parts of the mesh that will be influenced by wind"));
 
                 materialEditor.ShaderProperty(_WindAmbientStrength, new GUIContent(_WindAmbientStrength.displayName, "The amount of wind that is applied without gusting"));
                 materialEditor.ShaderProperty(_WindSpeed, new GUIContent(_WindSpeed.displayName, "The speed the wind and gusting moves at"));

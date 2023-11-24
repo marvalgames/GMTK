@@ -225,6 +225,11 @@ namespace FIMSpace
             return xy * xz * yz * yx * zx * zy;
         }
 
+        public static float PerlinNoise3D(Vector3 pos)
+        {
+            return PerlinNoise3D(pos.x, pos.y, pos.z);
+        }
+
         public static bool SameDirection(this float a, float b)
         {
             return (a > 0 && b > 0) || (a < 0f && b < 0f);

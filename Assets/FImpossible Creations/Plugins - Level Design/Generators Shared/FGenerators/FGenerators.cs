@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using UnityEngine;
+using System.Reflection;
 
 namespace FIMSpace.Generating
 {
@@ -103,13 +104,13 @@ namespace FIMSpace.Generating
         }
 
 
-        public static void DestroyObject(UnityEngine.Object obj)
+        public static void DestroyObject(UnityEngine.Object obj, bool allowDestroyAssets = false)
         {
             if (obj == null) return;
 
 #if UNITY_EDITOR
             if (Application.isPlaying == false)
-                GameObject.DestroyImmediate(obj);
+                GameObject.DestroyImmediate(obj, allowDestroyAssets);
             else
                 GameObject.Destroy(obj);
 #else
@@ -487,21 +488,86 @@ namespace FIMSpace.Generating
 
         public static bool IsRightMouseButton()
         {
-            if (Event.current == null) return false;
+            if (UnityEngine.Event.current == null) return false;
 
-            if (Event.current.type == EventType.Used)
-                if (Event.current.button == 1)
+            if (UnityEngine.Event.current.type == UnityEngine.EventType.Used)
+                if (UnityEngine.Event.current.button == 1)
                     return true;
 
             return false;
         }
 
+        /// <summary> Since remembering in which EditorGUI, EditorGUILayout, or EditorGUIUtility, or  GUILayoutUtility ahhh... in which if these classes you will find the desired variable is so confusing ¯\_(ツ)_/¯ each time when trying finding it, ending in googling for forums post with it </summary>
+        public static float InspectorViewWidth()
+        {
+#if UNITY_EDITOR
+            return EditorGUIUtility.currentViewWidth;
+#else
+            return 0f;
+#endif
+
+        }
+
+        /// <summary> Since remembering in which EditorGUI, EditorGUILayout, or EditorGUIUtility, or  GUILayoutUtility ahhh... in which if these classes you will find the desired variable is so confusing ¯\_(ツ)_/¯ each time when trying finding it, ending in googling for unity doc </summary>
+        public static Rect GUILastRect()
+        {
+#if UNITY_EDITOR
+            return GUILayoutUtility.GetLastRect();
+#else
+            return new Rect();
+#endif
+        }
+
+        /// <summary>
+        /// Resetting local position, rotation, scale to zero on 1,1,1 (defaults)
+        /// </summary>
+        public static void ResetCoords(this Transform t)
+        {
+            t.localPosition = Vector3.zero;
+            t.localRotation = Quaternion.identity;
+            t.localScale = Vector3.one;
+        }
+
+
+        /// <summary>
+        /// Working event outside OnGUI
+        /// </summary>
+        public static Vector2 GetEventMousePosition()
+        {
+#if UNITY_EDITOR
+            var field = typeof(Event).GetField("s_Current", BindingFlags.Static | BindingFlags.NonPublic);
+            if (field != null)
+            {
+                Event current = field.GetValue(null) as Event;
+                if (current != null)
+                {
+                    return EditorWindow.focusedWindow.position.position + current.mousePosition;
+                }
+            }
+#endif
+            return Vector2.zero;
+        }
+
+#if UNITY_EDITOR
+        public static string Editor_GetActiveProjectBrowserFolderPath()
+        {
+            MethodInfo getActiveFolderPath = typeof(ProjectWindowUtil).GetMethod(
+    "GetActiveFolderPath",
+    BindingFlags.Static | BindingFlags.NonPublic);
+
+            string folderPath = (string)getActiveFolderPath.Invoke(null, null);
+            return folderPath;
+        }
+
+#endif
+
+
 #if UNITY_EDITOR
         public static void DropDownMenu(GenericMenu menu)
         {
             if (menu == null) return;
-            if (Event.current == null) return;
-            menu.DropDown(new Rect(Event.current.mousePosition + Vector2.left * 100, Vector2.zero));
+            if (UnityEngine.Event.current == null) return;
+            menu.DropDown(new Rect(UnityEngine.Event.current.mousePosition + Vector2.left * 100, Vector2.zero));
         }
 #endif
 
@@ -836,8 +902,18 @@ namespace FIMSpace.Generating
         #region Utilities
 
 
-        public static void SwapElements<T>(List<T> list, int index1, int index2)
+        public static void SwapElements<T>(List<T> list, int index1, int index2, bool loop = false)
         {
+            if (index1 == index2) return;
+
+            if (loop)
+            {
+                if (index1 >= list.Count) index1 -= list.Count;
+                if (index1 < 0) index1 += list.Count;
+                if (index2 >= list.Count) index2 -= list.Count;
+                if (index2 < 0) index2 += list.Count;
+            }
+
             T temp = list[index1];
             list[index1] = list[index2];
             list[index2] = temp;
@@ -845,6 +921,8 @@ namespace FIMSpace.Generating
 
         public static void SwapElements<T>(T[] list, int index1, int index2)
         {
+            if (index1 == index2) return;
+
             T temp = list[index1];
             list[index1] = list[index2];
             list[index2] = temp;
@@ -914,6 +992,7 @@ namespace FIMSpace.Generating
             //    }
             //}
         }
+
 
         public static void Shuffle<T>(this IList<T> list)
         {
@@ -988,6 +1067,7 @@ namespace FIMSpace.Generating
 
         private static float _editorUiScaling;
         public static float EditorUIScale { get { return GetEditorUIScale(); } }
+
         public static float GetEditorUIScale()
         {
 #if UNITY_EDITOR
@@ -1010,6 +1090,8 @@ return 1f;
 
 
         #region Other Editor Related
+
+        public static readonly Color Color_Remove = new Color(1f, 0.825f, 0.825f, 1f);
 
 #if UNITY_EDITOR
         /// <summary> !!! EDITOR ONLY METHOD !!! </summary>
@@ -1058,6 +1140,7 @@ return 1f;
                 }
             }
         }
+
 
 #endif
 
@@ -1457,16 +1540,16 @@ return 1f;
 
                     GUI.Box(drop, new GUIContent(FGUI_Resources.Tex_Drag, "Drag & Drop prefabs here"), d);
 
-                    var dropEvent = Event.current;
+                    var dropEvent = UnityEngine.Event.current;
 
                     if (dropEvent != null)
                     {
-                        if (dropEvent.type == EventType.DragPerform || dropEvent.type == EventType.DragUpdated)
+                        if (dropEvent.type == UnityEngine.EventType.DragPerform || dropEvent.type == UnityEngine.EventType.DragUpdated)
                             if (drop.Contains(dropEvent.mousePosition))
                             {
                                 DragAndDrop.visualMode = DragAndDropVisualMode.Copy;
 
-                                if (dropEvent.type == EventType.DragPerform)
+                                if (dropEvent.type == UnityEngine.EventType.DragPerform)
                                 {
                                     DragAndDrop.AcceptDrag();
                                     foreach (var dragged in DragAndDrop.objectReferences)
@@ -1484,7 +1567,7 @@ return 1f;
                                     }
                                 }
 
-                                Event.current.Use();
+                                UnityEngine.Event.current.Use();
                             }
                     }
 

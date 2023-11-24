@@ -12,6 +12,10 @@ Shader "Universal Render Pipeline/Nature/Stylized Grass"
 		_Cutoff("Alpha Cutoff", Range(0.0, 1.0)) = 0.5
 		[MaterialEnum(Both,0,Front,1,Back,2)] _Cull("Render faces", Float) = 0
 		[Toggle] _AlphaToCoverage("Alpha to coverage", Float) = 0.0
+		
+		[MaterialEnum(Red,0,Green,1,Blue,2,Alpha,3)] _VertexColorShadingChannel("Vertex Color Shading Channel", Float) = 0.0
+		[MaterialEnum(Red,0,Green,1,Blue,2,Alpha,3)] _VertexColorWindChannel("Vertex Color Wind Channel", Float) = 0.0
+		[MaterialEnum(Red,0,Green,1,Blue,2,Alpha,3)] _VertexColorBendingChannel("Vertex Color Bending Channel", Float) = 0.0
 
 		//[Header(Shading)]
 		[MainColor] _BaseColor("Color", Color) = (0.49, 0.89, 0.12, 1.0)
@@ -80,7 +84,6 @@ Shader "Universal Render Pipeline/Nature/Stylized Grass"
 		//Vegetation Studio Pro v1.4.0+
 		_LODDebugColor ("LOD Debug color", Color) = (1,1,1,1)
 		
-		//Required for DOTS Instancing (aka Hybrid Renderer v2)
 		[HideInInspector][NoScaleOffset]unity_Lightmaps("unity_Lightmaps", 2DArray) = "" {}
 		[HideInInspector][NoScaleOffset]unity_LightmapsInd("unity_LightmapsInd", 2DArray) = "" {}
 		[HideInInspector][NoScaleOffset]unity_ShadowMasks("unity_ShadowMasks", 2DArray) = "" {}
@@ -114,17 +117,19 @@ Shader "Universal Render Pipeline/Nature/Stylized Grass"
 
 		//Uncomment to enable
 		//#define MASKING_SPHERE_DISPLACEMENT
-
-		//Change this to 4.5 to add support for the Hybrid Renderer. Doing so removes WebGL support!
+		
 		#pragma target 3.5
 
-		#if UNITY_VERSION >= 202220
+	    #if UNITY_VERSION >= 202220 
+        #include_with_pragmas "Packages/com.unity.render-pipelines.universal/ShaderLibrary/DOTS.hlsl"
+        #endif
+
+		#if UNITY_VERSION >= 202230
 		#include_with_pragmas "Packages/com.unity.render-pipelines.universal/ShaderLibrary/RenderingLayers.hlsl"
 		#endif
 
 		// GPU Instancing
 		#pragma multi_compile_instancing
-		#pragma multi_compile _ DOTS_INSTANCING_ON //Hybrid Renderer v2
 
 		/* start CurvedWorld */
 		//#define CURVEDWORLD_BEND_TYPE_CLASSICRUNNER_X_POSITIVE
@@ -223,7 +228,11 @@ Shader "Universal Render Pipeline/Nature/Stylized Grass"
 			// Unity defined keywords
 			//#pragma multi_compile _ DIRLIGHTMAP_COMBINED
 			#pragma multi_compile _ LIGHTMAP_ON
+			#pragma multi_compile _ DYNAMICLIGHTMAP_ON
 			#pragma multi_compile_fog
+			#if UNITY_VERSION >= 202310            
+            #include_with_pragmas "Packages/com.unity.render-pipelines.universal/ShaderLibrary/ProbeVolumeVariants.hlsl"
+            #endif
 
 			//VVV Stripped on older URP versions VVV
 
@@ -238,7 +247,6 @@ Shader "Universal Render Pipeline/Nature/Stylized Grass"
 			#pragma multi_compile_fragment _ _LIGHT_COOKIES 
             //#pragma multi_compile _ _MIXED_LIGHTING_SUBTRACTIVE //Deprecated?
 			#pragma multi_compile _ _CLUSTERED_RENDERING 
-			#pragma multi_compile _ DYNAMICLIGHTMAP_ON
 			#pragma multi_compile_fragment _ DEBUG_DISPLAY
 
 			//URP 14+

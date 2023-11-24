@@ -38,7 +38,7 @@ namespace PixelCrushers.DialogueSystem
             if (go == null) return false;
             if (go.activeInHierarchy) return false;
             if ((go.transform.parent != null) && go.transform.parent.gameObject.activeSelf) return false;
-            var list = GameObject.FindObjectsOfType<GameObject>();
+            var list = GameObjectUtility.FindObjectsByType<GameObject>();
             for (int i = 0; i < list.Length; i++)
             {
                 if (list[i] == go) return false;
@@ -228,7 +228,7 @@ namespace PixelCrushers.DialogueSystem
         /// <param name="message">Message.</param>
         public static void SendMessageToEveryone(string message)
         {
-            GameObject[] gameObjects = GameObject.FindObjectsOfType(typeof(GameObject)) as GameObject[];
+            GameObject[] gameObjects = GameObjectUtility.FindObjectsByType<GameObject>() as GameObject[];
             for (int i = 0; i < gameObjects.Length; i++)
             {
                 var go = gameObjects[i];
@@ -243,7 +243,7 @@ namespace PixelCrushers.DialogueSystem
         /// <param name="arg">Argument.</param>
         public static void SendMessageToEveryone(string message, string arg)
         {
-            GameObject[] gameObjects = GameObject.FindObjectsOfType(typeof(GameObject)) as GameObject[];
+            GameObject[] gameObjects = GameObjectUtility.FindObjectsByType<GameObject>() as GameObject[];
             for (int i = 0; i < gameObjects.Length; i++)
             {
                 var go = gameObjects[i];
@@ -258,7 +258,7 @@ namespace PixelCrushers.DialogueSystem
         /// <param name="gameObjectsPerFrame">Number of GameObjects to handle each frame.</param>
         public static IEnumerator SendMessageToEveryoneAsync(string message, int gameObjectsPerFrame)
         {
-            GameObject[] gameObjects = GameObject.FindObjectsOfType(typeof(GameObject)) as GameObject[];
+            GameObject[] gameObjects = GameObjectUtility.FindObjectsByType<GameObject>() as GameObject[];
             int count = 0;
             for (int i = 0; i < gameObjects.Length; i++)
             {
@@ -352,8 +352,8 @@ namespace PixelCrushers.DialogueSystem
                 @"<align=\w+>|</align>|<font=[^>]+>|</font>|<indent=\w+\%>|<indent=\w+>|</indent>|" +
                 @"<line-height=\w+%>|<line-height=\w+>|</line-height>|<line-indent=\w+\%>|<line-ident=\w+>|</line-ident>|" +
                 @"<link=""[^""]+"">|</link>|<lowercase>|</lowercase>|<uppercase>|</uppercase>|" +
-                @"<smallcaps>|</smallcaps>|<margin=.+>|<margin-?\w+=.+>|</margin>|<mark=#\w+>|</mark>|" +
-                @"<nobr>|</nobr>|<size=\w+\%>|<size=\w+>|</size>|<sprite=.+>|<[Ss]>|</[Ss]>|<[Uu]>|</[Uu]>|" +
+                @"<smallcaps>|</smallcaps>|<margin=.+?>|<margin-?\w+=.+?>|</margin>|<mark=#\w+>|</mark>|" +
+                @"<nobr>|</nobr>|<size=\w+\%>|<size=\w+>|</size>|<sprite=.+?>|<[Ss]>|</[Ss]>|<[Uu]>|</[Uu]>|" +
                 @"<sup>|</sup>|<sub>|</sub>|<p>|</p>|<\\/p>", string.Empty);
         }
 

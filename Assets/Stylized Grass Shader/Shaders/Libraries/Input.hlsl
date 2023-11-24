@@ -60,19 +60,18 @@ half _WindGustFreq;
 float _WindGustSpeed;
 half _WindGustTint;
 
+//Vegetation Studio Pro
 half4 _LODDebugColor;
 
-//DOTS
-float _Seed;
-
+int _VertexColorShadingChannel;
+int _VertexColorWindChannel;
+int _VertexColorBendingChannel;
 CBUFFER_END
 
-#if defined(UNITY_DOTS_INSTANCING_ENABLED)
+#ifdef UNITY_DOTS_INSTANCING_ENABLED
 UNITY_DOTS_INSTANCING_START(MaterialPropertyMetadata)
     UNITY_DOTS_INSTANCED_PROP(float4, _BaseColor)
-    UNITY_DOTS_INSTANCED_PROP(float, _Seed) //Value is expected to be between 0 and 1
 UNITY_DOTS_INSTANCING_END(MaterialPropertyMetadata)
 
-#define _BaseColor UNITY_ACCESS_DOTS_INSTANCED_PROP(float4, _BaseColor)
-#define _Seed UNITY_ACCESS_DOTS_INSTANCED_PROP(float, _Seed)
+#define _BaseColor UNITY_ACCESS_DOTS_INSTANCED_PROP_WITH_DEFAULT(float4, _BaseColor)
 #endif

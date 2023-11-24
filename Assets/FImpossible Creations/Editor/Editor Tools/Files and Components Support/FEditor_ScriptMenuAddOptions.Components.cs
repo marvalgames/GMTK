@@ -35,6 +35,18 @@ namespace FIMSpace.FEditor
             FitToBottom(t);
         }
 
+        [MenuItem("CONTEXT/Transform/Hide Transform In The Inspector View (Use Components Hider to unhide)")]
+        private static void HideTransformInInspector(MenuCommand menuCommand)
+        {
+            Transform t = (Transform)menuCommand.context;
+
+            if (t)
+            {
+                t.hideFlags = HideFlags.HideInInspector;
+                EditorUtility.SetDirty(t);
+            }
+        }
+
         private static void FitToBottom(Transform t)
         {
             if (t.childCount > 0)

@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using System.Collections;
 
@@ -22,6 +23,8 @@ namespace StylizedGrassDemo
         private float cameraRotUpCur;
         private float distance;
 
+        private Vector3 targetPoint;
+        
         void Start()
         {
             cam = Camera.main.transform;
@@ -33,37 +36,52 @@ namespace StylizedGrassDemo
             distance = -cam.localPosition.z;
         }
 
-        void LateUpdate()
+        private void LateUpdate()
         {
-
-            Cursor.visible = false;
-            if (!pivot) return;
-
             if (Input.GetMouseButton(0) && enableMouse)
             {
                 cameraRotSide += Input.GetAxis("Mouse X") * 5;
                 cameraRotUp -= Input.GetAxis("Mouse Y") * 5;
+                
+                Cursor.visible = false;
             }
             else
             {
                 cameraRotSide += idleRotationSpeed;
+
+                Cursor.visible = true;
             }
-            cameraRotSideCur = Mathf.LerpAngle(cameraRotSideCur, cameraRotSide, Time.deltaTime * lookSmoothSpeed);
-            cameraRotUpCur = Mathf.Lerp(cameraRotUpCur, cameraRotUp, Time.deltaTime * lookSmoothSpeed);
 
             if (Input.GetMouseButton(1) && enableMouse)
             {
                 distance *= (1 - 0.1f * Input.GetAxis("Mouse Y"));
             }
-
+            
             if(enableMouse) distance *= (1 - 1 * Input.GetAxis("Mouse ScrollWheel"));
+            
+        }
+        
+        private void Update()
+        {
+ 
+        }
 
-            Vector3 targetPoint = pivot.position;
-            transform.position = Vector3.Lerp(transform.position, targetPoint, Time.deltaTime * moveSmoothSpeed);
+        private void Apply()
+        {
+            cameraRotSideCur = Mathf.LerpAngle(cameraRotSideCur, cameraRotSide, 0.02f * lookSmoothSpeed);
+            cameraRotUpCur = Mathf.Lerp(cameraRotUpCur, cameraRotUp, 0.02f * lookSmoothSpeed);
+            
+            transform.position = Vector3.Lerp(transform.position, pivot.position, 0.02f * moveSmoothSpeed);
             transform.rotation = Quaternion.Euler(cameraRotUpCur, cameraRotSideCur, 0);
 
-            float dist = Mathf.Lerp(-cam.transform.localPosition.z, distance, Time.deltaTime * scrollSmoothSpeed);
+            float dist = Mathf.Lerp(-cam.transform.localPosition.z, distance, 0.02f * scrollSmoothSpeed);
             cam.localPosition = -Vector3.forward * dist;
+        }
+        
+        void FixedUpdate()
+        {
+            Apply();
+
         }
     }
 }

@@ -136,6 +136,11 @@ namespace PixelCrushers.DialogueSystem
         public event TransformDelegate conversationEnded = delegate { };
 
         /// <summary>
+        /// Raised when StopAllConversations() is called.
+        /// </summary>
+        public event System.Action stoppingAllConversations = delegate { };
+
+        /// <summary>
         /// Assign to replace the Dialogue System's built-in GetLocalizedText().
         /// </summary>
         public GetLocalizedTextDelegate overrideGetLocalizedText = null;
@@ -162,6 +167,8 @@ namespace PixelCrushers.DialogueSystem
         private DisplaySettings m_originalDisplaySettings = null;
         private bool m_overrodeDisplaySettings = false; // Inspector Debug mode will deserialize default into m_originalDisplaySettings, so use this bool instead of counting on m_originalDisplaySettings being null.
         private bool m_isOverrideUIPrefab = false;
+        private bool m_dontDestroyOverrideUI = false;
+        private OverrideDialogueUI m_overrideDialogueUI = null; // Used temporarily to set its ui property to instance.
         private ConversationController m_conversationController = null;
         private IsDialogueEntryValidDelegate m_isDialogueEntryValid = null;
         private System.Action m_customResponseTimeoutHandler = null;
@@ -376,7 +383,7 @@ namespace PixelCrushers.DialogueSystem
         /// </summary>
         public void Awake()
         {
-            if (allowOnlyOneInstance && (FindObjectsOfType<DialogueSystemController>().Length > 1))
+            if (allowOnlyOneInstance && (GameObjectUtility.FindObjectsByType<DialogueSystemController>().Length > 1))
             {
                 // Scene already has an instance, so destroy this one:
                 m_isDuplicateBeingDestroyed = true;
@@ -552,7 +559,7 @@ namespace PixelCrushers.DialogueSystem
             {
                 displaySettings.localizationSettings.language = Localization.GetLanguage(Application.systemLanguage);
             }
-            var m_uiLocalizationManager = GetComponent<UILocalizationManager>() ?? FindObjectOfType<UILocalizationManager>();
+            var m_uiLocalizationManager = GetComponent<UILocalizationManager>() ?? GameObjectUtility.FindFirstObjectByType<UILocalizationManager>();
             var needsLocalizationManager = !string.IsNullOrEmpty(displaySettings.localizationSettings.language) || displaySettings.localizationSettings.textTable != null;
             if (needsLocalizationManager && m_uiLocalizationManager == null)
             {
@@ -586,7 +593,7 @@ namespace PixelCrushers.DialogueSystem
         {
             if (m_uiLocalizationManager == null)
             {
-                m_uiLocalizationManager = GetComponent<UILocalizationManager>() ?? FindObjectOfType<UILocalizationManager>();
+                m_uiLocalizationManager = GetComponent<UILocalizationManager>() ?? GameObjectUtility.FindFirstObjectByType<UILocalizationManager>();
                 if (m_uiLocalizationManager == null)
                 {
                     m_uiLocalizationManager = gameObject.AddComponent<UILocalizationManager>();
@@ -892,7 +899,11 @@ namespace PixelCrushers.DialogueSystem
             {
                 foreach (var panel in warmupStandardDialogueUI.conversationUIElements.subtitlePanels)
                 {
-                    if (panel != null) panel.panelState = UIPanel.PanelState.Closed;
+                    if (panel != null)
+                    {
+                        if (panel.subtitleText != null) panel.subtitleText.text = string.Empty;
+                        panel.panelState = UIPanel.PanelState.Closed;
+                    }
                 }
             }
             masterDatabase.conversations.Remove(fakeConversation);
@@ -1056,6 +1067,7 @@ namespace PixelCrushers.DialogueSystem
                 record.originalDialogueUI = m_originalDialogueUI;
                 record.originalDisplaySettings = m_originalDisplaySettings;
                 record.isOverrideUIPrefab = m_isOverrideUIPrefab;
+                record.dontDestroyPrefabInstance = m_dontDestroyOverrideUI;
                 m_activeConversations.Add(record);
                 activeConversation = record;
                 view.sequencer.activeConversationRecord = record;
@@ -1145,10 +1157,12 @@ namespace PixelCrushers.DialogueSystem
         /// </summary>
         public void StopAllConversations()
         {
+            stoppingAllConversations?.Invoke();
             for (int i = DialogueManager.instance.activeConversations.Count - 1; i >= 0; i--)
             {
                 DialogueManager.instance.activeConversations[i].conversationController.Close();
             }
+
         }
 
         /// <summary>
@@ -1309,13 +1323,14 @@ namespace PixelCrushers.DialogueSystem
         // Activate and use an override dialogue UI.
         private void ApplyOverrideUI(OverrideUIBase overrideUI)
         {
-            var overrideDialogueUI = overrideUI as OverrideDialogueUI;
+            m_overrideDialogueUI = overrideUI as OverrideDialogueUI;
             var overrideDisplaySettings = overrideUI as OverrideDisplaySettings;
-            if (overrideDialogueUI != null)
+            if (m_overrideDialogueUI != null)
             {
-                m_isOverrideUIPrefab = Tools.IsPrefab(overrideDialogueUI.ui);
+                m_isOverrideUIPrefab = Tools.IsPrefab(m_overrideDialogueUI.ui);
+                m_dontDestroyOverrideUI = m_overrideDialogueUI.dontDestroyPrefabIntance;
                 m_originalDialogueUI = dialogueUI;
-                displaySettings.dialogueUI = overrideDialogueUI.ui;
+                displaySettings.dialogueUI = m_overrideDialogueUI.ui;
                 m_currentDialogueUI = null;
             }
             else if (overrideDisplaySettings)
@@ -1324,6 +1339,7 @@ namespace PixelCrushers.DialogueSystem
                 {
                     m_isOverrideUIPrefab = Tools.IsPrefab(overrideDisplaySettings.displaySettings.dialogueUI);
                     m_originalDialogueUI = dialogueUI;
+                    m_dontDestroyOverrideUI = false;
                     m_currentDialogueUI = null;
                 }
                 m_overrodeDisplaySettings = true;
@@ -1366,7 +1382,7 @@ namespace PixelCrushers.DialogueSystem
             }
             else
             {
-                Destroy(uiBehaviour.gameObject);
+                if (!m_dontDestroyOverrideUI) Destroy(uiBehaviour.gameObject);
             }
         }
 
@@ -1380,7 +1396,7 @@ namespace PixelCrushers.DialogueSystem
             {
                 yield return null;
             }
-            Destroy(standardDialogueUI.gameObject);
+            if (!m_dontDestroyOverrideUI) Destroy(standardDialogueUI.gameObject);
         }
 
         private void OnDialogueEntrySpoken(Subtitle subtitle)
@@ -1934,6 +1950,11 @@ namespace PixelCrushers.DialogueSystem
                         }
                     }
                     instanceGO.name = uiBehaviour.gameObject.name;
+                    if (m_overrideDialogueUI != null)
+                    {
+                        if (m_dontDestroyOverrideUI) m_overrideDialogueUI.ui = instanceGO;
+                        m_overrideDialogueUI = null;
+                    }
                 }
 
                 displaySettings.dialogueUI = uiBehaviour.gameObject;
@@ -2018,6 +2039,11 @@ namespace PixelCrushers.DialogueSystem
                     go.transform.SetParent(transform, false);
                 }
             }
+            if (m_overrideDialogueUI != null)
+            {
+                if (m_dontDestroyOverrideUI) m_overrideDialogueUI.ui = go;
+                m_overrideDialogueUI = null;
+            }
             return ui;
         }
 
@@ -2089,6 +2115,7 @@ namespace PixelCrushers.DialogueSystem
             Lua.RegisterFunction("ActorIDToName", this, SymbolExtensions.GetMethodInfo(() => ActorIDToName(0)));
             Lua.RegisterFunction("ItemIDToName", this, SymbolExtensions.GetMethodInfo(() => ItemIDToName(0)));
             Lua.RegisterFunction("QuestIDToName", this, SymbolExtensions.GetMethodInfo(() => ItemIDToName(0)));
+            Lua.RegisterFunction("GetTextTableValue", this, SymbolExtensions.GetMethodInfo(() => GetLocalizedText(string.Empty)));
             // Register DialogueLua in case they got unregistered:
             DialogueLua.RegisterLuaFunctions();
         }
@@ -2175,6 +2202,17 @@ namespace PixelCrushers.DialogueSystem
                 {
                     var info = DialogueManager.ConversationModel.GetCharacterInfo(actor.id);
                     if (info != null) info.Name = newDisplayName;
+                    foreach (var panel in DialogueManager.standardDialogueUI.conversationUIElements.subtitlePanels)
+                    {
+                        if (panel.portraitActorName == actorName)
+                        {
+                            if (panel.portraitName.gameObject != null)
+                            {
+                                panel.portraitName.text = newDisplayName;
+                            }
+                            break;
+                        }
+                    }
                 }
             }
         }
