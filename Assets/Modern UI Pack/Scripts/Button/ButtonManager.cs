@@ -312,7 +312,7 @@ namespace Michsky.MUIP
             onClick.Invoke();
 
             // Check for double click
-            if (checkForDoubleClick == false) { return; }
+            if (checkForDoubleClick == false || gameObject.activeInHierarchy == false) { return; }
             if (waitingForDoubleClickInput == true)
             {
                 onDoubleClick.Invoke();
@@ -361,12 +361,14 @@ namespace Michsky.MUIP
         {
             if (isInteractable == false) { return; }
             if (animationSolution == AnimationSolution.ScriptBased) { StartCoroutine("SetHighlight"); }
+            if (useUINavigation == true) { onHover.Invoke(); }
         }
 
         public void OnDeselect(BaseEventData eventData)
         {
             if (isInteractable == false) { return; }
             if (animationSolution == AnimationSolution.ScriptBased) { StartCoroutine("SetNormal"); }
+            if (useUINavigation == true) { onLeave.Invoke(); }
         }
 
         public void OnSubmit(BaseEventData eventData)

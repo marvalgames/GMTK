@@ -10,7 +10,7 @@ namespace Michsky.MUIP
     public class UIManagerEditor : Editor
     {
         GUISkin customSkin;
-        protected static string buildID = "B16-20230320";
+        protected static string buildID = "B16-20231120";
         protected static float foldoutItemSpace = 2;
         protected static float foldoutTopSpace = 5;
         protected static float foldoutBottomSpace = 2;
@@ -29,6 +29,7 @@ namespace Michsky.MUIP
         protected static bool showSwitch = false;
         protected static bool showToggle = false;
         protected static bool showTooltip = false;
+        protected static bool showCustomObjects = false;
 
         private void OnEnable() 
         {
@@ -451,6 +452,32 @@ namespace Michsky.MUIP
                 GUILayout.EndHorizontal();
                 MUIPEditorHandler.DrawProperty(tooltipTextColor, customSkin, "Text Color");
                 MUIPEditorHandler.DrawProperty(tooltipBackgroundColor, customSkin, "Background Color");
+            }
+
+            GUILayout.EndVertical();
+            #endregion
+
+            #region Custom Objects
+            GUILayout.BeginVertical(EditorStyles.helpBox);
+
+            var customObjPrimaryFont = serializedObject.FindProperty("customObjPrimaryFont");
+            var customObjSecondaryFont = serializedObject.FindProperty("customObjSecondaryFont");
+            var customObjPrimaryColor = serializedObject.FindProperty("customObjPrimaryColor");
+            var customObjSecondaryColor = serializedObject.FindProperty("customObjSecondaryColor");
+
+            GUILayout.Space(foldoutTopSpace);
+            GUILayout.BeginHorizontal();
+            showCustomObjects = EditorGUILayout.Foldout(showCustomObjects, "Custom Objects", true, foldoutStyle);
+            showCustomObjects = GUILayout.Toggle(showCustomObjects, new GUIContent(""), customSkin.FindStyle("Toggle Helper"));
+            GUILayout.EndHorizontal();
+            GUILayout.Space(foldoutBottomSpace);
+
+            if (showCustomObjects)
+            {
+                MUIPEditorHandler.DrawProperty(customObjPrimaryFont, customSkin, "Primary Font");
+                MUIPEditorHandler.DrawProperty(customObjSecondaryFont, customSkin, "Secondary Font");
+                MUIPEditorHandler.DrawProperty(customObjPrimaryColor, customSkin, "Primary Color");
+                MUIPEditorHandler.DrawProperty(customObjSecondaryColor, customSkin, "Secondary Color");
             }
 
             GUILayout.EndVertical();

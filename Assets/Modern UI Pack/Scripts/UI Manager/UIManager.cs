@@ -102,6 +102,12 @@ namespace Michsky.MUIP
         public Color tooltipTextColor = new Color(255, 255, 255, 255);
         public Color tooltipBackgroundColor = new Color(255, 255, 255, 255);
 
+        // Custom Objects
+        public TMP_FontAsset customObjPrimaryFont;
+        public TMP_FontAsset customObjSecondaryFont;
+        public Color customObjPrimaryColor = new Color(255, 255, 255, 255);
+        public Color customObjSecondaryColor = new Color(255, 255, 255, 255);
+
         public enum ModalWindowThemeType { Basic, Custom }
         public enum NotificationThemeType { Basic, Custom }
         public enum SliderThemeType { Basic, Custom }

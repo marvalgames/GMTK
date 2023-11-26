@@ -151,11 +151,16 @@ half4 UniversalFragment_DSTRM(InputData inputData, SurfaceData surfaceData, floa
 
     // Base map.
     {
-        #if defined(_TEXTUREBLENDINGMODE_ADD)
+        // Workaround to render decals without requiring the _BaseMap texture.
+#ifdef _DBUFFER
+        _TextureImpact = 1.0;
+#endif
+
+#if defined(_TEXTUREBLENDINGMODE_ADD)
         color += lerp(half3(0.0f, 0.0f, 0.0f), albedo.rgb, _TextureImpact);
-        #else  // _TEXTUREBLENDINGMODE_MULTIPLY
+#else  // _TEXTUREBLENDINGMODE_MULTIPLY
         color *= lerp(half3(1.0f, 1.0f, 1.0f), albedo.rgb, _TextureImpact);
-    #endif
+#endif
     }
 
     // Detail map.

@@ -4,7 +4,6 @@
     {
         [Gradient] _GradientRamp("Gradient", 2D) = "white" {}
 
-        [Space]
         _SelfShadingSize ("[]Shading Offset", Range(0, 1.0)) = 0.0
 
         [Space(10)]

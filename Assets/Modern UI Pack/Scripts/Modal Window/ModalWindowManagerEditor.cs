@@ -62,6 +62,7 @@ namespace Michsky.MUIP
             var useCustomContent = serializedObject.FindProperty("useCustomContent");
             var closeBehaviour = serializedObject.FindProperty("closeBehaviour");
             var startBehaviour = serializedObject.FindProperty("startBehaviour");
+            var onEnableBehaviour = serializedObject.FindProperty("onEnableBehaviour");
             var closeOnCancel = serializedObject.FindProperty("closeOnCancel");
             var closeOnConfirm = serializedObject.FindProperty("closeOnConfirm");
             var showCancelButton = serializedObject.FindProperty("showCancelButton");
@@ -146,8 +147,9 @@ namespace Michsky.MUIP
 
                 case 2:
                     MUIPEditorHandler.DrawHeader(customSkin, "Options Header", 6);
-                    MUIPEditorHandler.DrawProperty(startBehaviour, customSkin, "Start Behaviour");
-                    MUIPEditorHandler.DrawProperty(closeBehaviour, customSkin, "Close Behaviour");
+                    MUIPEditorHandler.DrawProperty(onEnableBehaviour, customSkin, "On Enable Behavior");
+                    MUIPEditorHandler.DrawProperty(startBehaviour, customSkin, "Start Behavior");
+                    MUIPEditorHandler.DrawProperty(closeBehaviour, customSkin, "Close Behavior");
                     useCustomContent.boolValue = MUIPEditorHandler.DrawToggle(useCustomContent.boolValue, customSkin, "Use Custom Content");
                     closeOnCancel.boolValue = MUIPEditorHandler.DrawToggle(closeOnCancel.boolValue, customSkin, "Close Window On Cancel");
                     closeOnConfirm.boolValue = MUIPEditorHandler.DrawToggle(closeOnConfirm.boolValue, customSkin, "Close Window On Confirm");

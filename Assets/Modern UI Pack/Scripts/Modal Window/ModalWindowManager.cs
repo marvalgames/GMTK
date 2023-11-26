@@ -1,8 +1,8 @@
 ﻿using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
-using TMPro;
 using UnityEngine.Events;
+using TMPro;
 
 namespace Michsky.MUIP
 {
@@ -23,9 +23,10 @@ namespace Michsky.MUIP
         [TextArea] public string descriptionText = "Description here";
 
         // Events
-        public UnityEvent onOpen;
-        public UnityEvent onConfirm;
-        public UnityEvent onCancel;
+        public UnityEvent onOpen = new UnityEvent();
+        public UnityEvent onClose = new UnityEvent();
+        public UnityEvent onConfirm = new UnityEvent();
+        public UnityEvent onCancel = new UnityEvent();
 
         // Settings
         public bool useCustomContent = false;
@@ -36,20 +37,22 @@ namespace Michsky.MUIP
         public bool showConfirmButton = true;
         public StartBehaviour startBehaviour = StartBehaviour.Disable;
         public CloseBehaviour closeBehaviour = CloseBehaviour.Disable;
+        public OnEnableBehaviour onEnableBehaviour = OnEnableBehaviour.None;
 
         // Helpers
         float cachedStateLength;
 
         public enum StartBehaviour { None, Disable, Enable }
         public enum CloseBehaviour { None, Disable, Destroy }
+        public enum OnEnableBehaviour { None, Restore }
 
         void Awake()
         {
             isOn = false;
 
             if (mwAnimator == null) { mwAnimator = gameObject.GetComponent<Animator>(); }
-            if (closeOnCancel == true) { onCancel.AddListener(CloseWindow); }
-            if (closeOnConfirm == true) { onConfirm.AddListener(CloseWindow); }
+            if (closeOnCancel) { onCancel.AddListener(CloseWindow); }
+            if (closeOnConfirm) { onConfirm.AddListener(CloseWindow); }
             if (confirmButton != null) { confirmButton.onClick.AddListener(onConfirm.Invoke); }
             if (cancelButton != null) { cancelButton.onClick.AddListener(onCancel.Invoke); }
             if (startBehaviour == StartBehaviour.Disable) { isOn = false; gameObject.SetActive(false); }
@@ -59,54 +62,72 @@ namespace Michsky.MUIP
             UpdateUI();
         }
 
+        void OnEnable()
+        {
+            if (onEnableBehaviour == OnEnableBehaviour.Restore && isOn) 
+            {
+                isOn = false;
+                Open(); 
+            }
+        }
+
+        void OnDisable()
+        {
+            if (onEnableBehaviour == OnEnableBehaviour.None)
+            {
+                isOn = false;
+            }
+        }
+
         public void UpdateUI()
         {
-            if (useCustomContent == true)
+            if (useCustomContent)
                 return;
 
             if (windowIcon != null) { windowIcon.sprite = icon; }
             if (windowTitle != null) { windowTitle.text = titleText; }
             if (windowDescription != null) { windowDescription.text = descriptionText; }
 
-            if (showCancelButton == true && cancelButton != null) { cancelButton.gameObject.SetActive(true); }
+            if (showCancelButton && cancelButton != null) { cancelButton.gameObject.SetActive(true); }
             else if (cancelButton != null) { cancelButton.gameObject.SetActive(false); }
 
-            if (showConfirmButton == true && confirmButton != null) { confirmButton.gameObject.SetActive(true); }
+            if (showConfirmButton && confirmButton != null) { confirmButton.gameObject.SetActive(true); }
             else if (confirmButton != null) { confirmButton.gameObject.SetActive(false); }
         }
 
         public void Open()
         {
-            if (isOn == false)
-            {
-                StopCoroutine("DisableObject");
+            if (isOn)
+                return;
 
-                gameObject.SetActive(true);
-                isOn = true;
-                onOpen.Invoke();
-                mwAnimator.Play("Fade-in");
-            }
+            isOn = true;
+            gameObject.SetActive(true);
+            onOpen.Invoke();
+
+            StopCoroutine("DisableObject");
+            mwAnimator.Play("Fade-in");
         }
 
         public void Close()
         {
-            if (isOn == true)
-            {
-                isOn = false;
-                mwAnimator.Play("Fade-out");
+            if (!isOn)
+                return;
 
-                StartCoroutine("DisableObject");
-            }
+            isOn = false;
+            onClose.Invoke();
+
+            mwAnimator.Play("Fade-out");
+            StartCoroutine("DisableObject");
         }
 
-
-        // Obsolete
+        #region Obsolote
         public void OpenWindow() { Open(); }
         public void CloseWindow() { Close(); }
+        #endregion
 
         public void AnimateWindow()
         {
-            if (isOn == false)
+            if (!isOn)
             {
                 StopCoroutine("DisableObject");
 

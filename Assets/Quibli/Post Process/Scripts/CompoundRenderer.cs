@@ -56,7 +56,7 @@ public abstract class CompoundRenderer : IDisposable {
     public virtual void Initialize() {
         // Texture format pre-lookup
         if (SystemInfo.IsFormatSupported(GraphicsFormat.B10G11R11_UFloatPack32,
-                                         FormatUsage.Linear | FormatUsage.Render)) {
+                                         GraphicsFormatUsage.Linear | GraphicsFormatUsage.Render)) {
             _defaultHDRFormat = GraphicsFormat.B10G11R11_UFloatPack32;
             _useRGBM = false;
         } else {

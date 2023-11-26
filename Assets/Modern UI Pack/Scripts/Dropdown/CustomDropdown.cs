@@ -61,9 +61,9 @@ namespace Michsky.MUIP
 
         // Events
         [System.Serializable] public class DropdownEvent : UnityEvent<int> { }
-        public DropdownEvent onValueChanged;
+        public DropdownEvent onValueChanged = new DropdownEvent();
         [System.Serializable] public class ItemTextChangedEvent : UnityEvent<TMP_Text> { }
-        public ItemTextChangedEvent onItemTextChanged;
+        public ItemTextChangedEvent onItemTextChanged = new ItemTextChangedEvent();
 
         // Audio
         public AudioClip hoverSound;
@@ -194,7 +194,11 @@ namespace Michsky.MUIP
         }
 
         // Obsolete
-        public void ChangeDropdownInfo(int itemIndex) { SetDropdownIndex(itemIndex); }
+        public void ChangeDropdownInfo(int itemIndex)
+        { 
+            SetDropdownIndex(itemIndex); 
+        }
+
         public void SetDropdownIndex(int itemIndex)
         {
             if (selectedImage != null && enableIcon == true && items[itemIndex].itemIcon != null) { selectedImage.gameObject.SetActive(true); selectedImage.sprite = items[itemIndex].itemIcon; }
@@ -252,43 +256,34 @@ namespace Michsky.MUIP
             isInteractable = value;
         }
 
-        public void CreateNewItem(string title, Sprite icon, bool notify)
+        public void CreateNewItem(string title, Sprite icon, bool notify = false)
         {
             Item item = new Item();
             item.itemName = title;
             item.itemIcon = icon;
             items.Add(item);
+
+            if (selectedItemIndex > items.Count) { selectedItemIndex = 0; }
             if (notify == true) { SetupDropdown(); }
         }
 
-        public void CreateNewItem(string title, bool notify)
+        public void CreateNewItem(string title, bool notify = false)
         {
             Item item = new Item();
             item.itemName = title;
             items.Add(item);
+
+            if (selectedItemIndex > items.Count) { selectedItemIndex = 0; }
             if (notify == true) { SetupDropdown(); }
         }
 
-        public void CreateNewItem(string title)
-        {
-            Item item = new Item();
-            item.itemName = title;
-            items.Add(item);
-            SetupDropdown();
-        }
-
-        public void RemoveItem(string itemTitle, bool notify)
+        public void RemoveItem(string itemTitle, bool notify = false)
         {
             var item = items.Find(x => x.itemName == itemTitle);
             items.Remove(item);
+
+            if (selectedItemIndex > items.Count) { selectedItemIndex = 0; }
             if (notify == true) { SetupDropdown(); }
-        }
-
-        public void RemoveItem(string itemTitle)
-        {
-            var item = items.Find(x => x.itemName == itemTitle);
-            items.Remove(item);
-            SetupDropdown();
         }
 
         public void UpdateItemLayout()
