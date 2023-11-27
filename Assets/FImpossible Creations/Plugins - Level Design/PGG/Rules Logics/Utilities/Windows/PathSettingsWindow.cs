@@ -58,7 +58,7 @@ namespace FIMSpace.Generating
 
         public float ExistingCellsCostMultiplier = 1f;
         public float SelfCellsExtraSearchRange = 1f;
-
+        public CheckerField3D.EPathFindFocusLevel PathFindFocusLevel = CheckerField3D.EPathFindFocusLevel.Middle;
 
         public enum EPathFindCategory { MainSettings, Handling, ExtraConditions }
         public EPathFindCategory DrawCategory = EPathFindCategory.MainSettings;
@@ -426,6 +426,10 @@ namespace FIMSpace.Generating
 
                 GUILayout.Space(5);
 
+                PathFindFocusLevel = (CheckerField3D.EPathFindFocusLevel)EditorGUILayout.EnumPopup(new GUIContent("Focus Level", "Cells level on which 'path start/path end' should find cells for connections"), PathFindFocusLevel);
+
+                GUILayout.Space(5);
+
                 //EditorGUIUtility.labelWidth = 180;
                 //_guiC.text = "Allow Change Direction Every:"; _guiC.tooltip = "You can set it higher if you want to prevent single-cell path direction changes (unless there is obstacle in a way)";
                 //AllowChangeDirectionEvery = EditorGUILayout.IntField(_guiC, AllowChangeDirectionEvery);
@@ -685,6 +689,7 @@ namespace FIMSpace.Generating
             pathParams.SearchStepIterationLimit = SearchStepsLimit;
             //pathParams.KeepDirectionFor = AllowChangeDirectionEvery;
             pathParams.SphericalDistanceMeasure = SphericalDistanceMeasuring;
+            pathParams.FindFocusLevel = PathFindFocusLevel;
             pathParams.ConnectOnAnyContact = OnAnyContact;
             pathParams.PrioritizeTargetedYLevel = PrioritizeTargetYLevel;
             pathParams.PrioritizePerpendicular = PrioritizePerpendicular;

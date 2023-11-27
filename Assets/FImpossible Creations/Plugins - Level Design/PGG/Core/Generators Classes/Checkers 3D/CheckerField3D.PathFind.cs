@@ -52,6 +52,15 @@ namespace FIMSpace.Generating.Checker
         bool _pathFind_wasAlignedOnStart = false;
         //int steps = 0;
 
+        Vector3 GetCenterPosFocusOn(CheckerField3D posOf, EPathFindFocusLevel level)
+        {
+            Bounds bounds = posOf.GetFullBoundsWorldSpace();
+            Vector3 center = bounds.center;
+            if (level == EPathFindFocusLevel.Bottom) center.y = bounds.min.y;
+            else if (level == EPathFindFocusLevel.Top) center.y = bounds.max.y;
+            return center;
+        }
+
         /// <summary>
         /// Generating line towards target with collision detection
         /// </summary>
@@ -81,7 +90,9 @@ namespace FIMSpace.Generating.Checker
                     _pathFind_wasAlignedOnStart = true;
                 }
                 else
-                    startCheckerBeginCell = start.GetNearestCellTowardsWorldPos3x3(start.GetFullBoundsWorldSpace().center);
+                {
+                    startCheckerBeginCell = start.GetNearestCellTowardsWorldPos3x3(GetCenterPosFocusOn(start, findParams.FindFocusLevel)); // start.GetNearestCellTowardsWorldPos3x3(start.GetFullBoundsWorldSpace().center);
+                }
             }
 
 
@@ -1650,6 +1661,10 @@ namespace FIMSpace.Generating.Checker
             return stepCost;
         }
 
+        public enum EPathFindFocusLevel
+        {
+            Bottom, Middle, Top
+        }
 
         public struct PathFindParams
         {
@@ -1667,6 +1682,7 @@ namespace FIMSpace.Generating.Checker
             public float LimitMinX;
             public float LimitMaxZ;
             public float LimitMinZ;
+            public EPathFindFocusLevel FindFocusLevel;
 
             public bool NoLimits;
 
@@ -1737,6 +1753,7 @@ namespace FIMSpace.Generating.Checker
                 ExistingCellsCostMul = 1f;
 
                 LogWarnings = true;
+                FindFocusLevel = EPathFindFocusLevel.Bottom;
 
                 KeepDirectionFor = 1;
                 PrioritizeTargetedYLevel = false;
