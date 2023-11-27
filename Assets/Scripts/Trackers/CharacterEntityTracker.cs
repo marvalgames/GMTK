@@ -31,10 +31,6 @@ public class CharacterEntityTracker : MonoBehaviour
 
     }
 
-
-
-
-
     void Start()
     {
         _animator = GetComponent<Animator>();
