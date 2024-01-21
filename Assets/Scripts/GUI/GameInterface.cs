@@ -16,7 +16,7 @@ public struct Pause : IComponentData
 
 public enum GameControllerMap
 {
-    DefaultMap,
+    DefaultMap, 
     MenuMap,
     DialogMap
     
