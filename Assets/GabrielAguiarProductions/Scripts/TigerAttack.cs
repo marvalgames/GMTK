@@ -66,7 +66,7 @@ public class TigerAttack : MonoBehaviour
         float t = 1;
         while (t > 0)
         {
-            rb.velocity = Vector3.Lerp(Vector3.zero, rb.velocity, t);
+            rb.linearVelocity = Vector3.Lerp(Vector3.zero, rb.linearVelocity, t);
             t -= slowDownRate;
             yield return new WaitForSeconds(0.1f);
         }

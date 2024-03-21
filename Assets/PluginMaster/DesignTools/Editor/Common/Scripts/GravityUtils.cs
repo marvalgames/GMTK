@@ -193,12 +193,12 @@ namespace PluginMaster
             foreach (var rigidBody in allBodies)
             {
                 originalBodies.Add((rigidBody, rigidBody.useGravity, rigidBody.isKinematic,
-                    rigidBody.drag, rigidBody.angularDrag, rigidBody.mass, rigidBody.constraints,
+                    rigidBody.linearDamping, rigidBody.angularDamping, rigidBody.mass, rigidBody.constraints,
                     rigidBody.interpolation, rigidBody.collisionDetectionMode));
                 rigidBody.useGravity = false;
                 rigidBody.isKinematic = true;
-                rigidBody.drag = simData.drag;
-                rigidBody.angularDrag = simData.angularDrag;
+                rigidBody.linearDamping = simData.drag;
+                rigidBody.angularDamping = simData.angularDrag;
                 rigidBody.mass = simData.mass;
                 rigidBody.constraints = RigidbodyConstraints.None;
                 rigidBody.interpolation = RigidbodyInterpolation.None;
@@ -268,8 +268,8 @@ namespace PluginMaster
                 for (int objIdx = 0; objIdx < selection.Length; ++objIdx)
                 {
                     var body = simBodies[objIdx];
-                    if (body.velocity.sqrMagnitude > simData.maxSpeedSquared)
-                        body.velocity = body.velocity.normalized * simData.maxSpeed;
+                    if (body.linearVelocity.sqrMagnitude > simData.maxSpeedSquared)
+                        body.linearVelocity = body.linearVelocity.normalized * simData.maxSpeed;
                     if (body.angularVelocity.sqrMagnitude > simData.maxAngularSpeedSquared)
                         body.angularVelocity = body.angularVelocity.normalized * simData.maxAngularSpeed;
                     if (i % 10 == 0) animData[objIdx].poses.Add(new Pose(body.position, body.rotation));
@@ -296,8 +296,8 @@ namespace PluginMaster
                 if (item.body == null) continue;
                 item.body.useGravity = item.useGravity;
                 item.body.isKinematic = item.isKinematic;
-                item.body.drag = item.drag;
-                item.body.angularDrag = item.angularDrag;
+                item.body.linearDamping = item.drag;
+                item.body.angularDamping = item.angularDrag;
                 item.body.mass = item.mass;
                 item.body.constraints = item.constraints;
                 item.body.interpolation = item.interpolation;

@@ -90,21 +90,21 @@ namespace FIMSpace.Generating
         private void FixedUpdate()
         {
             if (FreezeGravity)
-                rig.velocity = translation;
+                rig.linearVelocity = translation;
             else
             {
                 if ( triggerJump > 0f)
                 {
-                    rig.velocity = new Vector3(rig.velocity.x, triggerJump, rig.velocity.z);
+                    rig.linearVelocity = new Vector3(rig.linearVelocity.x, triggerJump, rig.linearVelocity.z);
                     triggerJump = 0f;
                 }
 
-                rig.velocity = new Vector3(translation.x, rig.velocity.y, translation.z);
+                rig.linearVelocity = new Vector3(translation.x, rig.linearVelocity.y, translation.z);
             }
 
             rig.maxAngularVelocity = 10f;
 
-            if (rig.velocity.sqrMagnitude > 0.05f)
+            if (rig.linearVelocity.sqrMagnitude > 0.05f)
                 rig.angularVelocity = FEngineering.QToAngularVelocity(rig.rotation, tgtRotation, true);
             else
                 rig.angularVelocity = Vector3.zero;

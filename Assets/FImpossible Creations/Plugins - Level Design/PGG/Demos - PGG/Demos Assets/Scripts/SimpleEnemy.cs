@@ -32,11 +32,11 @@ namespace FIMSpace.Generating
         {
             if (dist < 4f)
             {
-                rig.velocity = transform.forward * 0.4f;
+                rig.linearVelocity = transform.forward * 0.4f;
             }
             else
             {
-                rig.velocity = Vector3.zero;
+                rig.linearVelocity = Vector3.zero;
             }
         }
 

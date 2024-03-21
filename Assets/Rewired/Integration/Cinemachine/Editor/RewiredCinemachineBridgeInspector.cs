@@ -7,12 +7,9 @@ namespace Rewired.Integration.Cinemachine.Editor {
 
     using UnityEngine;
     using UnityEditor;
-    using System.Collections;
     using System.Collections.Generic;
-    using System.Text.RegularExpressions;
     using Rewired;
     using Rewired.Data;
-    using Rewired.Utils;
 
     [CustomEditor(typeof(RewiredCinemachineBridge))]
     public class RewiredCinemachineBridgeInspector : UnityEditor.Editor {
@@ -126,7 +123,12 @@ namespace Rewired.Integration.Cinemachine.Editor {
 
             EditorGUILayout.PropertyField(properties[c_absoluteAxisSensitivity]);
             EditorGUILayout.PropertyField(properties[c_scaleAbsoluteAxesToScreen]);
+            EditorGUI.BeginChangeCheck();
             EditorGUILayout.PropertyField(properties[c_runInEditMode]);
+            if(EditorGUI.EndChangeCheck()) {
+                // This is flawed because it will not work correctly with Undo. No solution at this time.
+                (target as RewiredCinemachineBridge).SetRunInEditMode(properties[c_runInEditMode].boolValue);
+            }
 
             EditorGUILayout.Separator();
 

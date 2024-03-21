@@ -44,7 +44,7 @@ namespace Gaia
         [Tooltip("The material used to render the terrain. This should use a suitable shader, for example Nature/Terrain/Diffuse. The default terrain shader is used if no material is supplied.")]
         public Material m_material;
         [Tooltip("The Physic Material used for the terrain surface to specify its friction and bounce.")]
-        public PhysicMaterial m_physicsMaterial;
+        public PhysicsMaterial m_physicsMaterial;
 
         [Header("Tree & Detail Objects:")]
         [Space(5)]

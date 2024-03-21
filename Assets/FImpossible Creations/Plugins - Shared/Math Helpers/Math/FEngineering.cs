@@ -438,15 +438,15 @@ namespace FIMSpace
             return layerMask;
         }
 
-        public static PhysicMaterial PMSliding
+        public static PhysicsMaterial PMSliding
         {
             get
             {
                 if (_slidingMat) return _slidingMat;
                 else
                 {
-                    _slidingMat = new PhysicMaterial("Slide");
-                    _slidingMat.frictionCombine = PhysicMaterialCombine.Minimum;
+                    _slidingMat = new PhysicsMaterial("Slide");
+                    _slidingMat.frictionCombine = PhysicsMaterialCombine.Minimum;
                     _slidingMat.dynamicFriction = 0f;
                     _slidingMat.staticFriction = 0f;
                     return _slidingMat;
@@ -454,16 +454,16 @@ namespace FIMSpace
             }
         }
 
-        private static PhysicMaterial _slidingMat;
-        public static PhysicMaterial PMFrict
+        private static PhysicsMaterial _slidingMat;
+        public static PhysicsMaterial PMFrict
         {
             get
             {
                 if (_frictMat) return _frictMat;
                 else
                 {
-                    _frictMat = new PhysicMaterial("Friction");
-                    _frictMat.frictionCombine = PhysicMaterialCombine.Maximum;
+                    _frictMat = new PhysicsMaterial("Friction");
+                    _frictMat.frictionCombine = PhysicsMaterialCombine.Maximum;
                     _frictMat.dynamicFriction = 10f;
                     _frictMat.staticFriction = 10f;
                     return _frictMat;
@@ -471,7 +471,7 @@ namespace FIMSpace
             }
         }
 
-        private static PhysicMaterial _frictMat;
+        private static PhysicsMaterial _frictMat;
 
 
         public static PhysicsMaterial2D PMSliding2D

@@ -1,3 +1,52 @@
+1.1.51.0:
+
+  Changes:
+    - Windows Standalone, Unity 2023: Added ARM64 native library Rewired_WindowsGamingInput.dll.
+    - Windows Standalone: Rewired_DirectInput.dll minimum Windows version support changed to 10.0.17134.0.
+    - windows Standalone: Rewired_DirectInput.dll changed to static linking of VC runtime.
+
+  Bug Fixes:
+    - Unity 2023, Windows Standalone: Fixed Rewired_WindowsGamingInput.dll plugin importer settings that were not inherited properly when copying the meta file from an older version of Unity causing Unity to attempt to include the 64-bit DLL in 32-bit builds.
+
+1.1.50.0:
+
+  Changes:
+    - Added keyboard key combination override modes.
+    - Changed the default keyboard key combination override mode to Cancel. This mode makes key combination override behavior more intuitive, with Actions bound to modifier keys canceled when a key combo is activated that contains that modifier key. Canceled Actions do not return True until the bound key is released and pressed again. Existing Rewired Input Managers will retain the legacy mode (Pause), but newly created Rewired Input Managers will default to Cancel.
+    - Added Key Combination Override Mode to Rewired Input Manager Settings.
+    - Added Generate Key Events On Key Combination Override to Rewired Input Manager Settings.
+    - Added Enhanced Device Support device type exclusion options.
+
+  API Changes:
+    - Added Rewired.Config.KeyCombinationOverrideMode enum.
+    - Added ReInput.ConfigHelper.keyCombinationOverrideMode property.
+    - Added ReInput.ConfigHelper.generateKeyEventsOnKeyCombinationOverride property.
+    - Added Rewired.ControllerExtensions.DualSenseExtension.GetVibrationMode function.
+    - Added Rewired.ControllerExtensions.DualSenseExtension.SetVibrationMode function.
+    - Addde Rewired.ControllerExtensions.DualSenseVibrationMode enum.
+    - Added Rewired.Config.EnhancedDeviceSupportDeviceType enum.
+    - Added ReInput.ConfigHelper.enhancedDeviceSupportExcludedDeviceTypes property.
+  
+  Bug Fixes:
+    - Player.GetButtonTimePressed and Player.GetButtonTimeUnpressed now return correct values when an Action bound to a keyboard modifier key has its value blocked or unblocked due to a key combination being activated or deactivated that includes the modifier key and Key Combination Override mode is set to Pause and Generate Key Events On Key Combination Override is disabled.
+
+1.1.49.2:
+
+  Changes:
+    - Updated Cinemachine integration to work with Unity Editor Play Mode options.
+
+  Controller Definitions:
+    - Microsoft Xbox One, Android: Changed mapping of View button for newer Android versions dropping support for older versions of Android that map the View button to keyboard ESC.
+    
+  Bug Fixes:
+    - Rewired_MacOS library: Now ad-hoc signed instead of signed with development identity.
+    - Rewired_MacOS library: Prevent possible issues on MacOS versions < 11.
+
+1.1.49.1:
+
+  Bug Fixes:
+    - MacOS Standalone, Native, Enhanced Device Support: Fixed bug causing controllers using Enhanced Device Support to stop working after editor pause, long level loading time, or application out of focus with Unity Player -> Run in Background disabled.
+
 1.1.49.0:
 
   Changes:

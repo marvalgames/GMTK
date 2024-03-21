@@ -14,9 +14,9 @@ namespace FIMSpace.Generating
         void FixedUpdate()
         {
             if (rig.detectCollisions)
-                rig.velocity = Velocity;
+                rig.linearVelocity = Velocity;
             else
-                rig.velocity = Vector3.zero;
+                rig.linearVelocity = Vector3.zero;
         }
 
         private void OnCollisionEnter(Collision collision)

@@ -44,7 +44,7 @@ public class GroundSlashShooter : MonoBehaviour
 
         groundSlashScript = projectileObj.GetComponent<GroundSlash>();
         RotateToDestination(projectileObj, destination, true);
-        projectileObj.GetComponent<Rigidbody>().velocity = transform.forward * groundSlashScript.speed;
+        projectileObj.GetComponent<Rigidbody>().linearVelocity = transform.forward * groundSlashScript.speed;
         
     }
 
@@ -54,7 +54,7 @@ public class GroundSlashShooter : MonoBehaviour
 
         groundSlashScript = projectileObj.GetComponent<GroundSlash>();
         RotateToDestination(projectileObj, firePoint.transform.forward*1000, true);
-        projectileObj.GetComponent<Rigidbody>().velocity = firePoint.transform.forward * groundSlashScript.speed;
+        projectileObj.GetComponent<Rigidbody>().linearVelocity = firePoint.transform.forward * groundSlashScript.speed;
     }
 
         void RotateToDestination(GameObject obj, Vector3 destination, bool onlyY)

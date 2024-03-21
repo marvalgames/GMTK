@@ -496,7 +496,7 @@ namespace FIMSpace.Generating
 
                 if (d.ColliderMode != TileDesign.EColliderMode.None)
                 {
-                    d.CollidersMaterial = (PhysicMaterial)EditorGUILayout.ObjectField("Colliders Material", d.CollidersMaterial, typeof(PhysicMaterial), false);
+                    d.CollidersMaterial = (PhysicsMaterial)EditorGUILayout.ObjectField("Colliders Material", d.CollidersMaterial, typeof(PhysicsMaterial), false);
                     GUILayout.Space(4);
 
                     if (d.ColliderMode == TileDesign.EColliderMode.BoundingBox || d.ColliderMode == TileDesign.EColliderMode.MultipleBoundingBoxes || d.ColliderMode == TileDesign.EColliderMode.SphereCollider)

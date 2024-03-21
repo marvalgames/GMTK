@@ -277,7 +277,7 @@ namespace FIMSpace.Generating
 
             for (int i = 0; i < simulatingRigidbodies.Count; i++)
             {
-                sum += simulatingRigidbodies[i].velocity;
+                sum += simulatingRigidbodies[i].linearVelocity;
             }
 
             return sum;

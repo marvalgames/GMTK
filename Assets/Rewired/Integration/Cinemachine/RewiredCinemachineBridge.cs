@@ -111,16 +111,19 @@ namespace Rewired.Integration.Cinemachine {
             }
         }
 
+        [System.NonSerialized]
         private readonly Dictionary<string, PlayerActionMapping> _mappings = new Dictionary<string, PlayerActionMapping>();
         [System.NonSerialized]
+        private global::Cinemachine.CinemachineCore.AxisInputDelegate _origAxisInputDelegate;
+        [System.NonSerialized]
         private bool _initialized;
-
-        private void Awake() {
-            if(!Application.isPlaying && !_runInEditMode) return;
+        
+        private void OnEnable() { // must use OnEnable / OnDisable instead of Awake / OnDestroy to be compatible with disabling Unity Editor Reload Scene Play Mode option
+            if (!Application.isPlaying && !_runInEditMode) return;
             Initialize();
         }
 
-        private void OnDestroy() {
+        private void OnDisable() {
             Deinitialize();
         }
 
@@ -131,11 +134,11 @@ namespace Rewired.Integration.Cinemachine {
                 return;
             }
 
-            if(_instance != null) {
+            if(s_instance != null) {
                 Debug.LogError("You cannot have multiple Rewired Cinemachine Bridges enabled in the scene.");
                 return;
             }
-            _instance = this;
+            s_instance = this;
 
             if(_rewiredInputManager == null) _rewiredInputManager = GetComponent<InputManager_Base>();
 
@@ -167,20 +170,25 @@ namespace Rewired.Integration.Cinemachine {
                 }
             }
 
-            global::Cinemachine.CinemachineCore.GetInputAxis = GetAxis;
+            _origAxisInputDelegate = global::Cinemachine.CinemachineCore.GetInputAxis;
+            global::Cinemachine.CinemachineCore.GetInputAxis = s_axisInputDelegate;
 
             _initialized = true;
         }
 
         private void Deinitialize() {
-            if(_instance == this) _instance = null;
+            if(s_instance == this) s_instance = null;
             if(_mappings != null) _mappings.Clear();
+            if(global::Cinemachine.CinemachineCore.GetInputAxis == s_axisInputDelegate) {
+                global::Cinemachine.CinemachineCore.GetInputAxis = _origAxisInputDelegate;
+            }
             _initialized = false;
         }
 
 #if UNITY_EDITOR
 
-        private void OnValidate() {
+        public void SetRunInEditMode(bool value) {
+            _runInEditMode = value;
             if(!Application.isPlaying) {
                 if(_runInEditMode) {
                     Initialize();
@@ -192,12 +200,13 @@ namespace Rewired.Integration.Cinemachine {
 
 #endif
 
-        private static RewiredCinemachineBridge _instance;
+        private static RewiredCinemachineBridge s_instance;
+        private static readonly global::Cinemachine.CinemachineCore.AxisInputDelegate s_axisInputDelegate = GetAxis;
 
         private static float GetAxis(string name) {
-            if(!ReInput.isReady || _instance == null || !_instance._initialized) return 0f;
+            if(!ReInput.isReady || s_instance == null || !s_instance._initialized) return 0f;
             PlayerActionMapping mapping;
-            if(!_instance._mappings.TryGetValue(name, out mapping)) {
+            if(!s_instance._mappings.TryGetValue(name, out mapping)) {
                 Debug.LogWarning("The Action \"" + name + "\" has not been mapped in the Rewired Cinemachine Bridge inspector.");
                 return 0f;
             }
@@ -205,17 +214,10 @@ namespace Rewired.Integration.Cinemachine {
             if(player == null) return 0f;
             float value = player.GetAxis(mapping.actionId);
             if(value != 0f && player.GetAxisCoordinateMode(mapping.actionId) == AxisCoordinateMode.Absolute) {
-                value *= _instance._absoluteAxisSensitivity * Time.unscaledDeltaTime;
-                if(_instance._scaleAbsoluteAxesToScreen) value *= Screen.currentResolution.width / 1920f;
+                value *= s_instance._absoluteAxisSensitivity * Time.unscaledDeltaTime;
+                if(s_instance._scaleAbsoluteAxesToScreen) value *= Screen.currentResolution.width / 1920f;
             }
             return value;
-        }
-
-        static RewiredCinemachineBridge() {
-            // Force override in the static contstructor to prevent
-            // Unity from throwing missing input Axis exceptions in edit mode
-            // if the user is using axis names that don't exist in the Unity input manager.
-            global::Cinemachine.CinemachineCore.GetInputAxis = GetAxis;
         }
     }
 }

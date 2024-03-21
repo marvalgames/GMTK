@@ -43,7 +43,7 @@ namespace Rewired.Demos {
             if(player.GetButtonDown("Fire")) {
                 Vector3 offset = Vector3.Scale(new Vector3(1, 0, 0), transform.right);
                 GameObject bullet = (GameObject)Instantiate(bulletPrefab, transform.position + offset, Quaternion.identity);
-                bullet.GetComponent<Rigidbody>().velocity = new Vector3(bulletSpeed * transform.right.x, 0, 0);
+                bullet.GetComponent<Rigidbody>().linearVelocity = new Vector3(bulletSpeed * transform.right.x, 0, 0);
             }
 
             if(player.GetButtonDown("Change Color")) {

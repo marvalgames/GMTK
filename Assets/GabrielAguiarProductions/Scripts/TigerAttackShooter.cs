@@ -50,7 +50,7 @@ public class TigerAttackShooter : MonoBehaviour
 
         tigerAttackScript = projectileObj.GetComponent<TigerAttack>();
         RotateToDestination(projectileObj, destination, rotateOnlyY);
-        projectileObj.GetComponent<Rigidbody>().velocity = transform.forward * tigerAttackScript.speed;
+        projectileObj.GetComponent<Rigidbody>().linearVelocity = transform.forward * tigerAttackScript.speed;
         
     }
 
@@ -60,7 +60,7 @@ public class TigerAttackShooter : MonoBehaviour
 
         tigerAttackScript = projectileObj.GetComponent<TigerAttack>();
         RotateToDestination(projectileObj, firePoint.transform.forward*1000, rotateOnlyY);
-        projectileObj.GetComponent<Rigidbody>().velocity = firePoint.transform.forward * tigerAttackScript.speed;
+        projectileObj.GetComponent<Rigidbody>().linearVelocity = firePoint.transform.forward * tigerAttackScript.speed;
     }
 
     void RotateToDestination(GameObject obj, Vector3 destination, bool onlyY)

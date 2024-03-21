@@ -91,7 +91,7 @@ namespace FIMSpace.Generating
         public bool IsKinematic = true;
         public float RigidbodyMass = 10f;
 
-        public PhysicMaterial CollidersMaterial = null;
+        public PhysicsMaterial CollidersMaterial = null;
 
         public enum EColliderMode { None, BoundingBox, MultipleBoundingBoxes, SphereCollider, MeshColliders, CombinedMeshCollider }
         public EColliderMode ColliderMode = EColliderMode.CombinedMeshCollider;
