@@ -97,6 +97,7 @@ namespace Enemy
 
                         ammoManagerComponent.playSound = true;
                         ammoDataComponent.Shooter = entity;
+                        ammoStartTransform.Scale = ammoDataComponent.AmmoScale;
                         commandBuffer.SetComponent(e, ammoDataComponent);
                         commandBuffer.SetComponent(e, new TriggerComponent
                             { Type = (int)TriggerType.Ammo, ParentEntity = entity, Entity = e, Active = true });

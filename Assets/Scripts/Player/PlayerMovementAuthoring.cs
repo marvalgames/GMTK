@@ -8,14 +8,27 @@ using UnityEngine.VFX;
 [System.Serializable]
 public class PlayerMoveGameObjectClass : IComponentData
 {
+    public AudioSource audioSource { get; }
+
+    public PlayerMoveGameObjectClass()
+    {
+    }
+
+    public PlayerMoveGameObjectClass(AudioSource value)
+    {
+        audioSource = value;
+    }
+
     public string name;
+
     public VisualEffect vfxSystem;
-    public AudioSource audioSource;
+
+    //public AudioSource audioSource;
     public AudioClip clip;
 }
 
 public class PlayerMovementAuthoring : MonoBehaviour
-{ 
+{
     public float rotateSpeed = 18;
     public bool snapRotation = false;
     public float dampTime = 0;
@@ -29,17 +42,16 @@ public class PlayerMovementAuthoring : MonoBehaviour
     public float approachStairBoost = 7;
     public float checkGroundDistance = .75f;
     public float checkNearGroundMultiplier = .25f;
+
     [Tooltip("Y Position of character to start Ray Down")]
     public float checkGroundStartY = 0;
+
     public float checkRadius = .1f;
     public AudioSource AudioSource;
+
     public AudioClip AudioClip;
     //public VisualEffect vfxSystem;
 }
-
-
-
-
 
 
 public class PlayerMovementBaker : Baker<PlayerMovementAuthoring>
@@ -47,9 +59,6 @@ public class PlayerMovementBaker : Baker<PlayerMovementAuthoring>
     //public VisualEffect vfxSystem;
     public override void Bake(PlayerMovementAuthoring authoring)
     {
-
-       
-        
         var position = authoring.transform.position;
         var e = GetEntity(authoring.gameObject, TransformUsageFlags.Dynamic);
         AddComponent(e, new PlayerMoveComponent()
@@ -61,10 +70,9 @@ public class PlayerMovementBaker : Baker<PlayerMovementAuthoring>
             startPosition = position,
             inputDisabled = authoring.inputDisabled,
             stepRate = authoring.stepRate
-
         });
 
-            
+
         AddComponent(e, new ApplyImpulseComponent
         {
             Force = 0,
@@ -79,13 +87,14 @@ public class PlayerMovementBaker : Baker<PlayerMovementAuthoring>
             checkGroundStartY = authoring.checkGroundStartY,
             OnGroundNegativeForce = authoring.onGroundNegativeForce
         });
-        
+
         //pass  this to playermove mb and set VFX effect there - for some reason if set in Sub-Scene it ignores parameters
-        AddComponentObject(e, new PlayerMoveGameObjectClass
-        {
-            name = authoring.name,
-            audioSource = authoring.AudioSource,
-            clip = authoring.AudioClip,
-        });
+        AddComponentObject(GetEntity(authoring, TransformUsageFlags.None),
+            new PlayerMoveGameObjectClass(authoring.AudioSource)
+            {
+                name = authoring.name,
+                clip = authoring.AudioClip
+            }
+        );
     }
 }

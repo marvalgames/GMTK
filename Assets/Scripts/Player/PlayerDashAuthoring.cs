@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Sandbox.Player
 {
-    [System.Serializable]
+    
 
     public struct PlayerDashComponent : IComponentData
     {
@@ -32,6 +32,7 @@ namespace Sandbox.Player
     {
         //public BlobAssetReference<Unity.Physics.Collider> box;
         public AudioSource audioSource;
+        public AudioClip audioClip;
         public ParticleSystem ps;
         public Transform transform;
     }
@@ -72,21 +73,22 @@ namespace Sandbox.Player
                     }
                 );
 
-                AudioSource authoringAudioSource = null;
-                if (authoring.audioSource != null)
-                {
-                    authoringAudioSource = authoring.audioSource;
-                    authoringAudioSource.clip = authoring.clip;
-                }
-                
-
-                AddComponentObject(e, 
-                    new PlayerDashClass
-                    {
-                        audioSource = authoringAudioSource,
-                        ps = authoring.ps,
-                        transform = authoring.transform
-                    } );
+                // AudioSource authoringAudioSource = null;
+                // if (authoring.audioSource != null)
+                // {
+                //     authoringAudioSource = authoring.audioSource;
+                //     authoringAudioSource.clip = authoring.clip;
+                // }
+                //
+                //
+                // AddComponentObject(e, 
+                //     new PlayerDashClass
+                //     {
+                //         audioSource = authoring.audioSource,
+                //         audioClip = authoring.clip,
+                //         ps = authoring.ps,
+                //         transform = authoring.transform
+                //     } );
 
                 
             }

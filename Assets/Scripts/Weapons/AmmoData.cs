@@ -13,6 +13,7 @@ public struct AmmoDataComponent : IComponentData
     public float GameDamage;
     public float GameRate;
     public bool ChargeRequired;
+    public float AmmoScale;
     public bool SpawnVisualEffect;
     public Entity Shooter;
 
@@ -43,6 +44,7 @@ public class AmmoData : MonoBehaviour
     public float Strength;
     public float Damage;
     public float Rate;
+    public float AmmoScale = .5f;
     public bool ChargeRequired;
     public bool SpawnVisualEffect = true;
 
@@ -60,6 +62,7 @@ public class AmmoData : MonoBehaviour
                     GameStrength = authoring.Strength,
                     GameDamage = authoring.Damage,
                     GameRate = authoring.Rate,
+                    AmmoScale = authoring.AmmoScale,
                     GameAmmoTime = authoring.AmmoTime,
                     ChargeRequired = authoring.ChargeRequired,
                     SpawnVisualEffect = authoring.SpawnVisualEffect

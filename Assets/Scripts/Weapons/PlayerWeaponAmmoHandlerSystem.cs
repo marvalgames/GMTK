@@ -95,6 +95,7 @@ public partial class PlayerWeaponAmmoHandlerSystem : SystemBase
                         commandBuffer.SetComponent(entityInQueryIndex, e, new TriggerComponent
                             { Type = (int)TriggerType.Ammo, ParentEntity = entity, Entity = e, Active = true });
                         var localTransform = LocalTransform.FromPositionRotation(weaponPosition, weaponRotation);
+                        localTransform.Scale = ammoDataComponent.AmmoScale;
                         commandBuffer.SetComponent(entityInQueryIndex, e, localTransform);
                         commandBuffer.SetComponent(entityInQueryIndex, e, velocity);
                     }

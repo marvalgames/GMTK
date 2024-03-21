@@ -12,7 +12,9 @@ namespace Sandbox.Player
         public VisualEffect vfxSystem;
         private Animator animator;
         public int targetFrameRate = -1;
-     
+        public AudioSource AudioSource;
+        public AudioClip AudioClip;
+
 
         void Start()
         {
@@ -40,6 +42,8 @@ namespace Sandbox.Player
                 var go = entityManager.GetComponentObject<PlayerMoveGameObjectClass>(linkedEntity);
                 go.vfxSystem = vfxSystem;
                 entityManager.SetComponentData(linkedEntity, go);
+                
+                //pass  this to playermove mb and set VFX effect there - for some reason if set in Sub-Scene it ignores parameters
 
             }
         }

@@ -254,6 +254,8 @@ namespace Sandbox.Player
                     in ApplyImpulseComponent applyImpulseComponent) =>
                 {
                     var audioSource = playerMove.audioSource;
+                    Debug.Log("AC " +  playerMove.clip);
+                    Debug.Log("AS " +  audioSource);
                     var stickSpeed = applyImpulseComponent.animatorStickSpeed;
 
 
@@ -261,6 +263,7 @@ namespace Sandbox.Player
                     {
                         if (playerMove.clip && audioSource)
                         {
+                            Debug.Log("AS " +  audioSource);
                             var pitch = stickSpeed * playerMoveComponent.stepRate;
                             if (audioSource.isPlaying == false)
                             {

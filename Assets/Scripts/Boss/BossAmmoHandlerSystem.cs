@@ -110,12 +110,14 @@ public partial class BossAmmoHandlerSystem : SystemBase
                     bulletManagerComponent.playSound = true;
 
                     ammoDataComponent.Shooter = entity;
+                    
+                        
                     commandBuffer.SetComponent(e, ammoDataComponent);
-
                     ammoStartTransform.Rotation = rotation;
                     commandBuffer.SetComponent(e, new TriggerComponent
                     { Type = (int)TriggerType.Ammo, ParentEntity = entity, Entity = e, Active = true });
                     SystemAPI.SetComponent(entity, bossLocalTransform);
+                    ammoStartTransform.Scale = ammoDataComponent.AmmoScale;
                     commandBuffer.SetComponent(e, ammoStartTransform);
                     commandBuffer.SetComponent(e, velocity);
                 }
