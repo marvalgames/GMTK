@@ -7,7 +7,7 @@
 #define COLLAPSIBLE_GROUP 1
 
 //Normalize the amount of normal-based distortion between reflection probes and screen-space reflections
-#define PLANAR_REFLECTION_DISTORTION_MULTIPLIER 0.25
+#define SCREENSPACE_REFLECTION_DISTORTION_MULTIPLIER 0.25
 
 struct SceneData
 {
@@ -183,13 +183,15 @@ float3 GetWaterColor(SceneData scene, float3 scatterColor, float density, float 
 
 //Note: Throws an error about a BLENDWEIGHTS vertex attribute on GLES when VR is enabled (fixed in URP 10+)
 //Possibly related to: https://issuetracker.unity3d.com/issues/oculus-a-non-system-generated-input-signature-parameter-blendindices-cannot-appear-after-a-system-generated-value
-#if SHADER_API_GLES3 && defined(USING_STEREO_MATRICES)
-#define FRONT_FACE_SEMANTIC_REAL VFACE
+#if SHADER_API_GLES3 && defined(STEREO_MULTIVIEW_ON)
+#define FRONT_FACE_SEMANTIC_REAL SV_IsFrontFace
+#define FRONT_FACE_TYPE_REAL bool
 #else
 #define FRONT_FACE_SEMANTIC_REAL FRONT_FACE_SEMANTIC
+#define FRONT_FACE_TYPE_REAL FRONT_FACE_TYPE
 #endif
 
-float4 ForwardPassFragment(Varyings input, FRONT_FACE_TYPE vertexFace : FRONT_FACE_SEMANTIC_REAL) : SV_Target
+float4 ForwardPassFragment(Varyings input, FRONT_FACE_TYPE_REAL vertexFace : FRONT_FACE_SEMANTIC_REAL) : SV_Target
 {
 	UNITY_SETUP_INSTANCE_ID(input);
 	UNITY_SETUP_STEREO_EYE_INDEX_POST_VERTEX(input);
@@ -202,6 +204,8 @@ float4 ForwardPassFragment(Varyings input, FRONT_FACE_TYPE vertexFace : FRONT_FA
 	water.vFace = IS_FRONT_VFACE(vertexFace, true, false); //0 = back face
 	//return float4(lerp(float3(1,0,0), float3(0,1,0), water.vFace), 1.0);
 	int faceSign = water.vFace > 0 ? 1 : -1;
+
+	//return float4(ReconstructWorldNormal(input.positionCS), 1.0);
 	
 	/* ========
 	// GEOMETRY DATA
@@ -246,6 +250,7 @@ float4 ForwardPassFragment(Varyings input, FRONT_FACE_TYPE vertexFace : FRONT_FA
 	#endif
 
 	water.vertexNormal = normalWS;
+	//return float4(water.vertexNormal, 1.0);
 		
 	//Returns mesh or world-space UV
 	float2 uv = GetSourceUV(input.uv.xy, positionWS.xz, _WorldSpaceUV);;
@@ -262,19 +267,19 @@ float4 ForwardPassFragment(Varyings input, FRONT_FACE_TYPE vertexFace : FRONT_FA
 	WaveInfo waves = GetWaveInfo(uv, TIME * _WaveSpeed, _WaveHeight,  lerp(1, 0, vertexColor.b), _WaveFadeDistance.x, _WaveFadeDistance.y);
 	
 	#if !_FLAT_SHADING
+	waves.normal = normalize(water.vertexNormal + waves.normal);
+
 	//Flatten by blue vertex color weight
 	waves.normal = lerp(waves.normal, normalWS, lerp(0, 1, vertexColor.b));
-	#else
-	//No normals were calculated, so use these
-	waves.normal = normalWS;
-	#endif
 	
 	water.waveNormal = waves.normal;
+	#endif
+	
 	//return float4(water.waveNormal.xyz, 1);
 
 	water.offset.y += waves.position.y;
 	//For steep waves the horizontal stretching is too extreme, tone it down here
-	water.offset.xz += waves.position.xz * 0.5;
+	water.offset.xz += waves.position.xz;
 #endif
 
 	#endif
@@ -288,7 +293,7 @@ float4 ForwardPassFragment(Varyings input, FRONT_FACE_TYPE vertexFace : FRONT_FA
 	#if DYNAMIC_EFFECTS_ENABLED
 	float4 dynamicEffectsData = SampleDynamicEffectsData(positionWS.xyz + water.offset.xyz);
 	//return float4(BoundsEdgeMask(positionWS.xz).xxx, 1.0);
-	//return float4(dynamicEffectsData.ggg, 1.0);
+	//return float4(dynamicEffectsData.rrr, 1.0);
 	#endif
 
 	/* ========
@@ -346,30 +351,33 @@ float4 ForwardPassFragment(Varyings input, FRONT_FACE_TYPE vertexFace : FRONT_FA
 	water.tangentNormal = float3(0.5, 0.5, 1);
 	water.tangentWorldNormal = water.waveNormal;
 	
+	#if DYNAMIC_EFFECTS_ENABLED
+	if(NORMALS_AVAILABLE)
+	{
+		float4 dynamicNormals = SampleDynamicEffectsNormals(water.positionWS + water.offset);
+		dynamicNormals.xyz = lerp(water.vertexNormal, dynamicNormals.xyz, dynamicEffectsData.a);
+  
+		//Composite into wave normal. Not using the tangent normal, since this has variable influence on reflection, dynamic effects should denote geometry curvature
+		water.waveNormal = BlendNormalWorldspaceRNM(dynamicNormals.xyz, water.waveNormal, float3(0,1,0));
+		//return float4(water.waveNormal, 1.0);
+	}
+    #endif
+	
 #if _NORMALMAP
 	//Tangent-space
 	water.tangentNormal = SampleNormals(uv, _NormalTiling, _NormalSubTiling, positionWS, TIME, _NormalSpeed, _NormalSubSpeed, water.slope, water.vFace);
 	//return float4(SRGBToLinear(float3(water.tangentNormal.x * 0.5 + 0.5, water.tangentNormal.y * 0.5 + 0.5, 1)), 1.0);
-
+	
 	//Based on wave normal, makes it easier to create blend between the smooth wave normals and high-frequency normal maps
 	water.tangentToWorldMatrix = half3x3(WorldTangent, WorldBiTangent, water.waveNormal);
 
-	#if DYNAMIC_EFFECTS_ENABLED
-	float4 dynamicNormals = SampleDynamicEffectsNormals(water.positionWS + water.offset);
-	//water.tangentNormal = BlendTangentNormals(water.tangentNormal, dynamicNormals.xyz);
-
-	float3 interactionWorldNormal = normalize(TransformTangentToWorld(dynamicNormals.xyz, half3x3(WorldTangent, WorldBiTangent, water.vertexNormal)));
-	interactionWorldNormal = lerp(water.vertexNormal, interactionWorldNormal, dynamicEffectsData.a * dynamicNormals.a);
-
-	water.waveNormal = BlendNormalWorldspaceRNM(interactionWorldNormal, water.waveNormal, water.vertexNormal);
-	#endif
-
 	//World-space
-	water.tangentWorldNormal = normalize(TransformTangentToWorld(water.tangentNormal, water.tangentToWorldMatrix));	
+	water.tangentWorldNormal = normalize(TransformTangentToWorld(water.tangentNormal, water.tangentToWorldMatrix));
+
 	//return float4(water.tangentWorldNormal, 1.0);
 #endif
 	#endif
-			
+	
 	#if _REFRACTION || UNDERWATER_ENABLED
 	float3 refractionViewDir = water.viewDir;
 
@@ -384,6 +392,8 @@ float4 ForwardPassFragment(Varyings input, FRONT_FACE_TYPE vertexFace : FRONT_FA
 
 	//return float4(ScreenEdgeMask(input.screenPos.xy / input.screenPos.w, length(water.refractionOffset.xy)).xxx, 1.0);
 	#endif
+	
+	float2 offsetVector = saturate(water.offset.yy + water.tangentWorldNormal.xz);
 	
 	//Normals can perturb the screen coordinates, so needs to be calculated first
 	PopulateSceneData(scene, input, water);
@@ -450,8 +460,12 @@ float4 ForwardPassFragment(Varyings input, FRONT_FACE_TYPE vertexFace : FRONT_FA
 	
 	if (_IntersectionSource == 1) interSecGradient = vertexColor.r;
 	if (_IntersectionSource == 2) interSecGradient = saturate(interSecGradient + vertexColor.r);
+
+	#if DYNAMIC_EFFECTS_ENABLED
+	//interSecGradient += dynamicEffectsData[DE_ALPHA_CHANNEL];
+	#endif
 	
-	water.intersection = SampleIntersection(uv.xy, interSecGradient, TIME * _IntersectionSpeed) * _IntersectionColor.a;
+	water.intersection = SampleIntersection(uv.xy + (offsetVector * _IntersectionDistortion), _IntersectionTiling, interSecGradient, _IntersectionFalloff, TIME * _IntersectionSpeed) * _IntersectionColor.a;
 
 	#if UNDERWATER_ENABLED
 	//Hide on backfaces
@@ -501,13 +515,16 @@ float4 ForwardPassFragment(Varyings input, FRONT_FACE_TYPE vertexFace : FRONT_FA
 	float baseFoam = saturate(_FoamBaseAmount - water.slope + vertexColor.a);
 	float foamMask = crest + baseFoam + foamSlopeMask;
 
-	float foamOffset = water.offset.y;
-
 	//Parallaxing
 	//half2 distortion = (_FoamDistortion * water.viewDir.xz / saturate(dot(water.waveNormal, water.viewDir)));
-	half2 distortion = (_FoamDistortion * saturate(foamOffset * 0.5 + 0.5));
+	half2 foamDistortion = offsetVector * _FoamDistortion.xx;
 
-	float foamTex = SampleFoamTexture((uv + distortion.xy), _FoamTiling, _FoamSubTiling, TIME, _FoamSpeed, _FoamSubSpeed, foamSlopeMask, _SlopeSpeed, _SlopeStretching, enableSlopeFoam);
+	#if _RIVER
+	//Only distort sideways, makes the effect appear more like foam is moving around obstacles or shallow rocks
+	foamDistortion.y = 0;
+	#endif
+	
+	float foamTex = SampleFoamTexture((uv + foamDistortion.xy), _FoamTiling, _FoamSubTiling, TIME, _FoamSpeed, _FoamSubSpeed, foamSlopeMask, _SlopeSpeed, _SlopeStretching, enableSlopeFoam);
 	if(_FoamClipping > 0) foamTex = smoothstep(_FoamClipping, 1.0, foamTex);
 	
 	//Dissolve the foam based on the input gradient
@@ -516,10 +533,9 @@ float4 ForwardPassFragment(Varyings input, FRONT_FACE_TYPE vertexFace : FRONT_FA
 
 	//Dynamic foam (separately sampled)
 	#if DYNAMIC_EFFECTS_ENABLED
-	foamOffset = dynamicEffectsData[DE_DISPLACEMENT_CHANNEL];
-	distortion = (_FoamDistortion * saturate(foamOffset * 0.5 + 0.5));
+	foamDistortion = _FoamDistortion * dynamicEffectsData[DE_DISPLACEMENT_CHANNEL].xx;
 	
-	foamTex = SampleDynamicFoam((uv + distortion.xy), _FoamTilingDynamic, _FoamSubTilingDynamic, TIME, _FoamSpeedDynamic, _FoamSubSpeedDynamic);
+	foamTex = SampleDynamicFoam((uv + foamDistortion.xy), _FoamTilingDynamic, _FoamSubTilingDynamic, TIME, _FoamSpeedDynamic, _FoamSubSpeedDynamic);
 
 	foamMask = dynamicEffectsData[DE_FOAM_CHANNEL];
 	foamMask = saturate(1.0 - foamMask);
@@ -541,37 +557,28 @@ float4 ForwardPassFragment(Varyings input, FRONT_FACE_TYPE vertexFace : FRONT_FA
 	#if COLLAPSIBLE_GROUP
 
 	#if _CAUSTICS
-	float2 causticsProjection = scene.positionWS.xz;
-
+	float3 causticsCoords = scene.positionWS;
 	#if _DISABLE_DEPTH_TEX
-	causticsProjection = water.positionWS.xz;
+	causticsCoords = causticsCoords;
 	#endif
 	
 	float causticsMask = saturate((1-water.fog) - water.intersection - water.foam - scene.skyMask) * water.vFace;
+	
+	float2 causticsProjection = GetCausticsProjection(input.positionCS, mainLight.direction, causticsCoords, causticsMask);
+	
 	#ifdef SCENE_SHADOWMASK
 	causticsMask *= scene.shadowMask;
 	#endif
-	
-	#if defined(DIRECTIONAL_CAUSTICS)
-	half3 sceneWorldNormal = ReconstructNormalTap3(input.positionCS.xy) * 2.0 - 1.0;
-	half causticsAtten = saturate(dot(sceneWorldNormal, mainLight.direction));
-	causticsMask *= causticsAtten;
-	//return float4(sceneWorldNormal.xyz, 1.0);
-	
-	#if UNITY_VERSION >= 202130
-	//_MainLightWorldToLight matrix needs set up through scripting
-	//causticsProjection = mul((float4x4)_MainLightWorldToLight, float4(scene.positionWS, 1.0)).xy;
+
+	float3 causticsDistortion = lerp(water.waveNormal.xyz, water.tangentWorldNormal.xyz, _CausticsDistortion);
+
+	#if _ADVANCED_SHADING
+	//causticsDistortion = TransformWorldToViewDir(causticsDistortion);
+	//causticsDistortion.xz = causticsDistortion.xy;
 	#endif
 	
-	//return float4(frac(causticsProjection.xy), 0, 1.0);
-	#endif
+	water.caustics = SampleCaustics(causticsProjection + causticsDistortion.xz, TIME * _CausticsSpeed, _CausticsTiling, _CausticsChromance);
 	
-	water.caustics = SampleCaustics(causticsProjection + lerp(water.waveNormal.xz, water.tangentWorldNormal.xz, _CausticsDistortion), TIME * _CausticsSpeed, _CausticsTiling);
-
-	//Caustics based on normals?
-	//float3 causticsTangentNormals = SampleNormals(scene.positionWS.xz * _NormalTiling, scene.positionWS, TIME, _NormalSpeed, water.slope, water.vFace);
-	//water.caustics = smoothstep(0, 1, 1-causticsTangentNormals.b);
-
 	//return float4(causticsMask.xxx, 1.0);
 	
 	//Note: not masked by surface shadows, this occurs in the lighting function so it also takes point/spot lights into account
@@ -618,11 +625,11 @@ float4 ForwardPassFragment(Varyings input, FRONT_FACE_TYPE vertexFace : FRONT_FA
 
 	//Blend between smooth surface normal and normal map to control the reflection perturbation (probes only!)
 	#if !_FLAT_SHADING 
-	float3 refWorldTangentNormal = lerp(water.waveNormal, normalize(water.waveNormal + water.tangentWorldNormal), _ReflectionDistortion);
+	float3 refWorldNormal = lerp(water.waveNormal, normalize(water.waveNormal + water.tangentWorldNormal), _ReflectionDistortion);
 	#else //Skip, not a good fit
-	float3 refWorldTangentNormal = water.waveNormal;
+	float3 refWorldNormal = water.waveNormal;
 	#endif
-
+	
 	half3 reflectionViewDir = water.viewDir;
 
 	#if _REFLECTION_PROBE_BOX_PROJECTION
@@ -630,7 +637,7 @@ float4 ForwardPassFragment(Varyings input, FRONT_FACE_TYPE vertexFace : FRONT_FA
 	if(unity_OrthoParams.w == 1) reflectionViewDir = GetWorldSpaceViewDir(positionWS);
 	#endif
 	
-	half3 reflectionVector = reflect(-reflectionViewDir, refWorldTangentNormal);
+	half3 reflectionVector = reflect(-reflectionViewDir, refWorldNormal);
 
 	#if !_RIVER
 	//Ensure only the top hemisphere of the reflection probe is used
@@ -638,11 +645,19 @@ float4 ForwardPassFragment(Varyings input, FRONT_FACE_TYPE vertexFace : FRONT_FA
 	#endif
 	
 	//Pixel offset for planar reflection, sampled in screen-space
-	float2 reflectionPixelOffset = lerp(water.vertexNormal.xz, water.tangentWorldNormal.xz, _ReflectionDistortion * scene.positionSS.w * PLANAR_REFLECTION_DISTORTION_MULTIPLIER).xy;
+	float3 reflectionOffsetVector = lerp(water.vertexNormal, water.tangentWorldNormal, _ReflectionDistortion);
 	
-	water.reflections = SampleReflections(reflectionVector, _ReflectionBlur, _PlanarReflectionsEnabled, scene.positionSS.xyzw, positionWS, refWorldTangentNormal, water.viewDir, reflectionPixelOffset);
+	#if _ADVANCED_SHADING
+	//reflectionOffsetVector = TransformWorldToViewDir(reflectionOffsetVector);
+	//reflectionOffsetVector.xz = reflectionOffsetVector.xy;
+	#endif
 	
-	float reflectionFresnel = ReflectionFresnel(refWorldTangentNormal, water.viewDir * faceSign, _ReflectionFresnel);
+	float2 reflectionPixelOffset = (reflectionOffsetVector.xz * scene.positionSS.w * SCREENSPACE_REFLECTION_DISTORTION_MULTIPLIER).xy;
+	
+	water.reflections = SampleReflections(reflectionVector, _ReflectionBlur, scene.positionSS.xyzw, positionWS, refWorldNormal, water.viewDir, reflectionPixelOffset, _PlanarReflectionsEnabled);
+	//return float4(water.reflections, 1.0);
+	
+	float reflectionFresnel = ReflectionFresnel(refWorldNormal, water.viewDir * faceSign, _ReflectionFresnel);
 	//return float4(reflectionFresnel.xxx, 1.0);
 	
 	water.reflectionMask = _ReflectionStrength * reflectionFresnel;

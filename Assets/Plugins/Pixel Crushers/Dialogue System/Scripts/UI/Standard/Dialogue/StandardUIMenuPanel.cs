@@ -151,6 +151,24 @@ namespace PixelCrushers.DialogueSystem
 
         #region Show & Hide
 
+        protected override void Update()
+        {
+            if (s_isInputDisabled)
+            {
+                if (eventSystem != null) eventSystem.SetSelectedGameObject(null);
+            }
+            else
+            {
+                base.Update();
+            }
+        }
+
+        public override void CheckFocus()
+        {
+            if (s_isInputDisabled) return;
+            base.CheckFocus();
+        }
+
         public virtual void SetPCPortrait(Sprite portraitSprite, string portraitName)
         {
             if (pcImage != null)
@@ -521,16 +539,27 @@ namespace PixelCrushers.DialogueSystem
                 if (autonumber.enabled)
                 {
                     button.text = string.Format(m_processedAutonumberFormat, buttonNumber + 1, button.text);
-                    var keyTrigger = button.GetComponent<UIButtonKeyTrigger>();
+                    // Add UIButtonKeyTrigger(s) if needed:
+                    var numKeyTriggersNeeded = 0;
+                    if (autonumber.regularNumberHotkeys) numKeyTriggersNeeded++;
+                    if (autonumber.numpadHotkeys) numKeyTriggersNeeded++;
+                    var keyTriggers = button.GetComponents<UIButtonKeyTrigger>();
+                    if (keyTriggers.Length < numKeyTriggersNeeded)
+                    {
+                        for (int i = keyTriggers.Length; i < numKeyTriggersNeeded; i++)
+                        {
+                            button.gameObject.AddComponent<UIButtonKeyTrigger>();
+                        }
+                        keyTriggers = button.GetComponents<UIButtonKeyTrigger>();
+                    }
+                    int index = 0;
                     if (autonumber.regularNumberHotkeys)
                     {
-                        if (keyTrigger == null) keyTrigger = button.gameObject.AddComponent<UIButtonKeyTrigger>();
-                        keyTrigger.key = (KeyCode)((int)KeyCode.Alpha1 + buttonNumber);
+                        keyTriggers[index++].key = (KeyCode)((int)KeyCode.Alpha1 + buttonNumber);
                     }
                     if (autonumber.numpadHotkeys)
                     {
-                        if (autonumber.regularNumberHotkeys || keyTrigger == null) keyTrigger = button.gameObject.AddComponent<UIButtonKeyTrigger>();
-                        keyTrigger.key = (KeyCode)((int)KeyCode.Keypad1 + buttonNumber);
+                        keyTriggers[index].key = (KeyCode)((int)KeyCode.Keypad1 + buttonNumber);
                     }
                 }
             }

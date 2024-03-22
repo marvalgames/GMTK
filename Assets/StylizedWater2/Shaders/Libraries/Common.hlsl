@@ -57,21 +57,22 @@ struct WaterSurface
 	float shadowMask;
 };
 
-//#define PIXELIZE_UV
+//Set through the public static C# parameter: StylizedWater2.WaterObject.PositionOffset
+float3 _WaterPositionOffset;
 
 float2 GetSourceUV(float2 uv, float2 wPos, float state) 
 {
-	float2 output =  lerp(uv, wPos, state);
+	#ifdef _RIVER
+	//World-space tiling is useless in this case
+	return uv;
+	#endif
+	
+	float2 output =  lerp(uv, wPos - _WaterPositionOffset.xz, state);
 
 	//Pixelize
 	#ifdef PIXELIZE_UV
 	output.x = (int)((output.x / 0.5) + 0.5) * 0.5;
 	output.y = (int)((output.y / 0.5) + 0.5) * 0.5;
-	#endif
-
-	#ifdef _RIVER
-	//World-space tiling is useless in this case
-	return uv;
 	#endif
 	
 	return output;
@@ -87,16 +88,13 @@ float DepthDistance(float3 wPos, float3 viewPos, float3 normal)
 	return length((wPos - viewPos) * normal);
 }
 
-float4 PackedUV(float2 sourceUV, float2 time, float speed, float subTiling, float subSpeed)
+float4 PackedUV(float2 sourceUV, float2 tiling, float2 time, float speed, float subTiling, float subSpeed)
 {
-	float2 uv1 = sourceUV.xy + (time.xy * speed);
+	float2 baseSpeed = speed.xx * tiling;
+	float2 uv1 = (sourceUV.xy * tiling.xy) + (time.xy * baseSpeed);
 
-	#ifdef _RIVER
-	//Can't allow negative values, as this causes water to move upstream
-	subSpeed = abs(subSpeed);
-	#endif
-	
-	float2 uv2 = (sourceUV.xy * subTiling) + ((time.xy) * speed * subSpeed);
+	float2 tiling_uv2 = tiling * subTiling;
+	float2 uv2 = (sourceUV.xy * tiling_uv2) + (time.xy * (speed.xx * subSpeed * tiling_uv2));
 	
 	return float4(uv1.xy, uv2.xy);
 }
@@ -203,4 +201,17 @@ float3 ReconstructWorldPosition(float4 screenPos, float3 viewDir, SceneDepth sce
 	#endif
 
 }
+
+#if UNITY_VERSION > 202110
+#include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/NormalReconstruction.hlsl"
+
+float3 ReconstructWorldNormal(float4 positionCS)
+{
+	half3 normalVS = ReconstructNormalTap3(positionCS.xy);
+
+	return normalVS;
+}
+#else
+float3 ReconstructWorldNormal(float4 positionCS) { return 0; }
+#endif
 #endif

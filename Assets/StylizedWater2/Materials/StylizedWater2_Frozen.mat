@@ -65,6 +65,10 @@ Material:
         m_Texture: {fileID: 2800000, guid: e91f048fea6b6b94eb864b2124843ce9, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    - _FoamTexDynamic:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _IntersectionNoise:
         m_Texture: {fileID: 2800000, guid: b8850342fb8b1e846ac3807e35ec1685, type: 3}
         m_Scale: {x: 1, y: 1}
@@ -158,14 +162,18 @@ Material:
     - _FlowSpeed: 1
     - _FoamBaseAmount: 0.747
     - _FoamClipping: 0.373
-    - _FoamDistortion: 1
+    - _FoamDistortion: 3
     - _FoamOn: 1
     - _FoamOpacity: 0
     - _FoamSize: 0.606
     - _FoamSpeed: 0
+    - _FoamSpeedDynamic: 0.1
     - _FoamSubSpeed: 0
+    - _FoamSubSpeedDynamic: -0.1
     - _FoamSubTiling: 0.1
+    - _FoamSubTilingDynamic: 2
     - _FoamTiling: 0.09999993
+    - _FoamTilingDynamic: 0.1
     - _FoamWaveAmount: 0
     - _FoamWaveMask: 0
     - _FoamWaveMaskExp: 1
@@ -225,6 +233,8 @@ Material:
     - _ShoreLineWaveDistance: 23
     - _ShoreLineWaveStr: 1
     - _SimpleLighting: 1
+    - _SlopeAngleFalloff: 25
+    - _SlopeAngleThreshold: 15
     - _SlopeFoam: 1
     - _SlopeSpeed: 4
     - _SlopeStretching: 0.5
@@ -237,7 +247,7 @@ Material:
     - _SpecularReflectionsOn: 1
     - _Speed: 1
     - _SrcBlend: 1
-    - _SunReflectionDistortion: 0.29
+    - _SunReflectionDistortion: 0.35
     - _SunReflectionPerturbance: 0.386
     - _SunReflectionSize: 1
     - _SunReflectionStrength: 1
@@ -251,6 +261,7 @@ Material:
     - _TranslucencyOn: 1
     - _TranslucencyReflectionMask: 0
     - _TranslucencyStrength: 1
+    - _TranslucencyStrengthDirect: 0.05
     - _UnderwaterRefractionOffset: 0.2
     - _UnderwaterSurfaceSmoothness: 0.8
     - _VertexColorDepth: 0
@@ -276,8 +287,10 @@ Material:
     - _DistanceNormalsFadeDist: {r: 0, g: 49.387802, b: 0, a: 0}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
     - _FoamColor: {r: 1, g: 1, b: 1, a: 0.12156863}
+    - _FoamTiling: {r: 0.1, g: 0.1, b: 0, a: 0}
     - _HorizonColor: {r: 0.68, g: 1, b: 0.99, a: 0.1764706}
     - _IntersectionColor: {r: 1, g: 1, b: 1, a: 1}
+    - _NormalTiling: {r: 0.1, g: 0.1, b: 0, a: 0}
     - _RimColor: {r: 1, g: 1, b: 1, a: 1}
     - _ShallowColor: {r: 0.07227186, g: 0.2831488, b: 0.34191445, a: 0}
     - _SpecColor: {r: 0.2, g: 0.2, b: 0.2, a: 1}

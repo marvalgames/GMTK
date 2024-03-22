@@ -93,6 +93,7 @@ namespace StylizedWater2
             if (GUILayout.Button(new GUIContent("  Recompile", EditorGUIUtility.IconContent("RotateTool").image), GUILayout.MinHeight(30f)))
             {
                 importer.SaveAndReimport();
+                return;
             }
 
             GUILayout.Space(-2f);

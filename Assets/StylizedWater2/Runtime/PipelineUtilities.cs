@@ -5,9 +5,11 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Reflection;
 using UnityEngine;
 using UnityEngine.Rendering;
+using Debug = UnityEngine.Debug;
 #if URP
 using UnityEngine.Rendering.Universal;
 
@@ -29,9 +31,10 @@ namespace StylizedWater2
     {
         private const string renderDataListFieldName = "m_RendererDataList";
         private const string renderFeaturesListFieldName = "m_RendererFeatures";
+        private const string defaultRendererIndexFieldName = "m_DefaultRendererIndex";
         
 #if URP
-        private static ScriptableRendererData[] GetRenderDataList(UniversalRenderPipelineAsset asset)
+        public static ScriptableRendererData[] GetRenderDataList(UniversalRenderPipelineAsset asset)
         {
             FieldInfo renderDataListField = typeof(UniversalRenderPipelineAsset).GetField(renderDataListFieldName, BindingFlags.NonPublic | BindingFlags.Instance);
 
@@ -138,12 +141,6 @@ namespace StylizedWater2
         /// <param name="renderer"></param>
         public static bool IsRendererAdded(ScriptableRendererData renderer)
         {
-            if (renderer == null)
-            {
-                Debug.LogError("Pass is null");
-                return false;
-            }
-
             if (UniversalRenderPipeline.asset)
             {
                 ScriptableRendererData[] m_rendererDataList = GetRenderDataList(UniversalRenderPipeline.asset);
@@ -204,7 +201,11 @@ namespace StylizedWater2
 
         private static int GetDefaultRendererIndex(UniversalRenderPipelineAsset asset)
         {
-            return (int)typeof(UniversalRenderPipelineAsset).GetField("m_DefaultRendererIndex", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(asset);;
+            FieldInfo fieldInfo = typeof(UniversalRenderPipelineAsset).GetField(defaultRendererIndexFieldName, BindingFlags.NonPublic | BindingFlags.Instance);
+
+            if (fieldInfo == null) {throw new Exception($"Reflection failed on the field named \"{defaultRendererIndexFieldName}\". It may have changed in the current Unity version");}
+
+            return (int)fieldInfo.GetValue(asset);
         }
 
         /// <summary>
@@ -226,16 +227,49 @@ namespace StylizedWater2
             throw new Exception("No Universal Render Pipeline is currently active.");
         }
 
-        public static ScriptableRendererFeature GetRenderFeature<T>()
+        /// <summary>
+        /// Editor only! Checks if the given render feature is missing on any renderers. Displays a pop up if that is the case, with the option to add it
+        /// </summary>
+        /// <param name="name">Descriptive name for the render feature</param>
+        /// <typeparam name="T">Render feature type</typeparam>
+        [Conditional("UNITY_EDITOR")]
+        public static void ValidateRenderFeatureSetup<T>(string name)
         {
-            ScriptableRendererData forwardRenderer = GetDefaultRenderer();
-
-            if (forwardRenderer)
+            if (Application.isPlaying == false)
             {
-                foreach (ScriptableRendererFeature feature in forwardRenderer.rendererFeatures)
+                if (RenderFeatureMissing<T>(out ScriptableRendererData[] renderers))
                 {
-                    if (feature && feature.GetType() == typeof(T)) return feature;
+                    #if UNITY_EDITOR
+                    string[] rendererNames = new string[renderers.Length];
+                    for (int i = 0; i < rendererNames.Length; i++)
+                    {
+                        rendererNames[i] = "• " + renderers[i].name;
+                    }
+
+                    if (EditorUtility.DisplayDialog($"Stylized Water 2", 
+                            $"The {name} render feature hasn't been added to the following renderers:\n\n" + 
+                            System.String.Join(System.Environment.NewLine, rendererNames) + 
+                            $"\n\nThis is required for rendering to take effect", "Setup", "Ignore"))
+                    {
+                        SetupRenderFeature<T>(name:$"Stylized Water 2: {name}");
+                    }
+                    #endif
                 }
+            }
+        }
+
+        /// <summary>
+        /// Retrieves the given render feature from the default renderer
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        public static ScriptableRendererFeature GetRenderFeature<T>(ScriptableRendererData renderer = null)
+        {
+            if(renderer == null) renderer = GetDefaultRenderer();
+            
+            foreach (ScriptableRendererFeature feature in renderer.rendererFeatures)
+            {
+                if (feature && feature.GetType() == typeof(T)) return feature;
             }
 
             return null;
@@ -247,24 +281,29 @@ namespace StylizedWater2
         /// <param name="addIfMissing"></param>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
-        public static bool RenderFeatureAdded<T>(ScriptableRendererData renderer = null, bool addIfMissing = false)
+        public static bool RenderFeatureAdded<T>(ScriptableRendererData renderer = null)
         {
             if(renderer == null) renderer = GetDefaultRenderer();
-			
-            bool isPresent = false;
 
             foreach (ScriptableRendererFeature feature in renderer.rendererFeatures)
             {
                 if(feature == null) continue;
-                
-                if (feature.GetType() == typeof(T)) isPresent = true;
+
+                if (feature.GetType() == typeof(T))
+                {
+                    return true;
+                }
             }
             
-            if(!isPresent && addIfMissing) AddRenderFeature<T>(renderer);
-            
-            return isPresent;
+            return false;
         }
 		
+        /// <summary>
+        /// Checks if the given render feature is missing on any configured renderers
+        /// </summary>
+        /// <param name="renderers"></param>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
 		public static bool RenderFeatureMissing<T>(out ScriptableRendererData[] renderers)
 		{
 			List<ScriptableRendererData> unconfigured = new List<ScriptableRendererData>();
@@ -284,6 +323,11 @@ namespace StylizedWater2
             return unconfigured.Count > 0;
         }
 
+        /// <summary>
+        /// Adds a render feature of a given type to all default renderers
+        /// </summary>
+        /// <param name="name"></param>
+        /// <typeparam name="T"></typeparam>
         public static void SetupRenderFeature<T>(string name = "")
         {
             foreach (var asset in GraphicsSettings.allConfiguredRenderPipelines)

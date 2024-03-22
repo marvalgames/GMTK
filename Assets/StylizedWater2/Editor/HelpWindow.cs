@@ -437,6 +437,8 @@ namespace StylizedWater2
                 if (underwaterExtensionInstalled && (integration.underwaterCompatible == false))
                 {
                     UI.DrawNotification("Editing of shader files for this asset is required to incorporate support for the Underwater Rendering extension. (See documentation section called \"Transparent Materials\")", MessageType.Warning);
+                    
+                    if(integration.asset == ShaderConfigurator.Fog.Assets.COZY) UI.DrawNotification("For COZY version 3.0+, an integration package comes with the asset, which must be unpacked. This contains pre-edited shader files.");
                 }
             }
             
@@ -512,21 +514,28 @@ namespace StylizedWater2
             EditorGUILayout.Space();
             
             if (projectDetails == null) projectDetails = GetProjectDetails();
-            
-            EditorGUILayout.LabelField("Project details", EditorStyles.boldLabel);
+
+            using (new EditorGUILayout.HorizontalScope())
+            {
+                EditorGUILayout.LabelField("Project details", EditorStyles.boldLabel);
+                if (GUILayout.Button("Refresh", EditorStyles.miniButton))
+                {
+                    projectDetails = GetProjectDetails();
+                }
+            }
             projectDetailsScrollPos = EditorGUILayout.BeginScrollView(projectDetailsScrollPos, EditorStyles.helpBox, GUILayout.Height(200f));
             EditorGUILayout.LabelField(projectDetails, UI.Styles.WordWrapLabel);
             EditorGUILayout.EndScrollView();
 
             using (new EditorGUILayout.HorizontalScope())
             {
+                EditorGUILayout.LabelField("Supplying this information is always useful!", EditorStyles.miniLabel);
+                
                 if (GUILayout.Button(new GUIContent("  Copy to clipboard", EditorGUIUtility.IconContent("Clipboard").image)))
                 {
-                    EditorGUIUtility.systemCopyBuffer = GetProjectDetails();
+                    EditorGUIUtility.systemCopyBuffer = projectDetails;
                     EditorApplication.Beep();
                 }
-                EditorGUILayout.LabelField("Supplying this information is always useful!", EditorStyles.miniLabel);
-                //GUILayout.FlexibleSpace();
             }
         }
         
@@ -534,7 +543,7 @@ namespace StylizedWater2
         {
             StringBuilder stringBuilder = new StringBuilder();
             
-            stringBuilder.AppendLine($"{AssetInfo.ASSET_NAME}: v{AssetInfo.INSTALLED_VERSION}");
+            stringBuilder.AppendLine($"Version: v{AssetInfo.INSTALLED_VERSION}");
             stringBuilder.AppendLine($"Install location: {AssetInfo.GetRootFolder()}");
             stringBuilder.AppendLine($"Unity version: {AssetInfo.VersionChecking.GetUnityVersion()}");
 
@@ -572,7 +581,7 @@ namespace StylizedWater2
             #if XR && UNITY_2020_3_OR_NEWER
             EditorBuildSettings.TryGetConfigObject(UnityEngine.XR.Management.XRGeneralSettings.k_SettingsKey, out UnityEditor.XR.Management.XRGeneralSettingsPerBuildTarget buildTargetSettings);
 
-            if (buildTargetSettings)
+            if (buildTargetSettings && buildTargetSettings.SettingsForBuildTarget(buildTargetGroup))
             {
                 if (buildTargetSettings.SettingsForBuildTarget(buildTargetGroup).AssignedSettings.activeLoaders.Count > 0)
                 {
@@ -590,7 +599,10 @@ namespace StylizedWater2
             stringBuilder.AppendLine($"First available fog integration: {ShaderConfigurator.Fog.GetFirstInstalled().name}");
             stringBuilder.AppendLine($"Underwater Rendering installed: {StylizedWaterEditor.UnderwaterRenderingInstalled()}");
             stringBuilder.AppendLine($"Dynamic Effects installed: {StylizedWaterEditor.DynamicEffectsInstalled()}");
-            
+            #if URP
+            stringBuilder.AppendLine($"Render feature present: {(StylizedWaterRenderFeature.GetDefault() ? "True" : "False")}");
+            #endif
+
             #if URP
             stringBuilder.AppendLine($"");
             
@@ -608,9 +620,23 @@ namespace StylizedWater2
             stringBuilder.AppendLine($"Strict shader variant matching: {PlayerSettings.strictShaderVariantMatching}");
             #endif
             
-            string output = stringBuilder.ToString();
+            stringBuilder.AppendLine($"");
 
-            return output;
+            string defaultShaderPath = AssetDatabase.GUIDToAssetPath("d7b0192b9bf19c949900035fa781fdc4");
+            Shader defaultShader = AssetDatabase.LoadAssetAtPath<Shader>(defaultShaderPath);
+            ShaderMessage[] shaderMessages = ShaderConfigurator.GetErrorMessages(defaultShader);
+            
+            stringBuilder.AppendLine($"Shader compile errors ({shaderMessages?.Length ?? 0}):");
+            
+            if (shaderMessages != null)
+            {
+                foreach (var t in shaderMessages)
+                {
+                    stringBuilder.AppendLine($"• {t.message} {t.file}:{t.line} ({t.platform})");
+                }
+            }
+
+            return stringBuilder.ToString();
         }
         
         private class Changelog

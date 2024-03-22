@@ -14,16 +14,16 @@ float3 BlendTangentNormals(float3 a, float3 b)
 	#endif
 }
 
-float3 SampleNormals(float2 uv, float tiling, float subTiling, float3 wPos, float2 time, float speed, float subSpeed, float slope, int vFace) 
+float3 SampleNormals(float2 uv, float2 tiling, float subTiling, float3 wPos, float2 time, float speed, float subSpeed, float slope, int vFace) 
 {
-	float4 uvs = PackedUV(uv * tiling, time, speed, subTiling, subSpeed);
+	float4 uvs = PackedUV(uv, tiling, time, speed, subTiling, subSpeed);
 	float3 n1 = UnpackNormal(SAMPLE_TEXTURE2D(_BumpMap, sampler_BumpMap, uvs.xy));
 	float3 n2 = UnpackNormal(SAMPLE_TEXTURE2D(_BumpMap, sampler_BumpMap, uvs.zw));
 
 	float3 blendedNormals = BlendTangentNormals(n1, n2);
 
 	#ifdef QUAD_NORMAL_SAMPLES
-	uvs = PackedUV(uv * tiling, time.yx, speed, subTiling, subSpeed);
+	uvs = PackedUV(uv, tiling, time.yx, speed, subTiling, subSpeed);
 	float3 n4 = UnpackNormal(SAMPLE_TEXTURE2D(_BumpMap, sampler_BumpMap, uvs.xy * 2.0));
 	float3 n5 = UnpackNormal(SAMPLE_TEXTURE2D(_BumpMap, sampler_BumpMap, uvs.zw * 2.0));
 
@@ -42,7 +42,7 @@ float3 SampleNormals(float2 uv, float tiling, float subTiling, float3 wPos, floa
 
 	float3 largeBlendedNormals;
 	
-	uvs = PackedUV(uv * _DistanceNormalsTiling, time, speed * 0.5, 0.5, 0.15);
+	uvs = PackedUV(uv, _DistanceNormalsTiling.xx, time, speed * 0.5, 0.5, 0.15);
 	float3 n1b = UnpackNormal(SAMPLE_TEXTURE2D(_BumpMapLarge, sampler_BumpMap, uvs.xy));
 	
 	#if _ADVANCED_SHADING //Use 2nd texture sample
@@ -56,7 +56,7 @@ float3 SampleNormals(float2 uv, float tiling, float subTiling, float3 wPos, floa
 #endif
 	
 #if _RIVER
-	uvs = PackedUV(uv * tiling, time, speed * _SlopeSpeed, subTiling, subSpeed * _SlopeSpeed);
+	uvs = PackedUV(uv, tiling, time, speed * _SlopeSpeed, subTiling, subSpeed * _SlopeSpeed);
 	uvs.xy = uvs.xy * float2(1, 1-_SlopeStretching);
 	float3 n3 = UnpackNormal(SAMPLE_TEXTURE2D(_BumpMapSlope, sampler_BumpMap, uvs.xy));
 
@@ -74,35 +74,31 @@ float3 SampleNormals(float2 uv, float tiling, float subTiling, float3 wPos, floa
 	return blendedNormals;
 }
 
-float SampleIntersection(float2 uv, float gradient, float2 time)
+float SampleIntersection(float2 uv, float tiling, float gradient, float falloff, float2 time)
 {
-	float inter = 0;
-	float dist = 0;
+	float intersection = 0;
+	float dist = saturate(gradient / falloff);
+	
+	float2 nUV = uv * tiling;
+	float noise = SAMPLE_TEXTURE2D(_IntersectionNoise, sampler_IntersectionNoise, nUV + time.xy).r;
 	
 #if _SHARP_INERSECTION
 	float sine = sin(time.y * 10.0 - (gradient * _IntersectionRippleDist)) * _IntersectionRippleStrength;
-	float2 nUV = float2(uv.x, uv.y) * _IntersectionTiling;
-	float noise = SAMPLE_TEXTURE2D(_IntersectionNoise, sampler_IntersectionNoise, nUV + time.xy).r;
 
-	dist = saturate(gradient / _IntersectionFalloff);
 	noise = saturate((noise + sine) * dist + dist);
-	inter = step(_IntersectionClipping, noise);
-#endif
-
-#if _SMOOTH_INTERSECTION
-	float noise1 = SAMPLE_TEXTURE2D(_IntersectionNoise, sampler_IntersectionNoise, (float2(uv.x, uv.y) * _IntersectionTiling) + (time.xy )).r;
-	float noise2 = SAMPLE_TEXTURE2D(_IntersectionNoise, sampler_IntersectionNoise, (float2(uv.x, uv.y) * (_IntersectionTiling * 1.5)) - (time.xy )).r;
+	intersection = step(_IntersectionClipping, noise);
+#elif _SMOOTH_INTERSECTION
+	float noise2 = SAMPLE_TEXTURE2D(_IntersectionNoise, sampler_IntersectionNoise, (nUV * 1.5) - (time.xy )).r;
 
 	#if UNITY_COLORSPACE_GAMMA
-	noise1 = SRGBToLinear(noise1);
+	noise = SRGBToLinear(noise);
 	noise2 = SRGBToLinear(noise2);
 	#endif
 	
-	dist = saturate(gradient / _IntersectionFalloff);
-	inter = saturate(noise1 + noise2 + dist) * dist;
+	intersection = saturate(noise + noise2 + dist) * dist;
 #endif
 
-	return saturate(inter);
+	return intersection;
 }
 
 float ScreenEdgeMask(float2 screenPos, float length)

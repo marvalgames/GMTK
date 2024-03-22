@@ -15,7 +15,8 @@ float _WaterFogDisabled;
 #endif
 
 #ifdef AtmosphericHeightFog
-bool AHF_Enabled;
+//For versions older than 3.2.0, uncomment this
+//bool AHF_Enabled;
 #endif
 
 //Fragment stage. Note: Screen position passed here is not normalized (divided by w-component)
@@ -71,10 +72,12 @@ void ApplyFog(inout float3 color, float fogFactor, float4 screenPos, float3 posi
 #endif
 
 #ifdef Buto
-	if (_ButoIsEnabled > 0.0)
-	{
-		foggedColor = ButoFogBlend(screenPos.xy / screenPos.w, color.rgb);
-	}
+	#if defined(BUTO_API_VERSION_2) //Buto 2022
+	float3 positionVS = TransformWorldToView(positionWS);
+	foggedColor = ButoFogBlend(screenPos.xy / screenPos.w, -positionVS.z, color.rgb);
+	#else //Buto 2021
+	foggedColor = ButoFogBlend(screenPos.xy / screenPos.w, color.rgb);
+	#endif
 #endif
 
 	#ifndef UnityFog

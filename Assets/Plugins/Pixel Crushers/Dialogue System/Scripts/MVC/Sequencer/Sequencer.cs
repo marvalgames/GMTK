@@ -134,7 +134,7 @@ namespace PixelCrushers.DialogueSystem
         /// <summary>
         /// The entrytag for the current dialogue entry, if playing a dialogue entry sequence.
         /// </summary>
-		public string entrytag { get; set; }
+        public string entrytag { get; set; }
 
         /// <summary>
         /// Currently language-localized entrytag.
@@ -581,6 +581,9 @@ namespace PixelCrushers.DialogueSystem
                             break;
                         case DialogueTime.TimeMode.Gameplay:
                             m_delayTimeLeft -= Time.deltaTime;
+                            break;
+                        default:
+                            m_delayTimeLeft -= DialogueTime.deltaTime;
                             break;
                     }
                 }
@@ -1250,6 +1253,10 @@ namespace PixelCrushers.DialogueSystem
             else if (string.Equals(commandName, "SequencerMessage"))
             {
                 return HandleSequencerMessageInternally(commandName, args);
+            }
+            else if (string.Equals(commandName, "GotoEntry"))
+            {
+                return HandleGotoEntryInternally(commandName, args);
             }
             return false;
         }
@@ -2663,6 +2670,38 @@ namespace PixelCrushers.DialogueSystem
 
         private static DisplaySettings.SubtitleSettings.ContinueButtonMode savedContinueButtonMode = DisplaySettings.SubtitleSettings.ContinueButtonMode.Always;
 
+        public static void SetContinueMode(bool value)
+        {
+            SetContinueMode(value ? DisplaySettings.SubtitleSettings.ContinueButtonMode.Always : DisplaySettings.SubtitleSettings.ContinueButtonMode.Never);
+            UpdateActiveConversationContinueButton();
+        }
+
+        public static void SetContinueMode(DisplaySettings.SubtitleSettings.ContinueButtonMode mode)
+        {
+            savedContinueButtonMode = DialogueManager.displaySettings.subtitleSettings.continueButton;
+            DialogueManager.displaySettings.subtitleSettings.continueButton = mode;
+            UpdateActiveConversationContinueButton();
+        }
+
+        public static void SetOriginalContinueMode()
+        {
+            DialogueManager.displaySettings.subtitleSettings.continueButton = savedContinueButtonMode;
+            UpdateActiveConversationContinueButton();
+        }
+
+        private static void UpdateActiveConversationContinueButton()
+        {
+            // If a conversation is open, update its continue button mode immediately:
+            if (DialogueManager.conversationView != null)
+            {
+                if (DialogueManager.conversationView.displaySettings.conversationOverrideSettings != null)
+                {
+                    DialogueManager.conversationView.displaySettings.conversationOverrideSettings.continueButton = DialogueManager.displaySettings.subtitleSettings.continueButton;
+                }
+                DialogueManager.conversationView.SetupContinueButton();
+            }
+        }
+
         /// <summary>
         /// Handles "SetContinueMode(true|false)".
         /// </summary>
@@ -2682,7 +2721,7 @@ namespace PixelCrushers.DialogueSystem
                 {
                     // Restore original mode:
                     if (DialogueDebug.logInfo) Debug.Log(string.Format("{0}: Sequencer: SetContinueMode({1}): Restoring original mode {2}", new System.Object[] { DialogueDebug.Prefix, arg, savedContinueButtonMode }));
-                    DialogueManager.displaySettings.subtitleSettings.continueButton = savedContinueButtonMode;
+                    //DialogueManager.displaySettings.subtitleSettings.continueButton = savedContinueButtonMode;
                 }
                 else
                 {
@@ -2690,8 +2729,9 @@ namespace PixelCrushers.DialogueSystem
                     DisplaySettings.SubtitleSettings.ContinueButtonMode mode;
                     if (TryGetContinueMode(arg, out mode))
                     {
-                        savedContinueButtonMode = DialogueManager.displaySettings.subtitleSettings.continueButton;
-                        DialogueManager.displaySettings.subtitleSettings.continueButton = mode;
+                        SetContinueMode(mode);
+                        //savedContinueButtonMode = DialogueManager.displaySettings.subtitleSettings.continueButton;
+                        //DialogueManager.displaySettings.subtitleSettings.continueButton = mode;
                     }
                     else
                     {
@@ -2699,15 +2739,16 @@ namespace PixelCrushers.DialogueSystem
                         return true;
                     }
                 }
-                // If a conversation is open, update its continue button mode immediately:
-                if (DialogueManager.conversationView != null)
-                {
-                    if (DialogueManager.conversationView.displaySettings.conversationOverrideSettings != null)
-                    {
-                        DialogueManager.conversationView.displaySettings.conversationOverrideSettings.continueButton = DialogueManager.displaySettings.subtitleSettings.continueButton;
-                    }
-                    DialogueManager.conversationView.SetupContinueButton();
-                }
+                UpdateActiveConversationContinueButton();
+                //// If a conversation is open, update its continue button mode immediately:
+                //if (DialogueManager.conversationView != null)
+                //{
+                //    if (DialogueManager.conversationView.displaySettings.conversationOverrideSettings != null)
+                //    {
+                //        DialogueManager.conversationView.displaySettings.conversationOverrideSettings.continueButton = DialogueManager.displaySettings.subtitleSettings.continueButton;
+                //    }
+                //    DialogueManager.conversationView.SetupContinueButton();
+                //}
                 return true;
             }
         }
@@ -2880,6 +2921,36 @@ namespace PixelCrushers.DialogueSystem
             {
                 Sequencer.Message(message);
             }
+            return true;
+        }
+
+        private bool HandleGotoEntryInternally(string commandName, string[] args)
+        {
+            var entryTitle = SequencerTools.GetParameter(args, 0);
+            var conversationTitle = SequencerTools.GetParameter(args, 1);
+            if (!DialogueManager.isConversationActive)
+            {
+                if (DialogueDebug.logWarnings) Debug.LogWarning(string.Format("{0}: Sequencer: GotoEntry({1}, {2}): No conversation is active.", new System.Object[] { DialogueDebug.Prefix, entryTitle, conversationTitle }));
+                return true;
+            }
+            var conversation = string.IsNullOrEmpty(conversationTitle)
+                ? DialogueManager.masterDatabase.GetConversation(DialogueManager.currentConversationState.subtitle.dialogueEntry.conversationID)
+                : DialogueManager.masterDatabase.GetConversation(conversationTitle);
+            if (conversation == null)
+            {
+                if (DialogueDebug.logWarnings) Debug.LogWarning(string.Format("{0}: Sequencer: GotoEntry({1}, {2}): Conversation '{2}' not found.", new System.Object[] { DialogueDebug.Prefix, entryTitle, conversationTitle }));
+                return true;
+            }
+            var entry = conversation.dialogueEntries.Find(x => x.Title == entryTitle) ??
+                conversation.dialogueEntries.Find(x => x.DialogueText == entryTitle);
+            if (entry == null)
+            {
+                if (DialogueDebug.logWarnings) Debug.LogWarning(string.Format("{0}: Sequencer: GotoEntry({1}, {2}): Entry '{1}' not found.", new System.Object[] { DialogueDebug.Prefix, entryTitle, conversationTitle }));
+                return true;
+            }
+            if (DialogueDebug.logInfo) Debug.Log(string.Format("{0}: Sequencer: GotoEntry({1}, {2})", new System.Object[] { DialogueDebug.Prefix, entryTitle, conversationTitle }));
+            var state = DialogueManager.conversationModel.GetState(entry);
+            DialogueManager.conversationController.GotoState(state);
             return true;
         }
 

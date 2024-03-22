@@ -204,6 +204,12 @@ namespace PixelCrushers.DialogueSystem
             }
         }
 
+        public override void HideAllAlerts()
+        {
+            m_alertQueue.Clear();
+            base.HideAllAlerts();
+        }
+
         private void UpdateAlertQueue()
         {
             if (alertUIElements.queueAlerts && m_alertQueue.Count > 0 && !alertUIElements.isVisible && !(alertUIElements.waitForHideAnimation && alertUIElements.isHiding))
@@ -347,6 +353,7 @@ namespace PixelCrushers.DialogueSystem
         protected virtual void ShowResponsesImmediate(Subtitle subtitle, Response[] responses, float timeout)
         { 
             conversationUIElements.standardSubtitleControls.UnfocusAll();
+            conversationUIElements.standardSubtitleControls.HideOnResponseMenu();
             base.ShowResponses(subtitle, responses, timeout);
         }
 

@@ -2,7 +2,7 @@
 %TAG !u! tag:unity3d.com,2011:
 --- !u!21 &2100000
 Material:
-  serializedVersion: 6
+  serializedVersion: 8
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -10,8 +10,19 @@ Material:
   m_Name: StylizedWater2_Clear
   m_Shader: {fileID: -6465566751694194690, guid: d7b0192b9bf19c949900035fa781fdc4,
     type: 3}
-  m_ShaderKeywords: ADVANCED_LIGHTING _ADVANCED_SHADING _CAUSTICS _DEPTHEXP_ON _DEPTH_TEX
-    _NORMALMAP _REFRACTION _SIMPLE_LIGHTING _VERTEXCOLORWAVEFLATTENING_ON _WORLDSPACEUV_ON
+  m_ValidKeywords:
+  - _ADVANCED_SHADING
+  - _CAUSTICS
+  - _NORMALMAP
+  - _REFRACTION
+  m_InvalidKeywords:
+  - ADVANCED_LIGHTING
+  - _DEPTHEXP_ON
+  - _DEPTH_TEX
+  - _SIMPLE_LIGHTING
+  - _VERTEXCOLORWAVEFLATTENING_ON
+  - _WORLDSPACEUV_ON
+  - _ZCLIP_ON
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 1
   m_DoubleSidedGI: 0
@@ -51,6 +62,10 @@ Material:
         m_Offset: {x: 0, y: 0}
     - _FoamTex:
         m_Texture: {fileID: 2800000, guid: 6a4aa5aa1ed7b9e4e9204a95f56f4d29, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _FoamTexDynamic:
+        m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _IntersectionNoise:
@@ -105,6 +120,7 @@ Material:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    m_Ints: []
     m_Floats:
     - Vector1_1942CF3A: 1
     - Vector1_BE75C478: 32
@@ -150,9 +166,13 @@ Material:
     - _FoamOpacity: 0.081
     - _FoamSize: 0.46
     - _FoamSpeed: 0.1
+    - _FoamSpeedDynamic: 0.1
     - _FoamSubSpeed: -0.25
+    - _FoamSubSpeedDynamic: -0.1
     - _FoamSubTiling: 0.5
+    - _FoamSubTilingDynamic: 2
     - _FoamTiling: 0.2
+    - _FoamTilingDynamic: 0.1
     - _FoamWaveAmount: 0
     - _FoamWaveMask: 0
     - _FoamWaveMaskExp: 1
@@ -211,6 +231,8 @@ Material:
     - _ShoreLineWaveDistance: 30
     - _ShoreLineWaveStr: 1
     - _SimpleLighting: 1
+    - _SlopeAngleFalloff: 25
+    - _SlopeAngleThreshold: 15
     - _SlopeFoam: 1
     - _SlopeSpeed: 4
     - _SlopeStretch: 0.5
@@ -238,6 +260,7 @@ Material:
     - _TranslucencyOn: 0
     - _TranslucencyReflectionMask: 0
     - _TranslucencyStrength: 1
+    - _TranslucencyStrengthDirect: 0.05
     - _UnderwaterRefractionOffset: 0.2
     - _UnderwaterSurfaceSmoothness: 0.8
     - _VertexColorDepth: 0
@@ -263,8 +286,10 @@ Material:
     - _DistanceNormalsFadeDist: {r: 0, g: 300, b: 0, a: 0}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
     - _FoamColor: {r: 1, g: 1, b: 1, a: 1}
+    - _FoamTiling: {r: 0.1, g: 0.1, b: 0, a: 0}
     - _HorizonColor: {r: 0.68, g: 1, b: 0.99, a: 0.15}
     - _IntersectionColor: {r: 1, g: 1, b: 1, a: 1}
+    - _NormalTiling: {r: 0.3, g: 0.3, b: 0, a: 0}
     - _RimColor: {r: 1, g: 1, b: 1, a: 1}
     - _ShallowColor: {r: 0, g: 1, b: 0.98136926, a: 0}
     - _SpecColor: {r: 0.2, g: 0.2, b: 0.2, a: 1}

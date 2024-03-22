@@ -63,7 +63,6 @@ namespace StylizedWater2
         {
 #if UNITY_EDITOR
             UnityEditor.SceneView.duringSceneGui += OnSceneGUI;
-
 #endif
             m_rowsColumns = rowsColumns;
 
@@ -163,7 +162,7 @@ namespace StylizedWater2
                 z * tileSize - ((tileSize * (rowsColumns)) * 0.5f) + (tileSize * 0.5f));
         }
 
-        private static Vector3 SnapToGrid(Vector3 position, float cellSize)
+        public static Vector3 SnapToGrid(Vector3 position, float cellSize)
         {
             return new Vector3(SnapToGrid(position.x, cellSize), SnapToGrid(position.y, cellSize), SnapToGrid(position.z, cellSize));
         }

@@ -265,10 +265,8 @@ namespace PixelCrushers.DialogueSystem
 
         private static AudioClip LoadAudioClip(string audioFileName)
         {
-#if UNITY_EDITOR || USE_ADDRESSABLES
-            AudioClip audioClip;
 #if UNITY_EDITOR
-            audioClip = Resources.Load<AudioClip>(audioFileName);
+            AudioClip audioClip = Resources.Load<AudioClip>(audioFileName);
             if (audioClip != null) return audioClip;
 
 #if USE_ADDRESSABLES
@@ -277,7 +275,6 @@ namespace PixelCrushers.DialogueSystem
             var foundEntry = allEntries.FirstOrDefault(e => e.address == audioFileName);
             if (foundEntry != null) audioClip = AssetDatabase.LoadAssetAtPath<AudioClip>(foundEntry.AssetPath);
             if (audioClip != null) return audioClip;
-#endif
 #endif
 #endif
             return null;

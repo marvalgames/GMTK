@@ -66,8 +66,14 @@ namespace StylizedWater2
             if(Application.isPlaying == false) EditorSceneManager.MarkSceneDirty(EditorSceneManager.GetActiveScene());
         }
         
+        [MenuItem("Window/Stylized Water 2/Set up render feature", false, 2000)]
+        public static void SetupRenderFeature()
+        {
+            PipelineUtilities.SetupRenderFeature<StylizedWaterRenderFeature>("Stylized Water 2");
+        }
+        
         [MenuItem("GameObject/3D Object/Water/Planar Reflections Renderer", false, 2)]
-        [MenuItem("Window/Stylized Water 2/Set up planar reflections", false, 2000)]
+        [MenuItem("Window/Stylized Water 2/Set up planar reflections", false, 2001)]
         public static void CreatePlanarReflectionRenderer()
         {
             GameObject obj = new GameObject("Planar Reflections Renderer", typeof(PlanarReflectionRenderer));
@@ -87,14 +93,14 @@ namespace StylizedWater2
             ProjectWindowUtil.CreateAssetWithContent("New Watermesh.watermesh", "");
         }
         
-        [MenuItem("CONTEXT/Transform/Add floating transform")]
-        private static void AddFloatingTransform(MenuCommand cmd)
+        [MenuItem("CONTEXT/Transform/Align To Waves")]
+        private static void AddAlignToWaves(MenuCommand cmd)
         {
             Transform t = (Transform)cmd.context;
 
-            if (!t.gameObject.GetComponent<FloatingTransform>())
+            if (!t.gameObject.GetComponent<AlignToWaves>())
             {
-                FloatingTransform component = t.gameObject.AddComponent<FloatingTransform>();
+                AlignToWaves component = t.gameObject.AddComponent<AlignToWaves>();
                 EditorUtility.SetDirty(t);
             }
         }

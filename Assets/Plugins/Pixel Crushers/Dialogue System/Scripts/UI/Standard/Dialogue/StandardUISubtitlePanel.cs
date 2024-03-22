@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.Events;
 using System.Collections;
 using System;
+using System.Text.RegularExpressions;
 
 namespace PixelCrushers.DialogueSystem
 {
@@ -606,11 +607,11 @@ namespace PixelCrushers.DialogueSystem
                 else
                 {
                     // If we're at the max number of lines, remove the first line from the accumulated text:
-                    previousText = previousText.Substring(previousText.IndexOf("\n") + 1);
+                    previousText = RemoveFirstLine(previousText);
                 }
             }
             var previousChars = accumulateText ? UITools.StripRPGMakerCodes(Tools.StripTextMeshProTags(Tools.StripRichTextCodes(previousText))).Length : 0;
-            SetFormattedText(subtitleText, previousText, subtitle.formattedText);
+            SetFormattedText(subtitleText, previousText, subtitle);
             if (accumulateText) m_accumulatedText = UITools.StripRPGMakerCodes(subtitleText.text) + "\n";
             if (scrollbarEnabler != null && !HasTypewriter())
             {
@@ -623,6 +624,27 @@ namespace PixelCrushers.DialogueSystem
             else
             {
                 TypewriterUtility.StartTyping(subtitleText, subtitleText.text, previousChars);
+            }
+        }
+
+        protected virtual string RemoveFirstLine(string previousText)
+        {
+            if (string.IsNullOrEmpty(previousText)) return string.Empty;
+            var newlineIndex = previousText.IndexOf("\n");
+            if (previousText.Contains("<"))
+            {
+                // Preserve rich text tags in first line:
+                var tags = string.Empty;
+                var firstLine = previousText.Substring(0, newlineIndex);
+                foreach (Match match in Tools.TextMeshProTagsRegex.Matches(firstLine))
+                {
+                    tags += match.Value;
+                }
+                return tags + previousText.Substring(newlineIndex + 1);
+            }
+            else
+            {
+                return previousText.Substring(newlineIndex + 1);
             }
         }
 
@@ -651,6 +673,25 @@ namespace PixelCrushers.DialogueSystem
             TypewriterUtility.StartTyping(subtitleText, text, fromIndex);
         }
 
+        protected virtual void SetFormattedText(UITextField textField, string previousText, Subtitle subtitle)
+        {
+            var currentText = UITools.GetUIFormattedText(subtitle.formattedText);
+            if (addSpeakerName && !string.IsNullOrEmpty(subtitle.speakerInfo.Name))
+            {
+                currentText = FormattedText.Parse(string.Format(addSpeakerNameFormat, new object[] { subtitle.speakerInfo.Name, currentText })).text;
+            }
+
+            textField.text = previousText + currentText;
+            UITools.SendTextChangeMessage(textField);
+            if (!haveSavedOriginalColor)
+            {
+                originalColor = textField.color;
+                haveSavedOriginalColor = true;
+            }
+            textField.color = (subtitle.formattedText.emphases != null && subtitle.formattedText.emphases.Length > 0) ? subtitle.formattedText.emphases[0].color : originalColor;
+        }
+
+        // No longer used, but kept in case user subclasses use it.
         protected virtual void SetFormattedText(UITextField textField, string previousText, FormattedText formattedText)
         {
             textField.text = previousText + UITools.GetUIFormattedText(formattedText);

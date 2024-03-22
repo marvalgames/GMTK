@@ -501,7 +501,7 @@ namespace PixelCrushers
         public static bool DefaultGetAnyKeyDown()
         {
 #if USE_NEW_INPUT
-            return Keyboard.current != null && Keyboard.current.anyKey.isPressed;
+            return Keyboard.current != null && Keyboard.current.anyKey.wasPressedThisFrame;
 #else
             return Input.anyKeyDown;
 #endif
@@ -601,9 +601,9 @@ namespace PixelCrushers
             if (Mouse.current == null) return false;
             switch (buttonNumber)
             {
-                case 0: return Mouse.current.leftButton.isPressed;
-                case 1: return Mouse.current.rightButton.isPressed;
-                case 2: return Mouse.current.middleButton.isPressed;
+                case 0: return Mouse.current.leftButton.wasPressedThisFrame;
+                case 1: return Mouse.current.rightButton.wasPressedThisFrame;
+                case 2: return Mouse.current.middleButton.wasPressedThisFrame;
                 default: return false;
             }
 #else

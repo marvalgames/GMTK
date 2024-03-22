@@ -51,10 +51,11 @@
 
         //Underwater
 		_CausticsBrightness("Brightness", Float) = 2
+		_CausticsChromance("Chromance", Range(0, 1)) = 1
 		_CausticsTiling("Tiling", Float) = 0.5
 		_CausticsSpeed("Speed multiplier", Float) = 0.1
 		_CausticsDistortion("Distortion", Range(0, 1)) = 0.15
-		[NoScaleOffset][SingleLineTexture]_CausticsTex("Caustics RGB", 2D) = "black" {}
+		[NoScaleOffset][SingleLineTexture]_CausticsTex("Texture", 2D) = "black" {}
 		
 		_UnderwaterSurfaceSmoothness("Underwater Surface Smoothness", Range(0, 1)) = 0.8
 		_UnderwaterRefractionOffset("Underwater Refraction Offset", Range(0, 1)) = 0.2
@@ -72,6 +73,7 @@
 		_IntersectionClipping("Cutoff", Range(0.01, 1)) = 0.5
 		_IntersectionFalloff("Falloff", Range(0.01 , 1)) = 0.5
 		_IntersectionTiling("Noise Tiling", float) = 0.2
+        _IntersectionDistortion("Distortion", Range(0 , 1)) = 0.2
 		_IntersectionSpeed("Speed multiplier", float) = 0.1
 		_IntersectionRippleDist("Ripple distance", float) = 32
 		_IntersectionRippleStrength("Ripple Strength", Range(0 , 1)) = 0.5
@@ -84,12 +86,12 @@
 		_FoamBaseAmount("Base amount", Range(0 , 1)) = 0
 		_FoamClipping("Clipping", Range(0 , 0.999)) = 0
 		_FoamWaveAmount("Wave crest amount", Range(0 , 2)) = 0
-		_FoamTiling("Tiling", float) = 0.1
+		_FoamTiling("Tiling", Vector) = (0.1, 0.1, 0, 0)
 		_FoamSubTiling("Tiling (sub-layer)", float) = 0.5
-        _FoamDistortion("Offset distortion", Range(0, 3)) = 0.1
+        _FoamDistortion("Distortion", Range(0, 3)) = 0
 		[Toggle] _VertexColorFoam("Vertex color (A) foam", Float) = 0
 
-		[NoScaleOffset][SingleLineTexture] _FoamTexDynamic("Foam (Dynamic)", 2D) = "white" {}
+		[NoScaleOffset][SingleLineTexture] _FoamTexDynamic("Foam (Dynamic)", 2D) = "black" {}
         _FoamTilingDynamic("Tiling (Dynamic)", float) = 0.1
         _FoamSubTilingDynamic("Tiling (sub-layer)", float) = 2
         _FoamSpeedDynamic("Speed multiplier", float) = 0.1
@@ -98,7 +100,7 @@
 		//Normals
 		[NoScaleOffset][Normal][SingleLineTexture]_BumpMap("Normals", 2D) = "bump" {}
 		[NoScaleOffset][Normal][SingleLineTexture]_BumpMapSlope("Normals (River slopes)", 2D) = "bump" {}
-		_NormalTiling("Tiling", Float) = 1
+		_NormalTiling("Tiling", Vector) = (0.5, 0.5, 0, 0)
 		_NormalSubTiling("Tiling (sub-layer)", Float) = 0.5
 		_NormalStrength("Strength", Range(0 , 1)) = 0.135
 		_NormalSpeed("Speed multiplier", Float) = 0.2
@@ -122,7 +124,7 @@
 		//World Reflections
 		_ReflectionStrength("Strength", Range(0, 1)) = 1
 		_ReflectionDistortion("Distortion", Range(0, 1)) = 0.05
-		_ReflectionBlur("Blur", Range(0, 1)) = 0	
+		_ReflectionBlur("Probe Blur Factor", Range(0, 1)) = 0	
 		_ReflectionFresnel("Curvature mask", Range(0.01, 20)) = 5	
 		_ReflectionLighting("Lighting influence", Range(0, 1)) = 0	
 		_PlanarReflection("Planar Reflections", 2D) = "" {} //Instanced
@@ -326,6 +328,7 @@
 			
 			#include_library "Libraries/Waves.hlsl"
 			#include_library "Libraries/Lighting.hlsl"
+			#include_library "Libraries/Reflections.hlsl"
 
 			#ifdef UNDERWATER_ENABLED
 			#include_library "Underwater/UnderwaterFog.hlsl"
@@ -373,8 +376,8 @@
 		//Currently unused, except for custom render passes (such as depth texture injection)
 		Pass
         {
-            Name "DepthOnly"
-            Tags { "LightMode"="DepthOnly" }
+            Name "Depth or Displacement"
+            Tags { "LightMode" = "DepthOnly" }
             
             ZWrite On
 			//ColorMask RG
@@ -384,13 +387,15 @@
             %pragma_target%
             %pragma_renderers%
 
-            #pragma multi_compile_instancing
+			#pragma multi_compile_instancing
+            #pragma instancing_options renderinglayer
+            #if UNITY_VERSION >= 202220 
+            #include_with_pragmas "Packages/com.unity.render-pipelines.universal/ShaderLibrary/DOTS.hlsl"
+            #endif
 
             #pragma shader_feature_local _WAVES
 
             %tessellation_directives%
-
-            #define SHADERPASS_DEPTHONLY
 
             #include_library "Libraries/URP.hlsl"
             //#include "Assets/Amazing Assets/Curved World/Shaders/Core/CurvedWorldTransform.cginc"
@@ -400,6 +405,16 @@
             #include_library "Libraries/Common.hlsl"
             #include_library "Libraries/Fog.hlsl"
             #include_library "Libraries/Waves.hlsl"
+            
+            #pragma multi_compile_fragment _ WATER_DISPLACEMENT_PASS
+
+            #if !WATER_DISPLACEMENT_PASS
+            #define SHADERPASS_DEPTHONLY
+            #endif
+
+            #if WATER_DISPLACEMENT_PASS
+            #define SHADERPASS_DISPLACEMENT
+            #endif
 
 			%multi_compile dynamic effects%
 			#ifdef DYNAMIC_EFFECTS_ENABLED
@@ -432,6 +447,29 @@
                 UNITY_SETUP_STEREO_EYE_INDEX_POST_VERTEX(input);
 
             	float depth = input.positionCS.z;
+
+                #if WATER_DISPLACEMENT_PASS
+                float3 positionWS = input.positionWS.xyz;
+
+                float2 uv = GetSourceUV(input.uv.xy, positionWS.xz, _WorldSpaceUV);
+	            float4 vertexColor = input.color; //Mask already applied in vertex shader
+	            WaveInfo waves = GetWaveInfo(uv, TIME * _WaveSpeed, _WaveHeight,  lerp(1, 0, vertexColor.b), _WaveFadeDistance.x, _WaveFadeDistance.y);
+
+                float3 offset = 0;
+
+                offset.y += waves.position.y;
+
+                #if DYNAMIC_EFFECTS_ENABLED
+	            float4 dynamicEffectsData = SampleDynamicEffectsData(positionWS.xyz);
+
+                //Why?
+                dynamicEffectsData.r *= 0.1;
+
+                offset.y += dynamicEffectsData.r;
+                #endif
+
+                depth = positionWS.y + offset.y;
+                #endif
 
                 return float4(depth, vFace, 0, 0);
             }

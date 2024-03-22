@@ -61,6 +61,8 @@ namespace PixelCrushers.DialogueSystem
         /// </summary>
         public override bool hasText { get { return m_focusedPanel != null && !string.IsNullOrEmpty(m_focusedPanel.subtitleText.text); } }
 
+        public virtual bool allowDialogueActorCustomPanels { get; set; } = true;
+
         #endregion
 
         #region Initialization & Lookup
@@ -148,7 +150,10 @@ namespace PixelCrushers.DialogueSystem
                             if (panel.panelState != UIPanel.PanelState.Open)
                             {
                                 panel.Open();
-                                if (currentHasFocus) panel.Focus();
+                                if (currentHasFocus || (actor != null && actor.id == DialogueManager.currentConversationState.subtitle.speakerInfo.id))
+                                {
+                                    panel.Focus();
+                                }
                                 if (isContinueButtonActive) panel.ShowContinueButton();
                             }
                             panel.SetPortraitName(currentName);
@@ -182,7 +187,9 @@ namespace PixelCrushers.DialogueSystem
                     break;
                 default:
                 case SubtitlePanelNumber.Custom:
-                    panel = GetPanelFromNumber(subtitlePanelNumber, customPanel);
+                    panel = allowDialogueActorCustomPanels 
+                        ? GetPanelFromNumber(subtitlePanelNumber, customPanel)
+                        : (actor != null && actor.IsPlayer) ? m_defaultPCPanel : m_defaultNPCPanel;
                     break;
             }
             if (panel == null)
@@ -288,6 +295,7 @@ namespace PixelCrushers.DialogueSystem
                 case SubtitlePanelNumber.Default:
                     return null;
                 case SubtitlePanelNumber.Custom:
+                    if (!allowDialogueActorCustomPanels) return null;
                     if (!m_customPanels.Contains(customPanel)) m_customPanels.Add(customPanel);
                     return customPanel;
                 case SubtitlePanelNumber.UseBarkUI:
@@ -498,16 +506,22 @@ namespace PixelCrushers.DialogueSystem
 
                 // Focus the panel and show the subtitle:
                 m_focusedPanel = panel;
-                if (panel.addSpeakerName && !string.IsNullOrEmpty(subtitle.speakerInfo.Name))
-                {
-                    subtitle.formattedText.text = FormattedText.Parse(string.Format(panel.addSpeakerNameFormat, new object[] { subtitle.speakerInfo.Name, subtitle.formattedText.text })).text;
-                }
                 if (dialogueActor != null && dialogueActor.standardDialogueUISettings.setSubtitleColor)
                 {
                     subtitle.formattedText.text = dialogueActor.AdjustSubtitleColor(subtitle);
                 }
                 SupercedeOtherPanels(panel);
                 panel.ShowSubtitle(subtitle);
+            }
+
+            // Check if a [picc=#] tag changed the conversant's portrait:
+            if (subtitle.formattedText.picConversant != FormattedText.NoPicOverride)
+            {
+                var conversantPortrait = subtitle.GetListenerOverridePortrait();
+                var defaultPanel = subtitle.listenerInfo.IsNPC ? defaultNPCPanel : defaultPCPanel;
+                DialogueActor conversantDialogueActor;
+                var conversantPanel = GetActorTransformPanel(subtitle.listenerInfo.transform, defaultPanel, out conversantDialogueActor);
+                if (conversantPanel != null && conversantPanel.portraitImage != null) conversantPanel.portraitImage.sprite = conversantPortrait;
             }
         }
 
@@ -591,7 +605,7 @@ namespace PixelCrushers.DialogueSystem
                 if (panel == null || panel == newPanel) continue;
                 if (panel.isOpen)
                 {
-                    if (panel.visibility == UIVisibility.UntilSuperceded)
+                    if (UITools.CanBeSuperceded(panel.visibility))
                     {
                         panel.Close();
                     }
@@ -608,7 +622,23 @@ namespace PixelCrushers.DialogueSystem
             for (int i = 0; i < m_builtinPanels.Count; i++)
             {
                 var panel = m_builtinPanels[i];
-                if (panel != null && panel.isOpen && (panel.hasFocus || panel.isFocusing)) panel.Unfocus();
+                if (panel != null && panel.isOpen && (panel.hasFocus || panel.isFocusing))
+                {
+                    panel.Unfocus();
+                }
+            }
+        }
+
+        public virtual void HideOnResponseMenu()
+        {
+            for (int i = 0; i < m_builtinPanels.Count; i++)
+            {
+                var panel = m_builtinPanels[i];
+                if (panel != null && panel.isOpen &&
+                    panel.visibility == UIVisibility.UntilSupercededOrActorChangeOrMenu)
+                {
+                    panel.Close();
+                }
             }
         }
 

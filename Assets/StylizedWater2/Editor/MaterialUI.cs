@@ -59,6 +59,7 @@ namespace StylizedWater2
 
         private MaterialProperty _CausticsTex;
         private MaterialProperty _CausticsBrightness;
+        private MaterialProperty _CausticsChromance;
         private MaterialProperty _CausticsTiling;
         private MaterialProperty _CausticsSpeed;
         private MaterialProperty _CausticsDistortion;
@@ -76,6 +77,7 @@ namespace StylizedWater2
         private MaterialProperty _IntersectionClipping;
         private MaterialProperty _IntersectionFalloff;
         private MaterialProperty _IntersectionTiling;
+        private MaterialProperty _IntersectionDistortion;
         private MaterialProperty _IntersectionRippleDist;
         private MaterialProperty _IntersectionRippleStrength;
         private MaterialProperty _IntersectionSpeed;
@@ -184,6 +186,9 @@ namespace StylizedWater2
 
         private List<Texture2D> foamTextures;
         private List<Texture2D> normalMapTextures;
+        private List<Texture2D> causticsTextures;
+
+        private StylizedWaterRenderFeature renderFeature;
         
         private void FindProperties(MaterialProperty[] props, Material material)
         {
@@ -239,6 +244,7 @@ namespace StylizedWater2
             _CausticsOn = FindProperty("_CausticsOn", props);
             _CausticsTex = FindProperty("_CausticsTex", props);
             _CausticsBrightness = FindProperty("_CausticsBrightness", props);
+            _CausticsChromance = FindProperty("_CausticsChromance", props);
             _CausticsTiling = FindProperty("_CausticsTiling", props);
             _CausticsSpeed = FindProperty("_CausticsSpeed", props);
             _CausticsDistortion = FindProperty("_CausticsDistortion", props);
@@ -254,6 +260,7 @@ namespace StylizedWater2
             _IntersectionClipping = FindProperty("_IntersectionClipping", props);
             _IntersectionFalloff = FindProperty("_IntersectionFalloff", props);
             _IntersectionTiling = FindProperty("_IntersectionTiling", props);
+            _IntersectionDistortion = FindProperty("_IntersectionDistortion", props);
             _IntersectionRippleDist = FindProperty("_IntersectionRippleDist", props);
             _IntersectionRippleStrength = FindProperty("_IntersectionRippleStrength", props);
             _IntersectionSpeed = FindProperty("_IntersectionSpeed", props);
@@ -341,7 +348,8 @@ namespace StylizedWater2
                 "• Accurate blending of light color for translucency shading\n" +
                 "• Additional texture sample for distance normals");
         }
-        
+
+        private ShaderMessage[] shaderMessages;
         private void OnEnable(MaterialEditor materialEditorIn)
         {
             sections = new List<UI.Material.Section>();
@@ -366,6 +374,8 @@ namespace StylizedWater2
             #endif
             #endif
 
+            Material mat = (Material)materialEditorIn.target;
+
             foreach (UnityEngine.Object target in materialEditorIn.targets)
             {
                 MaterialChanged((Material)target);
@@ -377,15 +387,19 @@ namespace StylizedWater2
                 }
             }
 
-            Material mat = (Material)materialEditorIn.target;
+            shaderMessages = ShaderConfigurator.GetErrorMessages(mat.shader);
+            
             WaterShaderImporter importer = AssetImporter.GetAtPath(AssetDatabase.GetAssetOrScenePath(mat.shader)) as WaterShaderImporter;
             
             fogAutomatic = importer.settings.autoIntegration;
             fogIntegration = importer.settings.autoIntegration ? ShaderConfigurator.Fog.GetFirstInstalled() : ShaderConfigurator.Fog.GetIntegration(importer.settings.fogIntegration);
-
+            
             string rootFolder = AssetInfo.GetRootFolder();
             LoadTextures(rootFolder + "Materials/Textures/Foam", ref foamTextures);
             LoadTextures(rootFolder + "Materials/Textures/Normals", ref normalMapTextures);
+            LoadTextures(rootFolder + "Materials/Textures/Caustics", ref causticsTextures);
+            
+            renderFeature = StylizedWaterRenderFeature.GetDefault();
 
             initialized = true;
         }
@@ -495,6 +509,8 @@ namespace StylizedWater2
         {
             UI.DrawNotification(!UniversalRenderPipeline.asset, "Universal Render Pipeline is currently not active!", "Show me", StylizedWaterEditor.OpenGraphicsSettings, MessageType.Error);
 
+            if (!UniversalRenderPipeline.asset) return;
+            
             if (UniversalRenderPipeline.asset && initialized)
             {
                 UI.DrawNotification(
@@ -525,6 +541,25 @@ namespace StylizedWater2
                 }
             }
             #endif
+
+            if (shaderMessages != null && shaderMessages.Length > 0)
+            {
+                Material targetMat = (Material)materialEditor.target;
+                UI.DrawNotification(shaderMessages != null, $"Shader has {shaderMessages.Length} compile errors.\n\nCheck the inspector to view them", "View", () => Selection.activeObject = targetMat.shader, MessageType.Error);
+            }
+        }
+
+        private void DrawRenderFeatureNotification()
+        {
+            if (!renderFeature)
+            {
+                UI.DrawNotification(true, "The Stylized Water render feature hasn't been added to the default renderer." +
+                                          "\n\nFeatures such as Directional Caustics and Screen-space Reflections are unavailable.", "Add", () =>
+                {
+                    PipelineUtilities.ValidateRenderFeatureSetup<StylizedWaterRenderFeature>("Stylized Water 2");
+                    renderFeature = StylizedWaterRenderFeature.GetDefault();
+                }, MessageType.Info);
+            }
         }
 
         private void MaterialChanged(Material material)
@@ -573,7 +608,7 @@ namespace StylizedWater2
             GUI.Label(rect, c, EditorStyles.label);
 
             rect.x += rect.width + 3f;
-            rect.y -= 2f;
+            rect.y += 2f;
             rect.width = 16f;
             rect.height = 16f;
             
@@ -612,7 +647,7 @@ namespace StylizedWater2
             tooltipBtnRtc.height = assetWindowBtnRtc.height;
             tooltipBtnRtc.x = assetWindowBtnRtc.x - assetWindowBtnRtc.width + 15f;
             
-            UI.ExpandTooltips = GUI.Toggle(tooltipBtnRtc, UI.ExpandTooltips, new GUIContent(" Toggle tooltips", EditorGUIUtility.IconContent(UI.ExpandTooltips ? "d_animationvisibilitytoggleon" : "d_animationvisibilitytoggleoff").image), "Button");
+            UI.ExpandTooltips = GUI.Toggle(tooltipBtnRtc, UI.ExpandTooltips, new GUIContent(" Toggle tooltips", EditorGUIUtility.IconContent(UI.iconPrefix + (UI.ExpandTooltips ? "animationvisibilitytoggleon" : "animationvisibilitytoggleoff")).image), "Button");
             
             EditorGUILayout.EndHorizontal();
             
@@ -620,10 +655,7 @@ namespace StylizedWater2
             
             DrawNotifications();
             
-            if (fogIntegration.asset != ShaderConfigurator.Fog.Assets.UnityFog)
-            {
-                EditorGUILayout.LabelField($"Active fog integration: {fogIntegration.name}" + (fogAutomatic ? " (Automatic)" : ""), EditorStyles.miniLabel);
-            }
+            EditorGUILayout.LabelField($"Active fog integration: {fogIntegration.name}" + (fogAutomatic ? " (Automatic)" : ""), EditorStyles.miniLabel);
         }
         
         #region Sections
@@ -729,8 +761,17 @@ namespace StylizedWater2
                 EditorGUILayout.Space();
 
                 materialEditor.EnableInstancingField();
-                materialEditor.RenderQueueField();
 
+                materialEditor.RenderQueueField();
+                GUILayout.Space(-3f);
+                using (new EditorGUILayout.HorizontalScope())
+                {
+                    GUILayout.FlexibleSpace();
+                    
+                    if (GUILayout.Button(new GUIContent(EditorGUIUtility.IconContent(UI.iconPrefix + "Toolbar Minus")), EditorStyles.miniButtonLeft, GUILayout.MaxWidth(EditorGUIUtility.fieldWidth / 2))) material.renderQueue--;
+                    if (GUILayout.Button(new GUIContent(EditorGUIUtility.IconContent(UI.iconPrefix + "Toolbar Plus")), EditorStyles.miniButtonRight, GUILayout.MaxWidth(EditorGUIUtility.fieldWidth / 2))) material.renderQueue++;
+                }
+                
                 if (material.renderQueue <= 2450 || material.renderQueue >= 3500)
                 {
                     UI.DrawNotification("Material must be on the Transparent render queue (2450-3500). Otherwise incurs rendering artefacts", MessageType.Error);
@@ -962,7 +1003,9 @@ namespace StylizedWater2
                     }
                     
                     EditorGUILayout.LabelField("Tiling & Offset", EditorStyles.boldLabel);
-                    UI.Material.DrawFloatTicker(_NormalTiling, tooltip:"Determines how often the texture repeats over the UV coordinates. Smaller values result in the texture being stretched larger, higher numbers means it becomes smaller");
+                    //UI.Material.DrawFloatTicker(_NormalTiling, tooltip:"Determines how often the texture repeats over the UV coordinates. Smaller values result in the texture being stretched larger, higher numbers means it becomes smaller");
+                    UI.Material.DrawVector2Ticker(_NormalTiling, "Tiling");
+
                     EditorGUI.indentLevel++;
                         UI.Material.DrawFloatTicker(_NormalSubTiling, "Sub-layer (multiplier)", "The effect uses a 2nd texture sample, for variety. This value controls the speed of this layer");
                     EditorGUI.indentLevel--;
@@ -972,7 +1015,7 @@ namespace StylizedWater2
                     EditorGUI.indentLevel--;
                     if (_RiverModeOn.floatValue > 0 && _NormalSubSpeed.floatValue < 0)
                     {
-                        EditorGUILayout.HelpBox("River Mode is enabled, negative speed values are ignored", MessageType.None);
+                        EditorGUILayout.HelpBox("River Mode is enabled, negative speed values create upstream animations", MessageType.None);
                     }
                     
                     EditorGUILayout.Space();
@@ -1008,14 +1051,34 @@ namespace StylizedWater2
                 
                 if (_CausticsOn.floatValue == 1 || _CausticsOn.hasMixedValue)
                 {
-                    materialEditor.TextureProperty(_CausticsTex, "Texture (Additively blended)");
+                    DrawTextureSelector(_CausticsTex, ref causticsTextures);
+
                     UI.Material.DrawFloatField(_CausticsBrightness, "Brightness", "The intensity of the incoming light controls how strongly the effect is visible. This parameter acts as a multiplier.");
                     if(!_CausticsBrightness.hasMixedValue) _CausticsBrightness.floatValue = Mathf.Max(0, _CausticsBrightness.floatValue);
-
+                    
+                    DrawShaderProperty(_CausticsChromance, new GUIContent(_CausticsChromance.displayName, "Blends between grayscale and RGB caustics"));
                     DrawShaderProperty(_CausticsDistortion, new GUIContent(_CausticsDistortion.displayName, "Distort the caustics based on the normal map"));
                     
                     EditorGUILayout.Space();
 
+                    using (new EditorGUILayout.VerticalScope(EditorStyles.helpBox))
+                    {
+                        EditorGUILayout.LabelField("Render feature settings", EditorStyles.boldLabel);
+                        DrawRenderFeatureNotification();
+
+                        if (renderFeature)
+                        {
+                            EditorGUI.BeginChangeCheck();
+                            renderFeature.directionalCaustics = EditorGUILayout.Toggle("Directional Caustics", renderFeature.directionalCaustics);
+                            if (EditorGUI.EndChangeCheck())
+                            {
+                                EditorUtility.SetDirty(renderFeature);
+                            }
+                        }
+                    }
+                    
+                    EditorGUILayout.Space();
+                    
                     UI.Material.DrawFloatTicker(_CausticsTiling);
                     UI.Material.DrawFloatTicker(_CausticsSpeed);
                 }
@@ -1105,7 +1168,8 @@ namespace StylizedWater2
                     EditorGUILayout.Space();
 
                     EditorGUILayout.LabelField("Tiling & Offset", EditorStyles.boldLabel);
-                    UI.Material.DrawFloatTicker(_FoamTiling, tooltip:"Determines how often the texture repeats over the UV coordinates. Smaller values result in the texture being stretched larger, higher numbers means it becomes smaller");
+                    //UI.Material.DrawFloatTicker(_FoamTiling, tooltip:"Determines how often the texture repeats over the UV coordinates. Smaller values result in the texture being stretched larger, higher numbers means it becomes smaller");
+                    UI.Material.DrawVector2Ticker(_FoamTiling, "Tiling");
                     EditorGUI.indentLevel++;
                     UI.Material.DrawFloatTicker(_FoamSubTiling, "Sub-layer (multiplier)", "The effect uses a 2nd texture sample, for variety. This value controls the speed of this layer");
                     EditorGUI.indentLevel--;
@@ -1115,7 +1179,7 @@ namespace StylizedWater2
                     EditorGUI.indentLevel--;
                     if (_RiverModeOn.floatValue > 0 && _FoamSubSpeed.floatValue < 0)
                     {
-                        EditorGUILayout.HelpBox("River Mode is enabled, negative speed values are ignored", MessageType.None);
+                        EditorGUILayout.HelpBox("River Mode is enabled, negative speed values create upstream animations", MessageType.None);
                     }
                     EditorGUILayout.Space();
                     
@@ -1214,6 +1278,13 @@ namespace StylizedWater2
                         UI.Material.DrawFloatTicker(_IntersectionRippleDist, _IntersectionRippleDist.displayName, "Distance between each ripples over the total intersection length");
                         DrawShaderProperty(_IntersectionRippleStrength, new GUIContent(_IntersectionRippleStrength.displayName, "Sets how much the ripples should be blended in with the effect"));
                     }
+                    
+                    EditorGUILayout.Space();
+
+                    if (_NormalMapOn.floatValue > 0 || _NormalMapOn.hasMixedValue)
+                    {
+                        DrawShaderProperty(_IntersectionDistortion, new GUIContent("Distortion", "Offset the texture sample by the normal map"));
+                    }
                 }
 
                 EditorGUILayout.Space();
@@ -1274,7 +1345,7 @@ namespace StylizedWater2
 
                 EditorGUILayout.LabelField("Environment Reflections", EditorStyles.boldLabel);
 
-                DrawShaderProperty(_EnvironmentReflectionsOn, new GUIContent("Enable", "Enable reflections from the skybox, reflection probes and planar reflections."));
+                DrawShaderProperty(_EnvironmentReflectionsOn, new GUIContent("Enable", "Enable reflections from the skybox, reflection probes, screen-space- and planar -reflections."));
                 
 #if UNITY_2022_1_OR_NEWER
                 var customReflection = RenderSettings.customReflectionTexture;
@@ -1316,6 +1387,8 @@ namespace StylizedWater2
                     
                     EditorGUILayout.Space();
                     
+                    EditorGUILayout.LabelField("Planar Reflections", EditorStyles.boldLabel);
+
                     EditorGUILayout.LabelField($"Planar Reflections renderers in scene: {PlanarReflectionRenderer.Instances.Count}", EditorStyles.miniLabel);
                     if (PlanarReflectionRenderer.Instances.Count > 0)
                     {
@@ -1331,6 +1404,24 @@ namespace StylizedWater2
                                         Selection.activeGameObject = r.gameObject;
                                     }
                                 }
+                            }
+                        }
+                    }
+                    
+                    EditorGUILayout.Space();
+
+                    using (new EditorGUILayout.VerticalScope(EditorStyles.helpBox))
+                    {
+                        EditorGUILayout.LabelField("Render feature settings", EditorStyles.boldLabel);
+                        DrawRenderFeatureNotification();
+
+                        if (renderFeature)
+                        {
+                            EditorGUI.BeginChangeCheck();
+                            renderFeature.screenSpaceReflectionSettings.enable = EditorGUILayout.Toggle("Screen-space Reflections", renderFeature.screenSpaceReflectionSettings.enable);
+                            if (EditorGUI.EndChangeCheck())
+                            {
+                                EditorUtility.SetDirty(renderFeature);
                             }
                         }
                     }

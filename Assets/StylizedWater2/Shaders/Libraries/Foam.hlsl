@@ -12,9 +12,9 @@ SAMPLER(sampler_FoamTex);
 
 #define FOAM_CHANNEL 0
 
-float SampleFoamTexture(TEXTURE2D_PARAM(tex, samplerName), float2 uv, float tiling, float subTiling, float2 time, float speed, float subSpeed, float slopeMask, float slopeSpeed, float slopeStretch, bool slopeFoamOn)
+float SampleFoamTexture(TEXTURE2D_PARAM(tex, samplerName), float2 uv, float2 tiling, float subTiling, float2 time, float speed, float subSpeed, float slopeMask, float slopeSpeed, float slopeStretch, bool slopeFoamOn)
 {
-	float4 uvs = PackedUV(uv * tiling, time, speed, subTiling, subSpeed);
+	float4 uvs = PackedUV(uv, tiling, time, speed, subTiling, subSpeed);
 
 	float f1 = SAMPLE_TEXTURE2D(tex, samplerName, uvs.xy)[FOAM_CHANNEL];	
 	float f2 = SAMPLE_TEXTURE2D(tex, samplerName, uvs.zw)[FOAM_CHANNEL];
@@ -28,7 +28,7 @@ float SampleFoamTexture(TEXTURE2D_PARAM(tex, samplerName), float2 uv, float tili
 
 	if(slopeFoamOn)
 	{
-		uvs = PackedUV(uv * tiling, time, speed * slopeSpeed, subTiling, subSpeed * slopeSpeed);
+		uvs = PackedUV(uv, tiling, time, speed * slopeSpeed, subTiling, subSpeed * slopeSpeed);
 		//Stretch UV vertically on slope
 		uvs.yw *= 1-slopeStretch;
 
@@ -49,7 +49,7 @@ float SampleFoamTexture(TEXTURE2D_PARAM(tex, samplerName), float2 uv, float tili
 	return foam;
 }
 
-float SampleFoamTexture(float2 uv, float tiling, float subTiling, float2 time, float speed, float subSpeed, float slopeMask, float slopeSpeed, half slopeStretch, bool slopeFoamOn)
+float SampleFoamTexture(float2 uv, float2 tiling, float subTiling, float2 time, float speed, float subSpeed, float slopeMask, float slopeSpeed, half slopeStretch, bool slopeFoamOn)
 {
 	return SampleFoamTexture(TEXTURE2D_ARGS(_FoamTex, sampler_FoamTex), uv, tiling, subTiling, time, speed, subSpeed, slopeMask, slopeSpeed, slopeStretch, slopeFoamOn);
 }

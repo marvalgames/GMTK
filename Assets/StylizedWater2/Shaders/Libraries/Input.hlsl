@@ -20,7 +20,7 @@ CBUFFER_START(UnityPerMaterial)
 	float _DepthHorizontal;
 	float _DepthExp;
 	float _WorldSpaceUV;
-	float _NormalTiling;
+	float2 _NormalTiling;
 	float _NormalSubTiling;
 	float _NormalSpeed;
 	float _NormalSubSpeed;
@@ -65,7 +65,7 @@ CBUFFER_START(UnityPerMaterial)
 	float4 _FoamColor;
 	float _FoamSpeed;
 	float _FoamSubSpeed;
-	float _FoamTiling;
+	float2 _FoamTiling;
 	float _FoamSubTiling;
 	half _FoamBaseAmount;
 	half _FoamClipping;
@@ -82,6 +82,7 @@ CBUFFER_START(UnityPerMaterial)
 	half _IntersectionLength;
 	half _IntersectionFalloff;
 	half _IntersectionTiling;
+	half _IntersectionDistortion;
 	half _IntersectionRippleDist;
 	half _IntersectionRippleStrength;
 	half _IntersectionClipping;
@@ -102,6 +103,7 @@ CBUFFER_START(UnityPerMaterial)
 
 	//Underwater
 	half _CausticsBrightness;
+	half _CausticsChromance;
 	float _CausticsTiling;
 	half _CausticsSpeed;
 	half _RefractionStrength;

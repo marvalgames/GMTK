@@ -21,7 +21,7 @@ namespace StylizedWater2
         public const string ASSET_ID = "170386";
         public const string ASSET_ABRV = "SW2";
 
-        public const string INSTALLED_VERSION = "1.5.5";
+        public const string INSTALLED_VERSION = "1.6.2";
         
         public const int SHADER_GENERATOR_VERSION_MAJOR = 1;
         public const int SHADER_GENERATOR_MINOR = 2; 
@@ -52,6 +52,7 @@ namespace StylizedWater2
                 if (EditorUtility.DisplayDialog(ASSET_NAME + " v" + INSTALLED_VERSION, "This package requires the Universal Render Pipeline " + MIN_URP_VERSION + " or newer, would you like to install or update it now?", "OK", "Later"))
                 {
 					Debug.Log("Universal Render Pipeline <b>v" + lastestURPVersion + "</b> will start installing in a moment. Please refer to the URP documentation for set up instructions");
+					Debug.Log("After installing and setting up URP, you must Re-import the Shaders folder!");
 					
                     InstallURP();
                 }

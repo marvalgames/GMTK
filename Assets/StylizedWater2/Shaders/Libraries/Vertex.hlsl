@@ -72,10 +72,6 @@ Varyings LitPassVertex(Attributes input)
 	float3 positionWS = TransformObjectToWorld(input.positionOS.xyz);
 	float3 offset = 0;
 	
-	#if MODIFIERS_ENABLED
-	offset += GetDisplacementOffset(positionWS);
-	#endif
-
 	VertexNormalInputs normalInput = GetVertexNormalInputs(input.normalOS.xyz, input.tangentOS);
 
 	if(_WorldSpaceUV > 0)
@@ -86,7 +82,8 @@ Varyings LitPassVertex(Attributes input)
 	}
 	
 	float4 vertexColor = GetVertexColor(input.color.rgba, float4(_IntersectionSource > 0 ? 1 : 0, _VertexColorDepth, _VertexColorWaveFlattening, _VertexColorFoam));
-	
+
+	#if !defined(SHADERPASS_DISPLACEMENT) //Displacement will be calculated per pixel
 #if _WAVES && !defined(TESSELLATION_ON)
 	float2 uv = GetSourceUV(input.uv.xy, positionWS.xz, _WorldSpaceUV);
 
@@ -100,11 +97,16 @@ Varyings LitPassVertex(Attributes input)
 
 	//SampleWaveSimulationVertex(positionWS, positionWS.y);
 
-	#if DYNAMIC_EFFECTS_ENABLED && defined(TESSELLATION_ON)
+	#if DYNAMIC_EFFECTS_ENABLED
 	float4 effectsData = SampleDynamicEffectsData(positionWS.xyz + offset.xyz);
 
-	half falloff = saturate(1.0 - (distance(positionWS.xyz, GetCurrentViewPosition() - _TessMin)) / (_TessMax - _TessMin));
-	offset.y += effectsData[DE_DISPLACEMENT_CHANNEL] * effectsData[DE_ALPHA_CHANNEL] * falloff;
+	half falloff = 1.0;
+	#if defined(TESSELLATION_ON)
+	falloff = saturate(1.0 - (distance(positionWS.xyz, GetCurrentViewPosition() - _TessMin)) / (_TessMax - _TessMin));
+	#endif
+	
+	offset.y += effectsData[DE_DISPLACEMENT_CHANNEL] * falloff;
+	#endif
 	#endif
 	
 	//Apply vertex displacements

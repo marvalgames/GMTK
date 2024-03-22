@@ -1,3 +1,55 @@
+1.6.2
+
+Added:
+- Intersection Foam distortion parameter, offsets the texture sample by the normals
+- Caustics chromance parameter, allows blending between grayscale- and RGB caustics
+
+Fixed:
+- Translucency rendering not being applied with the correct strength for a 2nd+ point light.
+
+1.6.1
+
+Fixed:
+- DWP2 integration, water level being fixed to a value of 0 in some cases.
+- Atmospheric Height Fog integration, shader error when using latest version (v3.2.0+)
+
+1.6.0
+Verified compatibility with Unity 2023.2.0
+
+Note: Unity packages cannot track moved/renamed/deleted files. It is recommended to delete the StylizedWater2 folder before updating!
+
+Added:
+- Generalized water render feature
+  * Screen Space Reflections (in preview)
+  * Water displacement prepass (advanced custom uses for the time being)
+  * Directional caustics option
+
+- Public static C# parameter: WaterObject.PositionOffset. Water shading and buoyancy will be offset by this value, for use with floating-origin systems.
+- Fog integration for Buto 2022 (v7.7.3+)
+- Render queue -/+ buttons in material UI
+- Lava flow river material
+
+Fixed:
+- Planar Reflections not composting correctly on Android when HDR was enabled
+- HDR information from reflection probes not correctly being used in the water material, making emissive surfaces appear dim.
+- Shader compile error when building for Android when using VR and OpenGLES (workaround for returning Unity bug).
+
+Changed:
+- Tiling parameters for Normals and Surface Foam now have an X & Y component. Allowing for width/length stretching.
+- Animation speed for texture-based effects now remain consistent when altering a tiling parameter.
+- "Floating Transform" component was renamed to "Align Transform To Waves", to clarify its functionality.
+- Surface Foam, normal map now also influences the Distortion parameter
+- Negative speed values are now allowed for Rivers
+- Buoyancy.SetCustomTime function deprecated. The static WaterObject.CustomTime parameter may now be used instead.
+- Dynamic effects (v1.1.0)
+  * Created curvature is no longer influenced by reflection distortion parameters. Effects always create visual distortions.
+  * Projected normals are now visible even when the Normals feature is disabled on the material.
+  * Vertex displacement now also applies to water materials with Tessellation disabled.
+
+Removed:
+- Obsolete buoyancy code functions
+- Support for code without the Mathematics package installed (it is required with URP anyway).
+
 1.5.5
 
 Fixed:

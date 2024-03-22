@@ -7,9 +7,6 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-#if UNITY_EDITOR
-using UnityEditor;
-#endif
 using UnityEngine;
 using UnityEngine.Profiling;
 
@@ -21,55 +18,22 @@ using Vector3 = Unity.Mathematics.float3;
 using Vector2 = Unity.Mathematics.float2;
 #endif
 
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
+
 namespace StylizedWater2
 {
     public static partial class Buoyancy
     {
-        internal static bool ComputeReadbackAvailable;
-        
         private static WaveParameters waveParameters = new WaveParameters();
         private static Material lastMaterial;
         
-        private static readonly int CustomTimeID = Shader.PropertyToID("_CustomTime");
         private static readonly int TimeParametersID = Shader.PropertyToID("_TimeParameters");
-
-        //OBSOLETE
-        private const string WavesKeyword = "_WAVES";
         
-        public struct BuoyancySample
-        {
-            public int hashCode;
-            
-            public UnityEngine.Vector3[] inputPositions;
-            
-            public UnityEngine.Vector3[] outputOffset;
-            public UnityEngine.Vector3[] outputNormal;
-
-            public void SetSamplePositions(UnityEngine.Vector3[] positions)
-            {
-                inputPositions = positions;
-                outputOffset = new UnityEngine.Vector3[positions.Length];
-                outputNormal = new UnityEngine.Vector3[positions.Length];
-            }
-        }
-
         private static void GetMaterialParameters(Material mat)
         {
             waveParameters.Update(mat);
-        }
-        
-        private static float customTimeValue = -1f;
-
-        /// <summary>
-        /// Pass in any time value, any kind of animations will use this as a time index, including wave animations (and thus buoyancy calculations as well).
-        /// To stop the water shader from using this, pass in a value lower than 0.
-        /// See "Shader" section of documentation. This is used for network synchronized waves.
-        /// </summary>
-        /// <param name="value"></param>
-        public static void SetCustomTime(float value)
-        {
-            customTimeValue = value;
-            Shader.SetGlobalFloat(CustomTimeID, customTimeValue);
         }
         
         //Returns the same value as _TimeParameters.x
@@ -77,7 +41,7 @@ namespace StylizedWater2
         {
             get
             {
-                if (customTimeValue > 0) return customTimeValue;
+                if (WaterObject.CustomTime >= 0) return WaterObject.CustomTime;
                 
 #if UNITY_EDITOR
                 return Application.isPlaying ? Time.time : Shader.GetGlobalVector(TimeParametersID).x;
@@ -87,74 +51,10 @@ namespace StylizedWater2
             }
         }
         
-        private static float Dot2(Vector2 a, Vector2 b)
+        [Obsolete("Set the static 'WaterObject.CustomTime' parameter instead.", false)]
+        public static void SetCustomTime(float value)
         {
-#if MATHEMATICS
-            return dot(a,b);
-#else
-            return Vector2.Dot(a, b);
-#endif
-        }
-        
-        private static float Dot3(Vector3 a, Vector3 b)
-        {
-#if MATHEMATICS
-            return dot(a,b);
-#else
-            return Vector3.Dot(a, b);
-#endif
-        }
-        
-        private static float Dot4(Vector4 a, Vector4 b)
-        {
-#if MATHEMATICS
-            return dot(a,b);
-#else
-            return Vector4.Dot(a, b);
-#endif
-        }
-        
-        private static float Sine(float t)
-        {
-#if MATHEMATICS
-            return sin(t);
-#else
-            return Mathf.Sin(t);
-#endif
-        }
-        
-        private static float Cosine(float t)
-        {
-#if MATHEMATICS
-            return cos(t);
-#else
-            return Mathf.Cos(t);
-#endif
-        }
-
-        private static void Vector4Sin(ref Vector4 input, Vector4 a, Vector4 b)
-        {
-            input.x = Sine(a.x + b.x);
-            input.y = Sine(a.y + b.y);
-            input.z = Sine(a.z + b.z);
-            input.w = Sine(a.w + b.w);
-        }
-        
-        private static void Vector4Cosin(ref Vector4 input, Vector4 a, Vector4 b)
-        {
-            input.x = Cosine(a.x + b.x);
-            input.y = Cosine(a.y + b.y);
-            input.z = Cosine(a.z + b.z);
-            input.w = Cosine(a.w + b.w);
-        }
-
-        private static Vector4 MultiplyVec4(Vector4 a, Vector4 b)
-        {
-#if MATHEMATICS
-            return a * b;
-#else
-            return Vector4.Scale(a, b);
-#endif
+            WaterObject.CustomTime = value;
         }
 
         private static Vector4 sine;
@@ -188,14 +88,18 @@ namespace StylizedWater2
         /// <returns></returns>
         public static Vector3 FindWaterLevelIntersection(Vector3 origin, Vector3 direction, float waterLevel)
         {
-            float upDot = Dot3(direction, UnityEngine.Vector3.up);
+            #if MATHEMATICS
+            float upDot = dot(direction, UnityEngine.Vector3.up);
             float angle = (Mathf.Acos(upDot) * 180f) / Mathf.PI;
 
             float depth = waterLevel - origin.y;
             //Distance from origin to water level along direction
-            float hypotenuse = depth / Cosine(Mathf.Deg2Rad * angle);
+            float hypotenuse = depth / cos(Mathf.Deg2Rad * angle);
             
             return origin + (direction * hypotenuse);
+            #else
+            return Vector3.zero;
+            #endif
         }
 
         /// <summary>
@@ -249,8 +153,9 @@ namespace StylizedWater2
 
         private static void RecalculateParameters()
         {
-            direction1 = MultiplyVec4(dir1, waveParameters.direction);
-            direction2 = MultiplyVec4(dir2, waveParameters.direction);
+            #if MATHEMATICS
+            direction1 = dir1 * waveParameters.direction;
+            direction2 = dir2 * waveParameters.direction;
 
             frequency = freq * (1-waveParameters.distance) * 3f;
 
@@ -263,12 +168,14 @@ namespace StylizedWater2
             CD.y = steepness.z * waveParameters.steepness * direction2.y * amp.z;
             CD.z = steepness.w * waveParameters.steepness * direction2.z * amp.w;
             CD.w = steepness.w * waveParameters.steepness * direction2.w * amp.w;
+            #endif
         }
         
         private static void SampleWaves(UnityEngine.Vector3 position, Material waterMat, float waterLevel, float rollStrength, bool dynamicMaterial, out UnityEngine.Vector3 offset, out UnityEngine.Vector3 normal)
         {
             Profiler.BeginSample("Buoyancy sampling");
             
+            #if MATHEMATICS
 			//If not desired to re-fetch the material properties every call, at least fetch them if the input material changed (since this is a static function)
 			//In edit-mode, always do this as materials are most likely modified then
 			if(!dynamicMaterial && Application.isPlaying)
@@ -296,8 +203,8 @@ namespace StylizedWater2
 
             offsets = Vector3.zero;
                 
-            planarPosition.x = position.x;
-            planarPosition.y = position.z;
+            planarPosition.x = position.x - WaterObject.PositionOffset.x;
+            planarPosition.y = position.z - WaterObject.PositionOffset.z;
 
             for (int i = 0; i <= waveParameters.count; i++)
             {
@@ -306,53 +213,44 @@ namespace StylizedWater2
                 frequency *= t;
                 
                 #if MATHEMATICS
-                dotABCD.x = Dot2(direction1.xy, planarPosition) * frequency.x;
-                dotABCD.y = Dot2(direction1.zw, planarPosition) * frequency.y;
-                dotABCD.z = Dot2(direction2.xy, planarPosition) * frequency.z;
-                dotABCD.w = Dot2(direction2.zw, planarPosition) * frequency.w;
-                #else
-                dotABCD.x = Dot2(new Vector2(direction1.x, direction1.y), planarPosition) * frequency.x;
-                dotABCD.y = Dot2(new Vector2(direction1.z, direction1.w), planarPosition) * frequency.y;
-                dotABCD.z = Dot2(new Vector2(direction2.x, direction2.y), planarPosition) * frequency.z;
-                dotABCD.w = Dot2(new Vector2(direction2.z, direction2.w), planarPosition) * frequency.w;
+                dotABCD.x = dot(direction1.xy, planarPosition) * frequency.x;
+                dotABCD.y = dot(direction1.zw, planarPosition) * frequency.y;
+                dotABCD.z = dot(direction2.xy, planarPosition) * frequency.z;
+                dotABCD.w = dot(direction2.zw, planarPosition) * frequency.w;
                 #endif
 
-                sine.x = Sine(dotABCD.x + TIME.x);
-                sine.y = Sine(dotABCD.y + TIME.y);
-                sine.z = Sine(dotABCD.z + TIME.z);
-                sine.w = Sine(dotABCD.w + TIME.w);
+                sine.x = sin(dotABCD.x + TIME.x);
+                sine.y = sin(dotABCD.y + TIME.y);
+                sine.z = sin(dotABCD.z + TIME.z);
+                sine.w = sin(dotABCD.w + TIME.w);
 
-                cosine.x = Cosine(dotABCD.x + TIME.x);
-                cosine.y = Cosine(dotABCD.y + TIME.y);
-                cosine.z = Cosine(dotABCD.z + TIME.z);
-                cosine.w = Cosine(dotABCD.w + TIME.w);
+                cosine.x = cos(dotABCD.x + TIME.x);
+                cosine.y = cos(dotABCD.y + TIME.y);
+                cosine.z = cos(dotABCD.z + TIME.z);
+                cosine.w = cos(dotABCD.w + TIME.w);
                 
-                offsets.x += Dot4(cosine, new Vector4(AB.x, AB.z, CD.x, CD.z));
-                offsets.y += Dot4(sine, amp);
-                offsets.z += Dot4(cosine, new Vector4(AB.y, AB.w, CD.y, CD.w));
+                offsets.x += dot(cosine, new Vector4(AB.x, AB.z, CD.x, CD.z));
+                offsets.y += dot(sine, amp);
+                offsets.z += dot(cosine, new Vector4(AB.y, AB.w, CD.y, CD.w));
             }
             
-			#if MATHEMATICS
             rollStrength *= lerp(0.001f, 0.1f, waveParameters.steepness);
-			#else
-            rollStrength *= Mathf.Lerp(0.001f, 0.1f, waveParameters.steepness);
-			#endif
-            
+
 			normal.x = -offsets.x * rollStrength * waveParameters.height;
 			normal.y = 2f;
 			normal.z = -offsets.z * rollStrength * waveParameters.height;
             
-#if MATHEMATICS
             normal = normalize(normal);
-#else
-            normal = normal.normalized;
-#endif
 
             //Average height
             offsets.y /= waveParameters.count;
             offsets.y = (offsets.y* waveParameters.height) + waterLevel;
 
             offset = offsets;
+            #else
+            offset = Vector3.zero;
+            normal = Vector3.zero;
+            #endif
             
             Profiler.EndSample();
         }
@@ -375,32 +273,6 @@ namespace StylizedWater2
             return m_offset.y;
         }
         
-        /// <summary>
-        /// Given a position in world-space, returns the wave height and normal
-        /// </summary>
-        /// <param name="sample">Struct containing an array of input positions to sample at, and and water surface offset/normal array to be filled as usable outputs</param>
-        /// <param name="waterMat">Material using StylizedWater2 shader</param>
-        /// <param name="waterLevel">Height of the reference water plane.</param>
-        /// <param name="dynamicMaterial">If true, the material's wave parameters will be re-fetched with every function call</param>
-        /// <returns>Wave height, in world-space.</returns>
-        public static void SampleWaves(ref BuoyancySample sample, Material waterMat, float waterLevel, bool dynamicMaterial)
-        {
-            if (!ComputeReadbackAvailable)
-            {
-                for (int i = 0; i < sample.inputPositions.Length; i++)
-                {
-                    SampleWaves(sample.inputPositions[i], waterMat, waterLevel, 1f, dynamicMaterial, out sample.outputOffset[i], out sample.outputNormal[i]);
-                }
-            }
-            else
-            {
-                SampleDisplacement(ref sample, waterLevel, sample.hashCode);
-            }
-        }
-        
-        //Surface Modifiers extension. Calls on the system that asynchronously reads back the displacement data from the GPU
-        static partial void SampleDisplacement(ref BuoyancySample sample, float waterLevel, int hashCode);
-
         /// <summary>
         /// Checks if the position is below the maximum possible wave height. Can be used as a fast broad-phase check, before actually using the more expensive SampleWaves function
         /// </summary>

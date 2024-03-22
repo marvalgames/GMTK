@@ -1,7 +1,13 @@
-﻿using System;
+﻿// Stylized Water 2
+// Staggart Creations (http://staggart.xyz)
+// Copyright protected under Unity Asset Store EULA
+// Copying or referencing source code for the production of new asset store content is strictly prohibited.
+
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Rendering;
+
 #if URP
 using UnityEngine.Rendering.Universal;
 #endif
@@ -27,9 +33,12 @@ namespace StylizedWater2
 
         [Min(0f)]
         public float offset = 0.05f;
-        [Tooltip("When disabled, the skybox reflection comes from a Reflection Probe. This has the benefit of being omni-directional rather than flat/planar. Enabled this to render the skybox into the planar reflection anyway")]
+        [Tooltip("When disabled, the skybox reflection comes from a Reflection Probe. This has the benefit of being omni-directional rather than flat/planar. Enabled this to render the skybox into the planar reflection anyway." +
+                 "\n\nNote that enabling this will override Screen Space Reflections completely!")]
         public bool includeSkybox;
-        [Tooltip("Render Unity's default fog in the reflection. Note that this doesn't strictly work correctly on large triangles, as it is incompatible with oblique camera projections.")]
+        [Tooltip("Render Unity's default scene fog in the reflection. Note that this doesn't strictly work correctly on large triangles, as it is incompatible with oblique camera projections." +
+                 "\n\n" +
+                 "This does not include to post-processing fog effects!")]
         public bool enableFog;
 
         //Quality
@@ -151,6 +160,7 @@ namespace StylizedWater2
                 if (kvp.Value)
                 {
                     RenderTexture.ReleaseTemporary(kvp.Value.targetTexture);
+                    
                     DestroyImmediate(kvp.Value.gameObject);
                 }
             }
@@ -252,41 +262,64 @@ namespace StylizedWater2
             UpdateCameraProperties(camera, m_reflectionCamera);
             UpdatePerspective(camera, m_reflectionCamera);
 
+            
             bool fogEnabled = RenderSettings.fog && !enableFog;
             //Fog is based on clip-space z-distance and doesn't work with oblique projections
-            if (fogEnabled) RenderSettings.fog = false;
+            if (fogEnabled) SetFogState(false);
             int maxLODLevel = QualitySettings.maximumLODLevel;
             QualitySettings.maximumLODLevel = maximumLODLevel;
             GL.invertCulling = true;
 
-#pragma warning disable 0618
-#if UNITY_2023_1_OR_NEWER
-            /*
-            requestData = new UniversalRenderPipeline.SingleCameraRequest();
-            requestData.destination = reflectionCamera.targetTexture;
-            requestData.slice = -1;
+            RenderReflection(context, m_reflectionCamera);
 
-            //Throws the 'Recursive rendering is not supported in SRP (are you calling Camera.Render from within a render pipeline?).' error.
-            if (RenderPipeline.SupportsRenderRequest(m_reflectionCamera, requestData))
-            {
-                RenderPipeline.SubmitRenderRequest(m_reflectionCamera, requestData);
-            }
-            */
-            
-            //Instead, Unity will whine about using an obsolete API.
-            UniversalRenderPipeline.RenderSingleCamera(context, m_reflectionCamera);
-            
-            //So now what?
-#else
-            UniversalRenderPipeline.RenderSingleCamera(context, m_reflectionCamera);
-#endif
-#pragma warning restore 0618
-
-            if (fogEnabled) RenderSettings.fog = true;
+            if (fogEnabled) SetFogState(true);
             QualitySettings.maximumLODLevel = maxLODLevel;
             GL.invertCulling = false;
 
             UnityEngine.Profiling.Profiler.EndSample();
+        }
+
+        private void RenderReflection(ScriptableRenderContext context, Camera target)
+        {
+            /* Uncomment to render NR's vegetation in the reflection
+            // Register the reflection camera for Nature Renderer
+            var cameraId = VisualDesignCafe.Rendering.Instancing.RendererPool.RegisterCamera(target);
+
+            // Render the instanced objects (details and trees)
+            VisualDesignCafe.Rendering.Instancing.RendererPool.GetCamera(cameraId).Render();
+            */
+            
+#pragma warning disable 0618
+#if UNITY_2023_1_OR_NEWER
+            /*
+            requestData = new UniversalRenderPipeline.SingleCameraRequest();
+            requestData.destination = target.targetTexture;
+            requestData.slice = -1;
+
+            //Throws the 'Recursive rendering is not supported in SRP (are you calling Camera.Render from within a render pipeline?).' error.
+            if (RenderPipeline.SupportsRenderRequest(target, requestData))
+            {
+                RenderPipeline.SubmitRenderRequest(target, requestData);
+            }
+            */
+            
+            //Instead, Unity will whine about using an obsolete API.
+            UniversalRenderPipeline.RenderSingleCamera(context, target);
+            
+            //So then what?
+#else
+            UniversalRenderPipeline.RenderSingleCamera(context, target);
+#endif
+#pragma warning restore 0618
+        }
+
+        private void SetFogState(bool value)
+        {
+            #if UNITY_EDITOR
+            UnityEditor.Unsupported.SetRenderSettingsUseFogNoDirty(value);
+            #else
+            RenderSettings.fog = value;
+            #endif
         }
 
         private float GetRenderScale()
@@ -415,7 +448,8 @@ namespace StylizedWater2
 
         private void CreateRenderTexture(Camera targetCamera, Camera source)
         {
-            RenderTextureFormat colorFormat = UniversalRenderPipeline.asset.supportsHDR && SystemInfo.SupportsRenderTextureFormat(RenderTextureFormat.DefaultHDR) ? RenderTextureFormat.DefaultHDR : RenderTextureFormat.Default;
+            //Note: Do not use RenderTextureFormat.Default or HDR, as these may be without an alpha channel on some platforms
+            RenderTextureFormat colorFormat = UniversalRenderPipeline.asset.supportsHDR && SystemInfo.SupportsRenderTextureFormat(RenderTextureFormat.ARGBHalf) ? RenderTextureFormat.ARGBHalf : RenderTextureFormat.ARGB32;
 
             float scale = GetRenderScale();
 

@@ -255,6 +255,8 @@ namespace PixelCrushers.DialogueSystem.Articy
                     "Instead of using entity's name as Display Name, use a custom field named 'DisplayName'."),
                     prefs.CustomDisplayName);
             }
+            prefs.IncludeFeatureNameInFields = EditorGUILayout.Toggle(new GUIContent("Include Feature Names",
+                "Add containing feature name to property name when importing properties as fields."), prefs.IncludeFeatureNameInFields);
         }
 
         private void DrawDirectConversationLinksToEntry1Toggle()
@@ -355,7 +357,10 @@ namespace PixelCrushers.DialogueSystem.Articy
         private void DrawReadXMLButton()
         {
             EditorGUI.BeginDisabledGroup(string.IsNullOrEmpty(prefs.ProjectFilename));
-            if (GUILayout.Button(new GUIContent("Read XML", "Load the XML file so you can adjust conversion parameters such as what to include in the dialogue database and which actor is the player. Also click this button after re-exporting from articy to reload the updated XML file."), GUILayout.Width(120))) ReviewArticyProject();
+            if (GUILayout.Button(new GUIContent("Read XML", "Load the XML file so you can adjust conversion parameters such as what to include in the dialogue database and which actor is the player. Also click this button after re-exporting from articy to reload the updated XML file."), GUILayout.Width(120)))
+            {
+                ReviewArticyProject();
+            }
             EditorGUI.EndDisabledGroup();
         }
 

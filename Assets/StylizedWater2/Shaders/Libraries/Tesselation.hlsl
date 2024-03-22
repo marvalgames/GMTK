@@ -149,6 +149,7 @@ Varyings Domain(TessellationFactors factors, OutputPatch<VertexControl, 3> input
 	//Tessellation does not work entirely correct with GPU instancing
 	UNITY_TRANSFER_INSTANCE_ID(input[0], output);
 
+	#if !defined(SHADERPASS_DISPLACEMENT) //Displacement will be calculated per pixel
 	#if _WAVES && defined(TESSELLATION_ON)
 	//Required to repeat these
 	VertexNormalInputs normalInput = GetVertexNormalInputs(output.normalOS.xyz, output.tangentOS);
@@ -168,7 +169,8 @@ Varyings Domain(TessellationFactors factors, OutputPatch<VertexControl, 3> input
 	
 	output.positionOS.xyz = TransformWorldToObject(positionWS);
 	#endif
-
+	#endif
+	
 	//Wave animation is skipped here
 	return LitPassVertex(output);
 }

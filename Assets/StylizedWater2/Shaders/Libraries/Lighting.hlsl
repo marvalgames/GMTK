@@ -3,49 +3,13 @@
 //Copyright protected under Unity Asset Store EULA
 
 #include "Common.hlsl"
+#include "Reflections.hlsl"
 
 #if !_UNLIT
 #define LIT
 #endif
 
 #define SPECULAR_POWER_RCP 0.01562 // 1.0/32
-#define AIR_RI 1.000293
-
-//Schlick's BRDF fresnel
-float ReflectionFresnel(float3 worldNormal, float3 viewDir, float exponent)
-{
-	float cosTheta = saturate(dot(worldNormal, viewDir));	
-	return pow(max(0.0, AIR_RI - cosTheta), exponent);
-}
-
-TEXTURE2D_X(_PlanarReflection);
-SAMPLER(sampler_PlanarReflection);
-
-float3 SampleReflections(float3 reflectionVector, float smoothness, float mask, float4 screenPos, float3 positionWS, float3 normal, float3 viewDir, float2 pixelOffset)
-{
-	#if !_RIVER || UNITY_VERSION >= 202220
-	screenPos.xy += pixelOffset.xy * lerp(1.0, 0.1, unity_OrthoParams.w);
-	screenPos /= screenPos.w;
-	#endif
-	
-	#if UNITY_VERSION >= 202220
-	float3 probe = saturate(GlossyEnvironmentReflection(reflectionVector, positionWS, smoothness, 1.0, screenPos.xy)).rgb;
-	#elif UNITY_VERSION >= 202120
-	float3 probe = saturate(GlossyEnvironmentReflection(reflectionVector, positionWS, smoothness, 1.0)).rgb;
-	#else
-	float3 probe = saturate(GlossyEnvironmentReflection(reflectionVector, smoothness, 1.0)).rgb;
-	#endif
-
-	#if !_RIVER //Planar reflections are pointless on curved surfaces, skip	
-	float4 planarReflections = SAMPLE_TEXTURE2D_X_LOD(_PlanarReflection, sampler_PlanarReflection, screenPos.xy, 0);
-	//Terrain add-pass can output negative alpha values. Clamp as a safeguard against this
-	planarReflections.a = saturate(planarReflections.a);
-	
-	return lerp(probe, planarReflections.rgb, planarReflections.a * mask);
-	#else
-	return probe;
-	#endif
-}
 
 //Reusable for every light
 struct TranslucencyData
@@ -237,6 +201,11 @@ float3 ApplyLighting(inout SurfaceData surfaceData, inout float3 sceneColor, Lig
 	#if _LIGHT_LAYERS && UNITY_VERSION >= 202220
 	uint meshRenderingLayers = GetMeshRenderingLayer();
 	#endif
+
+	#if _TRANSLUCENCY
+	float translucencyStrength = translucencyData.strength;
+	float translucencyExp = translucencyData.exponent;
+	#endif
 	
 	LIGHT_LOOP_BEGIN(pixelLightCount)
 		#if UNITY_VERSION >= 202110 //URP 11+
@@ -256,12 +225,12 @@ float3 ApplyLighting(inout SurfaceData surfaceData, inout float3 sceneColor, Lig
 			#endif
 			
 			#if _TRANSLUCENCY
-			//Keep settings from main light pass, override these
+			//Keep settings from main light pass, but override these
 			translucencyData.directionalLight = false;
 			translucencyData.lightDir = light.direction;
 			translucencyData.lightColor = light.color * light.distanceAttenuation;
-			translucencyData.strength *= light.shadowAttenuation;
-			translucencyData.exponent *= light.distanceAttenuation;
+			translucencyData.strength = translucencyStrength * light.shadowAttenuation;
+			translucencyData.exponent = translucencyExp * light.distanceAttenuation;
 				
 			ApplyTranslucency(translucencyData, surfaceData.emission.rgb);
 			#endif
