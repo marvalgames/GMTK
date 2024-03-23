@@ -254,7 +254,6 @@ namespace Sandbox.Player
                     in ApplyImpulseComponent applyImpulseComponent) =>
                 {
                     var audioSource = playerMove.audioSource;
-                    Debug.Log("AC " +  playerMove.clip);
                     Debug.Log("AS " +  audioSource);
                     var stickSpeed = applyImpulseComponent.animatorStickSpeed;
 

@@ -1,4 +1,5 @@
-﻿#if UNITY_2024 || UNITY_2025 || UNITY_2026 || UNITY_2027 || UNITY_2028 || UNITY_2029 || UNITY_2030
+﻿using System;
+#if UNITY_2024 || UNITY_2025 || UNITY_2026 || UNITY_2027 || UNITY_2028 || UNITY_2029 || UNITY_2030
 #define UNITY_2024_PLUS
 #endif
 
@@ -9,78 +10,78 @@
 #if UNITY_2022 || UNITY_2023_PLUS
 #define UNITY_2022_PLUS
 #endif
-
-#if UNITY_2021 || UNITY_2022_PLUS
-#define UNITY_2021_PLUS
-#endif
-
-#if UNITY_2020 || UNITY_2021_PLUS
-#define UNITY_2020_PLUS
-#endif
-
-#if UNITY_2019 || UNITY_2020_PLUS
-#define UNITY_2019_PLUS
-#endif
-
-#if UNITY_2018 || UNITY_2019_PLUS
-#define UNITY_2018_PLUS
-#endif
-
-#if UNITY_2017 || UNITY_2018_PLUS
-#define UNITY_2017_PLUS
-#endif
-
-#if UNITY_5 || UNITY_2017_PLUS
-#define UNITY_5_PLUS
-#endif
-
-#if UNITY_5_1 || UNITY_5_2 || UNITY_5_3_OR_NEWER || UNITY_2017_PLUS
-#define UNITY_5_1_PLUS
-#endif
-
-#if UNITY_5_2 || UNITY_5_3_OR_NEWER || UNITY_2017_PLUS
-#define UNITY_5_2_PLUS
-#endif
-
-#if UNITY_5_3_OR_NEWER || UNITY_2017_PLUS
-#define UNITY_5_3_PLUS
-#endif
-
-#if UNITY_5_4_OR_NEWER || UNITY_2017_PLUS
-#define UNITY_5_4_PLUS
-#endif
-
-#if UNITY_5_5_OR_NEWER || UNITY_2017_PLUS
-#define UNITY_5_5_PLUS
-#endif
-
-#if UNITY_5_6_OR_NEWER || UNITY_2017_PLUS
-#define UNITY_5_6_PLUS
-#endif
-
-#if UNITY_5_7_OR_NEWER || UNITY_2017_PLUS
-#define UNITY_5_7_PLUS
-#endif
-
-#if UNITY_5_8_OR_NEWER || UNITY_2017_PLUS
-#define UNITY_5_8_PLUS
-#endif
-
-#if UNITY_5_9_OR_NEWER || UNITY_2017_PLUS
-#define UNITY_5_9_PLUS
-#endif
-
-#if UNITY_4_6 || UNITY_4_7 || UNITY_5_PLUS
-#define SUPPORTS_UNITY_UI
-#endif
+//
+// #if UNITY_2021 || UNITY_2022_PLUS
+// #define UNITY_2021_PLUS
+// #endif
+//
+// #if UNITY_2020 || UNITY_2021_PLUS
+// #define UNITY_2020_PLUS
+// #endif
+//
+// #if UNITY_2019 || UNITY_2020_PLUS
+// #define UNITY_2019_PLUS
+// #endif
+//
+// #if UNITY_2018 || UNITY_2019_PLUS
+// #define UNITY_2018_PLUS
+// #endif
+//
+// #if UNITY_2017 || UNITY_2018_PLUS
+// #define UNITY_2017_PLUS
+// #endif
+//
+// #if UNITY_5 || UNITY_2017_PLUS
+// #define UNITY_5_PLUS
+// #endif
+//
+// #if UNITY_5_1 || UNITY_5_2 || UNITY_5_3_OR_NEWER || UNITY_2017_PLUS
+// #define UNITY_5_1_PLUS
+// #endif
+//
+// #if UNITY_5_2 || UNITY_5_3_OR_NEWER || UNITY_2017_PLUS
+// #define UNITY_5_2_PLUS
+// #endif
+//
+// #if UNITY_5_3_OR_NEWER || UNITY_2017_PLUS
+// #define UNITY_5_3_PLUS
+// #endif
+//
+// #if UNITY_5_4_OR_NEWER || UNITY_2017_PLUS
+// #define UNITY_5_4_PLUS
+// #endif
+//
+// #if UNITY_5_5_OR_NEWER || UNITY_2017_PLUS
+// #define UNITY_5_5_PLUS
+// #endif
+//
+// #if UNITY_5_6_OR_NEWER || UNITY_2017_PLUS
+// #define UNITY_5_6_PLUS
+// #endif
+//
+// #if UNITY_5_7_OR_NEWER || UNITY_2017_PLUS
+// #define UNITY_5_7_PLUS
+// #endif
+//
+// #if UNITY_5_8_OR_NEWER || UNITY_2017_PLUS
+// #define UNITY_5_8_PLUS
+// #endif
+//
+// #if UNITY_5_9_OR_NEWER || UNITY_2017_PLUS
+// #define UNITY_5_9_PLUS
+// #endif
+//
+// #if UNITY_4_6 || UNITY_4_7 || UNITY_5_PLUS
+// #define SUPPORTS_UNITY_UI
+// #endif
 
 #if (UNITY_PS4 && UNITY_2018_PLUS) || REWIRED_DEBUG_UNITY_PS4_2018_PLUS
 #define UNITY_PS4_2018_PLUS
 #endif
 
-#if UNITY_2018_PLUS || UNITY_2017_4_OR_NEWER
-#define PS4INPUT_NEW_PAD_API
-#endif
+// #if UNITY_2018_PLUS || UNITY_2017_4_OR_NEWER
+// #define PS4INPUT_NEW_PAD_API
+// #endif
 
 // Copyright (c) 2015 Augie R. Maddox, Guavaman Enterprises. All rights reserved.
 #pragma warning disable 0219
@@ -403,6 +404,12 @@ namespace Rewired.Utils {
 
         public int GetAndroidAPILevel() {
             return -1;
+        }
+
+        public void WindowsStandalone_ForwardRawInput(IntPtr rawInputHeaderIndices, IntPtr rawInputDataIndices, uint indicesCount,
+            IntPtr rawInputData, uint rawInputDataSize)
+        {
+            throw new NotImplementedException();
         }
 #endif
 
