@@ -573,6 +573,24 @@
             ENDHLSL
         }
 
+    //  Motion Vectors -------------------------------------------------------------
+        Pass
+        {
+            Name "MotionVectors"
+            Tags { "LightMode" = "MotionVectors" }
+            ColorMask RG
+
+            HLSLPROGRAM
+            #pragma shader_feature_local _ALPHATEST_ON
+            #pragma multi_compile_fragment _ LOD_FADE_CROSSFADE
+            #pragma shader_feature_local_vertex _ADD_PRECOMPUTED_VELOCITY
+
+            //#include "Packages/com.unity.render-pipelines.universal/Shaders/LitInput.hlsl"
+            #include "Includes/Lux URP Lit Extended Inputs.hlsl"
+            #include_with_pragmas "Packages/com.unity.render-pipelines.universal/ShaderLibrary/ObjectMotionVectors.hlsl"
+            ENDHLSL
+        }
+
     }
 
     FallBack "Hidden/InternalErrorShader"

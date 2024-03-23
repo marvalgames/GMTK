@@ -26,14 +26,16 @@ Shader "Lux URP/Toon HLSL"
         _SrcBlendAlpha              ("SrcAlphaBlend", Float) = 1.0
         [HideInInspector]
         _DstBlendAlpha              ("DstAlphaBlend", Float) = 0.0
-        //[HideInInspector]
+        
+        [Space(5)]
         [Enum(Off,0,On,1)]  
         _ZWrite                     ("ZWrite", Float) = 1.0
-
         [Enum(UnityEngine.Rendering.CompareFunction)]
         _ZTest                      ("ZTest", Int) = 4
         [Enum(UnityEngine.Rendering.CullMode)]
         _Cull                       ("Culling", Float) = 2
+        
+        [Space(5)]
         [Toggle(_ALPHATEST_ON)]
         _AlphaClip                  ("Alpha Clipping", Float) = 0.0
         [LuxURPHelpDrawer]
@@ -610,6 +612,24 @@ Shader "Lux URP/Toon HLSL"
 
             ENDHLSL
         }
+
+    //  Motion Vectors -------------------------------------------------------------
+        Pass
+        {
+            Name "MotionVectors"
+            Tags { "LightMode" = "MotionVectors" }
+            ColorMask RG
+
+            HLSLPROGRAM
+            #pragma shader_feature_local _ALPHATEST_ON
+            #pragma multi_compile_fragment _ LOD_FADE_CROSSFADE
+            #pragma shader_feature_local_vertex _ADD_PRECOMPUTED_VELOCITY
+
+            #include "Includes/Lux URP Toon Inputs.hlsl"
+            #include_with_pragmas "Packages/com.unity.render-pipelines.universal/ShaderLibrary/ObjectMotionVectors.hlsl"
+            ENDHLSL
+        }
+
     }
 
     FallBack "Hidden/InternalErrorShader"

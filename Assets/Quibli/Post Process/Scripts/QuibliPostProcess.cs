@@ -1,3 +1,7 @@
+// QuibliPostProcess.cs(91,28): warning CS0618: 'ScriptableRenderer.cameraColorTargetHandle' is obsolete:
+// 'This rendering path is for compatibility mode only (when Render Graph is disabled). Use Render Graph API instead.'
+#pragma warning disable 0618
+
 using System;
 using System.Collections.Generic;
 

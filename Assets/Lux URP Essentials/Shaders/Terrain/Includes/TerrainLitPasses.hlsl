@@ -693,15 +693,28 @@
         InputData inputData;
         InitializeInputData(IN, normalTS, tangentSpaceRotation, viewDirectionWS, inputData);
 
-    #if defined(_DBUFFER)
-        half3 specular = half3(0.0h, 0.0h, 0.0h);
-        ApplyDecal(IN.clipPos,
-            albedo,
-            specular,
-            inputData.normalWS,
-            metallic,
-            occlusion,
-            smoothness);
+        SurfaceData surfaceData = (SurfaceData)0;
+        surfaceData.albedo = albedo;
+        surfaceData.alpha = alpha;
+        surfaceData.normalTS = normalTS;
+        surfaceData.smoothness = smoothness;
+        surfaceData.occlusion = (half)1.0;
+        surfaceData.metallic = metallic;
+        surfaceData.specular = half3(0.0, 0.0, 0.0);
+
+    // #if defined(_DBUFFER)
+    //     half3 specular = half3(0.0, 0.0, 0.0);
+    //     ApplyDecal(IN.clipPos,
+    //         albedo,
+    //         specular,
+    //         inputData.normalWS,
+    //         metallic,
+    //         occlusion,
+    //         smoothness);
+    // #endif
+
+    #ifdef _DBUFFER
+        ApplyDecalToSurfaceData(IN.clipPos, surfaceData, inputData);
     #endif
 
     #ifdef TERRAIN_GBUFFER
@@ -712,23 +725,24 @@
         #endif
 
         BRDFData brdfData;
-        InitializeBRDFData(albedo, metallic, /* specular */ half3(0.0h, 0.0h, 0.0h), smoothness, alpha, brdfData);
+        //InitializeBRDFData(albedo, metallic, /* specular */ half3(0.0h, 0.0h, 0.0h), smoothness, alpha, brdfData);
+        InitializeBRDFData(surfaceData.albedo, surfaceData.metallic, surfaceData.specular, surfaceData.smoothness, surfaceData.alpha, brdfData);
 
         // Baked lighting.
         half4 color;
         Light mainLight = GetMainLight(inputData.shadowCoord, inputData.positionWS, inputData.shadowMask);
         MixRealtimeAndBakedGI(mainLight, inputData.normalWS, inputData.bakedGI, inputData.shadowMask);
-        color.rgb = GlobalIllumination(brdfData, inputData.bakedGI, occlusion, inputData.positionWS, inputData.normalWS, inputData.viewDirectionWS);
-        color.a = alpha;
+        color.rgb = GlobalIllumination(brdfData, inputData.bakedGI, surfaceData.occlusion, inputData.positionWS, inputData.normalWS, inputData.viewDirectionWS);
+        color.a = surfaceData.alpha;
         SplatmapFinalColor(color, inputData.fogCoord);
 
         // Dynamic lighting: emulate SplatmapFinalColor() by scaling gbuffer material properties. This will not give the same results
         // as forward renderer because we apply blending pre-lighting instead of post-lighting.
         // Blending of smoothness and normals is also not correct but close enough?
-        brdfData.albedo.rgb *= alpha;
-        brdfData.diffuse.rgb *= alpha;
-        brdfData.specular.rgb *= alpha;
-        brdfData.reflectivity *= alpha;
+        brdfData.albedo.rgb *= surfaceData.alpha;
+        brdfData.diffuse.rgb *= surfaceData.alpha;
+        brdfData.specular.rgb *= surfaceData.alpha;
+        brdfData.reflectivity *= surfaceData.alpha;
     //  We can not bend normals when using _GBUFFER_NORMALS_OCT
         #if defined(_GBUFFER_NORMALS_OCT)
             #if defined(TERRAIN_SPLAT_ADDPASS)
@@ -736,14 +750,15 @@
             #endif
             inputData.normalWS = inputData.normalWS;
         #else 
-            inputData.normalWS = inputData.normalWS * alpha;
+            inputData.normalWS = inputData.normalWS * surfaceData.alpha;
         #endif
-        smoothness *= alpha;
+        smoothness *= surfaceData.alpha;
 
-        return BRDFDataToGbuffer(brdfData, inputData, smoothness, color.rgb, occlusion);
+        return BRDFDataToGbuffer(brdfData, inputData, surfaceData.smoothness, color.rgb, surfaceData.occlusion);
 
     #else
-        half4 color = UniversalFragmentPBR(inputData, albedo, metallic, /* specular */ half3(0.0h, 0.0h, 0.0h), smoothness, occlusion, /* emission */ half3(0, 0, 0), alpha);
+        //half4 color = UniversalFragmentPBR(inputData, albedo, metallic, /* specular */ half3(0.0h, 0.0h, 0.0h), smoothness, occlusion, /* emission */ half3(0, 0, 0), alpha);
+        half4 color = UniversalFragmentPBR(inputData, surfaceData);
         SplatmapFinalColor(color, inputData.fogCoord);
         outColor = half4(color.rgb, 1.0h);
 
@@ -974,12 +989,14 @@
 
         #if defined(_NORMALINDEPTHNORMALPASS)
             #if defined(_NORMALMAP) || defined(_PARALLAX) || defined(TERRAIN_SPLAT_BASEPASS)
+                
                 #if !defined(ENABLE_TERRAIN_PERPIXEL_NORMAL) && ( defined(_NORMALMAP) || defined(_PARALLAX) )
                 //  Same matrix we need to transfer the normalTS
-                    half3 bitangentWS = cross(IN.normal, IN.tangent.xyz) * -1;
-                    tangentSpaceRotation =  half3x3(IN.tangent.xyz, bitangentWS, IN.normal.xyz);
-                    half3 tangentWS = IN.tangent.xyz;
+                    half3 tangentWS = -IN.tangent.xyz;
+                    half3 bitangentWS = cross(IN.normal, IN.tangent.xyz);
+                    tangentSpaceRotation = half3x3(tangentWS.xyz, bitangentWS, IN.normal.xyz);
                     half3 viewDirTS = normalize( mul(tangentSpaceRotation, viewDirectionWS ) );
+                
                 #elif defined(ENABLE_TERRAIN_PERPIXEL_NORMAL)
                     float2 sampleCoords = (IN.uvMainAndLM.xy / _TerrainHeightmapRecipSize.zw + 0.5f) * _TerrainHeightmapRecipSize.xy;
                     half3 normalWS = TransformObjectToWorldNormal(normalize(SAMPLE_TEXTURE2D(_TerrainNormalmapTexture, sampler_TerrainNormalmapTexture, sampleCoords).rgb * 2 - 1));
@@ -990,6 +1007,7 @@
                     tangentSpaceRotation =  half3x3(tangentWS, bitangentWS, normalWS);
                     half3 viewDirTS = normalize( mul(tangentSpaceRotation, viewDirectionWS) );
                 #endif
+            
             #endif
         #endif
 

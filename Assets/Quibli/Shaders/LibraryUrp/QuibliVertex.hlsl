@@ -46,9 +46,7 @@ Varyings LitPassVertex(Attributes input)
     half fogFactor = ComputeFogFactor(vertexInput.positionCS.z);
     #endif
 
-    half3 viewDirWS = GetWorldSpaceViewDir(vertexInput.positionWS);
-    half3 vertexLight = VertexLighting(vertexInput.positionWS, normalInput.normalWS);
-
+    const half3 viewDirWS = GetWorldSpaceViewDir(vertexInput.positionWS);
     output.uv = TRANSFORM_TEX(input.texcoord, _BaseMap);
 
     // already normalized from normal transform to WS.

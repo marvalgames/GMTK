@@ -23,14 +23,16 @@
         _SrcBlendAlpha              ("SrcAlphaBlend", Float) = 1.0
         [HideInInspector]
         _DstBlendAlpha              ("DstAlphaBlend", Float) = 0.0
-        //[HideInInspector]
+
+        [Space(5)]
         [Enum(Off,0,On,1)]  
         _ZWrite                     ("ZWrite", Float) = 1.0
-
         [Enum(UnityEngine.Rendering.CompareFunction)]
         _ZTest                      ("ZTest", Int) = 4
         [Enum(UnityEngine.Rendering.CullMode)]
         _Cull                       ("Culling", Float) = 2
+        
+        [Space(5)]
         [Toggle(_ALPHATEST_ON)]
         _AlphaClip                  ("Alpha Clipping", Float) = 0.0
         [LuxURPHelpDrawer]
@@ -40,6 +42,8 @@
         [Space(4)]
         [LuxURPHelpDrawer]
         _HelpA ("* Will most likely break if any Depth Prepass is active.", Float) = 0.0
+        [Enum(All,15,Depth,0)]
+        _ColorMask ("Color Mask", Float) = 15
 
         [Space(5)]
         [Toggle(_SSAO_ENABLED)]
@@ -186,13 +190,15 @@
         [Space(8)]
         [IntRange] _QueueOffset     ("Queue Offset", Range(-50, 50)) = 0
 
+        //  URP 10.+
+        [HideInInspector]
+        _Surface                    ("__surface", Float) = 0.0
+        [HideInInspector]
+        _LuxSurface                 ("__LuxSurface", Float) = 0.0
 
     //  Needed by the inspector
         [HideInInspector] _Culling  ("Culling", Float) = 0.0
         [HideInInspector] _AlphaFromMaskMap  ("AlphaFromMaskMap", Float) = 1.0
-
-    //  URP 10.+
-        [HideInInspector] _Surface("__surface", Float) = 0.0 
 
     //  ObsoleteProperties
         [HideInInspector] _MainTex  ("Albedo", 2D) = "white" {}
@@ -288,6 +294,9 @@
             ZTest [_ZTest]
             Cull [_Cull]
             AlphaToMask [_Coverage]
+
+            //  Experimental!
+            ColorMask [_ColorMask]
 
             HLSLPROGRAM
             #pragma target 2.0
@@ -668,6 +677,24 @@
 
             ENDHLSL
         }
+
+    //  Motion Vectors -------------------------------------------------------------
+        Pass
+        {
+            Name "MotionVectors"
+            Tags { "LightMode" = "MotionVectors" }
+            ColorMask RG
+
+            HLSLPROGRAM
+            #pragma shader_feature_local _ALPHATEST_ON
+            #pragma multi_compile_fragment _ LOD_FADE_CROSSFADE
+            #pragma shader_feature_local_vertex _ADD_PRECOMPUTED_VELOCITY
+
+            #include "Includes/Lux URP Toon Inputs.hlsl"
+            #include_with_pragmas "Packages/com.unity.render-pipelines.universal/ShaderLibrary/ObjectMotionVectors.hlsl"
+            ENDHLSL
+        }
+
     }
 
     FallBack "Hidden/InternalErrorShader"

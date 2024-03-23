@@ -180,9 +180,6 @@ public partial class CharacterImpulseEffectsSystem : SystemBase
                     //var effectsIndex = effectsComponent.effectIndex;
                     if (effects.actorEffect != null)
                     {
-                
-                        
-                        
                         if (effects.actorEffect[effectsComponent.effectIndex]
                             .psInstance) //tryinmg to match index to effect type - 3 is 2 close
                         {
@@ -289,7 +286,9 @@ public partial class CharacterDamageEffectsSystem : SystemBase
 
                             if (effects.actorEffect[effectsIndex].veInstance)
                             {
-                                effects.actorEffect[effectsComponent.effectIndex].veInstance.Play();
+                                effects.actorEffect[effectsComponent.effectIndex].veInstance.Play(); 
+                                Debug.Log("ps dam " + effects.actorEffect[effectsIndex].veInstance);
+                                
                             }
 
 

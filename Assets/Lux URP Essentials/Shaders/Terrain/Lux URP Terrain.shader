@@ -298,6 +298,9 @@
             #pragma shader_feature_local _NORMALINDEPTHNORMALPASS
             #pragma multi_compile __ _ALPHATEST_ON
 
+            // Sample normal in pixel shader when doing instancing
+            #pragma shader_feature_local _TERRAIN_INSTANCED_PERPIXEL_NORMAL
+
             // -------------------------------------
             // Universal Pipeline keywords
             #include_with_pragmas "Packages/com.unity.render-pipelines.universal/ShaderLibrary/RenderingLayers.hlsl"
@@ -348,5 +351,8 @@
     Dependency "AddPassShader" = "Hidden/Lux URP/Lit (Add Pass)"
     Dependency "BaseMapShader" = "Lux URP/Terrain/Lit (Base Pass)"
     Dependency "BaseMapGenShader" = "Hidden/Lux URP/Terrain/Lit (Basemap Gen)"
+
+    CustomEditor "LuxURPTerrainShaderGUI"
+
     Fallback "Hidden/InternalErrorShader"
 }

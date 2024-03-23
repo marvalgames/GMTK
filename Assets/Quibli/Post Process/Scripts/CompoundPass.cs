@@ -1,3 +1,13 @@
+// CompoundPass.cs(276,13): warning CS0618:
+// 'ScriptableRenderPass.Blit(CommandBuffer, RTHandle, RTHandle, Material, int)' is obsolete:
+// 'This rendering path is for compatibility mode only (when Render Graph is disabled). Use Render Graph API instead.'
+#pragma warning disable 618
+
+// CompoundPass.cs(197,26): warning CS0672: Member 'CompoundPass.Execute(ScriptableRenderContext, ref RenderingData)'
+// overrides obsolete member 'ScriptableRenderPass.Execute(ScriptableRenderContext, ref RenderingData)'.
+// Add the Obsolete attribute to 'CompoundPass.Execute(ScriptableRenderContext, ref RenderingData)'.
+#pragma warning disable 672
+
 using System.Collections.Generic;
 
 // ReSharper disable InconsistentNaming

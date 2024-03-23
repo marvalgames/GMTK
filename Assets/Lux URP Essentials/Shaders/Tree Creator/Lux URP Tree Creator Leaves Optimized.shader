@@ -16,6 +16,9 @@ Shader "Lux URP/Nature/Tree Creator Leaves Optimized"
         [Toggle(_ENABLEDITHERING)]
         _EnableDither               ("Enable Dithering for VR", Float) = 0.0
 
+        [Toggle(_MOTIONVECTORVA)]
+        _MotionVectorsVA            ("Motion Vectors for Vertex Animation", Float) = 0.0
+
         [Space(5)]
         [Toggle(_NORMALINDEPTHNORMALPASS)]
         _ApplyNormalDepthNormal     ("Enable Normal in Depth Normal Pass", Float) = 1.0
@@ -436,13 +439,22 @@ Shader "Lux URP/Nature/Tree Creator Leaves Optimized"
             Tags { "LightMode" = "MotionVectors" }
             ColorMask RG
 
-            HLSLPROGRAM
-            #pragma shader_feature_local _ALPHATEST_ON
-            #pragma multi_compile_fragment _ LOD_FADE_CROSSFADE
-            #pragma shader_feature_local_vertex _ADD_PRECOMPUTED_VELOCITY
+            Cull Off
 
-            #include "Packages/com.unity.render-pipelines.universal/Shaders/LitInput.hlsl"
-            #include_with_pragmas "Packages/com.unity.render-pipelines.universal/ShaderLibrary/ObjectMotionVectors.hlsl"
+            HLSLPROGRAM
+            //#pragma shader_feature_local _ALPHATEST_ON
+            #define _ALPHATEST_ON 1
+
+            #pragma shader_feature_local_vertex _MOTIONVECTORVA
+            
+            #pragma multi_compile_fragment _ LOD_FADE_CROSSFADE
+            //#pragma shader_feature_local_vertex _ADD_PRECOMPUTED_VELOCITY
+
+            #pragma shader_feature_local_vertex _WINDFROMSCRIPT
+
+            #include "Includes/Lux URP Tree Creator Inputs.hlsl"
+            #include_with_pragmas "Includes/Lux URP Creator Leaves MotionVector Pass.hlsl"
+            //#include_with_pragmas "Packages/com.unity.render-pipelines.universal/ShaderLibrary/ObjectMotionVectors.hlsl"
             ENDHLSL
         }
     

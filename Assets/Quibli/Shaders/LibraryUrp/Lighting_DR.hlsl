@@ -41,6 +41,7 @@ half3 LightingPhysicallyBased_DSTRM(Light light, InputData inputData, half4 albe
     const half rimEdgeSmooth = _FlatRimEdgeSmoothness;
     const half rimTransition = smoothstep(rimSpread - rimEdgeSmooth * 0.5, rimSpread + rimEdgeSmooth * 0.5, rim);
     c = lerp(c, _FlatRimColor, rimTransition);
+    // 0d344651-d8d3-46d2-b91c-031a0a12d4e8
 #endif  // DR_RIM_ON
 
 #if defined(DR_SPECULAR_ON)
@@ -125,8 +126,13 @@ half4 UniversalFragment_DSTRM(InputData inputData, SurfaceData surfaceData, floa
     const half4 albedo = half4(surfaceData.albedo, surfaceData.alpha);
     const half4 detail = SAMPLE_TEXTURE2D(_DetailMap, sampler_DetailMap, uv);
 
+    half3 brdf = _LightContribution;
+#if defined(_BASEMAP_PREMULTIPLY)
+    brdf *= albedo.rgb;
+#endif
+
     BRDFData brdfData;
-    InitializeBRDFData(1, 1.0 - 1.0 / kDielectricSpec.a, 0, 0, surfaceData.alpha, brdfData);
+    InitializeBRDFData(brdf, 1.0 - 1.0 / kDielectricSpec.a, 0, 0, surfaceData.alpha, brdfData);
     half3 color = GlobalIllumination(brdfData, inputData.bakedGI, 1.0, inputData.normalWS, inputData.viewDirectionWS);
     color += LightingPhysicallyBased_DSTRM(mainLight, inputData, albedo, detail);
 
@@ -166,13 +172,13 @@ half4 UniversalFragment_DSTRM(InputData inputData, SurfaceData surfaceData, floa
     // Detail map.
     {
         #if defined(_DETAILMAPBLENDINGMODE_ADD)
-        color += lerp(0, _DetailMapColor, detail.rgb * _DetailMapImpact).rgb;
+        color += lerp(0, _DetailMapColor.rgb, detail.rgb * _DetailMapImpact).rgb;
         #endif
         #if defined(_DETAILMAPBLENDINGMODE_MULTIPLY)
-        color *= lerp(1, _DetailMapColor, detail.rgb * _DetailMapImpact).rgb;
+        color *= lerp(1, _DetailMapColor.rgb, detail.rgb * _DetailMapImpact).rgb;
         #endif
         #if defined(_DETAILMAPBLENDINGMODE_INTERPOLATE)
-        color = lerp(color, detail.rgb, _DetailMapImpact * _DetailMapColor * detail.a).rgb;
+        color = lerp(color, detail.rgb, _DetailMapImpact * _DetailMapColor.rgb * detail.a).rgb;
         #endif
     }
 

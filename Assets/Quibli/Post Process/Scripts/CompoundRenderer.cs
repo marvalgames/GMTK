@@ -1,4 +1,6 @@
-﻿using System;
+﻿#pragma warning disable 618
+
+using System;
 using UnityEngine.Experimental.Rendering;
 
 namespace UnityEngine.Rendering.Universal.PostProcessing {
@@ -56,7 +58,7 @@ public abstract class CompoundRenderer : IDisposable {
     public virtual void Initialize() {
         // Texture format pre-lookup
         if (SystemInfo.IsFormatSupported(GraphicsFormat.B10G11R11_UFloatPack32,
-                                         GraphicsFormatUsage.Linear | GraphicsFormatUsage.Render)) {
+                                         FormatUsage.Linear | FormatUsage.Render)) {
             _defaultHDRFormat = GraphicsFormat.B10G11R11_UFloatPack32;
             _useRGBM = false;
         } else {

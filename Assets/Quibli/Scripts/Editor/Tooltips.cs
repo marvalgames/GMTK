@@ -4,6 +4,7 @@ using UnityEngine;
 
 namespace Quibli {
 public static class Tooltips {
+    // @formatter:off
     private static readonly Dictionary<string, Dictionary<string, string>> Map =
         new Dictionary<string, Dictionary<string, string>>
         {
@@ -55,13 +56,14 @@ public static class Tooltips {
                         "Enable Vertex Colors",
                         "If enabled, the final shading of the object is multiplied by the mesh’s vertex color values. It is a debug parameter, usually this is not used for changing the look."
                     },
+                    { "Albedo", "Main texture of the material. It is also known as 'Diffuse'." },
                     {
-                        "Albedo",
-                        "The input for a diffuse texture. Select the texture by clicking on the Select texture slot."
+                        "Mix Into Shading",
+                        "Uses the main texture when calculating lighting and shading colors. When disabled, the Environment Lighting of the scene has a greater impact on the material."
                     },
                     {
                         "Detail Map",
-                        "The input for a kind of diffuse texture. This one has two additional blending modes, which is useful for adding some kind of details into the material."
+                        "Additional texture slot, usually used for small details. This one has two additional blending modes, which is useful for adding different kinds of details to the material."
                     },
                     { "Bump Map", "The input for normal maps." },
                     {
@@ -318,6 +320,7 @@ public static class Tooltips {
                 }
             }
         };
+    // @formatter:on
 
     public static string Get(MaterialEditor editor, string displayName) {
         var material = editor.target as Material;

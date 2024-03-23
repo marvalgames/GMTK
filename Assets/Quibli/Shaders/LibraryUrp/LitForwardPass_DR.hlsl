@@ -148,7 +148,11 @@ half4 StylizedPassFragment(Varyings input) : SV_Target
 
     InputData inputData;
     InitializeInputData(input, surfaceData.normalTS, inputData);
+    #if UNITY_VERSION >= 202330
+    SETUP_DEBUG_TEXTURE_DATA(inputData, input.uv);
+    #elif UNITY_VERSION >= 202210
     SETUP_DEBUG_TEXTURE_DATA(inputData, input.uv, _BaseMap);
+    #endif
 
     #ifdef _DBUFFER
     ApplyDecalToSurfaceData(input.positionCS, surfaceData, inputData);

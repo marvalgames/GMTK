@@ -35,7 +35,7 @@ Varyings ShadowPassVertex(Attributes input)
         float3 lightDirectionWS = normalize(_LightPosition - positionWS);
     #else
         float3 lightDirectionWS = _LightDirection;
-    //  Distinguish between Directional (true) and Spot loght (false)
+    //  Distinguish between Directional (true) and Spot light (false)
         //float3 viewDirWS = UNITY_MATRIX_VP[3].w == 1.0f ? UNITY_MATRIX_I_V[2].xyz : normalize(_LightPosition - positionWS);
         //float3 viewDirWS = UNITY_MATRIX_I_V[2].xyz; // cam forward
     #endif

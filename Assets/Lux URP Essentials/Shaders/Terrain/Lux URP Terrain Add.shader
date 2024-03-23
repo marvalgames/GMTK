@@ -76,6 +76,7 @@ ZTest Equal
             #pragma multi_compile_fragment _ _SHADOWS_SOFT _SHADOWS_SOFT_LOW _SHADOWS_SOFT_MEDIUM _SHADOWS_SOFT_HIGH
             
             #pragma multi_compile_fragment _ _SCREEN_SPACE_OCCLUSION
+            #pragma multi_compile_fragment _ _DBUFFER_MRT1 _DBUFFER_MRT2 _DBUFFER_MRT3
             #pragma multi_compile_fragment _ _LIGHT_LAYERS
             #pragma multi_compile_fragment _ _LIGHT_COOKIES
             #pragma multi_compile _ _FORWARD_PLUS
@@ -111,7 +112,14 @@ ZTest Equal
             }
 //  This handles deph and clip holes!
 ZTest Equal
-            Blend One One
+            Blend 0 One One
+            Blend 1 One One
+            Blend 2 One One
+            Blend 3 One One
+        //  GBuffer 4, 5 and 6 contain _RENDER_PASS_ENABLED, LightLayers etc
+            Blend 4 Zero One
+            Blend 5 Zero One
+            Blend 6 Zero One
 
             HLSLPROGRAM
             #pragma target 4.5

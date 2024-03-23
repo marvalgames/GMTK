@@ -39,11 +39,12 @@
         _OutlineDepthOffset("[DR_OUTLINE_ON]Depth Offset", Range(0, 1)) = 0.0
         _CameraDistanceImpact("[DR_OUTLINE_ON]Camera Distance Impact", Range(0, 1)) = 0.5
 
-        [MainTexture] _BaseMap("[FOLDOUT(Texture maps){10}]Albedo", 2D) = "white" {}
+        [MainTexture] _BaseMap("[FOLDOUT(Texture maps){11}]Albedo", 2D) = "black" {}
+    	[Toggle(_BASEMAP_PREMULTIPLY)]_BaseMapPremultiply("[_]Mix Into Shading", Int) = 0
         [KeywordEnum(Multiply, Add)]_TextureBlendingMode("[]Blending Mode", Float) = 0
         _TextureImpact("[]Texture Impact", Range(0, 1)) = 1.0
 
-        _DetailMap("Detail Map", 2D) = "white" {}
+        _DetailMap("Detail Map", 2D) = "black" {}
         _DetailMapColor("[]Detail Color", Color) = (1,1,1,1)
         [KeywordEnum(Multiply, Add, Interpolate)]_DetailMapBlendingMode("[]Blending Mode", Float) = 0
         _DetailMapImpact("[]Detail Impact", Range(0, 1)) = 0.0
@@ -118,6 +119,7 @@
             #pragma shader_feature_local DR_ENABLE_LIGHTMAP_DIR
             #pragma shader_feature_local _TEXTUREBLENDINGMODE_MULTIPLY _TEXTUREBLENDINGMODE_ADD
             #pragma shader_feature_local _UNITYSHADOW_OCCLUSION
+            #pragma shader_feature_local _BASEMAP_PREMULTIPLY
 
             // -------------------------------------
             // Material Keywords
@@ -362,7 +364,7 @@
 
             #define BUMP_SCALE_NOT_SUPPORTED 1
 
-            #include "Packages/com.unity.render-pipelines.universal/Shaders/SimpleLitInput.hlsl"
+            #include "LibraryUrp/StylizedInput.hlsl"
             #include "Packages/com.unity.render-pipelines.universal/Shaders/SimpleLitGBufferPass.hlsl"
             ENDHLSL
         }
