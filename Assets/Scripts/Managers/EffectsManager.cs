@@ -49,7 +49,6 @@ public class EffectsManager : MonoBehaviour
             if (actorEffect[i] == null) continue;
             if (actorEffect[i].psPrefab != null)
             {
-                //Debug.Log("LOADED " + actorEffect[i].clip);
                 var ps = Instantiate(actorEffect[i].psPrefab, transform);
                 actorEffect[i].psInstance = ps;
             }
@@ -57,6 +56,7 @@ public class EffectsManager : MonoBehaviour
             if (actorEffect[i].vePrefab != null)
             {
                 var ve = Instantiate(actorEffect[i].vePrefab, transform);
+                Debug.Log("LOADED " + actorEffect[i].effectType);
                 actorEffect[i].veInstance = ve;
             }
 

@@ -90,7 +90,7 @@ namespace Collisions
                             ecb.AddComponent(entityB,
                                 new DamageComponent
                                 {
-                                    EffectsIndex = effectsIndex, DamageLanded = 0, DamageReceived = deflectPoints,
+                                    EffectsIndex = 1, DamageLanded = 0, DamageReceived = deflectPoints,
                                     EntityCausingDamage = entityA, LosingDamage = false
                                 });
 

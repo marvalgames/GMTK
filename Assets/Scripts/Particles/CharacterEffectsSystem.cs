@@ -21,8 +21,8 @@ public enum SpawnStage
 public enum EffectType
 {
     None,
-    Dead,
     Damaged,
+    Dead,
     TwoClose,
 }
 
@@ -271,14 +271,15 @@ public partial class CharacterDamageEffectsSystem : SystemBase
                     var effectsIndex = damageComponent.EffectsIndex;
                     //set in attackersystem by readin visualeffect component index
                     if (damageComponent.DamageReceived <= .0001) return;
-                    //Debug.Log("effects index " + effectsIndex);
+                    Debug.Log("effects index " + effectsIndex);
                     animator.SetInteger(HitReact,
                         1); // can easily change to effect index (maybe new field in component ammo and visual effect) if we add more hitreact animations
-                    if (effects.actorEffect.Count > 0)
+                    if (effects.actorEffect.Count > 0 )
                     {
                         if (effects.actorEffect != null)
                         {
-                            if (effects.actorEffect[effectsIndex].psInstance)
+                            effectsIndex--;
+                            if (effects.actorEffect[effectsIndex].psInstance )
                             {
                                 effects.actorEffect[effectsIndex].psInstance.Play(true);
                                 //Debug.Log("ps dam " + effects.actorEffect[effectsIndex].psInstance);
@@ -338,10 +339,8 @@ public partial class CharacterDeadEffectsSystem : SystemBase
                         animator.SetInteger(Dead,
                             1); // can easily change to effect index (maybe new field in component ammo and visual effect) if we add more DEAD animations
                     if (isEnemy) animator.SetInteger(Dead, 2);
-                    //animator.SetInteger("HitReact", 0);
-                    //deadComponent.playDeadEffects = false;
                     var effectsIndex = deadComponent.effectsIndex;
-                    //Debug.Log("eff ind play " + effectsIndex);
+                    Debug.Log("eff ind play " + effectsIndex);
 
                     if (effects.actorEffect != null && effects.actorEffect.Count > 0)
                     {
