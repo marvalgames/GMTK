@@ -4,6 +4,15 @@ using Unity.Entities;
 using Unity.Transforms;
 using UnityEngine;
 using UnityEngine.VFX;
+
+
+public struct EntityPrefabComponent : IComponentData
+{
+    public Entity moveVfxSystem;
+}
+
+
+
 [RequireMatchingQueriesForUpdate]
 public partial struct SpawnOnceVfxSystem :  ISystem // Deprecated
 {
@@ -58,6 +67,42 @@ public partial struct SpawnOnceVfxSystem :  ISystem // Deprecated
     
     
 }
+
+
+
+public partial struct InstantiatePrefabSystem : ISystem
+{
+    public void OnUpdate(ref SystemState state)
+    {
+        var ecb = new EntityCommandBuffer(Allocator.Temp);
+
+        // Get all Entities that have the component with the Entity reference
+        foreach (var prefab in
+                 SystemAPI.Query<RefRO<EntityPrefabComponent>>())
+        {
+            // Instantiate the prefab Entity
+            //var instance = ecb.Instantiate(prefab.ValueRO.moveVfxSystem);
+            // Note: the returned instance is only relevant when used in the ECB
+            // as the entity is not created in the EntityManager until ECB.Playback
+            //ecb.AddComponent<VfxComponentTag>(instance);
+        }
+
+        ecb.Playback(state.EntityManager);
+        ecb.Dispose();
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

@@ -23,7 +23,7 @@ namespace Michsky.MUIP
 
             this.enabled = true;
 
-            if (UIManagerAsset.enableDynamicUpdate == false)
+            if (!UIManagerAsset.enableDynamicUpdate)
             {
                 UpdateToggle();
                 this.enabled = false;
@@ -33,7 +33,7 @@ namespace Michsky.MUIP
         void Update()
         {
             if (UIManagerAsset == null) { return; }
-            if (UIManagerAsset.enableDynamicUpdate == true) { UpdateToggle(); }
+            if (UIManagerAsset.enableDynamicUpdate) { UpdateToggle(); }
         }
 
         void UpdateToggle()
@@ -41,10 +41,18 @@ namespace Michsky.MUIP
             border.color = UIManagerAsset.toggleBorderColor;
             background.color = UIManagerAsset.toggleBackgroundColor;
             check.color = UIManagerAsset.toggleCheckColor;
-            onLabel.color = new Color(UIManagerAsset.toggleTextColor.r, UIManagerAsset.toggleTextColor.g, UIManagerAsset.toggleTextColor.b, onLabel.color.a);
-            onLabel.font = UIManagerAsset.toggleFont;
-            offLabel.color = new Color(UIManagerAsset.toggleTextColor.r, UIManagerAsset.toggleTextColor.g, UIManagerAsset.toggleTextColor.b, offLabel.color.a);
-            offLabel.font = UIManagerAsset.toggleFont;
+          
+            if (onLabel != null)
+            {
+                onLabel.color = new Color(UIManagerAsset.toggleTextColor.r, UIManagerAsset.toggleTextColor.g, UIManagerAsset.toggleTextColor.b, onLabel.color.a);
+                onLabel.font = UIManagerAsset.toggleFont;
+            }
+
+            if (offLabel != null)
+            {
+                offLabel.color = new Color(UIManagerAsset.toggleTextColor.r, UIManagerAsset.toggleTextColor.g, UIManagerAsset.toggleTextColor.b, offLabel.color.a);
+                offLabel.font = UIManagerAsset.toggleFont;
+            }
         }
     }
 }

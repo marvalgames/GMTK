@@ -15,14 +15,16 @@ namespace Michsky.MUIP
     {
         [Header("Resources")]
         public TMP_InputField inputText;
-        public Animator inputFieldAnimator;
+        [SerializeField] private Animator inputFieldAnimator;
 
         [Header("Settings")]
         public bool processSubmit = false;
         public bool clearOnSubmit = true;
+        [Tooltip("Set the current event system object as null.")]
+        [SerializeField] private bool setEventSystem = false;
 
         [Header("Events")]
-        public UnityEvent onSubmit;
+        public UnityEvent onSubmit = new UnityEvent();
 
         // Hidden variables
         private float cachedDuration = 0.5f;
@@ -52,7 +54,7 @@ namespace Michsky.MUIP
 
         void Update()
         {
-            if (!processSubmit ||string.IsNullOrEmpty(inputText.text) ||  EventSystem.current.currentSelectedGameObject != inputText.gameObject)
+            if (!processSubmit || string.IsNullOrEmpty(inputText.text) || EventSystem.current.currentSelectedGameObject != inputText.gameObject)
                 return;
 
 #if ENABLE_LEGACY_INPUT_MANAGER
@@ -131,7 +133,7 @@ namespace Michsky.MUIP
 
         void HandleEndEdit()
         {
-            if (string.IsNullOrEmpty(inputText.text) && !EventSystem.current.alreadySelecting && EventSystem.current.currentSelectedGameObject == inputText.gameObject)
+            if (setEventSystem && string.IsNullOrEmpty(inputText.text) && !EventSystem.current.alreadySelecting && EventSystem.current.currentSelectedGameObject == inputText.gameObject)
             {
                 EventSystem.current.SetSelectedGameObject(null);
             }

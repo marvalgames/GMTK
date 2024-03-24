@@ -20,7 +20,7 @@ namespace Michsky.MUIP
         // Content
         public Sprite icon;
         public string titleText = "Title";
-        [TextArea] public string descriptionText = "Description here";
+        [TextArea(1, 4)] public string descriptionText = "Description here";
 
         // Events
         public UnityEvent onOpen = new UnityEvent();

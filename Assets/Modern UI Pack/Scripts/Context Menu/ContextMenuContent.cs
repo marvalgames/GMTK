@@ -63,7 +63,11 @@ namespace Michsky.MUIP
             {
                 try
                 {
-                    contextManager = (ContextMenuManager)GameObject.FindObjectsOfType(typeof(ContextMenuManager))[0];
+#if UNITY_2023_2_OR_NEWER
+                    contextManager = FindObjectsByType<ContextMenuManager>(FindObjectsSortMode.None)[0];
+#else
+                    contextManager = (ContextMenuManager)FindObjectsOfType(typeof(ContextMenuManager))[0];
+#endif
                     itemParent = contextManager.transform.Find("Content/Item List").transform;
                 }
 
@@ -163,6 +167,7 @@ namespace Michsky.MUIP
             itemParent.gameObject.SetActive(true);
         }
 
+#if !UNITY_IOS && !UNITY_ANDROID
         public void OnMouseOver() 
         {
 #if ENABLE_LEGACY_INPUT_MANAGER
@@ -174,6 +179,7 @@ namespace Michsky.MUIP
                 ProcessContent();
             }
         }
+#endif
 
         public void AddNewItem()
         {

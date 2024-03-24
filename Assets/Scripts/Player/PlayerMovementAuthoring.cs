@@ -1,3 +1,4 @@
+using System;
 using Sandbox.Player;
 using Unity.Entities;
 using Unity.Mathematics;
@@ -21,7 +22,7 @@ public class PlayerMoveGameObjectClass : IComponentData
 
     public string name;
 
-    public VisualEffect vfxSystem;
+    public GameObject vfxSystem;
 
     //public AudioSource audioSource;
     public AudioClip clip;
@@ -50,13 +51,16 @@ public class PlayerMovementAuthoring : MonoBehaviour
     public AudioSource AudioSource;
 
     public AudioClip AudioClip;
-    //public VisualEffect vfxSystem;
+    
+    public GameObject vfxPrefab;
+
+
+ 
 }
 
 
 public class PlayerMovementBaker : Baker<PlayerMovementAuthoring>
 {
-    //public VisualEffect vfxSystem;
     public override void Bake(PlayerMovementAuthoring authoring)
     {
         var position = authoring.transform.position;
@@ -72,7 +76,16 @@ public class PlayerMovementBaker : Baker<PlayerMovementAuthoring>
             stepRate = authoring.stepRate
         });
 
+        
+        // Register the Prefab in the Baker
+        var entityPrefab = GetEntity(authoring.vfxPrefab, TransformUsageFlags.Dynamic);
+        // Add the Entity reference to a component for instantiation later
+        var entity = GetEntity(TransformUsageFlags.Dynamic);
+        AddComponent(entity, new EntityPrefabComponent() {moveVfxSystem = entityPrefab});
+        
+        
 
+        
         AddComponent(e, new ApplyImpulseComponent
         {
             Force = 0,
@@ -93,7 +106,8 @@ public class PlayerMovementBaker : Baker<PlayerMovementAuthoring>
             new PlayerMoveGameObjectClass(authoring.AudioSource)
             {
                 name = authoring.name,
-                clip = authoring.AudioClip
+                clip = authoring.AudioClip,
+                vfxSystem = authoring.vfxPrefab
             }
         );
     }

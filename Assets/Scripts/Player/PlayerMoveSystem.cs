@@ -2,10 +2,12 @@ using Collisions;
 using Sandbox.Player;
 using Unity.Burst;
 using Unity.Entities;
+using Unity.Entities.Serialization;
 using Unity.Mathematics;
 using Unity.Physics;
 using Unity.Transforms;
 using UnityEngine;
+using UnityEngine.VFX;
 using Random = UnityEngine.Random;
 
 namespace Sandbox.Player
@@ -251,14 +253,14 @@ namespace Sandbox.Player
             Entities.WithoutBurst().ForEach(
                 (
                     in PlayerMoveGameObjectClass playerMove, in PlayerMoveComponent playerMoveComponent,
-                    in ApplyImpulseComponent applyImpulseComponent) =>
+                    in ApplyImpulseComponent applyImpulseComponent, in EntityPrefabComponent entityPrefabComponent) =>
                 {
                     var audioSource = playerMove.audioSource;
                     Debug.Log("AS " +  audioSource);
                     var stickSpeed = applyImpulseComponent.animatorStickSpeed;
 
 
-                    if (math.abs(stickSpeed) >= .0001f && applyImpulseComponent.Grounded == true)
+                    if (math.abs(stickSpeed) >= .0001f && applyImpulseComponent.Grounded)
                     {
                         if (playerMove.clip && audioSource)
                         {
@@ -273,7 +275,8 @@ namespace Sandbox.Player
 
                         if (playerMove.vfxSystem)
                         {
-                            playerMove.vfxSystem.SetFloat("Spawn Rate", 40);
+                            playerMove.vfxSystem.GetComponent<VisualEffect>().SetFloat("FlareRate", 40);
+                            Debug.Log("Flare Rate 40 ");
                         }
                     }
                     else
@@ -281,7 +284,8 @@ namespace Sandbox.Player
                         if (audioSource != null) audioSource.Stop();
                         if (playerMove.vfxSystem != null)
                         {
-                            playerMove.vfxSystem.SetFloat("Spawn Rate", 0);
+                            playerMove.vfxSystem.GetComponent<VisualEffect>().SetFloat("FlareRate", 0);
+                            Debug.Log("Flare Rate 0 ");
                         }
                     }
                 }

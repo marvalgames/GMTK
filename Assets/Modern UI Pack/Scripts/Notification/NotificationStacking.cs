@@ -7,52 +7,54 @@ namespace Michsky.MUIP
     [AddComponentMenu("Modern UI Pack/Notification/Notification Stacking")]
     public class NotificationStacking : MonoBehaviour
     {
-        public List<NotificationManager> notifications = new List<NotificationManager>();
-        [HideInInspector] public bool enableUpdating = false;
-
         [Header("Settings")]
         public float delay = 1;
+
+        // Helpers
+        List<NotificationManager> notifications = new List<NotificationManager>();
         int currentNotification = 0;
+        bool enableUpdating = false;
 
         void Update()
         {
-            if (enableUpdating == true)
+            if (notifications.Count == 0)
+                return;
+
+            if (enableUpdating && notifications[currentNotification] != null)
             {
-                try
-                {
-                    notifications[currentNotification].gameObject.SetActive(true);
+                notifications[currentNotification].Open();
 
-                    if (notifications[currentNotification].notificationAnimator.GetCurrentAnimatorStateInfo(0).IsName("Wait"))
-                    {
-                        notifications[currentNotification].OpenNotification();
-                        StartCoroutine("StartNotification");
-                        enableUpdating = false;
-                    }
+                StopCoroutine("StartNotification");
+                StartCoroutine("StartNotification");
 
-                    if (currentNotification >= notifications.Count)
-                    {
-                        enableUpdating = false;
-                        currentNotification = 0;
-                    }
-                }
-
-                catch
-                {
-                    enableUpdating = false;
-                    currentNotification = 0;
-                    notifications.Clear();
-                }
+                enableUpdating = false;
             }
+        }
+
+        public void AddToStack(NotificationManager notif)
+        {
+            notifications.Add(notif);
+            notif.gameObject.SetActive(false);
+            enableUpdating = true;
         }
 
         IEnumerator StartNotification()
         {
-            yield return new WaitForSeconds(notifications[currentNotification].timer + delay);
+            yield return new WaitForSecondsRealtime(notifications[currentNotification].timer + delay);
+           
             Destroy(notifications[currentNotification].gameObject);
-            // notifications.Remove(notifications[currentNotification]);
-            enableUpdating = true;
-            currentNotification += 1;
-            StopCoroutine("StartNotification");
+
+            if (currentNotification == notifications.Count - 1)
+            {
+                notifications.Clear();
+                currentNotification = 0;
+            }
+
+            else
+            {
+                currentNotification += 1;
+                enableUpdating = true;
+            }
         }
     }
 }

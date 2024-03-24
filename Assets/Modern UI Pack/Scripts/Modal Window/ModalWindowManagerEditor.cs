@@ -97,7 +97,7 @@ namespace Michsky.MUIP
 
                         GUILayout.BeginHorizontal(EditorStyles.helpBox);
                         EditorGUILayout.LabelField(new GUIContent("Description"), customSkin.FindStyle("Text"), GUILayout.Width(-3));
-                        EditorGUILayout.PropertyField(descriptionText, new GUIContent(""), GUILayout.Height(80));
+                        EditorGUILayout.PropertyField(descriptionText, new GUIContent(""));
                         GUILayout.EndHorizontal();
 
                         if (mwTarget.windowDescription != null) { mwTarget.windowDescription.text = descriptionText.stringValue; }

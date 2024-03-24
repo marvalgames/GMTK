@@ -108,7 +108,7 @@ namespace Michsky.MUIP
             index = defaultIndex;
 
             if (enableIndicators) { UpdateIndicators(); }
-            else { Destroy(indicatorParent.gameObject); }
+            else if (indicatorParent != null) { Destroy(indicatorParent.gameObject); }
         }
 
         public void PreviousItem()
@@ -304,7 +304,7 @@ namespace Michsky.MUIP
             foreach (Transform child in indicatorParent) { Destroy(child.gameObject); }
             for (int i = 0; i < items.Count; ++i)
             {
-                GameObject go = Instantiate(indicatorObject, new Vector3(0, 0, 0), Quaternion.identity) as GameObject;
+                GameObject go = Instantiate(indicatorObject, new Vector3(0, 0, 0), Quaternion.identity);
                 go.transform.SetParent(indicatorParent, false);
                 go.name = items[i].itemTitle;
                 
@@ -332,7 +332,7 @@ namespace Michsky.MUIP
 
         IEnumerator DisableAnimator()
         {
-            yield return new WaitForSeconds(0.5f);
+            yield return new WaitForSecondsRealtime(0.5f);
             selectorAnimator.enabled = false;
         }
     }

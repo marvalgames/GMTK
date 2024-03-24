@@ -14,7 +14,7 @@ namespace Michsky.MUIP
         // Content
         public Sprite icon;
         public string title = "Notification Title";
-        [TextArea] public string description = "Notification description";
+        [TextArea(1, 4)] public string description = "Notification description";
 
         // Resources
         public Animator notificationAnimator;
@@ -25,19 +25,21 @@ namespace Michsky.MUIP
         // Settings
         public bool enableTimer = true;
         public float timer = 3f;
-        public bool useCustomContent = false;
+        [SerializeField] private bool useCustomContent = false;
         public bool closeOnClick = false;
         public bool useStacking = false;
         [HideInInspector] public bool isOn;
         public StartBehaviour startBehaviour = StartBehaviour.Disable;
         public CloseBehaviour closeBehaviour = CloseBehaviour.Disable;
+        public SlideDirection slideDirection = SlideDirection.Default;
 
         // Events
-        public UnityEvent onOpen;
-        public UnityEvent onClose;
+        public UnityEvent onOpen = new UnityEvent();
+        public UnityEvent onClose = new UnityEvent();
 
-        public enum StartBehaviour { None, Disable }
+        public enum StartBehaviour { None, Disable, Open }
         public enum CloseBehaviour { None, Disable, Destroy }
+        public enum SlideDirection { Default, Left, Right }
 
         void Awake()
         {
@@ -45,18 +47,17 @@ namespace Michsky.MUIP
 
             if (!useCustomContent) { UpdateUI(); }
             if (notificationAnimator == null) { notificationAnimator = gameObject.GetComponent<Animator>(); }
-            if (startBehaviour == StartBehaviour.Disable) { gameObject.SetActive(false); }
             if (useStacking)
             {
-                try
-                {
-                    NotificationStacking stacking = transform.GetComponentInParent<NotificationStacking>();
-                    stacking.notifications.Add(this);
-                    stacking.enableUpdating = true;
-                }
-
+                try { transform.GetComponentInParent<NotificationStacking>().AddToStack(this); }
                 catch { Debug.LogError("<b>[Notification]</b> 'Stacking' is enabled but 'Notification Stacking' cannot be found in parent.", this); }
             }
+        }
+
+        void Start()
+        {
+            if (startBehaviour == StartBehaviour.Disable) { gameObject.SetActive(false); }
+            else if (startBehaviour == StartBehaviour.Open) { Open(); }
         }
 
         public void Open()
@@ -73,7 +74,10 @@ namespace Michsky.MUIP
             notificationAnimator.Play("In");
             onOpen.Invoke();
 
-            if (enableTimer == true) { StartCoroutine("StartTimer"); }
+            if (enableTimer) 
+            { 
+                StartCoroutine("StartTimer"); 
+            }
         }
 
         public void Close()
@@ -90,15 +94,28 @@ namespace Michsky.MUIP
             StartCoroutine("DisableNotification");
         }
 
-        // Obsolete
+        #region Obsolete
         public void OpenNotification() { Open(); }
         public void CloseNotification() { Close(); }
+        #endregion
 
         public void UpdateUI()
         {
             if (iconObj != null) { iconObj.sprite = icon; }
             if (titleObj != null) { titleObj.text = title; }
             if (descriptionObj != null) { descriptionObj.text = description; }
+
+            if (slideDirection == SlideDirection.Left)
+            {
+                transform.localScale = new Vector3(-1, transform.localScale.y, transform.localScale.z);
+                transform.GetChild(0).transform.localScale = new Vector3(-1, transform.GetChild(0).transform.localScale.y, transform.GetChild(0).transform.localScale.z);
+            }
+
+            else if (slideDirection == SlideDirection.Right)
+            {
+                transform.localScale = new Vector3(1, transform.localScale.y, transform.localScale.z);
+                transform.GetChild(0).transform.localScale = new Vector3(1, transform.GetChild(0).transform.localScale.y, transform.GetChild(0).transform.localScale.z);
+            }
         }
 
         public void OnPointerClick(PointerEventData eventData)
@@ -111,15 +128,13 @@ namespace Michsky.MUIP
 
         IEnumerator StartTimer()
         {
-            yield return new WaitForSeconds(timer);
-
-            CloseNotification();
-            StartCoroutine("DisableNotification");
+            yield return new WaitForSecondsRealtime(timer);
+            Close();
         }
 
         IEnumerator DisableNotification()
         {
-            yield return new WaitForSeconds(1f);
+            yield return new WaitForSecondsRealtime(1f);
 
             if (closeBehaviour == CloseBehaviour.Disable) { gameObject.SetActive(false); isOn = false; }
             else if (closeBehaviour == CloseBehaviour.Destroy) { Destroy(gameObject); }

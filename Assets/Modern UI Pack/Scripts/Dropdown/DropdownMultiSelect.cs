@@ -77,13 +77,11 @@ namespace Michsky.MUIP
         void OnEnable()
         {
             if (isInitialized == false) { Initialize(); }
-            if (animationType == AnimationType.Modular)
-            {
-                listCG.alpha = 0;
-                listCG.interactable = false;
-                listCG.blocksRaycasts = false;
-                listRect.sizeDelta = new Vector2(listRect.sizeDelta.x, closeOn);
-            }
+
+            listCG.alpha = 0;
+            listCG.interactable = false;
+            listCG.blocksRaycasts = false;
+            listRect.sizeDelta = new Vector2(listRect.sizeDelta.x, closeOn);
         }
 
         void Initialize()

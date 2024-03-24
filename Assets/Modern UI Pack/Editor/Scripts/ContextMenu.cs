@@ -55,7 +55,11 @@ namespace Michsky.MUIP
                 {
                     if (Selection.activeGameObject == null)
                     {
-                        var canvas = (Canvas)GameObject.FindObjectsOfType(typeof(Canvas))[0];
+#if UNITY_2023_2_OR_NEWER
+                        var canvas = FindObjectsByType<Canvas>(FindObjectsSortMode.None)[0];
+#else
+                        var canvas = (Canvas)FindObjectsOfType(typeof(Canvas))[0];
+#endif
                         clone.transform.SetParent(canvas.transform, false);
                     }
 
@@ -70,7 +74,11 @@ namespace Michsky.MUIP
                 catch
                 {
                     CreateCanvas();
-                    var canvas = (Canvas)GameObject.FindObjectsOfType(typeof(Canvas))[0];
+#if UNITY_2023_2_OR_NEWER
+                    var canvas = FindObjectsByType<Canvas>(FindObjectsSortMode.None)[0];
+#else
+                    var canvas = (Canvas)FindObjectsOfType(typeof(Canvas))[0];
+#endif
                     clone.transform.SetParent(canvas.transform, false);
                     clone.name = clone.name.Replace("(Clone)", "").Trim();
 #if !UNITY_2021_3_OR_NEWER || UNITY_2022_1_OR_NEWER
@@ -96,7 +104,11 @@ namespace Michsky.MUIP
                 {
                     if (Selection.activeGameObject == null)
                     {
-                        var canvas = (Canvas)GameObject.FindObjectsOfType(typeof(Canvas))[0];
+#if UNITY_2023_2_OR_NEWER
+                        var canvas = FindObjectsByType<Canvas>(FindObjectsSortMode.None)[0];
+#else
+                        var canvas = (Canvas)FindObjectsOfType(typeof(Canvas))[0];
+#endif
                         clone.transform.SetParent(canvas.transform, false);
                     }
 
@@ -112,7 +124,11 @@ namespace Michsky.MUIP
                 catch
                 {
                     CreateCanvas();
-                    var canvas = (Canvas)GameObject.FindObjectsOfType(typeof(Canvas))[0];
+#if UNITY_2023_2_OR_NEWER
+                    var canvas = FindObjectsByType<Canvas>(FindObjectsSortMode.None)[0];
+#else
+                    var canvas = (Canvas)FindObjectsOfType(typeof(Canvas))[0];
+#endif
                     clone.transform.SetParent(canvas.transform, false);
                     clone.name = "Button";
 #if !UNITY_2021_3_OR_NEWER || UNITY_2022_1_OR_NEWER
@@ -126,7 +142,7 @@ namespace Michsky.MUIP
             catch { ShowErrorDialog(); }
         }
 
-        [MenuItem("GameObject/Modern UI Pack/Canvas", false, 8)]
+        [MenuItem("GameObject/Modern UI Pack/Canvas", false, 6)]
         static void CreateCanvas()
         {
             try
@@ -151,7 +167,7 @@ namespace Michsky.MUIP
                 Debug.Log("<b>[Modern UI Pack]</b>Can't find a file named 'MUIP Manager'. Make sure you have 'MUIP Manager' file in Resources folder.");
         }
 
-        [MenuItem("GameObject/Modern UI Pack/Button/Standard", false, 8)]
+        [MenuItem("GameObject/Modern UI Pack/Button/Standard", false, 7)]
         static void BDEF()
         {
             CreateButton("Button/Basic - Outline/Standard");

@@ -1,7 +1,6 @@
 ﻿#if UNITY_EDITOR
 using UnityEngine;
 using UnityEditor;
-using static Michsky.MUIP.ButtonManager;
 
 namespace Michsky.MUIP
 {
@@ -99,6 +98,7 @@ namespace Michsky.MUIP
             var renderOnTop = serializedObject.FindProperty("renderOnTop");
             var centered = serializedObject.FindProperty("centered");
             var rippleUpdateMode = serializedObject.FindProperty("rippleUpdateMode");
+            var targetCanvas = serializedObject.FindProperty("targetCanvas");
             var rippleShape = serializedObject.FindProperty("rippleShape");
             var speed = serializedObject.FindProperty("speed");
             var maxSize = serializedObject.FindProperty("maxSize");
@@ -127,7 +127,7 @@ namespace Michsky.MUIP
                         if (enableIcon.boolValue == true)
                         {
                             MUIPEditorHandler.DrawPropertyCW(buttonIcon, customSkin, "Button Icon", 80);
-                            if (useCustomIconSize.boolValue == false) { MUIPEditorHandler.DrawPropertyCW(iconScale, customSkin, "Icon Scale", 80); }
+                            MUIPEditorHandler.DrawPropertyCW(iconScale, customSkin, "Icon Scale", 80);
                         }
 
                         GUILayout.EndVertical();
@@ -153,21 +153,14 @@ namespace Michsky.MUIP
 
                     GUILayout.BeginVertical(EditorStyles.helpBox);
                     GUILayout.Space(-3);
-
                     autoFitContent.boolValue = MUIPEditorHandler.DrawTogglePlain(autoFitContent.boolValue, customSkin, "Auto-Fit Content");
-
                     GUILayout.Space(4);
-
-                    if (autoFitContent.boolValue == true)
-                    {
-                        GUILayout.BeginHorizontal(EditorStyles.helpBox);
-                        EditorGUI.indentLevel = 1;
-                        EditorGUILayout.PropertyField(padding, new GUIContent(" Padding"), true);
-                        EditorGUI.indentLevel = 0;
-                        GUILayout.EndHorizontal();
-                        MUIPEditorHandler.DrawProperty(spacing, customSkin, "Spacing");
-                    }
-
+                    GUILayout.BeginHorizontal(EditorStyles.helpBox);
+                    EditorGUI.indentLevel = 1;
+                    EditorGUILayout.PropertyField(padding, new GUIContent(" Padding"), true);
+                    EditorGUI.indentLevel = 0;
+                    GUILayout.EndHorizontal();
+                    MUIPEditorHandler.DrawProperty(spacing, customSkin, "Spacing");
                     GUILayout.EndVertical();
 
                     if (Application.isPlaying == true && GUILayout.Button("Refresh", customSkin.button)) { buttonTarget.UpdateUI(); }
@@ -301,6 +294,7 @@ namespace Michsky.MUIP
                         renderOnTop.boolValue = MUIPEditorHandler.DrawToggle(renderOnTop.boolValue, customSkin, "Render On Top");
                         centered.boolValue = MUIPEditorHandler.DrawToggle(centered.boolValue, customSkin, "Centered");
                         MUIPEditorHandler.DrawProperty(rippleUpdateMode, customSkin, "Update Mode");
+                        MUIPEditorHandler.DrawProperty(targetCanvas, customSkin, "Target Canvas");
                         MUIPEditorHandler.DrawProperty(rippleShape, customSkin, "Shape");
                         MUIPEditorHandler.DrawProperty(speed, customSkin, "Speed");
                         MUIPEditorHandler.DrawProperty(maxSize, customSkin, "Max Size");
