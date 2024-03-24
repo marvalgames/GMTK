@@ -81,7 +81,6 @@ namespace Sandbox.Player
         [BurstCompile]
         public void OnUpdate(ref SystemState state)
         {
-
             var time = SystemAPI.Time.DeltaTime;
             var camTransform = SystemAPI.GetSingleton<CameraControlsComponent>();
 
@@ -252,40 +251,55 @@ namespace Sandbox.Player
         {
             Entities.WithoutBurst().ForEach(
                 (
-                    in PlayerMoveGameObjectClass playerMove, in PlayerMoveComponent playerMoveComponent,
-                    in ApplyImpulseComponent applyImpulseComponent, in EntityPrefabComponent entityPrefabComponent) =>
+                    in VisualEffectGO goVisualEffect,
+                    in AudioPlayerGO goAudioPlayer,
+                    in LocalTransform transform,
+                    in PlayerMoveComponent playerMoveComponent,
+                    in ApplyImpulseComponent applyImpulseComponent) =>
                 {
-                    var audioSource = playerMove.audioSource;
-                    Debug.Log("AS " +  audioSource);
+                    // var audioSource = playerMove.audioSource;
+                    Debug.Log("AS " + goAudioPlayer.AudioSource);
+                    Debug.Log("AC " + goAudioPlayer.AudioClip);
                     var stickSpeed = applyImpulseComponent.animatorStickSpeed;
 
 
                     if (math.abs(stickSpeed) >= .0001f && applyImpulseComponent.Grounded)
                     {
-                        if (playerMove.clip && audioSource)
+                        if (goAudioPlayer.AudioSource)
                         {
-                            Debug.Log("AS " +  audioSource);
                             var pitch = stickSpeed * playerMoveComponent.stepRate;
+                            Debug.Log("Pitch " + pitch);
+                            var audioSource = goAudioPlayer.AudioSource;
                             if (audioSource.isPlaying == false)
                             {
-                                audioSource.clip = playerMove.clip;
+                                audioSource.pitch = pitch;
+                                audioSource.clip = goAudioPlayer.AudioClip;
                                 audioSource.Play();
                             }
                         }
 
-                        if (playerMove.vfxSystem)
+                        if (goVisualEffect.VisualEffect)
                         {
-                            playerMove.vfxSystem.GetComponent<VisualEffect>().SetFloat("FlareRate", 40);
-                            Debug.Log("Flare Rate 40 ");
+                            goVisualEffect.VisualEffect.transform.position = transform.Position;
+                            goVisualEffect.VisualEffect.SetFloat("FlareRate", 40);
+                            Debug.Log("Flare Rate ");
                         }
                     }
                     else
                     {
-                        if (audioSource != null) audioSource.Stop();
-                        if (playerMove.vfxSystem != null)
+                        var audioSource = goAudioPlayer.AudioSource;
+                        if (audioSource != null)
                         {
-                            playerMove.vfxSystem.GetComponent<VisualEffect>().SetFloat("FlareRate", 0);
-                            Debug.Log("Flare Rate 0 ");
+                            Debug.Log("STOP");
+                            audioSource.pitch = 0;
+                            audioSource.Stop();
+                        }
+                      
+
+                        if (goVisualEffect.VisualEffect != null)
+                        {
+                            goVisualEffect.VisualEffect.transform.position = transform.Position;
+                            goVisualEffect.VisualEffect.SetFloat("FlareRate", 0);
                         }
                     }
                 }

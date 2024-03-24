@@ -6,9 +6,15 @@ using UnityEngine;
 using UnityEngine.VFX;
 
 
-public struct EntityPrefabComponent : IComponentData
+public class VisualEffectGO: IComponentData
 {
-    public Entity moveVfxSystem;
+    public VisualEffect VisualEffect;
+}
+
+public class AudioPlayerGO : IComponentData
+{
+    public AudioSource AudioSource;
+    public AudioClip AudioClip;
 }
 
 
@@ -77,11 +83,15 @@ public partial struct InstantiatePrefabSystem : ISystem
         var ecb = new EntityCommandBuffer(Allocator.Temp);
 
         // Get all Entities that have the component with the Entity reference
-        foreach (var prefab in
-                 SystemAPI.Query<RefRO<EntityPrefabComponent>>())
+        foreach (var (prefab, entity) in
+                 SystemAPI.Query<PlayerMoveGameObjectClass>().WithEntityAccess())
         {
             // Instantiate the prefab Entity
-            //var instance = ecb.Instantiate(prefab.ValueRO.moveVfxSystem);
+            GameObject  go = GameObject.Instantiate(prefab.vfxSystem);
+            ecb.RemoveComponent<PlayerMoveGameObjectClass>(entity);
+            ecb.AddComponent(entity,
+                new VisualEffectGO { VisualEffect = go.GetComponent<VisualEffect>() });
+            ecb.AddComponent(entity, new AudioPlayerGO { AudioSource = prefab.audioSource, AudioClip = prefab.clip});
             // Note: the returned instance is only relevant when used in the ECB
             // as the entity is not created in the EntityManager until ECB.Playback
             //ecb.AddComponent<VfxComponentTag>(instance);

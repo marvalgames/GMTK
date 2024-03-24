@@ -9,22 +9,9 @@ using UnityEngine.VFX;
 [System.Serializable]
 public class PlayerMoveGameObjectClass : IComponentData
 {
-    public AudioSource audioSource { get; }
-
-    public PlayerMoveGameObjectClass()
-    {
-    }
-
-    public PlayerMoveGameObjectClass(AudioSource value)
-    {
-        audioSource = value;
-    }
-
+    public AudioSource audioSource;
     public string name;
-
     public GameObject vfxSystem;
-
-    //public AudioSource audioSource;
     public AudioClip clip;
 }
 
@@ -53,9 +40,7 @@ public class PlayerMovementAuthoring : MonoBehaviour
     public AudioClip AudioClip;
     
     public GameObject vfxPrefab;
-
-
- 
+    
 }
 
 
@@ -81,10 +66,7 @@ public class PlayerMovementBaker : Baker<PlayerMovementAuthoring>
         var entityPrefab = GetEntity(authoring.vfxPrefab, TransformUsageFlags.Dynamic);
         // Add the Entity reference to a component for instantiation later
         var entity = GetEntity(TransformUsageFlags.Dynamic);
-        AddComponent(entity, new EntityPrefabComponent() {moveVfxSystem = entityPrefab});
-        
-        
-
+        //AddComponent(entity, new EntityPrefabComponent() {moveVfxSystem = entityPrefab});
         
         AddComponent(e, new ApplyImpulseComponent
         {
@@ -102,12 +84,13 @@ public class PlayerMovementBaker : Baker<PlayerMovementAuthoring>
         });
 
         //pass  this to playermove mb and set VFX effect there - for some reason if set in Sub-Scene it ignores parameters
-        AddComponentObject(GetEntity(authoring, TransformUsageFlags.None),
-            new PlayerMoveGameObjectClass(authoring.AudioSource)
+        AddComponentObject(GetEntity(authoring, TransformUsageFlags.Dynamic),
+            new PlayerMoveGameObjectClass()
             {
                 name = authoring.name,
                 clip = authoring.AudioClip,
-                vfxSystem = authoring.vfxPrefab
+                vfxSystem = authoring.vfxPrefab,
+                audioSource = authoring.AudioSource
             }
         );
     }
