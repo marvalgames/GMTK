@@ -262,14 +262,14 @@ namespace Sandbox.Player
                     Debug.Log("AC " + goAudioPlayer.AudioClip);
                     var stickSpeed = applyImpulseComponent.animatorStickSpeed;
 
-
+                    
                     if (math.abs(stickSpeed) >= .0001f && applyImpulseComponent.Grounded)
                     {
                         if (goAudioPlayer.AudioSource)
                         {
-                            var pitch = stickSpeed * playerMoveComponent.stepRate;
-                            Debug.Log("Pitch " + pitch);
                             var audioSource = goAudioPlayer.AudioSource;
+                            var pitch = stickSpeed * playerMoveComponent.stepRate;
+                            Debug.Log("audio source  " + audioSource);
                             if (audioSource.isPlaying == false)
                             {
                                 audioSource.pitch = pitch;

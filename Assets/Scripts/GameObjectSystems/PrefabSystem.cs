@@ -6,7 +6,7 @@ using UnityEngine;
 using UnityEngine.VFX;
 
 
-public class VisualEffectGO: IComponentData
+public class VisualEffectGO : IComponentData
 {
     public VisualEffect VisualEffect;
 }
@@ -16,9 +16,16 @@ public class AudioPlayerGO : IComponentData
     public AudioSource AudioSource;
     public AudioClip AudioClip;
 }
+public class VisualEffectJumpGO : IComponentData
+{
+    public VisualEffect VisualEffect;
+}
 
-
-
+public class AudioPlayerJumpGO : IComponentData
+{
+    public AudioSource AudioSource;
+    public AudioClip AudioClip;
+}
 
 
 public partial struct InstantiatePrefabSystem : ISystem
@@ -26,34 +33,34 @@ public partial struct InstantiatePrefabSystem : ISystem
     public void OnUpdate(ref SystemState state)
     {
         var ecb = new EntityCommandBuffer(Allocator.Temp);
-
         // Get all Entities that have the component with the Entity reference
         foreach (var (prefab, entity) in
                  SystemAPI.Query<PlayerMoveGameObjectClass>().WithEntityAccess())
         {
-            // Instantiate the prefab Entity
-            GameObject  go = GameObject.Instantiate(prefab.vfxSystem);
-            ecb.RemoveComponent<PlayerMoveGameObjectClass>(entity);
+            GameObject vfxGo = GameObject.Instantiate(prefab.vfxSystemGo);
             ecb.AddComponent(entity,
-                new VisualEffectGO { VisualEffect = go.GetComponent<VisualEffect>() });
-            ecb.AddComponent(entity, new AudioPlayerGO { AudioSource = prefab.audioSource, AudioClip = prefab.clip});
-            // Note: the returned instance is only relevant when used in the ECB
-            // as the entity is not created in the EntityManager until ECB.Playback
-            //ecb.AddComponent<VfxComponentTag>(instance);
+                new VisualEffectGO { VisualEffect = vfxGo.GetComponent<VisualEffect>() });
+
+            GameObject audioGo = GameObject.Instantiate(prefab.audioSourceGo);
+            ecb.AddComponent(entity,
+                new AudioPlayerGO { AudioSource = audioGo.GetComponent<AudioSource>(), AudioClip = prefab.clip });
+            ecb.RemoveComponent<PlayerMoveGameObjectClass>(entity);
+        }
+        
+        foreach (var (prefab, entity) in
+                 SystemAPI.Query<PlayerJumpGameObjectClass>().WithEntityAccess())
+        {
+            GameObject vfxGo = GameObject.Instantiate(prefab.vfxSystem);
+            ecb.AddComponent(entity,
+                new VisualEffectJumpGO() { VisualEffect = vfxGo.GetComponent<VisualEffect>() });
+
+            GameObject audioGo = GameObject.Instantiate(prefab.audioSourceGo);
+            ecb.AddComponent(entity,
+                new AudioPlayerJumpGO() { AudioSource = audioGo.GetComponent<AudioSource>(), AudioClip = prefab.clip });
+            ecb.RemoveComponent<PlayerJumpGameObjectClass>(entity);
         }
 
         ecb.Playback(state.EntityManager);
         ecb.Dispose();
     }
 }
-
-
-
-
-
-
-
-
-
-
-

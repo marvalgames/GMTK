@@ -1,13 +1,15 @@
 using Sandbox.Player;
 using Unity.Entities;
 using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.VFX;
 
 
 [System.Serializable]
 public class PlayerJumpGameObjectClass : IComponentData
 {
-    public AudioSource audioSource;
+    [FormerlySerializedAs("audioSourcePrefab")] public GameObject audioSourceGo; 
+    public GameObject vfxSystem;
     public AudioClip clip;
 }
 public class PlayerJumpAuthoring : MonoBehaviour
@@ -18,9 +20,12 @@ public class PlayerJumpAuthoring : MonoBehaviour
     [HideInInspector] public float jumpY = 6f;
     [HideInInspector] public float airForce = 500f;
     [SerializeField] private bool disabled = false;
-    public AudioSource AudioSource;
-    public AudioClip AudioClip;
+    [FormerlySerializedAs("audioSourcePrefab")] [FormerlySerializedAs("AudioSourcePrefab")] public GameObject audioSourceGo;
+    [FormerlySerializedAs("AudioClip")] public AudioClip audioClip;
+    public GameObject vfxPrefab;
 
+    
+    
     [Header("Jump Settings")]
     [Range(1, 3)]
     public int jumpPoints;
@@ -84,8 +89,9 @@ public class PlayerJumpAuthoring : MonoBehaviour
             
             AddComponentObject(e, new PlayerJumpGameObjectClass
             {
-                audioSource = authoring.AudioSource,
-                clip = authoring.AudioClip,
+                clip = authoring.audioClip,
+                vfxSystem = authoring.vfxPrefab,
+                audioSourceGo = authoring.audioSourceGo
                     
             });
             

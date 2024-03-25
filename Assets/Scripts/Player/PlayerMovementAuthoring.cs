@@ -3,15 +3,15 @@ using Sandbox.Player;
 using Unity.Entities;
 using Unity.Mathematics;
 using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.VFX;
 
 
 [System.Serializable]
 public class PlayerMoveGameObjectClass : IComponentData
 {
-    public AudioSource audioSource;
-    public string name;
-    public GameObject vfxSystem;
+    [FormerlySerializedAs("audioSource")] public GameObject audioSourceGo; 
+    [FormerlySerializedAs("vfxSystem")] public GameObject vfxSystemGo;
     public AudioClip clip;
 }
 
@@ -35,10 +35,9 @@ public class PlayerMovementAuthoring : MonoBehaviour
     public float checkGroundStartY = 0;
 
     public float checkRadius = .1f;
-    public AudioSource AudioSource;
-
-    public AudioClip AudioClip;
     
+    public GameObject AudioSource;
+    public AudioClip AudioClip;
     public GameObject vfxPrefab;
     
 }
@@ -87,10 +86,9 @@ public class PlayerMovementBaker : Baker<PlayerMovementAuthoring>
         AddComponentObject(GetEntity(authoring, TransformUsageFlags.Dynamic),
             new PlayerMoveGameObjectClass()
             {
-                name = authoring.name,
                 clip = authoring.AudioClip,
-                vfxSystem = authoring.vfxPrefab,
-                audioSource = authoring.AudioSource
+                vfxSystemGo = authoring.vfxPrefab,
+                audioSourceGo = authoring.AudioSource
             }
         );
     }

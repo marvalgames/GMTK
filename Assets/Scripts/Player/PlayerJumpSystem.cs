@@ -49,7 +49,7 @@ namespace Sandbox.Player
         JumpEnd
     }
 
-    
+
     [UpdateInGroup(typeof(FixedStepSimulationSystemGroup))]
     [UpdateAfter(typeof(InputControllerSystemUpdate))]
     [UpdateAfter(typeof(PlayerMoveSystem))]
@@ -67,8 +67,6 @@ namespace Sandbox.Player
                     in Entity e
                 ) =>
                 {
-
-
                     var hasDash = SystemAPI.HasComponent<PlayerDashComponent>(e);
                     if (hasDash)
                     {
@@ -123,7 +121,6 @@ namespace Sandbox.Player
                         playerJumpComponent.DoubleJumpAllowed = false;
                         playerJumpComponent.JumpCount = 0;
                         //playerJumpComponent.stopVfx = true;
-
                     }
                     else
                     {
@@ -162,7 +159,6 @@ namespace Sandbox.Player
                         playerJumpComponent.playVfx = true;
                         playerJumpComponent.JumpStage = JumpStages.JumpStart;
                         velocity = new float3(pv.Linear.x, originalJumpPower, pv.Linear.z);
-
                     }
                     else if (button_a && playerJumpComponent.DoubleJumpAllowed)
                     {
@@ -237,7 +233,7 @@ namespace Sandbox.Player
             ).Schedule();
         }
     }
-    
+
     [UpdateInGroup(typeof(FixedStepSimulationSystemGroup))]
     [UpdateAfter(typeof(PlayerJumpSystem))]
     [RequireMatchingQueriesForUpdate]
@@ -245,47 +241,63 @@ namespace Sandbox.Player
     {
         protected override void OnUpdate()
         {
-            Entities.WithoutBurst().WithNone<Pause>().ForEach(
+            Entities.WithoutBurst().ForEach(
                 (
-                    PlayerJumpGameObjectClass playerJump, ref PlayerJumpComponent playerJumpComponent
+                    ref PlayerJumpComponent playerJumpComponent,
+                    in VisualEffectJumpGO goVisualEffect,
+                    in AudioPlayerJumpGO goAudioPlayer,
+                    in LocalTransform transform
+                    //PlayerJumpGameObjectClass playerJump, 
                     //uses audio source created in PlayerJumpGameObjectClass sub-scene authoring 
                 ) =>
                 {
-                    var audioSource = playerJump.audioSource;
-                    if (playerJump.clip && audioSource && playerJumpComponent.playJumpAudio)
+                    
+                    if (goVisualEffect.VisualEffect && playerJumpComponent.playJumpAudio)
                     {
-                        audioSource.clip = playerJump.clip;
+                        goVisualEffect.VisualEffect.transform.position = transform.Position;
+                        goVisualEffect.VisualEffect.SetFloat("FlareRate", 400);
+                        Debug.Log("VFX Jump");
+                    }
+                    else if (goVisualEffect.VisualEffect && !playerJumpComponent.playJumpAudio)
+                    {
+                        goVisualEffect.VisualEffect.transform.position = transform.Position;
+                        goVisualEffect.VisualEffect.SetFloat("FlareRate", 400);
+                    }
+                    
+                    
+                    var audioSource = goAudioPlayer.AudioSource;
+                    if (audioSource && playerJumpComponent.playJumpAudio)
+                    {
+                        audioSource.clip = goAudioPlayer.AudioClip;
                         audioSource.PlayOneShot(audioSource.clip);
                         playerJumpComponent.playJumpAudio = false;
                     }
-
                 }
             ).Run();
         }
     }
 
-     [UpdateInGroup(typeof(FixedStepSimulationSystemGroup))]
-     [UpdateAfter(typeof(PlayerJumpSystem))]
-     public partial class PlayerJumpAnimationSystem : SystemBase
-     {
-         private static readonly int JumpState = Animator.StringToHash("JumpState");
+    [UpdateInGroup(typeof(FixedStepSimulationSystemGroup))]
+    [UpdateAfter(typeof(PlayerJumpSystem))]
+    public partial class PlayerJumpAnimationSystem : SystemBase
+    {
+        private static readonly int JumpState = Animator.StringToHash("JumpState");
 
-         protected override void OnUpdate()
-         {
-             Entities.WithoutBurst().WithNone<Pause>().ForEach(
-                 (
-                     Animator animator, ref PlayerJumpComponent jump //uses animator that is added to entity from main scene Player Object
-                 ) =>
-                 {
-                     if (jump.playJumpAnimation)
-                     {
-                         jump.playJumpAnimation = false;
-                         animator.SetInteger(JumpState, 1);
-                     }
-                 }
-             ).Run();
-         }
-     }
-     
-     
+        protected override void OnUpdate()
+        {
+            Entities.WithoutBurst().WithNone<Pause>().ForEach(
+                (
+                    Animator animator,
+                    ref PlayerJumpComponent jump //uses animator that is added to entity from main scene Player Object
+                ) =>
+                {
+                    if (jump.playJumpAnimation)
+                    {
+                        jump.playJumpAnimation = false;
+                        animator.SetInteger(JumpState, 1);
+                    }
+                }
+            ).Run();
+        }
+    }
 }
