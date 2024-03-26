@@ -244,6 +244,7 @@ namespace Sandbox.Player
             Entities.WithoutBurst().ForEach(
                 (
                     ref PlayerJumpComponent playerJumpComponent,
+                    in ApplyImpulseComponent applyImpulseComponent,
                     in VisualEffectJumpGO goVisualEffect,
                     in AudioPlayerJumpGO goAudioPlayer,
                     in LocalTransform transform
@@ -252,23 +253,23 @@ namespace Sandbox.Player
                 ) =>
                 {
                     
-                    if (goVisualEffect.VisualEffect && playerJumpComponent.playJumpAudio)
+                    if (goVisualEffect.VisualEffect && applyImpulseComponent.InJump)
                     {
                         goVisualEffect.VisualEffect.transform.position = transform.Position;
-                        goVisualEffect.VisualEffect.SetFloat("FlareRate", 400);
+                        goVisualEffect.VisualEffect.SetFloat("FlareRate", 100);
                         Debug.Log("VFX Jump");
                     }
-                    else if (goVisualEffect.VisualEffect && !playerJumpComponent.playJumpAudio)
+                    else if (goVisualEffect.VisualEffect && !applyImpulseComponent.InJump)
                     {
                         goVisualEffect.VisualEffect.transform.position = transform.Position;
-                        goVisualEffect.VisualEffect.SetFloat("FlareRate", 400);
+                        goVisualEffect.VisualEffect.SetFloat("FlareRate", 0);
                     }
                     
                     
                     var audioSource = goAudioPlayer.AudioSource;
                     if (audioSource && playerJumpComponent.playJumpAudio)
                     {
-                        audioSource.clip = goAudioPlayer.AudioClip;
+                        var clip = goAudioPlayer.AudioClip;
                         audioSource.PlayOneShot(audioSource.clip);
                         playerJumpComponent.playJumpAudio = false;
                     }
