@@ -21,25 +21,26 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: Dither
-  m_Shader: {fileID: 4800000, guid: 589366c8d179a91428574ab8bc5cf021, type: 3}
+  m_Shader: {fileID: 4800000, guid: df2e9e79972df4deca1815c90eac9a16, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords:
+  - _EMISSION
+  - _ENABLEBASEMAP
   - _NORMALINDEPTHNORMALPASS
   - _RECEIVEDECALS
+  - _RIMLIGHTING
   - _SSAO_ENABLED
-  m_InvalidKeywords:
-  - _EMISSION
-  - _ENERGYCONSERVATION_ON
-  - _RAMP_OFF
-  - _TEXMODE_OFF
+  - _SSAO_FLATSHADED
+  m_InvalidKeywords: []
   m_LightmapFlags: 0
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
   m_CustomRenderQueue: 2000
   stringTagMap:
     RenderType: Opaque
-  disabledShaderPasses: []
+  disabledShaderPasses:
+  - MOTIONVECTORS
   m_LockedProperties: Vector1_4D822FC9
   m_SavedProperties:
     serializedVersion: 3
@@ -224,6 +225,7 @@ Material:
     - Vector1_FFFD6FCD: 0.75
     - Vector1_c3d27e07a7d24a629d05ed7cea8a0f1f: 1
     - _AddLightFallOff: 1
+    - _AddPrecomputedVelocity: 0
     - _AlphaBaseCutout: 1
     - _AlphaClip: 0
     - _AlphaCutoff: 0.5
@@ -295,6 +297,7 @@ Material:
     - _Glow_Edge_Width: 1
     - _Help: 0
     - _HelpA: 0
+    - _HelpX: 0
     - _HighlightColorPower: 1
     - _IOR: 1.33
     - _IsThinShell: 0
@@ -306,6 +309,7 @@ Material:
     - _LightFalloffAffectShadowT: 0
     - _LightFalloffSoftness: 1
     - _LightIntensity: 1
+    - _LuxBlend: 0
     - _LuxSurface: 0
     - _MCIALO: 0
     - _MCapIntensity: 1
@@ -378,7 +382,7 @@ Material:
     - _RefVal: 0
     - _ReflectionIntensity: 0
     - _ReflectionRoughtness: 0
-    - _Rim: 0
+    - _Rim: 1
     - _RimFrequency: 0
     - _RimLigInt: 1
     - _RimLightColorPower: 10
@@ -483,7 +487,7 @@ Material:
     - _OverallShadowColor: {r: 0, g: 0, b: 0, a: 1}
     - _PTCol: {r: 0, g: 0, b: 0, a: 1}
     - _RIMCOLOR: {r: 1.098039, g: 0.972549, b: 0, a: 0}
-    - _RimColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
+    - _RimColor: {r: 0.88235295, g: 0.54509807, b: 0.3529412, a: 1}
     - _RimLightColor: {r: 1, g: 1, b: 1, a: 1}
     - _SSAOColor: {r: 0, g: 0, b: 0, a: 0}
     - _SelfLitColor: {r: 1, g: 1, b: 1, a: 1}
@@ -497,3 +501,4 @@ Material:
     - _ToonRimColor: {r: 1, g: 1, b: 1, a: 1}
     - _XYZPosition: {r: 0, g: 0, b: 0, a: 0}
   m_BuildTextureStacks: []
+  m_AllowLocking: 1
