@@ -3,22 +3,21 @@
 --- !u!21 &2100000
 Material:
   serializedVersion: 8
-  m_ObjectHideFlags: 0
+  m_ObjectHideFlags: 32
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: StylizedWater2_Toon
-  m_Shader: {fileID: -6465566751694194690, guid: d7b0192b9bf19c949900035fa781fdc4,
-    type: 3}
+  m_Shader: {fileID: -6465566751694194690, guid: d7b0192b9bf19c949900035fa781fdc4, type: 3}
+  m_Parent: {fileID: 0}
+  m_ModifiedSerializedProperties: 0
   m_ValidKeywords:
-  - _ADVANCED_SHADING
   - _ENVIRONMENTREFLECTIONS_OFF
   - _FOAM
   - _NORMALMAP
   - _RECEIVE_SHADOWS_OFF
   - _SHARP_INERSECTION
   - _SPECULARHIGHLIGHTS_OFF
-  - _UNLIT
   m_InvalidKeywords:
   - ADVANCED_LIGHTING
   - _DEPTHEXP_ON
@@ -31,6 +30,7 @@ Material:
   m_CustomRenderQueue: -1
   stringTagMap: {}
   disabledShaderPasses: []
+  m_LockedProperties: 
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
@@ -138,6 +138,7 @@ Material:
     - _BumpScale: 1
     - _CROSSPAN_INTERSECTIONOn: 0
     - _CausticsBrightness: 1
+    - _CausticsChromance: 1
     - _CausticsDistortion: 0.048
     - _CausticsOn: 0
     - _CausticsSpeed: 0.1
@@ -183,6 +184,7 @@ Material:
     - _GlossyReflections: 0
     - _HorizonDistance: 8
     - _IntersectionClipping: 1
+    - _IntersectionDistortion: 0.2
     - _IntersectionFalloff: 0.637
     - _IntersectionLength: 2.72
     - _IntersectionRippleDist: 32
@@ -193,7 +195,7 @@ Material:
     - _IntersectionStyle: 1
     - _IntersectionTiling: 0.11000057
     - _IntersectionWaveDist: 41.4
-    - _LightingOn: 0
+    - _LightingOn: 1
     - _Metallic: 0
     - _Metallicness: 0.1
     - _NORMALMAPOn: 1
@@ -227,7 +229,7 @@ Material:
     - _RimRize: 1
     - _RimTiling: 0.025
     - _RiverModeOn: 0
-    - _ShadingMode: 1
+    - _ShadingMode: 0
     - _ShadowStrength: 1
     - _ShoreLineLength: 1.3
     - _ShoreLineWaveDistance: 12
@@ -299,6 +301,7 @@ Material:
     - _WaveDirection: {r: 1, g: 1, b: 1, a: 1}
     - _WaveFadeDistance: {r: 150, g: 300, b: 0, a: 0}
   m_BuildTextureStacks: []
+  m_AllowLocking: 1
 --- !u!114 &6498140463000427223
 MonoBehaviour:
   m_ObjectHideFlags: 11
