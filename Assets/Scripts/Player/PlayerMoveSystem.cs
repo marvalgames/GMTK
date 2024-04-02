@@ -258,8 +258,8 @@ namespace Sandbox.Player
                     in ApplyImpulseComponent applyImpulseComponent) =>
                 {
                     // var audioSource = playerMove.audioSource;
-                    Debug.Log("AS " + goAudioPlayer.AudioSource);
-                    Debug.Log("AC " + goAudioPlayer.AudioClip);
+                    // Debug.Log("AS " + goAudioPlayer.AudioSource);
+                    // Debug.Log("AC " + goAudioPlayer.AudioClip);
                     var stickSpeed = applyImpulseComponent.animatorStickSpeed;
 
                     
@@ -269,7 +269,7 @@ namespace Sandbox.Player
                         {
                             var audioSource = goAudioPlayer.AudioSource;
                             var pitch = stickSpeed * playerMoveComponent.stepRate;
-                            Debug.Log("audio source  " + audioSource);
+                            // Debug.Log("audio source  " + audioSource);
                             if (audioSource.isPlaying == false)
                             {
                                 audioSource.pitch = pitch;
@@ -282,7 +282,7 @@ namespace Sandbox.Player
                         {
                             goVisualEffect.VisualEffect.transform.position = transform.Position;
                             goVisualEffect.VisualEffect.SetFloat("FlareRate", 40);
-                            Debug.Log("Flare Rate ");
+                            // Debug.Log("Flare Rate ");
                         }
                     }
                     else
@@ -290,7 +290,7 @@ namespace Sandbox.Player
                         var audioSource = goAudioPlayer.AudioSource;
                         if (audioSource != null)
                         {
-                            Debug.Log("STOP");
+                            // Debug.Log("STOP");
                             audioSource.pitch = 0;
                             audioSource.Stop();
                         }
