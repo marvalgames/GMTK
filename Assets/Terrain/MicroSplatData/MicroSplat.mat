@@ -47,6 +47,10 @@ Material:
         m_Texture: {fileID: 18700000, guid: 5a5a6805c76e8aa4e825b27a6f272200, type: 2}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    - _DistanceNoise:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _GeoCurve:
         m_Texture: {fileID: -2746195148250717791, guid: 378973f16fcfd2f48af0948bbbb752bf, type: 2}
         m_Scale: {x: 1, y: 1}
@@ -67,11 +71,27 @@ Material:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    - _GlobalTintTex:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _LavaDiffuse:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MainTex:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _NoiseHeight:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _NormalNoise:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _NormalNoise2:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
@@ -173,18 +193,27 @@ Material:
     - _WindParticulateStretch: 0.3
     m_Colors:
     - _DetailNoiseScaleStrengthFade: {r: 4, g: 0.5, b: 5, a: 0}
+    - _DistanceNoiseScaleStrengthFade: {r: 0.25, g: 0.5, b: 100, a: 250}
+    - _DistanceWetness: {r: 100, g: 1, b: 200, a: 0}
     - _GeoCurveParams: {r: 512, g: 0, b: 0, a: 0}
     - _GeoParams: {r: 1, g: 0.01, b: 0, a: 0}
     - _GeoRange: {r: 0, g: 0, b: 0, a: 0}
+    - _GlobalTextureParams: {r: 0.5, g: 0.5, b: 0.5, a: 0.5}
+    - _GlobalTintFade: {r: 50, g: 150, b: 1, a: 1}
+    - _GlobalTintUVScale: {r: 1, g: 1, b: 0, a: 0}
+    - _HeightWetness: {r: 1, g: 0.1, b: 1, a: 1}
     - _LavaColorHighlight: {r: 0.65999997, g: 0.65999997, b: 0, a: 1}
     - _LavaColorLow: {r: 0.83, g: 0, b: 0, a: 1}
     - _LavaEdgeColor: {r: 0.049999982, g: 0.015, b: 0, a: 1}
     - _LavaParams: {r: 2.7, g: 1, b: 0.5, a: 0.275}
     - _LavaParams2: {r: 0.05, g: 0.017, b: 0.15, a: 2}
     - _LavaUVScale: {r: 70, g: 70, b: 0, a: 0}
+    - _NoiseHeightData: {r: 1, g: 0.15, b: 0, a: 0}
+    - _NormalNoiseScaleStrength: {r: 8, g: 0.5, b: 0, a: 0}
+    - _NormalNoiseScaleStrength2: {r: 8, g: 0.5, b: 0, a: 0}
     - _PuddleParams: {r: 6, g: 1, b: 0, a: 0}
     - _RainIntensityScale: {r: 0, g: 150, b: 0, a: 0}
-    - _SnowHeightAngleRange: {r: 50, g: 90, b: 0, a: 1}
+    - _SnowHeightAngleRange: {r: -25, g: 200, b: 0, a: 0.86352974}
     - _SnowNormalNoiseScaleStrength: {r: 0.1, g: 0.5, b: 0, a: 0}
     - _SnowParams: {r: 0, g: 0, b: 0.3, a: 0.1}
     - _SnowParticulateAngleMask: {r: -1, g: -1, b: 1, a: 1}
