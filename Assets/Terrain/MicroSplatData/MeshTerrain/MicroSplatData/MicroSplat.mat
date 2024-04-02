@@ -23,6 +23,10 @@ Material:
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
+    - _AlphaHoleTexture:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _Control0:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
@@ -39,11 +43,59 @@ Material:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    - _DetailNoise:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _Diffuse:
         m_Texture: {fileID: 18700000, guid: 5a5a6805c76e8aa4e825b27a6f272200, type: 2}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    - _DistanceNoise:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _GeoCurve:
+        m_Texture: {fileID: -2746195148250717791, guid: 378973f16fcfd2f48af0948bbbb752bf, type: 2}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _GeoNormal:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _GeoSlopeTex:
+        m_Texture: {fileID: -220694068413994220, guid: 378973f16fcfd2f48af0948bbbb752bf, type: 2}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _GeoTex:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _GlitterWind:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _GlobalTintTex:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _LavaDiffuse:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _MainTex:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _NoiseHeight:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _NormalNoise:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _NormalNoise2:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
@@ -59,12 +111,36 @@ Material:
         m_Texture: {fileID: 563029047864677468, guid: 378973f16fcfd2f48af0948bbbb752bf, type: 2}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    - _RainDropTexture:
+        m_Texture: {fileID: 2800000, guid: aca95408547244a2b8760b8425b5b0fc, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _SnowDiff:
         m_Texture: {fileID: 2800000, guid: b822881b9ef3441f29c88bb6e0ef60cd, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _SnowNormal:
         m_Texture: {fileID: 2800000, guid: cc22f06eaf78d43f782ee617776c1640, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _SnowNormalNoise:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _SnowSparkleNoise:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _StreamControl:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _StreamNormal:
+        m_Texture: {fileID: 2800000, guid: 04426e150438d48e19ee055632fedf02, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _TerrainDesc:
+        m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _TerrainHeightmapTexture:
@@ -94,17 +170,89 @@ Material:
     m_Ints: []
     m_Floats:
     - _Contrast: 0.4
+    - _GeoHeightContrast: 10
+    - _GeoNormalStrength: 1
+    - _GlobalPorosity: 0.4
     - _HybridHeightBlendDistance: 300
-    - _SnowAmount: 0.5
+    - _LavaDislacementScale: 1
+    - _LavaEmissiveMult: 2
+    - _SnowAmount: 1
+    - _SnowParticulateOcclusionStrength: 1
+    - _SnowParticulateStrength: 1
+    - _SnowParticulateStretch: 0.3
+    - _SnowRimPower: 8
+    - _SnowSparkleDensity: 5
+    - _SnowSparkleEmission: 0.25
+    - _SnowSparkleNoiseAmplitude: 10
+    - _SnowSparkleNoiseDensity: 1
+    - _SnowSparkleSize: 3
+    - _SnowSparkleStrength: 1
+    - _SnowSparkleViewDependency: 0.3
+    - _StreamBlend: 40
+    - _StreamMax: 1
+    - _TessDisplaceSnowMultiplier: 1
+    - _TriplanarContrast: 4
+    - _TriplanarFaceBlend: 0
+    - _WindParticulateOcclusionStrength: 1
+    - _WindParticulateRotation: 0
+    - _WindParticulateStrength: 1
+    - _WindParticulateStretch: 0.3
     m_Colors:
-    - _SnowHeightAngleRange: {r: 50, g: 90, b: 0, a: 1}
+    - _AlphaData: {r: 0, g: 0, b: 0, a: 0}
+    - _DetailNoiseScaleStrengthFade: {r: 4, g: 0.5, b: 5, a: 0}
+    - _DistanceNoiseScaleStrengthFade: {r: 0.25, g: 0.5, b: 100, a: 250}
+    - _DistanceWetness: {r: 100, g: 1, b: 200, a: 0}
+    - _GeoCurveParams: {r: 512, g: 0, b: 0, a: 0}
+    - _GeoParams: {r: 1, g: 0.01, b: 0, a: 0}
+    - _GeoRange: {r: 0, g: 0, b: 0, a: 0}
+    - _GlobalTextureParams: {r: 0.5, g: 0.5, b: 0.5, a: 0.5}
+    - _GlobalTintFade: {r: 50, g: 150, b: 1, a: 1}
+    - _GlobalTintUVScale: {r: 1, g: 1, b: 0, a: 0}
+    - _HeightWetness: {r: 1, g: 0.1, b: 1, a: 1}
+    - _LavaColorHighlight: {r: 0.65999997, g: 0.65999997, b: 0, a: 1}
+    - _LavaColorLow: {r: 0.83, g: 0, b: 0, a: 1}
+    - _LavaEdgeColor: {r: 0.049999982, g: 0.015, b: 0, a: 1}
+    - _LavaParams: {r: 2.7, g: 1, b: 0.5, a: 0.275}
+    - _LavaParams2: {r: 0.05, g: 0.017, b: 0.15, a: 2}
+    - _LavaUVScale: {r: 70, g: 70, b: 0, a: 0}
+    - _NoiseHeightData: {r: 1, g: 0.15, b: 0, a: 0}
+    - _NormalNoiseScaleStrength: {r: 8, g: 0.5, b: 0, a: 0}
+    - _NormalNoiseScaleStrength2: {r: 8, g: 0.5, b: 0, a: 0}
+    - _PuddleParams: {r: 6, g: 1, b: 0, a: 0}
+    - _RainIntensityScale: {r: 0, g: 150, b: 0, a: 0}
+    - _SnowHeightAngleRange: {r: -25, g: 100, b: 0, a: 0.86352974}
+    - _SnowNormalNoiseScaleStrength: {r: 0.1, g: 0.5, b: 0, a: 0}
     - _SnowParams: {r: 0, g: 0, b: 0.3, a: 0.1}
+    - _SnowParticulateAngleMask: {r: -1, g: -1, b: 1, a: 1}
+    - _SnowParticulateColor: {r: 1, g: 1, b: 1, a: 1}
+    - _SnowParticulateHeightMask: {r: 0, g: 0, b: 99999, a: 99999}
+    - _SnowParticulateParams: {r: 1, g: 1, b: 1, a: 0.25}
+    - _SnowParticulateShadow: {r: 0.01, g: 1, b: 0, a: 0}
+    - _SnowParticulateShadowColor: {r: 0, g: 0, b: 0, a: 1}
+    - _SnowRimColor: {r: 0.5, g: 0.5, b: 1, a: 1}
+    - _SnowSparkleTint: {r: 1, g: 1, b: 1, a: 1}
     - _SnowTint: {r: 1, g: 1, b: 1, a: 1}
     - _SnowUVScales: {r: 50, g: 50, b: 0, a: 0}
     - _SnowUpVector: {r: 0, g: 1, b: 0, a: 0}
+    - _StreamFlowParams: {r: 0.4, g: 0.5, b: 0.3, a: 0.2}
+    - _StreamNormalFoam: {r: 0.35, g: 12, b: 0, a: 0}
+    - _StreamTint: {r: 0.5, g: 0.5, b: 0.5, a: 1}
+    - _StreamUVScales: {r: 70, g: 70, b: 70, a: 70}
+    - _TerrainBlendParams: {r: 1, g: 0.4, b: 0, a: 0}
+    - _TerrainBlendParams2: {r: 40, g: 0, b: 0, a: 0}
+    - _TerrainBounds: {r: 0, g: 0, b: 512, a: 512}
+    - _TerrainHeightmapScale: {r: 0, g: 0, b: 100, a: 0}
     - _TessData1: {r: 12, g: 0.8, b: 4, a: 0}
     - _TessData2: {r: 20, g: 45, b: 0.2, a: 0.25}
     - _TriplanarUVScale: {r: 1, g: 1, b: 0, a: 0}
     - _UVScale: {r: 1, g: 1, b: 0, a: 0}
+    - _WetnessParams: {r: 0, g: 1, b: 0, a: 0}
+    - _WindEmissive: {r: 0, g: 0, b: 0, a: 0}
+    - _WindParticulateAngleMask: {r: -1, g: -1, b: 1, a: 1}
+    - _WindParticulateColor: {r: 1, g: 1, b: 1, a: 1}
+    - _WindParticulateHeightMask: {r: 0, g: 0, b: 99999, a: 99999}
+    - _WindParticulateParams: {r: 1, g: 1, b: 1, a: 0.25}
+    - _WindParticulateShadow: {r: 0.01, g: 1, b: 0, a: 0}
+    - _WindParticulateShadowColor: {r: 0, g: 0, b: 0, a: 1}
   m_BuildTextureStacks: []
   m_AllowLocking: 1
