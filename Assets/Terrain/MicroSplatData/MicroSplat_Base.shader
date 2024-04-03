@@ -11,7 +11,7 @@
 ////////////////////////////////////////
 
 
-Shader "Hidden/Terrain_0_0_b99067c5-3ca4-472c-a942-0a6163051f29_Base-1719387497"
+Shader "Hidden/Terrain_0_0_b99067c5-3ca4-472c-a942-0a6163051f29_Base1918102964"
 {
    Properties
    {
@@ -41,16 +41,12 @@ Shader "Hidden/Terrain_0_0_b99067c5-3ca4-472c-a942-0a6163051f29_Base-1719387497"
 
 
 
-      // snow
-      _SnowDiff("Diffuse/Height", 2D) = "white" {}
-      _SnowNormal("NormalSAO", 2D) = "white" {}
-      _SnowUpVector("Snow Up Vector", Vector) = (0, 1, 0, 0)
-      _SnowTint("Snow Tint Color", Color) = (1,1,1,1)
-      _SnowAmount("Amount", Range(0,1)) = 0.5
-      _SnowUVScales("UV Scale", Vector) = (50, 50, 0, 0)
-      _SnowHeightAngleRange("Height Range", Vector) = (50, 90, 0, 1)   // height range, min/max angle
-      // height influence, erosion, crystal, melt
-      _SnowParams("Params", Vector) = (0.0, 0.0, 0.3, 0.1) 
+
+      _StreamControl("Stream Control", 2D) = "black" {}
+      _GlobalPorosity("Porosity", Range(0.0, 1.0)) = 0.4
+      // wetness
+      _WetnessParams("Min/Max Wetness", Vector) = (0, 1, 0, 0)
+
 
 
 
@@ -139,8 +135,7 @@ Shader "Hidden/Terrain_0_0_b99067c5-3ca4-472c-a942-0a6163051f29_Base-1719387497"
       #define _PERTEXUVSCALEOFFSET 1
       #define _BRANCHSAMPLES 1
       #define _BRANCHSAMPLESAGR 1
-      #define _SNOW 1
-      #define _SNOWSIMPLE 1
+      #define _WETNESS 1
       #define _MSRENDERLOOP_UNITYURP2022 1
       #define _MICROSPLATBASEMAP 1
       #define _MSRENDERLOOP_UNITYLD 1
@@ -567,65 +562,73 @@ Shader "Hidden/Terrain_0_0_b99067c5-3ca4-472c-a942-0a6163051f29_Base-1719387497"
       #endif
 
 
-         #if _SNOW
-         half4 _SnowParams; // influence, erosion, crystal, melt
-         half _SnowAmount;
-         half2 _SnowUVScales;
-         float4 _SnowHeightAngleRange;
-         half3 _SnowUpVector;
-         half3 _SnowTint;
-         #endif
-
-         #if _SNOWNORMALNOISE
-         float4 _SnowNormalNoiseScaleStrength;
-         #endif
-
-         #if _SNOWDISTANCERESAMPLE
-         float4 _SnowDistanceResampleScaleStrengthFade;
-         #endif
-
-         #if _SNOW && _USEGLOBALSNOWLEVEL
-         float _Global_SnowLevel;
-         #endif
-
-         #if _SNOW && _USEGLOBALSNOWHEIGHT
-         float2 _Global_SnowMinMaxHeight;
-         #endif
+         half _GlobalPorosity;
          
-         #if _SNOWSTOCHASTIC
-         half _SnowStochasticContrast;
-         half _SnowStochasticScale;
+         #if _WETNESS
+            #if _GLOBALWETNESS
+            half2 _Global_WetnessParams;
+            #else
+            half2 _WetnessParams;
+            #endif
+
+            #if _HEIGHTWETNESS
+            float4 _HeightWetness;
+            #endif
+
+            #if _DISTANCEWETNESS
+            float4 _DistanceWetness;
+            #endif
          #endif
 
-         #if _SNOWSSS
-         half4 _SnowSSSTint;
+         #if _PUDDLES
+            half2 _PuddleParams;
+            #if _GLOBALPUDDLES
+            half _Global_PuddleParams;
+            #endif
          #endif
 
-         #if _TESSDISTANCE || _TESSEDGE
-         half _TessDisplaceSnowMultiplier;
+         #if _STREAMS
+            half _StreamBlend;
+            half4 _StreamFlowParams;
+            half2 _StreamNormalFoam;
+            float2 _StreamUVScales;
+            #if _GLOBALSTREAMS
+               half _Global_StreamMax;
+            #else
+               half _StreamMax;
+            #endif
+            half3 _StreamTint;
+            #if _STREAMHEIGHTFILTER
+               float4 _StreamFades;
+            #endif
          #endif
 
-         #if _SNOWFOOTSTEPS
-         float2 _SnowTraxUVScales;
-         float _SnowTraxTextureBlend;
-         float _SnowTraxNormalStrength;
+         #if _LAVA
+            half4 _LavaParams;
+            half4 _LavaParams2;
+            half3 _LavaEdgeColor;
+            half3 _LavaColorLow;
+            half3 _LavaColorHighlight;
+            float2 _LavaUVScale;
+            half _LavaDislacementScale;
+            #if _LAVAHEIGHTFILTER
+               float4 _LavaFades;
+            #endif
+            half _LavaEmissiveMult;
+
+            #if _LAVASTOCHASTIC
+               half _LavaStochasticSize;
+               half _LavaStochasticContrast;
+            #endif
          #endif
 
-         #if _SNOWRIM
-         float _SnowRimPower;
-         half3 _SnowRimColor;
+         #if _RAINDROPS
+            float2 _RainIntensityScale;
+            #if _GLOBALRAIN
+               float _Global_RainIntensity;
+            #endif
          #endif
 
-         #if _SNOWSPARKLE
-         float _SnowSparkleStrength;
-         half3 _SnowSparkleTint;
-         half _SnowSparkleEmission;
-         float _SnowSparkleSize;
-         float _SnowSparkleDensity;
-         float _SnowSparkleNoiseDensity;
-         float _SnowSparkleNoiseAmplitude;
-         float _SnowSparkleViewDependency;
-         #endif
 
 
          CBUFFER_END
@@ -2043,589 +2046,530 @@ void PrepareStochasticUVs(float scale, float2 uv, out float2 uv1, out float2 uv2
 }
 
 
-         #if _SNOW
-         TEXTURE2D(_SnowDiff);
-         TEXTURE2D(_SnowNormal);
+
+
+         TEXTURE2D(_StreamControl);
+
+         #if _DYNAMICFLOWS
+            TEXTURE2D(_DynamicStreamControl);
          #endif
 
-         #if _SNOWNORMALNOISE
-         TEXTURE2D(_SnowNormalNoise);
+         #if _STREAMS
+            TEXTURE2D(_StreamNormal);
          #endif
 
-         #if _SNOWFOOTSTEPS
-         TEXTURE2D(_SnowTrackDiff);
-         TEXTURE2D(_SnowTrackNSAO);
+         #if _LAVA
+            TEXTURE2D(_LavaDiffuse);
          #endif
 
-         #if _SNOWMASK
-         TEXTURE2D(_SnowMask);
+         #if _RAINDROPS
+            TEXTURE2D(_RainDropTexture);
          #endif
 
-         #if _SNOWSPARKLE
-            TEXTURE2D(_SnowSparkleNoise);
-         #endif
-         
-         
 
-         float SnowFade(float worldHeight, float snowMin, float snowMax, half snowDot, half snowDotVertex, half snowLevel, half puddleHeight)
+
+         half4 ProcessFXLevels(half4 fxLevels, half traxBuffer)
          {
-            float snowHeightFade = saturate((worldHeight - snowMin) / max(snowMax, 0.001));
-            half snowAngleFade = max(0, (snowDotVertex - _SnowHeightAngleRange.z) * 6);
-            snowAngleFade = snowAngleFade * (1 - max(0, (snowDotVertex - _SnowHeightAngleRange.w) * 6));
-            return saturate((snowLevel * snowHeightFade * saturate(snowAngleFade)) - puddleHeight);
-         }
-
-         float DoSnowDisplace(float splat_height, float2 uv, float3 worldNormalVertex, float3 worldPos, float puddleHeight, Config config, half4 weights)
-         {
-            // could force a branch and avoid texsamples
-            #if _SNOW
-               
-               #if _USEGLOBALSNOWLEVEL 
-               float snowLevel = _Global_SnowLevel;
+            #if _STREAMS
+               #if _GLOBALSTREAMS
+                  fxLevels.b *= _Global_StreamMax;
                #else
-               float snowLevel = _SnowAmount;
+                  fxLevels.b *= _StreamMax;
                #endif
-
-               #if _USEGLOBALSNOWHEIGHT
-               float snowMin = _Global_SnowMinMaxHeight.x;
-               float snowMax = _Global_SnowMinMaxHeight.y;
-               #else
-               float snowMin = _SnowHeightAngleRange.x;
-               float snowMax = _SnowHeightAngleRange.y;
-               #endif
-
-               
-
-               float snowAge = _SnowParams.z;
-
-
-               #if _PERTEXSNOWSTRENGTH && !_SNOWSIMPLE
-                  SAMPLE_PER_TEX(ptSnowStr, 8.5, config, half4(1.0, 0.0, 0.0, 0.0));
-                  snowLevel *= ptSnowStr0.x * weights.x + ptSnowStr1.x * weights.y + ptSnowStr2.x * weights.z + ptSnowStr3.x * weights.w;
-               #endif
-
-               half2 levelMaxMin = half2(1, 0);
-               #if _SNOWMASK
-                  levelMaxMin = SAMPLE_TEXTURE2D_LOD(_SnowMask, shared_linear_clamp_sampler, uv, 0).xy;
-               #endif
-               
-               float3 snowUpVector = _SnowUpVector;
-               float worldHeight = worldPos.y;
-               
-               half snowDot = saturate(dot(worldNormalVertex, snowUpVector));
-               half snowDotVertex = max(snowLevel/2, snowDot);
-               
-
-               float snowFade = SnowFade(worldHeight, snowMin, snowMax, snowDotVertex, snowDotVertex, snowLevel, puddleHeight);
-               #if _SNOWMASK
-                  snowFade = min(levelMaxMin.x, snowFade);
-                  snowFade = max(levelMaxMin.y, snowFade);
-               #endif
-
-               float height = splat_height * _SnowParams.x;
-               float erosion = height * _SnowParams.y;
-               float snowMask = saturate((snowFade - erosion));
-               float snowMask2 = saturate(snowMask * 8);
-               snowMask *= snowMask * snowMask * snowMask * snowMask * snowMask2;
-               float snowAmount = snowMask * snowDot;
-
-               return snowAmount;
             #endif
-            return 0;
+
+            #if _LAVA
+               fxLevels.a *= _LavaParams.y;
+            #endif
+
+            #if _TRAXSINGLE || _TRAXARRAY || _TRAXNOTEXTURE
+               fxLevels = saturate(max(fxLevels, _TraxFXThresholds * (1 - saturate(traxBuffer))));
+            #endif
+            return fxLevels;
+         }
+
+         half4 SampleFXLevels(float2 uv, out half wetness, out half burnLevel, half traxBuffer)
+         {
+            half4 fxLevels = half4(0,0,0,0);
+            burnLevel = 0;
+            wetness = 0;
+            #if _WETNESS || _PUDDLES || _STREAMS || _LAVA
+               fxLevels = SAMPLE_TEXTURE2D(_StreamControl, shared_linear_clamp_sampler, uv);
+
+               COUNTSAMPLE
+
+               #if _DYNAMICFLOWS
+               half4 flows = SAMPLE_TEXTURE2D(_DynamicStreamControl, shared_linear_clamp_sampler, uv);
+               COUNTSAMPLE
+
+               wetness = flows.x;
+               burnLevel = flows.y;
+
+               flows.zw = saturate(flows.zw*3);
+               fxLevels.zw = max(fxLevels.zw, flows.zw);
+               #endif
+
+               
+
+            #endif
+            return ProcessFXLevels(fxLevels, traxBuffer);
+         }
+
+
+         half4 SampleFXLevelsLOD(float2 uv, half traxBuffer)
+         {
+            half4 fxLevels = half4(0,0,0,0);
+            #if _WETNESS || _PUDDLES || _STREAMS || _LAVA
+            fxLevels = SAMPLE_TEXTURE2D_LOD(_StreamControl, shared_linear_clamp_sampler, uv, 0);
+               #if _DYNAMICFLOWS
+               half4 flows = SAMPLE_TEXTURE2D_LOD(_DynamicStreamControl, shared_linear_clamp_sampler, uv, 0);
+               flows.xy = 0;
+               fxLevels = max(fxLevels, flows);
+               #endif
+
+               #if _LAVA
+                  fxLevels.w *= _LavaDislacementScale;
+               #endif
+
+            #endif
+            return ProcessFXLevels(fxLevels, 1.0 - traxBuffer);
+         }
+
+
+         void WaterBRDF (inout half3 Albedo, inout half Smoothness, half metalness, half wetFactor, half surfPorosity) 
+         {
+            half porosity = saturate((( (1 - Smoothness) - 0.5)) / max(surfPorosity, 0.001));
+            half factor = lerp(1, 0.2, (1 - metalness) * porosity);
+            Albedo *= lerp(1.0, factor, wetFactor);
+            Smoothness = lerp(Smoothness, 0.92f, wetFactor);
+         }
+
+         void Flow(float2 uv, half2 flow, half speed, float intensity, out float2 uv1, out float2 uv2, out half interp)
+         {
+            float2 flowVector = flow * intensity;
+            
+            float timeScale = _Time.y * speed;
+            float2 phase = frac(float2(timeScale, timeScale + .5));
+
+            uv1.xy = (uv.xy - flowVector * half2(phase.x, phase.x));
+            uv2.xy = (uv.xy - flowVector * half2(phase.y, phase.y));
+
+            interp = abs(0.5 - phase.x) / 0.5;
+         }
+
+
+         #if _RAINDROPS
+         half2 ComputeRipple(float2 uv, half time, half weight)
+         {
+            half4 ripple = SAMPLE_TEXTURE2D(_RainDropTexture, sampler_Diffuse, uv);
+            ripple.yz = ripple.yz * 2 - 1;
+
+            half dropFrac = frac(ripple.w + time);
+            half timeFrac = dropFrac - 1.0 + ripple.x;
+            half dropFactor = saturate(0.2f + weight * 0.8 - dropFrac);
+            half finalFactor = dropFactor * ripple.x * 
+                                 sin( clamp(timeFrac * 9.0f, 0.0f, 3.0f) * 3.14159265359);
+
+            return half2(ripple.yz * finalFactor);
+         }
+         #endif
+
+         half2 DoRain(half2 waterNorm, float2 uv)
+         {
+         #if _RAINDROPS
+            #if _GLOBALRAIN
+               float rainIntensity = _Global_RainIntensity.x;
+            #else
+               float rainIntensity = _RainIntensityScale.x;
+            #endif
+            half dropStrength = rainIntensity;
+            const float4 timeMul = float4(1.0f, 0.85f, 0.93f, 1.13f); 
+            half4 timeAdd = float4(0.0f, 0.2f, 0.45f, 0.7f);
+            half4 times = _Time.yyyy;
+            times = frac((times * float4(1, 0.85, 0.93, 1.13) + float4(0, 0.2, 0.45, 0.7)) * 1.6);
+
+            float2 ruv1 = uv * _RainIntensityScale.yy;
+            float2 ruv2 = ruv1;
+
+            half4 weights = rainIntensity.xxxx - float4(0, 0.25, 0.5, 0.75);
+            half2 ripple1 = ComputeRipple(ruv1 + float2( 0.25f,0.0f), times.x, weights.x);
+            half2 ripple2 = ComputeRipple(ruv2 + float2(-0.55f,0.3f), times.y, weights.y);
+            half2 ripple3 = ComputeRipple(ruv1 + float2(0.6f, 0.85f), times.z, weights.z);
+            half2 ripple4 = ComputeRipple(ruv2 + float2(0.5f,-0.75f), times.w, weights.w);
+            weights = saturate(weights * 4);
+
+            half2 rippleNormal = half2( weights.x * ripple1.xy +
+                        weights.y * ripple2.xy + 
+                        weights.z * ripple3.xy + 
+                        weights.w * ripple4.xy);
+
+            waterNorm = lerp(waterNorm, BlendNormal2(rippleNormal, waterNorm), rainIntensity * dropStrength); 
+            return waterNorm;                        
+         #else
+            return waterNorm;
+         #endif
+         }
+
+
+         #if _WETNESS
+         float DoWetness(inout MicroSplatLayer o, half wetLevel, half porosity, float3 worldPos)
+         {
+            #if _GLOBALWETNESS
+               wetLevel = clamp(wetLevel, _Global_WetnessParams.x, _Global_WetnessParams.y);
+            #else
+               wetLevel = clamp(wetLevel, _WetnessParams.x, _WetnessParams.y);
+            #endif
+            #if _HEIGHTWETNESS
+               float l = _HeightWetness.x;
+               l += sin(_Time.y * _HeightWetness.z) * _HeightWetness.w;
+               half hw = saturate((l - worldPos.y) * _HeightWetness.y);
+               wetLevel = max(hw, wetLevel);
+            #endif
+
+            #if _DISTANCEWETNESS
+               float camDist = distance(_WorldSpaceCameraPos, worldPos);
+               float fade = saturate((camDist - _DistanceWetness.x) / _DistanceWetness.z);
+
+               wetLevel *= lerp(_DistanceWetness.y, _DistanceWetness.w, fade);
+            #endif
+            
+            return wetLevel;
+         }
+         #endif
+
+
+         #if _PUDDLES
+         // modity lighting terms for water..
+         float DoPuddles(inout MicroSplatLayer o, half puddleLevel, half porosity, float2 uv)
+         {
+            float2 pudParams = _PuddleParams;
+            #if _GLOBALPUDDLES
+            pudParams.y = _Global_PuddleParams;
+            #endif
+
+            puddleLevel *= pudParams.y;
+            float waterBlend = saturate((puddleLevel - o.Height) * pudParams.x);
+            return waterBlend;
+         }
+         #endif
+
+         float3 W2TVec(Input i, float3 normal) 
+         {
+            float3x3 t2w = GetTBN(i);
+            return normalize(mul(t2w, normal));
          }
          
-         #if _SNOWSPARKLE
-         void DoSnowSparkle(Input i, inout MicroSplatLayer o, float3 viewDir, float3 worldPos, float3 worldNormalVertex, float snowLevel)
+         float2 FlowVecFromWNV(Input i, float2 uv, float3 worldNormalVertex)
          {
-            
-            #if _DEBUG_SNOWSPARKLE
-            o.Albedo = 0;
-            o.Smoothness = 0;
-            o.Occlusion = 1;
-            o.Emission = 0;
-            
+            float2 ret = lerp(worldNormalVertex.xz, normalize(worldNormalVertex.xz), max(0.1, worldNormalVertex.z));
+            #if _MICROMESH || _MICROVERTEXMESH
+            ret = W2TVec(i, float3(0,-1,0)).xy;
+            #elif _MICRODIGGERMESH
+            ret = W2TVec(i, float3(0,1,0)).xy;
             #endif
-            
-
-            // screen space method. Looks nice because it's in SS, but fails because clearly not
-            // combing from a single spot on the terrain.
-
-            float size = 1 - (_SnowSparkleSize * 0.001);
-            float density = _SnowSparkleDensity;
-            float noiseDensity = _SnowSparkleNoiseDensity;
-            float viewDep = _SnowSparkleViewDependency;
-
-            float3 wsView = worldPos - _WorldSpaceCameraPos;
-            float3 wsViewDir = normalize(wsView);
-
-            float z = length(wsView);
-            float e = floor(log2(0.3*z+3.0)/0.3785116);
-            float level_z = 0.1 * pow(1.3, e) - 0.2;
-            float level = 0.12 / level_z;
-            density *= level;
-            noiseDensity *= level;
-
-            float3 v = wsView / z;
-            float3 view_new = v * level_z;
-            view_new = sign(view_new) * frac(abs(view_new));
-
-            float3 pos = density*worldPos + viewDep * normalize(view_new);
-
-            float3 g_index = floor(pos);
-            float3 pc = g_index / density;
-            
-            float3 noise = _SnowSparkleNoiseAmplitude * SAMPLE_TEXTURE2D_LOD( _SnowSparkleNoise, sampler_Diffuse, noiseDensity * pc.xz + pc.y, 0).rgb;
-            float3 offset = 0.75;
-            float3 px = pos - g_index + 0.5 * frac(noise)-offset;
-
-            float dotvn = dot(wsViewDir, worldNormalVertex);
-            float3 ma = v - dotvn*worldNormalVertex;
-            float3 px_proj = dot(px, ma) * ma;
-            px += (abs(dotvn)-1.0)*px_proj/dot(ma,ma);
-
-            float dist2 = dot(px, px);
-            float thresh = 1 - size;
-
-            
-            float r = dist2 > thresh? 0 : 1-dist2/thresh;
-
-            r *= snowLevel * _SnowSparkleStrength;
-            float3 c = _SnowSparkleTint * r;
-               
-            o.Albedo += c;
-            o.Emission += c * _SnowSparkleEmission;
-            o.Smoothness += r;
-
-            #if _DEBUG_SNOWSPARKLE
-            o.Albedo = c;
-            o.Emission = c * _SnowSparkleEmission;
-            o.Smoothness = r;
-            o.Normal = float3(0,0,1);
-            #endif
-            
-            
-            
+            return ret;
          }
-         #endif
 
-         #if _SNOWRIM
-         void DoSnowRim(inout MicroSplatLayer o, Input i, float snowAmount)
+         #if _STREAMS
+         half3 GetWaterNormal(Input i, float2 uv, float3 worldNormalVertex)
          {
-            float rim = 1.0 - saturate(dot(normalize(_WorldSpaceCameraPos - i.worldPos), WorldNormalVector(i, o.Normal))); 
-            o.Emission += pow(rim, _SnowRimPower) * _SnowRimColor * snowAmount;
-         }
-         #endif
+            float2 flowDir = FlowVecFromWNV(i, uv, worldNormalVertex);
+            float2 uv1;
+            float2 uv2;
+            half interp;
+            Flow(uv * _StreamUVScales.xy, flowDir, _StreamFlowParams.y, _StreamFlowParams.z, uv1, uv2, interp);
 
-         #if _SNOWSTOCHASTIC
-         void SampleSnowStochastic(float2 uv, float2 dx, float2 dy, out float4 albedo, out float4 nsao)
-         {
-            float2 uv1, uv2, uv3;
-            half3 w;
-            PrepareStochasticUVs(_SnowStochasticScale, uv, uv1, uv2, uv3, w);
-               
-            half4 S1 = SAMPLE_TEXTURE2D_GRAD(_SnowDiff, sampler_Diffuse, uv1, dx, dy);
-            half4 S2 = SAMPLE_TEXTURE2D_GRAD(_SnowDiff, sampler_Diffuse, uv2, dx, dy);
-            half4 S3 = SAMPLE_TEXTURE2D_GRAD(_SnowDiff, sampler_Diffuse, uv3, dx, dy);
-
+            half3 fd = lerp(SAMPLE_TEXTURE2D(_StreamNormal, sampler_NormalSAO, uv1), SAMPLE_TEXTURE2D(_StreamNormal, sampler_NormalSAO, uv2), interp).xyz;
             COUNTSAMPLE
             COUNTSAMPLE
-            COUNTSAMPLE
 
-            half3 cw = BaryWeightBlend(w, S1.a, S2.a, S3.a, _SnowStochasticContrast);
-
-            half4 N1, N2, N3 = half4(0,0,1,0);
-            MSBRANCHCLUSTER(cw.x);
-            {
-               N1 = SAMPLE_TEXTURE2D_GRAD(_SnowNormal, sampler_NormalSAO, uv1, dx, dy);
-               COUNTSAMPLE
-            }
-            MSBRANCHCLUSTER(cw.y);
-            {
-               N2 = SAMPLE_TEXTURE2D_GRAD(_SnowNormal, sampler_NormalSAO, uv2, dx, dy);
-               COUNTSAMPLE
-            }
-            MSBRANCHCLUSTER(cw.z);
-            {
-               N3 = SAMPLE_TEXTURE2D_GRAD(_SnowNormal, sampler_NormalSAO, uv3, dx, dy);
-               COUNTSAMPLE
-            }
-               
-            albedo = S1 * cw.x + S2 * cw.y + S3 * cw.z;
-            nsao = N1 * cw.x + N2 * cw.y + N3 * cw.z;
-            nsao = nsao.agrb;
+            fd.xy = fd.xy * 2 - 1;
+            return fd;
          }
-         #endif
-         
-         
-         float DoSnow(Input i, inout MicroSplatLayer o, float2 uv, float3 worldNormal, float3 worldNormalVertex, 
-               float3 worldPos, float puddleHeight, half surfPorosity, float camDist, Config config, half4 weights, 
-               inout half3 SSSTint, inout half SSSThickness, float traxBuffer, float3 traxNormal)
+
+         // water normal only
+         void DoStreamRefract(inout Config config, inout TriplanarConfig tc, float3 waterNorm, half puddleLevel, half height)
          {
-            #if _SNOW
-            float2 maskUV = uv;
-            #if _SNOWWORLDSPACEUV
-               uv = worldPos.xz;
-            #endif
-            
-            
-            float2 dx = ddx(uv) * _SnowUVScales.xy;
-            float2 dy = ddy(uv) * _SnowUVScales.xy;
-
-            float3 wdx = ddx(worldPos) * _SnowUVScales.xxy;
-            float3 wdy = ddy(worldPos) * _SnowUVScales.xxy;
-
-            uv *= _SnowUVScales.xy;
-            float3 wuv = worldPos * _SnowUVScales.xxy;
-            
-            #if _USEGLOBALSNOWLEVEL 
-            float snowLevel = _Global_SnowLevel;
+            #if _GLOBALSTREAMS
+               puddleLevel *= _Global_StreamMax;
             #else
-            float snowLevel = _SnowAmount;
+               puddleLevel *= _StreamMax;
             #endif
 
-            #if _USEGLOBALSNOWHEIGHT
-            float snowMin = _Global_SnowMinMaxHeight.x;
-            float snowMax = _Global_SnowMinMaxHeight.y;
-            #else
-            float snowMin = _SnowHeightAngleRange.x;
-            float snowMax = _SnowHeightAngleRange.y;
-            #endif
-
-            
-
-
-            float snowAge = _SnowParams.z;
-            float snowErosion = _SnowParams.y;
-            float snowHeight = _SnowParams.x;
-
-
-
-            #if _PERTEXSNOWSTRENGTH && !_SIMPLESNOW
-               SAMPLE_PER_TEX(ptSnowStr, 8.5, config, half4(1.0, 0.0, 0.0, 0.0));
-               snowLevel *= ptSnowStr0.x * weights.x + ptSnowStr1.x * weights.y + ptSnowStr2.x * weights.z + ptSnowStr3.x * weights.w;
-            #endif
-
-            half2 levelMaxMin = half2(1,0);
-            #if _SNOWMASK
-               #if _MEGASPLAT
-                  levelMaxMin = i.fx2.yx;
-               #else
-                  levelMaxMin = SAMPLE_TEXTURE2D_GRAD(_SnowMask, shared_linear_clamp_sampler, maskUV, ddx(maskUV), ddy(maskUV));
-               #endif
-            #endif
-            
-            float3 snowUpVector = _SnowUpVector;
-            float worldHeight = i.worldHeight;
-            
-            
-            half snowDot = max(snowLevel/2, dot(worldNormal, snowUpVector));
-            half snowDotVertex = snowDot;
-            #if _SNOWSIMPLE
-               half ao = 1;
-               half oheight = 0;
-               half smoothness = 0;
-            #else
-               half ao = o.Occlusion;
-               half oheight = o.Height;
-               half smoothness = o.Smoothness;
-            #endif
-               
-            
-            float snowFade = SnowFade(worldHeight, snowMin, snowMax, snowDot, snowDotVertex, snowLevel, puddleHeight);
-
-            #if _SNOWMASK
-               snowFade = min(levelMaxMin.x, snowFade);
-               snowFade = max(levelMaxMin.y, snowFade);
-            #endif
-
-            //MSBRANCHOTHER(snowFade)
+            #if _STREAMHEIGHTFILTER
             {
-               #if _SNOWSTOCHASTIC && _SNOWTRIPLANAR
-
-                  float3 pn = pow(abs(worldNormal), 3);
-                  pn = pn / (pn.x + pn.y + pn.z);
-            
-                  half3 axisSign = sign(worldNormal);
-
-                  float2 uv0 = wuv.zy * axisSign.x;
-                  float2 uv1 = wuv.xz * axisSign.y;
-                  float2 uv2 = wuv.xy * axisSign.z;
-
-                  half4 snowAlb0; half4 snowAlb1; half4 snowAlb2;
-                  half4 snowNsao0; half4 snowNsao1; half4 snowNsao2;
-
-                  SampleSnowStochastic(uv0, wdx.zy, wdy.zy, snowAlb0, snowNsao0);
-                  SampleSnowStochastic(uv1, wdx.xz, wdy.xz, snowAlb1, snowNsao1);
-                  SampleSnowStochastic(uv2, wdx.xy, wdy.xy, snowAlb2, snowNsao2);
-
-                  half4 snowAlb = snowAlb0 * pn.x + snowAlb1 * pn.y + snowAlb2 * pn.z;
-                  half4 snowNsao = snowNsao0 * pn.x + snowNsao1 * pn.y + snowNsao2 * pn.z;
-
-               #elif _SNOWTRIPLANAR
-
-                  float3 pn = pow(abs(worldNormal), 3);
-                  pn = pn / (pn.x + pn.y + pn.z);
-            
-                  half3 axisSign = sign(worldNormal);
-
-                  float2 uv0 = wuv.zy * axisSign.x;
-                  float2 uv1 = wuv.xz * axisSign.y;
-                  float2 uv2 = wuv.xy * axisSign.z;
-                  half4 snowAlb0 = SAMPLE_TEXTURE2D_GRAD(_SnowDiff, sampler_Diffuse, uv0, wdx.zy, wdy.zy);
-                  half4 snowAlb1 = SAMPLE_TEXTURE2D_GRAD(_SnowDiff, sampler_Diffuse, uv1, wdx.xz, wdy.xz);
-                  half4 snowAlb2 = SAMPLE_TEXTURE2D_GRAD(_SnowDiff, sampler_Diffuse, uv2, wdx.xy, wdy.xy);
-                  half4 snowNsao0 = SAMPLE_TEXTURE2D_GRAD(_SnowNormal, sampler_NormalSAO, uv0, wdx.zy, wdy.zy).agrb;
-                  half4 snowNsao1 = SAMPLE_TEXTURE2D_GRAD(_SnowNormal, sampler_NormalSAO, uv1, wdx.xz, wdy.xz).agrb;
-                  half4 snowNsao2 = SAMPLE_TEXTURE2D_GRAD(_SnowNormal, sampler_NormalSAO, uv2, wdx.xy, wdy.xy).agrb;
-                  half4 snowAlb = snowAlb0 * pn.x + snowAlb1 * pn.y + snowAlb2 * pn.z;
-                  half4 snowNsao = snowNsao0 * pn.x + snowNsao1 * pn.y + snowNsao2 * pn.z;
-                  COUNTSAMPLE
-                  COUNTSAMPLE
-                  COUNTSAMPLE
-                  COUNTSAMPLE
-                  COUNTSAMPLE
-                  COUNTSAMPLE
-
-               #elif _SNOWSTOCHASTIC
-                  half4 snowAlb;
-                  half4 snowNsao;
-
-                  SampleSnowStochastic(uv, dx, dy, snowAlb, snowNsao);
-               #else
-                  half4 snowAlb = SAMPLE_TEXTURE2D_GRAD(_SnowDiff, sampler_Diffuse, uv, dx, dy);
-                  half4 snowNsao = SAMPLE_TEXTURE2D_GRAD(_SnowNormal, sampler_NormalSAO, uv, dx, dy).agrb;
-                  COUNTSAMPLE
-                  COUNTSAMPLE
-               #endif
-
-               #if _SNOWDISTANCERESAMPLE
-               {
-                  float fade = saturate ((camDist - _SnowDistanceResampleScaleStrengthFade.z) / _SnowDistanceResampleScaleStrengthFade.w);
-                  fade *= _SnowDistanceResampleScaleStrengthFade.y;
-                  MSBRANCHOTHER(fade)
-                  {
-                     float2 snowResampleUV = uv * _SnowDistanceResampleScaleStrengthFade.x;
-                     float2 rsdx = dx * _SnowDistanceResampleScaleStrengthFade.x;
-                     float2 rsdy = dy * _SnowDistanceResampleScaleStrengthFade.x;
-                     half4 resSnowAlb = SAMPLE_TEXTURE2D_GRAD(_SnowDiff, sampler_Diffuse,  snowResampleUV, rsdx, rsdy);
-                     half4 resSnowNsao = SAMPLE_TEXTURE2D_GRAD(_SnowNormal, sampler_NormalSAO, snowResampleUV, rsdx, rsdy).grab;
-                     COUNTSAMPLE
-                     COUNTSAMPLE
-           
-                     snowAlb.rgb = lerp(snowAlb, resSnowAlb, fade);
-                     snowNsao = lerp(snowNsao, resSnowNsao, fade);
-                  }
-               }
-               #endif
-
-               #if _SNOWNORMALNOISE
-               {
-                  float2 normalUV = uv * _SnowNormalNoiseScaleStrength.x;
-                  half3 noise = UnpackNormal(SAMPLE_TEXTURE2D_GRAD(_SnowNormalNoise, sampler_Diffuse, normalUV, dx * _SnowNormalNoiseScaleStrength.x, dy * _SnowNormalNoiseScaleStrength.x));
-                  COUNTSAMPLE
-                  snowNsao.xy = lerp(snowNsao.xy, BlendNormal2(snowNsao.xy, noise.xy), _SnowNormalNoiseScaleStrength.y);
-               }
-               #endif
-            
-               #if _SNOWFOOTSTEPS
-               {
-                  traxNormal.xy *= _SnowTraxNormalStrength;
-                  float2 fsdx = dx * _SnowTraxUVScales;
-                  float2 fsdy = dy * _SnowTraxUVScales;
-                  traxBuffer = 1 - ((1 - traxBuffer) * _SnowTraxTextureBlend);
-
-                  half4 traxDiffuse = SAMPLE_TEXTURE2D_GRAD(_SnowTrackDiff, sampler_Diffuse, uv * _SnowTraxUVScales, fsdx, fsdy);
-                  half4 traxN = SAMPLE_TEXTURE2D_GRAD(_SnowTrackNSAO, sampler_NormalSAO, uv * _SnowTraxUVScales, fsdx, fsdy).agrb;
-                  COUNTSAMPLE
-                  COUNTSAMPLE
-
-                  traxDiffuse.rgb *= _TraxSnowTint;
-                  snowAlb.rgba = lerp(traxDiffuse, snowAlb.rgba, traxBuffer);
-                  snowNsao.rgba = lerp(traxN + half4(traxNormal.xy, 0, 0), snowNsao.rgba, traxBuffer);
-                  snowAge = lerp(_TraxSnowAge, snowAge, traxBuffer);
-                  snowErosion = lerp(_TraxSnowErosion, snowErosion, traxBuffer);
-                  snowHeight = lerp(_TraxSnowHeight, snowHeight, traxBuffer);
-
-                  snowFade = saturate(snowFade - _TraxSnowRemoval * (1-saturate(traxBuffer)));
-               }
-               #endif
-
-              
-
-               half3 snowNormal = float3(snowNsao.xy * 2 - 1, 1);
-             
-               half height = saturate(oheight - (1.0 - snowHeight));
-               half erosion = saturate(ao * snowErosion);
-               erosion *= erosion;
-               half snowMask = saturate(snowFade - erosion - height);
-               snowMask = snowMask * snowMask * snowMask;
-               half snowAmount = snowMask * saturate(snowDot - (height + erosion) * 0.5);  // up
-               snowAmount = saturate(snowAmount * 8);
-
-               float wetnessMask = saturate((_SnowParams.w * (4.0 * snowFade) - (snowNsao.b) * 0.5));
-                
-               float snowNormalAmount = snowAmount * snowAmount;
-
-               float porosity = saturate((((1.0 - smoothness) - 0.5)) / max(surfPorosity, 0.001));
-               float factor = lerp(1, 0.4, porosity);
-
-               o.Albedo *= lerp(1.0, factor, wetnessMask);
-               o.Normal = lerp(o.Normal, float3(0,0,1), wetnessMask);
-               o.Smoothness = lerp(o.Smoothness, 0.8, wetnessMask);
-
-
-               #if _SNOWSSS
-                  SSSTint = lerp(SSSTint, _SnowSSSTint.rgb, snowNormalAmount);
-                  SSSThickness = lerp(SSSThickness, _SnowSSSTint.a * 2 * snowAlb.a, snowNormalAmount);
-               #endif
-
-               snowAlb.rgb *= _SnowTint.rgb;
-               
-
-               o.Albedo = lerp(o.Albedo, snowAlb.rgb, snowAmount);
-               o.Normal = lerp(o.Normal, snowNormal, snowNormalAmount);
-               o.Smoothness = lerp(o.Smoothness, (snowNsao.b) * snowAge, snowAmount);
-               o.Occlusion = lerp(o.Occlusion, snowNsao.w, snowAmount);
-               o.Height = lerp(o.Height, snowAlb.a, snowAmount);
-               o.Metallic = lerp(o.Metallic, 0.01, snowAmount);
-               float crystals = saturate(0.65 - snowNsao.b);
-               o.Smoothness = lerp(o.Smoothness, crystals * snowAge, snowAmount);
-               
-               #if _SNOWSPARKLE
-               DoSnowSparkle(i, o, i.viewDir, worldPos, worldNormalVertex, snowAmount);
-               #endif
-
-               #if _SNOWRIM
-               DoSnowRim(o, i, snowAmount);
-               #endif
-
-               return snowAmount;
+               float shf = saturate((height - _StreamFades.x) / max(_StreamFades.y - _StreamFades.x, 0.0001));
+               shf *= 1.0 - saturate((height - _StreamFades.z) / max(_StreamFades.w - _StreamFades.z, 0.0001));
+               puddleLevel *= shf;
             }
             #endif
+
+            float waterBlend = saturate((puddleLevel - height) * _StreamBlend);
+            waterBlend *= waterBlend;
+
+            waterNorm.xy *= puddleLevel * waterBlend;
+            float2 offset = lerp(waterNorm.xy, waterNorm.xy * height, _StreamFlowParams.w);
+            offset *= _StreamFlowParams.x;
+            #if !_TRIPLANAR
+            config.uv0.xy += offset;
+            config.uv1.xy += offset;
+            config.uv2.xy += offset;
+            config.uv3.xy += offset;
+            #else
+            tc.uv0[0].xy += offset;
+            tc.uv0[1].xy += offset;
+            tc.uv0[2].xy += offset;
+            tc.uv1[0].xy += offset;
+            tc.uv1[1].xy += offset;
+            tc.uv1[2].xy += offset;
+            tc.uv2[0].xy += offset;
+            tc.uv2[1].xy += offset;
+            tc.uv2[2].xy += offset;
+            tc.uv3[0].xy += offset;
+            tc.uv3[1].xy += offset;
+            tc.uv3[2].xy += offset;
+            #endif
+         }  
+
+
+
+
+         float DoStream(inout MicroSplatLayer o, float2 uv, half porosity, half3 waterNormFoam, 
+            half2 flowDir, half puddleLevel, half foamStrength, half wetTrail,
+            inout half foam)
+         {
+            
+            float waterBlend = saturate((puddleLevel - o.Height) * _StreamBlend);
+            if (waterBlend + wetTrail > 0)
+            {
+               half2 waterNorm = waterNormFoam.xy;
+
+               half pmh = puddleLevel - o.Height;
+               // refactor to compute flow UVs in previous step?
+               float2 foamUV0 = 0;
+               float2 foamUV1 = 0;
+               half foamInterp = 0;
+               Flow(uv * 1.75 + waterNormFoam.xy * waterNormFoam.b, flowDir, _StreamFlowParams.y/3, _StreamFlowParams.z/3, foamUV0, foamUV1, foamInterp);
+               half foam0 = SAMPLE_TEXTURE2D(_StreamNormal, sampler_NormalSAO, foamUV0).b;
+               half foam1 = SAMPLE_TEXTURE2D(_StreamNormal, sampler_NormalSAO, foamUV1).b;
+               COUNTSAMPLE
+               COUNTSAMPLE
+               foam = lerp(foam0, foam1, foamInterp);
+               foam = foam * abs(pmh) + (foam * o.Height);
+               foam *= 1.0 - (saturate(pmh * 1.5));
+               foam *= foam;
+               foam *= _StreamNormalFoam.y * foamStrength;
+
+               
+
+               #if _DYNAMICFLOWS
+                  #if _GLOBALSTREAMS
+                     float streamMax = _Global_StreamMax;
+                  #else
+                     float streamMax = _StreamMax;
+                  #endif
+                  half waterBlend2 = max(waterBlend, saturate((wetTrail * streamMax - o.Height) * _StreamBlend) * 0.85);
+                  return waterBlend2;
+               #endif
+               return waterBlend;   
+            }
             return 0;
          }
 
-         // for object blend shader, must, unfortunately, keep in sync..
-         float DoSnowSimple(Input i, inout MicroSplatLayer o, float2 uv, float3 worldNormal, float3 worldNormalVertex, 
-               float3 worldPos, float puddleHeight, half surfPorosity)
+         #endif
+
+
+         #if _LAVA
+
+         half4 SampleLava(float2 uv, float2 dx, float2 dy)
          {
-            #if _SNOW
-            float2 maskUV = uv;
-            #if _SNOWWORLDSPACEUV
-               uv = worldPos.xz;
+            #if _LAVASTOCHASTIC
+               float2 uv1, uv2, uv3;
+               half3 w;
+               PrepareStochasticUVs(_LavaStochasticSize, uv, uv1, uv2, uv3, w);
+               
+               half4 S1 = SAMPLE_TEXTURE2D_GRAD(_LavaDiffuse, sampler_Diffuse, uv1, dx, dy);
+               half4 S2 = SAMPLE_TEXTURE2D_GRAD(_LavaDiffuse, sampler_Diffuse, uv2, dx, dy);
+               half4 S3 = SAMPLE_TEXTURE2D_GRAD(_LavaDiffuse, sampler_Diffuse, uv3, dx, dy);
+               COUNTSAMPLE
+               COUNTSAMPLE
+               COUNTSAMPLE
+               
+               half3 cw = BaryWeightBlend(w, S1.r, S2.r, S3.r, _LavaStochasticContrast);
+               return S1 * cw.x + S2 * cw.y + S3 * cw.z;
+            #else
+               COUNTSAMPLE
+               return SAMPLE_TEXTURE2D_GRAD(_LavaDiffuse, sampler_Diffuse, uv, dx, dy);
             #endif
-            
-            uv *= _SnowUVScales.xy;
+         }
+
+         float DoLava(inout MicroSplatLayer o, float2 uv, half lavaLevel, half2 flowDir)
+         {
+            uv *= _LavaUVScale;
+            float lvh = lavaLevel - o.Height;
+            float lavaBlend = saturate(lvh * _LavaParams.x);
+
             float2 dx = ddx(uv);
             float2 dy = ddy(uv);
-            
-            #if _USEGLOBALSNOWLEVEL 
-               float snowLevel = _Global_SnowLevel;
-            #else
-               float snowLevel = _SnowAmount;
-            #endif
-
-            #if _USEGLOBALSNOWHEIGHT
-               float snowMin = _Global_SnowMinMaxHeight.x;
-               float snowMax = _Global_SnowMinMaxHeight.y;
-            #else
-               float snowMin = _SnowHeightAngleRange.x;
-               float snowMax = _SnowHeightAngleRange.y;
-            #endif
-
-            half2 levelMaxMin = half2(1,0);
-            #if _SNOWMASK
-               #if _MEGASPLAT
-                  levelMaxMin = i.fx2.yx;
-               #else
-                  levelMaxMin = SAMPLE_TEXTURE2D_GRAD(_SnowMask, shared_linear_clamp_sampler, maskUV, ddx(maskUV), ddy(maskUV));
-               #endif
-            #endif
-
-
-
-            float snowAge = _SnowParams.z;
-            float snowErosion = _SnowParams.y;
-            float snowHeight = _SnowParams.x;
-            
-            float3 snowUpVector = _SnowUpVector;
-            float worldHeight = i.worldHeight;
-            #if _PLANETVECTORS
-               snowUpVector = i.worldUpVector;
-            #endif
-
-            half snowDot = max(snowLevel/2, dot(worldNormal, snowUpVector));
-            half snowDotVertex = max(snowLevel/2, dot(worldNormalVertex, snowUpVector));
-            float snowFade = SnowFade(worldHeight, snowMin, snowMax, snowDot, snowDotVertex, snowLevel, puddleHeight);
-
-
-            MSBRANCHOTHER(snowFade)
+            UNITY_BRANCH
+            if (lavaBlend > 0)
             {
-               
-               half4 snowAlb = SAMPLE_TEXTURE2D_GRAD(_SnowDiff, sampler_Diffuse, uv, dx, dy);
-               half4 snowNsao = SAMPLE_TEXTURE2D_GRAD(_SnowNormal, sampler_NormalSAO, uv, dx, dy).agrb;
-               COUNTSAMPLE
-               COUNTSAMPLE
+               half distortionSize = _LavaParams2.x;
+               half distortionRate = _LavaParams2.y;
+               half distortionScale = _LavaParams2.z;
+               half darkening = _LavaParams2.w;
+               half3 edgeColor = _LavaEdgeColor;
+               half3 lavaColorLow = _LavaColorLow;
+               half3 lavaColorHighlight = _LavaColorHighlight;
 
-               snowAlb.rgb *= _SnowTint.rgb;
 
-               #if _SNOWNORMALNOISE
-               {
-                  float2 normalUV = uv * _SnowNormalNoiseScaleStrength.x;
-                  half3 noise = UnpackNormal(SAMPLE_TEXTURE2D_GRAD(_SnowNormalNoise, sampler_Diffuse, normalUV, dx * _SnowNormalNoiseScaleStrength.x, dy * _SnowNormalNoiseScaleStrength.x));
+               half lavaSpeed = _LavaParams.z;
+               half lavaInterp = _LavaParams.w;
 
-                  snowNsao.xy = lerp(snowNsao.xy, BlendNormal2(snowNsao.xy, noise.xy), _SnowNormalNoiseScaleStrength.y);
-               }
+               float2 uv1 = 0;
+               float2 uv2 = 0;
+               half interp = 0;
+               half drag = lerp(0.1, 1, saturate(lvh));
+               Flow(uv, flowDir, lavaInterp, lavaSpeed * drag, uv1, uv2, interp);
 
-               #endif
-               
-               half3 snowNormal = float3(snowNsao.xy * 2 - 1, 1);
-               half ao = o.Occlusion;
+               float2 dist_uv1;
+               float2 dist_uv2;
+               half dist_interp;
+               Flow(uv * distortionScale, flowDir, distortionRate, distortionSize, dist_uv1, dist_uv2, dist_interp);
 
-               half height = saturate(o.Height - (1-snowHeight));
-               half erosion = saturate(ao * snowErosion);
-               erosion *= erosion;
-               half snowMask = saturate(snowFade - erosion - height);
-               snowMask = snowMask * snowMask * snowMask;
-               half snowAmount = snowMask * saturate(snowDot - (height + erosion) * 0.5);  // up
-               snowAmount = saturate(snowAmount * 8);
+               half4 lavaDist = lerp(SampleLava(dist_uv1*0.51, dx, dy), SampleLava(dist_uv2, dx, dy), dist_interp);
+               half4 dist = lavaDist * (distortionSize * 2) - distortionSize;
 
-               float wetnessMask = saturate((_SnowParams.w * (4.0 * snowFade) - (snowNsao.b) * 0.5));
+               half4 lavaTex = lerp(SampleLava(uv1*1.1 + dist.xy, dx, dy), SampleLava(uv2 + dist.zw, dx, dy), interp);
 
-               float snowNormalAmount = snowAmount * snowAmount;
+               // base lava color, based on heights
+               half3 lavaColor = lerp(lavaColorLow, lavaColorHighlight, lavaTex.b);
 
-               float porosity = saturate((((1.0 - o.Smoothness) - 0.5)) / max(surfPorosity, 0.001));
-               float factor = lerp(1, 0.4, porosity);
+               // edges
+               float lavaBlendWide = saturate((lavaLevel - o.Height) * _LavaParams.x * 0.5);
+               float edge = saturate((1 - lavaBlendWide) * 3);
 
-               o.Albedo *= lerp(1.0, factor, wetnessMask);
-               o.Normal = lerp(o.Normal, float3(0,0,1), wetnessMask);
-               o.Smoothness = lerp(o.Smoothness, 0.8, wetnessMask);
+               // darkening
+               darkening = saturate(lavaTex.a * darkening * saturate(lvh*2));
+               lavaColor *= 1.0 - darkening;
+               // edges
+               lavaColor = lerp(lavaColor, edgeColor, edge);
 
-         
-               o.Albedo = lerp(o.Albedo, snowAlb.rgb, snowAmount);
-               o.Normal = lerp(o.Normal, snowNormal, snowNormalAmount);
-               o.Smoothness = lerp(o.Smoothness, (snowNsao.b) * snowAge, snowAmount);
-               o.Occlusion = lerp(o.Occlusion, snowNsao.w, snowAmount);
-               o.Height = lerp(o.Height, snowAlb.a, snowAmount);
-               o.Metallic = lerp(o.Metallic, 0.01, snowAmount);
-               float crystals = saturate(0.65 - snowNsao.b);
-               o.Smoothness = lerp(o.Smoothness, crystals * snowAge, snowAmount);
+               o.Albedo = lerp(o.Albedo, lavaColor, lavaBlend);
+               o.Normal.xy = lerp(o.Normal.xy, lavaTex.xy * 2 - 1, lavaBlend);
+               o.Smoothness = lerp(o.Smoothness, 0.3, lavaBlend * darkening);
 
-               #if _SNOWSPARKLE
-               DoSnowSparkle(i, o, i.viewDir, worldPos, worldNormalVertex, snowAmount);
-               #endif
-
-               #if _SNOWRIM
-               DoSnowRim(o, i, snowAmount);
-               #endif
-
-               return snowAmount;
-            
+               half3 emis = lavaColor * lavaBlend;
+               o.Emission = lerp(o.Emission, emis * _LavaEmissiveMult, lavaBlend);
+               // bleed
+               o.Emission += edgeColor * 0.3 * (saturate((lavaLevel*1.2 - o.Height) * _LavaParams.x) - lavaBlend);
+               return saturate(lavaBlend*3);
             }
-            #endif
             return 0;
          }
 
+
+         #endif
+
+
+
+
+
+         float DoStreams(Input i, inout MicroSplatLayer o, half4 fxLevels, float2 uv, half porosity, 
+            half3 waterNormalFoam, float3 worldNormalVertex, half streamFoam, half wetLevel, half burnLevel, float3 worldPos)
+         {
+            float pud = 0;
+            float wetness = 0;
+            half foam = 0;
+            half streamPud = 0;
+
+            #if _WETNESS
+            wetness = DoWetness(o, fxLevels.x, porosity, worldPos);
+            #endif
+
+
+            #if _PUDDLES
+            pud = DoPuddles(o, fxLevels.g, porosity, uv);
+            #endif
+
+            
+
+            #if _STREAMS || _LAVA
+            float2 flowDir = FlowVecFromWNV(i, uv, worldNormalVertex);
+            #endif
+
+            
+            #if _STREAMS
+               #if _STREAMHEIGHTFILTER
+               {
+                  float shf = saturate((worldPos.y - _StreamFades.x) / max(_StreamFades.y - _StreamFades.x, 0.0001));
+                  shf *= 1.0 - saturate((worldPos.y - _StreamFades.z) / max(_StreamFades.w - _StreamFades.z, 0.0001));
+                  fxLevels.z *= shf;
+                  wetLevel *= shf;
+               }
+               #endif
+
+            half foamStr = min(length(worldNormalVertex.xz) * 18, 1) * streamFoam;
+            streamPud = DoStream(o, uv, porosity, waterNormalFoam, flowDir, fxLevels.z, foamStr, wetLevel, foam);
+            o.Albedo = lerp(o.Albedo, o.Albedo * _StreamTint * 2.0, streamPud);
+            //pud -= streamPud;
+            #endif
+
+            #if _WETNESS || _PUDDLES || _STREAMS
+               half3 waterNorm = half3(0,0,1);
+               half3 wetAlbedo = o.Albedo;
+               half wetSmoothness = o.Smoothness;
+
+               float wetBlend = max(max(pud, wetness), streamPud);
+
+               WaterBRDF(wetAlbedo, wetSmoothness, o.Metallic, wetBlend, porosity);
+               
+               wetAlbedo += foam;
+               wetSmoothness -= foam;
+
+               float foamNormStr = 1; 
+               #if _STREAMS
+                  foamNormStr = _StreamNormalFoam.x;
+               #endif
+
+               #if _RAINDROPS
+               waterNorm.xy = DoRain(waterNorm.xy, uv) * pud;
+               #endif
+
+               
+
+
+               o.Normal = lerp(o.Normal, waterNorm, pud * foamNormStr);
+               o.Occlusion = lerp(o.Occlusion, 1, wetBlend);
+               o.Smoothness = lerp(o.Smoothness, wetSmoothness, wetBlend);
+               o.Albedo = lerp(o.Albedo, wetAlbedo, wetBlend);
+
+            #endif
+
+
+            #if _LAVA
+               #if _LAVAHEIGHTFILTER
+               {
+                  float lhf = saturate((worldPos.y - _LavaFades.x) / max(_LavaFades.y - _LavaFades.x, 0.0001));
+                  lhf *= 1.0 - saturate((worldPos.y - _LavaFades.z) / max(_LavaFades.w - _LavaFades.z, 0.0001));
+                  fxLevels.a *= lhf;
+                  burnLevel *= lhf;
+               }
+               #endif
+
+            float burn = 1 - burnLevel * 0.85;
+            o.Albedo *= burn;
+            o.Smoothness *= burn;
+            pud = max(streamPud, DoLava(o, uv, fxLevels.a, flowDir));
+            #endif
+
+            pud = max(max(pud, streamPud), wetness);
+            #if _WETNESSMASKSNOW
+            pud = max(pud, 1-fxLevels.x);
+            #endif
+
+            return pud;
+         }
 
 
       void SampleAlbedo(inout Config config, inout TriplanarConfig tc, inout RawSamples s, MIPFORMAT mipLevel, half4 weights)
@@ -5054,8 +4998,7 @@ float3 GetTessFactors ()
       #define _PERTEXUVSCALEOFFSET 1
       #define _BRANCHSAMPLES 1
       #define _BRANCHSAMPLESAGR 1
-      #define _SNOW 1
-      #define _SNOWSIMPLE 1
+      #define _WETNESS 1
       #define _MSRENDERLOOP_UNITYURP2022 1
       #define _MICROSPLATBASEMAP 1
       #define _MSRENDERLOOP_UNITYLD 1
@@ -5481,65 +5424,73 @@ float3 GetTessFactors ()
       #endif
 
 
-         #if _SNOW
-         half4 _SnowParams; // influence, erosion, crystal, melt
-         half _SnowAmount;
-         half2 _SnowUVScales;
-         float4 _SnowHeightAngleRange;
-         half3 _SnowUpVector;
-         half3 _SnowTint;
-         #endif
-
-         #if _SNOWNORMALNOISE
-         float4 _SnowNormalNoiseScaleStrength;
-         #endif
-
-         #if _SNOWDISTANCERESAMPLE
-         float4 _SnowDistanceResampleScaleStrengthFade;
-         #endif
-
-         #if _SNOW && _USEGLOBALSNOWLEVEL
-         float _Global_SnowLevel;
-         #endif
-
-         #if _SNOW && _USEGLOBALSNOWHEIGHT
-         float2 _Global_SnowMinMaxHeight;
-         #endif
+         half _GlobalPorosity;
          
-         #if _SNOWSTOCHASTIC
-         half _SnowStochasticContrast;
-         half _SnowStochasticScale;
+         #if _WETNESS
+            #if _GLOBALWETNESS
+            half2 _Global_WetnessParams;
+            #else
+            half2 _WetnessParams;
+            #endif
+
+            #if _HEIGHTWETNESS
+            float4 _HeightWetness;
+            #endif
+
+            #if _DISTANCEWETNESS
+            float4 _DistanceWetness;
+            #endif
          #endif
 
-         #if _SNOWSSS
-         half4 _SnowSSSTint;
+         #if _PUDDLES
+            half2 _PuddleParams;
+            #if _GLOBALPUDDLES
+            half _Global_PuddleParams;
+            #endif
          #endif
 
-         #if _TESSDISTANCE || _TESSEDGE
-         half _TessDisplaceSnowMultiplier;
+         #if _STREAMS
+            half _StreamBlend;
+            half4 _StreamFlowParams;
+            half2 _StreamNormalFoam;
+            float2 _StreamUVScales;
+            #if _GLOBALSTREAMS
+               half _Global_StreamMax;
+            #else
+               half _StreamMax;
+            #endif
+            half3 _StreamTint;
+            #if _STREAMHEIGHTFILTER
+               float4 _StreamFades;
+            #endif
          #endif
 
-         #if _SNOWFOOTSTEPS
-         float2 _SnowTraxUVScales;
-         float _SnowTraxTextureBlend;
-         float _SnowTraxNormalStrength;
+         #if _LAVA
+            half4 _LavaParams;
+            half4 _LavaParams2;
+            half3 _LavaEdgeColor;
+            half3 _LavaColorLow;
+            half3 _LavaColorHighlight;
+            float2 _LavaUVScale;
+            half _LavaDislacementScale;
+            #if _LAVAHEIGHTFILTER
+               float4 _LavaFades;
+            #endif
+            half _LavaEmissiveMult;
+
+            #if _LAVASTOCHASTIC
+               half _LavaStochasticSize;
+               half _LavaStochasticContrast;
+            #endif
          #endif
 
-         #if _SNOWRIM
-         float _SnowRimPower;
-         half3 _SnowRimColor;
+         #if _RAINDROPS
+            float2 _RainIntensityScale;
+            #if _GLOBALRAIN
+               float _Global_RainIntensity;
+            #endif
          #endif
 
-         #if _SNOWSPARKLE
-         float _SnowSparkleStrength;
-         half3 _SnowSparkleTint;
-         half _SnowSparkleEmission;
-         float _SnowSparkleSize;
-         float _SnowSparkleDensity;
-         float _SnowSparkleNoiseDensity;
-         float _SnowSparkleNoiseAmplitude;
-         float _SnowSparkleViewDependency;
-         #endif
 
 
             CBUFFER_END
@@ -6957,589 +6908,530 @@ void PrepareStochasticUVs(float scale, float2 uv, out float2 uv1, out float2 uv2
 }
 
 
-         #if _SNOW
-         TEXTURE2D(_SnowDiff);
-         TEXTURE2D(_SnowNormal);
+
+
+         TEXTURE2D(_StreamControl);
+
+         #if _DYNAMICFLOWS
+            TEXTURE2D(_DynamicStreamControl);
          #endif
 
-         #if _SNOWNORMALNOISE
-         TEXTURE2D(_SnowNormalNoise);
+         #if _STREAMS
+            TEXTURE2D(_StreamNormal);
          #endif
 
-         #if _SNOWFOOTSTEPS
-         TEXTURE2D(_SnowTrackDiff);
-         TEXTURE2D(_SnowTrackNSAO);
+         #if _LAVA
+            TEXTURE2D(_LavaDiffuse);
          #endif
 
-         #if _SNOWMASK
-         TEXTURE2D(_SnowMask);
+         #if _RAINDROPS
+            TEXTURE2D(_RainDropTexture);
          #endif
 
-         #if _SNOWSPARKLE
-            TEXTURE2D(_SnowSparkleNoise);
-         #endif
-         
-         
 
-         float SnowFade(float worldHeight, float snowMin, float snowMax, half snowDot, half snowDotVertex, half snowLevel, half puddleHeight)
+
+         half4 ProcessFXLevels(half4 fxLevels, half traxBuffer)
          {
-            float snowHeightFade = saturate((worldHeight - snowMin) / max(snowMax, 0.001));
-            half snowAngleFade = max(0, (snowDotVertex - _SnowHeightAngleRange.z) * 6);
-            snowAngleFade = snowAngleFade * (1 - max(0, (snowDotVertex - _SnowHeightAngleRange.w) * 6));
-            return saturate((snowLevel * snowHeightFade * saturate(snowAngleFade)) - puddleHeight);
-         }
-
-         float DoSnowDisplace(float splat_height, float2 uv, float3 worldNormalVertex, float3 worldPos, float puddleHeight, Config config, half4 weights)
-         {
-            // could force a branch and avoid texsamples
-            #if _SNOW
-               
-               #if _USEGLOBALSNOWLEVEL 
-               float snowLevel = _Global_SnowLevel;
+            #if _STREAMS
+               #if _GLOBALSTREAMS
+                  fxLevels.b *= _Global_StreamMax;
                #else
-               float snowLevel = _SnowAmount;
+                  fxLevels.b *= _StreamMax;
                #endif
-
-               #if _USEGLOBALSNOWHEIGHT
-               float snowMin = _Global_SnowMinMaxHeight.x;
-               float snowMax = _Global_SnowMinMaxHeight.y;
-               #else
-               float snowMin = _SnowHeightAngleRange.x;
-               float snowMax = _SnowHeightAngleRange.y;
-               #endif
-
-               
-
-               float snowAge = _SnowParams.z;
-
-
-               #if _PERTEXSNOWSTRENGTH && !_SNOWSIMPLE
-                  SAMPLE_PER_TEX(ptSnowStr, 8.5, config, half4(1.0, 0.0, 0.0, 0.0));
-                  snowLevel *= ptSnowStr0.x * weights.x + ptSnowStr1.x * weights.y + ptSnowStr2.x * weights.z + ptSnowStr3.x * weights.w;
-               #endif
-
-               half2 levelMaxMin = half2(1, 0);
-               #if _SNOWMASK
-                  levelMaxMin = SAMPLE_TEXTURE2D_LOD(_SnowMask, shared_linear_clamp_sampler, uv, 0).xy;
-               #endif
-               
-               float3 snowUpVector = _SnowUpVector;
-               float worldHeight = worldPos.y;
-               
-               half snowDot = saturate(dot(worldNormalVertex, snowUpVector));
-               half snowDotVertex = max(snowLevel/2, snowDot);
-               
-
-               float snowFade = SnowFade(worldHeight, snowMin, snowMax, snowDotVertex, snowDotVertex, snowLevel, puddleHeight);
-               #if _SNOWMASK
-                  snowFade = min(levelMaxMin.x, snowFade);
-                  snowFade = max(levelMaxMin.y, snowFade);
-               #endif
-
-               float height = splat_height * _SnowParams.x;
-               float erosion = height * _SnowParams.y;
-               float snowMask = saturate((snowFade - erosion));
-               float snowMask2 = saturate(snowMask * 8);
-               snowMask *= snowMask * snowMask * snowMask * snowMask * snowMask2;
-               float snowAmount = snowMask * snowDot;
-
-               return snowAmount;
             #endif
-            return 0;
+
+            #if _LAVA
+               fxLevels.a *= _LavaParams.y;
+            #endif
+
+            #if _TRAXSINGLE || _TRAXARRAY || _TRAXNOTEXTURE
+               fxLevels = saturate(max(fxLevels, _TraxFXThresholds * (1 - saturate(traxBuffer))));
+            #endif
+            return fxLevels;
+         }
+
+         half4 SampleFXLevels(float2 uv, out half wetness, out half burnLevel, half traxBuffer)
+         {
+            half4 fxLevels = half4(0,0,0,0);
+            burnLevel = 0;
+            wetness = 0;
+            #if _WETNESS || _PUDDLES || _STREAMS || _LAVA
+               fxLevels = SAMPLE_TEXTURE2D(_StreamControl, shared_linear_clamp_sampler, uv);
+
+               COUNTSAMPLE
+
+               #if _DYNAMICFLOWS
+               half4 flows = SAMPLE_TEXTURE2D(_DynamicStreamControl, shared_linear_clamp_sampler, uv);
+               COUNTSAMPLE
+
+               wetness = flows.x;
+               burnLevel = flows.y;
+
+               flows.zw = saturate(flows.zw*3);
+               fxLevels.zw = max(fxLevels.zw, flows.zw);
+               #endif
+
+               
+
+            #endif
+            return ProcessFXLevels(fxLevels, traxBuffer);
+         }
+
+
+         half4 SampleFXLevelsLOD(float2 uv, half traxBuffer)
+         {
+            half4 fxLevels = half4(0,0,0,0);
+            #if _WETNESS || _PUDDLES || _STREAMS || _LAVA
+            fxLevels = SAMPLE_TEXTURE2D_LOD(_StreamControl, shared_linear_clamp_sampler, uv, 0);
+               #if _DYNAMICFLOWS
+               half4 flows = SAMPLE_TEXTURE2D_LOD(_DynamicStreamControl, shared_linear_clamp_sampler, uv, 0);
+               flows.xy = 0;
+               fxLevels = max(fxLevels, flows);
+               #endif
+
+               #if _LAVA
+                  fxLevels.w *= _LavaDislacementScale;
+               #endif
+
+            #endif
+            return ProcessFXLevels(fxLevels, 1.0 - traxBuffer);
+         }
+
+
+         void WaterBRDF (inout half3 Albedo, inout half Smoothness, half metalness, half wetFactor, half surfPorosity) 
+         {
+            half porosity = saturate((( (1 - Smoothness) - 0.5)) / max(surfPorosity, 0.001));
+            half factor = lerp(1, 0.2, (1 - metalness) * porosity);
+            Albedo *= lerp(1.0, factor, wetFactor);
+            Smoothness = lerp(Smoothness, 0.92f, wetFactor);
+         }
+
+         void Flow(float2 uv, half2 flow, half speed, float intensity, out float2 uv1, out float2 uv2, out half interp)
+         {
+            float2 flowVector = flow * intensity;
+            
+            float timeScale = _Time.y * speed;
+            float2 phase = frac(float2(timeScale, timeScale + .5));
+
+            uv1.xy = (uv.xy - flowVector * half2(phase.x, phase.x));
+            uv2.xy = (uv.xy - flowVector * half2(phase.y, phase.y));
+
+            interp = abs(0.5 - phase.x) / 0.5;
+         }
+
+
+         #if _RAINDROPS
+         half2 ComputeRipple(float2 uv, half time, half weight)
+         {
+            half4 ripple = SAMPLE_TEXTURE2D(_RainDropTexture, sampler_Diffuse, uv);
+            ripple.yz = ripple.yz * 2 - 1;
+
+            half dropFrac = frac(ripple.w + time);
+            half timeFrac = dropFrac - 1.0 + ripple.x;
+            half dropFactor = saturate(0.2f + weight * 0.8 - dropFrac);
+            half finalFactor = dropFactor * ripple.x * 
+                                 sin( clamp(timeFrac * 9.0f, 0.0f, 3.0f) * 3.14159265359);
+
+            return half2(ripple.yz * finalFactor);
+         }
+         #endif
+
+         half2 DoRain(half2 waterNorm, float2 uv)
+         {
+         #if _RAINDROPS
+            #if _GLOBALRAIN
+               float rainIntensity = _Global_RainIntensity.x;
+            #else
+               float rainIntensity = _RainIntensityScale.x;
+            #endif
+            half dropStrength = rainIntensity;
+            const float4 timeMul = float4(1.0f, 0.85f, 0.93f, 1.13f); 
+            half4 timeAdd = float4(0.0f, 0.2f, 0.45f, 0.7f);
+            half4 times = _Time.yyyy;
+            times = frac((times * float4(1, 0.85, 0.93, 1.13) + float4(0, 0.2, 0.45, 0.7)) * 1.6);
+
+            float2 ruv1 = uv * _RainIntensityScale.yy;
+            float2 ruv2 = ruv1;
+
+            half4 weights = rainIntensity.xxxx - float4(0, 0.25, 0.5, 0.75);
+            half2 ripple1 = ComputeRipple(ruv1 + float2( 0.25f,0.0f), times.x, weights.x);
+            half2 ripple2 = ComputeRipple(ruv2 + float2(-0.55f,0.3f), times.y, weights.y);
+            half2 ripple3 = ComputeRipple(ruv1 + float2(0.6f, 0.85f), times.z, weights.z);
+            half2 ripple4 = ComputeRipple(ruv2 + float2(0.5f,-0.75f), times.w, weights.w);
+            weights = saturate(weights * 4);
+
+            half2 rippleNormal = half2( weights.x * ripple1.xy +
+                        weights.y * ripple2.xy + 
+                        weights.z * ripple3.xy + 
+                        weights.w * ripple4.xy);
+
+            waterNorm = lerp(waterNorm, BlendNormal2(rippleNormal, waterNorm), rainIntensity * dropStrength); 
+            return waterNorm;                        
+         #else
+            return waterNorm;
+         #endif
+         }
+
+
+         #if _WETNESS
+         float DoWetness(inout MicroSplatLayer o, half wetLevel, half porosity, float3 worldPos)
+         {
+            #if _GLOBALWETNESS
+               wetLevel = clamp(wetLevel, _Global_WetnessParams.x, _Global_WetnessParams.y);
+            #else
+               wetLevel = clamp(wetLevel, _WetnessParams.x, _WetnessParams.y);
+            #endif
+            #if _HEIGHTWETNESS
+               float l = _HeightWetness.x;
+               l += sin(_Time.y * _HeightWetness.z) * _HeightWetness.w;
+               half hw = saturate((l - worldPos.y) * _HeightWetness.y);
+               wetLevel = max(hw, wetLevel);
+            #endif
+
+            #if _DISTANCEWETNESS
+               float camDist = distance(_WorldSpaceCameraPos, worldPos);
+               float fade = saturate((camDist - _DistanceWetness.x) / _DistanceWetness.z);
+
+               wetLevel *= lerp(_DistanceWetness.y, _DistanceWetness.w, fade);
+            #endif
+            
+            return wetLevel;
+         }
+         #endif
+
+
+         #if _PUDDLES
+         // modity lighting terms for water..
+         float DoPuddles(inout MicroSplatLayer o, half puddleLevel, half porosity, float2 uv)
+         {
+            float2 pudParams = _PuddleParams;
+            #if _GLOBALPUDDLES
+            pudParams.y = _Global_PuddleParams;
+            #endif
+
+            puddleLevel *= pudParams.y;
+            float waterBlend = saturate((puddleLevel - o.Height) * pudParams.x);
+            return waterBlend;
+         }
+         #endif
+
+         float3 W2TVec(Input i, float3 normal) 
+         {
+            float3x3 t2w = GetTBN(i);
+            return normalize(mul(t2w, normal));
          }
          
-         #if _SNOWSPARKLE
-         void DoSnowSparkle(Input i, inout MicroSplatLayer o, float3 viewDir, float3 worldPos, float3 worldNormalVertex, float snowLevel)
+         float2 FlowVecFromWNV(Input i, float2 uv, float3 worldNormalVertex)
          {
-            
-            #if _DEBUG_SNOWSPARKLE
-            o.Albedo = 0;
-            o.Smoothness = 0;
-            o.Occlusion = 1;
-            o.Emission = 0;
-            
+            float2 ret = lerp(worldNormalVertex.xz, normalize(worldNormalVertex.xz), max(0.1, worldNormalVertex.z));
+            #if _MICROMESH || _MICROVERTEXMESH
+            ret = W2TVec(i, float3(0,-1,0)).xy;
+            #elif _MICRODIGGERMESH
+            ret = W2TVec(i, float3(0,1,0)).xy;
             #endif
-            
-
-            // screen space method. Looks nice because it's in SS, but fails because clearly not
-            // combing from a single spot on the terrain.
-
-            float size = 1 - (_SnowSparkleSize * 0.001);
-            float density = _SnowSparkleDensity;
-            float noiseDensity = _SnowSparkleNoiseDensity;
-            float viewDep = _SnowSparkleViewDependency;
-
-            float3 wsView = worldPos - _WorldSpaceCameraPos;
-            float3 wsViewDir = normalize(wsView);
-
-            float z = length(wsView);
-            float e = floor(log2(0.3*z+3.0)/0.3785116);
-            float level_z = 0.1 * pow(1.3, e) - 0.2;
-            float level = 0.12 / level_z;
-            density *= level;
-            noiseDensity *= level;
-
-            float3 v = wsView / z;
-            float3 view_new = v * level_z;
-            view_new = sign(view_new) * frac(abs(view_new));
-
-            float3 pos = density*worldPos + viewDep * normalize(view_new);
-
-            float3 g_index = floor(pos);
-            float3 pc = g_index / density;
-            
-            float3 noise = _SnowSparkleNoiseAmplitude * SAMPLE_TEXTURE2D_LOD( _SnowSparkleNoise, sampler_Diffuse, noiseDensity * pc.xz + pc.y, 0).rgb;
-            float3 offset = 0.75;
-            float3 px = pos - g_index + 0.5 * frac(noise)-offset;
-
-            float dotvn = dot(wsViewDir, worldNormalVertex);
-            float3 ma = v - dotvn*worldNormalVertex;
-            float3 px_proj = dot(px, ma) * ma;
-            px += (abs(dotvn)-1.0)*px_proj/dot(ma,ma);
-
-            float dist2 = dot(px, px);
-            float thresh = 1 - size;
-
-            
-            float r = dist2 > thresh? 0 : 1-dist2/thresh;
-
-            r *= snowLevel * _SnowSparkleStrength;
-            float3 c = _SnowSparkleTint * r;
-               
-            o.Albedo += c;
-            o.Emission += c * _SnowSparkleEmission;
-            o.Smoothness += r;
-
-            #if _DEBUG_SNOWSPARKLE
-            o.Albedo = c;
-            o.Emission = c * _SnowSparkleEmission;
-            o.Smoothness = r;
-            o.Normal = float3(0,0,1);
-            #endif
-            
-            
-            
+            return ret;
          }
-         #endif
 
-         #if _SNOWRIM
-         void DoSnowRim(inout MicroSplatLayer o, Input i, float snowAmount)
+         #if _STREAMS
+         half3 GetWaterNormal(Input i, float2 uv, float3 worldNormalVertex)
          {
-            float rim = 1.0 - saturate(dot(normalize(_WorldSpaceCameraPos - i.worldPos), WorldNormalVector(i, o.Normal))); 
-            o.Emission += pow(rim, _SnowRimPower) * _SnowRimColor * snowAmount;
-         }
-         #endif
+            float2 flowDir = FlowVecFromWNV(i, uv, worldNormalVertex);
+            float2 uv1;
+            float2 uv2;
+            half interp;
+            Flow(uv * _StreamUVScales.xy, flowDir, _StreamFlowParams.y, _StreamFlowParams.z, uv1, uv2, interp);
 
-         #if _SNOWSTOCHASTIC
-         void SampleSnowStochastic(float2 uv, float2 dx, float2 dy, out float4 albedo, out float4 nsao)
-         {
-            float2 uv1, uv2, uv3;
-            half3 w;
-            PrepareStochasticUVs(_SnowStochasticScale, uv, uv1, uv2, uv3, w);
-               
-            half4 S1 = SAMPLE_TEXTURE2D_GRAD(_SnowDiff, sampler_Diffuse, uv1, dx, dy);
-            half4 S2 = SAMPLE_TEXTURE2D_GRAD(_SnowDiff, sampler_Diffuse, uv2, dx, dy);
-            half4 S3 = SAMPLE_TEXTURE2D_GRAD(_SnowDiff, sampler_Diffuse, uv3, dx, dy);
-
+            half3 fd = lerp(SAMPLE_TEXTURE2D(_StreamNormal, sampler_NormalSAO, uv1), SAMPLE_TEXTURE2D(_StreamNormal, sampler_NormalSAO, uv2), interp).xyz;
             COUNTSAMPLE
             COUNTSAMPLE
-            COUNTSAMPLE
 
-            half3 cw = BaryWeightBlend(w, S1.a, S2.a, S3.a, _SnowStochasticContrast);
-
-            half4 N1, N2, N3 = half4(0,0,1,0);
-            MSBRANCHCLUSTER(cw.x);
-            {
-               N1 = SAMPLE_TEXTURE2D_GRAD(_SnowNormal, sampler_NormalSAO, uv1, dx, dy);
-               COUNTSAMPLE
-            }
-            MSBRANCHCLUSTER(cw.y);
-            {
-               N2 = SAMPLE_TEXTURE2D_GRAD(_SnowNormal, sampler_NormalSAO, uv2, dx, dy);
-               COUNTSAMPLE
-            }
-            MSBRANCHCLUSTER(cw.z);
-            {
-               N3 = SAMPLE_TEXTURE2D_GRAD(_SnowNormal, sampler_NormalSAO, uv3, dx, dy);
-               COUNTSAMPLE
-            }
-               
-            albedo = S1 * cw.x + S2 * cw.y + S3 * cw.z;
-            nsao = N1 * cw.x + N2 * cw.y + N3 * cw.z;
-            nsao = nsao.agrb;
+            fd.xy = fd.xy * 2 - 1;
+            return fd;
          }
-         #endif
-         
-         
-         float DoSnow(Input i, inout MicroSplatLayer o, float2 uv, float3 worldNormal, float3 worldNormalVertex, 
-               float3 worldPos, float puddleHeight, half surfPorosity, float camDist, Config config, half4 weights, 
-               inout half3 SSSTint, inout half SSSThickness, float traxBuffer, float3 traxNormal)
+
+         // water normal only
+         void DoStreamRefract(inout Config config, inout TriplanarConfig tc, float3 waterNorm, half puddleLevel, half height)
          {
-            #if _SNOW
-            float2 maskUV = uv;
-            #if _SNOWWORLDSPACEUV
-               uv = worldPos.xz;
-            #endif
-            
-            
-            float2 dx = ddx(uv) * _SnowUVScales.xy;
-            float2 dy = ddy(uv) * _SnowUVScales.xy;
-
-            float3 wdx = ddx(worldPos) * _SnowUVScales.xxy;
-            float3 wdy = ddy(worldPos) * _SnowUVScales.xxy;
-
-            uv *= _SnowUVScales.xy;
-            float3 wuv = worldPos * _SnowUVScales.xxy;
-            
-            #if _USEGLOBALSNOWLEVEL 
-            float snowLevel = _Global_SnowLevel;
+            #if _GLOBALSTREAMS
+               puddleLevel *= _Global_StreamMax;
             #else
-            float snowLevel = _SnowAmount;
+               puddleLevel *= _StreamMax;
             #endif
 
-            #if _USEGLOBALSNOWHEIGHT
-            float snowMin = _Global_SnowMinMaxHeight.x;
-            float snowMax = _Global_SnowMinMaxHeight.y;
-            #else
-            float snowMin = _SnowHeightAngleRange.x;
-            float snowMax = _SnowHeightAngleRange.y;
-            #endif
-
-            
-
-
-            float snowAge = _SnowParams.z;
-            float snowErosion = _SnowParams.y;
-            float snowHeight = _SnowParams.x;
-
-
-
-            #if _PERTEXSNOWSTRENGTH && !_SIMPLESNOW
-               SAMPLE_PER_TEX(ptSnowStr, 8.5, config, half4(1.0, 0.0, 0.0, 0.0));
-               snowLevel *= ptSnowStr0.x * weights.x + ptSnowStr1.x * weights.y + ptSnowStr2.x * weights.z + ptSnowStr3.x * weights.w;
-            #endif
-
-            half2 levelMaxMin = half2(1,0);
-            #if _SNOWMASK
-               #if _MEGASPLAT
-                  levelMaxMin = i.fx2.yx;
-               #else
-                  levelMaxMin = SAMPLE_TEXTURE2D_GRAD(_SnowMask, shared_linear_clamp_sampler, maskUV, ddx(maskUV), ddy(maskUV));
-               #endif
-            #endif
-            
-            float3 snowUpVector = _SnowUpVector;
-            float worldHeight = i.worldHeight;
-            
-            
-            half snowDot = max(snowLevel/2, dot(worldNormal, snowUpVector));
-            half snowDotVertex = snowDot;
-            #if _SNOWSIMPLE
-               half ao = 1;
-               half oheight = 0;
-               half smoothness = 0;
-            #else
-               half ao = o.Occlusion;
-               half oheight = o.Height;
-               half smoothness = o.Smoothness;
-            #endif
-               
-            
-            float snowFade = SnowFade(worldHeight, snowMin, snowMax, snowDot, snowDotVertex, snowLevel, puddleHeight);
-
-            #if _SNOWMASK
-               snowFade = min(levelMaxMin.x, snowFade);
-               snowFade = max(levelMaxMin.y, snowFade);
-            #endif
-
-            //MSBRANCHOTHER(snowFade)
+            #if _STREAMHEIGHTFILTER
             {
-               #if _SNOWSTOCHASTIC && _SNOWTRIPLANAR
-
-                  float3 pn = pow(abs(worldNormal), 3);
-                  pn = pn / (pn.x + pn.y + pn.z);
-            
-                  half3 axisSign = sign(worldNormal);
-
-                  float2 uv0 = wuv.zy * axisSign.x;
-                  float2 uv1 = wuv.xz * axisSign.y;
-                  float2 uv2 = wuv.xy * axisSign.z;
-
-                  half4 snowAlb0; half4 snowAlb1; half4 snowAlb2;
-                  half4 snowNsao0; half4 snowNsao1; half4 snowNsao2;
-
-                  SampleSnowStochastic(uv0, wdx.zy, wdy.zy, snowAlb0, snowNsao0);
-                  SampleSnowStochastic(uv1, wdx.xz, wdy.xz, snowAlb1, snowNsao1);
-                  SampleSnowStochastic(uv2, wdx.xy, wdy.xy, snowAlb2, snowNsao2);
-
-                  half4 snowAlb = snowAlb0 * pn.x + snowAlb1 * pn.y + snowAlb2 * pn.z;
-                  half4 snowNsao = snowNsao0 * pn.x + snowNsao1 * pn.y + snowNsao2 * pn.z;
-
-               #elif _SNOWTRIPLANAR
-
-                  float3 pn = pow(abs(worldNormal), 3);
-                  pn = pn / (pn.x + pn.y + pn.z);
-            
-                  half3 axisSign = sign(worldNormal);
-
-                  float2 uv0 = wuv.zy * axisSign.x;
-                  float2 uv1 = wuv.xz * axisSign.y;
-                  float2 uv2 = wuv.xy * axisSign.z;
-                  half4 snowAlb0 = SAMPLE_TEXTURE2D_GRAD(_SnowDiff, sampler_Diffuse, uv0, wdx.zy, wdy.zy);
-                  half4 snowAlb1 = SAMPLE_TEXTURE2D_GRAD(_SnowDiff, sampler_Diffuse, uv1, wdx.xz, wdy.xz);
-                  half4 snowAlb2 = SAMPLE_TEXTURE2D_GRAD(_SnowDiff, sampler_Diffuse, uv2, wdx.xy, wdy.xy);
-                  half4 snowNsao0 = SAMPLE_TEXTURE2D_GRAD(_SnowNormal, sampler_NormalSAO, uv0, wdx.zy, wdy.zy).agrb;
-                  half4 snowNsao1 = SAMPLE_TEXTURE2D_GRAD(_SnowNormal, sampler_NormalSAO, uv1, wdx.xz, wdy.xz).agrb;
-                  half4 snowNsao2 = SAMPLE_TEXTURE2D_GRAD(_SnowNormal, sampler_NormalSAO, uv2, wdx.xy, wdy.xy).agrb;
-                  half4 snowAlb = snowAlb0 * pn.x + snowAlb1 * pn.y + snowAlb2 * pn.z;
-                  half4 snowNsao = snowNsao0 * pn.x + snowNsao1 * pn.y + snowNsao2 * pn.z;
-                  COUNTSAMPLE
-                  COUNTSAMPLE
-                  COUNTSAMPLE
-                  COUNTSAMPLE
-                  COUNTSAMPLE
-                  COUNTSAMPLE
-
-               #elif _SNOWSTOCHASTIC
-                  half4 snowAlb;
-                  half4 snowNsao;
-
-                  SampleSnowStochastic(uv, dx, dy, snowAlb, snowNsao);
-               #else
-                  half4 snowAlb = SAMPLE_TEXTURE2D_GRAD(_SnowDiff, sampler_Diffuse, uv, dx, dy);
-                  half4 snowNsao = SAMPLE_TEXTURE2D_GRAD(_SnowNormal, sampler_NormalSAO, uv, dx, dy).agrb;
-                  COUNTSAMPLE
-                  COUNTSAMPLE
-               #endif
-
-               #if _SNOWDISTANCERESAMPLE
-               {
-                  float fade = saturate ((camDist - _SnowDistanceResampleScaleStrengthFade.z) / _SnowDistanceResampleScaleStrengthFade.w);
-                  fade *= _SnowDistanceResampleScaleStrengthFade.y;
-                  MSBRANCHOTHER(fade)
-                  {
-                     float2 snowResampleUV = uv * _SnowDistanceResampleScaleStrengthFade.x;
-                     float2 rsdx = dx * _SnowDistanceResampleScaleStrengthFade.x;
-                     float2 rsdy = dy * _SnowDistanceResampleScaleStrengthFade.x;
-                     half4 resSnowAlb = SAMPLE_TEXTURE2D_GRAD(_SnowDiff, sampler_Diffuse,  snowResampleUV, rsdx, rsdy);
-                     half4 resSnowNsao = SAMPLE_TEXTURE2D_GRAD(_SnowNormal, sampler_NormalSAO, snowResampleUV, rsdx, rsdy).grab;
-                     COUNTSAMPLE
-                     COUNTSAMPLE
-           
-                     snowAlb.rgb = lerp(snowAlb, resSnowAlb, fade);
-                     snowNsao = lerp(snowNsao, resSnowNsao, fade);
-                  }
-               }
-               #endif
-
-               #if _SNOWNORMALNOISE
-               {
-                  float2 normalUV = uv * _SnowNormalNoiseScaleStrength.x;
-                  half3 noise = UnpackNormal(SAMPLE_TEXTURE2D_GRAD(_SnowNormalNoise, sampler_Diffuse, normalUV, dx * _SnowNormalNoiseScaleStrength.x, dy * _SnowNormalNoiseScaleStrength.x));
-                  COUNTSAMPLE
-                  snowNsao.xy = lerp(snowNsao.xy, BlendNormal2(snowNsao.xy, noise.xy), _SnowNormalNoiseScaleStrength.y);
-               }
-               #endif
-            
-               #if _SNOWFOOTSTEPS
-               {
-                  traxNormal.xy *= _SnowTraxNormalStrength;
-                  float2 fsdx = dx * _SnowTraxUVScales;
-                  float2 fsdy = dy * _SnowTraxUVScales;
-                  traxBuffer = 1 - ((1 - traxBuffer) * _SnowTraxTextureBlend);
-
-                  half4 traxDiffuse = SAMPLE_TEXTURE2D_GRAD(_SnowTrackDiff, sampler_Diffuse, uv * _SnowTraxUVScales, fsdx, fsdy);
-                  half4 traxN = SAMPLE_TEXTURE2D_GRAD(_SnowTrackNSAO, sampler_NormalSAO, uv * _SnowTraxUVScales, fsdx, fsdy).agrb;
-                  COUNTSAMPLE
-                  COUNTSAMPLE
-
-                  traxDiffuse.rgb *= _TraxSnowTint;
-                  snowAlb.rgba = lerp(traxDiffuse, snowAlb.rgba, traxBuffer);
-                  snowNsao.rgba = lerp(traxN + half4(traxNormal.xy, 0, 0), snowNsao.rgba, traxBuffer);
-                  snowAge = lerp(_TraxSnowAge, snowAge, traxBuffer);
-                  snowErosion = lerp(_TraxSnowErosion, snowErosion, traxBuffer);
-                  snowHeight = lerp(_TraxSnowHeight, snowHeight, traxBuffer);
-
-                  snowFade = saturate(snowFade - _TraxSnowRemoval * (1-saturate(traxBuffer)));
-               }
-               #endif
-
-              
-
-               half3 snowNormal = float3(snowNsao.xy * 2 - 1, 1);
-             
-               half height = saturate(oheight - (1.0 - snowHeight));
-               half erosion = saturate(ao * snowErosion);
-               erosion *= erosion;
-               half snowMask = saturate(snowFade - erosion - height);
-               snowMask = snowMask * snowMask * snowMask;
-               half snowAmount = snowMask * saturate(snowDot - (height + erosion) * 0.5);  // up
-               snowAmount = saturate(snowAmount * 8);
-
-               float wetnessMask = saturate((_SnowParams.w * (4.0 * snowFade) - (snowNsao.b) * 0.5));
-                
-               float snowNormalAmount = snowAmount * snowAmount;
-
-               float porosity = saturate((((1.0 - smoothness) - 0.5)) / max(surfPorosity, 0.001));
-               float factor = lerp(1, 0.4, porosity);
-
-               o.Albedo *= lerp(1.0, factor, wetnessMask);
-               o.Normal = lerp(o.Normal, float3(0,0,1), wetnessMask);
-               o.Smoothness = lerp(o.Smoothness, 0.8, wetnessMask);
-
-
-               #if _SNOWSSS
-                  SSSTint = lerp(SSSTint, _SnowSSSTint.rgb, snowNormalAmount);
-                  SSSThickness = lerp(SSSThickness, _SnowSSSTint.a * 2 * snowAlb.a, snowNormalAmount);
-               #endif
-
-               snowAlb.rgb *= _SnowTint.rgb;
-               
-
-               o.Albedo = lerp(o.Albedo, snowAlb.rgb, snowAmount);
-               o.Normal = lerp(o.Normal, snowNormal, snowNormalAmount);
-               o.Smoothness = lerp(o.Smoothness, (snowNsao.b) * snowAge, snowAmount);
-               o.Occlusion = lerp(o.Occlusion, snowNsao.w, snowAmount);
-               o.Height = lerp(o.Height, snowAlb.a, snowAmount);
-               o.Metallic = lerp(o.Metallic, 0.01, snowAmount);
-               float crystals = saturate(0.65 - snowNsao.b);
-               o.Smoothness = lerp(o.Smoothness, crystals * snowAge, snowAmount);
-               
-               #if _SNOWSPARKLE
-               DoSnowSparkle(i, o, i.viewDir, worldPos, worldNormalVertex, snowAmount);
-               #endif
-
-               #if _SNOWRIM
-               DoSnowRim(o, i, snowAmount);
-               #endif
-
-               return snowAmount;
+               float shf = saturate((height - _StreamFades.x) / max(_StreamFades.y - _StreamFades.x, 0.0001));
+               shf *= 1.0 - saturate((height - _StreamFades.z) / max(_StreamFades.w - _StreamFades.z, 0.0001));
+               puddleLevel *= shf;
             }
             #endif
+
+            float waterBlend = saturate((puddleLevel - height) * _StreamBlend);
+            waterBlend *= waterBlend;
+
+            waterNorm.xy *= puddleLevel * waterBlend;
+            float2 offset = lerp(waterNorm.xy, waterNorm.xy * height, _StreamFlowParams.w);
+            offset *= _StreamFlowParams.x;
+            #if !_TRIPLANAR
+            config.uv0.xy += offset;
+            config.uv1.xy += offset;
+            config.uv2.xy += offset;
+            config.uv3.xy += offset;
+            #else
+            tc.uv0[0].xy += offset;
+            tc.uv0[1].xy += offset;
+            tc.uv0[2].xy += offset;
+            tc.uv1[0].xy += offset;
+            tc.uv1[1].xy += offset;
+            tc.uv1[2].xy += offset;
+            tc.uv2[0].xy += offset;
+            tc.uv2[1].xy += offset;
+            tc.uv2[2].xy += offset;
+            tc.uv3[0].xy += offset;
+            tc.uv3[1].xy += offset;
+            tc.uv3[2].xy += offset;
+            #endif
+         }  
+
+
+
+
+         float DoStream(inout MicroSplatLayer o, float2 uv, half porosity, half3 waterNormFoam, 
+            half2 flowDir, half puddleLevel, half foamStrength, half wetTrail,
+            inout half foam)
+         {
+            
+            float waterBlend = saturate((puddleLevel - o.Height) * _StreamBlend);
+            if (waterBlend + wetTrail > 0)
+            {
+               half2 waterNorm = waterNormFoam.xy;
+
+               half pmh = puddleLevel - o.Height;
+               // refactor to compute flow UVs in previous step?
+               float2 foamUV0 = 0;
+               float2 foamUV1 = 0;
+               half foamInterp = 0;
+               Flow(uv * 1.75 + waterNormFoam.xy * waterNormFoam.b, flowDir, _StreamFlowParams.y/3, _StreamFlowParams.z/3, foamUV0, foamUV1, foamInterp);
+               half foam0 = SAMPLE_TEXTURE2D(_StreamNormal, sampler_NormalSAO, foamUV0).b;
+               half foam1 = SAMPLE_TEXTURE2D(_StreamNormal, sampler_NormalSAO, foamUV1).b;
+               COUNTSAMPLE
+               COUNTSAMPLE
+               foam = lerp(foam0, foam1, foamInterp);
+               foam = foam * abs(pmh) + (foam * o.Height);
+               foam *= 1.0 - (saturate(pmh * 1.5));
+               foam *= foam;
+               foam *= _StreamNormalFoam.y * foamStrength;
+
+               
+
+               #if _DYNAMICFLOWS
+                  #if _GLOBALSTREAMS
+                     float streamMax = _Global_StreamMax;
+                  #else
+                     float streamMax = _StreamMax;
+                  #endif
+                  half waterBlend2 = max(waterBlend, saturate((wetTrail * streamMax - o.Height) * _StreamBlend) * 0.85);
+                  return waterBlend2;
+               #endif
+               return waterBlend;   
+            }
             return 0;
          }
 
-         // for object blend shader, must, unfortunately, keep in sync..
-         float DoSnowSimple(Input i, inout MicroSplatLayer o, float2 uv, float3 worldNormal, float3 worldNormalVertex, 
-               float3 worldPos, float puddleHeight, half surfPorosity)
+         #endif
+
+
+         #if _LAVA
+
+         half4 SampleLava(float2 uv, float2 dx, float2 dy)
          {
-            #if _SNOW
-            float2 maskUV = uv;
-            #if _SNOWWORLDSPACEUV
-               uv = worldPos.xz;
+            #if _LAVASTOCHASTIC
+               float2 uv1, uv2, uv3;
+               half3 w;
+               PrepareStochasticUVs(_LavaStochasticSize, uv, uv1, uv2, uv3, w);
+               
+               half4 S1 = SAMPLE_TEXTURE2D_GRAD(_LavaDiffuse, sampler_Diffuse, uv1, dx, dy);
+               half4 S2 = SAMPLE_TEXTURE2D_GRAD(_LavaDiffuse, sampler_Diffuse, uv2, dx, dy);
+               half4 S3 = SAMPLE_TEXTURE2D_GRAD(_LavaDiffuse, sampler_Diffuse, uv3, dx, dy);
+               COUNTSAMPLE
+               COUNTSAMPLE
+               COUNTSAMPLE
+               
+               half3 cw = BaryWeightBlend(w, S1.r, S2.r, S3.r, _LavaStochasticContrast);
+               return S1 * cw.x + S2 * cw.y + S3 * cw.z;
+            #else
+               COUNTSAMPLE
+               return SAMPLE_TEXTURE2D_GRAD(_LavaDiffuse, sampler_Diffuse, uv, dx, dy);
             #endif
-            
-            uv *= _SnowUVScales.xy;
+         }
+
+         float DoLava(inout MicroSplatLayer o, float2 uv, half lavaLevel, half2 flowDir)
+         {
+            uv *= _LavaUVScale;
+            float lvh = lavaLevel - o.Height;
+            float lavaBlend = saturate(lvh * _LavaParams.x);
+
             float2 dx = ddx(uv);
             float2 dy = ddy(uv);
-            
-            #if _USEGLOBALSNOWLEVEL 
-               float snowLevel = _Global_SnowLevel;
-            #else
-               float snowLevel = _SnowAmount;
-            #endif
-
-            #if _USEGLOBALSNOWHEIGHT
-               float snowMin = _Global_SnowMinMaxHeight.x;
-               float snowMax = _Global_SnowMinMaxHeight.y;
-            #else
-               float snowMin = _SnowHeightAngleRange.x;
-               float snowMax = _SnowHeightAngleRange.y;
-            #endif
-
-            half2 levelMaxMin = half2(1,0);
-            #if _SNOWMASK
-               #if _MEGASPLAT
-                  levelMaxMin = i.fx2.yx;
-               #else
-                  levelMaxMin = SAMPLE_TEXTURE2D_GRAD(_SnowMask, shared_linear_clamp_sampler, maskUV, ddx(maskUV), ddy(maskUV));
-               #endif
-            #endif
-
-
-
-            float snowAge = _SnowParams.z;
-            float snowErosion = _SnowParams.y;
-            float snowHeight = _SnowParams.x;
-            
-            float3 snowUpVector = _SnowUpVector;
-            float worldHeight = i.worldHeight;
-            #if _PLANETVECTORS
-               snowUpVector = i.worldUpVector;
-            #endif
-
-            half snowDot = max(snowLevel/2, dot(worldNormal, snowUpVector));
-            half snowDotVertex = max(snowLevel/2, dot(worldNormalVertex, snowUpVector));
-            float snowFade = SnowFade(worldHeight, snowMin, snowMax, snowDot, snowDotVertex, snowLevel, puddleHeight);
-
-
-            MSBRANCHOTHER(snowFade)
+            UNITY_BRANCH
+            if (lavaBlend > 0)
             {
-               
-               half4 snowAlb = SAMPLE_TEXTURE2D_GRAD(_SnowDiff, sampler_Diffuse, uv, dx, dy);
-               half4 snowNsao = SAMPLE_TEXTURE2D_GRAD(_SnowNormal, sampler_NormalSAO, uv, dx, dy).agrb;
-               COUNTSAMPLE
-               COUNTSAMPLE
+               half distortionSize = _LavaParams2.x;
+               half distortionRate = _LavaParams2.y;
+               half distortionScale = _LavaParams2.z;
+               half darkening = _LavaParams2.w;
+               half3 edgeColor = _LavaEdgeColor;
+               half3 lavaColorLow = _LavaColorLow;
+               half3 lavaColorHighlight = _LavaColorHighlight;
 
-               snowAlb.rgb *= _SnowTint.rgb;
 
-               #if _SNOWNORMALNOISE
-               {
-                  float2 normalUV = uv * _SnowNormalNoiseScaleStrength.x;
-                  half3 noise = UnpackNormal(SAMPLE_TEXTURE2D_GRAD(_SnowNormalNoise, sampler_Diffuse, normalUV, dx * _SnowNormalNoiseScaleStrength.x, dy * _SnowNormalNoiseScaleStrength.x));
+               half lavaSpeed = _LavaParams.z;
+               half lavaInterp = _LavaParams.w;
 
-                  snowNsao.xy = lerp(snowNsao.xy, BlendNormal2(snowNsao.xy, noise.xy), _SnowNormalNoiseScaleStrength.y);
-               }
+               float2 uv1 = 0;
+               float2 uv2 = 0;
+               half interp = 0;
+               half drag = lerp(0.1, 1, saturate(lvh));
+               Flow(uv, flowDir, lavaInterp, lavaSpeed * drag, uv1, uv2, interp);
 
-               #endif
-               
-               half3 snowNormal = float3(snowNsao.xy * 2 - 1, 1);
-               half ao = o.Occlusion;
+               float2 dist_uv1;
+               float2 dist_uv2;
+               half dist_interp;
+               Flow(uv * distortionScale, flowDir, distortionRate, distortionSize, dist_uv1, dist_uv2, dist_interp);
 
-               half height = saturate(o.Height - (1-snowHeight));
-               half erosion = saturate(ao * snowErosion);
-               erosion *= erosion;
-               half snowMask = saturate(snowFade - erosion - height);
-               snowMask = snowMask * snowMask * snowMask;
-               half snowAmount = snowMask * saturate(snowDot - (height + erosion) * 0.5);  // up
-               snowAmount = saturate(snowAmount * 8);
+               half4 lavaDist = lerp(SampleLava(dist_uv1*0.51, dx, dy), SampleLava(dist_uv2, dx, dy), dist_interp);
+               half4 dist = lavaDist * (distortionSize * 2) - distortionSize;
 
-               float wetnessMask = saturate((_SnowParams.w * (4.0 * snowFade) - (snowNsao.b) * 0.5));
+               half4 lavaTex = lerp(SampleLava(uv1*1.1 + dist.xy, dx, dy), SampleLava(uv2 + dist.zw, dx, dy), interp);
 
-               float snowNormalAmount = snowAmount * snowAmount;
+               // base lava color, based on heights
+               half3 lavaColor = lerp(lavaColorLow, lavaColorHighlight, lavaTex.b);
 
-               float porosity = saturate((((1.0 - o.Smoothness) - 0.5)) / max(surfPorosity, 0.001));
-               float factor = lerp(1, 0.4, porosity);
+               // edges
+               float lavaBlendWide = saturate((lavaLevel - o.Height) * _LavaParams.x * 0.5);
+               float edge = saturate((1 - lavaBlendWide) * 3);
 
-               o.Albedo *= lerp(1.0, factor, wetnessMask);
-               o.Normal = lerp(o.Normal, float3(0,0,1), wetnessMask);
-               o.Smoothness = lerp(o.Smoothness, 0.8, wetnessMask);
+               // darkening
+               darkening = saturate(lavaTex.a * darkening * saturate(lvh*2));
+               lavaColor *= 1.0 - darkening;
+               // edges
+               lavaColor = lerp(lavaColor, edgeColor, edge);
 
-         
-               o.Albedo = lerp(o.Albedo, snowAlb.rgb, snowAmount);
-               o.Normal = lerp(o.Normal, snowNormal, snowNormalAmount);
-               o.Smoothness = lerp(o.Smoothness, (snowNsao.b) * snowAge, snowAmount);
-               o.Occlusion = lerp(o.Occlusion, snowNsao.w, snowAmount);
-               o.Height = lerp(o.Height, snowAlb.a, snowAmount);
-               o.Metallic = lerp(o.Metallic, 0.01, snowAmount);
-               float crystals = saturate(0.65 - snowNsao.b);
-               o.Smoothness = lerp(o.Smoothness, crystals * snowAge, snowAmount);
+               o.Albedo = lerp(o.Albedo, lavaColor, lavaBlend);
+               o.Normal.xy = lerp(o.Normal.xy, lavaTex.xy * 2 - 1, lavaBlend);
+               o.Smoothness = lerp(o.Smoothness, 0.3, lavaBlend * darkening);
 
-               #if _SNOWSPARKLE
-               DoSnowSparkle(i, o, i.viewDir, worldPos, worldNormalVertex, snowAmount);
-               #endif
-
-               #if _SNOWRIM
-               DoSnowRim(o, i, snowAmount);
-               #endif
-
-               return snowAmount;
-            
+               half3 emis = lavaColor * lavaBlend;
+               o.Emission = lerp(o.Emission, emis * _LavaEmissiveMult, lavaBlend);
+               // bleed
+               o.Emission += edgeColor * 0.3 * (saturate((lavaLevel*1.2 - o.Height) * _LavaParams.x) - lavaBlend);
+               return saturate(lavaBlend*3);
             }
-            #endif
             return 0;
          }
 
+
+         #endif
+
+
+
+
+
+         float DoStreams(Input i, inout MicroSplatLayer o, half4 fxLevels, float2 uv, half porosity, 
+            half3 waterNormalFoam, float3 worldNormalVertex, half streamFoam, half wetLevel, half burnLevel, float3 worldPos)
+         {
+            float pud = 0;
+            float wetness = 0;
+            half foam = 0;
+            half streamPud = 0;
+
+            #if _WETNESS
+            wetness = DoWetness(o, fxLevels.x, porosity, worldPos);
+            #endif
+
+
+            #if _PUDDLES
+            pud = DoPuddles(o, fxLevels.g, porosity, uv);
+            #endif
+
+            
+
+            #if _STREAMS || _LAVA
+            float2 flowDir = FlowVecFromWNV(i, uv, worldNormalVertex);
+            #endif
+
+            
+            #if _STREAMS
+               #if _STREAMHEIGHTFILTER
+               {
+                  float shf = saturate((worldPos.y - _StreamFades.x) / max(_StreamFades.y - _StreamFades.x, 0.0001));
+                  shf *= 1.0 - saturate((worldPos.y - _StreamFades.z) / max(_StreamFades.w - _StreamFades.z, 0.0001));
+                  fxLevels.z *= shf;
+                  wetLevel *= shf;
+               }
+               #endif
+
+            half foamStr = min(length(worldNormalVertex.xz) * 18, 1) * streamFoam;
+            streamPud = DoStream(o, uv, porosity, waterNormalFoam, flowDir, fxLevels.z, foamStr, wetLevel, foam);
+            o.Albedo = lerp(o.Albedo, o.Albedo * _StreamTint * 2.0, streamPud);
+            //pud -= streamPud;
+            #endif
+
+            #if _WETNESS || _PUDDLES || _STREAMS
+               half3 waterNorm = half3(0,0,1);
+               half3 wetAlbedo = o.Albedo;
+               half wetSmoothness = o.Smoothness;
+
+               float wetBlend = max(max(pud, wetness), streamPud);
+
+               WaterBRDF(wetAlbedo, wetSmoothness, o.Metallic, wetBlend, porosity);
+               
+               wetAlbedo += foam;
+               wetSmoothness -= foam;
+
+               float foamNormStr = 1; 
+               #if _STREAMS
+                  foamNormStr = _StreamNormalFoam.x;
+               #endif
+
+               #if _RAINDROPS
+               waterNorm.xy = DoRain(waterNorm.xy, uv) * pud;
+               #endif
+
+               
+
+
+               o.Normal = lerp(o.Normal, waterNorm, pud * foamNormStr);
+               o.Occlusion = lerp(o.Occlusion, 1, wetBlend);
+               o.Smoothness = lerp(o.Smoothness, wetSmoothness, wetBlend);
+               o.Albedo = lerp(o.Albedo, wetAlbedo, wetBlend);
+
+            #endif
+
+
+            #if _LAVA
+               #if _LAVAHEIGHTFILTER
+               {
+                  float lhf = saturate((worldPos.y - _LavaFades.x) / max(_LavaFades.y - _LavaFades.x, 0.0001));
+                  lhf *= 1.0 - saturate((worldPos.y - _LavaFades.z) / max(_LavaFades.w - _LavaFades.z, 0.0001));
+                  fxLevels.a *= lhf;
+                  burnLevel *= lhf;
+               }
+               #endif
+
+            float burn = 1 - burnLevel * 0.85;
+            o.Albedo *= burn;
+            o.Smoothness *= burn;
+            pud = max(streamPud, DoLava(o, uv, fxLevels.a, flowDir));
+            #endif
+
+            pud = max(max(pud, streamPud), wetness);
+            #if _WETNESSMASKSNOW
+            pud = max(pud, 1-fxLevels.x);
+            #endif
+
+            return pud;
+         }
 
 
       void SampleAlbedo(inout Config config, inout TriplanarConfig tc, inout RawSamples s, MIPFORMAT mipLevel, half4 weights)
@@ -9908,8 +9800,7 @@ float3 GetTessFactors ()
       #define _PERTEXUVSCALEOFFSET 1
       #define _BRANCHSAMPLES 1
       #define _BRANCHSAMPLESAGR 1
-      #define _SNOW 1
-      #define _SNOWSIMPLE 1
+      #define _WETNESS 1
       #define _MSRENDERLOOP_UNITYURP2022 1
       #define _MICROSPLATBASEMAP 1
       #define _MSRENDERLOOP_UNITYLD 1
@@ -10321,65 +10212,73 @@ float3 GetTessFactors ()
       #endif
 
 
-         #if _SNOW
-         half4 _SnowParams; // influence, erosion, crystal, melt
-         half _SnowAmount;
-         half2 _SnowUVScales;
-         float4 _SnowHeightAngleRange;
-         half3 _SnowUpVector;
-         half3 _SnowTint;
-         #endif
-
-         #if _SNOWNORMALNOISE
-         float4 _SnowNormalNoiseScaleStrength;
-         #endif
-
-         #if _SNOWDISTANCERESAMPLE
-         float4 _SnowDistanceResampleScaleStrengthFade;
-         #endif
-
-         #if _SNOW && _USEGLOBALSNOWLEVEL
-         float _Global_SnowLevel;
-         #endif
-
-         #if _SNOW && _USEGLOBALSNOWHEIGHT
-         float2 _Global_SnowMinMaxHeight;
-         #endif
+         half _GlobalPorosity;
          
-         #if _SNOWSTOCHASTIC
-         half _SnowStochasticContrast;
-         half _SnowStochasticScale;
+         #if _WETNESS
+            #if _GLOBALWETNESS
+            half2 _Global_WetnessParams;
+            #else
+            half2 _WetnessParams;
+            #endif
+
+            #if _HEIGHTWETNESS
+            float4 _HeightWetness;
+            #endif
+
+            #if _DISTANCEWETNESS
+            float4 _DistanceWetness;
+            #endif
          #endif
 
-         #if _SNOWSSS
-         half4 _SnowSSSTint;
+         #if _PUDDLES
+            half2 _PuddleParams;
+            #if _GLOBALPUDDLES
+            half _Global_PuddleParams;
+            #endif
          #endif
 
-         #if _TESSDISTANCE || _TESSEDGE
-         half _TessDisplaceSnowMultiplier;
+         #if _STREAMS
+            half _StreamBlend;
+            half4 _StreamFlowParams;
+            half2 _StreamNormalFoam;
+            float2 _StreamUVScales;
+            #if _GLOBALSTREAMS
+               half _Global_StreamMax;
+            #else
+               half _StreamMax;
+            #endif
+            half3 _StreamTint;
+            #if _STREAMHEIGHTFILTER
+               float4 _StreamFades;
+            #endif
          #endif
 
-         #if _SNOWFOOTSTEPS
-         float2 _SnowTraxUVScales;
-         float _SnowTraxTextureBlend;
-         float _SnowTraxNormalStrength;
+         #if _LAVA
+            half4 _LavaParams;
+            half4 _LavaParams2;
+            half3 _LavaEdgeColor;
+            half3 _LavaColorLow;
+            half3 _LavaColorHighlight;
+            float2 _LavaUVScale;
+            half _LavaDislacementScale;
+            #if _LAVAHEIGHTFILTER
+               float4 _LavaFades;
+            #endif
+            half _LavaEmissiveMult;
+
+            #if _LAVASTOCHASTIC
+               half _LavaStochasticSize;
+               half _LavaStochasticContrast;
+            #endif
          #endif
 
-         #if _SNOWRIM
-         float _SnowRimPower;
-         half3 _SnowRimColor;
+         #if _RAINDROPS
+            float2 _RainIntensityScale;
+            #if _GLOBALRAIN
+               float _Global_RainIntensity;
+            #endif
          #endif
 
-         #if _SNOWSPARKLE
-         float _SnowSparkleStrength;
-         half3 _SnowSparkleTint;
-         half _SnowSparkleEmission;
-         float _SnowSparkleSize;
-         float _SnowSparkleDensity;
-         float _SnowSparkleNoiseDensity;
-         float _SnowSparkleNoiseAmplitude;
-         float _SnowSparkleViewDependency;
-         #endif
 
 
             CBUFFER_END
@@ -11797,589 +11696,530 @@ void PrepareStochasticUVs(float scale, float2 uv, out float2 uv1, out float2 uv2
 }
 
 
-         #if _SNOW
-         TEXTURE2D(_SnowDiff);
-         TEXTURE2D(_SnowNormal);
+
+
+         TEXTURE2D(_StreamControl);
+
+         #if _DYNAMICFLOWS
+            TEXTURE2D(_DynamicStreamControl);
          #endif
 
-         #if _SNOWNORMALNOISE
-         TEXTURE2D(_SnowNormalNoise);
+         #if _STREAMS
+            TEXTURE2D(_StreamNormal);
          #endif
 
-         #if _SNOWFOOTSTEPS
-         TEXTURE2D(_SnowTrackDiff);
-         TEXTURE2D(_SnowTrackNSAO);
+         #if _LAVA
+            TEXTURE2D(_LavaDiffuse);
          #endif
 
-         #if _SNOWMASK
-         TEXTURE2D(_SnowMask);
+         #if _RAINDROPS
+            TEXTURE2D(_RainDropTexture);
          #endif
 
-         #if _SNOWSPARKLE
-            TEXTURE2D(_SnowSparkleNoise);
-         #endif
-         
-         
 
-         float SnowFade(float worldHeight, float snowMin, float snowMax, half snowDot, half snowDotVertex, half snowLevel, half puddleHeight)
+
+         half4 ProcessFXLevels(half4 fxLevels, half traxBuffer)
          {
-            float snowHeightFade = saturate((worldHeight - snowMin) / max(snowMax, 0.001));
-            half snowAngleFade = max(0, (snowDotVertex - _SnowHeightAngleRange.z) * 6);
-            snowAngleFade = snowAngleFade * (1 - max(0, (snowDotVertex - _SnowHeightAngleRange.w) * 6));
-            return saturate((snowLevel * snowHeightFade * saturate(snowAngleFade)) - puddleHeight);
-         }
-
-         float DoSnowDisplace(float splat_height, float2 uv, float3 worldNormalVertex, float3 worldPos, float puddleHeight, Config config, half4 weights)
-         {
-            // could force a branch and avoid texsamples
-            #if _SNOW
-               
-               #if _USEGLOBALSNOWLEVEL 
-               float snowLevel = _Global_SnowLevel;
+            #if _STREAMS
+               #if _GLOBALSTREAMS
+                  fxLevels.b *= _Global_StreamMax;
                #else
-               float snowLevel = _SnowAmount;
+                  fxLevels.b *= _StreamMax;
                #endif
-
-               #if _USEGLOBALSNOWHEIGHT
-               float snowMin = _Global_SnowMinMaxHeight.x;
-               float snowMax = _Global_SnowMinMaxHeight.y;
-               #else
-               float snowMin = _SnowHeightAngleRange.x;
-               float snowMax = _SnowHeightAngleRange.y;
-               #endif
-
-               
-
-               float snowAge = _SnowParams.z;
-
-
-               #if _PERTEXSNOWSTRENGTH && !_SNOWSIMPLE
-                  SAMPLE_PER_TEX(ptSnowStr, 8.5, config, half4(1.0, 0.0, 0.0, 0.0));
-                  snowLevel *= ptSnowStr0.x * weights.x + ptSnowStr1.x * weights.y + ptSnowStr2.x * weights.z + ptSnowStr3.x * weights.w;
-               #endif
-
-               half2 levelMaxMin = half2(1, 0);
-               #if _SNOWMASK
-                  levelMaxMin = SAMPLE_TEXTURE2D_LOD(_SnowMask, shared_linear_clamp_sampler, uv, 0).xy;
-               #endif
-               
-               float3 snowUpVector = _SnowUpVector;
-               float worldHeight = worldPos.y;
-               
-               half snowDot = saturate(dot(worldNormalVertex, snowUpVector));
-               half snowDotVertex = max(snowLevel/2, snowDot);
-               
-
-               float snowFade = SnowFade(worldHeight, snowMin, snowMax, snowDotVertex, snowDotVertex, snowLevel, puddleHeight);
-               #if _SNOWMASK
-                  snowFade = min(levelMaxMin.x, snowFade);
-                  snowFade = max(levelMaxMin.y, snowFade);
-               #endif
-
-               float height = splat_height * _SnowParams.x;
-               float erosion = height * _SnowParams.y;
-               float snowMask = saturate((snowFade - erosion));
-               float snowMask2 = saturate(snowMask * 8);
-               snowMask *= snowMask * snowMask * snowMask * snowMask * snowMask2;
-               float snowAmount = snowMask * snowDot;
-
-               return snowAmount;
             #endif
-            return 0;
+
+            #if _LAVA
+               fxLevels.a *= _LavaParams.y;
+            #endif
+
+            #if _TRAXSINGLE || _TRAXARRAY || _TRAXNOTEXTURE
+               fxLevels = saturate(max(fxLevels, _TraxFXThresholds * (1 - saturate(traxBuffer))));
+            #endif
+            return fxLevels;
+         }
+
+         half4 SampleFXLevels(float2 uv, out half wetness, out half burnLevel, half traxBuffer)
+         {
+            half4 fxLevels = half4(0,0,0,0);
+            burnLevel = 0;
+            wetness = 0;
+            #if _WETNESS || _PUDDLES || _STREAMS || _LAVA
+               fxLevels = SAMPLE_TEXTURE2D(_StreamControl, shared_linear_clamp_sampler, uv);
+
+               COUNTSAMPLE
+
+               #if _DYNAMICFLOWS
+               half4 flows = SAMPLE_TEXTURE2D(_DynamicStreamControl, shared_linear_clamp_sampler, uv);
+               COUNTSAMPLE
+
+               wetness = flows.x;
+               burnLevel = flows.y;
+
+               flows.zw = saturate(flows.zw*3);
+               fxLevels.zw = max(fxLevels.zw, flows.zw);
+               #endif
+
+               
+
+            #endif
+            return ProcessFXLevels(fxLevels, traxBuffer);
+         }
+
+
+         half4 SampleFXLevelsLOD(float2 uv, half traxBuffer)
+         {
+            half4 fxLevels = half4(0,0,0,0);
+            #if _WETNESS || _PUDDLES || _STREAMS || _LAVA
+            fxLevels = SAMPLE_TEXTURE2D_LOD(_StreamControl, shared_linear_clamp_sampler, uv, 0);
+               #if _DYNAMICFLOWS
+               half4 flows = SAMPLE_TEXTURE2D_LOD(_DynamicStreamControl, shared_linear_clamp_sampler, uv, 0);
+               flows.xy = 0;
+               fxLevels = max(fxLevels, flows);
+               #endif
+
+               #if _LAVA
+                  fxLevels.w *= _LavaDislacementScale;
+               #endif
+
+            #endif
+            return ProcessFXLevels(fxLevels, 1.0 - traxBuffer);
+         }
+
+
+         void WaterBRDF (inout half3 Albedo, inout half Smoothness, half metalness, half wetFactor, half surfPorosity) 
+         {
+            half porosity = saturate((( (1 - Smoothness) - 0.5)) / max(surfPorosity, 0.001));
+            half factor = lerp(1, 0.2, (1 - metalness) * porosity);
+            Albedo *= lerp(1.0, factor, wetFactor);
+            Smoothness = lerp(Smoothness, 0.92f, wetFactor);
+         }
+
+         void Flow(float2 uv, half2 flow, half speed, float intensity, out float2 uv1, out float2 uv2, out half interp)
+         {
+            float2 flowVector = flow * intensity;
+            
+            float timeScale = _Time.y * speed;
+            float2 phase = frac(float2(timeScale, timeScale + .5));
+
+            uv1.xy = (uv.xy - flowVector * half2(phase.x, phase.x));
+            uv2.xy = (uv.xy - flowVector * half2(phase.y, phase.y));
+
+            interp = abs(0.5 - phase.x) / 0.5;
+         }
+
+
+         #if _RAINDROPS
+         half2 ComputeRipple(float2 uv, half time, half weight)
+         {
+            half4 ripple = SAMPLE_TEXTURE2D(_RainDropTexture, sampler_Diffuse, uv);
+            ripple.yz = ripple.yz * 2 - 1;
+
+            half dropFrac = frac(ripple.w + time);
+            half timeFrac = dropFrac - 1.0 + ripple.x;
+            half dropFactor = saturate(0.2f + weight * 0.8 - dropFrac);
+            half finalFactor = dropFactor * ripple.x * 
+                                 sin( clamp(timeFrac * 9.0f, 0.0f, 3.0f) * 3.14159265359);
+
+            return half2(ripple.yz * finalFactor);
+         }
+         #endif
+
+         half2 DoRain(half2 waterNorm, float2 uv)
+         {
+         #if _RAINDROPS
+            #if _GLOBALRAIN
+               float rainIntensity = _Global_RainIntensity.x;
+            #else
+               float rainIntensity = _RainIntensityScale.x;
+            #endif
+            half dropStrength = rainIntensity;
+            const float4 timeMul = float4(1.0f, 0.85f, 0.93f, 1.13f); 
+            half4 timeAdd = float4(0.0f, 0.2f, 0.45f, 0.7f);
+            half4 times = _Time.yyyy;
+            times = frac((times * float4(1, 0.85, 0.93, 1.13) + float4(0, 0.2, 0.45, 0.7)) * 1.6);
+
+            float2 ruv1 = uv * _RainIntensityScale.yy;
+            float2 ruv2 = ruv1;
+
+            half4 weights = rainIntensity.xxxx - float4(0, 0.25, 0.5, 0.75);
+            half2 ripple1 = ComputeRipple(ruv1 + float2( 0.25f,0.0f), times.x, weights.x);
+            half2 ripple2 = ComputeRipple(ruv2 + float2(-0.55f,0.3f), times.y, weights.y);
+            half2 ripple3 = ComputeRipple(ruv1 + float2(0.6f, 0.85f), times.z, weights.z);
+            half2 ripple4 = ComputeRipple(ruv2 + float2(0.5f,-0.75f), times.w, weights.w);
+            weights = saturate(weights * 4);
+
+            half2 rippleNormal = half2( weights.x * ripple1.xy +
+                        weights.y * ripple2.xy + 
+                        weights.z * ripple3.xy + 
+                        weights.w * ripple4.xy);
+
+            waterNorm = lerp(waterNorm, BlendNormal2(rippleNormal, waterNorm), rainIntensity * dropStrength); 
+            return waterNorm;                        
+         #else
+            return waterNorm;
+         #endif
+         }
+
+
+         #if _WETNESS
+         float DoWetness(inout MicroSplatLayer o, half wetLevel, half porosity, float3 worldPos)
+         {
+            #if _GLOBALWETNESS
+               wetLevel = clamp(wetLevel, _Global_WetnessParams.x, _Global_WetnessParams.y);
+            #else
+               wetLevel = clamp(wetLevel, _WetnessParams.x, _WetnessParams.y);
+            #endif
+            #if _HEIGHTWETNESS
+               float l = _HeightWetness.x;
+               l += sin(_Time.y * _HeightWetness.z) * _HeightWetness.w;
+               half hw = saturate((l - worldPos.y) * _HeightWetness.y);
+               wetLevel = max(hw, wetLevel);
+            #endif
+
+            #if _DISTANCEWETNESS
+               float camDist = distance(_WorldSpaceCameraPos, worldPos);
+               float fade = saturate((camDist - _DistanceWetness.x) / _DistanceWetness.z);
+
+               wetLevel *= lerp(_DistanceWetness.y, _DistanceWetness.w, fade);
+            #endif
+            
+            return wetLevel;
+         }
+         #endif
+
+
+         #if _PUDDLES
+         // modity lighting terms for water..
+         float DoPuddles(inout MicroSplatLayer o, half puddleLevel, half porosity, float2 uv)
+         {
+            float2 pudParams = _PuddleParams;
+            #if _GLOBALPUDDLES
+            pudParams.y = _Global_PuddleParams;
+            #endif
+
+            puddleLevel *= pudParams.y;
+            float waterBlend = saturate((puddleLevel - o.Height) * pudParams.x);
+            return waterBlend;
+         }
+         #endif
+
+         float3 W2TVec(Input i, float3 normal) 
+         {
+            float3x3 t2w = GetTBN(i);
+            return normalize(mul(t2w, normal));
          }
          
-         #if _SNOWSPARKLE
-         void DoSnowSparkle(Input i, inout MicroSplatLayer o, float3 viewDir, float3 worldPos, float3 worldNormalVertex, float snowLevel)
+         float2 FlowVecFromWNV(Input i, float2 uv, float3 worldNormalVertex)
          {
-            
-            #if _DEBUG_SNOWSPARKLE
-            o.Albedo = 0;
-            o.Smoothness = 0;
-            o.Occlusion = 1;
-            o.Emission = 0;
-            
+            float2 ret = lerp(worldNormalVertex.xz, normalize(worldNormalVertex.xz), max(0.1, worldNormalVertex.z));
+            #if _MICROMESH || _MICROVERTEXMESH
+            ret = W2TVec(i, float3(0,-1,0)).xy;
+            #elif _MICRODIGGERMESH
+            ret = W2TVec(i, float3(0,1,0)).xy;
             #endif
-            
-
-            // screen space method. Looks nice because it's in SS, but fails because clearly not
-            // combing from a single spot on the terrain.
-
-            float size = 1 - (_SnowSparkleSize * 0.001);
-            float density = _SnowSparkleDensity;
-            float noiseDensity = _SnowSparkleNoiseDensity;
-            float viewDep = _SnowSparkleViewDependency;
-
-            float3 wsView = worldPos - _WorldSpaceCameraPos;
-            float3 wsViewDir = normalize(wsView);
-
-            float z = length(wsView);
-            float e = floor(log2(0.3*z+3.0)/0.3785116);
-            float level_z = 0.1 * pow(1.3, e) - 0.2;
-            float level = 0.12 / level_z;
-            density *= level;
-            noiseDensity *= level;
-
-            float3 v = wsView / z;
-            float3 view_new = v * level_z;
-            view_new = sign(view_new) * frac(abs(view_new));
-
-            float3 pos = density*worldPos + viewDep * normalize(view_new);
-
-            float3 g_index = floor(pos);
-            float3 pc = g_index / density;
-            
-            float3 noise = _SnowSparkleNoiseAmplitude * SAMPLE_TEXTURE2D_LOD( _SnowSparkleNoise, sampler_Diffuse, noiseDensity * pc.xz + pc.y, 0).rgb;
-            float3 offset = 0.75;
-            float3 px = pos - g_index + 0.5 * frac(noise)-offset;
-
-            float dotvn = dot(wsViewDir, worldNormalVertex);
-            float3 ma = v - dotvn*worldNormalVertex;
-            float3 px_proj = dot(px, ma) * ma;
-            px += (abs(dotvn)-1.0)*px_proj/dot(ma,ma);
-
-            float dist2 = dot(px, px);
-            float thresh = 1 - size;
-
-            
-            float r = dist2 > thresh? 0 : 1-dist2/thresh;
-
-            r *= snowLevel * _SnowSparkleStrength;
-            float3 c = _SnowSparkleTint * r;
-               
-            o.Albedo += c;
-            o.Emission += c * _SnowSparkleEmission;
-            o.Smoothness += r;
-
-            #if _DEBUG_SNOWSPARKLE
-            o.Albedo = c;
-            o.Emission = c * _SnowSparkleEmission;
-            o.Smoothness = r;
-            o.Normal = float3(0,0,1);
-            #endif
-            
-            
-            
+            return ret;
          }
-         #endif
 
-         #if _SNOWRIM
-         void DoSnowRim(inout MicroSplatLayer o, Input i, float snowAmount)
+         #if _STREAMS
+         half3 GetWaterNormal(Input i, float2 uv, float3 worldNormalVertex)
          {
-            float rim = 1.0 - saturate(dot(normalize(_WorldSpaceCameraPos - i.worldPos), WorldNormalVector(i, o.Normal))); 
-            o.Emission += pow(rim, _SnowRimPower) * _SnowRimColor * snowAmount;
-         }
-         #endif
+            float2 flowDir = FlowVecFromWNV(i, uv, worldNormalVertex);
+            float2 uv1;
+            float2 uv2;
+            half interp;
+            Flow(uv * _StreamUVScales.xy, flowDir, _StreamFlowParams.y, _StreamFlowParams.z, uv1, uv2, interp);
 
-         #if _SNOWSTOCHASTIC
-         void SampleSnowStochastic(float2 uv, float2 dx, float2 dy, out float4 albedo, out float4 nsao)
-         {
-            float2 uv1, uv2, uv3;
-            half3 w;
-            PrepareStochasticUVs(_SnowStochasticScale, uv, uv1, uv2, uv3, w);
-               
-            half4 S1 = SAMPLE_TEXTURE2D_GRAD(_SnowDiff, sampler_Diffuse, uv1, dx, dy);
-            half4 S2 = SAMPLE_TEXTURE2D_GRAD(_SnowDiff, sampler_Diffuse, uv2, dx, dy);
-            half4 S3 = SAMPLE_TEXTURE2D_GRAD(_SnowDiff, sampler_Diffuse, uv3, dx, dy);
-
+            half3 fd = lerp(SAMPLE_TEXTURE2D(_StreamNormal, sampler_NormalSAO, uv1), SAMPLE_TEXTURE2D(_StreamNormal, sampler_NormalSAO, uv2), interp).xyz;
             COUNTSAMPLE
             COUNTSAMPLE
-            COUNTSAMPLE
 
-            half3 cw = BaryWeightBlend(w, S1.a, S2.a, S3.a, _SnowStochasticContrast);
-
-            half4 N1, N2, N3 = half4(0,0,1,0);
-            MSBRANCHCLUSTER(cw.x);
-            {
-               N1 = SAMPLE_TEXTURE2D_GRAD(_SnowNormal, sampler_NormalSAO, uv1, dx, dy);
-               COUNTSAMPLE
-            }
-            MSBRANCHCLUSTER(cw.y);
-            {
-               N2 = SAMPLE_TEXTURE2D_GRAD(_SnowNormal, sampler_NormalSAO, uv2, dx, dy);
-               COUNTSAMPLE
-            }
-            MSBRANCHCLUSTER(cw.z);
-            {
-               N3 = SAMPLE_TEXTURE2D_GRAD(_SnowNormal, sampler_NormalSAO, uv3, dx, dy);
-               COUNTSAMPLE
-            }
-               
-            albedo = S1 * cw.x + S2 * cw.y + S3 * cw.z;
-            nsao = N1 * cw.x + N2 * cw.y + N3 * cw.z;
-            nsao = nsao.agrb;
+            fd.xy = fd.xy * 2 - 1;
+            return fd;
          }
-         #endif
-         
-         
-         float DoSnow(Input i, inout MicroSplatLayer o, float2 uv, float3 worldNormal, float3 worldNormalVertex, 
-               float3 worldPos, float puddleHeight, half surfPorosity, float camDist, Config config, half4 weights, 
-               inout half3 SSSTint, inout half SSSThickness, float traxBuffer, float3 traxNormal)
+
+         // water normal only
+         void DoStreamRefract(inout Config config, inout TriplanarConfig tc, float3 waterNorm, half puddleLevel, half height)
          {
-            #if _SNOW
-            float2 maskUV = uv;
-            #if _SNOWWORLDSPACEUV
-               uv = worldPos.xz;
-            #endif
-            
-            
-            float2 dx = ddx(uv) * _SnowUVScales.xy;
-            float2 dy = ddy(uv) * _SnowUVScales.xy;
-
-            float3 wdx = ddx(worldPos) * _SnowUVScales.xxy;
-            float3 wdy = ddy(worldPos) * _SnowUVScales.xxy;
-
-            uv *= _SnowUVScales.xy;
-            float3 wuv = worldPos * _SnowUVScales.xxy;
-            
-            #if _USEGLOBALSNOWLEVEL 
-            float snowLevel = _Global_SnowLevel;
+            #if _GLOBALSTREAMS
+               puddleLevel *= _Global_StreamMax;
             #else
-            float snowLevel = _SnowAmount;
+               puddleLevel *= _StreamMax;
             #endif
 
-            #if _USEGLOBALSNOWHEIGHT
-            float snowMin = _Global_SnowMinMaxHeight.x;
-            float snowMax = _Global_SnowMinMaxHeight.y;
-            #else
-            float snowMin = _SnowHeightAngleRange.x;
-            float snowMax = _SnowHeightAngleRange.y;
-            #endif
-
-            
-
-
-            float snowAge = _SnowParams.z;
-            float snowErosion = _SnowParams.y;
-            float snowHeight = _SnowParams.x;
-
-
-
-            #if _PERTEXSNOWSTRENGTH && !_SIMPLESNOW
-               SAMPLE_PER_TEX(ptSnowStr, 8.5, config, half4(1.0, 0.0, 0.0, 0.0));
-               snowLevel *= ptSnowStr0.x * weights.x + ptSnowStr1.x * weights.y + ptSnowStr2.x * weights.z + ptSnowStr3.x * weights.w;
-            #endif
-
-            half2 levelMaxMin = half2(1,0);
-            #if _SNOWMASK
-               #if _MEGASPLAT
-                  levelMaxMin = i.fx2.yx;
-               #else
-                  levelMaxMin = SAMPLE_TEXTURE2D_GRAD(_SnowMask, shared_linear_clamp_sampler, maskUV, ddx(maskUV), ddy(maskUV));
-               #endif
-            #endif
-            
-            float3 snowUpVector = _SnowUpVector;
-            float worldHeight = i.worldHeight;
-            
-            
-            half snowDot = max(snowLevel/2, dot(worldNormal, snowUpVector));
-            half snowDotVertex = snowDot;
-            #if _SNOWSIMPLE
-               half ao = 1;
-               half oheight = 0;
-               half smoothness = 0;
-            #else
-               half ao = o.Occlusion;
-               half oheight = o.Height;
-               half smoothness = o.Smoothness;
-            #endif
-               
-            
-            float snowFade = SnowFade(worldHeight, snowMin, snowMax, snowDot, snowDotVertex, snowLevel, puddleHeight);
-
-            #if _SNOWMASK
-               snowFade = min(levelMaxMin.x, snowFade);
-               snowFade = max(levelMaxMin.y, snowFade);
-            #endif
-
-            //MSBRANCHOTHER(snowFade)
+            #if _STREAMHEIGHTFILTER
             {
-               #if _SNOWSTOCHASTIC && _SNOWTRIPLANAR
-
-                  float3 pn = pow(abs(worldNormal), 3);
-                  pn = pn / (pn.x + pn.y + pn.z);
-            
-                  half3 axisSign = sign(worldNormal);
-
-                  float2 uv0 = wuv.zy * axisSign.x;
-                  float2 uv1 = wuv.xz * axisSign.y;
-                  float2 uv2 = wuv.xy * axisSign.z;
-
-                  half4 snowAlb0; half4 snowAlb1; half4 snowAlb2;
-                  half4 snowNsao0; half4 snowNsao1; half4 snowNsao2;
-
-                  SampleSnowStochastic(uv0, wdx.zy, wdy.zy, snowAlb0, snowNsao0);
-                  SampleSnowStochastic(uv1, wdx.xz, wdy.xz, snowAlb1, snowNsao1);
-                  SampleSnowStochastic(uv2, wdx.xy, wdy.xy, snowAlb2, snowNsao2);
-
-                  half4 snowAlb = snowAlb0 * pn.x + snowAlb1 * pn.y + snowAlb2 * pn.z;
-                  half4 snowNsao = snowNsao0 * pn.x + snowNsao1 * pn.y + snowNsao2 * pn.z;
-
-               #elif _SNOWTRIPLANAR
-
-                  float3 pn = pow(abs(worldNormal), 3);
-                  pn = pn / (pn.x + pn.y + pn.z);
-            
-                  half3 axisSign = sign(worldNormal);
-
-                  float2 uv0 = wuv.zy * axisSign.x;
-                  float2 uv1 = wuv.xz * axisSign.y;
-                  float2 uv2 = wuv.xy * axisSign.z;
-                  half4 snowAlb0 = SAMPLE_TEXTURE2D_GRAD(_SnowDiff, sampler_Diffuse, uv0, wdx.zy, wdy.zy);
-                  half4 snowAlb1 = SAMPLE_TEXTURE2D_GRAD(_SnowDiff, sampler_Diffuse, uv1, wdx.xz, wdy.xz);
-                  half4 snowAlb2 = SAMPLE_TEXTURE2D_GRAD(_SnowDiff, sampler_Diffuse, uv2, wdx.xy, wdy.xy);
-                  half4 snowNsao0 = SAMPLE_TEXTURE2D_GRAD(_SnowNormal, sampler_NormalSAO, uv0, wdx.zy, wdy.zy).agrb;
-                  half4 snowNsao1 = SAMPLE_TEXTURE2D_GRAD(_SnowNormal, sampler_NormalSAO, uv1, wdx.xz, wdy.xz).agrb;
-                  half4 snowNsao2 = SAMPLE_TEXTURE2D_GRAD(_SnowNormal, sampler_NormalSAO, uv2, wdx.xy, wdy.xy).agrb;
-                  half4 snowAlb = snowAlb0 * pn.x + snowAlb1 * pn.y + snowAlb2 * pn.z;
-                  half4 snowNsao = snowNsao0 * pn.x + snowNsao1 * pn.y + snowNsao2 * pn.z;
-                  COUNTSAMPLE
-                  COUNTSAMPLE
-                  COUNTSAMPLE
-                  COUNTSAMPLE
-                  COUNTSAMPLE
-                  COUNTSAMPLE
-
-               #elif _SNOWSTOCHASTIC
-                  half4 snowAlb;
-                  half4 snowNsao;
-
-                  SampleSnowStochastic(uv, dx, dy, snowAlb, snowNsao);
-               #else
-                  half4 snowAlb = SAMPLE_TEXTURE2D_GRAD(_SnowDiff, sampler_Diffuse, uv, dx, dy);
-                  half4 snowNsao = SAMPLE_TEXTURE2D_GRAD(_SnowNormal, sampler_NormalSAO, uv, dx, dy).agrb;
-                  COUNTSAMPLE
-                  COUNTSAMPLE
-               #endif
-
-               #if _SNOWDISTANCERESAMPLE
-               {
-                  float fade = saturate ((camDist - _SnowDistanceResampleScaleStrengthFade.z) / _SnowDistanceResampleScaleStrengthFade.w);
-                  fade *= _SnowDistanceResampleScaleStrengthFade.y;
-                  MSBRANCHOTHER(fade)
-                  {
-                     float2 snowResampleUV = uv * _SnowDistanceResampleScaleStrengthFade.x;
-                     float2 rsdx = dx * _SnowDistanceResampleScaleStrengthFade.x;
-                     float2 rsdy = dy * _SnowDistanceResampleScaleStrengthFade.x;
-                     half4 resSnowAlb = SAMPLE_TEXTURE2D_GRAD(_SnowDiff, sampler_Diffuse,  snowResampleUV, rsdx, rsdy);
-                     half4 resSnowNsao = SAMPLE_TEXTURE2D_GRAD(_SnowNormal, sampler_NormalSAO, snowResampleUV, rsdx, rsdy).grab;
-                     COUNTSAMPLE
-                     COUNTSAMPLE
-           
-                     snowAlb.rgb = lerp(snowAlb, resSnowAlb, fade);
-                     snowNsao = lerp(snowNsao, resSnowNsao, fade);
-                  }
-               }
-               #endif
-
-               #if _SNOWNORMALNOISE
-               {
-                  float2 normalUV = uv * _SnowNormalNoiseScaleStrength.x;
-                  half3 noise = UnpackNormal(SAMPLE_TEXTURE2D_GRAD(_SnowNormalNoise, sampler_Diffuse, normalUV, dx * _SnowNormalNoiseScaleStrength.x, dy * _SnowNormalNoiseScaleStrength.x));
-                  COUNTSAMPLE
-                  snowNsao.xy = lerp(snowNsao.xy, BlendNormal2(snowNsao.xy, noise.xy), _SnowNormalNoiseScaleStrength.y);
-               }
-               #endif
-            
-               #if _SNOWFOOTSTEPS
-               {
-                  traxNormal.xy *= _SnowTraxNormalStrength;
-                  float2 fsdx = dx * _SnowTraxUVScales;
-                  float2 fsdy = dy * _SnowTraxUVScales;
-                  traxBuffer = 1 - ((1 - traxBuffer) * _SnowTraxTextureBlend);
-
-                  half4 traxDiffuse = SAMPLE_TEXTURE2D_GRAD(_SnowTrackDiff, sampler_Diffuse, uv * _SnowTraxUVScales, fsdx, fsdy);
-                  half4 traxN = SAMPLE_TEXTURE2D_GRAD(_SnowTrackNSAO, sampler_NormalSAO, uv * _SnowTraxUVScales, fsdx, fsdy).agrb;
-                  COUNTSAMPLE
-                  COUNTSAMPLE
-
-                  traxDiffuse.rgb *= _TraxSnowTint;
-                  snowAlb.rgba = lerp(traxDiffuse, snowAlb.rgba, traxBuffer);
-                  snowNsao.rgba = lerp(traxN + half4(traxNormal.xy, 0, 0), snowNsao.rgba, traxBuffer);
-                  snowAge = lerp(_TraxSnowAge, snowAge, traxBuffer);
-                  snowErosion = lerp(_TraxSnowErosion, snowErosion, traxBuffer);
-                  snowHeight = lerp(_TraxSnowHeight, snowHeight, traxBuffer);
-
-                  snowFade = saturate(snowFade - _TraxSnowRemoval * (1-saturate(traxBuffer)));
-               }
-               #endif
-
-              
-
-               half3 snowNormal = float3(snowNsao.xy * 2 - 1, 1);
-             
-               half height = saturate(oheight - (1.0 - snowHeight));
-               half erosion = saturate(ao * snowErosion);
-               erosion *= erosion;
-               half snowMask = saturate(snowFade - erosion - height);
-               snowMask = snowMask * snowMask * snowMask;
-               half snowAmount = snowMask * saturate(snowDot - (height + erosion) * 0.5);  // up
-               snowAmount = saturate(snowAmount * 8);
-
-               float wetnessMask = saturate((_SnowParams.w * (4.0 * snowFade) - (snowNsao.b) * 0.5));
-                
-               float snowNormalAmount = snowAmount * snowAmount;
-
-               float porosity = saturate((((1.0 - smoothness) - 0.5)) / max(surfPorosity, 0.001));
-               float factor = lerp(1, 0.4, porosity);
-
-               o.Albedo *= lerp(1.0, factor, wetnessMask);
-               o.Normal = lerp(o.Normal, float3(0,0,1), wetnessMask);
-               o.Smoothness = lerp(o.Smoothness, 0.8, wetnessMask);
-
-
-               #if _SNOWSSS
-                  SSSTint = lerp(SSSTint, _SnowSSSTint.rgb, snowNormalAmount);
-                  SSSThickness = lerp(SSSThickness, _SnowSSSTint.a * 2 * snowAlb.a, snowNormalAmount);
-               #endif
-
-               snowAlb.rgb *= _SnowTint.rgb;
-               
-
-               o.Albedo = lerp(o.Albedo, snowAlb.rgb, snowAmount);
-               o.Normal = lerp(o.Normal, snowNormal, snowNormalAmount);
-               o.Smoothness = lerp(o.Smoothness, (snowNsao.b) * snowAge, snowAmount);
-               o.Occlusion = lerp(o.Occlusion, snowNsao.w, snowAmount);
-               o.Height = lerp(o.Height, snowAlb.a, snowAmount);
-               o.Metallic = lerp(o.Metallic, 0.01, snowAmount);
-               float crystals = saturate(0.65 - snowNsao.b);
-               o.Smoothness = lerp(o.Smoothness, crystals * snowAge, snowAmount);
-               
-               #if _SNOWSPARKLE
-               DoSnowSparkle(i, o, i.viewDir, worldPos, worldNormalVertex, snowAmount);
-               #endif
-
-               #if _SNOWRIM
-               DoSnowRim(o, i, snowAmount);
-               #endif
-
-               return snowAmount;
+               float shf = saturate((height - _StreamFades.x) / max(_StreamFades.y - _StreamFades.x, 0.0001));
+               shf *= 1.0 - saturate((height - _StreamFades.z) / max(_StreamFades.w - _StreamFades.z, 0.0001));
+               puddleLevel *= shf;
             }
             #endif
+
+            float waterBlend = saturate((puddleLevel - height) * _StreamBlend);
+            waterBlend *= waterBlend;
+
+            waterNorm.xy *= puddleLevel * waterBlend;
+            float2 offset = lerp(waterNorm.xy, waterNorm.xy * height, _StreamFlowParams.w);
+            offset *= _StreamFlowParams.x;
+            #if !_TRIPLANAR
+            config.uv0.xy += offset;
+            config.uv1.xy += offset;
+            config.uv2.xy += offset;
+            config.uv3.xy += offset;
+            #else
+            tc.uv0[0].xy += offset;
+            tc.uv0[1].xy += offset;
+            tc.uv0[2].xy += offset;
+            tc.uv1[0].xy += offset;
+            tc.uv1[1].xy += offset;
+            tc.uv1[2].xy += offset;
+            tc.uv2[0].xy += offset;
+            tc.uv2[1].xy += offset;
+            tc.uv2[2].xy += offset;
+            tc.uv3[0].xy += offset;
+            tc.uv3[1].xy += offset;
+            tc.uv3[2].xy += offset;
+            #endif
+         }  
+
+
+
+
+         float DoStream(inout MicroSplatLayer o, float2 uv, half porosity, half3 waterNormFoam, 
+            half2 flowDir, half puddleLevel, half foamStrength, half wetTrail,
+            inout half foam)
+         {
+            
+            float waterBlend = saturate((puddleLevel - o.Height) * _StreamBlend);
+            if (waterBlend + wetTrail > 0)
+            {
+               half2 waterNorm = waterNormFoam.xy;
+
+               half pmh = puddleLevel - o.Height;
+               // refactor to compute flow UVs in previous step?
+               float2 foamUV0 = 0;
+               float2 foamUV1 = 0;
+               half foamInterp = 0;
+               Flow(uv * 1.75 + waterNormFoam.xy * waterNormFoam.b, flowDir, _StreamFlowParams.y/3, _StreamFlowParams.z/3, foamUV0, foamUV1, foamInterp);
+               half foam0 = SAMPLE_TEXTURE2D(_StreamNormal, sampler_NormalSAO, foamUV0).b;
+               half foam1 = SAMPLE_TEXTURE2D(_StreamNormal, sampler_NormalSAO, foamUV1).b;
+               COUNTSAMPLE
+               COUNTSAMPLE
+               foam = lerp(foam0, foam1, foamInterp);
+               foam = foam * abs(pmh) + (foam * o.Height);
+               foam *= 1.0 - (saturate(pmh * 1.5));
+               foam *= foam;
+               foam *= _StreamNormalFoam.y * foamStrength;
+
+               
+
+               #if _DYNAMICFLOWS
+                  #if _GLOBALSTREAMS
+                     float streamMax = _Global_StreamMax;
+                  #else
+                     float streamMax = _StreamMax;
+                  #endif
+                  half waterBlend2 = max(waterBlend, saturate((wetTrail * streamMax - o.Height) * _StreamBlend) * 0.85);
+                  return waterBlend2;
+               #endif
+               return waterBlend;   
+            }
             return 0;
          }
 
-         // for object blend shader, must, unfortunately, keep in sync..
-         float DoSnowSimple(Input i, inout MicroSplatLayer o, float2 uv, float3 worldNormal, float3 worldNormalVertex, 
-               float3 worldPos, float puddleHeight, half surfPorosity)
+         #endif
+
+
+         #if _LAVA
+
+         half4 SampleLava(float2 uv, float2 dx, float2 dy)
          {
-            #if _SNOW
-            float2 maskUV = uv;
-            #if _SNOWWORLDSPACEUV
-               uv = worldPos.xz;
+            #if _LAVASTOCHASTIC
+               float2 uv1, uv2, uv3;
+               half3 w;
+               PrepareStochasticUVs(_LavaStochasticSize, uv, uv1, uv2, uv3, w);
+               
+               half4 S1 = SAMPLE_TEXTURE2D_GRAD(_LavaDiffuse, sampler_Diffuse, uv1, dx, dy);
+               half4 S2 = SAMPLE_TEXTURE2D_GRAD(_LavaDiffuse, sampler_Diffuse, uv2, dx, dy);
+               half4 S3 = SAMPLE_TEXTURE2D_GRAD(_LavaDiffuse, sampler_Diffuse, uv3, dx, dy);
+               COUNTSAMPLE
+               COUNTSAMPLE
+               COUNTSAMPLE
+               
+               half3 cw = BaryWeightBlend(w, S1.r, S2.r, S3.r, _LavaStochasticContrast);
+               return S1 * cw.x + S2 * cw.y + S3 * cw.z;
+            #else
+               COUNTSAMPLE
+               return SAMPLE_TEXTURE2D_GRAD(_LavaDiffuse, sampler_Diffuse, uv, dx, dy);
             #endif
-            
-            uv *= _SnowUVScales.xy;
+         }
+
+         float DoLava(inout MicroSplatLayer o, float2 uv, half lavaLevel, half2 flowDir)
+         {
+            uv *= _LavaUVScale;
+            float lvh = lavaLevel - o.Height;
+            float lavaBlend = saturate(lvh * _LavaParams.x);
+
             float2 dx = ddx(uv);
             float2 dy = ddy(uv);
-            
-            #if _USEGLOBALSNOWLEVEL 
-               float snowLevel = _Global_SnowLevel;
-            #else
-               float snowLevel = _SnowAmount;
-            #endif
-
-            #if _USEGLOBALSNOWHEIGHT
-               float snowMin = _Global_SnowMinMaxHeight.x;
-               float snowMax = _Global_SnowMinMaxHeight.y;
-            #else
-               float snowMin = _SnowHeightAngleRange.x;
-               float snowMax = _SnowHeightAngleRange.y;
-            #endif
-
-            half2 levelMaxMin = half2(1,0);
-            #if _SNOWMASK
-               #if _MEGASPLAT
-                  levelMaxMin = i.fx2.yx;
-               #else
-                  levelMaxMin = SAMPLE_TEXTURE2D_GRAD(_SnowMask, shared_linear_clamp_sampler, maskUV, ddx(maskUV), ddy(maskUV));
-               #endif
-            #endif
-
-
-
-            float snowAge = _SnowParams.z;
-            float snowErosion = _SnowParams.y;
-            float snowHeight = _SnowParams.x;
-            
-            float3 snowUpVector = _SnowUpVector;
-            float worldHeight = i.worldHeight;
-            #if _PLANETVECTORS
-               snowUpVector = i.worldUpVector;
-            #endif
-
-            half snowDot = max(snowLevel/2, dot(worldNormal, snowUpVector));
-            half snowDotVertex = max(snowLevel/2, dot(worldNormalVertex, snowUpVector));
-            float snowFade = SnowFade(worldHeight, snowMin, snowMax, snowDot, snowDotVertex, snowLevel, puddleHeight);
-
-
-            MSBRANCHOTHER(snowFade)
+            UNITY_BRANCH
+            if (lavaBlend > 0)
             {
-               
-               half4 snowAlb = SAMPLE_TEXTURE2D_GRAD(_SnowDiff, sampler_Diffuse, uv, dx, dy);
-               half4 snowNsao = SAMPLE_TEXTURE2D_GRAD(_SnowNormal, sampler_NormalSAO, uv, dx, dy).agrb;
-               COUNTSAMPLE
-               COUNTSAMPLE
+               half distortionSize = _LavaParams2.x;
+               half distortionRate = _LavaParams2.y;
+               half distortionScale = _LavaParams2.z;
+               half darkening = _LavaParams2.w;
+               half3 edgeColor = _LavaEdgeColor;
+               half3 lavaColorLow = _LavaColorLow;
+               half3 lavaColorHighlight = _LavaColorHighlight;
 
-               snowAlb.rgb *= _SnowTint.rgb;
 
-               #if _SNOWNORMALNOISE
-               {
-                  float2 normalUV = uv * _SnowNormalNoiseScaleStrength.x;
-                  half3 noise = UnpackNormal(SAMPLE_TEXTURE2D_GRAD(_SnowNormalNoise, sampler_Diffuse, normalUV, dx * _SnowNormalNoiseScaleStrength.x, dy * _SnowNormalNoiseScaleStrength.x));
+               half lavaSpeed = _LavaParams.z;
+               half lavaInterp = _LavaParams.w;
 
-                  snowNsao.xy = lerp(snowNsao.xy, BlendNormal2(snowNsao.xy, noise.xy), _SnowNormalNoiseScaleStrength.y);
-               }
+               float2 uv1 = 0;
+               float2 uv2 = 0;
+               half interp = 0;
+               half drag = lerp(0.1, 1, saturate(lvh));
+               Flow(uv, flowDir, lavaInterp, lavaSpeed * drag, uv1, uv2, interp);
 
-               #endif
-               
-               half3 snowNormal = float3(snowNsao.xy * 2 - 1, 1);
-               half ao = o.Occlusion;
+               float2 dist_uv1;
+               float2 dist_uv2;
+               half dist_interp;
+               Flow(uv * distortionScale, flowDir, distortionRate, distortionSize, dist_uv1, dist_uv2, dist_interp);
 
-               half height = saturate(o.Height - (1-snowHeight));
-               half erosion = saturate(ao * snowErosion);
-               erosion *= erosion;
-               half snowMask = saturate(snowFade - erosion - height);
-               snowMask = snowMask * snowMask * snowMask;
-               half snowAmount = snowMask * saturate(snowDot - (height + erosion) * 0.5);  // up
-               snowAmount = saturate(snowAmount * 8);
+               half4 lavaDist = lerp(SampleLava(dist_uv1*0.51, dx, dy), SampleLava(dist_uv2, dx, dy), dist_interp);
+               half4 dist = lavaDist * (distortionSize * 2) - distortionSize;
 
-               float wetnessMask = saturate((_SnowParams.w * (4.0 * snowFade) - (snowNsao.b) * 0.5));
+               half4 lavaTex = lerp(SampleLava(uv1*1.1 + dist.xy, dx, dy), SampleLava(uv2 + dist.zw, dx, dy), interp);
 
-               float snowNormalAmount = snowAmount * snowAmount;
+               // base lava color, based on heights
+               half3 lavaColor = lerp(lavaColorLow, lavaColorHighlight, lavaTex.b);
 
-               float porosity = saturate((((1.0 - o.Smoothness) - 0.5)) / max(surfPorosity, 0.001));
-               float factor = lerp(1, 0.4, porosity);
+               // edges
+               float lavaBlendWide = saturate((lavaLevel - o.Height) * _LavaParams.x * 0.5);
+               float edge = saturate((1 - lavaBlendWide) * 3);
 
-               o.Albedo *= lerp(1.0, factor, wetnessMask);
-               o.Normal = lerp(o.Normal, float3(0,0,1), wetnessMask);
-               o.Smoothness = lerp(o.Smoothness, 0.8, wetnessMask);
+               // darkening
+               darkening = saturate(lavaTex.a * darkening * saturate(lvh*2));
+               lavaColor *= 1.0 - darkening;
+               // edges
+               lavaColor = lerp(lavaColor, edgeColor, edge);
 
-         
-               o.Albedo = lerp(o.Albedo, snowAlb.rgb, snowAmount);
-               o.Normal = lerp(o.Normal, snowNormal, snowNormalAmount);
-               o.Smoothness = lerp(o.Smoothness, (snowNsao.b) * snowAge, snowAmount);
-               o.Occlusion = lerp(o.Occlusion, snowNsao.w, snowAmount);
-               o.Height = lerp(o.Height, snowAlb.a, snowAmount);
-               o.Metallic = lerp(o.Metallic, 0.01, snowAmount);
-               float crystals = saturate(0.65 - snowNsao.b);
-               o.Smoothness = lerp(o.Smoothness, crystals * snowAge, snowAmount);
+               o.Albedo = lerp(o.Albedo, lavaColor, lavaBlend);
+               o.Normal.xy = lerp(o.Normal.xy, lavaTex.xy * 2 - 1, lavaBlend);
+               o.Smoothness = lerp(o.Smoothness, 0.3, lavaBlend * darkening);
 
-               #if _SNOWSPARKLE
-               DoSnowSparkle(i, o, i.viewDir, worldPos, worldNormalVertex, snowAmount);
-               #endif
-
-               #if _SNOWRIM
-               DoSnowRim(o, i, snowAmount);
-               #endif
-
-               return snowAmount;
-            
+               half3 emis = lavaColor * lavaBlend;
+               o.Emission = lerp(o.Emission, emis * _LavaEmissiveMult, lavaBlend);
+               // bleed
+               o.Emission += edgeColor * 0.3 * (saturate((lavaLevel*1.2 - o.Height) * _LavaParams.x) - lavaBlend);
+               return saturate(lavaBlend*3);
             }
-            #endif
             return 0;
          }
 
+
+         #endif
+
+
+
+
+
+         float DoStreams(Input i, inout MicroSplatLayer o, half4 fxLevels, float2 uv, half porosity, 
+            half3 waterNormalFoam, float3 worldNormalVertex, half streamFoam, half wetLevel, half burnLevel, float3 worldPos)
+         {
+            float pud = 0;
+            float wetness = 0;
+            half foam = 0;
+            half streamPud = 0;
+
+            #if _WETNESS
+            wetness = DoWetness(o, fxLevels.x, porosity, worldPos);
+            #endif
+
+
+            #if _PUDDLES
+            pud = DoPuddles(o, fxLevels.g, porosity, uv);
+            #endif
+
+            
+
+            #if _STREAMS || _LAVA
+            float2 flowDir = FlowVecFromWNV(i, uv, worldNormalVertex);
+            #endif
+
+            
+            #if _STREAMS
+               #if _STREAMHEIGHTFILTER
+               {
+                  float shf = saturate((worldPos.y - _StreamFades.x) / max(_StreamFades.y - _StreamFades.x, 0.0001));
+                  shf *= 1.0 - saturate((worldPos.y - _StreamFades.z) / max(_StreamFades.w - _StreamFades.z, 0.0001));
+                  fxLevels.z *= shf;
+                  wetLevel *= shf;
+               }
+               #endif
+
+            half foamStr = min(length(worldNormalVertex.xz) * 18, 1) * streamFoam;
+            streamPud = DoStream(o, uv, porosity, waterNormalFoam, flowDir, fxLevels.z, foamStr, wetLevel, foam);
+            o.Albedo = lerp(o.Albedo, o.Albedo * _StreamTint * 2.0, streamPud);
+            //pud -= streamPud;
+            #endif
+
+            #if _WETNESS || _PUDDLES || _STREAMS
+               half3 waterNorm = half3(0,0,1);
+               half3 wetAlbedo = o.Albedo;
+               half wetSmoothness = o.Smoothness;
+
+               float wetBlend = max(max(pud, wetness), streamPud);
+
+               WaterBRDF(wetAlbedo, wetSmoothness, o.Metallic, wetBlend, porosity);
+               
+               wetAlbedo += foam;
+               wetSmoothness -= foam;
+
+               float foamNormStr = 1; 
+               #if _STREAMS
+                  foamNormStr = _StreamNormalFoam.x;
+               #endif
+
+               #if _RAINDROPS
+               waterNorm.xy = DoRain(waterNorm.xy, uv) * pud;
+               #endif
+
+               
+
+
+               o.Normal = lerp(o.Normal, waterNorm, pud * foamNormStr);
+               o.Occlusion = lerp(o.Occlusion, 1, wetBlend);
+               o.Smoothness = lerp(o.Smoothness, wetSmoothness, wetBlend);
+               o.Albedo = lerp(o.Albedo, wetAlbedo, wetBlend);
+
+            #endif
+
+
+            #if _LAVA
+               #if _LAVAHEIGHTFILTER
+               {
+                  float lhf = saturate((worldPos.y - _LavaFades.x) / max(_LavaFades.y - _LavaFades.x, 0.0001));
+                  lhf *= 1.0 - saturate((worldPos.y - _LavaFades.z) / max(_LavaFades.w - _LavaFades.z, 0.0001));
+                  fxLevels.a *= lhf;
+                  burnLevel *= lhf;
+               }
+               #endif
+
+            float burn = 1 - burnLevel * 0.85;
+            o.Albedo *= burn;
+            o.Smoothness *= burn;
+            pud = max(streamPud, DoLava(o, uv, fxLevels.a, flowDir));
+            #endif
+
+            pud = max(max(pud, streamPud), wetness);
+            #if _WETNESSMASKSNOW
+            pud = max(pud, 1-fxLevels.x);
+            #endif
+
+            return pud;
+         }
 
 
       void SampleAlbedo(inout Config config, inout TriplanarConfig tc, inout RawSamples s, MIPFORMAT mipLevel, half4 weights)
@@ -14675,8 +14515,7 @@ float3 GetTessFactors ()
       #define _PERTEXUVSCALEOFFSET 1
       #define _BRANCHSAMPLES 1
       #define _BRANCHSAMPLESAGR 1
-      #define _SNOW 1
-      #define _SNOWSIMPLE 1
+      #define _WETNESS 1
       #define _MSRENDERLOOP_UNITYURP2022 1
       #define _MICROSPLATBASEMAP 1
       #define _MSRENDERLOOP_UNITYLD 1
@@ -15090,65 +14929,73 @@ float3 GetTessFactors ()
       #endif
 
 
-         #if _SNOW
-         half4 _SnowParams; // influence, erosion, crystal, melt
-         half _SnowAmount;
-         half2 _SnowUVScales;
-         float4 _SnowHeightAngleRange;
-         half3 _SnowUpVector;
-         half3 _SnowTint;
-         #endif
-
-         #if _SNOWNORMALNOISE
-         float4 _SnowNormalNoiseScaleStrength;
-         #endif
-
-         #if _SNOWDISTANCERESAMPLE
-         float4 _SnowDistanceResampleScaleStrengthFade;
-         #endif
-
-         #if _SNOW && _USEGLOBALSNOWLEVEL
-         float _Global_SnowLevel;
-         #endif
-
-         #if _SNOW && _USEGLOBALSNOWHEIGHT
-         float2 _Global_SnowMinMaxHeight;
-         #endif
+         half _GlobalPorosity;
          
-         #if _SNOWSTOCHASTIC
-         half _SnowStochasticContrast;
-         half _SnowStochasticScale;
+         #if _WETNESS
+            #if _GLOBALWETNESS
+            half2 _Global_WetnessParams;
+            #else
+            half2 _WetnessParams;
+            #endif
+
+            #if _HEIGHTWETNESS
+            float4 _HeightWetness;
+            #endif
+
+            #if _DISTANCEWETNESS
+            float4 _DistanceWetness;
+            #endif
          #endif
 
-         #if _SNOWSSS
-         half4 _SnowSSSTint;
+         #if _PUDDLES
+            half2 _PuddleParams;
+            #if _GLOBALPUDDLES
+            half _Global_PuddleParams;
+            #endif
          #endif
 
-         #if _TESSDISTANCE || _TESSEDGE
-         half _TessDisplaceSnowMultiplier;
+         #if _STREAMS
+            half _StreamBlend;
+            half4 _StreamFlowParams;
+            half2 _StreamNormalFoam;
+            float2 _StreamUVScales;
+            #if _GLOBALSTREAMS
+               half _Global_StreamMax;
+            #else
+               half _StreamMax;
+            #endif
+            half3 _StreamTint;
+            #if _STREAMHEIGHTFILTER
+               float4 _StreamFades;
+            #endif
          #endif
 
-         #if _SNOWFOOTSTEPS
-         float2 _SnowTraxUVScales;
-         float _SnowTraxTextureBlend;
-         float _SnowTraxNormalStrength;
+         #if _LAVA
+            half4 _LavaParams;
+            half4 _LavaParams2;
+            half3 _LavaEdgeColor;
+            half3 _LavaColorLow;
+            half3 _LavaColorHighlight;
+            float2 _LavaUVScale;
+            half _LavaDislacementScale;
+            #if _LAVAHEIGHTFILTER
+               float4 _LavaFades;
+            #endif
+            half _LavaEmissiveMult;
+
+            #if _LAVASTOCHASTIC
+               half _LavaStochasticSize;
+               half _LavaStochasticContrast;
+            #endif
          #endif
 
-         #if _SNOWRIM
-         float _SnowRimPower;
-         half3 _SnowRimColor;
+         #if _RAINDROPS
+            float2 _RainIntensityScale;
+            #if _GLOBALRAIN
+               float _Global_RainIntensity;
+            #endif
          #endif
 
-         #if _SNOWSPARKLE
-         float _SnowSparkleStrength;
-         half3 _SnowSparkleTint;
-         half _SnowSparkleEmission;
-         float _SnowSparkleSize;
-         float _SnowSparkleDensity;
-         float _SnowSparkleNoiseDensity;
-         float _SnowSparkleNoiseAmplitude;
-         float _SnowSparkleViewDependency;
-         #endif
 
 
             CBUFFER_END
@@ -16566,589 +16413,530 @@ void PrepareStochasticUVs(float scale, float2 uv, out float2 uv1, out float2 uv2
 }
 
 
-         #if _SNOW
-         TEXTURE2D(_SnowDiff);
-         TEXTURE2D(_SnowNormal);
+
+
+         TEXTURE2D(_StreamControl);
+
+         #if _DYNAMICFLOWS
+            TEXTURE2D(_DynamicStreamControl);
          #endif
 
-         #if _SNOWNORMALNOISE
-         TEXTURE2D(_SnowNormalNoise);
+         #if _STREAMS
+            TEXTURE2D(_StreamNormal);
          #endif
 
-         #if _SNOWFOOTSTEPS
-         TEXTURE2D(_SnowTrackDiff);
-         TEXTURE2D(_SnowTrackNSAO);
+         #if _LAVA
+            TEXTURE2D(_LavaDiffuse);
          #endif
 
-         #if _SNOWMASK
-         TEXTURE2D(_SnowMask);
+         #if _RAINDROPS
+            TEXTURE2D(_RainDropTexture);
          #endif
 
-         #if _SNOWSPARKLE
-            TEXTURE2D(_SnowSparkleNoise);
-         #endif
-         
-         
 
-         float SnowFade(float worldHeight, float snowMin, float snowMax, half snowDot, half snowDotVertex, half snowLevel, half puddleHeight)
+
+         half4 ProcessFXLevels(half4 fxLevels, half traxBuffer)
          {
-            float snowHeightFade = saturate((worldHeight - snowMin) / max(snowMax, 0.001));
-            half snowAngleFade = max(0, (snowDotVertex - _SnowHeightAngleRange.z) * 6);
-            snowAngleFade = snowAngleFade * (1 - max(0, (snowDotVertex - _SnowHeightAngleRange.w) * 6));
-            return saturate((snowLevel * snowHeightFade * saturate(snowAngleFade)) - puddleHeight);
-         }
-
-         float DoSnowDisplace(float splat_height, float2 uv, float3 worldNormalVertex, float3 worldPos, float puddleHeight, Config config, half4 weights)
-         {
-            // could force a branch and avoid texsamples
-            #if _SNOW
-               
-               #if _USEGLOBALSNOWLEVEL 
-               float snowLevel = _Global_SnowLevel;
+            #if _STREAMS
+               #if _GLOBALSTREAMS
+                  fxLevels.b *= _Global_StreamMax;
                #else
-               float snowLevel = _SnowAmount;
+                  fxLevels.b *= _StreamMax;
                #endif
-
-               #if _USEGLOBALSNOWHEIGHT
-               float snowMin = _Global_SnowMinMaxHeight.x;
-               float snowMax = _Global_SnowMinMaxHeight.y;
-               #else
-               float snowMin = _SnowHeightAngleRange.x;
-               float snowMax = _SnowHeightAngleRange.y;
-               #endif
-
-               
-
-               float snowAge = _SnowParams.z;
-
-
-               #if _PERTEXSNOWSTRENGTH && !_SNOWSIMPLE
-                  SAMPLE_PER_TEX(ptSnowStr, 8.5, config, half4(1.0, 0.0, 0.0, 0.0));
-                  snowLevel *= ptSnowStr0.x * weights.x + ptSnowStr1.x * weights.y + ptSnowStr2.x * weights.z + ptSnowStr3.x * weights.w;
-               #endif
-
-               half2 levelMaxMin = half2(1, 0);
-               #if _SNOWMASK
-                  levelMaxMin = SAMPLE_TEXTURE2D_LOD(_SnowMask, shared_linear_clamp_sampler, uv, 0).xy;
-               #endif
-               
-               float3 snowUpVector = _SnowUpVector;
-               float worldHeight = worldPos.y;
-               
-               half snowDot = saturate(dot(worldNormalVertex, snowUpVector));
-               half snowDotVertex = max(snowLevel/2, snowDot);
-               
-
-               float snowFade = SnowFade(worldHeight, snowMin, snowMax, snowDotVertex, snowDotVertex, snowLevel, puddleHeight);
-               #if _SNOWMASK
-                  snowFade = min(levelMaxMin.x, snowFade);
-                  snowFade = max(levelMaxMin.y, snowFade);
-               #endif
-
-               float height = splat_height * _SnowParams.x;
-               float erosion = height * _SnowParams.y;
-               float snowMask = saturate((snowFade - erosion));
-               float snowMask2 = saturate(snowMask * 8);
-               snowMask *= snowMask * snowMask * snowMask * snowMask * snowMask2;
-               float snowAmount = snowMask * snowDot;
-
-               return snowAmount;
             #endif
-            return 0;
+
+            #if _LAVA
+               fxLevels.a *= _LavaParams.y;
+            #endif
+
+            #if _TRAXSINGLE || _TRAXARRAY || _TRAXNOTEXTURE
+               fxLevels = saturate(max(fxLevels, _TraxFXThresholds * (1 - saturate(traxBuffer))));
+            #endif
+            return fxLevels;
+         }
+
+         half4 SampleFXLevels(float2 uv, out half wetness, out half burnLevel, half traxBuffer)
+         {
+            half4 fxLevels = half4(0,0,0,0);
+            burnLevel = 0;
+            wetness = 0;
+            #if _WETNESS || _PUDDLES || _STREAMS || _LAVA
+               fxLevels = SAMPLE_TEXTURE2D(_StreamControl, shared_linear_clamp_sampler, uv);
+
+               COUNTSAMPLE
+
+               #if _DYNAMICFLOWS
+               half4 flows = SAMPLE_TEXTURE2D(_DynamicStreamControl, shared_linear_clamp_sampler, uv);
+               COUNTSAMPLE
+
+               wetness = flows.x;
+               burnLevel = flows.y;
+
+               flows.zw = saturate(flows.zw*3);
+               fxLevels.zw = max(fxLevels.zw, flows.zw);
+               #endif
+
+               
+
+            #endif
+            return ProcessFXLevels(fxLevels, traxBuffer);
+         }
+
+
+         half4 SampleFXLevelsLOD(float2 uv, half traxBuffer)
+         {
+            half4 fxLevels = half4(0,0,0,0);
+            #if _WETNESS || _PUDDLES || _STREAMS || _LAVA
+            fxLevels = SAMPLE_TEXTURE2D_LOD(_StreamControl, shared_linear_clamp_sampler, uv, 0);
+               #if _DYNAMICFLOWS
+               half4 flows = SAMPLE_TEXTURE2D_LOD(_DynamicStreamControl, shared_linear_clamp_sampler, uv, 0);
+               flows.xy = 0;
+               fxLevels = max(fxLevels, flows);
+               #endif
+
+               #if _LAVA
+                  fxLevels.w *= _LavaDislacementScale;
+               #endif
+
+            #endif
+            return ProcessFXLevels(fxLevels, 1.0 - traxBuffer);
+         }
+
+
+         void WaterBRDF (inout half3 Albedo, inout half Smoothness, half metalness, half wetFactor, half surfPorosity) 
+         {
+            half porosity = saturate((( (1 - Smoothness) - 0.5)) / max(surfPorosity, 0.001));
+            half factor = lerp(1, 0.2, (1 - metalness) * porosity);
+            Albedo *= lerp(1.0, factor, wetFactor);
+            Smoothness = lerp(Smoothness, 0.92f, wetFactor);
+         }
+
+         void Flow(float2 uv, half2 flow, half speed, float intensity, out float2 uv1, out float2 uv2, out half interp)
+         {
+            float2 flowVector = flow * intensity;
+            
+            float timeScale = _Time.y * speed;
+            float2 phase = frac(float2(timeScale, timeScale + .5));
+
+            uv1.xy = (uv.xy - flowVector * half2(phase.x, phase.x));
+            uv2.xy = (uv.xy - flowVector * half2(phase.y, phase.y));
+
+            interp = abs(0.5 - phase.x) / 0.5;
+         }
+
+
+         #if _RAINDROPS
+         half2 ComputeRipple(float2 uv, half time, half weight)
+         {
+            half4 ripple = SAMPLE_TEXTURE2D(_RainDropTexture, sampler_Diffuse, uv);
+            ripple.yz = ripple.yz * 2 - 1;
+
+            half dropFrac = frac(ripple.w + time);
+            half timeFrac = dropFrac - 1.0 + ripple.x;
+            half dropFactor = saturate(0.2f + weight * 0.8 - dropFrac);
+            half finalFactor = dropFactor * ripple.x * 
+                                 sin( clamp(timeFrac * 9.0f, 0.0f, 3.0f) * 3.14159265359);
+
+            return half2(ripple.yz * finalFactor);
+         }
+         #endif
+
+         half2 DoRain(half2 waterNorm, float2 uv)
+         {
+         #if _RAINDROPS
+            #if _GLOBALRAIN
+               float rainIntensity = _Global_RainIntensity.x;
+            #else
+               float rainIntensity = _RainIntensityScale.x;
+            #endif
+            half dropStrength = rainIntensity;
+            const float4 timeMul = float4(1.0f, 0.85f, 0.93f, 1.13f); 
+            half4 timeAdd = float4(0.0f, 0.2f, 0.45f, 0.7f);
+            half4 times = _Time.yyyy;
+            times = frac((times * float4(1, 0.85, 0.93, 1.13) + float4(0, 0.2, 0.45, 0.7)) * 1.6);
+
+            float2 ruv1 = uv * _RainIntensityScale.yy;
+            float2 ruv2 = ruv1;
+
+            half4 weights = rainIntensity.xxxx - float4(0, 0.25, 0.5, 0.75);
+            half2 ripple1 = ComputeRipple(ruv1 + float2( 0.25f,0.0f), times.x, weights.x);
+            half2 ripple2 = ComputeRipple(ruv2 + float2(-0.55f,0.3f), times.y, weights.y);
+            half2 ripple3 = ComputeRipple(ruv1 + float2(0.6f, 0.85f), times.z, weights.z);
+            half2 ripple4 = ComputeRipple(ruv2 + float2(0.5f,-0.75f), times.w, weights.w);
+            weights = saturate(weights * 4);
+
+            half2 rippleNormal = half2( weights.x * ripple1.xy +
+                        weights.y * ripple2.xy + 
+                        weights.z * ripple3.xy + 
+                        weights.w * ripple4.xy);
+
+            waterNorm = lerp(waterNorm, BlendNormal2(rippleNormal, waterNorm), rainIntensity * dropStrength); 
+            return waterNorm;                        
+         #else
+            return waterNorm;
+         #endif
+         }
+
+
+         #if _WETNESS
+         float DoWetness(inout MicroSplatLayer o, half wetLevel, half porosity, float3 worldPos)
+         {
+            #if _GLOBALWETNESS
+               wetLevel = clamp(wetLevel, _Global_WetnessParams.x, _Global_WetnessParams.y);
+            #else
+               wetLevel = clamp(wetLevel, _WetnessParams.x, _WetnessParams.y);
+            #endif
+            #if _HEIGHTWETNESS
+               float l = _HeightWetness.x;
+               l += sin(_Time.y * _HeightWetness.z) * _HeightWetness.w;
+               half hw = saturate((l - worldPos.y) * _HeightWetness.y);
+               wetLevel = max(hw, wetLevel);
+            #endif
+
+            #if _DISTANCEWETNESS
+               float camDist = distance(_WorldSpaceCameraPos, worldPos);
+               float fade = saturate((camDist - _DistanceWetness.x) / _DistanceWetness.z);
+
+               wetLevel *= lerp(_DistanceWetness.y, _DistanceWetness.w, fade);
+            #endif
+            
+            return wetLevel;
+         }
+         #endif
+
+
+         #if _PUDDLES
+         // modity lighting terms for water..
+         float DoPuddles(inout MicroSplatLayer o, half puddleLevel, half porosity, float2 uv)
+         {
+            float2 pudParams = _PuddleParams;
+            #if _GLOBALPUDDLES
+            pudParams.y = _Global_PuddleParams;
+            #endif
+
+            puddleLevel *= pudParams.y;
+            float waterBlend = saturate((puddleLevel - o.Height) * pudParams.x);
+            return waterBlend;
+         }
+         #endif
+
+         float3 W2TVec(Input i, float3 normal) 
+         {
+            float3x3 t2w = GetTBN(i);
+            return normalize(mul(t2w, normal));
          }
          
-         #if _SNOWSPARKLE
-         void DoSnowSparkle(Input i, inout MicroSplatLayer o, float3 viewDir, float3 worldPos, float3 worldNormalVertex, float snowLevel)
+         float2 FlowVecFromWNV(Input i, float2 uv, float3 worldNormalVertex)
          {
-            
-            #if _DEBUG_SNOWSPARKLE
-            o.Albedo = 0;
-            o.Smoothness = 0;
-            o.Occlusion = 1;
-            o.Emission = 0;
-            
+            float2 ret = lerp(worldNormalVertex.xz, normalize(worldNormalVertex.xz), max(0.1, worldNormalVertex.z));
+            #if _MICROMESH || _MICROVERTEXMESH
+            ret = W2TVec(i, float3(0,-1,0)).xy;
+            #elif _MICRODIGGERMESH
+            ret = W2TVec(i, float3(0,1,0)).xy;
             #endif
-            
-
-            // screen space method. Looks nice because it's in SS, but fails because clearly not
-            // combing from a single spot on the terrain.
-
-            float size = 1 - (_SnowSparkleSize * 0.001);
-            float density = _SnowSparkleDensity;
-            float noiseDensity = _SnowSparkleNoiseDensity;
-            float viewDep = _SnowSparkleViewDependency;
-
-            float3 wsView = worldPos - _WorldSpaceCameraPos;
-            float3 wsViewDir = normalize(wsView);
-
-            float z = length(wsView);
-            float e = floor(log2(0.3*z+3.0)/0.3785116);
-            float level_z = 0.1 * pow(1.3, e) - 0.2;
-            float level = 0.12 / level_z;
-            density *= level;
-            noiseDensity *= level;
-
-            float3 v = wsView / z;
-            float3 view_new = v * level_z;
-            view_new = sign(view_new) * frac(abs(view_new));
-
-            float3 pos = density*worldPos + viewDep * normalize(view_new);
-
-            float3 g_index = floor(pos);
-            float3 pc = g_index / density;
-            
-            float3 noise = _SnowSparkleNoiseAmplitude * SAMPLE_TEXTURE2D_LOD( _SnowSparkleNoise, sampler_Diffuse, noiseDensity * pc.xz + pc.y, 0).rgb;
-            float3 offset = 0.75;
-            float3 px = pos - g_index + 0.5 * frac(noise)-offset;
-
-            float dotvn = dot(wsViewDir, worldNormalVertex);
-            float3 ma = v - dotvn*worldNormalVertex;
-            float3 px_proj = dot(px, ma) * ma;
-            px += (abs(dotvn)-1.0)*px_proj/dot(ma,ma);
-
-            float dist2 = dot(px, px);
-            float thresh = 1 - size;
-
-            
-            float r = dist2 > thresh? 0 : 1-dist2/thresh;
-
-            r *= snowLevel * _SnowSparkleStrength;
-            float3 c = _SnowSparkleTint * r;
-               
-            o.Albedo += c;
-            o.Emission += c * _SnowSparkleEmission;
-            o.Smoothness += r;
-
-            #if _DEBUG_SNOWSPARKLE
-            o.Albedo = c;
-            o.Emission = c * _SnowSparkleEmission;
-            o.Smoothness = r;
-            o.Normal = float3(0,0,1);
-            #endif
-            
-            
-            
+            return ret;
          }
-         #endif
 
-         #if _SNOWRIM
-         void DoSnowRim(inout MicroSplatLayer o, Input i, float snowAmount)
+         #if _STREAMS
+         half3 GetWaterNormal(Input i, float2 uv, float3 worldNormalVertex)
          {
-            float rim = 1.0 - saturate(dot(normalize(_WorldSpaceCameraPos - i.worldPos), WorldNormalVector(i, o.Normal))); 
-            o.Emission += pow(rim, _SnowRimPower) * _SnowRimColor * snowAmount;
-         }
-         #endif
+            float2 flowDir = FlowVecFromWNV(i, uv, worldNormalVertex);
+            float2 uv1;
+            float2 uv2;
+            half interp;
+            Flow(uv * _StreamUVScales.xy, flowDir, _StreamFlowParams.y, _StreamFlowParams.z, uv1, uv2, interp);
 
-         #if _SNOWSTOCHASTIC
-         void SampleSnowStochastic(float2 uv, float2 dx, float2 dy, out float4 albedo, out float4 nsao)
-         {
-            float2 uv1, uv2, uv3;
-            half3 w;
-            PrepareStochasticUVs(_SnowStochasticScale, uv, uv1, uv2, uv3, w);
-               
-            half4 S1 = SAMPLE_TEXTURE2D_GRAD(_SnowDiff, sampler_Diffuse, uv1, dx, dy);
-            half4 S2 = SAMPLE_TEXTURE2D_GRAD(_SnowDiff, sampler_Diffuse, uv2, dx, dy);
-            half4 S3 = SAMPLE_TEXTURE2D_GRAD(_SnowDiff, sampler_Diffuse, uv3, dx, dy);
-
+            half3 fd = lerp(SAMPLE_TEXTURE2D(_StreamNormal, sampler_NormalSAO, uv1), SAMPLE_TEXTURE2D(_StreamNormal, sampler_NormalSAO, uv2), interp).xyz;
             COUNTSAMPLE
             COUNTSAMPLE
-            COUNTSAMPLE
 
-            half3 cw = BaryWeightBlend(w, S1.a, S2.a, S3.a, _SnowStochasticContrast);
-
-            half4 N1, N2, N3 = half4(0,0,1,0);
-            MSBRANCHCLUSTER(cw.x);
-            {
-               N1 = SAMPLE_TEXTURE2D_GRAD(_SnowNormal, sampler_NormalSAO, uv1, dx, dy);
-               COUNTSAMPLE
-            }
-            MSBRANCHCLUSTER(cw.y);
-            {
-               N2 = SAMPLE_TEXTURE2D_GRAD(_SnowNormal, sampler_NormalSAO, uv2, dx, dy);
-               COUNTSAMPLE
-            }
-            MSBRANCHCLUSTER(cw.z);
-            {
-               N3 = SAMPLE_TEXTURE2D_GRAD(_SnowNormal, sampler_NormalSAO, uv3, dx, dy);
-               COUNTSAMPLE
-            }
-               
-            albedo = S1 * cw.x + S2 * cw.y + S3 * cw.z;
-            nsao = N1 * cw.x + N2 * cw.y + N3 * cw.z;
-            nsao = nsao.agrb;
+            fd.xy = fd.xy * 2 - 1;
+            return fd;
          }
-         #endif
-         
-         
-         float DoSnow(Input i, inout MicroSplatLayer o, float2 uv, float3 worldNormal, float3 worldNormalVertex, 
-               float3 worldPos, float puddleHeight, half surfPorosity, float camDist, Config config, half4 weights, 
-               inout half3 SSSTint, inout half SSSThickness, float traxBuffer, float3 traxNormal)
+
+         // water normal only
+         void DoStreamRefract(inout Config config, inout TriplanarConfig tc, float3 waterNorm, half puddleLevel, half height)
          {
-            #if _SNOW
-            float2 maskUV = uv;
-            #if _SNOWWORLDSPACEUV
-               uv = worldPos.xz;
-            #endif
-            
-            
-            float2 dx = ddx(uv) * _SnowUVScales.xy;
-            float2 dy = ddy(uv) * _SnowUVScales.xy;
-
-            float3 wdx = ddx(worldPos) * _SnowUVScales.xxy;
-            float3 wdy = ddy(worldPos) * _SnowUVScales.xxy;
-
-            uv *= _SnowUVScales.xy;
-            float3 wuv = worldPos * _SnowUVScales.xxy;
-            
-            #if _USEGLOBALSNOWLEVEL 
-            float snowLevel = _Global_SnowLevel;
+            #if _GLOBALSTREAMS
+               puddleLevel *= _Global_StreamMax;
             #else
-            float snowLevel = _SnowAmount;
+               puddleLevel *= _StreamMax;
             #endif
 
-            #if _USEGLOBALSNOWHEIGHT
-            float snowMin = _Global_SnowMinMaxHeight.x;
-            float snowMax = _Global_SnowMinMaxHeight.y;
-            #else
-            float snowMin = _SnowHeightAngleRange.x;
-            float snowMax = _SnowHeightAngleRange.y;
-            #endif
-
-            
-
-
-            float snowAge = _SnowParams.z;
-            float snowErosion = _SnowParams.y;
-            float snowHeight = _SnowParams.x;
-
-
-
-            #if _PERTEXSNOWSTRENGTH && !_SIMPLESNOW
-               SAMPLE_PER_TEX(ptSnowStr, 8.5, config, half4(1.0, 0.0, 0.0, 0.0));
-               snowLevel *= ptSnowStr0.x * weights.x + ptSnowStr1.x * weights.y + ptSnowStr2.x * weights.z + ptSnowStr3.x * weights.w;
-            #endif
-
-            half2 levelMaxMin = half2(1,0);
-            #if _SNOWMASK
-               #if _MEGASPLAT
-                  levelMaxMin = i.fx2.yx;
-               #else
-                  levelMaxMin = SAMPLE_TEXTURE2D_GRAD(_SnowMask, shared_linear_clamp_sampler, maskUV, ddx(maskUV), ddy(maskUV));
-               #endif
-            #endif
-            
-            float3 snowUpVector = _SnowUpVector;
-            float worldHeight = i.worldHeight;
-            
-            
-            half snowDot = max(snowLevel/2, dot(worldNormal, snowUpVector));
-            half snowDotVertex = snowDot;
-            #if _SNOWSIMPLE
-               half ao = 1;
-               half oheight = 0;
-               half smoothness = 0;
-            #else
-               half ao = o.Occlusion;
-               half oheight = o.Height;
-               half smoothness = o.Smoothness;
-            #endif
-               
-            
-            float snowFade = SnowFade(worldHeight, snowMin, snowMax, snowDot, snowDotVertex, snowLevel, puddleHeight);
-
-            #if _SNOWMASK
-               snowFade = min(levelMaxMin.x, snowFade);
-               snowFade = max(levelMaxMin.y, snowFade);
-            #endif
-
-            //MSBRANCHOTHER(snowFade)
+            #if _STREAMHEIGHTFILTER
             {
-               #if _SNOWSTOCHASTIC && _SNOWTRIPLANAR
-
-                  float3 pn = pow(abs(worldNormal), 3);
-                  pn = pn / (pn.x + pn.y + pn.z);
-            
-                  half3 axisSign = sign(worldNormal);
-
-                  float2 uv0 = wuv.zy * axisSign.x;
-                  float2 uv1 = wuv.xz * axisSign.y;
-                  float2 uv2 = wuv.xy * axisSign.z;
-
-                  half4 snowAlb0; half4 snowAlb1; half4 snowAlb2;
-                  half4 snowNsao0; half4 snowNsao1; half4 snowNsao2;
-
-                  SampleSnowStochastic(uv0, wdx.zy, wdy.zy, snowAlb0, snowNsao0);
-                  SampleSnowStochastic(uv1, wdx.xz, wdy.xz, snowAlb1, snowNsao1);
-                  SampleSnowStochastic(uv2, wdx.xy, wdy.xy, snowAlb2, snowNsao2);
-
-                  half4 snowAlb = snowAlb0 * pn.x + snowAlb1 * pn.y + snowAlb2 * pn.z;
-                  half4 snowNsao = snowNsao0 * pn.x + snowNsao1 * pn.y + snowNsao2 * pn.z;
-
-               #elif _SNOWTRIPLANAR
-
-                  float3 pn = pow(abs(worldNormal), 3);
-                  pn = pn / (pn.x + pn.y + pn.z);
-            
-                  half3 axisSign = sign(worldNormal);
-
-                  float2 uv0 = wuv.zy * axisSign.x;
-                  float2 uv1 = wuv.xz * axisSign.y;
-                  float2 uv2 = wuv.xy * axisSign.z;
-                  half4 snowAlb0 = SAMPLE_TEXTURE2D_GRAD(_SnowDiff, sampler_Diffuse, uv0, wdx.zy, wdy.zy);
-                  half4 snowAlb1 = SAMPLE_TEXTURE2D_GRAD(_SnowDiff, sampler_Diffuse, uv1, wdx.xz, wdy.xz);
-                  half4 snowAlb2 = SAMPLE_TEXTURE2D_GRAD(_SnowDiff, sampler_Diffuse, uv2, wdx.xy, wdy.xy);
-                  half4 snowNsao0 = SAMPLE_TEXTURE2D_GRAD(_SnowNormal, sampler_NormalSAO, uv0, wdx.zy, wdy.zy).agrb;
-                  half4 snowNsao1 = SAMPLE_TEXTURE2D_GRAD(_SnowNormal, sampler_NormalSAO, uv1, wdx.xz, wdy.xz).agrb;
-                  half4 snowNsao2 = SAMPLE_TEXTURE2D_GRAD(_SnowNormal, sampler_NormalSAO, uv2, wdx.xy, wdy.xy).agrb;
-                  half4 snowAlb = snowAlb0 * pn.x + snowAlb1 * pn.y + snowAlb2 * pn.z;
-                  half4 snowNsao = snowNsao0 * pn.x + snowNsao1 * pn.y + snowNsao2 * pn.z;
-                  COUNTSAMPLE
-                  COUNTSAMPLE
-                  COUNTSAMPLE
-                  COUNTSAMPLE
-                  COUNTSAMPLE
-                  COUNTSAMPLE
-
-               #elif _SNOWSTOCHASTIC
-                  half4 snowAlb;
-                  half4 snowNsao;
-
-                  SampleSnowStochastic(uv, dx, dy, snowAlb, snowNsao);
-               #else
-                  half4 snowAlb = SAMPLE_TEXTURE2D_GRAD(_SnowDiff, sampler_Diffuse, uv, dx, dy);
-                  half4 snowNsao = SAMPLE_TEXTURE2D_GRAD(_SnowNormal, sampler_NormalSAO, uv, dx, dy).agrb;
-                  COUNTSAMPLE
-                  COUNTSAMPLE
-               #endif
-
-               #if _SNOWDISTANCERESAMPLE
-               {
-                  float fade = saturate ((camDist - _SnowDistanceResampleScaleStrengthFade.z) / _SnowDistanceResampleScaleStrengthFade.w);
-                  fade *= _SnowDistanceResampleScaleStrengthFade.y;
-                  MSBRANCHOTHER(fade)
-                  {
-                     float2 snowResampleUV = uv * _SnowDistanceResampleScaleStrengthFade.x;
-                     float2 rsdx = dx * _SnowDistanceResampleScaleStrengthFade.x;
-                     float2 rsdy = dy * _SnowDistanceResampleScaleStrengthFade.x;
-                     half4 resSnowAlb = SAMPLE_TEXTURE2D_GRAD(_SnowDiff, sampler_Diffuse,  snowResampleUV, rsdx, rsdy);
-                     half4 resSnowNsao = SAMPLE_TEXTURE2D_GRAD(_SnowNormal, sampler_NormalSAO, snowResampleUV, rsdx, rsdy).grab;
-                     COUNTSAMPLE
-                     COUNTSAMPLE
-           
-                     snowAlb.rgb = lerp(snowAlb, resSnowAlb, fade);
-                     snowNsao = lerp(snowNsao, resSnowNsao, fade);
-                  }
-               }
-               #endif
-
-               #if _SNOWNORMALNOISE
-               {
-                  float2 normalUV = uv * _SnowNormalNoiseScaleStrength.x;
-                  half3 noise = UnpackNormal(SAMPLE_TEXTURE2D_GRAD(_SnowNormalNoise, sampler_Diffuse, normalUV, dx * _SnowNormalNoiseScaleStrength.x, dy * _SnowNormalNoiseScaleStrength.x));
-                  COUNTSAMPLE
-                  snowNsao.xy = lerp(snowNsao.xy, BlendNormal2(snowNsao.xy, noise.xy), _SnowNormalNoiseScaleStrength.y);
-               }
-               #endif
-            
-               #if _SNOWFOOTSTEPS
-               {
-                  traxNormal.xy *= _SnowTraxNormalStrength;
-                  float2 fsdx = dx * _SnowTraxUVScales;
-                  float2 fsdy = dy * _SnowTraxUVScales;
-                  traxBuffer = 1 - ((1 - traxBuffer) * _SnowTraxTextureBlend);
-
-                  half4 traxDiffuse = SAMPLE_TEXTURE2D_GRAD(_SnowTrackDiff, sampler_Diffuse, uv * _SnowTraxUVScales, fsdx, fsdy);
-                  half4 traxN = SAMPLE_TEXTURE2D_GRAD(_SnowTrackNSAO, sampler_NormalSAO, uv * _SnowTraxUVScales, fsdx, fsdy).agrb;
-                  COUNTSAMPLE
-                  COUNTSAMPLE
-
-                  traxDiffuse.rgb *= _TraxSnowTint;
-                  snowAlb.rgba = lerp(traxDiffuse, snowAlb.rgba, traxBuffer);
-                  snowNsao.rgba = lerp(traxN + half4(traxNormal.xy, 0, 0), snowNsao.rgba, traxBuffer);
-                  snowAge = lerp(_TraxSnowAge, snowAge, traxBuffer);
-                  snowErosion = lerp(_TraxSnowErosion, snowErosion, traxBuffer);
-                  snowHeight = lerp(_TraxSnowHeight, snowHeight, traxBuffer);
-
-                  snowFade = saturate(snowFade - _TraxSnowRemoval * (1-saturate(traxBuffer)));
-               }
-               #endif
-
-              
-
-               half3 snowNormal = float3(snowNsao.xy * 2 - 1, 1);
-             
-               half height = saturate(oheight - (1.0 - snowHeight));
-               half erosion = saturate(ao * snowErosion);
-               erosion *= erosion;
-               half snowMask = saturate(snowFade - erosion - height);
-               snowMask = snowMask * snowMask * snowMask;
-               half snowAmount = snowMask * saturate(snowDot - (height + erosion) * 0.5);  // up
-               snowAmount = saturate(snowAmount * 8);
-
-               float wetnessMask = saturate((_SnowParams.w * (4.0 * snowFade) - (snowNsao.b) * 0.5));
-                
-               float snowNormalAmount = snowAmount * snowAmount;
-
-               float porosity = saturate((((1.0 - smoothness) - 0.5)) / max(surfPorosity, 0.001));
-               float factor = lerp(1, 0.4, porosity);
-
-               o.Albedo *= lerp(1.0, factor, wetnessMask);
-               o.Normal = lerp(o.Normal, float3(0,0,1), wetnessMask);
-               o.Smoothness = lerp(o.Smoothness, 0.8, wetnessMask);
-
-
-               #if _SNOWSSS
-                  SSSTint = lerp(SSSTint, _SnowSSSTint.rgb, snowNormalAmount);
-                  SSSThickness = lerp(SSSThickness, _SnowSSSTint.a * 2 * snowAlb.a, snowNormalAmount);
-               #endif
-
-               snowAlb.rgb *= _SnowTint.rgb;
-               
-
-               o.Albedo = lerp(o.Albedo, snowAlb.rgb, snowAmount);
-               o.Normal = lerp(o.Normal, snowNormal, snowNormalAmount);
-               o.Smoothness = lerp(o.Smoothness, (snowNsao.b) * snowAge, snowAmount);
-               o.Occlusion = lerp(o.Occlusion, snowNsao.w, snowAmount);
-               o.Height = lerp(o.Height, snowAlb.a, snowAmount);
-               o.Metallic = lerp(o.Metallic, 0.01, snowAmount);
-               float crystals = saturate(0.65 - snowNsao.b);
-               o.Smoothness = lerp(o.Smoothness, crystals * snowAge, snowAmount);
-               
-               #if _SNOWSPARKLE
-               DoSnowSparkle(i, o, i.viewDir, worldPos, worldNormalVertex, snowAmount);
-               #endif
-
-               #if _SNOWRIM
-               DoSnowRim(o, i, snowAmount);
-               #endif
-
-               return snowAmount;
+               float shf = saturate((height - _StreamFades.x) / max(_StreamFades.y - _StreamFades.x, 0.0001));
+               shf *= 1.0 - saturate((height - _StreamFades.z) / max(_StreamFades.w - _StreamFades.z, 0.0001));
+               puddleLevel *= shf;
             }
             #endif
+
+            float waterBlend = saturate((puddleLevel - height) * _StreamBlend);
+            waterBlend *= waterBlend;
+
+            waterNorm.xy *= puddleLevel * waterBlend;
+            float2 offset = lerp(waterNorm.xy, waterNorm.xy * height, _StreamFlowParams.w);
+            offset *= _StreamFlowParams.x;
+            #if !_TRIPLANAR
+            config.uv0.xy += offset;
+            config.uv1.xy += offset;
+            config.uv2.xy += offset;
+            config.uv3.xy += offset;
+            #else
+            tc.uv0[0].xy += offset;
+            tc.uv0[1].xy += offset;
+            tc.uv0[2].xy += offset;
+            tc.uv1[0].xy += offset;
+            tc.uv1[1].xy += offset;
+            tc.uv1[2].xy += offset;
+            tc.uv2[0].xy += offset;
+            tc.uv2[1].xy += offset;
+            tc.uv2[2].xy += offset;
+            tc.uv3[0].xy += offset;
+            tc.uv3[1].xy += offset;
+            tc.uv3[2].xy += offset;
+            #endif
+         }  
+
+
+
+
+         float DoStream(inout MicroSplatLayer o, float2 uv, half porosity, half3 waterNormFoam, 
+            half2 flowDir, half puddleLevel, half foamStrength, half wetTrail,
+            inout half foam)
+         {
+            
+            float waterBlend = saturate((puddleLevel - o.Height) * _StreamBlend);
+            if (waterBlend + wetTrail > 0)
+            {
+               half2 waterNorm = waterNormFoam.xy;
+
+               half pmh = puddleLevel - o.Height;
+               // refactor to compute flow UVs in previous step?
+               float2 foamUV0 = 0;
+               float2 foamUV1 = 0;
+               half foamInterp = 0;
+               Flow(uv * 1.75 + waterNormFoam.xy * waterNormFoam.b, flowDir, _StreamFlowParams.y/3, _StreamFlowParams.z/3, foamUV0, foamUV1, foamInterp);
+               half foam0 = SAMPLE_TEXTURE2D(_StreamNormal, sampler_NormalSAO, foamUV0).b;
+               half foam1 = SAMPLE_TEXTURE2D(_StreamNormal, sampler_NormalSAO, foamUV1).b;
+               COUNTSAMPLE
+               COUNTSAMPLE
+               foam = lerp(foam0, foam1, foamInterp);
+               foam = foam * abs(pmh) + (foam * o.Height);
+               foam *= 1.0 - (saturate(pmh * 1.5));
+               foam *= foam;
+               foam *= _StreamNormalFoam.y * foamStrength;
+
+               
+
+               #if _DYNAMICFLOWS
+                  #if _GLOBALSTREAMS
+                     float streamMax = _Global_StreamMax;
+                  #else
+                     float streamMax = _StreamMax;
+                  #endif
+                  half waterBlend2 = max(waterBlend, saturate((wetTrail * streamMax - o.Height) * _StreamBlend) * 0.85);
+                  return waterBlend2;
+               #endif
+               return waterBlend;   
+            }
             return 0;
          }
 
-         // for object blend shader, must, unfortunately, keep in sync..
-         float DoSnowSimple(Input i, inout MicroSplatLayer o, float2 uv, float3 worldNormal, float3 worldNormalVertex, 
-               float3 worldPos, float puddleHeight, half surfPorosity)
+         #endif
+
+
+         #if _LAVA
+
+         half4 SampleLava(float2 uv, float2 dx, float2 dy)
          {
-            #if _SNOW
-            float2 maskUV = uv;
-            #if _SNOWWORLDSPACEUV
-               uv = worldPos.xz;
+            #if _LAVASTOCHASTIC
+               float2 uv1, uv2, uv3;
+               half3 w;
+               PrepareStochasticUVs(_LavaStochasticSize, uv, uv1, uv2, uv3, w);
+               
+               half4 S1 = SAMPLE_TEXTURE2D_GRAD(_LavaDiffuse, sampler_Diffuse, uv1, dx, dy);
+               half4 S2 = SAMPLE_TEXTURE2D_GRAD(_LavaDiffuse, sampler_Diffuse, uv2, dx, dy);
+               half4 S3 = SAMPLE_TEXTURE2D_GRAD(_LavaDiffuse, sampler_Diffuse, uv3, dx, dy);
+               COUNTSAMPLE
+               COUNTSAMPLE
+               COUNTSAMPLE
+               
+               half3 cw = BaryWeightBlend(w, S1.r, S2.r, S3.r, _LavaStochasticContrast);
+               return S1 * cw.x + S2 * cw.y + S3 * cw.z;
+            #else
+               COUNTSAMPLE
+               return SAMPLE_TEXTURE2D_GRAD(_LavaDiffuse, sampler_Diffuse, uv, dx, dy);
             #endif
-            
-            uv *= _SnowUVScales.xy;
+         }
+
+         float DoLava(inout MicroSplatLayer o, float2 uv, half lavaLevel, half2 flowDir)
+         {
+            uv *= _LavaUVScale;
+            float lvh = lavaLevel - o.Height;
+            float lavaBlend = saturate(lvh * _LavaParams.x);
+
             float2 dx = ddx(uv);
             float2 dy = ddy(uv);
-            
-            #if _USEGLOBALSNOWLEVEL 
-               float snowLevel = _Global_SnowLevel;
-            #else
-               float snowLevel = _SnowAmount;
-            #endif
-
-            #if _USEGLOBALSNOWHEIGHT
-               float snowMin = _Global_SnowMinMaxHeight.x;
-               float snowMax = _Global_SnowMinMaxHeight.y;
-            #else
-               float snowMin = _SnowHeightAngleRange.x;
-               float snowMax = _SnowHeightAngleRange.y;
-            #endif
-
-            half2 levelMaxMin = half2(1,0);
-            #if _SNOWMASK
-               #if _MEGASPLAT
-                  levelMaxMin = i.fx2.yx;
-               #else
-                  levelMaxMin = SAMPLE_TEXTURE2D_GRAD(_SnowMask, shared_linear_clamp_sampler, maskUV, ddx(maskUV), ddy(maskUV));
-               #endif
-            #endif
-
-
-
-            float snowAge = _SnowParams.z;
-            float snowErosion = _SnowParams.y;
-            float snowHeight = _SnowParams.x;
-            
-            float3 snowUpVector = _SnowUpVector;
-            float worldHeight = i.worldHeight;
-            #if _PLANETVECTORS
-               snowUpVector = i.worldUpVector;
-            #endif
-
-            half snowDot = max(snowLevel/2, dot(worldNormal, snowUpVector));
-            half snowDotVertex = max(snowLevel/2, dot(worldNormalVertex, snowUpVector));
-            float snowFade = SnowFade(worldHeight, snowMin, snowMax, snowDot, snowDotVertex, snowLevel, puddleHeight);
-
-
-            MSBRANCHOTHER(snowFade)
+            UNITY_BRANCH
+            if (lavaBlend > 0)
             {
-               
-               half4 snowAlb = SAMPLE_TEXTURE2D_GRAD(_SnowDiff, sampler_Diffuse, uv, dx, dy);
-               half4 snowNsao = SAMPLE_TEXTURE2D_GRAD(_SnowNormal, sampler_NormalSAO, uv, dx, dy).agrb;
-               COUNTSAMPLE
-               COUNTSAMPLE
+               half distortionSize = _LavaParams2.x;
+               half distortionRate = _LavaParams2.y;
+               half distortionScale = _LavaParams2.z;
+               half darkening = _LavaParams2.w;
+               half3 edgeColor = _LavaEdgeColor;
+               half3 lavaColorLow = _LavaColorLow;
+               half3 lavaColorHighlight = _LavaColorHighlight;
 
-               snowAlb.rgb *= _SnowTint.rgb;
 
-               #if _SNOWNORMALNOISE
-               {
-                  float2 normalUV = uv * _SnowNormalNoiseScaleStrength.x;
-                  half3 noise = UnpackNormal(SAMPLE_TEXTURE2D_GRAD(_SnowNormalNoise, sampler_Diffuse, normalUV, dx * _SnowNormalNoiseScaleStrength.x, dy * _SnowNormalNoiseScaleStrength.x));
+               half lavaSpeed = _LavaParams.z;
+               half lavaInterp = _LavaParams.w;
 
-                  snowNsao.xy = lerp(snowNsao.xy, BlendNormal2(snowNsao.xy, noise.xy), _SnowNormalNoiseScaleStrength.y);
-               }
+               float2 uv1 = 0;
+               float2 uv2 = 0;
+               half interp = 0;
+               half drag = lerp(0.1, 1, saturate(lvh));
+               Flow(uv, flowDir, lavaInterp, lavaSpeed * drag, uv1, uv2, interp);
 
-               #endif
-               
-               half3 snowNormal = float3(snowNsao.xy * 2 - 1, 1);
-               half ao = o.Occlusion;
+               float2 dist_uv1;
+               float2 dist_uv2;
+               half dist_interp;
+               Flow(uv * distortionScale, flowDir, distortionRate, distortionSize, dist_uv1, dist_uv2, dist_interp);
 
-               half height = saturate(o.Height - (1-snowHeight));
-               half erosion = saturate(ao * snowErosion);
-               erosion *= erosion;
-               half snowMask = saturate(snowFade - erosion - height);
-               snowMask = snowMask * snowMask * snowMask;
-               half snowAmount = snowMask * saturate(snowDot - (height + erosion) * 0.5);  // up
-               snowAmount = saturate(snowAmount * 8);
+               half4 lavaDist = lerp(SampleLava(dist_uv1*0.51, dx, dy), SampleLava(dist_uv2, dx, dy), dist_interp);
+               half4 dist = lavaDist * (distortionSize * 2) - distortionSize;
 
-               float wetnessMask = saturate((_SnowParams.w * (4.0 * snowFade) - (snowNsao.b) * 0.5));
+               half4 lavaTex = lerp(SampleLava(uv1*1.1 + dist.xy, dx, dy), SampleLava(uv2 + dist.zw, dx, dy), interp);
 
-               float snowNormalAmount = snowAmount * snowAmount;
+               // base lava color, based on heights
+               half3 lavaColor = lerp(lavaColorLow, lavaColorHighlight, lavaTex.b);
 
-               float porosity = saturate((((1.0 - o.Smoothness) - 0.5)) / max(surfPorosity, 0.001));
-               float factor = lerp(1, 0.4, porosity);
+               // edges
+               float lavaBlendWide = saturate((lavaLevel - o.Height) * _LavaParams.x * 0.5);
+               float edge = saturate((1 - lavaBlendWide) * 3);
 
-               o.Albedo *= lerp(1.0, factor, wetnessMask);
-               o.Normal = lerp(o.Normal, float3(0,0,1), wetnessMask);
-               o.Smoothness = lerp(o.Smoothness, 0.8, wetnessMask);
+               // darkening
+               darkening = saturate(lavaTex.a * darkening * saturate(lvh*2));
+               lavaColor *= 1.0 - darkening;
+               // edges
+               lavaColor = lerp(lavaColor, edgeColor, edge);
 
-         
-               o.Albedo = lerp(o.Albedo, snowAlb.rgb, snowAmount);
-               o.Normal = lerp(o.Normal, snowNormal, snowNormalAmount);
-               o.Smoothness = lerp(o.Smoothness, (snowNsao.b) * snowAge, snowAmount);
-               o.Occlusion = lerp(o.Occlusion, snowNsao.w, snowAmount);
-               o.Height = lerp(o.Height, snowAlb.a, snowAmount);
-               o.Metallic = lerp(o.Metallic, 0.01, snowAmount);
-               float crystals = saturate(0.65 - snowNsao.b);
-               o.Smoothness = lerp(o.Smoothness, crystals * snowAge, snowAmount);
+               o.Albedo = lerp(o.Albedo, lavaColor, lavaBlend);
+               o.Normal.xy = lerp(o.Normal.xy, lavaTex.xy * 2 - 1, lavaBlend);
+               o.Smoothness = lerp(o.Smoothness, 0.3, lavaBlend * darkening);
 
-               #if _SNOWSPARKLE
-               DoSnowSparkle(i, o, i.viewDir, worldPos, worldNormalVertex, snowAmount);
-               #endif
-
-               #if _SNOWRIM
-               DoSnowRim(o, i, snowAmount);
-               #endif
-
-               return snowAmount;
-            
+               half3 emis = lavaColor * lavaBlend;
+               o.Emission = lerp(o.Emission, emis * _LavaEmissiveMult, lavaBlend);
+               // bleed
+               o.Emission += edgeColor * 0.3 * (saturate((lavaLevel*1.2 - o.Height) * _LavaParams.x) - lavaBlend);
+               return saturate(lavaBlend*3);
             }
-            #endif
             return 0;
          }
 
+
+         #endif
+
+
+
+
+
+         float DoStreams(Input i, inout MicroSplatLayer o, half4 fxLevels, float2 uv, half porosity, 
+            half3 waterNormalFoam, float3 worldNormalVertex, half streamFoam, half wetLevel, half burnLevel, float3 worldPos)
+         {
+            float pud = 0;
+            float wetness = 0;
+            half foam = 0;
+            half streamPud = 0;
+
+            #if _WETNESS
+            wetness = DoWetness(o, fxLevels.x, porosity, worldPos);
+            #endif
+
+
+            #if _PUDDLES
+            pud = DoPuddles(o, fxLevels.g, porosity, uv);
+            #endif
+
+            
+
+            #if _STREAMS || _LAVA
+            float2 flowDir = FlowVecFromWNV(i, uv, worldNormalVertex);
+            #endif
+
+            
+            #if _STREAMS
+               #if _STREAMHEIGHTFILTER
+               {
+                  float shf = saturate((worldPos.y - _StreamFades.x) / max(_StreamFades.y - _StreamFades.x, 0.0001));
+                  shf *= 1.0 - saturate((worldPos.y - _StreamFades.z) / max(_StreamFades.w - _StreamFades.z, 0.0001));
+                  fxLevels.z *= shf;
+                  wetLevel *= shf;
+               }
+               #endif
+
+            half foamStr = min(length(worldNormalVertex.xz) * 18, 1) * streamFoam;
+            streamPud = DoStream(o, uv, porosity, waterNormalFoam, flowDir, fxLevels.z, foamStr, wetLevel, foam);
+            o.Albedo = lerp(o.Albedo, o.Albedo * _StreamTint * 2.0, streamPud);
+            //pud -= streamPud;
+            #endif
+
+            #if _WETNESS || _PUDDLES || _STREAMS
+               half3 waterNorm = half3(0,0,1);
+               half3 wetAlbedo = o.Albedo;
+               half wetSmoothness = o.Smoothness;
+
+               float wetBlend = max(max(pud, wetness), streamPud);
+
+               WaterBRDF(wetAlbedo, wetSmoothness, o.Metallic, wetBlend, porosity);
+               
+               wetAlbedo += foam;
+               wetSmoothness -= foam;
+
+               float foamNormStr = 1; 
+               #if _STREAMS
+                  foamNormStr = _StreamNormalFoam.x;
+               #endif
+
+               #if _RAINDROPS
+               waterNorm.xy = DoRain(waterNorm.xy, uv) * pud;
+               #endif
+
+               
+
+
+               o.Normal = lerp(o.Normal, waterNorm, pud * foamNormStr);
+               o.Occlusion = lerp(o.Occlusion, 1, wetBlend);
+               o.Smoothness = lerp(o.Smoothness, wetSmoothness, wetBlend);
+               o.Albedo = lerp(o.Albedo, wetAlbedo, wetBlend);
+
+            #endif
+
+
+            #if _LAVA
+               #if _LAVAHEIGHTFILTER
+               {
+                  float lhf = saturate((worldPos.y - _LavaFades.x) / max(_LavaFades.y - _LavaFades.x, 0.0001));
+                  lhf *= 1.0 - saturate((worldPos.y - _LavaFades.z) / max(_LavaFades.w - _LavaFades.z, 0.0001));
+                  fxLevels.a *= lhf;
+                  burnLevel *= lhf;
+               }
+               #endif
+
+            float burn = 1 - burnLevel * 0.85;
+            o.Albedo *= burn;
+            o.Smoothness *= burn;
+            pud = max(streamPud, DoLava(o, uv, fxLevels.a, flowDir));
+            #endif
+
+            pud = max(max(pud, streamPud), wetness);
+            #if _WETNESSMASKSNOW
+            pud = max(pud, 1-fxLevels.x);
+            #endif
+
+            return pud;
+         }
 
 
       void SampleAlbedo(inout Config config, inout TriplanarConfig tc, inout RawSamples s, MIPFORMAT mipLevel, half4 weights)
@@ -19438,8 +19226,7 @@ float3 GetTessFactors ()
       #define _PERTEXUVSCALEOFFSET 1
       #define _BRANCHSAMPLES 1
       #define _BRANCHSAMPLESAGR 1
-      #define _SNOW 1
-      #define _SNOWSIMPLE 1
+      #define _WETNESS 1
       #define _MSRENDERLOOP_UNITYURP2022 1
       #define _MICROSPLATBASEMAP 1
       #define _MSRENDERLOOP_UNITYLD 1
@@ -19856,65 +19643,73 @@ float3 GetTessFactors ()
       #endif
 
 
-         #if _SNOW
-         half4 _SnowParams; // influence, erosion, crystal, melt
-         half _SnowAmount;
-         half2 _SnowUVScales;
-         float4 _SnowHeightAngleRange;
-         half3 _SnowUpVector;
-         half3 _SnowTint;
-         #endif
-
-         #if _SNOWNORMALNOISE
-         float4 _SnowNormalNoiseScaleStrength;
-         #endif
-
-         #if _SNOWDISTANCERESAMPLE
-         float4 _SnowDistanceResampleScaleStrengthFade;
-         #endif
-
-         #if _SNOW && _USEGLOBALSNOWLEVEL
-         float _Global_SnowLevel;
-         #endif
-
-         #if _SNOW && _USEGLOBALSNOWHEIGHT
-         float2 _Global_SnowMinMaxHeight;
-         #endif
+         half _GlobalPorosity;
          
-         #if _SNOWSTOCHASTIC
-         half _SnowStochasticContrast;
-         half _SnowStochasticScale;
+         #if _WETNESS
+            #if _GLOBALWETNESS
+            half2 _Global_WetnessParams;
+            #else
+            half2 _WetnessParams;
+            #endif
+
+            #if _HEIGHTWETNESS
+            float4 _HeightWetness;
+            #endif
+
+            #if _DISTANCEWETNESS
+            float4 _DistanceWetness;
+            #endif
          #endif
 
-         #if _SNOWSSS
-         half4 _SnowSSSTint;
+         #if _PUDDLES
+            half2 _PuddleParams;
+            #if _GLOBALPUDDLES
+            half _Global_PuddleParams;
+            #endif
          #endif
 
-         #if _TESSDISTANCE || _TESSEDGE
-         half _TessDisplaceSnowMultiplier;
+         #if _STREAMS
+            half _StreamBlend;
+            half4 _StreamFlowParams;
+            half2 _StreamNormalFoam;
+            float2 _StreamUVScales;
+            #if _GLOBALSTREAMS
+               half _Global_StreamMax;
+            #else
+               half _StreamMax;
+            #endif
+            half3 _StreamTint;
+            #if _STREAMHEIGHTFILTER
+               float4 _StreamFades;
+            #endif
          #endif
 
-         #if _SNOWFOOTSTEPS
-         float2 _SnowTraxUVScales;
-         float _SnowTraxTextureBlend;
-         float _SnowTraxNormalStrength;
+         #if _LAVA
+            half4 _LavaParams;
+            half4 _LavaParams2;
+            half3 _LavaEdgeColor;
+            half3 _LavaColorLow;
+            half3 _LavaColorHighlight;
+            float2 _LavaUVScale;
+            half _LavaDislacementScale;
+            #if _LAVAHEIGHTFILTER
+               float4 _LavaFades;
+            #endif
+            half _LavaEmissiveMult;
+
+            #if _LAVASTOCHASTIC
+               half _LavaStochasticSize;
+               half _LavaStochasticContrast;
+            #endif
          #endif
 
-         #if _SNOWRIM
-         float _SnowRimPower;
-         half3 _SnowRimColor;
+         #if _RAINDROPS
+            float2 _RainIntensityScale;
+            #if _GLOBALRAIN
+               float _Global_RainIntensity;
+            #endif
          #endif
 
-         #if _SNOWSPARKLE
-         float _SnowSparkleStrength;
-         half3 _SnowSparkleTint;
-         half _SnowSparkleEmission;
-         float _SnowSparkleSize;
-         float _SnowSparkleDensity;
-         float _SnowSparkleNoiseDensity;
-         float _SnowSparkleNoiseAmplitude;
-         float _SnowSparkleViewDependency;
-         #endif
 
 
             CBUFFER_END
@@ -21332,589 +21127,530 @@ void PrepareStochasticUVs(float scale, float2 uv, out float2 uv1, out float2 uv2
 }
 
 
-         #if _SNOW
-         TEXTURE2D(_SnowDiff);
-         TEXTURE2D(_SnowNormal);
+
+
+         TEXTURE2D(_StreamControl);
+
+         #if _DYNAMICFLOWS
+            TEXTURE2D(_DynamicStreamControl);
          #endif
 
-         #if _SNOWNORMALNOISE
-         TEXTURE2D(_SnowNormalNoise);
+         #if _STREAMS
+            TEXTURE2D(_StreamNormal);
          #endif
 
-         #if _SNOWFOOTSTEPS
-         TEXTURE2D(_SnowTrackDiff);
-         TEXTURE2D(_SnowTrackNSAO);
+         #if _LAVA
+            TEXTURE2D(_LavaDiffuse);
          #endif
 
-         #if _SNOWMASK
-         TEXTURE2D(_SnowMask);
+         #if _RAINDROPS
+            TEXTURE2D(_RainDropTexture);
          #endif
 
-         #if _SNOWSPARKLE
-            TEXTURE2D(_SnowSparkleNoise);
-         #endif
-         
-         
 
-         float SnowFade(float worldHeight, float snowMin, float snowMax, half snowDot, half snowDotVertex, half snowLevel, half puddleHeight)
+
+         half4 ProcessFXLevels(half4 fxLevels, half traxBuffer)
          {
-            float snowHeightFade = saturate((worldHeight - snowMin) / max(snowMax, 0.001));
-            half snowAngleFade = max(0, (snowDotVertex - _SnowHeightAngleRange.z) * 6);
-            snowAngleFade = snowAngleFade * (1 - max(0, (snowDotVertex - _SnowHeightAngleRange.w) * 6));
-            return saturate((snowLevel * snowHeightFade * saturate(snowAngleFade)) - puddleHeight);
-         }
-
-         float DoSnowDisplace(float splat_height, float2 uv, float3 worldNormalVertex, float3 worldPos, float puddleHeight, Config config, half4 weights)
-         {
-            // could force a branch and avoid texsamples
-            #if _SNOW
-               
-               #if _USEGLOBALSNOWLEVEL 
-               float snowLevel = _Global_SnowLevel;
+            #if _STREAMS
+               #if _GLOBALSTREAMS
+                  fxLevels.b *= _Global_StreamMax;
                #else
-               float snowLevel = _SnowAmount;
+                  fxLevels.b *= _StreamMax;
                #endif
-
-               #if _USEGLOBALSNOWHEIGHT
-               float snowMin = _Global_SnowMinMaxHeight.x;
-               float snowMax = _Global_SnowMinMaxHeight.y;
-               #else
-               float snowMin = _SnowHeightAngleRange.x;
-               float snowMax = _SnowHeightAngleRange.y;
-               #endif
-
-               
-
-               float snowAge = _SnowParams.z;
-
-
-               #if _PERTEXSNOWSTRENGTH && !_SNOWSIMPLE
-                  SAMPLE_PER_TEX(ptSnowStr, 8.5, config, half4(1.0, 0.0, 0.0, 0.0));
-                  snowLevel *= ptSnowStr0.x * weights.x + ptSnowStr1.x * weights.y + ptSnowStr2.x * weights.z + ptSnowStr3.x * weights.w;
-               #endif
-
-               half2 levelMaxMin = half2(1, 0);
-               #if _SNOWMASK
-                  levelMaxMin = SAMPLE_TEXTURE2D_LOD(_SnowMask, shared_linear_clamp_sampler, uv, 0).xy;
-               #endif
-               
-               float3 snowUpVector = _SnowUpVector;
-               float worldHeight = worldPos.y;
-               
-               half snowDot = saturate(dot(worldNormalVertex, snowUpVector));
-               half snowDotVertex = max(snowLevel/2, snowDot);
-               
-
-               float snowFade = SnowFade(worldHeight, snowMin, snowMax, snowDotVertex, snowDotVertex, snowLevel, puddleHeight);
-               #if _SNOWMASK
-                  snowFade = min(levelMaxMin.x, snowFade);
-                  snowFade = max(levelMaxMin.y, snowFade);
-               #endif
-
-               float height = splat_height * _SnowParams.x;
-               float erosion = height * _SnowParams.y;
-               float snowMask = saturate((snowFade - erosion));
-               float snowMask2 = saturate(snowMask * 8);
-               snowMask *= snowMask * snowMask * snowMask * snowMask * snowMask2;
-               float snowAmount = snowMask * snowDot;
-
-               return snowAmount;
             #endif
-            return 0;
+
+            #if _LAVA
+               fxLevels.a *= _LavaParams.y;
+            #endif
+
+            #if _TRAXSINGLE || _TRAXARRAY || _TRAXNOTEXTURE
+               fxLevels = saturate(max(fxLevels, _TraxFXThresholds * (1 - saturate(traxBuffer))));
+            #endif
+            return fxLevels;
+         }
+
+         half4 SampleFXLevels(float2 uv, out half wetness, out half burnLevel, half traxBuffer)
+         {
+            half4 fxLevels = half4(0,0,0,0);
+            burnLevel = 0;
+            wetness = 0;
+            #if _WETNESS || _PUDDLES || _STREAMS || _LAVA
+               fxLevels = SAMPLE_TEXTURE2D(_StreamControl, shared_linear_clamp_sampler, uv);
+
+               COUNTSAMPLE
+
+               #if _DYNAMICFLOWS
+               half4 flows = SAMPLE_TEXTURE2D(_DynamicStreamControl, shared_linear_clamp_sampler, uv);
+               COUNTSAMPLE
+
+               wetness = flows.x;
+               burnLevel = flows.y;
+
+               flows.zw = saturate(flows.zw*3);
+               fxLevels.zw = max(fxLevels.zw, flows.zw);
+               #endif
+
+               
+
+            #endif
+            return ProcessFXLevels(fxLevels, traxBuffer);
+         }
+
+
+         half4 SampleFXLevelsLOD(float2 uv, half traxBuffer)
+         {
+            half4 fxLevels = half4(0,0,0,0);
+            #if _WETNESS || _PUDDLES || _STREAMS || _LAVA
+            fxLevels = SAMPLE_TEXTURE2D_LOD(_StreamControl, shared_linear_clamp_sampler, uv, 0);
+               #if _DYNAMICFLOWS
+               half4 flows = SAMPLE_TEXTURE2D_LOD(_DynamicStreamControl, shared_linear_clamp_sampler, uv, 0);
+               flows.xy = 0;
+               fxLevels = max(fxLevels, flows);
+               #endif
+
+               #if _LAVA
+                  fxLevels.w *= _LavaDislacementScale;
+               #endif
+
+            #endif
+            return ProcessFXLevels(fxLevels, 1.0 - traxBuffer);
+         }
+
+
+         void WaterBRDF (inout half3 Albedo, inout half Smoothness, half metalness, half wetFactor, half surfPorosity) 
+         {
+            half porosity = saturate((( (1 - Smoothness) - 0.5)) / max(surfPorosity, 0.001));
+            half factor = lerp(1, 0.2, (1 - metalness) * porosity);
+            Albedo *= lerp(1.0, factor, wetFactor);
+            Smoothness = lerp(Smoothness, 0.92f, wetFactor);
+         }
+
+         void Flow(float2 uv, half2 flow, half speed, float intensity, out float2 uv1, out float2 uv2, out half interp)
+         {
+            float2 flowVector = flow * intensity;
+            
+            float timeScale = _Time.y * speed;
+            float2 phase = frac(float2(timeScale, timeScale + .5));
+
+            uv1.xy = (uv.xy - flowVector * half2(phase.x, phase.x));
+            uv2.xy = (uv.xy - flowVector * half2(phase.y, phase.y));
+
+            interp = abs(0.5 - phase.x) / 0.5;
+         }
+
+
+         #if _RAINDROPS
+         half2 ComputeRipple(float2 uv, half time, half weight)
+         {
+            half4 ripple = SAMPLE_TEXTURE2D(_RainDropTexture, sampler_Diffuse, uv);
+            ripple.yz = ripple.yz * 2 - 1;
+
+            half dropFrac = frac(ripple.w + time);
+            half timeFrac = dropFrac - 1.0 + ripple.x;
+            half dropFactor = saturate(0.2f + weight * 0.8 - dropFrac);
+            half finalFactor = dropFactor * ripple.x * 
+                                 sin( clamp(timeFrac * 9.0f, 0.0f, 3.0f) * 3.14159265359);
+
+            return half2(ripple.yz * finalFactor);
+         }
+         #endif
+
+         half2 DoRain(half2 waterNorm, float2 uv)
+         {
+         #if _RAINDROPS
+            #if _GLOBALRAIN
+               float rainIntensity = _Global_RainIntensity.x;
+            #else
+               float rainIntensity = _RainIntensityScale.x;
+            #endif
+            half dropStrength = rainIntensity;
+            const float4 timeMul = float4(1.0f, 0.85f, 0.93f, 1.13f); 
+            half4 timeAdd = float4(0.0f, 0.2f, 0.45f, 0.7f);
+            half4 times = _Time.yyyy;
+            times = frac((times * float4(1, 0.85, 0.93, 1.13) + float4(0, 0.2, 0.45, 0.7)) * 1.6);
+
+            float2 ruv1 = uv * _RainIntensityScale.yy;
+            float2 ruv2 = ruv1;
+
+            half4 weights = rainIntensity.xxxx - float4(0, 0.25, 0.5, 0.75);
+            half2 ripple1 = ComputeRipple(ruv1 + float2( 0.25f,0.0f), times.x, weights.x);
+            half2 ripple2 = ComputeRipple(ruv2 + float2(-0.55f,0.3f), times.y, weights.y);
+            half2 ripple3 = ComputeRipple(ruv1 + float2(0.6f, 0.85f), times.z, weights.z);
+            half2 ripple4 = ComputeRipple(ruv2 + float2(0.5f,-0.75f), times.w, weights.w);
+            weights = saturate(weights * 4);
+
+            half2 rippleNormal = half2( weights.x * ripple1.xy +
+                        weights.y * ripple2.xy + 
+                        weights.z * ripple3.xy + 
+                        weights.w * ripple4.xy);
+
+            waterNorm = lerp(waterNorm, BlendNormal2(rippleNormal, waterNorm), rainIntensity * dropStrength); 
+            return waterNorm;                        
+         #else
+            return waterNorm;
+         #endif
+         }
+
+
+         #if _WETNESS
+         float DoWetness(inout MicroSplatLayer o, half wetLevel, half porosity, float3 worldPos)
+         {
+            #if _GLOBALWETNESS
+               wetLevel = clamp(wetLevel, _Global_WetnessParams.x, _Global_WetnessParams.y);
+            #else
+               wetLevel = clamp(wetLevel, _WetnessParams.x, _WetnessParams.y);
+            #endif
+            #if _HEIGHTWETNESS
+               float l = _HeightWetness.x;
+               l += sin(_Time.y * _HeightWetness.z) * _HeightWetness.w;
+               half hw = saturate((l - worldPos.y) * _HeightWetness.y);
+               wetLevel = max(hw, wetLevel);
+            #endif
+
+            #if _DISTANCEWETNESS
+               float camDist = distance(_WorldSpaceCameraPos, worldPos);
+               float fade = saturate((camDist - _DistanceWetness.x) / _DistanceWetness.z);
+
+               wetLevel *= lerp(_DistanceWetness.y, _DistanceWetness.w, fade);
+            #endif
+            
+            return wetLevel;
+         }
+         #endif
+
+
+         #if _PUDDLES
+         // modity lighting terms for water..
+         float DoPuddles(inout MicroSplatLayer o, half puddleLevel, half porosity, float2 uv)
+         {
+            float2 pudParams = _PuddleParams;
+            #if _GLOBALPUDDLES
+            pudParams.y = _Global_PuddleParams;
+            #endif
+
+            puddleLevel *= pudParams.y;
+            float waterBlend = saturate((puddleLevel - o.Height) * pudParams.x);
+            return waterBlend;
+         }
+         #endif
+
+         float3 W2TVec(Input i, float3 normal) 
+         {
+            float3x3 t2w = GetTBN(i);
+            return normalize(mul(t2w, normal));
          }
          
-         #if _SNOWSPARKLE
-         void DoSnowSparkle(Input i, inout MicroSplatLayer o, float3 viewDir, float3 worldPos, float3 worldNormalVertex, float snowLevel)
+         float2 FlowVecFromWNV(Input i, float2 uv, float3 worldNormalVertex)
          {
-            
-            #if _DEBUG_SNOWSPARKLE
-            o.Albedo = 0;
-            o.Smoothness = 0;
-            o.Occlusion = 1;
-            o.Emission = 0;
-            
+            float2 ret = lerp(worldNormalVertex.xz, normalize(worldNormalVertex.xz), max(0.1, worldNormalVertex.z));
+            #if _MICROMESH || _MICROVERTEXMESH
+            ret = W2TVec(i, float3(0,-1,0)).xy;
+            #elif _MICRODIGGERMESH
+            ret = W2TVec(i, float3(0,1,0)).xy;
             #endif
-            
-
-            // screen space method. Looks nice because it's in SS, but fails because clearly not
-            // combing from a single spot on the terrain.
-
-            float size = 1 - (_SnowSparkleSize * 0.001);
-            float density = _SnowSparkleDensity;
-            float noiseDensity = _SnowSparkleNoiseDensity;
-            float viewDep = _SnowSparkleViewDependency;
-
-            float3 wsView = worldPos - _WorldSpaceCameraPos;
-            float3 wsViewDir = normalize(wsView);
-
-            float z = length(wsView);
-            float e = floor(log2(0.3*z+3.0)/0.3785116);
-            float level_z = 0.1 * pow(1.3, e) - 0.2;
-            float level = 0.12 / level_z;
-            density *= level;
-            noiseDensity *= level;
-
-            float3 v = wsView / z;
-            float3 view_new = v * level_z;
-            view_new = sign(view_new) * frac(abs(view_new));
-
-            float3 pos = density*worldPos + viewDep * normalize(view_new);
-
-            float3 g_index = floor(pos);
-            float3 pc = g_index / density;
-            
-            float3 noise = _SnowSparkleNoiseAmplitude * SAMPLE_TEXTURE2D_LOD( _SnowSparkleNoise, sampler_Diffuse, noiseDensity * pc.xz + pc.y, 0).rgb;
-            float3 offset = 0.75;
-            float3 px = pos - g_index + 0.5 * frac(noise)-offset;
-
-            float dotvn = dot(wsViewDir, worldNormalVertex);
-            float3 ma = v - dotvn*worldNormalVertex;
-            float3 px_proj = dot(px, ma) * ma;
-            px += (abs(dotvn)-1.0)*px_proj/dot(ma,ma);
-
-            float dist2 = dot(px, px);
-            float thresh = 1 - size;
-
-            
-            float r = dist2 > thresh? 0 : 1-dist2/thresh;
-
-            r *= snowLevel * _SnowSparkleStrength;
-            float3 c = _SnowSparkleTint * r;
-               
-            o.Albedo += c;
-            o.Emission += c * _SnowSparkleEmission;
-            o.Smoothness += r;
-
-            #if _DEBUG_SNOWSPARKLE
-            o.Albedo = c;
-            o.Emission = c * _SnowSparkleEmission;
-            o.Smoothness = r;
-            o.Normal = float3(0,0,1);
-            #endif
-            
-            
-            
+            return ret;
          }
-         #endif
 
-         #if _SNOWRIM
-         void DoSnowRim(inout MicroSplatLayer o, Input i, float snowAmount)
+         #if _STREAMS
+         half3 GetWaterNormal(Input i, float2 uv, float3 worldNormalVertex)
          {
-            float rim = 1.0 - saturate(dot(normalize(_WorldSpaceCameraPos - i.worldPos), WorldNormalVector(i, o.Normal))); 
-            o.Emission += pow(rim, _SnowRimPower) * _SnowRimColor * snowAmount;
-         }
-         #endif
+            float2 flowDir = FlowVecFromWNV(i, uv, worldNormalVertex);
+            float2 uv1;
+            float2 uv2;
+            half interp;
+            Flow(uv * _StreamUVScales.xy, flowDir, _StreamFlowParams.y, _StreamFlowParams.z, uv1, uv2, interp);
 
-         #if _SNOWSTOCHASTIC
-         void SampleSnowStochastic(float2 uv, float2 dx, float2 dy, out float4 albedo, out float4 nsao)
-         {
-            float2 uv1, uv2, uv3;
-            half3 w;
-            PrepareStochasticUVs(_SnowStochasticScale, uv, uv1, uv2, uv3, w);
-               
-            half4 S1 = SAMPLE_TEXTURE2D_GRAD(_SnowDiff, sampler_Diffuse, uv1, dx, dy);
-            half4 S2 = SAMPLE_TEXTURE2D_GRAD(_SnowDiff, sampler_Diffuse, uv2, dx, dy);
-            half4 S3 = SAMPLE_TEXTURE2D_GRAD(_SnowDiff, sampler_Diffuse, uv3, dx, dy);
-
+            half3 fd = lerp(SAMPLE_TEXTURE2D(_StreamNormal, sampler_NormalSAO, uv1), SAMPLE_TEXTURE2D(_StreamNormal, sampler_NormalSAO, uv2), interp).xyz;
             COUNTSAMPLE
             COUNTSAMPLE
-            COUNTSAMPLE
 
-            half3 cw = BaryWeightBlend(w, S1.a, S2.a, S3.a, _SnowStochasticContrast);
-
-            half4 N1, N2, N3 = half4(0,0,1,0);
-            MSBRANCHCLUSTER(cw.x);
-            {
-               N1 = SAMPLE_TEXTURE2D_GRAD(_SnowNormal, sampler_NormalSAO, uv1, dx, dy);
-               COUNTSAMPLE
-            }
-            MSBRANCHCLUSTER(cw.y);
-            {
-               N2 = SAMPLE_TEXTURE2D_GRAD(_SnowNormal, sampler_NormalSAO, uv2, dx, dy);
-               COUNTSAMPLE
-            }
-            MSBRANCHCLUSTER(cw.z);
-            {
-               N3 = SAMPLE_TEXTURE2D_GRAD(_SnowNormal, sampler_NormalSAO, uv3, dx, dy);
-               COUNTSAMPLE
-            }
-               
-            albedo = S1 * cw.x + S2 * cw.y + S3 * cw.z;
-            nsao = N1 * cw.x + N2 * cw.y + N3 * cw.z;
-            nsao = nsao.agrb;
+            fd.xy = fd.xy * 2 - 1;
+            return fd;
          }
-         #endif
-         
-         
-         float DoSnow(Input i, inout MicroSplatLayer o, float2 uv, float3 worldNormal, float3 worldNormalVertex, 
-               float3 worldPos, float puddleHeight, half surfPorosity, float camDist, Config config, half4 weights, 
-               inout half3 SSSTint, inout half SSSThickness, float traxBuffer, float3 traxNormal)
+
+         // water normal only
+         void DoStreamRefract(inout Config config, inout TriplanarConfig tc, float3 waterNorm, half puddleLevel, half height)
          {
-            #if _SNOW
-            float2 maskUV = uv;
-            #if _SNOWWORLDSPACEUV
-               uv = worldPos.xz;
-            #endif
-            
-            
-            float2 dx = ddx(uv) * _SnowUVScales.xy;
-            float2 dy = ddy(uv) * _SnowUVScales.xy;
-
-            float3 wdx = ddx(worldPos) * _SnowUVScales.xxy;
-            float3 wdy = ddy(worldPos) * _SnowUVScales.xxy;
-
-            uv *= _SnowUVScales.xy;
-            float3 wuv = worldPos * _SnowUVScales.xxy;
-            
-            #if _USEGLOBALSNOWLEVEL 
-            float snowLevel = _Global_SnowLevel;
+            #if _GLOBALSTREAMS
+               puddleLevel *= _Global_StreamMax;
             #else
-            float snowLevel = _SnowAmount;
+               puddleLevel *= _StreamMax;
             #endif
 
-            #if _USEGLOBALSNOWHEIGHT
-            float snowMin = _Global_SnowMinMaxHeight.x;
-            float snowMax = _Global_SnowMinMaxHeight.y;
-            #else
-            float snowMin = _SnowHeightAngleRange.x;
-            float snowMax = _SnowHeightAngleRange.y;
-            #endif
-
-            
-
-
-            float snowAge = _SnowParams.z;
-            float snowErosion = _SnowParams.y;
-            float snowHeight = _SnowParams.x;
-
-
-
-            #if _PERTEXSNOWSTRENGTH && !_SIMPLESNOW
-               SAMPLE_PER_TEX(ptSnowStr, 8.5, config, half4(1.0, 0.0, 0.0, 0.0));
-               snowLevel *= ptSnowStr0.x * weights.x + ptSnowStr1.x * weights.y + ptSnowStr2.x * weights.z + ptSnowStr3.x * weights.w;
-            #endif
-
-            half2 levelMaxMin = half2(1,0);
-            #if _SNOWMASK
-               #if _MEGASPLAT
-                  levelMaxMin = i.fx2.yx;
-               #else
-                  levelMaxMin = SAMPLE_TEXTURE2D_GRAD(_SnowMask, shared_linear_clamp_sampler, maskUV, ddx(maskUV), ddy(maskUV));
-               #endif
-            #endif
-            
-            float3 snowUpVector = _SnowUpVector;
-            float worldHeight = i.worldHeight;
-            
-            
-            half snowDot = max(snowLevel/2, dot(worldNormal, snowUpVector));
-            half snowDotVertex = snowDot;
-            #if _SNOWSIMPLE
-               half ao = 1;
-               half oheight = 0;
-               half smoothness = 0;
-            #else
-               half ao = o.Occlusion;
-               half oheight = o.Height;
-               half smoothness = o.Smoothness;
-            #endif
-               
-            
-            float snowFade = SnowFade(worldHeight, snowMin, snowMax, snowDot, snowDotVertex, snowLevel, puddleHeight);
-
-            #if _SNOWMASK
-               snowFade = min(levelMaxMin.x, snowFade);
-               snowFade = max(levelMaxMin.y, snowFade);
-            #endif
-
-            //MSBRANCHOTHER(snowFade)
+            #if _STREAMHEIGHTFILTER
             {
-               #if _SNOWSTOCHASTIC && _SNOWTRIPLANAR
-
-                  float3 pn = pow(abs(worldNormal), 3);
-                  pn = pn / (pn.x + pn.y + pn.z);
-            
-                  half3 axisSign = sign(worldNormal);
-
-                  float2 uv0 = wuv.zy * axisSign.x;
-                  float2 uv1 = wuv.xz * axisSign.y;
-                  float2 uv2 = wuv.xy * axisSign.z;
-
-                  half4 snowAlb0; half4 snowAlb1; half4 snowAlb2;
-                  half4 snowNsao0; half4 snowNsao1; half4 snowNsao2;
-
-                  SampleSnowStochastic(uv0, wdx.zy, wdy.zy, snowAlb0, snowNsao0);
-                  SampleSnowStochastic(uv1, wdx.xz, wdy.xz, snowAlb1, snowNsao1);
-                  SampleSnowStochastic(uv2, wdx.xy, wdy.xy, snowAlb2, snowNsao2);
-
-                  half4 snowAlb = snowAlb0 * pn.x + snowAlb1 * pn.y + snowAlb2 * pn.z;
-                  half4 snowNsao = snowNsao0 * pn.x + snowNsao1 * pn.y + snowNsao2 * pn.z;
-
-               #elif _SNOWTRIPLANAR
-
-                  float3 pn = pow(abs(worldNormal), 3);
-                  pn = pn / (pn.x + pn.y + pn.z);
-            
-                  half3 axisSign = sign(worldNormal);
-
-                  float2 uv0 = wuv.zy * axisSign.x;
-                  float2 uv1 = wuv.xz * axisSign.y;
-                  float2 uv2 = wuv.xy * axisSign.z;
-                  half4 snowAlb0 = SAMPLE_TEXTURE2D_GRAD(_SnowDiff, sampler_Diffuse, uv0, wdx.zy, wdy.zy);
-                  half4 snowAlb1 = SAMPLE_TEXTURE2D_GRAD(_SnowDiff, sampler_Diffuse, uv1, wdx.xz, wdy.xz);
-                  half4 snowAlb2 = SAMPLE_TEXTURE2D_GRAD(_SnowDiff, sampler_Diffuse, uv2, wdx.xy, wdy.xy);
-                  half4 snowNsao0 = SAMPLE_TEXTURE2D_GRAD(_SnowNormal, sampler_NormalSAO, uv0, wdx.zy, wdy.zy).agrb;
-                  half4 snowNsao1 = SAMPLE_TEXTURE2D_GRAD(_SnowNormal, sampler_NormalSAO, uv1, wdx.xz, wdy.xz).agrb;
-                  half4 snowNsao2 = SAMPLE_TEXTURE2D_GRAD(_SnowNormal, sampler_NormalSAO, uv2, wdx.xy, wdy.xy).agrb;
-                  half4 snowAlb = snowAlb0 * pn.x + snowAlb1 * pn.y + snowAlb2 * pn.z;
-                  half4 snowNsao = snowNsao0 * pn.x + snowNsao1 * pn.y + snowNsao2 * pn.z;
-                  COUNTSAMPLE
-                  COUNTSAMPLE
-                  COUNTSAMPLE
-                  COUNTSAMPLE
-                  COUNTSAMPLE
-                  COUNTSAMPLE
-
-               #elif _SNOWSTOCHASTIC
-                  half4 snowAlb;
-                  half4 snowNsao;
-
-                  SampleSnowStochastic(uv, dx, dy, snowAlb, snowNsao);
-               #else
-                  half4 snowAlb = SAMPLE_TEXTURE2D_GRAD(_SnowDiff, sampler_Diffuse, uv, dx, dy);
-                  half4 snowNsao = SAMPLE_TEXTURE2D_GRAD(_SnowNormal, sampler_NormalSAO, uv, dx, dy).agrb;
-                  COUNTSAMPLE
-                  COUNTSAMPLE
-               #endif
-
-               #if _SNOWDISTANCERESAMPLE
-               {
-                  float fade = saturate ((camDist - _SnowDistanceResampleScaleStrengthFade.z) / _SnowDistanceResampleScaleStrengthFade.w);
-                  fade *= _SnowDistanceResampleScaleStrengthFade.y;
-                  MSBRANCHOTHER(fade)
-                  {
-                     float2 snowResampleUV = uv * _SnowDistanceResampleScaleStrengthFade.x;
-                     float2 rsdx = dx * _SnowDistanceResampleScaleStrengthFade.x;
-                     float2 rsdy = dy * _SnowDistanceResampleScaleStrengthFade.x;
-                     half4 resSnowAlb = SAMPLE_TEXTURE2D_GRAD(_SnowDiff, sampler_Diffuse,  snowResampleUV, rsdx, rsdy);
-                     half4 resSnowNsao = SAMPLE_TEXTURE2D_GRAD(_SnowNormal, sampler_NormalSAO, snowResampleUV, rsdx, rsdy).grab;
-                     COUNTSAMPLE
-                     COUNTSAMPLE
-           
-                     snowAlb.rgb = lerp(snowAlb, resSnowAlb, fade);
-                     snowNsao = lerp(snowNsao, resSnowNsao, fade);
-                  }
-               }
-               #endif
-
-               #if _SNOWNORMALNOISE
-               {
-                  float2 normalUV = uv * _SnowNormalNoiseScaleStrength.x;
-                  half3 noise = UnpackNormal(SAMPLE_TEXTURE2D_GRAD(_SnowNormalNoise, sampler_Diffuse, normalUV, dx * _SnowNormalNoiseScaleStrength.x, dy * _SnowNormalNoiseScaleStrength.x));
-                  COUNTSAMPLE
-                  snowNsao.xy = lerp(snowNsao.xy, BlendNormal2(snowNsao.xy, noise.xy), _SnowNormalNoiseScaleStrength.y);
-               }
-               #endif
-            
-               #if _SNOWFOOTSTEPS
-               {
-                  traxNormal.xy *= _SnowTraxNormalStrength;
-                  float2 fsdx = dx * _SnowTraxUVScales;
-                  float2 fsdy = dy * _SnowTraxUVScales;
-                  traxBuffer = 1 - ((1 - traxBuffer) * _SnowTraxTextureBlend);
-
-                  half4 traxDiffuse = SAMPLE_TEXTURE2D_GRAD(_SnowTrackDiff, sampler_Diffuse, uv * _SnowTraxUVScales, fsdx, fsdy);
-                  half4 traxN = SAMPLE_TEXTURE2D_GRAD(_SnowTrackNSAO, sampler_NormalSAO, uv * _SnowTraxUVScales, fsdx, fsdy).agrb;
-                  COUNTSAMPLE
-                  COUNTSAMPLE
-
-                  traxDiffuse.rgb *= _TraxSnowTint;
-                  snowAlb.rgba = lerp(traxDiffuse, snowAlb.rgba, traxBuffer);
-                  snowNsao.rgba = lerp(traxN + half4(traxNormal.xy, 0, 0), snowNsao.rgba, traxBuffer);
-                  snowAge = lerp(_TraxSnowAge, snowAge, traxBuffer);
-                  snowErosion = lerp(_TraxSnowErosion, snowErosion, traxBuffer);
-                  snowHeight = lerp(_TraxSnowHeight, snowHeight, traxBuffer);
-
-                  snowFade = saturate(snowFade - _TraxSnowRemoval * (1-saturate(traxBuffer)));
-               }
-               #endif
-
-              
-
-               half3 snowNormal = float3(snowNsao.xy * 2 - 1, 1);
-             
-               half height = saturate(oheight - (1.0 - snowHeight));
-               half erosion = saturate(ao * snowErosion);
-               erosion *= erosion;
-               half snowMask = saturate(snowFade - erosion - height);
-               snowMask = snowMask * snowMask * snowMask;
-               half snowAmount = snowMask * saturate(snowDot - (height + erosion) * 0.5);  // up
-               snowAmount = saturate(snowAmount * 8);
-
-               float wetnessMask = saturate((_SnowParams.w * (4.0 * snowFade) - (snowNsao.b) * 0.5));
-                
-               float snowNormalAmount = snowAmount * snowAmount;
-
-               float porosity = saturate((((1.0 - smoothness) - 0.5)) / max(surfPorosity, 0.001));
-               float factor = lerp(1, 0.4, porosity);
-
-               o.Albedo *= lerp(1.0, factor, wetnessMask);
-               o.Normal = lerp(o.Normal, float3(0,0,1), wetnessMask);
-               o.Smoothness = lerp(o.Smoothness, 0.8, wetnessMask);
-
-
-               #if _SNOWSSS
-                  SSSTint = lerp(SSSTint, _SnowSSSTint.rgb, snowNormalAmount);
-                  SSSThickness = lerp(SSSThickness, _SnowSSSTint.a * 2 * snowAlb.a, snowNormalAmount);
-               #endif
-
-               snowAlb.rgb *= _SnowTint.rgb;
-               
-
-               o.Albedo = lerp(o.Albedo, snowAlb.rgb, snowAmount);
-               o.Normal = lerp(o.Normal, snowNormal, snowNormalAmount);
-               o.Smoothness = lerp(o.Smoothness, (snowNsao.b) * snowAge, snowAmount);
-               o.Occlusion = lerp(o.Occlusion, snowNsao.w, snowAmount);
-               o.Height = lerp(o.Height, snowAlb.a, snowAmount);
-               o.Metallic = lerp(o.Metallic, 0.01, snowAmount);
-               float crystals = saturate(0.65 - snowNsao.b);
-               o.Smoothness = lerp(o.Smoothness, crystals * snowAge, snowAmount);
-               
-               #if _SNOWSPARKLE
-               DoSnowSparkle(i, o, i.viewDir, worldPos, worldNormalVertex, snowAmount);
-               #endif
-
-               #if _SNOWRIM
-               DoSnowRim(o, i, snowAmount);
-               #endif
-
-               return snowAmount;
+               float shf = saturate((height - _StreamFades.x) / max(_StreamFades.y - _StreamFades.x, 0.0001));
+               shf *= 1.0 - saturate((height - _StreamFades.z) / max(_StreamFades.w - _StreamFades.z, 0.0001));
+               puddleLevel *= shf;
             }
             #endif
+
+            float waterBlend = saturate((puddleLevel - height) * _StreamBlend);
+            waterBlend *= waterBlend;
+
+            waterNorm.xy *= puddleLevel * waterBlend;
+            float2 offset = lerp(waterNorm.xy, waterNorm.xy * height, _StreamFlowParams.w);
+            offset *= _StreamFlowParams.x;
+            #if !_TRIPLANAR
+            config.uv0.xy += offset;
+            config.uv1.xy += offset;
+            config.uv2.xy += offset;
+            config.uv3.xy += offset;
+            #else
+            tc.uv0[0].xy += offset;
+            tc.uv0[1].xy += offset;
+            tc.uv0[2].xy += offset;
+            tc.uv1[0].xy += offset;
+            tc.uv1[1].xy += offset;
+            tc.uv1[2].xy += offset;
+            tc.uv2[0].xy += offset;
+            tc.uv2[1].xy += offset;
+            tc.uv2[2].xy += offset;
+            tc.uv3[0].xy += offset;
+            tc.uv3[1].xy += offset;
+            tc.uv3[2].xy += offset;
+            #endif
+         }  
+
+
+
+
+         float DoStream(inout MicroSplatLayer o, float2 uv, half porosity, half3 waterNormFoam, 
+            half2 flowDir, half puddleLevel, half foamStrength, half wetTrail,
+            inout half foam)
+         {
+            
+            float waterBlend = saturate((puddleLevel - o.Height) * _StreamBlend);
+            if (waterBlend + wetTrail > 0)
+            {
+               half2 waterNorm = waterNormFoam.xy;
+
+               half pmh = puddleLevel - o.Height;
+               // refactor to compute flow UVs in previous step?
+               float2 foamUV0 = 0;
+               float2 foamUV1 = 0;
+               half foamInterp = 0;
+               Flow(uv * 1.75 + waterNormFoam.xy * waterNormFoam.b, flowDir, _StreamFlowParams.y/3, _StreamFlowParams.z/3, foamUV0, foamUV1, foamInterp);
+               half foam0 = SAMPLE_TEXTURE2D(_StreamNormal, sampler_NormalSAO, foamUV0).b;
+               half foam1 = SAMPLE_TEXTURE2D(_StreamNormal, sampler_NormalSAO, foamUV1).b;
+               COUNTSAMPLE
+               COUNTSAMPLE
+               foam = lerp(foam0, foam1, foamInterp);
+               foam = foam * abs(pmh) + (foam * o.Height);
+               foam *= 1.0 - (saturate(pmh * 1.5));
+               foam *= foam;
+               foam *= _StreamNormalFoam.y * foamStrength;
+
+               
+
+               #if _DYNAMICFLOWS
+                  #if _GLOBALSTREAMS
+                     float streamMax = _Global_StreamMax;
+                  #else
+                     float streamMax = _StreamMax;
+                  #endif
+                  half waterBlend2 = max(waterBlend, saturate((wetTrail * streamMax - o.Height) * _StreamBlend) * 0.85);
+                  return waterBlend2;
+               #endif
+               return waterBlend;   
+            }
             return 0;
          }
 
-         // for object blend shader, must, unfortunately, keep in sync..
-         float DoSnowSimple(Input i, inout MicroSplatLayer o, float2 uv, float3 worldNormal, float3 worldNormalVertex, 
-               float3 worldPos, float puddleHeight, half surfPorosity)
+         #endif
+
+
+         #if _LAVA
+
+         half4 SampleLava(float2 uv, float2 dx, float2 dy)
          {
-            #if _SNOW
-            float2 maskUV = uv;
-            #if _SNOWWORLDSPACEUV
-               uv = worldPos.xz;
+            #if _LAVASTOCHASTIC
+               float2 uv1, uv2, uv3;
+               half3 w;
+               PrepareStochasticUVs(_LavaStochasticSize, uv, uv1, uv2, uv3, w);
+               
+               half4 S1 = SAMPLE_TEXTURE2D_GRAD(_LavaDiffuse, sampler_Diffuse, uv1, dx, dy);
+               half4 S2 = SAMPLE_TEXTURE2D_GRAD(_LavaDiffuse, sampler_Diffuse, uv2, dx, dy);
+               half4 S3 = SAMPLE_TEXTURE2D_GRAD(_LavaDiffuse, sampler_Diffuse, uv3, dx, dy);
+               COUNTSAMPLE
+               COUNTSAMPLE
+               COUNTSAMPLE
+               
+               half3 cw = BaryWeightBlend(w, S1.r, S2.r, S3.r, _LavaStochasticContrast);
+               return S1 * cw.x + S2 * cw.y + S3 * cw.z;
+            #else
+               COUNTSAMPLE
+               return SAMPLE_TEXTURE2D_GRAD(_LavaDiffuse, sampler_Diffuse, uv, dx, dy);
             #endif
-            
-            uv *= _SnowUVScales.xy;
+         }
+
+         float DoLava(inout MicroSplatLayer o, float2 uv, half lavaLevel, half2 flowDir)
+         {
+            uv *= _LavaUVScale;
+            float lvh = lavaLevel - o.Height;
+            float lavaBlend = saturate(lvh * _LavaParams.x);
+
             float2 dx = ddx(uv);
             float2 dy = ddy(uv);
-            
-            #if _USEGLOBALSNOWLEVEL 
-               float snowLevel = _Global_SnowLevel;
-            #else
-               float snowLevel = _SnowAmount;
-            #endif
-
-            #if _USEGLOBALSNOWHEIGHT
-               float snowMin = _Global_SnowMinMaxHeight.x;
-               float snowMax = _Global_SnowMinMaxHeight.y;
-            #else
-               float snowMin = _SnowHeightAngleRange.x;
-               float snowMax = _SnowHeightAngleRange.y;
-            #endif
-
-            half2 levelMaxMin = half2(1,0);
-            #if _SNOWMASK
-               #if _MEGASPLAT
-                  levelMaxMin = i.fx2.yx;
-               #else
-                  levelMaxMin = SAMPLE_TEXTURE2D_GRAD(_SnowMask, shared_linear_clamp_sampler, maskUV, ddx(maskUV), ddy(maskUV));
-               #endif
-            #endif
-
-
-
-            float snowAge = _SnowParams.z;
-            float snowErosion = _SnowParams.y;
-            float snowHeight = _SnowParams.x;
-            
-            float3 snowUpVector = _SnowUpVector;
-            float worldHeight = i.worldHeight;
-            #if _PLANETVECTORS
-               snowUpVector = i.worldUpVector;
-            #endif
-
-            half snowDot = max(snowLevel/2, dot(worldNormal, snowUpVector));
-            half snowDotVertex = max(snowLevel/2, dot(worldNormalVertex, snowUpVector));
-            float snowFade = SnowFade(worldHeight, snowMin, snowMax, snowDot, snowDotVertex, snowLevel, puddleHeight);
-
-
-            MSBRANCHOTHER(snowFade)
+            UNITY_BRANCH
+            if (lavaBlend > 0)
             {
-               
-               half4 snowAlb = SAMPLE_TEXTURE2D_GRAD(_SnowDiff, sampler_Diffuse, uv, dx, dy);
-               half4 snowNsao = SAMPLE_TEXTURE2D_GRAD(_SnowNormal, sampler_NormalSAO, uv, dx, dy).agrb;
-               COUNTSAMPLE
-               COUNTSAMPLE
+               half distortionSize = _LavaParams2.x;
+               half distortionRate = _LavaParams2.y;
+               half distortionScale = _LavaParams2.z;
+               half darkening = _LavaParams2.w;
+               half3 edgeColor = _LavaEdgeColor;
+               half3 lavaColorLow = _LavaColorLow;
+               half3 lavaColorHighlight = _LavaColorHighlight;
 
-               snowAlb.rgb *= _SnowTint.rgb;
 
-               #if _SNOWNORMALNOISE
-               {
-                  float2 normalUV = uv * _SnowNormalNoiseScaleStrength.x;
-                  half3 noise = UnpackNormal(SAMPLE_TEXTURE2D_GRAD(_SnowNormalNoise, sampler_Diffuse, normalUV, dx * _SnowNormalNoiseScaleStrength.x, dy * _SnowNormalNoiseScaleStrength.x));
+               half lavaSpeed = _LavaParams.z;
+               half lavaInterp = _LavaParams.w;
 
-                  snowNsao.xy = lerp(snowNsao.xy, BlendNormal2(snowNsao.xy, noise.xy), _SnowNormalNoiseScaleStrength.y);
-               }
+               float2 uv1 = 0;
+               float2 uv2 = 0;
+               half interp = 0;
+               half drag = lerp(0.1, 1, saturate(lvh));
+               Flow(uv, flowDir, lavaInterp, lavaSpeed * drag, uv1, uv2, interp);
 
-               #endif
-               
-               half3 snowNormal = float3(snowNsao.xy * 2 - 1, 1);
-               half ao = o.Occlusion;
+               float2 dist_uv1;
+               float2 dist_uv2;
+               half dist_interp;
+               Flow(uv * distortionScale, flowDir, distortionRate, distortionSize, dist_uv1, dist_uv2, dist_interp);
 
-               half height = saturate(o.Height - (1-snowHeight));
-               half erosion = saturate(ao * snowErosion);
-               erosion *= erosion;
-               half snowMask = saturate(snowFade - erosion - height);
-               snowMask = snowMask * snowMask * snowMask;
-               half snowAmount = snowMask * saturate(snowDot - (height + erosion) * 0.5);  // up
-               snowAmount = saturate(snowAmount * 8);
+               half4 lavaDist = lerp(SampleLava(dist_uv1*0.51, dx, dy), SampleLava(dist_uv2, dx, dy), dist_interp);
+               half4 dist = lavaDist * (distortionSize * 2) - distortionSize;
 
-               float wetnessMask = saturate((_SnowParams.w * (4.0 * snowFade) - (snowNsao.b) * 0.5));
+               half4 lavaTex = lerp(SampleLava(uv1*1.1 + dist.xy, dx, dy), SampleLava(uv2 + dist.zw, dx, dy), interp);
 
-               float snowNormalAmount = snowAmount * snowAmount;
+               // base lava color, based on heights
+               half3 lavaColor = lerp(lavaColorLow, lavaColorHighlight, lavaTex.b);
 
-               float porosity = saturate((((1.0 - o.Smoothness) - 0.5)) / max(surfPorosity, 0.001));
-               float factor = lerp(1, 0.4, porosity);
+               // edges
+               float lavaBlendWide = saturate((lavaLevel - o.Height) * _LavaParams.x * 0.5);
+               float edge = saturate((1 - lavaBlendWide) * 3);
 
-               o.Albedo *= lerp(1.0, factor, wetnessMask);
-               o.Normal = lerp(o.Normal, float3(0,0,1), wetnessMask);
-               o.Smoothness = lerp(o.Smoothness, 0.8, wetnessMask);
+               // darkening
+               darkening = saturate(lavaTex.a * darkening * saturate(lvh*2));
+               lavaColor *= 1.0 - darkening;
+               // edges
+               lavaColor = lerp(lavaColor, edgeColor, edge);
 
-         
-               o.Albedo = lerp(o.Albedo, snowAlb.rgb, snowAmount);
-               o.Normal = lerp(o.Normal, snowNormal, snowNormalAmount);
-               o.Smoothness = lerp(o.Smoothness, (snowNsao.b) * snowAge, snowAmount);
-               o.Occlusion = lerp(o.Occlusion, snowNsao.w, snowAmount);
-               o.Height = lerp(o.Height, snowAlb.a, snowAmount);
-               o.Metallic = lerp(o.Metallic, 0.01, snowAmount);
-               float crystals = saturate(0.65 - snowNsao.b);
-               o.Smoothness = lerp(o.Smoothness, crystals * snowAge, snowAmount);
+               o.Albedo = lerp(o.Albedo, lavaColor, lavaBlend);
+               o.Normal.xy = lerp(o.Normal.xy, lavaTex.xy * 2 - 1, lavaBlend);
+               o.Smoothness = lerp(o.Smoothness, 0.3, lavaBlend * darkening);
 
-               #if _SNOWSPARKLE
-               DoSnowSparkle(i, o, i.viewDir, worldPos, worldNormalVertex, snowAmount);
-               #endif
-
-               #if _SNOWRIM
-               DoSnowRim(o, i, snowAmount);
-               #endif
-
-               return snowAmount;
-            
+               half3 emis = lavaColor * lavaBlend;
+               o.Emission = lerp(o.Emission, emis * _LavaEmissiveMult, lavaBlend);
+               // bleed
+               o.Emission += edgeColor * 0.3 * (saturate((lavaLevel*1.2 - o.Height) * _LavaParams.x) - lavaBlend);
+               return saturate(lavaBlend*3);
             }
-            #endif
             return 0;
          }
 
+
+         #endif
+
+
+
+
+
+         float DoStreams(Input i, inout MicroSplatLayer o, half4 fxLevels, float2 uv, half porosity, 
+            half3 waterNormalFoam, float3 worldNormalVertex, half streamFoam, half wetLevel, half burnLevel, float3 worldPos)
+         {
+            float pud = 0;
+            float wetness = 0;
+            half foam = 0;
+            half streamPud = 0;
+
+            #if _WETNESS
+            wetness = DoWetness(o, fxLevels.x, porosity, worldPos);
+            #endif
+
+
+            #if _PUDDLES
+            pud = DoPuddles(o, fxLevels.g, porosity, uv);
+            #endif
+
+            
+
+            #if _STREAMS || _LAVA
+            float2 flowDir = FlowVecFromWNV(i, uv, worldNormalVertex);
+            #endif
+
+            
+            #if _STREAMS
+               #if _STREAMHEIGHTFILTER
+               {
+                  float shf = saturate((worldPos.y - _StreamFades.x) / max(_StreamFades.y - _StreamFades.x, 0.0001));
+                  shf *= 1.0 - saturate((worldPos.y - _StreamFades.z) / max(_StreamFades.w - _StreamFades.z, 0.0001));
+                  fxLevels.z *= shf;
+                  wetLevel *= shf;
+               }
+               #endif
+
+            half foamStr = min(length(worldNormalVertex.xz) * 18, 1) * streamFoam;
+            streamPud = DoStream(o, uv, porosity, waterNormalFoam, flowDir, fxLevels.z, foamStr, wetLevel, foam);
+            o.Albedo = lerp(o.Albedo, o.Albedo * _StreamTint * 2.0, streamPud);
+            //pud -= streamPud;
+            #endif
+
+            #if _WETNESS || _PUDDLES || _STREAMS
+               half3 waterNorm = half3(0,0,1);
+               half3 wetAlbedo = o.Albedo;
+               half wetSmoothness = o.Smoothness;
+
+               float wetBlend = max(max(pud, wetness), streamPud);
+
+               WaterBRDF(wetAlbedo, wetSmoothness, o.Metallic, wetBlend, porosity);
+               
+               wetAlbedo += foam;
+               wetSmoothness -= foam;
+
+               float foamNormStr = 1; 
+               #if _STREAMS
+                  foamNormStr = _StreamNormalFoam.x;
+               #endif
+
+               #if _RAINDROPS
+               waterNorm.xy = DoRain(waterNorm.xy, uv) * pud;
+               #endif
+
+               
+
+
+               o.Normal = lerp(o.Normal, waterNorm, pud * foamNormStr);
+               o.Occlusion = lerp(o.Occlusion, 1, wetBlend);
+               o.Smoothness = lerp(o.Smoothness, wetSmoothness, wetBlend);
+               o.Albedo = lerp(o.Albedo, wetAlbedo, wetBlend);
+
+            #endif
+
+
+            #if _LAVA
+               #if _LAVAHEIGHTFILTER
+               {
+                  float lhf = saturate((worldPos.y - _LavaFades.x) / max(_LavaFades.y - _LavaFades.x, 0.0001));
+                  lhf *= 1.0 - saturate((worldPos.y - _LavaFades.z) / max(_LavaFades.w - _LavaFades.z, 0.0001));
+                  fxLevels.a *= lhf;
+                  burnLevel *= lhf;
+               }
+               #endif
+
+            float burn = 1 - burnLevel * 0.85;
+            o.Albedo *= burn;
+            o.Smoothness *= burn;
+            pud = max(streamPud, DoLava(o, uv, fxLevels.a, flowDir));
+            #endif
+
+            pud = max(max(pud, streamPud), wetness);
+            #if _WETNESSMASKSNOW
+            pud = max(pud, 1-fxLevels.x);
+            #endif
+
+            return pud;
+         }
 
 
       void SampleAlbedo(inout Config config, inout TriplanarConfig tc, inout RawSamples s, MIPFORMAT mipLevel, half4 weights)
@@ -24205,8 +23941,7 @@ float3 GetTessFactors ()
       #define _PERTEXUVSCALEOFFSET 1
       #define _BRANCHSAMPLES 1
       #define _BRANCHSAMPLESAGR 1
-      #define _SNOW 1
-      #define _SNOWSIMPLE 1
+      #define _WETNESS 1
       #define _MSRENDERLOOP_UNITYURP2022 1
       #define _MICROSPLATBASEMAP 1
       #define _MSRENDERLOOP_UNITYLD 1
@@ -24630,65 +24365,73 @@ float3 GetTessFactors ()
       #endif
 
 
-         #if _SNOW
-         half4 _SnowParams; // influence, erosion, crystal, melt
-         half _SnowAmount;
-         half2 _SnowUVScales;
-         float4 _SnowHeightAngleRange;
-         half3 _SnowUpVector;
-         half3 _SnowTint;
-         #endif
-
-         #if _SNOWNORMALNOISE
-         float4 _SnowNormalNoiseScaleStrength;
-         #endif
-
-         #if _SNOWDISTANCERESAMPLE
-         float4 _SnowDistanceResampleScaleStrengthFade;
-         #endif
-
-         #if _SNOW && _USEGLOBALSNOWLEVEL
-         float _Global_SnowLevel;
-         #endif
-
-         #if _SNOW && _USEGLOBALSNOWHEIGHT
-         float2 _Global_SnowMinMaxHeight;
-         #endif
+         half _GlobalPorosity;
          
-         #if _SNOWSTOCHASTIC
-         half _SnowStochasticContrast;
-         half _SnowStochasticScale;
+         #if _WETNESS
+            #if _GLOBALWETNESS
+            half2 _Global_WetnessParams;
+            #else
+            half2 _WetnessParams;
+            #endif
+
+            #if _HEIGHTWETNESS
+            float4 _HeightWetness;
+            #endif
+
+            #if _DISTANCEWETNESS
+            float4 _DistanceWetness;
+            #endif
          #endif
 
-         #if _SNOWSSS
-         half4 _SnowSSSTint;
+         #if _PUDDLES
+            half2 _PuddleParams;
+            #if _GLOBALPUDDLES
+            half _Global_PuddleParams;
+            #endif
          #endif
 
-         #if _TESSDISTANCE || _TESSEDGE
-         half _TessDisplaceSnowMultiplier;
+         #if _STREAMS
+            half _StreamBlend;
+            half4 _StreamFlowParams;
+            half2 _StreamNormalFoam;
+            float2 _StreamUVScales;
+            #if _GLOBALSTREAMS
+               half _Global_StreamMax;
+            #else
+               half _StreamMax;
+            #endif
+            half3 _StreamTint;
+            #if _STREAMHEIGHTFILTER
+               float4 _StreamFades;
+            #endif
          #endif
 
-         #if _SNOWFOOTSTEPS
-         float2 _SnowTraxUVScales;
-         float _SnowTraxTextureBlend;
-         float _SnowTraxNormalStrength;
+         #if _LAVA
+            half4 _LavaParams;
+            half4 _LavaParams2;
+            half3 _LavaEdgeColor;
+            half3 _LavaColorLow;
+            half3 _LavaColorHighlight;
+            float2 _LavaUVScale;
+            half _LavaDislacementScale;
+            #if _LAVAHEIGHTFILTER
+               float4 _LavaFades;
+            #endif
+            half _LavaEmissiveMult;
+
+            #if _LAVASTOCHASTIC
+               half _LavaStochasticSize;
+               half _LavaStochasticContrast;
+            #endif
          #endif
 
-         #if _SNOWRIM
-         float _SnowRimPower;
-         half3 _SnowRimColor;
+         #if _RAINDROPS
+            float2 _RainIntensityScale;
+            #if _GLOBALRAIN
+               float _Global_RainIntensity;
+            #endif
          #endif
 
-         #if _SNOWSPARKLE
-         float _SnowSparkleStrength;
-         half3 _SnowSparkleTint;
-         half _SnowSparkleEmission;
-         float _SnowSparkleSize;
-         float _SnowSparkleDensity;
-         float _SnowSparkleNoiseDensity;
-         float _SnowSparkleNoiseAmplitude;
-         float _SnowSparkleViewDependency;
-         #endif
 
 
          CBUFFER_END
@@ -26106,589 +25849,530 @@ void PrepareStochasticUVs(float scale, float2 uv, out float2 uv1, out float2 uv2
 }
 
 
-         #if _SNOW
-         TEXTURE2D(_SnowDiff);
-         TEXTURE2D(_SnowNormal);
+
+
+         TEXTURE2D(_StreamControl);
+
+         #if _DYNAMICFLOWS
+            TEXTURE2D(_DynamicStreamControl);
          #endif
 
-         #if _SNOWNORMALNOISE
-         TEXTURE2D(_SnowNormalNoise);
+         #if _STREAMS
+            TEXTURE2D(_StreamNormal);
          #endif
 
-         #if _SNOWFOOTSTEPS
-         TEXTURE2D(_SnowTrackDiff);
-         TEXTURE2D(_SnowTrackNSAO);
+         #if _LAVA
+            TEXTURE2D(_LavaDiffuse);
          #endif
 
-         #if _SNOWMASK
-         TEXTURE2D(_SnowMask);
+         #if _RAINDROPS
+            TEXTURE2D(_RainDropTexture);
          #endif
 
-         #if _SNOWSPARKLE
-            TEXTURE2D(_SnowSparkleNoise);
-         #endif
-         
-         
 
-         float SnowFade(float worldHeight, float snowMin, float snowMax, half snowDot, half snowDotVertex, half snowLevel, half puddleHeight)
+
+         half4 ProcessFXLevels(half4 fxLevels, half traxBuffer)
          {
-            float snowHeightFade = saturate((worldHeight - snowMin) / max(snowMax, 0.001));
-            half snowAngleFade = max(0, (snowDotVertex - _SnowHeightAngleRange.z) * 6);
-            snowAngleFade = snowAngleFade * (1 - max(0, (snowDotVertex - _SnowHeightAngleRange.w) * 6));
-            return saturate((snowLevel * snowHeightFade * saturate(snowAngleFade)) - puddleHeight);
-         }
-
-         float DoSnowDisplace(float splat_height, float2 uv, float3 worldNormalVertex, float3 worldPos, float puddleHeight, Config config, half4 weights)
-         {
-            // could force a branch and avoid texsamples
-            #if _SNOW
-               
-               #if _USEGLOBALSNOWLEVEL 
-               float snowLevel = _Global_SnowLevel;
+            #if _STREAMS
+               #if _GLOBALSTREAMS
+                  fxLevels.b *= _Global_StreamMax;
                #else
-               float snowLevel = _SnowAmount;
+                  fxLevels.b *= _StreamMax;
                #endif
-
-               #if _USEGLOBALSNOWHEIGHT
-               float snowMin = _Global_SnowMinMaxHeight.x;
-               float snowMax = _Global_SnowMinMaxHeight.y;
-               #else
-               float snowMin = _SnowHeightAngleRange.x;
-               float snowMax = _SnowHeightAngleRange.y;
-               #endif
-
-               
-
-               float snowAge = _SnowParams.z;
-
-
-               #if _PERTEXSNOWSTRENGTH && !_SNOWSIMPLE
-                  SAMPLE_PER_TEX(ptSnowStr, 8.5, config, half4(1.0, 0.0, 0.0, 0.0));
-                  snowLevel *= ptSnowStr0.x * weights.x + ptSnowStr1.x * weights.y + ptSnowStr2.x * weights.z + ptSnowStr3.x * weights.w;
-               #endif
-
-               half2 levelMaxMin = half2(1, 0);
-               #if _SNOWMASK
-                  levelMaxMin = SAMPLE_TEXTURE2D_LOD(_SnowMask, shared_linear_clamp_sampler, uv, 0).xy;
-               #endif
-               
-               float3 snowUpVector = _SnowUpVector;
-               float worldHeight = worldPos.y;
-               
-               half snowDot = saturate(dot(worldNormalVertex, snowUpVector));
-               half snowDotVertex = max(snowLevel/2, snowDot);
-               
-
-               float snowFade = SnowFade(worldHeight, snowMin, snowMax, snowDotVertex, snowDotVertex, snowLevel, puddleHeight);
-               #if _SNOWMASK
-                  snowFade = min(levelMaxMin.x, snowFade);
-                  snowFade = max(levelMaxMin.y, snowFade);
-               #endif
-
-               float height = splat_height * _SnowParams.x;
-               float erosion = height * _SnowParams.y;
-               float snowMask = saturate((snowFade - erosion));
-               float snowMask2 = saturate(snowMask * 8);
-               snowMask *= snowMask * snowMask * snowMask * snowMask * snowMask2;
-               float snowAmount = snowMask * snowDot;
-
-               return snowAmount;
             #endif
-            return 0;
+
+            #if _LAVA
+               fxLevels.a *= _LavaParams.y;
+            #endif
+
+            #if _TRAXSINGLE || _TRAXARRAY || _TRAXNOTEXTURE
+               fxLevels = saturate(max(fxLevels, _TraxFXThresholds * (1 - saturate(traxBuffer))));
+            #endif
+            return fxLevels;
+         }
+
+         half4 SampleFXLevels(float2 uv, out half wetness, out half burnLevel, half traxBuffer)
+         {
+            half4 fxLevels = half4(0,0,0,0);
+            burnLevel = 0;
+            wetness = 0;
+            #if _WETNESS || _PUDDLES || _STREAMS || _LAVA
+               fxLevels = SAMPLE_TEXTURE2D(_StreamControl, shared_linear_clamp_sampler, uv);
+
+               COUNTSAMPLE
+
+               #if _DYNAMICFLOWS
+               half4 flows = SAMPLE_TEXTURE2D(_DynamicStreamControl, shared_linear_clamp_sampler, uv);
+               COUNTSAMPLE
+
+               wetness = flows.x;
+               burnLevel = flows.y;
+
+               flows.zw = saturate(flows.zw*3);
+               fxLevels.zw = max(fxLevels.zw, flows.zw);
+               #endif
+
+               
+
+            #endif
+            return ProcessFXLevels(fxLevels, traxBuffer);
+         }
+
+
+         half4 SampleFXLevelsLOD(float2 uv, half traxBuffer)
+         {
+            half4 fxLevels = half4(0,0,0,0);
+            #if _WETNESS || _PUDDLES || _STREAMS || _LAVA
+            fxLevels = SAMPLE_TEXTURE2D_LOD(_StreamControl, shared_linear_clamp_sampler, uv, 0);
+               #if _DYNAMICFLOWS
+               half4 flows = SAMPLE_TEXTURE2D_LOD(_DynamicStreamControl, shared_linear_clamp_sampler, uv, 0);
+               flows.xy = 0;
+               fxLevels = max(fxLevels, flows);
+               #endif
+
+               #if _LAVA
+                  fxLevels.w *= _LavaDislacementScale;
+               #endif
+
+            #endif
+            return ProcessFXLevels(fxLevels, 1.0 - traxBuffer);
+         }
+
+
+         void WaterBRDF (inout half3 Albedo, inout half Smoothness, half metalness, half wetFactor, half surfPorosity) 
+         {
+            half porosity = saturate((( (1 - Smoothness) - 0.5)) / max(surfPorosity, 0.001));
+            half factor = lerp(1, 0.2, (1 - metalness) * porosity);
+            Albedo *= lerp(1.0, factor, wetFactor);
+            Smoothness = lerp(Smoothness, 0.92f, wetFactor);
+         }
+
+         void Flow(float2 uv, half2 flow, half speed, float intensity, out float2 uv1, out float2 uv2, out half interp)
+         {
+            float2 flowVector = flow * intensity;
+            
+            float timeScale = _Time.y * speed;
+            float2 phase = frac(float2(timeScale, timeScale + .5));
+
+            uv1.xy = (uv.xy - flowVector * half2(phase.x, phase.x));
+            uv2.xy = (uv.xy - flowVector * half2(phase.y, phase.y));
+
+            interp = abs(0.5 - phase.x) / 0.5;
+         }
+
+
+         #if _RAINDROPS
+         half2 ComputeRipple(float2 uv, half time, half weight)
+         {
+            half4 ripple = SAMPLE_TEXTURE2D(_RainDropTexture, sampler_Diffuse, uv);
+            ripple.yz = ripple.yz * 2 - 1;
+
+            half dropFrac = frac(ripple.w + time);
+            half timeFrac = dropFrac - 1.0 + ripple.x;
+            half dropFactor = saturate(0.2f + weight * 0.8 - dropFrac);
+            half finalFactor = dropFactor * ripple.x * 
+                                 sin( clamp(timeFrac * 9.0f, 0.0f, 3.0f) * 3.14159265359);
+
+            return half2(ripple.yz * finalFactor);
+         }
+         #endif
+
+         half2 DoRain(half2 waterNorm, float2 uv)
+         {
+         #if _RAINDROPS
+            #if _GLOBALRAIN
+               float rainIntensity = _Global_RainIntensity.x;
+            #else
+               float rainIntensity = _RainIntensityScale.x;
+            #endif
+            half dropStrength = rainIntensity;
+            const float4 timeMul = float4(1.0f, 0.85f, 0.93f, 1.13f); 
+            half4 timeAdd = float4(0.0f, 0.2f, 0.45f, 0.7f);
+            half4 times = _Time.yyyy;
+            times = frac((times * float4(1, 0.85, 0.93, 1.13) + float4(0, 0.2, 0.45, 0.7)) * 1.6);
+
+            float2 ruv1 = uv * _RainIntensityScale.yy;
+            float2 ruv2 = ruv1;
+
+            half4 weights = rainIntensity.xxxx - float4(0, 0.25, 0.5, 0.75);
+            half2 ripple1 = ComputeRipple(ruv1 + float2( 0.25f,0.0f), times.x, weights.x);
+            half2 ripple2 = ComputeRipple(ruv2 + float2(-0.55f,0.3f), times.y, weights.y);
+            half2 ripple3 = ComputeRipple(ruv1 + float2(0.6f, 0.85f), times.z, weights.z);
+            half2 ripple4 = ComputeRipple(ruv2 + float2(0.5f,-0.75f), times.w, weights.w);
+            weights = saturate(weights * 4);
+
+            half2 rippleNormal = half2( weights.x * ripple1.xy +
+                        weights.y * ripple2.xy + 
+                        weights.z * ripple3.xy + 
+                        weights.w * ripple4.xy);
+
+            waterNorm = lerp(waterNorm, BlendNormal2(rippleNormal, waterNorm), rainIntensity * dropStrength); 
+            return waterNorm;                        
+         #else
+            return waterNorm;
+         #endif
+         }
+
+
+         #if _WETNESS
+         float DoWetness(inout MicroSplatLayer o, half wetLevel, half porosity, float3 worldPos)
+         {
+            #if _GLOBALWETNESS
+               wetLevel = clamp(wetLevel, _Global_WetnessParams.x, _Global_WetnessParams.y);
+            #else
+               wetLevel = clamp(wetLevel, _WetnessParams.x, _WetnessParams.y);
+            #endif
+            #if _HEIGHTWETNESS
+               float l = _HeightWetness.x;
+               l += sin(_Time.y * _HeightWetness.z) * _HeightWetness.w;
+               half hw = saturate((l - worldPos.y) * _HeightWetness.y);
+               wetLevel = max(hw, wetLevel);
+            #endif
+
+            #if _DISTANCEWETNESS
+               float camDist = distance(_WorldSpaceCameraPos, worldPos);
+               float fade = saturate((camDist - _DistanceWetness.x) / _DistanceWetness.z);
+
+               wetLevel *= lerp(_DistanceWetness.y, _DistanceWetness.w, fade);
+            #endif
+            
+            return wetLevel;
+         }
+         #endif
+
+
+         #if _PUDDLES
+         // modity lighting terms for water..
+         float DoPuddles(inout MicroSplatLayer o, half puddleLevel, half porosity, float2 uv)
+         {
+            float2 pudParams = _PuddleParams;
+            #if _GLOBALPUDDLES
+            pudParams.y = _Global_PuddleParams;
+            #endif
+
+            puddleLevel *= pudParams.y;
+            float waterBlend = saturate((puddleLevel - o.Height) * pudParams.x);
+            return waterBlend;
+         }
+         #endif
+
+         float3 W2TVec(Input i, float3 normal) 
+         {
+            float3x3 t2w = GetTBN(i);
+            return normalize(mul(t2w, normal));
          }
          
-         #if _SNOWSPARKLE
-         void DoSnowSparkle(Input i, inout MicroSplatLayer o, float3 viewDir, float3 worldPos, float3 worldNormalVertex, float snowLevel)
+         float2 FlowVecFromWNV(Input i, float2 uv, float3 worldNormalVertex)
          {
-            
-            #if _DEBUG_SNOWSPARKLE
-            o.Albedo = 0;
-            o.Smoothness = 0;
-            o.Occlusion = 1;
-            o.Emission = 0;
-            
+            float2 ret = lerp(worldNormalVertex.xz, normalize(worldNormalVertex.xz), max(0.1, worldNormalVertex.z));
+            #if _MICROMESH || _MICROVERTEXMESH
+            ret = W2TVec(i, float3(0,-1,0)).xy;
+            #elif _MICRODIGGERMESH
+            ret = W2TVec(i, float3(0,1,0)).xy;
             #endif
-            
-
-            // screen space method. Looks nice because it's in SS, but fails because clearly not
-            // combing from a single spot on the terrain.
-
-            float size = 1 - (_SnowSparkleSize * 0.001);
-            float density = _SnowSparkleDensity;
-            float noiseDensity = _SnowSparkleNoiseDensity;
-            float viewDep = _SnowSparkleViewDependency;
-
-            float3 wsView = worldPos - _WorldSpaceCameraPos;
-            float3 wsViewDir = normalize(wsView);
-
-            float z = length(wsView);
-            float e = floor(log2(0.3*z+3.0)/0.3785116);
-            float level_z = 0.1 * pow(1.3, e) - 0.2;
-            float level = 0.12 / level_z;
-            density *= level;
-            noiseDensity *= level;
-
-            float3 v = wsView / z;
-            float3 view_new = v * level_z;
-            view_new = sign(view_new) * frac(abs(view_new));
-
-            float3 pos = density*worldPos + viewDep * normalize(view_new);
-
-            float3 g_index = floor(pos);
-            float3 pc = g_index / density;
-            
-            float3 noise = _SnowSparkleNoiseAmplitude * SAMPLE_TEXTURE2D_LOD( _SnowSparkleNoise, sampler_Diffuse, noiseDensity * pc.xz + pc.y, 0).rgb;
-            float3 offset = 0.75;
-            float3 px = pos - g_index + 0.5 * frac(noise)-offset;
-
-            float dotvn = dot(wsViewDir, worldNormalVertex);
-            float3 ma = v - dotvn*worldNormalVertex;
-            float3 px_proj = dot(px, ma) * ma;
-            px += (abs(dotvn)-1.0)*px_proj/dot(ma,ma);
-
-            float dist2 = dot(px, px);
-            float thresh = 1 - size;
-
-            
-            float r = dist2 > thresh? 0 : 1-dist2/thresh;
-
-            r *= snowLevel * _SnowSparkleStrength;
-            float3 c = _SnowSparkleTint * r;
-               
-            o.Albedo += c;
-            o.Emission += c * _SnowSparkleEmission;
-            o.Smoothness += r;
-
-            #if _DEBUG_SNOWSPARKLE
-            o.Albedo = c;
-            o.Emission = c * _SnowSparkleEmission;
-            o.Smoothness = r;
-            o.Normal = float3(0,0,1);
-            #endif
-            
-            
-            
+            return ret;
          }
-         #endif
 
-         #if _SNOWRIM
-         void DoSnowRim(inout MicroSplatLayer o, Input i, float snowAmount)
+         #if _STREAMS
+         half3 GetWaterNormal(Input i, float2 uv, float3 worldNormalVertex)
          {
-            float rim = 1.0 - saturate(dot(normalize(_WorldSpaceCameraPos - i.worldPos), WorldNormalVector(i, o.Normal))); 
-            o.Emission += pow(rim, _SnowRimPower) * _SnowRimColor * snowAmount;
-         }
-         #endif
+            float2 flowDir = FlowVecFromWNV(i, uv, worldNormalVertex);
+            float2 uv1;
+            float2 uv2;
+            half interp;
+            Flow(uv * _StreamUVScales.xy, flowDir, _StreamFlowParams.y, _StreamFlowParams.z, uv1, uv2, interp);
 
-         #if _SNOWSTOCHASTIC
-         void SampleSnowStochastic(float2 uv, float2 dx, float2 dy, out float4 albedo, out float4 nsao)
-         {
-            float2 uv1, uv2, uv3;
-            half3 w;
-            PrepareStochasticUVs(_SnowStochasticScale, uv, uv1, uv2, uv3, w);
-               
-            half4 S1 = SAMPLE_TEXTURE2D_GRAD(_SnowDiff, sampler_Diffuse, uv1, dx, dy);
-            half4 S2 = SAMPLE_TEXTURE2D_GRAD(_SnowDiff, sampler_Diffuse, uv2, dx, dy);
-            half4 S3 = SAMPLE_TEXTURE2D_GRAD(_SnowDiff, sampler_Diffuse, uv3, dx, dy);
-
+            half3 fd = lerp(SAMPLE_TEXTURE2D(_StreamNormal, sampler_NormalSAO, uv1), SAMPLE_TEXTURE2D(_StreamNormal, sampler_NormalSAO, uv2), interp).xyz;
             COUNTSAMPLE
             COUNTSAMPLE
-            COUNTSAMPLE
 
-            half3 cw = BaryWeightBlend(w, S1.a, S2.a, S3.a, _SnowStochasticContrast);
-
-            half4 N1, N2, N3 = half4(0,0,1,0);
-            MSBRANCHCLUSTER(cw.x);
-            {
-               N1 = SAMPLE_TEXTURE2D_GRAD(_SnowNormal, sampler_NormalSAO, uv1, dx, dy);
-               COUNTSAMPLE
-            }
-            MSBRANCHCLUSTER(cw.y);
-            {
-               N2 = SAMPLE_TEXTURE2D_GRAD(_SnowNormal, sampler_NormalSAO, uv2, dx, dy);
-               COUNTSAMPLE
-            }
-            MSBRANCHCLUSTER(cw.z);
-            {
-               N3 = SAMPLE_TEXTURE2D_GRAD(_SnowNormal, sampler_NormalSAO, uv3, dx, dy);
-               COUNTSAMPLE
-            }
-               
-            albedo = S1 * cw.x + S2 * cw.y + S3 * cw.z;
-            nsao = N1 * cw.x + N2 * cw.y + N3 * cw.z;
-            nsao = nsao.agrb;
+            fd.xy = fd.xy * 2 - 1;
+            return fd;
          }
-         #endif
-         
-         
-         float DoSnow(Input i, inout MicroSplatLayer o, float2 uv, float3 worldNormal, float3 worldNormalVertex, 
-               float3 worldPos, float puddleHeight, half surfPorosity, float camDist, Config config, half4 weights, 
-               inout half3 SSSTint, inout half SSSThickness, float traxBuffer, float3 traxNormal)
+
+         // water normal only
+         void DoStreamRefract(inout Config config, inout TriplanarConfig tc, float3 waterNorm, half puddleLevel, half height)
          {
-            #if _SNOW
-            float2 maskUV = uv;
-            #if _SNOWWORLDSPACEUV
-               uv = worldPos.xz;
-            #endif
-            
-            
-            float2 dx = ddx(uv) * _SnowUVScales.xy;
-            float2 dy = ddy(uv) * _SnowUVScales.xy;
-
-            float3 wdx = ddx(worldPos) * _SnowUVScales.xxy;
-            float3 wdy = ddy(worldPos) * _SnowUVScales.xxy;
-
-            uv *= _SnowUVScales.xy;
-            float3 wuv = worldPos * _SnowUVScales.xxy;
-            
-            #if _USEGLOBALSNOWLEVEL 
-            float snowLevel = _Global_SnowLevel;
+            #if _GLOBALSTREAMS
+               puddleLevel *= _Global_StreamMax;
             #else
-            float snowLevel = _SnowAmount;
+               puddleLevel *= _StreamMax;
             #endif
 
-            #if _USEGLOBALSNOWHEIGHT
-            float snowMin = _Global_SnowMinMaxHeight.x;
-            float snowMax = _Global_SnowMinMaxHeight.y;
-            #else
-            float snowMin = _SnowHeightAngleRange.x;
-            float snowMax = _SnowHeightAngleRange.y;
-            #endif
-
-            
-
-
-            float snowAge = _SnowParams.z;
-            float snowErosion = _SnowParams.y;
-            float snowHeight = _SnowParams.x;
-
-
-
-            #if _PERTEXSNOWSTRENGTH && !_SIMPLESNOW
-               SAMPLE_PER_TEX(ptSnowStr, 8.5, config, half4(1.0, 0.0, 0.0, 0.0));
-               snowLevel *= ptSnowStr0.x * weights.x + ptSnowStr1.x * weights.y + ptSnowStr2.x * weights.z + ptSnowStr3.x * weights.w;
-            #endif
-
-            half2 levelMaxMin = half2(1,0);
-            #if _SNOWMASK
-               #if _MEGASPLAT
-                  levelMaxMin = i.fx2.yx;
-               #else
-                  levelMaxMin = SAMPLE_TEXTURE2D_GRAD(_SnowMask, shared_linear_clamp_sampler, maskUV, ddx(maskUV), ddy(maskUV));
-               #endif
-            #endif
-            
-            float3 snowUpVector = _SnowUpVector;
-            float worldHeight = i.worldHeight;
-            
-            
-            half snowDot = max(snowLevel/2, dot(worldNormal, snowUpVector));
-            half snowDotVertex = snowDot;
-            #if _SNOWSIMPLE
-               half ao = 1;
-               half oheight = 0;
-               half smoothness = 0;
-            #else
-               half ao = o.Occlusion;
-               half oheight = o.Height;
-               half smoothness = o.Smoothness;
-            #endif
-               
-            
-            float snowFade = SnowFade(worldHeight, snowMin, snowMax, snowDot, snowDotVertex, snowLevel, puddleHeight);
-
-            #if _SNOWMASK
-               snowFade = min(levelMaxMin.x, snowFade);
-               snowFade = max(levelMaxMin.y, snowFade);
-            #endif
-
-            //MSBRANCHOTHER(snowFade)
+            #if _STREAMHEIGHTFILTER
             {
-               #if _SNOWSTOCHASTIC && _SNOWTRIPLANAR
-
-                  float3 pn = pow(abs(worldNormal), 3);
-                  pn = pn / (pn.x + pn.y + pn.z);
-            
-                  half3 axisSign = sign(worldNormal);
-
-                  float2 uv0 = wuv.zy * axisSign.x;
-                  float2 uv1 = wuv.xz * axisSign.y;
-                  float2 uv2 = wuv.xy * axisSign.z;
-
-                  half4 snowAlb0; half4 snowAlb1; half4 snowAlb2;
-                  half4 snowNsao0; half4 snowNsao1; half4 snowNsao2;
-
-                  SampleSnowStochastic(uv0, wdx.zy, wdy.zy, snowAlb0, snowNsao0);
-                  SampleSnowStochastic(uv1, wdx.xz, wdy.xz, snowAlb1, snowNsao1);
-                  SampleSnowStochastic(uv2, wdx.xy, wdy.xy, snowAlb2, snowNsao2);
-
-                  half4 snowAlb = snowAlb0 * pn.x + snowAlb1 * pn.y + snowAlb2 * pn.z;
-                  half4 snowNsao = snowNsao0 * pn.x + snowNsao1 * pn.y + snowNsao2 * pn.z;
-
-               #elif _SNOWTRIPLANAR
-
-                  float3 pn = pow(abs(worldNormal), 3);
-                  pn = pn / (pn.x + pn.y + pn.z);
-            
-                  half3 axisSign = sign(worldNormal);
-
-                  float2 uv0 = wuv.zy * axisSign.x;
-                  float2 uv1 = wuv.xz * axisSign.y;
-                  float2 uv2 = wuv.xy * axisSign.z;
-                  half4 snowAlb0 = SAMPLE_TEXTURE2D_GRAD(_SnowDiff, sampler_Diffuse, uv0, wdx.zy, wdy.zy);
-                  half4 snowAlb1 = SAMPLE_TEXTURE2D_GRAD(_SnowDiff, sampler_Diffuse, uv1, wdx.xz, wdy.xz);
-                  half4 snowAlb2 = SAMPLE_TEXTURE2D_GRAD(_SnowDiff, sampler_Diffuse, uv2, wdx.xy, wdy.xy);
-                  half4 snowNsao0 = SAMPLE_TEXTURE2D_GRAD(_SnowNormal, sampler_NormalSAO, uv0, wdx.zy, wdy.zy).agrb;
-                  half4 snowNsao1 = SAMPLE_TEXTURE2D_GRAD(_SnowNormal, sampler_NormalSAO, uv1, wdx.xz, wdy.xz).agrb;
-                  half4 snowNsao2 = SAMPLE_TEXTURE2D_GRAD(_SnowNormal, sampler_NormalSAO, uv2, wdx.xy, wdy.xy).agrb;
-                  half4 snowAlb = snowAlb0 * pn.x + snowAlb1 * pn.y + snowAlb2 * pn.z;
-                  half4 snowNsao = snowNsao0 * pn.x + snowNsao1 * pn.y + snowNsao2 * pn.z;
-                  COUNTSAMPLE
-                  COUNTSAMPLE
-                  COUNTSAMPLE
-                  COUNTSAMPLE
-                  COUNTSAMPLE
-                  COUNTSAMPLE
-
-               #elif _SNOWSTOCHASTIC
-                  half4 snowAlb;
-                  half4 snowNsao;
-
-                  SampleSnowStochastic(uv, dx, dy, snowAlb, snowNsao);
-               #else
-                  half4 snowAlb = SAMPLE_TEXTURE2D_GRAD(_SnowDiff, sampler_Diffuse, uv, dx, dy);
-                  half4 snowNsao = SAMPLE_TEXTURE2D_GRAD(_SnowNormal, sampler_NormalSAO, uv, dx, dy).agrb;
-                  COUNTSAMPLE
-                  COUNTSAMPLE
-               #endif
-
-               #if _SNOWDISTANCERESAMPLE
-               {
-                  float fade = saturate ((camDist - _SnowDistanceResampleScaleStrengthFade.z) / _SnowDistanceResampleScaleStrengthFade.w);
-                  fade *= _SnowDistanceResampleScaleStrengthFade.y;
-                  MSBRANCHOTHER(fade)
-                  {
-                     float2 snowResampleUV = uv * _SnowDistanceResampleScaleStrengthFade.x;
-                     float2 rsdx = dx * _SnowDistanceResampleScaleStrengthFade.x;
-                     float2 rsdy = dy * _SnowDistanceResampleScaleStrengthFade.x;
-                     half4 resSnowAlb = SAMPLE_TEXTURE2D_GRAD(_SnowDiff, sampler_Diffuse,  snowResampleUV, rsdx, rsdy);
-                     half4 resSnowNsao = SAMPLE_TEXTURE2D_GRAD(_SnowNormal, sampler_NormalSAO, snowResampleUV, rsdx, rsdy).grab;
-                     COUNTSAMPLE
-                     COUNTSAMPLE
-           
-                     snowAlb.rgb = lerp(snowAlb, resSnowAlb, fade);
-                     snowNsao = lerp(snowNsao, resSnowNsao, fade);
-                  }
-               }
-               #endif
-
-               #if _SNOWNORMALNOISE
-               {
-                  float2 normalUV = uv * _SnowNormalNoiseScaleStrength.x;
-                  half3 noise = UnpackNormal(SAMPLE_TEXTURE2D_GRAD(_SnowNormalNoise, sampler_Diffuse, normalUV, dx * _SnowNormalNoiseScaleStrength.x, dy * _SnowNormalNoiseScaleStrength.x));
-                  COUNTSAMPLE
-                  snowNsao.xy = lerp(snowNsao.xy, BlendNormal2(snowNsao.xy, noise.xy), _SnowNormalNoiseScaleStrength.y);
-               }
-               #endif
-            
-               #if _SNOWFOOTSTEPS
-               {
-                  traxNormal.xy *= _SnowTraxNormalStrength;
-                  float2 fsdx = dx * _SnowTraxUVScales;
-                  float2 fsdy = dy * _SnowTraxUVScales;
-                  traxBuffer = 1 - ((1 - traxBuffer) * _SnowTraxTextureBlend);
-
-                  half4 traxDiffuse = SAMPLE_TEXTURE2D_GRAD(_SnowTrackDiff, sampler_Diffuse, uv * _SnowTraxUVScales, fsdx, fsdy);
-                  half4 traxN = SAMPLE_TEXTURE2D_GRAD(_SnowTrackNSAO, sampler_NormalSAO, uv * _SnowTraxUVScales, fsdx, fsdy).agrb;
-                  COUNTSAMPLE
-                  COUNTSAMPLE
-
-                  traxDiffuse.rgb *= _TraxSnowTint;
-                  snowAlb.rgba = lerp(traxDiffuse, snowAlb.rgba, traxBuffer);
-                  snowNsao.rgba = lerp(traxN + half4(traxNormal.xy, 0, 0), snowNsao.rgba, traxBuffer);
-                  snowAge = lerp(_TraxSnowAge, snowAge, traxBuffer);
-                  snowErosion = lerp(_TraxSnowErosion, snowErosion, traxBuffer);
-                  snowHeight = lerp(_TraxSnowHeight, snowHeight, traxBuffer);
-
-                  snowFade = saturate(snowFade - _TraxSnowRemoval * (1-saturate(traxBuffer)));
-               }
-               #endif
-
-              
-
-               half3 snowNormal = float3(snowNsao.xy * 2 - 1, 1);
-             
-               half height = saturate(oheight - (1.0 - snowHeight));
-               half erosion = saturate(ao * snowErosion);
-               erosion *= erosion;
-               half snowMask = saturate(snowFade - erosion - height);
-               snowMask = snowMask * snowMask * snowMask;
-               half snowAmount = snowMask * saturate(snowDot - (height + erosion) * 0.5);  // up
-               snowAmount = saturate(snowAmount * 8);
-
-               float wetnessMask = saturate((_SnowParams.w * (4.0 * snowFade) - (snowNsao.b) * 0.5));
-                
-               float snowNormalAmount = snowAmount * snowAmount;
-
-               float porosity = saturate((((1.0 - smoothness) - 0.5)) / max(surfPorosity, 0.001));
-               float factor = lerp(1, 0.4, porosity);
-
-               o.Albedo *= lerp(1.0, factor, wetnessMask);
-               o.Normal = lerp(o.Normal, float3(0,0,1), wetnessMask);
-               o.Smoothness = lerp(o.Smoothness, 0.8, wetnessMask);
-
-
-               #if _SNOWSSS
-                  SSSTint = lerp(SSSTint, _SnowSSSTint.rgb, snowNormalAmount);
-                  SSSThickness = lerp(SSSThickness, _SnowSSSTint.a * 2 * snowAlb.a, snowNormalAmount);
-               #endif
-
-               snowAlb.rgb *= _SnowTint.rgb;
-               
-
-               o.Albedo = lerp(o.Albedo, snowAlb.rgb, snowAmount);
-               o.Normal = lerp(o.Normal, snowNormal, snowNormalAmount);
-               o.Smoothness = lerp(o.Smoothness, (snowNsao.b) * snowAge, snowAmount);
-               o.Occlusion = lerp(o.Occlusion, snowNsao.w, snowAmount);
-               o.Height = lerp(o.Height, snowAlb.a, snowAmount);
-               o.Metallic = lerp(o.Metallic, 0.01, snowAmount);
-               float crystals = saturate(0.65 - snowNsao.b);
-               o.Smoothness = lerp(o.Smoothness, crystals * snowAge, snowAmount);
-               
-               #if _SNOWSPARKLE
-               DoSnowSparkle(i, o, i.viewDir, worldPos, worldNormalVertex, snowAmount);
-               #endif
-
-               #if _SNOWRIM
-               DoSnowRim(o, i, snowAmount);
-               #endif
-
-               return snowAmount;
+               float shf = saturate((height - _StreamFades.x) / max(_StreamFades.y - _StreamFades.x, 0.0001));
+               shf *= 1.0 - saturate((height - _StreamFades.z) / max(_StreamFades.w - _StreamFades.z, 0.0001));
+               puddleLevel *= shf;
             }
             #endif
+
+            float waterBlend = saturate((puddleLevel - height) * _StreamBlend);
+            waterBlend *= waterBlend;
+
+            waterNorm.xy *= puddleLevel * waterBlend;
+            float2 offset = lerp(waterNorm.xy, waterNorm.xy * height, _StreamFlowParams.w);
+            offset *= _StreamFlowParams.x;
+            #if !_TRIPLANAR
+            config.uv0.xy += offset;
+            config.uv1.xy += offset;
+            config.uv2.xy += offset;
+            config.uv3.xy += offset;
+            #else
+            tc.uv0[0].xy += offset;
+            tc.uv0[1].xy += offset;
+            tc.uv0[2].xy += offset;
+            tc.uv1[0].xy += offset;
+            tc.uv1[1].xy += offset;
+            tc.uv1[2].xy += offset;
+            tc.uv2[0].xy += offset;
+            tc.uv2[1].xy += offset;
+            tc.uv2[2].xy += offset;
+            tc.uv3[0].xy += offset;
+            tc.uv3[1].xy += offset;
+            tc.uv3[2].xy += offset;
+            #endif
+         }  
+
+
+
+
+         float DoStream(inout MicroSplatLayer o, float2 uv, half porosity, half3 waterNormFoam, 
+            half2 flowDir, half puddleLevel, half foamStrength, half wetTrail,
+            inout half foam)
+         {
+            
+            float waterBlend = saturate((puddleLevel - o.Height) * _StreamBlend);
+            if (waterBlend + wetTrail > 0)
+            {
+               half2 waterNorm = waterNormFoam.xy;
+
+               half pmh = puddleLevel - o.Height;
+               // refactor to compute flow UVs in previous step?
+               float2 foamUV0 = 0;
+               float2 foamUV1 = 0;
+               half foamInterp = 0;
+               Flow(uv * 1.75 + waterNormFoam.xy * waterNormFoam.b, flowDir, _StreamFlowParams.y/3, _StreamFlowParams.z/3, foamUV0, foamUV1, foamInterp);
+               half foam0 = SAMPLE_TEXTURE2D(_StreamNormal, sampler_NormalSAO, foamUV0).b;
+               half foam1 = SAMPLE_TEXTURE2D(_StreamNormal, sampler_NormalSAO, foamUV1).b;
+               COUNTSAMPLE
+               COUNTSAMPLE
+               foam = lerp(foam0, foam1, foamInterp);
+               foam = foam * abs(pmh) + (foam * o.Height);
+               foam *= 1.0 - (saturate(pmh * 1.5));
+               foam *= foam;
+               foam *= _StreamNormalFoam.y * foamStrength;
+
+               
+
+               #if _DYNAMICFLOWS
+                  #if _GLOBALSTREAMS
+                     float streamMax = _Global_StreamMax;
+                  #else
+                     float streamMax = _StreamMax;
+                  #endif
+                  half waterBlend2 = max(waterBlend, saturate((wetTrail * streamMax - o.Height) * _StreamBlend) * 0.85);
+                  return waterBlend2;
+               #endif
+               return waterBlend;   
+            }
             return 0;
          }
 
-         // for object blend shader, must, unfortunately, keep in sync..
-         float DoSnowSimple(Input i, inout MicroSplatLayer o, float2 uv, float3 worldNormal, float3 worldNormalVertex, 
-               float3 worldPos, float puddleHeight, half surfPorosity)
+         #endif
+
+
+         #if _LAVA
+
+         half4 SampleLava(float2 uv, float2 dx, float2 dy)
          {
-            #if _SNOW
-            float2 maskUV = uv;
-            #if _SNOWWORLDSPACEUV
-               uv = worldPos.xz;
+            #if _LAVASTOCHASTIC
+               float2 uv1, uv2, uv3;
+               half3 w;
+               PrepareStochasticUVs(_LavaStochasticSize, uv, uv1, uv2, uv3, w);
+               
+               half4 S1 = SAMPLE_TEXTURE2D_GRAD(_LavaDiffuse, sampler_Diffuse, uv1, dx, dy);
+               half4 S2 = SAMPLE_TEXTURE2D_GRAD(_LavaDiffuse, sampler_Diffuse, uv2, dx, dy);
+               half4 S3 = SAMPLE_TEXTURE2D_GRAD(_LavaDiffuse, sampler_Diffuse, uv3, dx, dy);
+               COUNTSAMPLE
+               COUNTSAMPLE
+               COUNTSAMPLE
+               
+               half3 cw = BaryWeightBlend(w, S1.r, S2.r, S3.r, _LavaStochasticContrast);
+               return S1 * cw.x + S2 * cw.y + S3 * cw.z;
+            #else
+               COUNTSAMPLE
+               return SAMPLE_TEXTURE2D_GRAD(_LavaDiffuse, sampler_Diffuse, uv, dx, dy);
             #endif
-            
-            uv *= _SnowUVScales.xy;
+         }
+
+         float DoLava(inout MicroSplatLayer o, float2 uv, half lavaLevel, half2 flowDir)
+         {
+            uv *= _LavaUVScale;
+            float lvh = lavaLevel - o.Height;
+            float lavaBlend = saturate(lvh * _LavaParams.x);
+
             float2 dx = ddx(uv);
             float2 dy = ddy(uv);
-            
-            #if _USEGLOBALSNOWLEVEL 
-               float snowLevel = _Global_SnowLevel;
-            #else
-               float snowLevel = _SnowAmount;
-            #endif
-
-            #if _USEGLOBALSNOWHEIGHT
-               float snowMin = _Global_SnowMinMaxHeight.x;
-               float snowMax = _Global_SnowMinMaxHeight.y;
-            #else
-               float snowMin = _SnowHeightAngleRange.x;
-               float snowMax = _SnowHeightAngleRange.y;
-            #endif
-
-            half2 levelMaxMin = half2(1,0);
-            #if _SNOWMASK
-               #if _MEGASPLAT
-                  levelMaxMin = i.fx2.yx;
-               #else
-                  levelMaxMin = SAMPLE_TEXTURE2D_GRAD(_SnowMask, shared_linear_clamp_sampler, maskUV, ddx(maskUV), ddy(maskUV));
-               #endif
-            #endif
-
-
-
-            float snowAge = _SnowParams.z;
-            float snowErosion = _SnowParams.y;
-            float snowHeight = _SnowParams.x;
-            
-            float3 snowUpVector = _SnowUpVector;
-            float worldHeight = i.worldHeight;
-            #if _PLANETVECTORS
-               snowUpVector = i.worldUpVector;
-            #endif
-
-            half snowDot = max(snowLevel/2, dot(worldNormal, snowUpVector));
-            half snowDotVertex = max(snowLevel/2, dot(worldNormalVertex, snowUpVector));
-            float snowFade = SnowFade(worldHeight, snowMin, snowMax, snowDot, snowDotVertex, snowLevel, puddleHeight);
-
-
-            MSBRANCHOTHER(snowFade)
+            UNITY_BRANCH
+            if (lavaBlend > 0)
             {
-               
-               half4 snowAlb = SAMPLE_TEXTURE2D_GRAD(_SnowDiff, sampler_Diffuse, uv, dx, dy);
-               half4 snowNsao = SAMPLE_TEXTURE2D_GRAD(_SnowNormal, sampler_NormalSAO, uv, dx, dy).agrb;
-               COUNTSAMPLE
-               COUNTSAMPLE
+               half distortionSize = _LavaParams2.x;
+               half distortionRate = _LavaParams2.y;
+               half distortionScale = _LavaParams2.z;
+               half darkening = _LavaParams2.w;
+               half3 edgeColor = _LavaEdgeColor;
+               half3 lavaColorLow = _LavaColorLow;
+               half3 lavaColorHighlight = _LavaColorHighlight;
 
-               snowAlb.rgb *= _SnowTint.rgb;
 
-               #if _SNOWNORMALNOISE
-               {
-                  float2 normalUV = uv * _SnowNormalNoiseScaleStrength.x;
-                  half3 noise = UnpackNormal(SAMPLE_TEXTURE2D_GRAD(_SnowNormalNoise, sampler_Diffuse, normalUV, dx * _SnowNormalNoiseScaleStrength.x, dy * _SnowNormalNoiseScaleStrength.x));
+               half lavaSpeed = _LavaParams.z;
+               half lavaInterp = _LavaParams.w;
 
-                  snowNsao.xy = lerp(snowNsao.xy, BlendNormal2(snowNsao.xy, noise.xy), _SnowNormalNoiseScaleStrength.y);
-               }
+               float2 uv1 = 0;
+               float2 uv2 = 0;
+               half interp = 0;
+               half drag = lerp(0.1, 1, saturate(lvh));
+               Flow(uv, flowDir, lavaInterp, lavaSpeed * drag, uv1, uv2, interp);
 
-               #endif
-               
-               half3 snowNormal = float3(snowNsao.xy * 2 - 1, 1);
-               half ao = o.Occlusion;
+               float2 dist_uv1;
+               float2 dist_uv2;
+               half dist_interp;
+               Flow(uv * distortionScale, flowDir, distortionRate, distortionSize, dist_uv1, dist_uv2, dist_interp);
 
-               half height = saturate(o.Height - (1-snowHeight));
-               half erosion = saturate(ao * snowErosion);
-               erosion *= erosion;
-               half snowMask = saturate(snowFade - erosion - height);
-               snowMask = snowMask * snowMask * snowMask;
-               half snowAmount = snowMask * saturate(snowDot - (height + erosion) * 0.5);  // up
-               snowAmount = saturate(snowAmount * 8);
+               half4 lavaDist = lerp(SampleLava(dist_uv1*0.51, dx, dy), SampleLava(dist_uv2, dx, dy), dist_interp);
+               half4 dist = lavaDist * (distortionSize * 2) - distortionSize;
 
-               float wetnessMask = saturate((_SnowParams.w * (4.0 * snowFade) - (snowNsao.b) * 0.5));
+               half4 lavaTex = lerp(SampleLava(uv1*1.1 + dist.xy, dx, dy), SampleLava(uv2 + dist.zw, dx, dy), interp);
 
-               float snowNormalAmount = snowAmount * snowAmount;
+               // base lava color, based on heights
+               half3 lavaColor = lerp(lavaColorLow, lavaColorHighlight, lavaTex.b);
 
-               float porosity = saturate((((1.0 - o.Smoothness) - 0.5)) / max(surfPorosity, 0.001));
-               float factor = lerp(1, 0.4, porosity);
+               // edges
+               float lavaBlendWide = saturate((lavaLevel - o.Height) * _LavaParams.x * 0.5);
+               float edge = saturate((1 - lavaBlendWide) * 3);
 
-               o.Albedo *= lerp(1.0, factor, wetnessMask);
-               o.Normal = lerp(o.Normal, float3(0,0,1), wetnessMask);
-               o.Smoothness = lerp(o.Smoothness, 0.8, wetnessMask);
+               // darkening
+               darkening = saturate(lavaTex.a * darkening * saturate(lvh*2));
+               lavaColor *= 1.0 - darkening;
+               // edges
+               lavaColor = lerp(lavaColor, edgeColor, edge);
 
-         
-               o.Albedo = lerp(o.Albedo, snowAlb.rgb, snowAmount);
-               o.Normal = lerp(o.Normal, snowNormal, snowNormalAmount);
-               o.Smoothness = lerp(o.Smoothness, (snowNsao.b) * snowAge, snowAmount);
-               o.Occlusion = lerp(o.Occlusion, snowNsao.w, snowAmount);
-               o.Height = lerp(o.Height, snowAlb.a, snowAmount);
-               o.Metallic = lerp(o.Metallic, 0.01, snowAmount);
-               float crystals = saturate(0.65 - snowNsao.b);
-               o.Smoothness = lerp(o.Smoothness, crystals * snowAge, snowAmount);
+               o.Albedo = lerp(o.Albedo, lavaColor, lavaBlend);
+               o.Normal.xy = lerp(o.Normal.xy, lavaTex.xy * 2 - 1, lavaBlend);
+               o.Smoothness = lerp(o.Smoothness, 0.3, lavaBlend * darkening);
 
-               #if _SNOWSPARKLE
-               DoSnowSparkle(i, o, i.viewDir, worldPos, worldNormalVertex, snowAmount);
-               #endif
-
-               #if _SNOWRIM
-               DoSnowRim(o, i, snowAmount);
-               #endif
-
-               return snowAmount;
-            
+               half3 emis = lavaColor * lavaBlend;
+               o.Emission = lerp(o.Emission, emis * _LavaEmissiveMult, lavaBlend);
+               // bleed
+               o.Emission += edgeColor * 0.3 * (saturate((lavaLevel*1.2 - o.Height) * _LavaParams.x) - lavaBlend);
+               return saturate(lavaBlend*3);
             }
-            #endif
             return 0;
          }
 
+
+         #endif
+
+
+
+
+
+         float DoStreams(Input i, inout MicroSplatLayer o, half4 fxLevels, float2 uv, half porosity, 
+            half3 waterNormalFoam, float3 worldNormalVertex, half streamFoam, half wetLevel, half burnLevel, float3 worldPos)
+         {
+            float pud = 0;
+            float wetness = 0;
+            half foam = 0;
+            half streamPud = 0;
+
+            #if _WETNESS
+            wetness = DoWetness(o, fxLevels.x, porosity, worldPos);
+            #endif
+
+
+            #if _PUDDLES
+            pud = DoPuddles(o, fxLevels.g, porosity, uv);
+            #endif
+
+            
+
+            #if _STREAMS || _LAVA
+            float2 flowDir = FlowVecFromWNV(i, uv, worldNormalVertex);
+            #endif
+
+            
+            #if _STREAMS
+               #if _STREAMHEIGHTFILTER
+               {
+                  float shf = saturate((worldPos.y - _StreamFades.x) / max(_StreamFades.y - _StreamFades.x, 0.0001));
+                  shf *= 1.0 - saturate((worldPos.y - _StreamFades.z) / max(_StreamFades.w - _StreamFades.z, 0.0001));
+                  fxLevels.z *= shf;
+                  wetLevel *= shf;
+               }
+               #endif
+
+            half foamStr = min(length(worldNormalVertex.xz) * 18, 1) * streamFoam;
+            streamPud = DoStream(o, uv, porosity, waterNormalFoam, flowDir, fxLevels.z, foamStr, wetLevel, foam);
+            o.Albedo = lerp(o.Albedo, o.Albedo * _StreamTint * 2.0, streamPud);
+            //pud -= streamPud;
+            #endif
+
+            #if _WETNESS || _PUDDLES || _STREAMS
+               half3 waterNorm = half3(0,0,1);
+               half3 wetAlbedo = o.Albedo;
+               half wetSmoothness = o.Smoothness;
+
+               float wetBlend = max(max(pud, wetness), streamPud);
+
+               WaterBRDF(wetAlbedo, wetSmoothness, o.Metallic, wetBlend, porosity);
+               
+               wetAlbedo += foam;
+               wetSmoothness -= foam;
+
+               float foamNormStr = 1; 
+               #if _STREAMS
+                  foamNormStr = _StreamNormalFoam.x;
+               #endif
+
+               #if _RAINDROPS
+               waterNorm.xy = DoRain(waterNorm.xy, uv) * pud;
+               #endif
+
+               
+
+
+               o.Normal = lerp(o.Normal, waterNorm, pud * foamNormStr);
+               o.Occlusion = lerp(o.Occlusion, 1, wetBlend);
+               o.Smoothness = lerp(o.Smoothness, wetSmoothness, wetBlend);
+               o.Albedo = lerp(o.Albedo, wetAlbedo, wetBlend);
+
+            #endif
+
+
+            #if _LAVA
+               #if _LAVAHEIGHTFILTER
+               {
+                  float lhf = saturate((worldPos.y - _LavaFades.x) / max(_LavaFades.y - _LavaFades.x, 0.0001));
+                  lhf *= 1.0 - saturate((worldPos.y - _LavaFades.z) / max(_LavaFades.w - _LavaFades.z, 0.0001));
+                  fxLevels.a *= lhf;
+                  burnLevel *= lhf;
+               }
+               #endif
+
+            float burn = 1 - burnLevel * 0.85;
+            o.Albedo *= burn;
+            o.Smoothness *= burn;
+            pud = max(streamPud, DoLava(o, uv, fxLevels.a, flowDir));
+            #endif
+
+            pud = max(max(pud, streamPud), wetness);
+            #if _WETNESSMASKSNOW
+            pud = max(pud, 1-fxLevels.x);
+            #endif
+
+            return pud;
+         }
 
 
       void SampleAlbedo(inout Config config, inout TriplanarConfig tc, inout RawSamples s, MIPFORMAT mipLevel, half4 weights)
