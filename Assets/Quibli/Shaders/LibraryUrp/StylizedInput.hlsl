@@ -4,7 +4,11 @@
 #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
 #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/SurfaceInput.hlsl"
 
+#if _FORWARD_PLUS
+CBUFFER_START(UnityPerMaterialNoBatching)
+#else
 CBUFFER_START(UnityPerMaterial)
+#endif
 
 // --- Compatibility with Simple Lit.
 float4 _BaseMap_ST;

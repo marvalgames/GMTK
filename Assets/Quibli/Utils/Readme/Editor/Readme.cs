@@ -16,7 +16,7 @@ namespace Quibli {
 [ExecuteAlways]
 public class Readme : ScriptableObject {
     [NonSerialized]
-    public readonly string AssetVersion = "2.3.2";
+    public readonly string AssetVersion = "2.4.0";
     [NonSerialized]
     public bool? UrpInstalled;
     [NonSerialized]
@@ -28,9 +28,6 @@ public class Readme : ScriptableObject {
     public string UnityVersion = Application.unityVersion;
 
     private const string UrpPackageID = "com.unity.render-pipelines.universal";
-
-    // bd41cdc8-9f79-4d72-82b6-95d4f615811a
-    // 95b02117-de66-49f0-91e7-cc5f4291cf90
 
     public void Refresh() {
         UrpInstalled = false;

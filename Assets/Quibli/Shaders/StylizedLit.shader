@@ -97,6 +97,11 @@
         }
         LOD 300
 
+    	HLSLINCLUDE
+    	// #define DR_DOTS_INSTANCING_ON // Uncomment to enable DOTS instancing
+    	#include "Packages/com.unity.render-pipelines.core/ShaderLibrary/Version.hlsl"
+    	ENDHLSL
+
         Pass
         {
             Name "ForwardLit"
@@ -131,37 +136,50 @@
             #pragma shader_feature_local_fragment _EMISSION
             #pragma shader_feature_local _RECEIVE_SHADOWS_OFF
 
-
             // -------------------------------------
             // Universal Pipeline keywords
+            #if VERSION_GREATER_EQUAL(11, 0)
             #pragma multi_compile _ _MAIN_LIGHT_SHADOWS _MAIN_LIGHT_SHADOWS_CASCADE _MAIN_LIGHT_SHADOWS_SCREEN
+            #else
+            #pragma multi_compile _ _MAIN_LIGHT_SHADOWS
+            #pragma multi_compile _ _MAIN_LIGHT_SHADOWS_CASCADE
+            #endif
             #pragma multi_compile _ _ADDITIONAL_LIGHTS_VERTEX _ADDITIONAL_LIGHTS
-            #pragma multi_compile_fragment _ _ADDITIONAL_LIGHT_SHADOWS
-            #pragma multi_compile_fragment _ _SHADOWS_SOFT
             #pragma multi_compile _ LIGHTMAP_SHADOW_MIXING
             #pragma multi_compile _ SHADOWS_SHADOWMASK
+            #pragma multi_compile_fragment _ _ADDITIONAL_LIGHT_SHADOWS
+            #pragma multi_compile_fragment _ _SHADOWS_SOFT
             #pragma multi_compile_fragment _ _SCREEN_SPACE_OCCLUSION
+            #if VERSION_GREATER_EQUAL(12, 0)
             #pragma multi_compile_fragment _ _DBUFFER_MRT1 _DBUFFER_MRT2 _DBUFFER_MRT3
             #pragma multi_compile_fragment _ _LIGHT_LAYERS
             #pragma multi_compile_fragment _ _LIGHT_COOKIES
             #pragma multi_compile _ _CLUSTERED_RENDERING
+            #endif
+            #if UNITY_VERSION >= 202220
             #pragma multi_compile _ _FORWARD_PLUS
             #pragma multi_compile_fragment _ _WRITE_RENDERING_LAYERS
+            #endif
 
             // -------------------------------------
             // Unity defined keywords
             #pragma multi_compile _ DIRLIGHTMAP_COMBINED
             #pragma multi_compile _ LIGHTMAP_ON
             #pragma multi_compile_fog
+            #if UNITY_VERSION >= 202220
             #pragma multi_compile _ DYNAMICLIGHTMAP_ON
             #pragma multi_compile_fragment _ DEBUG_DISPLAY
             #pragma multi_compile_fragment _ LOD_FADE_CROSSFADE
+            #endif
 
             //--------------------------------------
             // GPU Instancing
             #pragma multi_compile_instancing
             #pragma instancing_options renderinglayer
-            #pragma multi_compile _ DOTS_INSTANCING_ON
+            #if defined(DR_DOTS_INSTANCING_ON)
+            #pragma target 4.5							// Uncomment to enable DOTs instancing
+            #pragma multi_compile _ DOTS_INSTANCING_ON	// Uncomment to enable DOTs instancing
+            #endif
 
             #define BUMP_SCALE_NOT_SUPPORTED 1
             #define REQUIRES_WORLD_SPACE_TANGENT_INTERPOLATOR 1
@@ -294,7 +312,10 @@
             //--------------------------------------
             // GPU Instancing
             #pragma multi_compile_instancing
-            #pragma multi_compile _ DOTS_INSTANCING_ON
+            #if defined(DR_DOTS_INSTANCING_ON)
+            #pragma target 4.5							// Uncomment to enable DOTs instancing
+            #pragma multi_compile _ DOTS_INSTANCING_ON	// Uncomment to enable DOTs instancing
+            #endif
 
             // -------------------------------------
             // Universal Pipeline keywords
@@ -357,7 +378,10 @@
             // GPU Instancing
             #pragma multi_compile_instancing
             #pragma instancing_options renderinglayer
-            #pragma multi_compile _ DOTS_INSTANCING_ON
+            #if defined(DR_DOTS_INSTANCING_ON)
+            #pragma target 4.5							// Uncomment to enable DOTs instancing
+            #pragma multi_compile _ DOTS_INSTANCING_ON	// Uncomment to enable DOTs instancing
+            #endif
 
             #pragma vertex LitPassVertexSimple
             #pragma fragment LitPassFragmentSimple
@@ -435,7 +459,10 @@
             //--------------------------------------
             // GPU Instancing
             #pragma multi_compile_instancing
-            #pragma multi_compile _ DOTS_INSTANCING_ON
+            #if defined(FLAT_KIT_DOTS_INSTANCING_ON)
+            #pragma target 4.5							// Uncomment to enable DOTs instancing
+            #pragma multi_compile _ DOTS_INSTANCING_ON	// Uncomment to enable DOTs instancing
+            #endif
 
             #include "LibraryUrp/StylizedInput.hlsl"
             #include "Packages/com.unity.render-pipelines.universal/Shaders/DepthNormalsPass.hlsl"

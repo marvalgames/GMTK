@@ -138,8 +138,25 @@ half4 UniversalFragment_DSTRM(InputData inputData, SurfaceData surfaceData, floa
 
 #ifdef _ADDITIONAL_LIGHTS
     const uint pixelLightCount = GetAdditionalLightsCount();
-    for (uint lightIndex = 0u; lightIndex < pixelLightCount; ++lightIndex)
+
+    #if USE_FORWARD_PLUS
+    for (uint lightIndex = 0; lightIndex < min(URP_FP_DIRECTIONAL_LIGHTS_COUNT, MAX_VISIBLE_LIGHTS); lightIndex++)
     {
+        FORWARD_PLUS_SUBTRACTIVE_LIGHT_CHECK
+
+        Light light = GetAdditionalLight(lightIndex, inputData.positionWS, shadowMask);//, aoFactor);
+        StylizeLight(light);
+
+        #ifdef _LIGHT_LAYERS
+        if (IsMatchingLightLayer(light.layerMask, meshRenderingLayers))
+            #endif
+        {
+            color += LightingPhysicallyBased_DSTRM(light, inputData, albedo, detail);
+        }
+    }
+    #endif
+    
+    LIGHT_LOOP_BEGIN(pixelLightCount)
         Light light = GetAdditionalLight(lightIndex, inputData.positionWS, shadowMask);
 
 #if defined(_SCREEN_SPACE_OCCLUSION)
@@ -147,8 +164,14 @@ half4 UniversalFragment_DSTRM(InputData inputData, SurfaceData surfaceData, floa
 #endif
 
         StylizeLight(light);
-        color += LightingPhysicallyBased_DSTRM(light, inputData, albedo, detail);
-    }
+    
+        #ifdef _LIGHT_LAYERS
+        if (IsMatchingLightLayer(light.layerMask, meshRenderingLayers))
+            #endif
+        {
+            color += LightingPhysicallyBased_DSTRM(light, inputData, albedo, detail);
+        }
+    LIGHT_LOOP_END
 #endif
 
 #ifdef _ADDITIONAL_LIGHTS_VERTEX
