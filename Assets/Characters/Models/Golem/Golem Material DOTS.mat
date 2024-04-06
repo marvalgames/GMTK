@@ -72,6 +72,7 @@ Material:
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords:
   - DR_OUTLINE_ON
+  - DR_RIM_ON
   - DR_SPECULAR_ON
   - _DETAILMAPBLENDINGMODE_MULTIPLY
   - _EMISSION
@@ -82,7 +83,7 @@ Material:
   m_LightmapFlags: 0
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
-  m_CustomRenderQueue: -1
+  m_CustomRenderQueue: 2000
   stringTagMap:
     IgnoreProjection: False
     RenderType: Opaque
@@ -237,7 +238,7 @@ Material:
     - _Blend: 0
     - _BlendModePreserveSpecular: 1
     - _BumpScale: 1
-    - _CameraDistanceImpact: 0.5
+    - _CameraDistanceImpact: 0
     - _ClearCoatMask: 0
     - _ClearCoatSmoothness: 0
     - _Compa: 4
@@ -341,11 +342,11 @@ Material:
     - _OcclusionStrength: 1
     - _Opacity: 1
     - _Oper: 0
-    - _OutlineDepthOffset: 0.5
+    - _OutlineDepthOffset: 0
     - _OutlineEnabled: 1
     - _OutlineExtrudeMethod: 0
     - _OutlineScale: 1
-    - _OutlineWidth: 0.5
+    - _OutlineWidth: 2
     - _OutlineWidthAffectedByViewDistance: 0
     - _OutlineZPostionInCamera: 0
     - _OverallShadowColorPower: 1
@@ -365,7 +366,7 @@ Material:
     - _RefVal: 0
     - _ReflectionIntensity: 0
     - _ReflectionRoughtness: 0
-    - _RimEnabled: 0
+    - _RimEnabled: 1
     - _RimLigInt: 1
     - _RimLightColorPower: 10
     - _RimLightInLight: 1
@@ -433,8 +434,8 @@ Material:
     - _CustomLightDirection: {r: 0, g: 0, b: 10, a: 0}
     - _DetailMapColor: {r: 1, g: 1, b: 1, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
-    - _FlatRimColor: {r: 1, g: 1, b: 1, a: 0.85056}
-    - _FlatSpecularColor: {r: 0.5372549, g: 0.46274513, b: 0.6313726, a: 1}
+    - _FlatRimColor: {r: 1, g: 0.83137256, b: 0.6392157, a: 1}
+    - _FlatSpecularColor: {r: 1, g: 1, b: 1, a: 1}
     - _GlossColor: {r: 1, g: 1, b: 1, a: 1}
     - _Glow_Color: {r: 1, g: 1, b: 1, a: 1}
     - _HighlightColor: {r: 1, g: 1, b: 1, a: 1}
