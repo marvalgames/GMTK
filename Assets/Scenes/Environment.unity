@@ -6305,6 +6305,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Tin
       objectReference: {fileID: 0}
+    - target: {fileID: 1287192567876288169, guid: e0b7d80132c854349a4631dc28e62f72, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1915954530554061843, guid: e0b7d80132c854349a4631dc28e62f72, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -7641,6 +7645,67 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
+--- !u!1001 &126721914
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 7202620333143228442}
+    m_Modifications:
+    - target: {fileID: -8679921383154817045, guid: 9a3034f99851d1946bb94226109d7e70, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 9a3034f99851d1946bb94226109d7e70, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 9a3034f99851d1946bb94226109d7e70, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 9a3034f99851d1946bb94226109d7e70, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 9a3034f99851d1946bb94226109d7e70, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 9a3034f99851d1946bb94226109d7e70, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 9a3034f99851d1946bb94226109d7e70, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 9a3034f99851d1946bb94226109d7e70, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 9a3034f99851d1946bb94226109d7e70, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 9a3034f99851d1946bb94226109d7e70, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 9a3034f99851d1946bb94226109d7e70, type: 3}
+      propertyPath: m_Name
+      value: Troll
+      objectReference: {fileID: 0}
+    - target: {fileID: 5866666021909216657, guid: 9a3034f99851d1946bb94226109d7e70, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 9a3034f99851d1946bb94226109d7e70, type: 3}
 --- !u!4 &130331361 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 5022024387123991257, guid: e09e3e3c1165f0e498155da113b6a502, type: 3}
@@ -146798,6 +146863,11 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 2741434915399858650, guid: e09e3e3c1165f0e498155da113b6a502, type: 3}
   m_PrefabInstance: {fileID: 719077414}
   m_PrefabAsset: {fileID: 0}
+--- !u!4 &1859280020 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 9a3034f99851d1946bb94226109d7e70, type: 3}
+  m_PrefabInstance: {fileID: 126721914}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1864077780
 GameObject:
   m_ObjectHideFlags: 0
@@ -181602,7 +181672,7 @@ Animator:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8653580133806850404}
   m_Enabled: 1
-  m_Avatar: {fileID: 9000000, guid: c3469d98f8116b34799e0b4cae33b844, type: 3}
+  m_Avatar: {fileID: 9000000, guid: 9a3034f99851d1946bb94226109d7e70, type: 3}
   m_Controller: {fileID: 9100000, guid: 477dd56a51a3d384b971af3e1e994cb4, type: 2}
   m_CullingMode: 2
   m_UpdateMode: 1
@@ -187579,6 +187649,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 1859280020}
   - {fileID: 856542950}
   - {fileID: 1105377514}
   - {fileID: 1105297753}
