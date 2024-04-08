@@ -2831,6 +2831,7 @@ MonoBehaviour:
   ExposeShape: 1
   FieldType: 0
   DefaultFieldSetup: {fileID: 0}
+  DefaultPrefab: {fileID: 0}
   Instances: 1
   ExposeInstanceCount: 0
   DisableCollision: 0
@@ -5490,6 +5491,7 @@ MonoBehaviour:
     Switch_ReturnOnlyFieldPlanners: 0
     Switch_ReturnOnlyCheckers: 0
     Switch_DontUsePlannerForCheckerReference: 0
+  PositionsMode: 0
   SingleStepPath:
     ParentNodeID: -2147483644
     PortID: 5
@@ -5523,6 +5525,7 @@ MonoBehaviour:
     SeparateSelfYCells: 1
     SeparateCollisionY: {x: 0, y: 0}
     SphericalDistanceMeasuring: 0
+    OnAnyContact: 0
     PrioritizePerpendicular: 0
     PrioritizeTargetYLevel: 1
     ForceStartPathOnSide: 0
@@ -5538,6 +5541,9 @@ MonoBehaviour:
     DontAllowFinishDist: 0
     DontAllowStartToo: 0
     DiscardIfAligning: 0
+    ExistingCellsCostMultiplier: 1
+    SelfCellsExtraSearchRange: 1
+    PathFindFocusLevel: 1
     DrawCategory: 0
     Directions: []
 --- !u!114 &3804263391844848324
@@ -5727,6 +5733,7 @@ MonoBehaviour:
   ExposeShape: 1
   FieldType: 0
   DefaultFieldSetup: {fileID: 0}
+  DefaultPrefab: {fileID: 0}
   Instances: 1
   ExposeInstanceCount: 0
   DisableCollision: 0
@@ -5904,6 +5911,7 @@ MonoBehaviour:
   ExposeShape: 1
   FieldType: 0
   DefaultFieldSetup: {fileID: 0}
+  DefaultPrefab: {fileID: 0}
   Instances: 5
   ExposeInstanceCount: 1
   DisableCollision: 0
