@@ -66,6 +66,8 @@ namespace FIMSpace.Generating
 
         public List<PathStep> Directions = new List<PathStep>();
 
+        /// <summary> start checker, current cell, target checker, target step cell, current cost </summary>
+        public System.Func<CheckerField3D, FieldCell, CheckerField3D, FieldCell, float> StepCostAction;
 
 
         [System.Serializable]

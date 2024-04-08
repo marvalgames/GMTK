@@ -1,0 +1,1295 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &-7812384923116168047
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 671fd9c659a53a04eb310656f11c9125, type: 3}
+  m_Name: Walls
+  m_EditorClassIdentifier: 
+  TemporaryContainer: {fileID: 0}
+  Enabled: 1
+  ModTag: 
+  DrawMeshAndBox: 0
+  Combine: 0
+  RunEmittersIfContains: 0
+  DrawSetupFor: 0
+  OStamp: {fileID: 0}
+  DrawObjectStamps: 1
+  OMultiStamp: {fileID: 0}
+  PrefabsList: []
+  DrawMultiObjectStamps: 1
+  Spawners:
+  - Enabled: 1
+    Name: Walls
+    SpawnerTag: 
+    StampPrefabID: -2
+    Parent: {fileID: -7812384923116168047}
+    Rules:
+    - {fileID: 4908545432768298016}
+    - {fileID: 706773794362723969}
+    Mode: 0
+    CellCheckMode: 0
+    _Editor_SpawnerAdvancedOptionsFoldout: 0
+    OnScalledGrid: 0
+    Repeat: 1
+    DontInheritRotations: 0
+    SwitchSpawnedToStatic: 0
+    MultipleToSpawn: 0
+    UseGlobalRules: 1
+    UseParentPackageRules: 1
+    _wasEnablingGlobalRules: 1
+    ScaleAccess: 1
+    DisplayPreviewGUI: 1
+    IsSubSpawner: 0
+    _EditorDisplaySpawnerHeader: 1
+  - Enabled: 1
+    Name: Wall corner
+    SpawnerTag: 
+    StampPrefabID: -2
+    Parent: {fileID: -7812384923116168047}
+    Rules:
+    - {fileID: -316431007140119108}
+    - {fileID: 5589357810524001848}
+    Mode: 0
+    CellCheckMode: 0
+    _Editor_SpawnerAdvancedOptionsFoldout: 0
+    OnScalledGrid: 0
+    Repeat: 1
+    DontInheritRotations: 0
+    SwitchSpawnedToStatic: 0
+    MultipleToSpawn: 0
+    UseGlobalRules: 1
+    UseParentPackageRules: 1
+    _wasEnablingGlobalRules: 1
+    ScaleAccess: 1
+    DisplayPreviewGUI: 1
+    IsSubSpawner: 0
+    _EditorDisplaySpawnerHeader: 1
+  SubSpawners: []
+  VariantOf: {fileID: 0}
+  _editor_drawStamp: 0
+  _editor_drawSpawners: 1
+  _editor_drawGlobalRules: 0
+  _editor_drawModPackRules: 0
+  _editor_shareSelected: 1
+  ParentPreset: {fileID: 0}
+  ParentPack: {fileID: 4768698145432227629}
+--- !u!114 &-7162992881280907997
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2c2dce51e0707d148a013ced427f44c0, type: 3}
+  m_Name: SR_VolumeIndicator-[Roof]
+  m_EditorClassIdentifier: 
+  Logic: 0
+  Negate: 0
+  Global: 0
+  Enabled: 1
+  Ignore: 0
+  _editor_drawRule: 1
+  CellAllow: 1
+  AllConditionsMet: 1
+  IndicatorID: Roof 1
+--- !u!114 &-4879239946156353202
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9e735e11b729ebf4aa0216397033ddfe, type: 3}
+  m_Name: SR_Comment-[Roof]
+  m_EditorClassIdentifier: 
+  Logic: 0
+  Negate: 0
+  Global: 0
+  Enabled: 1
+  Ignore: 1
+  _editor_drawRule: 0
+  CellAllow: 0
+  AllConditionsMet: 1
+  Info: Defining bounding points for the roof
+  CommentInHeader: 1
+  Padding: {x: 8, y: 8}
+--- !u!114 &-1094387411647889654
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3ea731bcdcafc6441aa5eca1daa55544, type: 3}
+  m_Name: SR_SetMaterial-[Roof]
+  m_EditorClassIdentifier: 
+  Logic: 0
+  Negate: 0
+  Global: 0
+  Enabled: 1
+  Ignore: 0
+  _editor_drawRule: 1
+  CellAllow: 1
+  AllConditionsMet: 1
+  NewMaterial: {fileID: 2100000, guid: 25c5f711d727daf46ae004956f91122f, type: 2}
+  MatVariable:
+    name: 
+    requiredType: 3
+    Tooltip: 
+  ReplaceOnly: {fileID: 0}
+  ReplaceOnlyFirst: 0
+--- !u!114 &-673240641028983718
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4c5c2bdc91a89cd43ab74a56a02d5c5b, type: 3}
+  m_Name: SR_RoofSideGenerator-[Roof]
+  m_EditorClassIdentifier: 
+  Logic: 0
+  Negate: 0
+  Global: 0
+  Enabled: 1
+  Ignore: 0
+  _editor_drawRule: 1
+  CellAllow: 0
+  AllConditionsMet: 1
+  GetIndicatorID: Roof 1
+  RoofHeight: 3
+  RoofHeightVariable:
+    name: 
+    requiredType: 1
+    Tooltip: 
+  RoofCenterOffset: 0
+  RoofCenterVariable:
+    name: 
+    requiredType: 1
+    Tooltip: 
+  Rotate90: 0
+  OptionalSetup: {fileID: 0}
+  TargetMaterial: {fileID: 0}
+  UVTiling: {x: 4, y: 4}
+  GenerateFirstSide: 1
+  GenerateSecondSide: 1
+--- !u!114 &-316431007140119108
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 893e62798003cfc4ba6de159ef003bf2, type: 3}
+  m_Name: SR_WallPlacer-[Walls](Clone)
+  m_EditorClassIdentifier: 
+  Logic: 0
+  Negate: 0
+  Global: 0
+  Enabled: 1
+  Ignore: 0
+  _editor_drawRule: 1
+  CellAllow: 1
+  AllConditionsMet: 1
+  Module: 3
+  CornerMode: 0
+  CornerMode45: 0
+  SpawnOnEachSide: 1
+  UseYLevel: -1
+  AutoRemoveOverlaps: 1
+  SetGhosts: 0
+  OverlapDetectMode: 0
+  Version2: 0
+  ScaleBounds: 0.99
+  Padding: 0
+  YawOffset: 0
+  DirectOffset: {x: -0.5, y: 0, z: -0.5}
+  OffsetMode: 1
+  IgnoreOtherMods: 1
+  DontCheckAdditionals: 0
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3b6c361108247f045b5087f48c0c7951, type: 3}
+  m_Name: FS_RoofVolumeSpawner
+  m_EditorClassIdentifier: 
+  CellSize: 2
+  NonUniformSize: 0
+  NonUniformCellSize: {x: 2, y: 2, z: 2}
+  InfoText: Basic example of Volume Spawner node
+  Variables:
+  - Name: Spawn Propability Multiplier
+    v3Val: {x: 1, y: 0, z: 0}
+    colVal: {r: 0, g: 0, b: 0, a: 0}
+    str: 
+    mat: {fileID: 0}
+    gameObj: {fileID: 0}
+    curve:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    unityObj: {fileID: 0}
+    helper: {x: 0, y: 5, z: 0}
+    additionalHelperRef: {fileID: 0}
+    ValueType: 1
+    helpForFieldCommand: 0
+    displayOnScene: 0
+    allowTransformFollow: 0
+    FloatSwitch: 0
+  - Name: Spawn Count Multiplier
+    v3Val: {x: 1, y: 0, z: 0}
+    colVal: {r: 0, g: 0, b: 0, a: 0}
+    str: 
+    mat: {fileID: 0}
+    gameObj: {fileID: 0}
+    curve:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    unityObj: {fileID: 0}
+    helper: {x: 0, y: 5, z: 0}
+    additionalHelperRef: {fileID: 0}
+    ValueType: 1
+    helpForFieldCommand: 0
+    displayOnScene: 0
+    allowTransformFollow: 0
+    FloatSwitch: 0
+  DoorsModificator: {fileID: 11400000, guid: 7500e28d48a8ac44da90dfc8719e91ef, type: 2}
+  EraseWallModificator: {fileID: 11400000, guid: c5bd286613ebcb24c932c8d5e7f79f9b,
+    type: 2}
+  CellsInstructions:
+  - Title: Door Hole
+    InstructionType: 1
+    TargetModification: {fileID: 11400000, guid: 7500e28d48a8ac44da90dfc8719e91ef,
+      type: 2}
+    Tags: Props
+    InstructionArgument: 
+    Foldout: 1
+    extraMod: {fileID: 0}
+    extraPack: {fileID: 0}
+  - Title: Clear Wall
+    InstructionType: 3
+    TargetModification: {fileID: 11400000, guid: c5bd286613ebcb24c932c8d5e7f79f9b,
+      type: 2}
+    Tags: 
+    InstructionArgument: 
+    Foldout: 1
+    extraMod: {fileID: 0}
+    extraPack: {fileID: 0}
+  RootPack: {fileID: 4768698145432227629}
+  UtilityModificators: []
+  ModificatorPacks:
+  - {fileID: 4768698145432227629}
+  Ignores: []
+  DontSpawnOn: 
+  SelfInjections: []
+  disabledMods: []
+  CustomPostEvents: []
+  AddReflectionProbes: 0
+  MainReflectionSettings: {fileID: 11400000, guid: dabe448206028124294db7edb02eed3f,
+    type: 2}
+  AddMultipleProbes: 0
+  SmallerReflSettings: {fileID: 11400000, guid: 290a908b3df7c6a4a84c21c932841cde,
+    type: 2}
+  MiniReflSettings: {fileID: 11400000, guid: b243a7973537dbf4faacf7bbda74dada, type: 2}
+  SmallerReflLowerSpaceThan: 4
+  LimitSingleProbeSize: 0
+  TriggerColliderGeneration: 0
+  TriggerGenSettings:
+    TriggersLayer: 0
+    ScaleupTriggers: 1
+    FillHeight: 1
+    MaxCellChecks: 10
+    JoinBounds: 1
+    GenerateRelations: 1
+    GroupUpToSize: 8
+    MaxGroupDistance: 8
+--- !u!114 &706773794362723969
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e38da0f7b84c8c4409da4c496b12b24f, type: 3}
+  m_Name: SR_TileDesigner-[Walls]
+  m_EditorClassIdentifier: 
+  Logic: 0
+  Negate: 0
+  Global: 0
+  Enabled: 1
+  Ignore: 0
+  _editor_drawRule: 1
+  CellAllow: 1
+  AllConditionsMet: 1
+  Design:
+    Static: 0
+    Tag: Untagged
+    Layer: 0
+    DefaultMaterial: {fileID: 2100000, guid: 85210dd3f8886ca41b6e10c207b404a1, type: 2}
+    _editor_ToAttach: []
+    _string_ToAttach: []
+    SendMessages: []
+    AddRigidbody: 0
+    IsKinematic: 1
+    RigidbodyMass: 10
+    CollidersMaterial: {fileID: 0}
+    ColliderMode: 5
+    ScaleColliders: 1
+    ConvexCollider: 0
+    MeshColliderReduction: 0
+    ExpandThinCollider: {x: 0, y: 0, z: 0}
+    LatestGeneratedMeshes:
+    - {fileID: 0}
+    LatestGeneratedMeshesMaterials:
+    - {fileID: 2100000, guid: 85210dd3f8886ca41b6e10c207b404a1, type: 2}
+    _LatestGen_Meshes: 1
+    _LatestGen_Vertices: 12
+    _LatestGen_Tris: 10
+    _LatestGen_Bounds:
+      m_Center: {x: 0, y: 1.3, z: 0.044573642}
+      m_Extent: {x: 1, y: 1.3, z: 0.044573642}
+    DesignName: Walls
+    TileMeshes:
+    - Copies: 1
+      _instances:
+      - Enabled: 1
+        MeshMode: 0
+        Position: {x: 0, y: 0, z: 0}
+        Rotation: {x: 0, y: 0, z: 0}
+        Scale: {x: 1, y: 1, z: 1}
+        OverrideMaterial: {fileID: 0}
+        FoldoutAdvanced: 0
+        FlipNormals: 0
+        UVOffset: {x: 0, y: 0}
+        UVRotate: 0
+        UVReScale: {x: 1, y: 1}
+        UseInCollider: 1
+        MeshModeApplyToAll: 1
+        MeshModeApplyMasks: 
+        SepAxisRotMode: 0
+      splineLength: 1.1186144
+      splineLength2: 1
+      splineLength3: 1
+      ExtraMesh: 0
+      CustomMesh: {fileID: 0}
+      _extrudeMirror: 1
+      _extrudeFrontCap: 0
+      _extrudeBackCap: 0
+      _extrude_SubdivLimit: 30
+      _extrude_curve: []
+      _extrudePreview: []
+      _tryWeldVertices: 0
+      _tryWeldVerticesV2: 0
+      _randomizeVerticesOffset: {x: 0, y: 0, z: 0}
+      _randomizeVerticesNoiseScale: {x: 1, y: 1}
+      _customMeshOverwriteVertexColor: 0
+      _customMeshOverwriteVertexColorValues: {r: 1, g: 1, b: 1, a: 1}
+      _CablePoints:
+      - {x: 0, y: 0, z: -0.5}
+      - {x: 0, y: 0, z: 0.5}
+      _CableRadius: 0.02
+      _CableLoose: 1.5
+      _CableHanging: 0
+      _CableMeshSettings:
+        LengthSubdivs: 12
+        CircleSubdivs: 6
+        RollOffset: 0
+        JoinEnds: 0
+      _CableTexturingSettings:
+        LengthTiling: 4
+        VerticalTiling: 1
+        UVRotate: 0
+      _CableClonerSettings:
+        InstancesCount: {x: 1, y: 1, z: 1}
+        ClonesOffsets: {x: 1, y: 1, z: 1}
+        ScaleOffsets: 1
+        CircularGrid: 0
+        PathReGenerate: 0
+        FlattenEnds: 0
+      _CableRandomizationSettings:
+        RandomizeTrails: {x: 0, y: 0}
+        NoiseScale: 0.5
+        RandomizeLoose: {x: 1, y: 1}
+        RandomizePathPoints: {x: 0, y: 0, z: 0}
+        CutOutClones: {x: 0, y: 0}
+      _CableView: 0
+      _lathe_fillAngle: 360
+      _lathe_xSubdivCount: 8
+      _lathe_ySubdivLimit: 30
+      _lathe_points: []
+      _loftDepthCurveWidener: 0.25
+      _loft_DepthSubdivLimit: 30
+      _loft_DistribSubdivLimit: 30
+      _loft_Collapse: 0
+      _loft_forceDepth: 0
+      _loft_depth:
+      - distanceInSpline: 0
+        Mode: 0
+        VertexColor: {r: 1, g: 1, b: 1, a: 1}
+        VertexColorFalloff: 1
+        overrideNormal: {x: 0, y: 0}
+        index: 0
+        rect:
+          serializedVersion: 2
+          x: -7
+          y: 10.415001
+          width: 14
+          height: 14
+        localPos: {x: 0, y: 0}
+        localInTan: {x: 0.08039047, y: 0.022968706}
+        localNextTan: {x: 0.08039047, y: 0.01722653}
+        _extra_z: 0
+        _Loft_Height_ShiftWhole: 0
+        AutoFactor: 0.7
+      - distanceInSpline: 0.29453057
+        Mode: 0
+        VertexColor: {r: 1, g: 1, b: 1, a: 1}
+        VertexColorFalloff: 1
+        overrideNormal: {x: 0, y: 0}
+        index: 1
+        rect:
+          serializedVersion: 2
+          x: -7
+          y: 112.99999
+          width: 14
+          height: 14
+        localPos: {x: 0, y: 0.29453057}
+        localInTan: {x: 0.08039047, y: 0.022968706}
+        localNextTan: {x: 0.08039047, y: 0.01722653}
+        _extra_z: 0
+        _Loft_Height_ShiftWhole: 0
+        AutoFactor: 0.7
+      - distanceInSpline: 0.7912287
+        Mode: 0
+        VertexColor: {r: 1, g: 1, b: 1, a: 1}
+        VertexColorFalloff: 1
+        overrideNormal: {x: 0, y: 0}
+        index: 2
+        rect:
+          serializedVersion: 2
+          x: -7
+          y: 285.99997
+          width: 14
+          height: 14
+        localPos: {x: 0, y: 0.7912287}
+        localInTan: {x: 0.08963601, y: 0.021800743}
+        localNextTan: {x: 0.07114493, y: 0.018394493}
+        _extra_z: 0
+        _Loft_Height_ShiftWhole: 0
+        AutoFactor: 0.7
+      - distanceInSpline: 0.9021658
+        Mode: 0
+        VertexColor: {r: 1, g: 1, b: 1, a: 1}
+        VertexColorFalloff: 1
+        overrideNormal: {x: 0, y: 0}
+        index: 3
+        rect:
+          serializedVersion: 2
+          x: 2.500001
+          y: 292.99997
+          width: 14
+          height: 14
+        localPos: {x: 0.10910136, y: 0.8113264}
+        localInTan: {x: 0.08505468, y: 0.022721255}
+        localNextTan: {x: 0.07572626, y: 0.01747398}
+        _extra_z: 0
+        _Loft_Height_ShiftWhole: 0
+        AutoFactor: 0.12
+      - distanceInSpline: 0.954872
+        Mode: 0
+        VertexColor: {r: 1, g: 1, b: 1, a: 1}
+        VertexColorFalloff: 1
+        overrideNormal: {x: 0, y: 0}
+        index: 4
+        rect:
+          serializedVersion: 2
+          x: 6.499999
+          y: 302.00003
+          width: 14
+          height: 14
+        localPos: {x: 0.15503876, y: 0.8371663}
+        localInTan: {x: 0.08008684, y: 0.022967704}
+        localNextTan: {x: 0.0806941, y: 0.017227532}
+        _extra_z: 0
+        _Loft_Height_ShiftWhole: 0
+        AutoFactor: 0.12
+      - distanceInSpline: 1.1186144
+        Mode: 0
+        VertexColor: {r: 1, g: 1, b: 1, a: 1}
+        VertexColorFalloff: 1
+        overrideNormal: {x: 0, y: 0}
+        index: 5
+        rect:
+          serializedVersion: 2
+          x: 5.000001
+          y: 358.715
+          width: 14
+          height: 14
+        localPos: {x: 0.13781224, y: 1}
+        localInTan: {x: 0, y: 0}
+        localNextTan: {x: 0, y: 0}
+        _extra_z: 0
+        _Loft_Height_ShiftWhole: 0
+        AutoFactor: 0.7
+      _loft_distribute:
+      - distanceInSpline: 0
+        Mode: 0
+        VertexColor: {r: 1, g: 1, b: 1, a: 1}
+        VertexColorFalloff: 1
+        overrideNormal: {x: 0, y: 0}
+        index: 0
+        rect:
+          serializedVersion: 2
+          x: 89.75
+          y: 184.565
+          width: 14
+          height: 14
+        localPos: {x: 0, y: 0.5}
+        localInTan: {x: 0.022968706, y: 0.020097617}
+        localNextTan: {x: 0.01722653, y: 0.020097617}
+        _extra_z: 0
+        _Loft_Height_ShiftWhole: 0
+        AutoFactor: 0.7
+      - distanceInSpline: 1
+        Mode: 0
+        VertexColor: {r: 1, g: 1, b: 1, a: 1}
+        VertexColorFalloff: 1
+        overrideNormal: {x: 0, y: 0}
+        index: 1
+        rect:
+          serializedVersion: 2
+          x: 438.05
+          y: 184.565
+          width: 14
+          height: 14
+        localPos: {x: 1, y: 0.5}
+        localInTan: {x: 0, y: 0}
+        localNextTan: {x: 0, y: 0}
+        _extra_z: 0
+        _Loft_Height_ShiftWhole: 0
+        AutoFactor: 0.7
+      _loft_height:
+      - distanceInSpline: 0
+        Mode: 0
+        VertexColor: {r: 1, g: 1, b: 1, a: 1}
+        VertexColorFalloff: 1
+        overrideNormal: {x: 0, y: 0}
+        index: 0
+        rect:
+          serializedVersion: 2
+          x: 0
+          y: 0
+          width: 14
+          height: 14
+        localPos: {x: 0, y: 0}
+        localInTan: {x: 0, y: 0}
+        localNextTan: {x: 0, y: 0}
+        _extra_z: 0
+        _Loft_Height_ShiftWhole: 0
+        AutoFactor: 0.7
+      - distanceInSpline: 1
+        Mode: 0
+        VertexColor: {r: 1, g: 1, b: 1, a: 1}
+        VertexColorFalloff: 1
+        overrideNormal: {x: 0, y: 0}
+        index: 0
+        rect:
+          serializedVersion: 2
+          x: 1
+          y: 0
+          width: 14
+          height: 14
+        localPos: {x: 1, y: 0}
+        localInTan: {x: 0, y: 0}
+        localNextTan: {x: 0, y: 0}
+        _extra_z: 0
+        _Loft_Height_ShiftWhole: 0
+        AutoFactor: 0.7
+      GenTechnique: 0
+      Origin: 0
+      UVFit: 2
+      UVMul: {x: 1, y: 1}
+      NormalsMode: 0
+      HardNormals: 0
+      SubdivMode: 0
+      width: 2
+      height: 2.6
+      depth: 0.5
+      _loft_depthDim: 2
+      Material: {fileID: 0}
+      _primitive_Type: 0
+      _primitive_scale: {x: 1, y: 1, z: 1}
+      _primitive_cube_topFace: 1
+      _primitive_cube_bottomFace: 1
+      _primitive_cube_leftFace: 1
+      _primitive_cube_rightFace: 1
+      _primitive_cube_frontFace: 1
+      _primitive_cube_backFace: 1
+      _primitive_cube_bevel: 0
+      _primitive_cube_bevelSubdivs: 1
+      _primitive_plane_subdivs: {x: 1, y: 1, z: 1}
+      _sweep_path: []
+      _sweep_shape: []
+      _sweep_radius: []
+      _sweep_radiusMul: 0.5
+      _sweep_Close: 1
+      _sweep_shapeSubdivLimit: 30
+      _sweep_distribSubdivLimit: 30
+      Name: Wall Profile
+      OverrideTag: Untagged
+      CustomID: 
+    PostFilters: []
+  ReplacePrefabToSpawn: 0
+  ProjectPreset: {fileID: 11400000, guid: 3c3c3cbc4e936c34eb5828a124688868, type: 2}
+  DesignModifyCommand: 
+--- !u!114 &2788625244806853783
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3ea731bcdcafc6441aa5eca1daa55544, type: 3}
+  m_Name: SR_SetMaterial-[Roof]
+  m_EditorClassIdentifier: 
+  Logic: 0
+  Negate: 0
+  Global: 0
+  Enabled: 1
+  Ignore: 0
+  _editor_drawRule: 1
+  CellAllow: 1
+  AllConditionsMet: 1
+  NewMaterial: {fileID: -2310514774154243031, guid: fdf2f188f38fab44e9a40a0dc8868b67,
+    type: 3}
+  MatVariable:
+    name: 
+    requiredType: 3
+    Tooltip: 
+  ReplaceOnly: {fileID: 0}
+  ReplaceOnlyFirst: 0
+--- !u!114 &2863462083146354289
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5015748d498a9d94abd4c0c69a786f28, type: 3}
+  m_Name: SR_DirectOffset-[Roof]
+  m_EditorClassIdentifier: 
+  Logic: 0
+  Negate: 0
+  Global: 0
+  Enabled: 1
+  Ignore: 0
+  _editor_drawRule: 1
+  CellAllow: 1
+  AllConditionsMet: 1
+  Append: 0
+  Randomize: 0
+  GetOffsetFromTagged: 
+  CheckMode: 0
+  Offset: {x: 0, y: 1.5, z: 0}
+  OffsetMode: 1
+  RandomOffset: {x: 0, y: 0, z: 0}
+--- !u!114 &3669836817638352540
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 671fd9c659a53a04eb310656f11c9125, type: 3}
+  m_Name: Roof
+  m_EditorClassIdentifier: 
+  TemporaryContainer: {fileID: 0}
+  Enabled: 1
+  ModTag: 
+  DrawMeshAndBox: 0
+  Combine: 0
+  RunEmittersIfContains: 0
+  DrawSetupFor: 0
+  OStamp: {fileID: 0}
+  DrawObjectStamps: 1
+  OMultiStamp: {fileID: 0}
+  PrefabsList: []
+  DrawMultiObjectStamps: 1
+  Spawners:
+  - Enabled: 1
+    Name: Indicator Cell
+    SpawnerTag: 
+    StampPrefabID: -2
+    Parent: {fileID: 3669836817638352540}
+    Rules:
+    - {fileID: -7162992881280907997}
+    - {fileID: 2863462083146354289}
+    - {fileID: -4879239946156353202}
+    Mode: 0
+    CellCheckMode: 0
+    _Editor_SpawnerAdvancedOptionsFoldout: 0
+    OnScalledGrid: 0
+    Repeat: 1
+    DontInheritRotations: 0
+    SwitchSpawnedToStatic: 0
+    MultipleToSpawn: 0
+    UseGlobalRules: 1
+    UseParentPackageRules: 1
+    _wasEnablingGlobalRules: 1
+    ScaleAccess: 1
+    DisplayPreviewGUI: 1
+    IsSubSpawner: 0
+    _EditorDisplaySpawnerHeader: 1
+  - Enabled: 1
+    Name: Roof Plane
+    SpawnerTag: 
+    StampPrefabID: -2
+    Parent: {fileID: 3669836817638352540}
+    Rules:
+    - {fileID: 5274771713274893608}
+    - {fileID: 2788625244806853783}
+    Mode: 0
+    CellCheckMode: 0
+    _Editor_SpawnerAdvancedOptionsFoldout: 0
+    OnScalledGrid: 0
+    Repeat: 1
+    DontInheritRotations: 0
+    SwitchSpawnedToStatic: 0
+    MultipleToSpawn: 0
+    UseGlobalRules: 1
+    UseParentPackageRules: 1
+    _wasEnablingGlobalRules: 1
+    ScaleAccess: 1
+    DisplayPreviewGUI: 1
+    IsSubSpawner: 0
+    _EditorDisplaySpawnerHeader: 1
+  - Enabled: 1
+    Name: Roof Side Wall
+    SpawnerTag: 
+    StampPrefabID: -2
+    Parent: {fileID: 3669836817638352540}
+    Rules:
+    - {fileID: -673240641028983718}
+    - {fileID: -1094387411647889654}
+    Mode: 0
+    CellCheckMode: 0
+    _Editor_SpawnerAdvancedOptionsFoldout: 0
+    OnScalledGrid: 0
+    Repeat: 1
+    DontInheritRotations: 0
+    SwitchSpawnedToStatic: 0
+    MultipleToSpawn: 0
+    UseGlobalRules: 1
+    UseParentPackageRules: 1
+    _wasEnablingGlobalRules: 1
+    ScaleAccess: 1
+    DisplayPreviewGUI: 1
+    IsSubSpawner: 0
+    _EditorDisplaySpawnerHeader: 1
+  SubSpawners: []
+  VariantOf: {fileID: 0}
+  _editor_drawStamp: 0
+  _editor_drawSpawners: 1
+  _editor_drawGlobalRules: 0
+  _editor_drawModPackRules: 0
+  _editor_shareSelected: 2
+  ParentPreset: {fileID: 0}
+  ParentPack: {fileID: 4768698145432227629}
+--- !u!114 &4768698145432227629
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f132315e3189e59479a1674dc7e52576, type: 3}
+  m_Name: Root
+  m_EditorClassIdentifier: 
+  FieldModificators:
+  - {fileID: -7812384923116168047}
+  - {fileID: 3669836817638352540}
+  ParentPreset: {fileID: 11400000}
+  DisableWholePackage: 0
+  SeedMode: 0
+  CustomSeed: 0
+  ModPackType: 0
+  TagForAllSpawners: 
+  CombineSpawns: 0
+  Variables: []
+  CallOnAllMod: {fileID: 0}
+  CallOnAllSpawners:
+    Enabled: 0
+    Name: 
+    SpawnerTag: 
+    StampPrefabID: 0
+    Parent: {fileID: 0}
+    Rules: []
+    Mode: 0
+    CellCheckMode: 0
+    _Editor_SpawnerAdvancedOptionsFoldout: 0
+    OnScalledGrid: 0
+    Repeat: 0
+    DontInheritRotations: 0
+    SwitchSpawnedToStatic: 0
+    MultipleToSpawn: 0
+    UseGlobalRules: 0
+    UseParentPackageRules: 0
+    _wasEnablingGlobalRules: 0
+    ScaleAccess: 0
+    DisplayPreviewGUI: 0
+    IsSubSpawner: 0
+    _EditorDisplaySpawnerHeader: 0
+  _EditorDisplayCallOnAll: 0
+--- !u!114 &4908545432768298016
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 893e62798003cfc4ba6de159ef003bf2, type: 3}
+  m_Name: SR_WallPlacer-[Walls]
+  m_EditorClassIdentifier: 
+  Logic: 0
+  Negate: 0
+  Global: 0
+  Enabled: 1
+  Ignore: 0
+  _editor_drawRule: 1
+  CellAllow: 1
+  AllConditionsMet: 1
+  Module: 0
+  CornerMode: 0
+  CornerMode45: 0
+  SpawnOnEachSide: 1
+  UseYLevel: -1
+  AutoRemoveOverlaps: 1
+  SetGhosts: 0
+  OverlapDetectMode: 0
+  Version2: 0
+  ScaleBounds: 0.99
+  Padding: 0
+  YawOffset: 180
+  DirectOffset: {x: 0, y: 0, z: 0.5}
+  OffsetMode: 1
+  IgnoreOtherMods: 1
+  DontCheckAdditionals: 0
+--- !u!114 &5274771713274893608
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 73505041b99d7bb498aacdbb7e34437a, type: 3}
+  m_Name: SR_RoofPlaneGenerator-[Roof]
+  m_EditorClassIdentifier: 
+  Logic: 0
+  Negate: 0
+  Global: 0
+  Enabled: 1
+  Ignore: 0
+  _editor_drawRule: 1
+  CellAllow: 0
+  AllConditionsMet: 1
+  GetIndicatorID: Roof 1
+  RoofHeight: 3
+  RoofHeightVariable:
+    name: 
+    requiredType: 1
+    Tooltip: 
+  RoofCenterOffset: 0
+  RoofCenterVariable:
+    name: 
+    requiredType: 1
+    Tooltip: 
+  Rotate90: 0
+  OptionalSetup: {fileID: 0}
+  TargetMaterial: {fileID: 0}
+  UVTiling: {x: 1, y: 2}
+  Rescale: {x: 1.06, y: 1, z: 1.04}
+  ExtraOffset: {x: 0, y: 0, z: 0}
+  ExtraSubdivisions: {x: 0, y: 0}
+--- !u!114 &5589357810524001848
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e38da0f7b84c8c4409da4c496b12b24f, type: 3}
+  m_Name: SR_TileDesigner-[Walls](Clone)
+  m_EditorClassIdentifier: 
+  Logic: 0
+  Negate: 0
+  Global: 0
+  Enabled: 1
+  Ignore: 0
+  _editor_drawRule: 1
+  CellAllow: 1
+  AllConditionsMet: 1
+  Design:
+    Static: 0
+    Tag: Untagged
+    Layer: 0
+    DefaultMaterial: {fileID: 2100000, guid: 85210dd3f8886ca41b6e10c207b404a1, type: 2}
+    _editor_ToAttach: []
+    _string_ToAttach: []
+    SendMessages: []
+    AddRigidbody: 0
+    IsKinematic: 1
+    RigidbodyMass: 10
+    CollidersMaterial: {fileID: 0}
+    ColliderMode: 5
+    ScaleColliders: 1
+    ConvexCollider: 0
+    MeshColliderReduction: 0
+    ExpandThinCollider: {x: 0, y: 0, z: 0}
+    LatestGeneratedMeshes:
+    - {fileID: 0}
+    LatestGeneratedMeshesMaterials:
+    - {fileID: 2100000, guid: 85210dd3f8886ca41b6e10c207b404a1, type: 2}
+    _LatestGen_Meshes: 1
+    _LatestGen_Vertices: 12
+    _LatestGen_Tris: 10
+    _LatestGen_Bounds:
+      m_Center: {x: 0, y: 1.3, z: 0.044573642}
+      m_Extent: {x: 1, y: 1.3, z: 0.044573642}
+    DesignName: Walls
+    TileMeshes:
+    - Copies: 1
+      _instances:
+      - Enabled: 1
+        MeshMode: 0
+        Position: {x: 0, y: 0, z: 0}
+        Rotation: {x: 0, y: 0, z: 0}
+        Scale: {x: 1, y: 1, z: 1}
+        OverrideMaterial: {fileID: 0}
+        FoldoutAdvanced: 0
+        FlipNormals: 0
+        UVOffset: {x: 0, y: 0}
+        UVRotate: 0
+        UVReScale: {x: 1, y: 1}
+        UseInCollider: 1
+        MeshModeApplyToAll: 1
+        MeshModeApplyMasks: 
+        SepAxisRotMode: 0
+      splineLength: 1.1186144
+      splineLength2: 1
+      splineLength3: 1
+      ExtraMesh: 0
+      CustomMesh: {fileID: 0}
+      _extrudeMirror: 1
+      _extrudeFrontCap: 0
+      _extrudeBackCap: 0
+      _extrude_SubdivLimit: 30
+      _extrude_curve: []
+      _extrudePreview: []
+      _tryWeldVertices: 0
+      _tryWeldVerticesV2: 0
+      _randomizeVerticesOffset: {x: 0, y: 0, z: 0}
+      _randomizeVerticesNoiseScale: {x: 1, y: 1}
+      _customMeshOverwriteVertexColor: 0
+      _customMeshOverwriteVertexColorValues: {r: 1, g: 1, b: 1, a: 1}
+      _CablePoints:
+      - {x: 0, y: 0, z: -0.5}
+      - {x: 0, y: 0, z: 0.5}
+      _CableRadius: 0.02
+      _CableLoose: 1.5
+      _CableHanging: 0
+      _CableMeshSettings:
+        LengthSubdivs: 12
+        CircleSubdivs: 6
+        RollOffset: 0
+        JoinEnds: 0
+      _CableTexturingSettings:
+        LengthTiling: 4
+        VerticalTiling: 1
+        UVRotate: 0
+      _CableClonerSettings:
+        InstancesCount: {x: 1, y: 1, z: 1}
+        ClonesOffsets: {x: 1, y: 1, z: 1}
+        ScaleOffsets: 1
+        CircularGrid: 0
+        PathReGenerate: 0
+        FlattenEnds: 0
+      _CableRandomizationSettings:
+        RandomizeTrails: {x: 0, y: 0}
+        NoiseScale: 0.5
+        RandomizeLoose: {x: 1, y: 1}
+        RandomizePathPoints: {x: 0, y: 0, z: 0}
+        CutOutClones: {x: 0, y: 0}
+      _CableView: 0
+      _lathe_fillAngle: 360
+      _lathe_xSubdivCount: 8
+      _lathe_ySubdivLimit: 30
+      _lathe_points: []
+      _loftDepthCurveWidener: 0.25
+      _loft_DepthSubdivLimit: 30
+      _loft_DistribSubdivLimit: 30
+      _loft_Collapse: 0
+      _loft_forceDepth: 0
+      _loft_depth:
+      - distanceInSpline: 0
+        Mode: 0
+        VertexColor: {r: 1, g: 1, b: 1, a: 1}
+        VertexColorFalloff: 1
+        overrideNormal: {x: 0, y: 0}
+        index: 0
+        rect:
+          serializedVersion: 2
+          x: -7
+          y: 10.415001
+          width: 14
+          height: 14
+        localPos: {x: 0, y: 0}
+        localInTan: {x: 0.08039047, y: 0.022968706}
+        localNextTan: {x: 0.08039047, y: 0.01722653}
+        _extra_z: 0
+        _Loft_Height_ShiftWhole: 0
+        AutoFactor: 0.7
+      - distanceInSpline: 0.29453057
+        Mode: 0
+        VertexColor: {r: 1, g: 1, b: 1, a: 1}
+        VertexColorFalloff: 1
+        overrideNormal: {x: 0, y: 0}
+        index: 1
+        rect:
+          serializedVersion: 2
+          x: -7
+          y: 112.99999
+          width: 14
+          height: 14
+        localPos: {x: 0, y: 0.29453057}
+        localInTan: {x: 0.08039047, y: 0.022968706}
+        localNextTan: {x: 0.08039047, y: 0.01722653}
+        _extra_z: 0
+        _Loft_Height_ShiftWhole: 0
+        AutoFactor: 0.7
+      - distanceInSpline: 0.7912287
+        Mode: 0
+        VertexColor: {r: 1, g: 1, b: 1, a: 1}
+        VertexColorFalloff: 1
+        overrideNormal: {x: 0, y: 0}
+        index: 2
+        rect:
+          serializedVersion: 2
+          x: -7
+          y: 285.99997
+          width: 14
+          height: 14
+        localPos: {x: 0, y: 0.7912287}
+        localInTan: {x: 0.08963601, y: 0.021800743}
+        localNextTan: {x: 0.07114493, y: 0.018394493}
+        _extra_z: 0
+        _Loft_Height_ShiftWhole: 0
+        AutoFactor: 0.7
+      - distanceInSpline: 0.9021658
+        Mode: 0
+        VertexColor: {r: 1, g: 1, b: 1, a: 1}
+        VertexColorFalloff: 1
+        overrideNormal: {x: 0, y: 0}
+        index: 3
+        rect:
+          serializedVersion: 2
+          x: 2.500001
+          y: 292.99997
+          width: 14
+          height: 14
+        localPos: {x: 0.10910136, y: 0.8113264}
+        localInTan: {x: 0.08505468, y: 0.022721255}
+        localNextTan: {x: 0.07572626, y: 0.01747398}
+        _extra_z: 0
+        _Loft_Height_ShiftWhole: 0
+        AutoFactor: 0.12
+      - distanceInSpline: 0.954872
+        Mode: 0
+        VertexColor: {r: 1, g: 1, b: 1, a: 1}
+        VertexColorFalloff: 1
+        overrideNormal: {x: 0, y: 0}
+        index: 4
+        rect:
+          serializedVersion: 2
+          x: 6.499999
+          y: 302.00003
+          width: 14
+          height: 14
+        localPos: {x: 0.15503876, y: 0.8371663}
+        localInTan: {x: 0.08008684, y: 0.022967704}
+        localNextTan: {x: 0.0806941, y: 0.017227532}
+        _extra_z: 0
+        _Loft_Height_ShiftWhole: 0
+        AutoFactor: 0.12
+      - distanceInSpline: 1.1186144
+        Mode: 0
+        VertexColor: {r: 1, g: 1, b: 1, a: 1}
+        VertexColorFalloff: 1
+        overrideNormal: {x: 0, y: 0}
+        index: 5
+        rect:
+          serializedVersion: 2
+          x: 5.000001
+          y: 358.715
+          width: 14
+          height: 14
+        localPos: {x: 0.13781224, y: 1}
+        localInTan: {x: 0, y: 0}
+        localNextTan: {x: 0, y: 0}
+        _extra_z: 0
+        _Loft_Height_ShiftWhole: 0
+        AutoFactor: 0.7
+      _loft_distribute:
+      - distanceInSpline: 0
+        Mode: 0
+        VertexColor: {r: 1, g: 1, b: 1, a: 1}
+        VertexColorFalloff: 1
+        overrideNormal: {x: 0, y: 0}
+        index: 0
+        rect:
+          serializedVersion: 2
+          x: 89.75
+          y: 184.565
+          width: 14
+          height: 14
+        localPos: {x: 0, y: 0.5}
+        localInTan: {x: 0.022968706, y: 0.020097617}
+        localNextTan: {x: 0.01722653, y: 0.020097617}
+        _extra_z: 0
+        _Loft_Height_ShiftWhole: 0
+        AutoFactor: 0.7
+      - distanceInSpline: 1
+        Mode: 0
+        VertexColor: {r: 1, g: 1, b: 1, a: 1}
+        VertexColorFalloff: 1
+        overrideNormal: {x: 0, y: 0}
+        index: 1
+        rect:
+          serializedVersion: 2
+          x: 438.05
+          y: 184.565
+          width: 14
+          height: 14
+        localPos: {x: 1, y: 0.5}
+        localInTan: {x: 0, y: 0}
+        localNextTan: {x: 0, y: 0}
+        _extra_z: 0
+        _Loft_Height_ShiftWhole: 0
+        AutoFactor: 0.7
+      _loft_height:
+      - distanceInSpline: 0
+        Mode: 0
+        VertexColor: {r: 1, g: 1, b: 1, a: 1}
+        VertexColorFalloff: 1
+        overrideNormal: {x: 0, y: 0}
+        index: 0
+        rect:
+          serializedVersion: 2
+          x: 0
+          y: 0
+          width: 14
+          height: 14
+        localPos: {x: 0, y: 0}
+        localInTan: {x: 0, y: 0}
+        localNextTan: {x: 0, y: 0}
+        _extra_z: 0
+        _Loft_Height_ShiftWhole: 0
+        AutoFactor: 0.7
+      - distanceInSpline: 1
+        Mode: 0
+        VertexColor: {r: 1, g: 1, b: 1, a: 1}
+        VertexColorFalloff: 1
+        overrideNormal: {x: 0, y: 0}
+        index: 0
+        rect:
+          serializedVersion: 2
+          x: 1
+          y: 0
+          width: 14
+          height: 14
+        localPos: {x: 1, y: 0}
+        localInTan: {x: 0, y: 0}
+        localNextTan: {x: 0, y: 0}
+        _extra_z: 0
+        _Loft_Height_ShiftWhole: 0
+        AutoFactor: 0.7
+      GenTechnique: 0
+      Origin: 0
+      UVFit: 2
+      UVMul: {x: 1, y: 1}
+      NormalsMode: 0
+      HardNormals: 0
+      SubdivMode: 0
+      width: 2
+      height: 2.6
+      depth: 0.5
+      _loft_depthDim: 2
+      Material: {fileID: 0}
+      _primitive_Type: 0
+      _primitive_scale: {x: 1, y: 1, z: 1}
+      _primitive_cube_topFace: 1
+      _primitive_cube_bottomFace: 1
+      _primitive_cube_leftFace: 1
+      _primitive_cube_rightFace: 1
+      _primitive_cube_frontFace: 1
+      _primitive_cube_backFace: 1
+      _primitive_cube_bevel: 0
+      _primitive_cube_bevelSubdivs: 1
+      _primitive_plane_subdivs: {x: 1, y: 1, z: 1}
+      _sweep_path: []
+      _sweep_shape: []
+      _sweep_radius: []
+      _sweep_radiusMul: 0.5
+      _sweep_Close: 1
+      _sweep_shapeSubdivLimit: 30
+      _sweep_distribSubdivLimit: 30
+      Name: Wall Profile
+      OverrideTag: Untagged
+      CustomID: 
+    PostFilters: []
+  ReplacePrefabToSpawn: 0
+  ProjectPreset: {fileID: 11400000, guid: 3c3c3cbc4e936c34eb5828a124688868, type: 2}
+  DesignModifyCommand: '[0] fillOUT;[0] set U 0.08'

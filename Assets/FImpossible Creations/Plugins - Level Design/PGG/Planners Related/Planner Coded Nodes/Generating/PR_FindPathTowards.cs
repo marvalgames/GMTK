@@ -34,13 +34,15 @@ namespace FIMSpace.Generating.Planning.PlannerNodes.Generating
         [HideInInspector][Port(EPortPinType.Input, EPortValueDisplay.Default, "Path Base")] public PGGPlannerPort PathBase;
 
         [Tooltip("Enabling interpreting inputted Vector3 values into StartOn and SearchTowards values as target pathfind positions.")]
-        [HideInInspector, SerializeField] private bool PositionsMode = false;
+        [HideInInspector, SerializeField] protected bool PositionsMode = false;
+        [Tooltip("Removing path shape cells which are overlapping with start or target grids")]
+        [HideInInspector, SerializeField] protected bool RemoveOverlappingCells = true;
 
         [Tooltip("Use to execute different doorway generation (From Start - Towards End) if path without shape was found. Without shape, so fields was aligning with each other, generating direct connection.")]
         [HideInInspector][Port(EPortPinType.Output, EPortValueDisplay.HideValue, "Towards End Cell:")] public BoolPort SingleStepPath;
 
         [HideInInspector, SerializeField]
-        private Checker3DPathFindSetup PathfindSetup = new Checker3DPathFindSetup();
+        protected Checker3DPathFindSetup PathfindSetup = new Checker3DPathFindSetup();
 
 
         public override int OutputConnectorsCount { get { return 2; } }
@@ -56,6 +58,12 @@ namespace FIMSpace.Generating.Planning.PlannerNodes.Generating
 
         bool pathWasFound = false;
         Vector3? searchTowardsPosition = null;
+
+
+        protected virtual CheckerField3D CallPathfind( CheckerField3D baseChecker, CheckerField3D startChecker, CheckerField3D targetChecker, List<CheckerField3D> collisions, FieldPlanner aPlanner, FieldPlanner bPlanner )
+        {
+            return baseChecker.GeneratePathFindTowards( startChecker, targetChecker, collisions, PathfindSetup.ToCheckerFieldPathFindParams(), aPlanner, bPlanner, RemoveOverlappingCells );
+        }
 
         public override void Execute(PlanGenerationPrint print, PlannerResult newResult)
         {
@@ -235,9 +243,9 @@ namespace FIMSpace.Generating.Planning.PlannerNodes.Generating
             if (_EditorDebugMode) CheckerField3D.DebugHelper = true;
 
             var generateFrom = aChecker;
-            var path = coreChecker.GeneratePathFindTowards(aChecker, bChec, masks, PathfindSetup.ToCheckerFieldPathFindParams(), a, b, true);
+            var path = CallPathfind( coreChecker, aChecker, bChec, masks, a, b );
 
-            if (_EditorDebugMode) CheckerField3D.DebugHelper = false;
+            if( _EditorDebugMode) CheckerField3D.DebugHelper = false;
 
             if (path != null)
             {
@@ -408,8 +416,9 @@ namespace FIMSpace.Generating.Planning.PlannerNodes.Generating
 
                 if (displayExtra)
                 {
-                    extraHeight += 48;
+                    extraHeight += 68;
                     GUILayout.Space(8);
+                    spc.Next(false); EditorGUILayout.PropertyField(spc);
                     spc.Next(false); EditorGUILayout.PropertyField(spc);
                     spc.Next(false); EditorGUILayout.PropertyField(spc);
                 }

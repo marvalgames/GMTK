@@ -20,7 +20,13 @@ namespace FIMSpace.Generating
         {
             if (collision.transform.CompareTag("Player"))
             {
-                if ( IsBossKey) SimpleGameController.Instance.OnKeyCollected();
+                if (IsBossKey)
+                {
+                    if (DungeonGameController_PGGDemo.Instance) DungeonGameController_PGGDemo.Instance.OnKeyCollected();
+                    else
+                    SimpleGameController.Instance.OnKeyCollected();
+                }
+
                 OnCollected.Invoke();
                 if (OnCollectedCreate) GameObject.Instantiate(OnCollectedCreate, transform.position + Vector3.up * 0.5f, Quaternion.identity);
                 GameObject.Destroy(gameObject);

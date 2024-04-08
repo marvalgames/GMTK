@@ -1,7 +1,7 @@
 __________________________________________________________________________________________
 
 Package "Procedural Generation Grid"
-Version 1.6.6.1.5 (Beta)
+Version 1.6.6.1.9 (Beta)
 
 Made by FImpossible Creations - Filip Moeglich
 https://www.FilipMoeglich.pl
@@ -62,6 +62,31 @@ Description:
 - Package is providing additional packages for randomly placing smaller objects in physical space using Unity’s collision system (Object’s Stamper and Pipe Generator)
 
 __________________________________________________________________________________________
+
+Beta Version 1.6.6.1.9:
+- New Planner Shape Generator: Complex/Random Tunnels (Limited)
+- New Planner Node: "Remove Too Far Cells"
+- New Planner Node: "Generate Bounds"
+- New menu option after right-clicking on the planner node "Open Node Source Script File" to quickly jump into .cs file of the node
+
+Beta Version 1.6.6.1.8:
+- Added non 'Direct' offset mode for 'Check If Colliding' node
+- 'Check If Colliding' collision data read operation will keep prefabs positions intact
+- Added experimental 'Sorted' cells execution order
+
+Beta Version 1.6.6.1.7:
+- Added possibility to inject custom A* step cost for path finding
+Example inside PR_PathFindGenerateLowerCost node
+- Remove Overlapping Cells toggle for pathfind extra parameters (visible when clicked on the button next to the 'display pathfind setup' after expanding node)
+- Tile Designer normals computing (phong smoothing) now is using different - more precise algorithm
+- New: 'Allow Every Few' - Field Setup Node
+
+
+Beta Version 1.6.6.1.6:
+- Field Setup: Added Physics.SyncTransforms() call during object generation stages
+- Added try-catch for destroying not needed MeshRenderers during mesh combining (to prevent error when some plugin depends on mesh renderers)
+- Build Planner: Fixed few nodes to support reading cells of dynamically generated shapes
+- Added "Near Walls Detection" build planner function node
 
 Beta Version 1.6.6.1.5:
 - Hotfix for part of Buid Planner Executor not initializing planner fields when dropping prefabed executor on scene

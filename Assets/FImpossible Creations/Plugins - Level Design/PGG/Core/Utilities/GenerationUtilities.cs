@@ -83,6 +83,26 @@ namespace FIMSpace.Generating
             return randomizedCells;
         }
 
+        public static List<FieldCell> GetSortedCells( FGenGraph<FieldCell, FGenPoint> grid)
+        {
+            List<FieldCell> sortList = new List<FieldCell>();
+
+            if (grid != null)
+                for (int i = 0; i < grid.AllApprovedCells.Count; i++)
+                    sortList.Add(grid.AllApprovedCells[i]);
+
+            sortList.Sort( ( cell1, cell2 ) =>
+            {
+                int compareX = cell1.Pos.x.CompareTo( cell2.Pos.x );
+                if( compareX == 0 ) // If X values are equal, compare Z values
+                    return cell1.Pos.z.CompareTo( cell2.Pos.z );
+                else
+                    return compareX;
+            } );
+
+            return sortList;
+        }
+
         public static Vector3 V2ToV3(Vector2Int p)
         {
             return new Vector3(p.x, 0, p.y);

@@ -23,19 +23,13 @@ namespace FIMSpace.Generating.Planning.PlannerNodes.Field.Shape
             ToRemove.TriggerReadPort(true);
 
             var checker = From.GetInputCheckerSafe;
-            var plan = GetPlannerFromPort(From, false);
-            if (plan != null) checker = plan.LatestChecker;
-
             if (checker == null) return;
             if (checker.ChildPositionsCount == 0) return;
 
             var oChecker = ToRemove.GetInputCheckerSafe;
-            var oplan = GetPlannerFromPort(ToRemove, false);
-
-            if (oplan == null) return;
             if (oChecker == null) return;
             if (oChecker.ChildPositionsCount == 0) return;
-
+            
             CheckerField3D nChecker = checker.Copy();
             nChecker.RemoveCellsCollidingWith(oChecker);
 

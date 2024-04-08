@@ -29,11 +29,10 @@ namespace FIMSpace.Generating.Planning.PlannerNodes.Field.Access
             if (CurrentExecutingPlanner.ParentBuildPlanner == null) return;
 
             CellsOf.TriggerReadPort(true);
-            FieldPlanner planner;
-            planner = GetPlannerFromPort(CellsOf, false);
+            var chec = GetCheckerFromPort(CellsOf, false);
 
-            if (planner == null) return;
-            Count.Value = planner.LatestChecker.ChildPositionsCount;
+            if (chec == null) return;
+            Count.Value = chec.CheckerReference.ChildPositionsCount;
         }
 
         #region Editor GUI Code

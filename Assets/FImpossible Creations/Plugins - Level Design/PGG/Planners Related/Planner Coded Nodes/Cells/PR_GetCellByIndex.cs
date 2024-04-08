@@ -29,13 +29,13 @@ namespace FIMSpace.Generating.Planning.PlannerNodes.Cells
             CellOf.TriggerReadPort(true);
             Cell.Clear();
 
-            var planner = GetPlannerFromPort(CellOf, false);
+            var planner = GetCheckerFromPort(CellOf, false);
             if (FGenerators.IsNull(planner)) return;
 
             int i = Index.GetInputValue;
-            if ( i >= 0 && i < planner.LatestChecker.AllCells.Count)
+            if ( i >= 0 && i < planner.AllCells.Count)
             {
-                Cell.ProvideFullCellData(planner.LatestChecker.GetCell(i), planner.LatestChecker, planner.LatestResult);
+                Cell.ProvideFullCellData(planner.GetCell(i), planner, CurrentExecutingPlanner?.LatestResult);
             }
         }
 

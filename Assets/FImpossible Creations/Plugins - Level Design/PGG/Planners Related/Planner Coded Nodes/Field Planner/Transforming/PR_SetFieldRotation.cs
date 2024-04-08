@@ -25,7 +25,7 @@ namespace FIMSpace.Generating.Planning.PlannerNodes.Field.Transforming
         {
             Angles.TriggerReadPort();
 
-            FieldPlanner planner = GetPlannerFromPort(Planner);
+            var checker = GetCheckerFromPort(Planner);
             object val = Angles.GetPortValue;
 
             if (val == null)
@@ -37,13 +37,13 @@ namespace FIMSpace.Generating.Planning.PlannerNodes.Field.Transforming
 
                 //if (planner.RoundPosition) newRotation = newRotation.V3toV3Int();
 
-                planner.LatestResult.Checker.RootRotation = Quaternion.Euler(newRotation);
+                checker.RootRotation = Quaternion.Euler(newRotation);
             }
 
             if (Debugging)
             {
                 DebuggingInfo = "Setting rotation to " + val;
-                print._debugLatestExecuted = planner.LatestResult.Checker;
+                print._debugLatestExecuted = checker;
             }
         }
 

@@ -52,7 +52,10 @@ namespace FIMSpace.Generating
                 if (IsBoss)
                 {
                     if (expl != null) expl.transform.localScale = Vector3.one * 2f;
-                    SimpleGameController.Instance.OnBossDeath();
+
+                    if (DungeonGameController_PGGDemo.Instance) DungeonGameController_PGGDemo.Instance.OnBossDeath();
+                    else
+                        SimpleGameController.Instance.OnBossDeath();
                 }
 
                 GameObject.Destroy(gameObject);

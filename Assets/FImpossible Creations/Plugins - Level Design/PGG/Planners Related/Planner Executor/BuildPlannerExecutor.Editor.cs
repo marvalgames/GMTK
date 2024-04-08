@@ -743,7 +743,7 @@ namespace FIMSpace.Generating
 
                                         GUI.backgroundColor = preBg;
 
-                                        FieldSetupComposition.DrawCompositionGUI2(this, selected, viewPlanner);
+                                        FieldSetupComposition.DrawCompositionGUI2(Get, selected, viewPlanner);
 
                                         GUILayout.EndHorizontal();
 
@@ -842,7 +842,7 @@ namespace FIMSpace.Generating
                                                     }
                                                 }
 
-                                                FieldSetupComposition.DrawCompositionGUI2(this, duplCompos, viewPlanner);
+                                                FieldSetupComposition.DrawCompositionGUI2(Get, duplCompos, viewPlanner);
 
                                                 GUILayout.EndHorizontal();
                                             }

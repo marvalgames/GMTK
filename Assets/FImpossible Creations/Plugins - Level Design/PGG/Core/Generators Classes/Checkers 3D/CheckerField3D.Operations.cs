@@ -43,6 +43,8 @@ namespace FIMSpace.Generating.Checker
             return copy;
         }
 
+
+        static Dictionary<Vector3Int, FieldCell> _originCellsBackup = new Dictionary<Vector3Int, FieldCell>();
         public void ChangeOrigin(Vector3 localOrigin)
         {
             Vector3 pos = RootPosition;
@@ -56,10 +58,35 @@ namespace FIMSpace.Generating.Checker
             //Grid.Clear();
             //for (int i = 0; i < cellsCopy.Count; i++) Grid.AddCell(cellsCopy[i] - off);
 
-            for (int i = 0; i < AllCells.Count; i++)
+            for( int i = 0; i < AllCells.Count; i++ ) _originCellsBackup.Add(AllCells[i].Pos, AllCells[i] );
+
+            // Previous Code 
+            //for( int i = 0; i < AllCells.Count; i++ )
+            //{
+            // Needs to prevent moving cell to already target existing cell
+            // There was issue when moving cell to new placement
+            // when this new placement was occupied by other cell
+            //Grid.MoveCell( AllCells[i], AllCells[i].Pos - off );
+            //}
+
+            foreach( var bCell in _originCellsBackup )
             {
-                Grid.MoveCell(AllCells[i], AllCells[i].Pos - off);
+                Grid.MoveCell( bCell.Value, bCell.Key - off );
             }
+
+            //List<Vector3Int> backupList = new List<Vector3Int>();
+            //for( int i = 0; i < AllCells.Count; i++ )
+            //{
+            //    backupList.Add( AllCells[i].Pos );
+            //}
+
+            //Grid.Clear();
+            //foreach( var bCell in backupList )
+            //{
+            //    Grid.AddCell( bCell - off );
+            //}
+
+            _originCellsBackup.Clear();
         }
 
         /// <summary> Move cells to the checker origin </summary>

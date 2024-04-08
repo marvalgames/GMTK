@@ -327,6 +327,11 @@ namespace FIMSpace.Graph
                 //node.CheckPortsForNullConnections();
             });
 
+            menu.AddItem( new GUIContent( "[Debugging] Open Node Source Script File" ), false, () =>
+            {
+                MonoScript script = MonoScript.FromScriptableObject( node );
+                AssetDatabase.OpenAsset( script );
+            } );
 
             PlannerRuleBase plNode = node as PlannerRuleBase;
             if (plNode != null)

@@ -22,7 +22,6 @@ MonoBehaviour:
   CustomSeed: 0
   ModPackType: 0
   TagForAllSpawners: 
-  CombineSpawns: 0
   Variables: []
   CallOnAllMod: {fileID: 0}
   CallOnAllSpawners:
@@ -37,8 +36,7 @@ MonoBehaviour:
     _Editor_SpawnerAdvancedOptionsFoldout: 0
     OnScalledGrid: 0
     Repeat: 0
-    DontInheritRotations: 0
-    SwitchSpawnedToStatic: 0
+    InheritRotations: 0
     MultipleToSpawn: 0
     UseGlobalRules: 0
     UseParentPackageRules: 0
@@ -65,7 +63,29 @@ MonoBehaviour:
   Global: 0
   Enabled: 1
   Ignore: 0
-  _editor_drawRule: 1
+  OwnerSpawner:
+    Enabled: 1
+    Name: Closet
+    SpawnerTag: 
+    StampPrefabID: 1
+    Parent: {fileID: -1328033709205236978}
+    Rules:
+    - {fileID: 571540510497389879}
+    - {fileID: 9051142139903330547}
+    Mode: 0
+    CellCheckMode: 0
+    _Editor_SpawnerAdvancedOptionsFoldout: 0
+    OnScalledGrid: 1
+    Repeat: 1
+    InheritRotations: 0
+    MultipleToSpawn: 0
+    UseGlobalRules: 1
+    UseParentPackageRules: 1
+    _wasEnablingGlobalRules: 1
+    ScaleAccess: 1
+    DisplayPreviewGUI: 1
+    IsSubSpawner: 0
+    _EditorDisplaySpawnerHeader: 1
   CellAllow: 1
   AllConditionsMet: 1
   Operation: 2
@@ -85,7 +105,6 @@ MonoBehaviour:
     ToCheck:
     - {x: 1, y: 0, z: 0}
     - {x: -1, y: 0, z: 0}
-    EditorDisplayColor: {r: 0.4, g: 0.4, b: 1, a: 0.95}
   drawAdditionals: 0
 --- !u!114 &-1328033709205236978
 MonoBehaviour:
@@ -103,7 +122,6 @@ MonoBehaviour:
   Enabled: 1
   ModTag: Prop
   DrawMeshAndBox: 0
-  Combine: 0
   RunEmittersIfContains: 0
   DrawSetupFor: 0
   OStamp: {fileID: 0}
@@ -144,8 +162,7 @@ MonoBehaviour:
     _Editor_SpawnerAdvancedOptionsFoldout: 0
     OnScalledGrid: 1
     Repeat: 1
-    DontInheritRotations: 0
-    SwitchSpawnedToStatic: 0
+    InheritRotations: 0
     MultipleToSpawn: 0
     UseGlobalRules: 1
     UseParentPackageRules: 1
@@ -168,8 +185,7 @@ MonoBehaviour:
     _Editor_SpawnerAdvancedOptionsFoldout: 0
     OnScalledGrid: 1
     Repeat: 1
-    DontInheritRotations: 0
-    SwitchSpawnedToStatic: 0
+    InheritRotations: 0
     MultipleToSpawn: 0
     UseGlobalRules: 1
     UseParentPackageRules: 1
@@ -178,7 +194,6 @@ MonoBehaviour:
     DisplayPreviewGUI: 1
     IsSubSpawner: 0
     _EditorDisplaySpawnerHeader: 1
-  SubSpawners: []
   VariantOf: {fileID: 0}
   _editor_drawStamp: 1
   _editor_drawSpawners: 1
@@ -204,7 +219,30 @@ MonoBehaviour:
   Global: 0
   Enabled: 1
   Ignore: 0
-  _editor_drawRule: 1
+  OwnerSpawner:
+    Enabled: 1
+    Name: Closet
+    SpawnerTag: 
+    StampPrefabID: 1
+    Parent: {fileID: -1328033709205236978}
+    Rules:
+    - {fileID: 7278172144921372872}
+    - {fileID: 571540510497389879}
+    - {fileID: 9051142139903330547}
+    Mode: 0
+    CellCheckMode: 0
+    _Editor_SpawnerAdvancedOptionsFoldout: 0
+    OnScalledGrid: 1
+    Repeat: 1
+    InheritRotations: 0
+    MultipleToSpawn: 0
+    UseGlobalRules: 1
+    UseParentPackageRules: 1
+    _wasEnablingGlobalRules: 1
+    ScaleAccess: 1
+    DisplayPreviewGUI: 1
+    IsSubSpawner: 0
+    _EditorDisplaySpawnerHeader: 1
   CellAllow: 1
   AllConditionsMet: 1
   Tag: Wall
@@ -219,7 +257,6 @@ MonoBehaviour:
     Condition: 0
     ToCheck:
     - {x: 0, y: 0, z: 0}
-    EditorDisplayColor: {r: 0.4, g: 0.4, b: 1, a: 0.95}
 --- !u!114 &-645158413372251921
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -236,7 +273,6 @@ MonoBehaviour:
   Enabled: 1
   ModTag: 
   DrawMeshAndBox: 0
-  Combine: 0
   RunEmittersIfContains: 0
   DrawSetupFor: 0
   OStamp: {fileID: 0}
@@ -266,8 +302,7 @@ MonoBehaviour:
     _Editor_SpawnerAdvancedOptionsFoldout: 0
     OnScalledGrid: 1
     Repeat: 1
-    DontInheritRotations: 0
-    SwitchSpawnedToStatic: 0
+    InheritRotations: 0
     MultipleToSpawn: 0
     UseGlobalRules: 1
     UseParentPackageRules: 1
@@ -276,7 +311,6 @@ MonoBehaviour:
     DisplayPreviewGUI: 1
     IsSubSpawner: 0
     _EditorDisplaySpawnerHeader: 1
-  SubSpawners: []
   VariantOf: {fileID: 0}
   _editor_drawStamp: 1
   _editor_drawSpawners: 1
@@ -307,27 +341,15 @@ MonoBehaviour:
     str: 
     mat: {fileID: 0}
     gameObj: {fileID: 0}
-    unityObj: {fileID: 0}
     helper: {x: 0, y: 5, z: 0}
-    additionalHelperRef: {fileID: 0}
     ValueType: 1
-    helpForFieldCommand: 0
-    displayOnScene: 0
-    allowTransformFollow: 0
-    FloatSwitch: 0
   - Name: Spawn Count Multiplier
     v3Val: {x: 1, y: 0, z: 0}
     str: 
     mat: {fileID: 0}
     gameObj: {fileID: 0}
-    unityObj: {fileID: 0}
     helper: {x: 0, y: 5, z: 0}
-    additionalHelperRef: {fileID: 0}
     ValueType: 1
-    helpForFieldCommand: 0
-    displayOnScene: 0
-    allowTransformFollow: 0
-    FloatSwitch: 0
   DoorsModificator: {fileID: 11400000, guid: 7500e28d48a8ac44da90dfc8719e91ef, type: 2}
   EraseWallModificator: {fileID: 11400000, guid: c5bd286613ebcb24c932c8d5e7f79f9b,
     type: 2}
@@ -351,7 +373,6 @@ MonoBehaviour:
     extraMod: {fileID: 0}
     extraPack: {fileID: 0}
   RootPack: {fileID: -8764816697258491023}
-  UtilityModificators: []
   ModificatorPacks:
   - {fileID: -8764816697258491023}
   Ignores: []
@@ -366,12 +387,10 @@ MonoBehaviour:
     type: 2}
   MiniReflSettings: {fileID: 11400000, guid: b243a7973537dbf4faacf7bbda74dada, type: 2}
   SmallerReflLowerSpaceThan: 4
-  LimitSingleProbeSize: 0
   AddLightProbes: 0
   ProbesPerCell: 1
   TriggerColliderGeneration: 0
   TriggerGenSettings:
-    TriggersLayer: 0
     ScaleupTriggers: 1
     FillHeight: 1
     MaxCellChecks: 10
@@ -395,7 +414,6 @@ MonoBehaviour:
   Enabled: 1
   ModTag: 
   DrawMeshAndBox: 0
-  Combine: 0
   RunEmittersIfContains: 0
   DrawSetupFor: 0
   OStamp: {fileID: 0}
@@ -431,8 +449,7 @@ MonoBehaviour:
     _Editor_SpawnerAdvancedOptionsFoldout: 0
     OnScalledGrid: 1
     Repeat: 1
-    DontInheritRotations: 0
-    SwitchSpawnedToStatic: 0
+    InheritRotations: 0
     MultipleToSpawn: 0
     UseGlobalRules: 1
     UseParentPackageRules: 1
@@ -454,8 +471,7 @@ MonoBehaviour:
     _Editor_SpawnerAdvancedOptionsFoldout: 0
     OnScalledGrid: 1
     Repeat: 1
-    DontInheritRotations: 0
-    SwitchSpawnedToStatic: 0
+    InheritRotations: 0
     MultipleToSpawn: 0
     UseGlobalRules: 1
     UseParentPackageRules: 1
@@ -464,7 +480,6 @@ MonoBehaviour:
     DisplayPreviewGUI: 1
     IsSubSpawner: 0
     _EditorDisplaySpawnerHeader: 1
-  SubSpawners: []
   VariantOf: {fileID: 0}
   _editor_drawStamp: 1
   _editor_drawSpawners: 1
@@ -490,7 +505,29 @@ MonoBehaviour:
   Global: 0
   Enabled: 1
   Ignore: 0
-  _editor_drawRule: 1
+  OwnerSpawner:
+    Enabled: 1
+    Name: Wall-Base
+    SpawnerTag: Wall
+    StampPrefabID: 1
+    Parent: {fileID: 326047505877679129}
+    Rules:
+    - {fileID: 419680052748538221}
+    - {fileID: 8915995890058903272}
+    Mode: 0
+    CellCheckMode: 0
+    _Editor_SpawnerAdvancedOptionsFoldout: 0
+    OnScalledGrid: 1
+    Repeat: 1
+    InheritRotations: 0
+    MultipleToSpawn: 0
+    UseGlobalRules: 1
+    UseParentPackageRules: 1
+    _wasEnablingGlobalRules: 1
+    ScaleAccess: 1
+    DisplayPreviewGUI: 1
+    IsSubSpawner: 0
+    _EditorDisplaySpawnerHeader: 1
   CellAllow: 1
   AllConditionsMet: 1
   Module: 0
@@ -499,7 +536,6 @@ MonoBehaviour:
   SpawnOnEachSide: 1
   UseYLevel: -1
   AutoRemoveOverlaps: 1
-  SetGhosts: 0
   Version2: 0
   Padding: 0
   YawOffset: 0
@@ -524,7 +560,30 @@ MonoBehaviour:
   Global: 0
   Enabled: 1
   Ignore: 0
-  _editor_drawRule: 1
+  OwnerSpawner:
+    Enabled: 1
+    Name: Closet
+    SpawnerTag: 
+    StampPrefabID: 1
+    Parent: {fileID: -1328033709205236978}
+    Rules:
+    - {fileID: 7278172144921372872}
+    - {fileID: 571540510497389879}
+    - {fileID: 9051142139903330547}
+    Mode: 0
+    CellCheckMode: 0
+    _Editor_SpawnerAdvancedOptionsFoldout: 0
+    OnScalledGrid: 1
+    Repeat: 1
+    InheritRotations: 0
+    MultipleToSpawn: 0
+    UseGlobalRules: 1
+    UseParentPackageRules: 1
+    _wasEnablingGlobalRules: 1
+    ScaleAccess: 1
+    DisplayPreviewGUI: 1
+    IsSubSpawner: 0
+    _EditorDisplaySpawnerHeader: 1
   CellAllow: 0
   AllConditionsMet: 1
   OffsetCellMode: 0
@@ -532,13 +591,13 @@ MonoBehaviour:
   DistanceMustBe: 1
   IgnoreSelf: 1
   DistanceToTagged: Closet
-  CheckMode: 3
   Distance: 4
-  MeasureIn: 1
   DistanceMulVariable:
     name: 
     requiredType: 1
     Tooltip: 
+  CheckMode: 3
+  MeasureIn: 1
 --- !u!114 &2082305024330180701
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -556,7 +615,32 @@ MonoBehaviour:
   Global: 0
   Enabled: 1
   Ignore: 0
-  _editor_drawRule: 1
+  OwnerSpawner:
+    Enabled: 1
+    Name: Wardrobe
+    SpawnerTag: 
+    StampPrefabID: 0
+    Parent: {fileID: -1328033709205236978}
+    Rules:
+    - {fileID: 2788456617149955178}
+    - {fileID: 6415027490146408205}
+    - {fileID: 2082305024330180701}
+    - {fileID: 3097534276151192150}
+    - {fileID: 5984232662216704370}
+    Mode: 0
+    CellCheckMode: 0
+    _Editor_SpawnerAdvancedOptionsFoldout: 0
+    OnScalledGrid: 1
+    Repeat: 1
+    InheritRotations: 0
+    MultipleToSpawn: 0
+    UseGlobalRules: 1
+    UseParentPackageRules: 1
+    _wasEnablingGlobalRules: 1
+    ScaleAccess: 1
+    DisplayPreviewGUI: 1
+    IsSubSpawner: 0
+    _EditorDisplaySpawnerHeader: 1
   CellAllow: 1
   AllConditionsMet: 1
   GetFromTagged: Wall
@@ -598,7 +682,32 @@ MonoBehaviour:
   Global: 0
   Enabled: 1
   Ignore: 0
-  _editor_drawRule: 1
+  OwnerSpawner:
+    Enabled: 1
+    Name: Wardrobe
+    SpawnerTag: 
+    StampPrefabID: 0
+    Parent: {fileID: -1328033709205236978}
+    Rules:
+    - {fileID: 2788456617149955178}
+    - {fileID: 6415027490146408205}
+    - {fileID: 2082305024330180701}
+    - {fileID: 3097534276151192150}
+    - {fileID: 5984232662216704370}
+    Mode: 0
+    CellCheckMode: 0
+    _Editor_SpawnerAdvancedOptionsFoldout: 0
+    OnScalledGrid: 1
+    Repeat: 1
+    InheritRotations: 0
+    MultipleToSpawn: 0
+    UseGlobalRules: 1
+    UseParentPackageRules: 1
+    _wasEnablingGlobalRules: 1
+    ScaleAccess: 1
+    DisplayPreviewGUI: 1
+    IsSubSpawner: 0
+    _EditorDisplaySpawnerHeader: 1
   CellAllow: 0
   AllConditionsMet: 1
   Tag: Prop
@@ -613,7 +722,6 @@ MonoBehaviour:
     Condition: 0
     ToCheck:
     - {x: 0, y: 0, z: 0}
-    EditorDisplayColor: {r: 0.4, g: 0.4, b: 1, a: 0.95}
 --- !u!114 &3097534276151192150
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -631,8 +739,33 @@ MonoBehaviour:
   Global: 0
   Enabled: 1
   Ignore: 0
-  _editor_drawRule: 1
-  CellAllow: 0
+  OwnerSpawner:
+    Enabled: 1
+    Name: Wardrobe
+    SpawnerTag: 
+    StampPrefabID: 0
+    Parent: {fileID: -1328033709205236978}
+    Rules:
+    - {fileID: 2788456617149955178}
+    - {fileID: 6415027490146408205}
+    - {fileID: 2082305024330180701}
+    - {fileID: 3097534276151192150}
+    - {fileID: 5984232662216704370}
+    Mode: 0
+    CellCheckMode: 0
+    _Editor_SpawnerAdvancedOptionsFoldout: 0
+    OnScalledGrid: 1
+    Repeat: 1
+    InheritRotations: 0
+    MultipleToSpawn: 0
+    UseGlobalRules: 1
+    UseParentPackageRules: 1
+    _wasEnablingGlobalRules: 1
+    ScaleAccess: 1
+    DisplayPreviewGUI: 1
+    IsSubSpawner: 0
+    _EditorDisplaySpawnerHeader: 1
+  CellAllow: 1
   AllConditionsMet: 1
   CheckedCellsMustBe: 3
   NeightbourNeeds: 0
@@ -670,16 +803,8 @@ MonoBehaviour:
   GetNeightbourPos: 0
   GetNeightbourRot: 0
   GetNeightbourScale: 0
-  UseRestrictedDir: 0
   CustomCellsCheck: 0
   FullRotGet: 0
-  Check3DAngles: 0
-  RotationSpaceDisplay: 0
-  CheckPosit90: 1
-  CheckNeg90: 1
-  OverridePitchRotation: 1
-  InitPitchRotation: 0
-  NotCheckDefaultPitch: 0
 --- !u!114 &5649255963489816864
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -697,7 +822,30 @@ MonoBehaviour:
   Global: 0
   Enabled: 1
   Ignore: 0
-  _editor_drawRule: 1
+  OwnerSpawner:
+    Enabled: 1
+    Name: Light
+    SpawnerTag: 
+    StampPrefabID: 0
+    Parent: {fileID: -645158413372251921}
+    Rules:
+    - {fileID: 7683202550219056639}
+    - {fileID: 5649255963489816864}
+    - {fileID: 8649391659866532119}
+    Mode: 0
+    CellCheckMode: 0
+    _Editor_SpawnerAdvancedOptionsFoldout: 0
+    OnScalledGrid: 1
+    Repeat: 1
+    InheritRotations: 0
+    MultipleToSpawn: 0
+    UseGlobalRules: 1
+    UseParentPackageRules: 1
+    _wasEnablingGlobalRules: 1
+    ScaleAccess: 1
+    DisplayPreviewGUI: 1
+    IsSubSpawner: 0
+    _EditorDisplaySpawnerHeader: 1
   CellAllow: 1
   AllConditionsMet: 1
   GetFromTagged: Wall
@@ -739,7 +887,32 @@ MonoBehaviour:
   Global: 0
   Enabled: 1
   Ignore: 0
-  _editor_drawRule: 1
+  OwnerSpawner:
+    Enabled: 1
+    Name: Wardrobe
+    SpawnerTag: 
+    StampPrefabID: 0
+    Parent: {fileID: -1328033709205236978}
+    Rules:
+    - {fileID: 2788456617149955178}
+    - {fileID: 6415027490146408205}
+    - {fileID: 2082305024330180701}
+    - {fileID: 3097534276151192150}
+    - {fileID: 5984232662216704370}
+    Mode: 0
+    CellCheckMode: 0
+    _Editor_SpawnerAdvancedOptionsFoldout: 0
+    OnScalledGrid: 1
+    Repeat: 1
+    InheritRotations: 0
+    MultipleToSpawn: 0
+    UseGlobalRules: 1
+    UseParentPackageRules: 1
+    _wasEnablingGlobalRules: 1
+    ScaleAccess: 1
+    DisplayPreviewGUI: 1
+    IsSubSpawner: 0
+    _EditorDisplaySpawnerHeader: 1
   CellAllow: 1
   AllConditionsMet: 1
   Operation: 2
@@ -759,7 +932,6 @@ MonoBehaviour:
     ToCheck:
     - {x: 1, y: 0, z: 0}
     - {x: -1, y: 0, z: 0}
-    EditorDisplayColor: {r: 0.4, g: 0.4, b: 1, a: 0.95}
   drawAdditionals: 0
 --- !u!114 &6415027490146408205
 MonoBehaviour:
@@ -778,21 +950,46 @@ MonoBehaviour:
   Global: 0
   Enabled: 1
   Ignore: 0
-  _editor_drawRule: 1
-  CellAllow: 1
+  OwnerSpawner:
+    Enabled: 1
+    Name: Wardrobe
+    SpawnerTag: 
+    StampPrefabID: 0
+    Parent: {fileID: -1328033709205236978}
+    Rules:
+    - {fileID: 2788456617149955178}
+    - {fileID: 6415027490146408205}
+    - {fileID: 2082305024330180701}
+    - {fileID: 3097534276151192150}
+    - {fileID: 5984232662216704370}
+    Mode: 0
+    CellCheckMode: 0
+    _Editor_SpawnerAdvancedOptionsFoldout: 0
+    OnScalledGrid: 1
+    Repeat: 1
+    InheritRotations: 0
+    MultipleToSpawn: 0
+    UseGlobalRules: 1
+    UseParentPackageRules: 1
+    _wasEnablingGlobalRules: 1
+    ScaleAccess: 1
+    DisplayPreviewGUI: 1
+    IsSubSpawner: 0
+    _EditorDisplaySpawnerHeader: 1
+  CellAllow: 0
   AllConditionsMet: 1
   OffsetCellMode: 0
   OffsetCell: {x: 0, y: 0, z: 0}
   DistanceMustBe: 1
   IgnoreSelf: 1
   DistanceToTagged: Wardrobe
-  CheckMode: 3
   Distance: 5
-  MeasureIn: 1
   DistanceMulVariable:
     name: 
     requiredType: 1
     Tooltip: 
+  CheckMode: 3
+  MeasureIn: 1
 --- !u!114 &6486287030250694959
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -810,7 +1007,29 @@ MonoBehaviour:
   Global: 0
   Enabled: 1
   Ignore: 0
-  _editor_drawRule: 1
+  OwnerSpawner:
+    Enabled: 1
+    Name: Closet
+    SpawnerTag: 
+    StampPrefabID: 1
+    Parent: {fileID: -1328033709205236978}
+    Rules:
+    - {fileID: 571540510497389879}
+    - {fileID: 9051142139903330547}
+    Mode: 0
+    CellCheckMode: 0
+    _Editor_SpawnerAdvancedOptionsFoldout: 0
+    OnScalledGrid: 1
+    Repeat: 1
+    InheritRotations: 0
+    MultipleToSpawn: 0
+    UseGlobalRules: 1
+    UseParentPackageRules: 1
+    _wasEnablingGlobalRules: 1
+    ScaleAccess: 1
+    DisplayPreviewGUI: 1
+    IsSubSpawner: 0
+    _EditorDisplaySpawnerHeader: 1
   CellAllow: 0
   AllConditionsMet: 1
   CheckedCellsMustBe: 3
@@ -849,16 +1068,8 @@ MonoBehaviour:
   GetNeightbourPos: 0
   GetNeightbourRot: 0
   GetNeightbourScale: 0
-  UseRestrictedDir: 0
   CustomCellsCheck: 0
   FullRotGet: 0
-  Check3DAngles: 0
-  RotationSpaceDisplay: 0
-  CheckPosit90: 1
-  CheckNeg90: 1
-  OverridePitchRotation: 1
-  InitPitchRotation: 0
-  NotCheckDefaultPitch: 0
 --- !u!114 &7278172144921372872
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -876,7 +1087,30 @@ MonoBehaviour:
   Global: 0
   Enabled: 1
   Ignore: 0
-  _editor_drawRule: 1
+  OwnerSpawner:
+    Enabled: 1
+    Name: Closet
+    SpawnerTag: 
+    StampPrefabID: 1
+    Parent: {fileID: -1328033709205236978}
+    Rules:
+    - {fileID: 7278172144921372872}
+    - {fileID: 571540510497389879}
+    - {fileID: 9051142139903330547}
+    Mode: 0
+    CellCheckMode: 0
+    _Editor_SpawnerAdvancedOptionsFoldout: 0
+    OnScalledGrid: 1
+    Repeat: 1
+    InheritRotations: 0
+    MultipleToSpawn: 0
+    UseGlobalRules: 1
+    UseParentPackageRules: 1
+    _wasEnablingGlobalRules: 1
+    ScaleAccess: 1
+    DisplayPreviewGUI: 1
+    IsSubSpawner: 0
+    _EditorDisplaySpawnerHeader: 1
   CellAllow: 0
   AllConditionsMet: 1
   Tag: Prop
@@ -891,7 +1125,6 @@ MonoBehaviour:
     Condition: 0
     ToCheck:
     - {x: 0, y: 0, z: 0}
-    EditorDisplayColor: {r: 0.4, g: 0.4, b: 1, a: 0.95}
 --- !u!114 &7353598128828962921
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -909,7 +1142,29 @@ MonoBehaviour:
   Global: 0
   Enabled: 1
   Ignore: 0
-  _editor_drawRule: 1
+  OwnerSpawner:
+    Enabled: 1
+    Name: Closet
+    SpawnerTag: 
+    StampPrefabID: 1
+    Parent: {fileID: -1328033709205236978}
+    Rules:
+    - {fileID: 571540510497389879}
+    - {fileID: 9051142139903330547}
+    Mode: 0
+    CellCheckMode: 0
+    _Editor_SpawnerAdvancedOptionsFoldout: 0
+    OnScalledGrid: 1
+    Repeat: 1
+    InheritRotations: 0
+    MultipleToSpawn: 0
+    UseGlobalRules: 1
+    UseParentPackageRules: 1
+    _wasEnablingGlobalRules: 1
+    ScaleAccess: 1
+    DisplayPreviewGUI: 1
+    IsSubSpawner: 0
+    _EditorDisplaySpawnerHeader: 1
   CellAllow: 0
   AllConditionsMet: 1
   Tag: Prop
@@ -924,7 +1179,6 @@ MonoBehaviour:
     Condition: 0
     ToCheck:
     - {x: 0, y: 0, z: 0}
-    EditorDisplayColor: {r: 0.4, g: 0.4, b: 1, a: 0.95}
 --- !u!114 &7683202550219056639
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -942,7 +1196,30 @@ MonoBehaviour:
   Global: 0
   Enabled: 1
   Ignore: 0
-  _editor_drawRule: 1
+  OwnerSpawner:
+    Enabled: 1
+    Name: Light
+    SpawnerTag: 
+    StampPrefabID: 0
+    Parent: {fileID: -645158413372251921}
+    Rules:
+    - {fileID: 7683202550219056639}
+    - {fileID: 5649255963489816864}
+    - {fileID: 8649391659866532119}
+    Mode: 0
+    CellCheckMode: 0
+    _Editor_SpawnerAdvancedOptionsFoldout: 0
+    OnScalledGrid: 1
+    Repeat: 1
+    InheritRotations: 0
+    MultipleToSpawn: 0
+    UseGlobalRules: 1
+    UseParentPackageRules: 1
+    _wasEnablingGlobalRules: 1
+    ScaleAccess: 1
+    DisplayPreviewGUI: 1
+    IsSubSpawner: 0
+    _EditorDisplaySpawnerHeader: 1
   CellAllow: 0
   AllConditionsMet: 1
   Tag: Prop
@@ -957,7 +1234,6 @@ MonoBehaviour:
     Condition: 0
     ToCheck:
     - {x: 0, y: 0, z: 0}
-    EditorDisplayColor: {r: 0.4, g: 0.4, b: 1, a: 0.95}
 --- !u!114 &8649391659866532119
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -975,7 +1251,30 @@ MonoBehaviour:
   Global: 0
   Enabled: 1
   Ignore: 0
-  _editor_drawRule: 1
+  OwnerSpawner:
+    Enabled: 1
+    Name: Light
+    SpawnerTag: 
+    StampPrefabID: 0
+    Parent: {fileID: -645158413372251921}
+    Rules:
+    - {fileID: 7683202550219056639}
+    - {fileID: 5649255963489816864}
+    - {fileID: 8649391659866532119}
+    Mode: 0
+    CellCheckMode: 0
+    _Editor_SpawnerAdvancedOptionsFoldout: 0
+    OnScalledGrid: 1
+    Repeat: 1
+    InheritRotations: 0
+    MultipleToSpawn: 0
+    UseGlobalRules: 1
+    UseParentPackageRules: 1
+    _wasEnablingGlobalRules: 1
+    ScaleAccess: 1
+    DisplayPreviewGUI: 1
+    IsSubSpawner: 0
+    _EditorDisplaySpawnerHeader: 1
   CellAllow: 0
   AllConditionsMet: 1
   OffsetCellMode: 0
@@ -983,13 +1282,13 @@ MonoBehaviour:
   DistanceMustBe: 1
   IgnoreSelf: 1
   DistanceToTagged: Light
-  CheckMode: 3
   Distance: 4
-  MeasureIn: 1
   DistanceMulVariable:
     name: 
     requiredType: 1
     Tooltip: 
+  CheckMode: 3
+  MeasureIn: 1
 --- !u!114 &8915995890058903272
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1007,7 +1306,29 @@ MonoBehaviour:
   Global: 0
   Enabled: 1
   Ignore: 0
-  _editor_drawRule: 1
+  OwnerSpawner:
+    Enabled: 1
+    Name: Wall-Base
+    SpawnerTag: Wall
+    StampPrefabID: 1
+    Parent: {fileID: 326047505877679129}
+    Rules:
+    - {fileID: 419680052748538221}
+    - {fileID: 8915995890058903272}
+    Mode: 0
+    CellCheckMode: 0
+    _Editor_SpawnerAdvancedOptionsFoldout: 0
+    OnScalledGrid: 1
+    Repeat: 1
+    InheritRotations: 0
+    MultipleToSpawn: 0
+    UseGlobalRules: 1
+    UseParentPackageRules: 1
+    _wasEnablingGlobalRules: 1
+    ScaleAccess: 1
+    DisplayPreviewGUI: 1
+    IsSubSpawner: 0
+    _EditorDisplaySpawnerHeader: 1
   CellAllow: 1
   AllConditionsMet: 1
   ScaleMultiplier: {x: 1, y: 0.5, z: 1}
@@ -1033,7 +1354,30 @@ MonoBehaviour:
   Global: 0
   Enabled: 1
   Ignore: 0
-  _editor_drawRule: 1
+  OwnerSpawner:
+    Enabled: 1
+    Name: Closet
+    SpawnerTag: 
+    StampPrefabID: 1
+    Parent: {fileID: -1328033709205236978}
+    Rules:
+    - {fileID: 7278172144921372872}
+    - {fileID: 571540510497389879}
+    - {fileID: 9051142139903330547}
+    Mode: 0
+    CellCheckMode: 0
+    _Editor_SpawnerAdvancedOptionsFoldout: 0
+    OnScalledGrid: 1
+    Repeat: 1
+    InheritRotations: 0
+    MultipleToSpawn: 0
+    UseGlobalRules: 1
+    UseParentPackageRules: 1
+    _wasEnablingGlobalRules: 1
+    ScaleAccess: 1
+    DisplayPreviewGUI: 1
+    IsSubSpawner: 0
+    _EditorDisplaySpawnerHeader: 1
   CellAllow: 1
   AllConditionsMet: 1
   GetFromTagged: Wall

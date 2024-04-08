@@ -15,34 +15,33 @@ namespace FIMSpace.Generating
         bool drawPrefabsOverrides = true;
         bool drawUtilitiesOverrides = false;
         UnityEngine.Object toDirty = null;
-
+        static bool wasInit = false;
         public static List<FieldCompositionWindow> opened = new List<FieldCompositionWindow>();
 
         private void Awake()
         {
-            PGGUtils.CheckForNulls(opened);
-            if (opened.Contains(this) == false) opened.Add(this);
+            PGGUtils.CheckForNulls( opened );
+            if( opened.Contains( this ) == false ) opened.Add( this );
         }
 
         private void OnDestroy()
         {
-            if (opened.Contains(this)) opened.Remove(this);
+            if( opened.Contains( this ) ) opened.Remove( this );
         }
 
-
-        public static void Init(FieldSetupComposition composition, string targetName = "", Object toDirty = null)
+        public static void Init( FieldSetupComposition composition, string targetName = "", Object toDirty = null )
         {
-            for (int i = 0; i < opened.Count; i++)
+            for( int i = 0; i < opened.Count; i++ )
             {
-                if (composition == opened[i].composition)
+                if( composition == opened[i].composition )
                 {
                     opened[i].Focus();
                     return;
                 }
             }
 
-            FieldCompositionWindow window = GetWindow<FieldCompositionWindow>(true);
-            if (window == null)
+            FieldCompositionWindow window = GetWindow<FieldCompositionWindow>( true );
+            if( window == null )
             {
 #if UNITY_2019_4_OR_NEWER
                 window = CreateWindow<FieldCompositionWindow>();
@@ -52,23 +51,30 @@ namespace FIMSpace.Generating
             }
 
             string title = "Composition";
-            if (string.IsNullOrEmpty(targetName))
+            if( string.IsNullOrEmpty( targetName ) )
             {
-                if (composition.Setup != null) title = composition.Setup.name;
+                if( composition.Setup != null ) title = composition.Setup.name;
             }
             else
                 title = targetName;
 
-            window.titleContent = new GUIContent(title, Resources.Load<Texture>("SPR_Compos"));
+            wasInit = true;
+            window.titleContent = new GUIContent( title, Resources.Load<Texture>( "SPR_Compos" ) );
             window.composition = composition;
             window.Show();
-
             window.toDirty = toDirty;
         }
 
 
         void OnGUI()
         {
+            if ( !wasInit ) // Prevent editing composition after compile (reference to source may be lost and working on unity generated ghost data)
+            {
+                Close();
+                return;
+            }
+
+            //
             //bool preWideMode = EditorGUIUtility.wideMode;
             //bool preHierarchyMode = EditorGUIUtility.hierarchyMode;
             //EditorGUIUtility.hierarchyMode = true;
@@ -78,101 +84,101 @@ namespace FIMSpace.Generating
             Color preCol = GUI.color;
             bool preEn = GUI.enabled;
 
-            mainScroll = EditorGUILayout.BeginScrollView(mainScroll);
+            mainScroll = EditorGUILayout.BeginScrollView( mainScroll );
             EditorGUI.BeginChangeCheck();
 
-            GUILayout.Space(9);
+            GUILayout.Space( 9 );
             EditorGUILayout.BeginHorizontal();
 
-            EditorGUILayout.LabelField("  Customize ", EditorStyles.boldLabel, GUILayout.Width(81));
+            EditorGUILayout.LabelField( "  Customize ", EditorStyles.boldLabel, GUILayout.Width( 81 ) );
 
             GUI.enabled = false;
 
-            FieldSetupComposition.DrawGenSelectorGUI(composition);
+            FieldSetupComposition.DrawGenSelectorGUI( composition );
             //EditorGUILayout.ObjectField("Parent Planner:", composition.ParentFieldPlanner, typeof(FieldPlanner), true);
-            GUILayout.Space(5);
+            GUILayout.Space( 5 );
             GUI.enabled = preEn;
             EditorGUILayout.EndHorizontal();
 
-            GUILayout.Space(5f);
+            GUILayout.Space( 5f );
 
             bool preWide = EditorGUIUtility.wideMode;
             EditorGUIUtility.wideMode = true;
             GUILayout.BeginHorizontal();
-            composition.OverrideCellSize = GUILayout.Toggle(composition.OverrideCellSize, GUIContent.none, GUILayout.Width(18));
-            if (composition.OverrideCellSize == false)
+            composition.OverrideCellSize = GUILayout.Toggle( composition.OverrideCellSize, GUIContent.none, GUILayout.Width( 18 ) );
+            if( composition.OverrideCellSize == false )
             {
                 GUI.enabled = false;
-                if (composition.Setup) composition.OverridingCellSize = composition.Setup.GetCellUnitSize();
+                if( composition.Setup ) composition.OverridingCellSize = composition.Setup.GetCellUnitSize();
             }
             EditorGUIUtility.labelWidth = 120;
-            composition.OverridingCellSize = EditorGUILayout.Vector3Field("Override Cell Size:", composition.OverridingCellSize);
+            composition.OverridingCellSize = EditorGUILayout.Vector3Field( "Override Cell Size:", composition.OverridingCellSize );
             EditorGUIUtility.labelWidth = 0;
-            if (composition.OverrideCellSize == false) GUI.enabled = true;
+            if( composition.OverrideCellSize == false ) GUI.enabled = true;
             GUILayout.EndHorizontal();
             EditorGUIUtility.wideMode = preWide;
 
 
-            GUILayout.Space(6);
+            GUILayout.Space( 6 );
 
             FieldSetup setp = composition.GetSetup;
             ModificatorsPack pack = null;
             FieldModification mod = null;
             FieldSpawner spawner = null;
 
-            if (!composition.IsSettedUp)
+            if( !composition.IsSettedUp )
             {
-                EditorGUILayout.LabelField("No Setup Reference in composition!", EditorStyles.centeredGreyMiniLabel);
+                EditorGUILayout.LabelField( "No Setup Reference in composition!", EditorStyles.centeredGreyMiniLabel );
             }
             else
             {
-                if (composition.GenType == EPGGGenType.FieldSetup)
+                if( composition.GenType == EPGGGenType.FieldSetup )
                 {
-                    if (composition.Setup) pack = composition.Setup.RootPack;
+                    if( composition.Setup ) pack = composition.Setup.RootPack;
                 }
-                else if (composition.GenType == EPGGGenType.Modificator) mod = composition.JustMod;
-                else if (composition.GenType == EPGGGenType.ModPack) pack = composition.JustModPack;
+                else if( composition.GenType == EPGGGenType.Modificator ) mod = composition.JustMod;
+                else if( composition.GenType == EPGGGenType.ModPack ) pack = composition.JustModPack;
 
 
                 #region Selecting References
 
-                if (composition.GenType != EPGGGenType.Modificator)
+                if( composition.GenType != EPGGGenType.Modificator )
                 {
 
-                    if (pack)
+                    if( pack )
                     {
 
-                        if (pack.FieldModificators.Count == 0)
+                        if( pack.FieldModificators.Count == 0 )
                         {
                             // Just root pack
-                            EditorGUILayout.LabelField("Root Mods Pack", EditorStyles.centeredGreyMiniLabel);
+                            EditorGUILayout.LabelField( "Root Mods Pack", EditorStyles.centeredGreyMiniLabel );
                         }
                         else // Root pack and other packs
                         {
 
-                            if (setp)
+                            if( setp )
                             {
 
-                                if (composition.GenType == EPGGGenType.FieldSetup)
+                                if( composition.GenType == EPGGGenType.FieldSetup )
                                 {
-                                    if (selectedPack < composition.Setup.ModificatorPacks.Count) pack = composition.Setup.ModificatorPacks[selectedPack];
+                                    if( selectedPack < composition.Setup.ModificatorPacks.Count ) pack = composition.Setup.ModificatorPacks[selectedPack];
                                     else selectedPack = 0;
                                 }
 
-                                if (pack.FieldModificators.Count == 0)
+                                if( pack.FieldModificators.Count == 0 )
                                 {
-                                    EditorGUILayout.LabelField("No Modificators in Pack!", EditorStyles.centeredGreyMiniLabel);
+                                    EditorGUILayout.LabelField( "No Modificators in Pack!", EditorStyles.centeredGreyMiniLabel );
                                 }
                                 else
                                 {
-                                    if (selectedMod < pack.FieldModificators.Count) mod = pack.FieldModificators[selectedMod];
+                                    if( selectedMod < pack.FieldModificators.Count ) mod = pack.FieldModificators[selectedMod];
                                     else selectedMod = 0;
 
-                                    if (mod)
+                                    if( mod )
                                     {
-                                        if (mod.Spawners.Count > 0)
+                                        if( mod.Spawners.Count > 0 )
                                         {
-                                            if (selectedSpawner < mod.Spawners.Count) spawner = mod.Spawners[selectedSpawner];
+                                            if( selectedSpawner < mod.Spawners.Count ) spawner = mod.Spawners[selectedSpawner];
                                             else selectedSpawner = 0;
                                         }
                                     }
@@ -185,175 +191,175 @@ namespace FIMSpace.Generating
                     }
                     else
                     {
-                        EditorGUILayout.LabelField("Wrong Modificators Pack!", EditorStyles.centeredGreyMiniLabel);
+                        EditorGUILayout.LabelField( "Wrong Modificators Pack!", EditorStyles.centeredGreyMiniLabel );
                     }
                 }
 
                 #endregion
 
 
-                bool validation = composition.ValidateComposition(selectedPack);
+                bool validation = composition.ValidateComposition( selectedPack );
 
-                if (validation)
+                if( validation )
                 {
                     FieldSetup tgtSetup = composition.GetSetup;
 
-                    EditorGUILayout.BeginVertical(FGUI_Resources.BGInBoxStyle);
+                    EditorGUILayout.BeginVertical( FGUI_Resources.BGInBoxStyle );
 
                     EditorGUILayout.BeginHorizontal();
-                    FGUI_Inspector.FoldHeaderStart(ref drawInjections, "Injections (" + composition.Injections.Count + ")", null);
-                    if (drawInjections) if (GUILayout.Button("+", FGUI_Resources.ButtonStyle, GUILayout.Height(18), GUILayout.Width(24))) { composition.Injections.Add(new InjectionSetup(null, InjectionSetup.EGridCall.Post)); OnChange(); }
+                    FGUI_Inspector.FoldHeaderStart( ref drawInjections, "Injections (" + composition.Injections.Count + ")", null );
+                    if( drawInjections ) if( GUILayout.Button( "+", FGUI_Resources.ButtonStyle, GUILayout.Height( 18 ), GUILayout.Width( 24 ) ) ) { composition.Injections.Add( new InjectionSetup( null, InjectionSetup.EGridCall.Post ) ); OnChange(); }
                     EditorGUILayout.EndHorizontal();
 
-                    if (drawInjections)
+                    if( drawInjections )
                     {
-                        GUILayout.Space(5f);
+                        GUILayout.Space( 5f );
 
-                        for (int i = 0; i < composition.Injections.Count; i++)
+                        for( int i = 0; i < composition.Injections.Count; i++ )
                         {
                             float bright = i % 2 == 0 ? 0.75f : 0.5f;
                             float brightB = i % 2 == 0 ? 1f : 0.5f;
-                            GUI.color = new Color(bright, bright, brightB, 1f);
-                            EditorGUILayout.BeginVertical(FGUI_Resources.BGInBoxStyleH);
+                            GUI.color = new Color( bright, bright, brightB, 1f );
+                            EditorGUILayout.BeginVertical( FGUI_Resources.BGInBoxStyleH );
                             GUI.color = Color.white;
 
-                            DrawInjection(composition, i);
+                            DrawInjection( composition, i );
                             EditorGUILayout.EndVertical();
                         }
 
-                        if (_injectionIndexToRemove > -1)
+                        if( _injectionIndexToRemove > -1 )
                         {
-                            composition.Injections.RemoveAt(_injectionIndexToRemove);
+                            composition.Injections.RemoveAt( _injectionIndexToRemove );
                             OnChange();
                             _injectionIndexToRemove = -1;
                         }
 
-                        GUILayout.Space(5f);
+                        GUILayout.Space( 5f );
                     }
 
                     EditorGUILayout.EndVertical();
 
 
 
-                    if (tgtSetup && composition.FieldSetupVariablesOverrides != null && composition.FieldSetupVariablesOverrides.Count > 0)
+                    if( tgtSetup && composition.FieldSetupVariablesOverrides != null && composition.FieldSetupVariablesOverrides.Count > 0 )
                     {
-                        GUILayout.Space(4f);
+                        GUILayout.Space( 4f );
 
                         #region Field Setup Variables
 
 
-                        if (tgtSetup.Variables.Count > 0)
+                        if( tgtSetup.Variables.Count > 0 )
                         {
                             string varTitle = "Override FieldSetup Variables";
-                            if (composition.GenType != EPGGGenType.FieldSetup) varTitle = "Override Parent FieldSetup Variables";
+                            if( composition.GenType != EPGGGenType.FieldSetup ) varTitle = "Override Parent FieldSetup Variables";
 
-                            FGUI_Inspector.FoldHeaderStart(ref drawSetupVars, varTitle, FGUI_Resources.BGInBoxStyle);
+                            FGUI_Inspector.FoldHeaderStart( ref drawSetupVars, varTitle, FGUI_Resources.BGInBoxStyle );
 
-                            if (drawSetupVars)
+                            if( drawSetupVars )
                             {
-                                GUILayout.Space(5f);
+                                GUILayout.Space( 5f );
 
-                                for (int i = 0; i < composition.FieldSetupVariablesOverrides.Count; i++)
+                                for( int i = 0; i < composition.FieldSetupVariablesOverrides.Count; i++ )
                                 {
-                                    composition.FieldSetupVariablesOverrides[i].UpdateVariableWith(tgtSetup.Variables[i], true);
-                                    FieldVariable.Editor_DrawTweakableVariable(composition.FieldSetupVariablesOverrides[i]);
+                                    composition.FieldSetupVariablesOverrides[i].UpdateVariableWith( tgtSetup.Variables[i], true );
+                                    FieldVariable.Editor_DrawTweakableVariable( composition.FieldSetupVariablesOverrides[i] );
                                 }
 
-                                GUILayout.Space(5f);
+                                GUILayout.Space( 5f );
                             }
 
                             EditorGUILayout.EndVertical();
                         }
 
-                        GUILayout.Space(10f);
+                        GUILayout.Space( 10f );
 
                         #endregion
                     }
 
 
-                    if (composition.GenType == EPGGGenType.Modificator)
+                    if( composition.GenType == EPGGGenType.Modificator )
                     {
-                        if (composition.UtilityModsOverrides == null) composition.UtilityModsOverrides = new List<FieldSetupComposition.ModOverrideHelper>();
-                        if (composition.UtilityModsOverrides.Count == 0)
+                        if( composition.UtilityModsOverrides == null ) composition.UtilityModsOverrides = new List<FieldSetupComposition.ModOverrideHelper>();
+                        if( composition.UtilityModsOverrides.Count == 0 )
                         {
-                            composition.UtilityModsOverrides.Add(new FieldSetupComposition.ModOverrideHelper());
-                            composition.RefreshModTo(mod, composition.UtilityModsOverrides[0]);
+                            composition.UtilityModsOverrides.Add( new FieldSetupComposition.ModOverrideHelper() );
+                            composition.RefreshModTo( mod, composition.UtilityModsOverrides[0] );
                         }
 
-                        DisplayModOverridesGUI(mod, composition.UtilityModsOverrides[0], ref pfUtilScroll);
+                        DisplayModOverridesGUI( mod, composition.UtilityModsOverrides[0], ref pfUtilScroll );
                     }
                     else
                     {
-                        if (pack && mod/* && spawner != null*/)
+                        if( pack && mod/* && spawner != null*/)
                         {
 
-                            FGUI_Inspector.FoldHeaderStart(ref drawPrefabsOverrides, "Override Prefabs to Spawn", FGUI_Resources.BGInBoxStyle);
+                            FGUI_Inspector.FoldHeaderStart( ref drawPrefabsOverrides, "Override Prefabs to Spawn", FGUI_Resources.BGInBoxStyle );
                             bool packEnabled = true;
 
                             #region Package Overrides
 
-                            if (drawPrefabsOverrides)
+                            if( drawPrefabsOverrides )
                             {
-                                GUILayout.Space(7);
-                                var packOverrides = composition.GetOverridesFor(pack);
+                                GUILayout.Space( 7 );
+                                var packOverrides = composition.GetOverridesFor( pack );
                                 bool refreshNeeded = false;
 
 
-                                if (composition.GenType == EPGGGenType.FieldSetup)
+                                if( composition.GenType == EPGGGenType.FieldSetup )
                                 {
 
-                                    if (composition.Setup.ModificatorPacks.Count > 1)
+                                    if( composition.Setup.ModificatorPacks.Count > 1 )
                                     {
-                                        if (selectedPack > 0) GUI.color = new Color(0.7f, 1f, 0.7f, 1f);
+                                        if( selectedPack > 0 ) GUI.color = new Color( 0.7f, 1f, 0.7f, 1f );
                                         EditorGUILayout.BeginVertical();
                                         GUI.color = preCol;
                                     }
 
-                                    if (composition.Setup.ModificatorPacks.Count > 1)
+                                    if( composition.Setup.ModificatorPacks.Count > 1 )
                                     {
-                                        EditorGUILayout.BeginVertical(FGUI_Resources.HeaderBoxStyle);
+                                        EditorGUILayout.BeginVertical( FGUI_Resources.HeaderBoxStyle );
 
-                                        EditorGUILayout.BeginHorizontal(GUILayout.Height(20));
+                                        EditorGUILayout.BeginHorizontal( GUILayout.Height( 20 ) );
 
-                                        if (GUILayout.Button(new GUIContent(FGUI_Resources.Tex_LeftFold), GUILayout.Height(20))) { pfScroll = Vector2.zero; selectedPack -= 1; if (selectedPack < 0) selectedPack = composition.Setup.ModificatorPacks.Count - 1; }
+                                        if( GUILayout.Button( new GUIContent( FGUI_Resources.Tex_LeftFold ), GUILayout.Height( 20 ) ) ) { pfScroll = Vector2.zero; selectedPack -= 1; if( selectedPack < 0 ) selectedPack = composition.Setup.ModificatorPacks.Count - 1; }
 
-                                        EditorGUILayout.LabelField((selectedPack + 1) + " / " + composition.Setup.ModificatorPacks.Count, FGUI_Resources.HeaderStyle, GUILayout.Width(64));
+                                        EditorGUILayout.LabelField( ( selectedPack + 1 ) + " / " + composition.Setup.ModificatorPacks.Count, FGUI_Resources.HeaderStyle, GUILayout.Width( 64 ) );
 
 
-                                        if (packOverrides != null)
+                                        if( packOverrides != null )
                                         {
                                             packOverrides.SetEnabled =
-                                                EditorGUILayout.Toggle(packOverrides.SetEnabled, GUILayout.Width(24));
+                                                EditorGUILayout.Toggle( packOverrides.SetEnabled, GUILayout.Width( 24 ) );
 
                                             packEnabled = packOverrides.SetEnabled;
                                         }
 
 
                                         GUI.enabled = false;
-                                        EditorGUILayout.ObjectField(pack, typeof(ModificatorsPack), true, GUILayout.MinWidth(120));
+                                        EditorGUILayout.ObjectField( pack, typeof( ModificatorsPack ), true, GUILayout.MinWidth( 120 ) );
                                         GUI.enabled = preEn;
 
                                         //EditorGUILayout.ObjectField(pack, typeof(ModificatorsPack), true, GUILayout.MinWidth(120));
                                         //EditorGUILayout.LabelField(" Mod Pack: " + (selectedPack + 1) + " / " + composition.Setup.ModificatorPacks.Count, FGUI_Resources.HeaderStyle);
-                                        if (GUILayout.Button(new GUIContent(FGUI_Resources.Tex_RightFold), GUILayout.Height(20))) { pfScroll = Vector2.zero; selectedPack += 1; if (selectedPack >= composition.Setup.ModificatorPacks.Count) selectedPack = 0; }
+                                        if( GUILayout.Button( new GUIContent( FGUI_Resources.Tex_RightFold ), GUILayout.Height( 20 ) ) ) { pfScroll = Vector2.zero; selectedPack += 1; if( selectedPack >= composition.Setup.ModificatorPacks.Count ) selectedPack = 0; }
                                         EditorGUILayout.EndHorizontal();
 
-                                        GUILayout.Space(2f);
+                                        GUILayout.Space( 2f );
 
-                                        if (pack.Variables.Count > 0)
+                                        if( pack.Variables.Count > 0 )
                                         {
-                                            GUILayout.Space(4);
+                                            GUILayout.Space( 4 );
                                             //EditorGUILayout.LabelField("Override Package Variables", EditorStyles.centeredGreyMiniLabel);
 
-                                            FGUI_Inspector.FoldHeaderStart(ref drawPackVars, "Override Package Variables", FGUI_Resources.BGInBoxStyle);
+                                            FGUI_Inspector.FoldHeaderStart( ref drawPackVars, "Override Package Variables", FGUI_Resources.BGInBoxStyle );
 
-                                            if (drawPackVars)
+                                            if( drawPackVars )
                                             {
 
-                                                for (int i = 0; i < packOverrides.PackVariablesOverrides.Count; i++)
+                                                for( int i = 0; i < packOverrides.PackVariablesOverrides.Count; i++ )
                                                 {
-                                                    packOverrides.PackVariablesOverrides[i].UpdateVariableWith(packOverrides.ParentPack.Variables[i], true);
-                                                    FieldVariable.Editor_DrawTweakableVariable(packOverrides.PackVariablesOverrides[i]);
+                                                    packOverrides.PackVariablesOverrides[i].UpdateVariableWith( packOverrides.ParentPack.Variables[i], true );
+                                                    FieldVariable.Editor_DrawTweakableVariable( packOverrides.PackVariablesOverrides[i] );
                                                 }
 
                                             }
@@ -366,116 +372,142 @@ namespace FIMSpace.Generating
 
                                 }
 
-                                EditorGUILayout.BeginVertical(FGUI_Resources.BGInBoxBlankStyle);
+                                EditorGUILayout.BeginVertical( FGUI_Resources.BGInBoxBlankStyle );
 
                                 bool drawSwitchers = pack.FieldModificators.Count > 1;
-                                EditorGUILayout.BeginHorizontal(GUILayout.Height(20));
+                                EditorGUILayout.BeginHorizontal( GUILayout.Height( 20 ) );
 
-                                if (drawSwitchers) if (GUILayout.Button(new GUIContent(FGUI_Resources.Tex_LeftFold), GUILayout.Height(20))) { pfScroll = Vector2.zero; selectedMod -= 1; if (selectedMod < 0) selectedMod = pack.FieldModificators.Count - 1; }
-                                if (drawSwitchers) EditorGUILayout.LabelField((selectedMod + 1) + " / " + pack.FieldModificators.Count, FGUI_Resources.HeaderStyle, GUILayout.Width(64));
+                                if( drawSwitchers ) if( GUILayout.Button( new GUIContent( FGUI_Resources.Tex_LeftFold ), GUILayout.Height( 20 ) ) ) { pfScroll = Vector2.zero; selectedMod -= 1; if( selectedMod < 0 ) selectedMod = pack.FieldModificators.Count - 1; }
+                                if( drawSwitchers ) EditorGUILayout.LabelField( ( selectedMod + 1 ) + " / " + pack.FieldModificators.Count, FGUI_Resources.HeaderStyle, GUILayout.Width( 64 ) );
 
                                 bool modEnabled = true;
 
-                                if (packOverrides != null)
-                                    if (packOverrides.PackModsOverrides[selectedMod] != null)
+                                if( packOverrides != null )
+                                    if( packOverrides.PackModsOverrides[selectedMod] != null )
                                     {
                                         packOverrides.PackModsOverrides[selectedMod].SetEnabled =
-                                            EditorGUILayout.Toggle(packOverrides.PackModsOverrides[selectedMod].SetEnabled, GUILayout.Width(24));
+                                            EditorGUILayout.Toggle( packOverrides.PackModsOverrides[selectedMod].SetEnabled, GUILayout.Width( 24 ) );
 
                                         modEnabled = packOverrides.PackModsOverrides[selectedMod].SetEnabled;
                                     }
 
-                                if (composition.GenType == EPGGGenType.ModPack)
+                                if( composition.GenType == EPGGGenType.ModPack )
                                 {
                                     packOverrides = composition.FieldPackagesOverrides[0];
                                 }
 
                                 GUI.enabled = false;
-                                EditorGUILayout.ObjectField(mod, typeof(FieldModification), true, GUILayout.MinWidth(120));
+                                EditorGUILayout.ObjectField( mod, typeof( FieldModification ), true, GUILayout.MinWidth( 120 ) );
                                 GUI.enabled = preEn;
-                                GUILayout.Space(4f);
+                                GUILayout.Space( 4f );
 
-                                if (drawSwitchers) if (GUILayout.Button(new GUIContent(FGUI_Resources.Tex_RightFold), GUILayout.Height(20))) { pfScroll = Vector2.zero; selectedMod += 1; if (selectedMod >= pack.FieldModificators.Count) selectedMod = 0; }
+                                if( drawSwitchers ) if( GUILayout.Button( new GUIContent( FGUI_Resources.Tex_RightFold ), GUILayout.Height( 20 ) ) ) { pfScroll = Vector2.zero; selectedMod += 1; if( selectedMod >= pack.FieldModificators.Count ) selectedMod = 0; }
                                 EditorGUILayout.EndHorizontal();
 
 
-                                GUILayout.Space(2);
-                                EditorGUILayout.LabelField("Alternate spawned prefabs with other ones", EditorStyles.centeredGreyMiniLabel);
-                                GUILayout.Space(2);
+                                GUILayout.Space( 2 );
+                                EditorGUILayout.LabelField( "Alternate spawned prefabs with other ones", EditorStyles.centeredGreyMiniLabel );
+                                GUILayout.Space( 2 );
 
 
-                                if (spawner == null)
+                                if( spawner == null )
                                 {
-                                    EditorGUILayout.LabelField("No Spawners In Modificator!", EditorStyles.centeredGreyMiniLabel);
+                                    EditorGUILayout.LabelField( "No Spawners In Modificator!", EditorStyles.centeredGreyMiniLabel );
                                 }
 
-                                GUILayout.Space(4f);
+                                GUILayout.Space( 4f );
 
                                 FieldSetupComposition.ModOverrideHelper modOverrides = null;
 
-                                if (composition.GenType == EPGGGenType.FieldSetup || composition.GenType == EPGGGenType.ModPack)
+                                if( composition.GenType == EPGGGenType.FieldSetup || composition.GenType == EPGGGenType.ModPack )
                                 {
-                                    if (packOverrides == null)
+                                    if( packOverrides == null )
                                     {
                                         refreshNeeded = true;
                                     }
                                     else
-                                    if (packOverrides.PackVariablesOverrides.Count != pack.Variables.Count)
+                                    if( packOverrides.PackVariablesOverrides.Count != pack.Variables.Count )
                                     {
                                         refreshNeeded = true;
                                     }
                                     else
                                     {
-                                        if (packOverrides.PackModsOverrides.Count != pack.FieldModificators.Count)
+                                        if( packOverrides.PackModsOverrides.Count != pack.FieldModificators.Count )
                                         {
                                             refreshNeeded = true;
                                         }
                                     }
 
-                                    if (refreshNeeded)
-                                        if (GUILayout.Button("Refresh Overrides Reference"))
+                                    if( refreshNeeded )
+                                    {
+                                        EditorGUILayout.BeginHorizontal();
+
+                                        if( GUILayout.Button( "Refresh All Overrides Reference" ) )
                                         {
-                                            if (composition.GenType == EPGGGenType.FieldSetup)
-                                                composition.RefreshWith(this, composition.ParentFieldPlanner, composition.Setup, true);
+                                            if( composition.GenType == EPGGGenType.FieldSetup )
+                                                composition.RefreshWith( this, composition.ParentFieldPlanner, composition.Setup, true );
                                             else
-                                                composition.RefreshWith(composition.JustModPack);
+                                                composition.RefreshWith( composition.JustModPack );
+                                            OnChange();
                                         }
 
-                                    if (!refreshNeeded)
-                                        if (packOverrides != null)
+                                        if( GUILayout.Button( "Refresh Mod" ) )
                                         {
-                                            modOverrides = packOverrides.GetOverridesFor(mod);
+                                            modOverrides.UpdateModsCountWith( mod );
+                                            OnChange();
+                                        }
 
-                                            if (modOverrides == null)
+                                        EditorGUILayout.EndHorizontal();
+                                    }
+
+                                    if( !refreshNeeded )
+                                        if( packOverrides != null )
+                                        {
+                                            modOverrides = packOverrides.GetOverridesFor( mod );
+
+                                            if( modOverrides == null )
                                                 refreshNeeded = true;
                                             else
-                                                if (modOverrides.OverridePrefabs.Count != mod.PrefabsList.Count)
+                                                if( modOverrides.OverridePrefabs.Count != mod.PrefabsList.Count )
                                                 refreshNeeded = true;
 
-                                            if (refreshNeeded)
-                                                if (GUILayout.Button("Refresh Overrides Reference"))
+                                            if( refreshNeeded )
+                                            {
+                                                EditorGUILayout.BeginHorizontal();
+                                                if( GUILayout.Button( "Refresh All Overrides Reference" ) )
                                                 {
-                                                    if (composition.GenType == EPGGGenType.FieldSetup)
-                                                        composition.RefreshWith(this, composition.ParentFieldPlanner, composition.Setup, true);
+                                                    if( composition.GenType == EPGGGenType.FieldSetup )
+                                                        composition.RefreshWith( this, composition.ParentFieldPlanner, composition.Setup, true );
                                                     else
-                                                        composition.RefreshWith(composition.JustModPack);
+                                                        composition.RefreshWith( composition.JustModPack );
+                                                    OnChange();
                                                 }
+
+                                                if( GUILayout.Button( "Refresh Mod" ) )
+                                                {
+                                                    modOverrides.UpdateModsCountWith( mod );
+                                                    OnChange();
+                                                }
+
+                                                EditorGUILayout.EndHorizontal();
+
+                                            }
                                         }
 
                                 }
 
 
-                                if (modEnabled == false || packEnabled == false) GUI.enabled = false;
-                                DisplayModOverridesGUI(mod, modOverrides, ref pfScroll);
-                                if (modEnabled == false || packEnabled == false) GUI.enabled = true;
+                                if( modEnabled == false || packEnabled == false ) GUI.enabled = false;
+                                DisplayModOverridesGUI( mod, modOverrides, ref pfScroll );
+                                if( modEnabled == false || packEnabled == false ) GUI.enabled = true;
 
 
-                                GUILayout.Space(4f);
+                                GUILayout.Space( 4f );
                                 EditorGUILayout.EndVertical();
 
 
-                                if (composition.GenType == EPGGGenType.FieldSetup)
-                                    if (composition.Setup.ModificatorPacks.Count > 1)
+                                if( composition.GenType == EPGGGenType.FieldSetup )
+                                    if( composition.Setup.ModificatorPacks.Count > 1 )
                                     {
                                         EditorGUILayout.EndVertical();
                                     }
@@ -485,37 +517,37 @@ namespace FIMSpace.Generating
 
                             EditorGUILayout.EndVertical();
 
-                            if (composition.GenType == EPGGGenType.FieldSetup)
+                            if( composition.GenType == EPGGGenType.FieldSetup )
                             {
 
-                                if (composition.Setup.UtilityModificators.Count > 0)
+                                if( composition.Setup.UtilityModificators.Count > 0 )
                                 {
 
-                                    GUILayout.Space(10);
-                                    FGUI_Inspector.FoldHeaderStart(ref drawUtilitiesOverrides, "Override Utility Modificators", FGUI_Resources.BGInBoxStyle);
+                                    GUILayout.Space( 10 );
+                                    FGUI_Inspector.FoldHeaderStart( ref drawUtilitiesOverrides, "Override Utility Modificators", FGUI_Resources.BGInBoxStyle );
 
-                                    if (drawUtilitiesOverrides)
+                                    if( drawUtilitiesOverrides )
                                     {
-                                        GUILayout.Space(4);
+                                        GUILayout.Space( 4 );
 
-                                        EditorGUILayout.BeginHorizontal(GUILayout.Height(20));
+                                        EditorGUILayout.BeginHorizontal( GUILayout.Height( 20 ) );
 
-                                        if (GUILayout.Button(new GUIContent(FGUI_Resources.Tex_LeftFold), GUILayout.Height(20))) { pfScroll = Vector2.zero; selectedCommand -= 1; if (selectedCommand < 0) selectedCommand = composition.Setup.UtilityModificators.Count - 1; }
+                                        if( GUILayout.Button( new GUIContent( FGUI_Resources.Tex_LeftFold ), GUILayout.Height( 20 ) ) ) { pfScroll = Vector2.zero; selectedCommand -= 1; if( selectedCommand < 0 ) selectedCommand = composition.Setup.UtilityModificators.Count - 1; }
 
-                                        EditorGUILayout.LabelField((selectedCommand + 1) + " / " + composition.Setup.UtilityModificators.Count, FGUI_Resources.HeaderStyle, GUILayout.Width(64));
+                                        EditorGUILayout.LabelField( ( selectedCommand + 1 ) + " / " + composition.Setup.UtilityModificators.Count, FGUI_Resources.HeaderStyle, GUILayout.Width( 64 ) );
 
                                         GUI.enabled = false;
-                                        EditorGUILayout.ObjectField(composition.Setup.UtilityModificators[selectedCommand], typeof(FieldModification), true, GUILayout.MinWidth(120));
+                                        EditorGUILayout.ObjectField( composition.Setup.UtilityModificators[selectedCommand], typeof( FieldModification ), true, GUILayout.MinWidth( 120 ) );
                                         GUI.enabled = preEn;
 
-                                        if (GUILayout.Button(new GUIContent(FGUI_Resources.Tex_RightFold), GUILayout.Height(20))) { pfScroll = Vector2.zero; selectedCommand += 1; if (selectedCommand >= composition.Setup.UtilityModificators.Count) selectedCommand = 0; }
+                                        if( GUILayout.Button( new GUIContent( FGUI_Resources.Tex_RightFold ), GUILayout.Height( 20 ) ) ) { pfScroll = Vector2.zero; selectedCommand += 1; if( selectedCommand >= composition.Setup.UtilityModificators.Count ) selectedCommand = 0; }
                                         EditorGUILayout.EndHorizontal();
 
-                                        GUILayout.Space(2);
+                                        GUILayout.Space( 2 );
 
-                                        DisplayModOverridesGUI(composition.Setup.UtilityModificators[selectedCommand], composition.UtilityModsOverrides[selectedCommand], ref pfUtilScroll);
+                                        DisplayModOverridesGUI( composition.Setup.UtilityModificators[selectedCommand], composition.UtilityModsOverrides[selectedCommand], ref pfUtilScroll );
 
-                                        GUILayout.Space(2);
+                                        GUILayout.Space( 2 );
 
 
                                     }
@@ -531,22 +563,24 @@ namespace FIMSpace.Generating
                 }
                 else
                 {
-                    EditorGUILayout.HelpBox("Composition must be refreshed!", MessageType.Info);
+                    EditorGUILayout.HelpBox( "Composition must be refreshed!", MessageType.Info );
                 }
             }
 
 
-            GUILayout.Space(9);
-            GUI.backgroundColor = new Color(1f, 0.65f, 0.65f, 1f);
-            if (GUILayout.Button(new GUIContent(" Don't Use Composition", FGUI_Resources.Tex_Remove), FGUI_Resources.ButtonStyle, GUILayout.Height(22))) { composition.Prepared = false; Close(); }
+            GUILayout.Space( 9 );
+            GUI.backgroundColor = new Color( 1f, 0.65f, 0.65f, 1f );
+            if( GUILayout.Button( new GUIContent( " Don't Use Composition", FGUI_Resources.Tex_Remove ), FGUI_Resources.ButtonStyle, GUILayout.Height( 22 ) ) ) { composition.Prepared = false; Close(); }
             GUI.backgroundColor = preCol;
-            GUILayout.Space(6);
+            GUILayout.Space( 6 );
 
-            if (EditorGUI.EndChangeCheck())
+            if( EditorGUI.EndChangeCheck() )
             {
-                if (composition.Owner)
+                if( toDirty != null ) EditorUtility.SetDirty( toDirty );
+
+                if( composition.Owner )
                 {
-                    EditorUtility.SetDirty(composition.Owner);
+                    EditorUtility.SetDirty( composition.Owner );
                 }
             }
 
@@ -558,63 +592,63 @@ namespace FIMSpace.Generating
 
 
 
-        void DisplayModOverridesGUI(FieldModification mod, FieldSetupComposition.ModOverrideHelper modOverrides, ref Vector2 pfScroll)
+        void DisplayModOverridesGUI( FieldModification mod, FieldSetupComposition.ModOverrideHelper modOverrides, ref Vector2 pfScroll )
         {
             Color preCol = GUI.color;
 
-            if (mod.DrawSetupFor == FieldModification.EModificationMode.CustomPrefabs)
+            if( mod.DrawSetupFor == FieldModification.EModificationMode.CustomPrefabs )
             {
                 var pList = mod.PrefabsList;
-                var wdth = GUILayout.Width(54);
+                var wdth = GUILayout.Width( 54 );
 
-                pfScroll = EditorGUILayout.BeginScrollView(pfScroll, false, false);
+                pfScroll = EditorGUILayout.BeginScrollView( pfScroll, false, false );
 
                 EditorGUILayout.BeginHorizontal();
 
-                if (pList.Count == 0) EditorGUILayout.HelpBox("No Prefabs in Modificator", MessageType.Info);
+                if( pList.Count == 0 ) EditorGUILayout.HelpBox( "No Prefabs in Modificator", MessageType.Info );
 
-                for (int p = 0; p < pList.Count; p++)
+                for( int p = 0; p < pList.Count; p++ )
                 {
                     bool overriding = false;
 
-                    if (modOverrides != null)
-                        if (modOverrides.OverridePrefabs != null)
-                            if (p < modOverrides.OverridePrefabs.Count)
-                                if (modOverrides.OverridePrefabs[p] != null)
+                    if( modOverrides != null )
+                        if( modOverrides.OverridePrefabs != null )
+                            if( p < modOverrides.OverridePrefabs.Count )
+                                if( modOverrides.OverridePrefabs[p] != null )
                                 {
-                                    if (modOverrides.OverridePrefabs[p].CoreGameObject != null)
+                                    if( modOverrides.OverridePrefabs[p].CoreGameObject != null )
                                     {
-                                        GUI.color = new Color(1f, 1f, 1f, 0.3f);
+                                        GUI.color = new Color( 1f, 1f, 1f, 0.3f );
                                         overriding = true;
                                     }
                                 }
 
-                    EditorGUILayout.BeginVertical(wdth);
-                    PrefabReference.DrawPrefabField(pList[p], Color.gray, "Default", 54, () => { EditorGUIUtility.PingObject(pList[p].CoreGameObject); }, null, true, null, false, false);
+                    EditorGUILayout.BeginVertical( wdth );
+                    PrefabReference.DrawPrefabField( pList[p], Color.gray, "Default", 54, () => { EditorGUIUtility.PingObject( pList[p].CoreGameObject ); }, null, true, null, false, false );
 
-                    if (overriding) GUI.color = preCol;
+                    if( overriding ) GUI.color = preCol;
 
-                    if (overriding) GUI.backgroundColor = Color.green; else GUI.backgroundColor = new Color(0.7f, 1f, 0.7f, 0.9f);
-                    EditorGUILayout.BeginVertical(FGUI_Resources.BGInBoxStyleH, wdth);
+                    if( overriding ) GUI.backgroundColor = Color.green; else GUI.backgroundColor = new Color( 0.7f, 1f, 0.7f, 0.9f );
+                    EditorGUILayout.BeginVertical( FGUI_Resources.BGInBoxStyleH, wdth );
                     GUI.backgroundColor = Color.white;
 
-                    EditorGUILayout.LabelField("Override:", wdth);
+                    EditorGUILayout.LabelField( "Override:", wdth );
                     PrefabReference prref = null;
 
-                    if (modOverrides != null)
-                        if (modOverrides.OverridePrefabs != null)
-                            if (p < modOverrides.OverridePrefabs.Count)
+                    if( modOverrides != null )
+                        if( modOverrides.OverridePrefabs != null )
+                            if( p < modOverrides.OverridePrefabs.Count )
                             {
                                 prref = modOverrides.OverridePrefabs[p];
-                                modOverrides.OverridePrefabs[p].SetPrefab((GameObject)EditorGUILayout.ObjectField(modOverrides.OverridePrefabs[p].GameObject, typeof(GameObject), false, wdth));
+                                modOverrides.OverridePrefabs[p].SetPrefab( (GameObject)EditorGUILayout.ObjectField( modOverrides.OverridePrefabs[p].GameObject, typeof( GameObject ), false, wdth ) );
                             }
 
-                    if (prref != null)
+                    if( prref != null )
                     {
-                        if (prref.CoreGameObject == null)
-                            PrefabReference.DrawPrefabField(prref, Color.gray, "_", 54, () => { EditorGUIUtility.PingObject(prref.CoreGameObject); }, null, true, null, false);
+                        if( prref.CoreGameObject == null )
+                            PrefabReference.DrawPrefabField( prref, Color.gray, "_", 54, () => { EditorGUIUtility.PingObject( prref.CoreGameObject ); }, null, true, null, false );
                         else
-                            PrefabReference.DrawPrefabField(prref, Color.gray, "_", 54, () => { EditorGUIUtility.PingObject(prref.CoreGameObject); }, () => { modOverrides.OverridePrefabs[p].SetPrefab(null); }, true, null, false);
+                            PrefabReference.DrawPrefabField( prref, Color.gray, "_", 54, () => { EditorGUIUtility.PingObject( prref.CoreGameObject ); }, () => { modOverrides.OverridePrefabs[p].SetPrefab( null ); }, true, null, false );
                     }
 
                     EditorGUILayout.EndVertical();
@@ -625,35 +659,35 @@ namespace FIMSpace.Generating
 
                 EditorGUILayout.EndScrollView();
             }
-            else if (mod.DrawSetupFor == FieldModification.EModificationMode.ObjectsStamp)
+            else if( mod.DrawSetupFor == FieldModification.EModificationMode.ObjectsStamp )
             {
-                if (modOverrides != null)
-                    if (modOverrides.OverrideStampSet != null)
-                        GUI.color = new Color(1f, 1f, 1f, 0.3f);
+                if( modOverrides != null )
+                    if( modOverrides.OverrideStampSet != null )
+                        GUI.color = new Color( 1f, 1f, 1f, 0.3f );
 
-                EditorGUILayout.ObjectField("Modificator's Stamp:", mod.OStamp, typeof(OStamperSet), false);
-                GUILayout.Space(4f);
+                EditorGUILayout.ObjectField( "Modificator's Stamp:", mod.OStamp, typeof( OStamperSet ), false );
+                GUILayout.Space( 4f );
 
                 GUI.color = preCol;
 
-                if (modOverrides != null)
-                    modOverrides.OverrideStampSet = (OStamperSet)EditorGUILayout.ObjectField("Override With:", modOverrides.OverrideStampSet, typeof(OStamperSet), false);
+                if( modOverrides != null )
+                    modOverrides.OverrideStampSet = (OStamperSet)EditorGUILayout.ObjectField( "Override With:", modOverrides.OverrideStampSet, typeof( OStamperSet ), false );
 
                 //EditorGUILayout.ObjectField("Override With:", null, typeof(OStamperSet), false);
             }
-            else if (mod.DrawSetupFor == FieldModification.EModificationMode.ObjectMultiEmitter)
+            else if( mod.DrawSetupFor == FieldModification.EModificationMode.ObjectMultiEmitter )
             {
-                if (modOverrides != null)
-                    if (modOverrides.OverrideMultiSet != null)
-                        GUI.color = new Color(1f, 1f, 1f, 0.3f);
+                if( modOverrides != null )
+                    if( modOverrides.OverrideMultiSet != null )
+                        GUI.color = new Color( 1f, 1f, 1f, 0.3f );
 
-                EditorGUILayout.ObjectField("Modificator's MultiStamp:", mod.OMultiStamp, typeof(OStamperMultiSet), false);
+                EditorGUILayout.ObjectField( "Modificator's MultiStamp:", mod.OMultiStamp, typeof( OStamperMultiSet ), false );
                 GUI.color = preCol;
 
-                GUILayout.Space(4f);
+                GUILayout.Space( 4f );
 
-                if (modOverrides != null)
-                    modOverrides.OverrideMultiSet = (OStamperMultiSet)EditorGUILayout.ObjectField("Override With:", modOverrides.OverrideMultiSet, typeof(OStamperMultiSet), false);
+                if( modOverrides != null )
+                    modOverrides.OverrideMultiSet = (OStamperMultiSet)EditorGUILayout.ObjectField( "Override With:", modOverrides.OverrideMultiSet, typeof( OStamperMultiSet ), false );
 
 
                 //EditorGUILayout.ObjectField("Override With:", null, typeof(OStamperMultiSet), false);
@@ -662,18 +696,18 @@ namespace FIMSpace.Generating
 
         int _injectionIndexToRemove = -1;
         static GUIContent _guicOverr = null;
-        void DrawInjection(FieldSetupComposition comp, int i)
+        void DrawInjection( FieldSetupComposition comp, int i )
         {
-            if (comp.Injections.ContainsIndex(i) == false)
+            if( comp.Injections.ContainsIndex( i ) == false )
             {
-                EditorGUILayout.HelpBox("Index " + i + " out of bounds (" + comp.Injections.Count + ")", MessageType.None);
+                EditorGUILayout.HelpBox( "Index " + i + " out of bounds (" + comp.Injections.Count + ")", MessageType.None );
                 return;
             }
 
             InjectionSetup injection = comp.Injections[i];
-            if (injection == null)
+            if( injection == null )
             {
-                EditorGUILayout.HelpBox("Null injection at " + i + " !", MessageType.None);
+                EditorGUILayout.HelpBox( "Null injection at " + i + " !", MessageType.None );
                 return;
             }
 
@@ -684,27 +718,27 @@ namespace FIMSpace.Generating
 
             EditorGUILayout.BeginHorizontal();
 
-            GUILayout.Label("[" + i + "]", EditorStyles.centeredGreyMiniLabel, GUILayout.Width(22));
+            GUILayout.Label( "[" + i + "]", EditorStyles.centeredGreyMiniLabel, GUILayout.Width( 22 ) );
 
-            injection.Inject = (InjectionSetup.EInjectTarget)EditorGUILayout.EnumPopup(injection.Inject, GUILayout.MaxWidth(100));
-            InjectionSetup.Editor_DrawReferenceField(injection);
-            injection.Call = (InjectionSetup.EGridCall)EditorGUILayout.EnumPopup(injection.Call, GUILayout.Width(52));
+            injection.Inject = (InjectionSetup.EInjectTarget)EditorGUILayout.EnumPopup( injection.Inject, GUILayout.MaxWidth( 100 ) );
+            InjectionSetup.Editor_DrawReferenceField( injection );
+            injection.Call = (InjectionSetup.EGridCall)EditorGUILayout.EnumPopup( injection.Call, GUILayout.Width( 52 ) );
 
-            if (_guicOverr == null || _guicOverr.image == null)
+            if( _guicOverr == null || _guicOverr.image == null )
             {
-                _guicOverr = new GUIContent(FGUI_Resources.Tex_Variables, "Enable/disable variable overriding                                       ");
+                _guicOverr = new GUIContent( FGUI_Resources.Tex_Variables, "Enable/disable variable overriding                                       " );
             }
 
-            if (injection.OverrideVariables) GUI.backgroundColor = Color.green; else GUI.backgroundColor = Color.white;
-            if (GUILayout.Button(_guicOverr, EditorStyles.label, GUILayout.Width(18), GUILayout.Height(18)))
+            if( injection.OverrideVariables ) GUI.backgroundColor = Color.green; else GUI.backgroundColor = Color.white;
+            if( GUILayout.Button( _guicOverr, EditorStyles.label, GUILayout.Width( 18 ), GUILayout.Height( 18 ) ) )
             {
                 injection.OverrideVariables = !injection.OverrideVariables;
             }
 
-            injection.OverrideVariables = EditorGUILayout.Toggle(injection.OverrideVariables, GUILayout.Width(20));
+            injection.OverrideVariables = EditorGUILayout.Toggle( injection.OverrideVariables, GUILayout.Width( 20 ) );
 
-            GUI.backgroundColor = new Color(1f, 0.5f, 0.5f);
-            if (GUILayout.Button(FGUI_Resources.GUIC_Remove, FGUI_Resources.ButtonStyle, GUILayout.Width(24), GUILayout.Height(18)))
+            GUI.backgroundColor = new Color( 1f, 0.5f, 0.5f );
+            if( GUILayout.Button( FGUI_Resources.GUIC_Remove, FGUI_Resources.ButtonStyle, GUILayout.Width( 24 ), GUILayout.Height( 18 ) ) )
             {
                 _injectionIndexToRemove = i;
             }
@@ -717,48 +751,48 @@ namespace FIMSpace.Generating
 
             #region Override variables 
 
-            if (injection.OverrideVariables)
+            if( injection.OverrideVariables )
             {
 
                 List<FieldVariable> toOverride = null;
 
                 // Single Mod
-                if (injection.Inject == InjectionSetup.EInjectTarget.Modificator || injection.Inject == InjectionSetup.EInjectTarget.ModOnlyForAccessingVariables)
+                if( injection.Inject == InjectionSetup.EInjectTarget.Modificator || injection.Inject == InjectionSetup.EInjectTarget.ModOnlyForAccessingVariables )
                 {
-                    if (injection.Modificator == null)
+                    if( injection.Modificator == null )
                     {
-                        EditorGUILayout.HelpBox("No reference to the Mod for variable-override search", MessageType.None);
+                        EditorGUILayout.HelpBox( "No reference to the Mod for variable-override search", MessageType.None );
                         return;
                     }
 
                     toOverride = injection.Modificator.TryGetFieldVariablesList();
                 }
                 // Mod Packs
-                else if (injection.Inject == InjectionSetup.EInjectTarget.Pack || injection.Inject == InjectionSetup.EInjectTarget.PackOnlyForAccessingVariables)
+                else if( injection.Inject == InjectionSetup.EInjectTarget.Pack || injection.Inject == InjectionSetup.EInjectTarget.PackOnlyForAccessingVariables )
                 {
-                    if (injection.ModificatorsPack == null)
+                    if( injection.ModificatorsPack == null )
                     {
-                        EditorGUILayout.HelpBox("No reference to the ModPack for variable-override search", MessageType.None);
+                        EditorGUILayout.HelpBox( "No reference to the ModPack for variable-override search", MessageType.None );
                         return;
                     }
 
-                    toOverride = ModificatorsPack.TryGetFieldVariablesList(injection.ModificatorsPack, true, false);
+                    toOverride = ModificatorsPack.TryGetFieldVariablesList( injection.ModificatorsPack, true, false );
                 }
 
 
-                if (toOverride != null)
+                if( toOverride != null )
                 {
                     EditorGUI.indentLevel++;
 
-                    if (injection.Overrides == null) injection.Overrides = new List<FieldVariable>();
-                    PGGUtils.AdjustCount(injection.Overrides, toOverride.Count, true);
+                    if( injection.Overrides == null ) injection.Overrides = new List<FieldVariable>();
+                    PGGUtils.AdjustCount( injection.Overrides, toOverride.Count, true );
 
-                    for (int o = 0; o < injection.Overrides.Count; o++)
+                    for( int o = 0; o < injection.Overrides.Count; o++ )
                     {
-                        if (injection.Overrides[o] == null || injection.Overrides[o].ValueType != toOverride[o].ValueType || injection.Overrides[o].Name != toOverride[o].Name)
+                        if( injection.Overrides[o] == null || injection.Overrides[o].ValueType != toOverride[o].ValueType || injection.Overrides[o].Name != toOverride[o].Name )
                             injection.Overrides[o] = toOverride[o].Copy();
 
-                        FieldVariable.Editor_DrawTweakableVariable(injection.Overrides[o]);
+                        FieldVariable.Editor_DrawTweakableVariable( injection.Overrides[o] );
                     }
 
                     EditorGUI.indentLevel--;
@@ -768,14 +802,14 @@ namespace FIMSpace.Generating
             #endregion
 
 
-            if (EditorGUI.EndChangeCheck()) OnChange();
+            if( EditorGUI.EndChangeCheck() ) OnChange();
 
         }
 
         void OnChange()
         {
-            if (toDirty == null) return;
-            EditorUtility.SetDirty(toDirty);
+            if( toDirty == null ) return;
+            EditorUtility.SetDirty( toDirty );
         }
 
         public int selectedPack = 0;

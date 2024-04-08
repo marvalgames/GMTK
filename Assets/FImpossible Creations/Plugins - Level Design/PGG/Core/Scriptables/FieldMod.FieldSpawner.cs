@@ -19,7 +19,7 @@ namespace FIMSpace.Generating
         public List<SpawnRuleBase> Rules = new List<SpawnRuleBase>();
         public FieldModification.EModificationMode Mode = FieldModification.EModificationMode.CustomPrefabs;
 
-        public enum ESR_CellOrder { Ordered, Reversed, Random, RandomReversed, Random2, Random2Reversed, TotalRandom }
+        public enum ESR_CellOrder { Ordered, Reversed, Random, RandomReversed, Random2, Random2Reversed, TotalRandom, Sorted }
         public ESR_CellOrder CellCheckMode = ESR_CellOrder.Ordered;
         public bool _Editor_SpawnerAdvancedOptionsFoldout = false;
         [Tooltip("Multiplying cells used by spawner, if set to 2 then spawn will have size of 4 cells (2x2)\nIt will generate additional grid basing on size 1 grid, you can manage if this spawner should see other grid cells with lower or higher scale")]

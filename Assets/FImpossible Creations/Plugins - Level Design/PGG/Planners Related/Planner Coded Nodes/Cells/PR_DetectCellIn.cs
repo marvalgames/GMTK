@@ -1,5 +1,7 @@
 ﻿using FIMSpace.Graph;
 using UnityEngine;
+using FIMSpace.Generating.Checker;
+
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
@@ -26,16 +28,17 @@ namespace FIMSpace.Generating.Planning.PlannerNodes.Cells
         public override void OnStartReadingNode()
         {
             FindIn.TriggerReadPort(true);
+            DetectOnlyCellsOf.TriggerReadPort(true);
 
-            System.Collections.Generic.List<FieldPlanner> planners;
+            System.Collections.Generic.List<ICheckerReference> planners;
 
             if (DetectOnlyCellsOf.IsConnected)
             {
-                planners = GetPlannersFromPort(DetectOnlyCellsOf, false);
+                planners = DetectOnlyCellsOf.Get_GetMultipleCheckers;
             }
             else
             {
-                planners = ParentPlanner.ParentBuildPlanner.CollectAllAvailablePlanners(true, true);
+                planners = ParentPlanner.ParentBuildPlanner.CollectAllAvailablePlannersCheckerRefs(true, true);
                 planners.Remove(CurrentExecutingPlanner);
             }
 
@@ -46,10 +49,10 @@ namespace FIMSpace.Generating.Planning.PlannerNodes.Cells
                 var pl = planners[p];
                 if (pl == null) continue;
 
-                FieldCell cell = pl.LatestChecker.GetCellInWorldPos(position);
+                FieldCell cell = pl.CheckerReference.GetCellInWorldPos(position);
                 if (FGenerators.IsNull(cell)) continue;
-
-                DetectedCell.ProvideFullCellData(cell, pl.LatestChecker, pl.LatestResult);
+                
+                DetectedCell.ProvideFullCellData(cell, pl.CheckerReference, CurrentExecutingPlanner?.LatestResult);
                 break;
             }
         }

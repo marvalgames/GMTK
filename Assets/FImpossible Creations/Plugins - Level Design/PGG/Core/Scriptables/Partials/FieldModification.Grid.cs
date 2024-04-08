@@ -319,6 +319,15 @@ namespace FIMSpace.Generating
                                     spawner.RunSpawnerOnCell(this, preset, randCells[i], grid, Vector3.zero, childMod);
                                 }
                             }
+                            else if( spawner.CellCheckMode == FieldSpawner.ESR_CellOrder.Sorted )
+                            {
+                                List<FieldCell> sortedCells = IGeneration.GetSortedCells( grid );
+                                for( int i = 0; i < sortedCells.Count; i++ ) // Go through all cells on grid with [s] Rule
+                                {
+                                    if( string.IsNullOrEmpty( preset.DontSpawnOn ) == false ) if( FGenerators.CheckIfExist_NOTNULL( SpawnRuleBase.CellSpawnsHaveTag( sortedCells[i], preset.DontSpawnOn ) ) ) continue;
+                                    spawner.RunSpawnerOnCell( this, preset, sortedCells[i], grid, Vector3.zero, childMod );
+                                }
+                            }
 
                         }
                         else // Running on scalled grid
@@ -566,6 +575,10 @@ namespace FIMSpace.Generating
             else if (spawner.CellCheckMode == FieldSpawner.ESR_CellOrder.TotalRandom)
             {
                 return IGeneration.GetRandomizedCells(cellsContr.Grid);
+            }
+            else if( spawner.CellCheckMode == FieldSpawner.ESR_CellOrder.Sorted )
+            {
+                return IGeneration.GetSortedCells( cellsContr.Grid );
             }
 
             return cellsContr.Grid.AllApprovedCells;

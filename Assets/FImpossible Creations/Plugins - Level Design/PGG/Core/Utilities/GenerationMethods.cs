@@ -524,11 +524,13 @@ namespace FIMSpace.Generating
 
             gen.Instantiated = new List<GameObject>();
             List<IGenerating> generatorsSpawned = RunGraphSpawners(grid, container, preset, gen.Instantiated, combineNonStatic, combineStatic, transformMatrix);
+            Physics.SyncTransforms();
 
             Bounds fullBounds = GetBounds(grid, gen.Instantiated, preset, transformMatrix, container.position);
             gen.FieldBounds = fullBounds;
 
             CustomPostEvents_BeforeCorePostEvents(gen);
+            Physics.SyncTransforms();
 
             preset.PostEvents(ref gen, grid, fullBounds, container);
 
@@ -606,6 +608,7 @@ namespace FIMSpace.Generating
             preset.AfterAllGenerating();
 
             CustomPostEvents_AfterCorePostEvents(gen);
+            Physics.SyncTransforms();
 
             return gen;
         }
@@ -786,7 +789,15 @@ namespace FIMSpace.Generating
 
                                             materialMeshes[kMat].Add(filter);
                                             if (setStatic) m.gameObject.isStatic = true;
-                                            FGenerators.DestroyObject(m); // Clean ref to renderer component on the scene
+
+                                            try
+                                            {
+                                                FGenerators.DestroyObject(m); // Clean ref to renderer component on the scene
+                                            }
+                                            catch (System.Exception)
+                                            {
+                                                m.enabled = false; // In case some component depends on it, then just disable
+                                            }
                                         }
                                 }
                             }
@@ -967,7 +978,14 @@ namespace FIMSpace.Generating
 
                 for (int i = 0; i < item.Value.Count; i++)
                 {
-                    FGenerators.DestroyObject(item.Value[i]); // Clean ref to filter component on the scene
+                    try
+                    {
+                        FGenerators.DestroyObject(item.Value[i]); // Clean ref to filter component on the scene
+                    }
+                    catch (System.Exception)
+                    {
+                        // In case some component depends on it, then just disable
+                    }
                 }
 
             }
@@ -990,7 +1008,7 @@ namespace FIMSpace.Generating
 
         static GameObject GenerateCombinedDrawer(string name, GameObject reference, Mesh targetMesh, CombineMaterialComparer mat, Transform putGeneratedIn, bool setStatic, int setSubMaterial = -1)
         {
-            GameObject combinedDrawer = new GameObject(name); 
+            GameObject combinedDrawer = new GameObject(name);
             combinedDrawer.transform.SetParent(putGeneratedIn, true);
             combinedDrawer.transform.ResetCoords();
             combinedDrawer.tag = reference.tag;

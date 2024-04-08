@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using UnityEngine;
+using static UnityEngine.GraphicsBuffer;
 
 namespace FIMSpace.Generating.Checker
 {
@@ -1201,7 +1203,7 @@ namespace FIMSpace.Generating.Checker
                             _pathFind_cheapestCost = -1f;
                             _pathFind_cheapestNodeC = pathChecker.AddWorld(checkedWorldPos);
                             _GeneratePathFindTowards_OtherTargetCell = targetChecker.GetCellInWorldPos(checkedWorldPos, true, targetInvMX);
-                            _PathFindValidateNode(startChecker, checkedWorldPos, originNode, checkedPathCell, targetPathEndLocalPos, findParams.directions[i], findParams);
+                            _PathFindValidateNode(pathChecker, startChecker, checkedWorldPos, originNode, checkedPathCell, targetPathEndLocalPos, findParams.directions[i], findParams);
                             return;
                         }
                     }
@@ -1388,7 +1390,7 @@ namespace FIMSpace.Generating.Checker
                         _pathFind_cheapestCost = -1f;
                         _pathFind_cheapestNodeC = pathChecker.AddWorld(checkedWorldPos);
                         _GeneratePathFindTowards_OtherTargetCell = targetChecker.GetCellInWorldPos(checkedWorldPos, true, targetInvMX);
-                        _PathFindValidateNode(startChecker, checkedWorldPos, originNode, checkedPathCell, targetPathEndLocalPos, findParams.directions[i], findParams);
+                        _PathFindValidateNode(pathChecker, startChecker, checkedWorldPos, originNode, checkedPathCell, targetPathEndLocalPos, findParams.directions[i], findParams);
                         return;
                     }
                     else // Pathfind direction not allows to end with this direction path find step
@@ -1495,7 +1497,7 @@ namespace FIMSpace.Generating.Checker
                         continue;
                     }
 
-                    _PathFindValidateNode(startChecker, checkedWorldPos, originNode, checkedPathCell, targetPathEndLocalPos, findParams.directions[i], findParams);
+                    _PathFindValidateNode(pathChecker, startChecker, checkedWorldPos, originNode, checkedPathCell, targetPathEndLocalPos, findParams.directions[i], findParams);
                 }
             }
 
@@ -1510,7 +1512,7 @@ namespace FIMSpace.Generating.Checker
         {
             if (!target.ContainsWorld(checkedworldpos)) return;
 
-            float cost = PathFind_ComputeStepCost(originNode, checkedPathCell, targetPathEndLocalPos, direction, parameters, checkedworldpos);
+            float cost = PathFind_ComputeStepCost(path, originNode, checkedPathCell, targetPathEndLocalPos, direction, parameters, checkedworldpos);
 
             if (cost < _pathFind_cheapestDiscardedCost)
             {
@@ -1553,14 +1555,14 @@ namespace FIMSpace.Generating.Checker
             return collision;
         }
 
-        void _PathFindValidateNode(CheckerField3D startChecker, Vector3 targetWorldPos, FieldCell originNode, FieldCell checkedPathCell, Vector3Int targetPathEndLocalPos, LineFindHelper direction, PathFindParams parameters)
+        void _PathFindValidateNode(CheckerField3D path, CheckerField3D startChecker, Vector3 targetWorldPos, FieldCell originNode, FieldCell checkedPathCell, Vector3Int targetPathEndLocalPos, LineFindHelper direction, PathFindParams parameters)
         {
             checkedPathCell._PathFind_status = 1;
             checkedPathCell.ParentCell = originNode;
 
-            float stepCost = PathFind_ComputeStepCost(originNode, checkedPathCell, targetPathEndLocalPos, direction, parameters, targetWorldPos);
+            float stepCost = PathFind_ComputeStepCost(path, originNode, checkedPathCell, targetPathEndLocalPos, direction, parameters, targetWorldPos);
 
-            if (parameters.StartOnSide) // Ensureing that cells which would go through inside field are not prioritized
+            if( parameters.StartOnSide) // Ensureing that cells which would go through inside field are not prioritized
             {
                 if (startChecker.ContainsWorld(targetWorldPos)) { stepCost += 1; stepCost *= 3f; }
             }
@@ -1595,7 +1597,7 @@ namespace FIMSpace.Generating.Checker
             _pathFind_openListC.Add(checkedPathCell);
         }
 
-        float PathFind_ComputeStepCost(FieldCell originNode, FieldCell checkedPathCell, Vector3Int targetPathEndLocalPos, LineFindHelper direction, PathFindParams parameters, Vector3 checkedWorld)
+        float PathFind_ComputeStepCost(CheckerField3D path, FieldCell originNode, FieldCell checkedPathCell, Vector3Int targetPathEndLocalPos, LineFindHelper direction, PathFindParams parameters, Vector3 checkedWorld)
         {
             float stepCost = direction.Cost;
 
@@ -1650,13 +1652,13 @@ namespace FIMSpace.Generating.Checker
 
             stepCost += originNode._PathFind_movementCost;
 
-
             if (parameters.ExistingCellsCostMul != 1f)
                 if (ContainsWorld(checkedWorld))
                 {
                     stepCost *= parameters.ExistingCellsCostMul;
                 }
-
+            
+            if( parameters.StepCostAction != null ) stepCost = parameters.StepCostAction.Invoke( path, originNode, checkedPathCell, stepCost );
 
             return stepCost;
         }
@@ -1723,6 +1725,14 @@ namespace FIMSpace.Generating.Checker
             /// <summary> x is above, y is below : both positive </summary>
             public Vector2 CollisionYMargins;
 
+
+            /// <summary> Executed every time A* algorithm is checking cell for single step move. 
+            /// Path checker, current cell, target step cell, current cost 
+            /// returns new cost for the step
+            /// </summary>
+            public System.Func<CheckerField3D, FieldCell, FieldCell, float, float> StepCostAction;
+
+
             public PathFindParams(List<LineFindHelper> movementDirections, float limitLowYTo = float.MaxValue, bool worldSpace = false)
             {
                 //StartCentered = true;
@@ -1764,6 +1774,8 @@ namespace FIMSpace.Generating.Checker
                 DiscardOnNoPathFound = true;
                 ConnectEvenDiscarded = false;
                 DiscardIfAligning = false;
+
+                StepCostAction = null;
 
                 End_RequireCellsOnLeftSide = 0;
                 End_RequireCellsOnRightSide = 0;
