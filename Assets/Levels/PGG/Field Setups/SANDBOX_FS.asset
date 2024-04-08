@@ -790,13 +790,13 @@ MonoBehaviour:
   _editor_drawRule: 1
   CellAllow: 1
   AllConditionsMet: 1
-  replaceOnTag: 
+  replaceOnTag: Wall
   CheckMode: 0
-  Offset: {x: 0, y: 0, z: 0.5}
+  Offset: {x: 0, y: 0, z: 0.45}
   OffsetMode: 1
   YawRotationOffset: 0
-  RemoveDistance: 0.1
-  DistanceSource: 2
+  RemoveDistance: 0.5
+  DistanceSource: 0
   DebugDirection: 0
   DrawDebugGizmos: 1
 --- !u!114 &-2241661952690225057
@@ -1112,10 +1112,10 @@ MonoBehaviour:
   AllConditionsMet: 1
   replaceOnTag: 
   CheckMode: 0
-  Offset: {x: 0, y: 0, z: 1}
+  Offset: {x: 0, y: 0, z: -0.5}
   OffsetMode: 0
   YawRotationOffset: 0
-  RemoveDistance: 0.1
+  RemoveDistance: 1
   DistanceSource: 0
   DebugDirection: 0
   DrawDebugGizmos: 0
@@ -2097,7 +2097,7 @@ MonoBehaviour:
   Logic: 0
   Negate: 0
   Global: 0
-  Enabled: 1
+  Enabled: 0
   Ignore: 0
   _editor_drawRule: 1
   CellAllow: 1
@@ -2114,7 +2114,7 @@ MonoBehaviour:
     requiredType: 5
     Tooltip: Set Additive Vector3 Field Variable value to this property
   RotationOffset: {x: 0, y: 90, z: 0}
-  ScaleMultiplier: {x: 0.5, y: 0.5, z: 0.25}
+  ScaleMultiplier: {x: 1, y: 1, z: 1}
   RandomizeOffset: {x: 0, y: 0, z: 0}
   MaxDegreesSteps: {x: 1, y: 1, z: 1}
   InheritScaleOffset: 0
