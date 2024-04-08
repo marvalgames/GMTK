@@ -105,7 +105,7 @@ MonoBehaviour:
   DrawObjectStamps: 1
   OMultiStamp: {fileID: 0}
   PrefabsList:
-  - Prefab: {fileID: 6325126634580688049, guid: da6cb1bb852e3ab4b9c4be244174e8f0, type: 3}
+  - Prefab: {fileID: 427923017583535349, guid: c0d602d0a23f7d6488a5b062b2ec5eaa, type: 3}
     MainCollider: {fileID: 0}
     subID: 0
     _refMesh: {fileID: 2863967534805457344, guid: 8f50acbdb7056ea40af34807460ba408, type: 3}
@@ -217,6 +217,42 @@ MonoBehaviour:
     ToCheck:
     - {x: 0, y: 0, z: 0}
     EditorDisplayColor: {r: 0.4, g: 0.4, b: 1, a: 0.95}
+--- !u!114 &-7931859180999810534
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b496837ae5a0c3b4786589d6fb51e8d5, type: 3}
+  m_Name: 'SR_MoveRotateScale-[Stairs]'
+  m_EditorClassIdentifier: 
+  Logic: 0
+  Negate: 0
+  Global: 0
+  Enabled: 1
+  Ignore: 0
+  _editor_drawRule: 1
+  CellAllow: 1
+  AllConditionsMet: 1
+  EffectOn: 2
+  ApplyMode: 0
+  Space: 0
+  GetCoords: 
+  CheckMode: 0
+  PositionOffset: {x: 0, y: 0, z: 0}
+  OffsetMode: 1
+  OffsetPosVariable:
+    name: 
+    requiredType: 5
+    Tooltip: Set Additive Vector3 Field Variable value to this property
+  RotationOffset: {x: 0, y: 90, z: 0}
+  ScaleMultiplier: {x: 1.8, y: 4, z: 2}
+  RandomizeOffset: {x: 0, y: 0, z: 0}
+  MaxDegreesSteps: {x: 1, y: 1, z: 1}
+  InheritScaleOffset: 0
 --- !u!114 &-7524087098481071771
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -240,17 +276,17 @@ MonoBehaviour:
   DrawObjectStamps: 1
   OMultiStamp: {fileID: 0}
   PrefabsList:
-  - Prefab: {fileID: 7851038783038124247, guid: c747c7b0a4b80604d95cc75296385d22, type: 3}
+  - Prefab: {fileID: 7126589026732099666, guid: 94414984375e2e54586cdbabdb20ec74, type: 3}
     MainCollider: {fileID: 0}
     subID: 0
     _refMesh: {fileID: -8814386876606807464, guid: 8f50acbdb7056ea40af34807460ba408, type: 3}
     _refCol: {fileID: 0}
-  - Prefab: {fileID: 4187180211617324883, guid: 5da0ca1bea31b164ba34ebdfc6527ee2, type: 3}
+  - Prefab: {fileID: 7126589026732099666, guid: 94414984375e2e54586cdbabdb20ec74, type: 3}
     MainCollider: {fileID: 0}
     subID: 0
     _refMesh: {fileID: 5085965759457506131, guid: 8f50acbdb7056ea40af34807460ba408, type: 3}
     _refCol: {fileID: 0}
-  - Prefab: {fileID: 2388965973087274210, guid: 9edb77bc93016494a9a848b5a559e8ca, type: 3}
+  - Prefab: {fileID: 7126589026732099666, guid: 94414984375e2e54586cdbabdb20ec74, type: 3}
     MainCollider: {fileID: 0}
     subID: 0
     _refMesh: {fileID: -3268728532136532347, guid: 8f50acbdb7056ea40af34807460ba408, type: 3}
@@ -458,6 +494,30 @@ MonoBehaviour:
   NotCheckDefaultPitch: 0
   OverridePitchRotation: 1
   InitPitchRotation: 0
+--- !u!114 &-6714194289639214390
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 207e1eaa379db1743a31893a3b87cc58, type: 3}
+  m_Name: 'SR_BoundedOffset-[Stairs]'
+  m_EditorClassIdentifier: 
+  Logic: 0
+  Negate: 0
+  Global: 0
+  Enabled: 1
+  Ignore: 0
+  _editor_drawRule: 1
+  CellAllow: 1
+  AllConditionsMet: 1
+  WorldOffset: {x: 0, y: 0, z: 0}
+  DirectionalOffset: {x: 0, y: 0, z: 0}
+  DirectFrom: 
+  CheckMode: 0
 --- !u!114 &-6173571632353893813
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -561,7 +621,7 @@ MonoBehaviour:
   Logic: 0
   Negate: 1
   Global: 0
-  Enabled: 1
+  Enabled: 0
   Ignore: 0
   _editor_drawRule: 1
   CellAllow: 0
@@ -799,7 +859,7 @@ MonoBehaviour:
   Randomize: 0
   GetOffsetFromTagged: 
   CheckMode: 0
-  Offset: {x: 0, y: 1, z: 0}
+  Offset: {x: 0, y: 4, z: 0}
   OffsetMode: 0
   RandomOffset: {x: 0, y: 0, z: 0}
 --- !u!114 &-2328914806453490717
@@ -824,7 +884,7 @@ MonoBehaviour:
   AllConditionsMet: 1
   replaceOnTag: 
   CheckMode: 0
-  Offset: {x: 0, y: 0, z: 0}
+  Offset: {x: 0, y: 0, z: 0.45}
   OffsetMode: 1
   YawRotationOffset: 0
   RemoveDistance: 0.5
@@ -1341,7 +1401,7 @@ MonoBehaviour:
     TargetModification: {fileID: 8017177735639860324}
     Tags: Props
     InstructionArgument: 
-    Foldout: 1
+    Foldout: 0
     extraMod: {fileID: 0}
     extraPack: {fileID: 0}
   - Title: Clear Wall
@@ -1757,7 +1817,7 @@ MonoBehaviour:
   ScaleBounds: 0.99
   Padding: 0
   YawOffset: 180
-  DirectOffset: {x: 0, y: 0, z: 0}
+  DirectOffset: {x: 0, y: 0, z: 0.5}
   OffsetMode: 1
   IgnoreOtherMods: 1
   DontCheckAdditionals: 0
@@ -1894,7 +1954,6 @@ MonoBehaviour:
     ExtraValue: 0
     ToCheck:
     - {x: 0, y: 0, z: 0}
-    - {x: 0, y: 1, z: 1}
     - {x: 0, y: 1, z: 0}
     - {x: 0, y: 0, z: -1}
     - {x: 0, y: 0, z: -1}
@@ -2178,7 +2237,7 @@ MonoBehaviour:
   _editor_drawRule: 1
   CellAllow: 1
   AllConditionsMet: 1
-  ScaleMultiplier: {x: 1.275, y: 1, z: 1}
+  ScaleMultiplier: {x: 1, y: 1, z: 1}
   ScaleMulVariable:
     name: 
     requiredType: 5
@@ -2480,6 +2539,42 @@ MonoBehaviour:
     Tooltip: 
   ReplaceOnly: {fileID: 0}
   ReplaceOnlyFirst: 1
+--- !u!114 &6484013601955780564
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b496837ae5a0c3b4786589d6fb51e8d5, type: 3}
+  m_Name: 'SR_MoveRotateScale-[Stairs]'
+  m_EditorClassIdentifier: 
+  Logic: 0
+  Negate: 0
+  Global: 0
+  Enabled: 1
+  Ignore: 0
+  _editor_drawRule: 1
+  CellAllow: 1
+  AllConditionsMet: 1
+  EffectOn: 2
+  ApplyMode: 0
+  Space: 0
+  GetCoords: 
+  CheckMode: 0
+  PositionOffset: {x: 0, y: 0, z: 0}
+  OffsetMode: 1
+  OffsetPosVariable:
+    name: 
+    requiredType: 5
+    Tooltip: Set Additive Vector3 Field Variable value to this property
+  RotationOffset: {x: 0, y: 90, z: 0}
+  ScaleMultiplier: {x: 1.8, y: 4, z: 2}
+  RandomizeOffset: {x: 0, y: 0, z: 0}
+  MaxDegreesSteps: {x: 1, y: 1, z: 1}
+  InheritScaleOffset: 0
 --- !u!114 &6615972079416451501
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2569,17 +2664,17 @@ MonoBehaviour:
   DrawObjectStamps: 1
   OMultiStamp: {fileID: 0}
   PrefabsList:
-  - Prefab: {fileID: 821105046218489575, guid: 60ea1f538d0cc784ebbfb5b0ec4f1a27, type: 3}
+  - Prefab: {fileID: 821105046218489575, guid: 8be39c2d8dde8f241948b9dc0fa8b760, type: 3}
     MainCollider: {fileID: 0}
     subID: 0
     _refMesh: {fileID: -4303887579223004961, guid: 8f50acbdb7056ea40af34807460ba408, type: 3}
     _refCol: {fileID: 0}
-  - Prefab: {fileID: 6924196216273371695, guid: 03f8c445d9e72774698eb911fc6bb19e, type: 3}
+  - Prefab: {fileID: 6924196216273371695, guid: 5fdd0c7ef59efd248bc4aa9c32c6e2a1, type: 3}
     MainCollider: {fileID: 0}
     subID: 0
     _refMesh: {fileID: -4303887579223004961, guid: 8f50acbdb7056ea40af34807460ba408, type: 3}
     _refCol: {fileID: 0}
-  - Prefab: {fileID: 6924196216273371695, guid: bf457cf57a6f7f64580591c3da1b3582, type: 3}
+  - Prefab: {fileID: 6924196216273371695, guid: a64c7c99ed712d24b929230d64e07e4c, type: 3}
     MainCollider: {fileID: 0}
     subID: 0
     _refMesh: {fileID: -8470971047716781645, guid: 8f50acbdb7056ea40af34807460ba408, type: 3}
@@ -2593,6 +2688,7 @@ MonoBehaviour:
     Parent: {fileID: 7906467318267168703}
     Rules:
     - {fileID: 3277330611074846594}
+    - {fileID: 6484013601955780564}
     Mode: 0
     CellCheckMode: 0
     _Editor_SpawnerAdvancedOptionsFoldout: 0
@@ -2665,6 +2761,7 @@ MonoBehaviour:
     - {fileID: -5497163362131261965}
     - {fileID: -939797738770742189}
     - {fileID: -2578806539607322669}
+    - {fileID: -7931859180999810534}
     Mode: 0
     CellCheckMode: 0
     _Editor_SpawnerAdvancedOptionsFoldout: 0
@@ -2680,7 +2777,7 @@ MonoBehaviour:
     DisplayPreviewGUI: 1
     IsSubSpawner: 0
     _EditorDisplaySpawnerHeader: 1
-  - Enabled: 1
+  - Enabled: 0
     Name: PR_SlopeTile90 L
     SpawnerTag: 
     StampPrefabID: 2
@@ -2703,7 +2800,7 @@ MonoBehaviour:
     DisplayPreviewGUI: 1
     IsSubSpawner: 0
     _EditorDisplaySpawnerHeader: 1
-  - Enabled: 1
+  - Enabled: 0
     Name: PR_SlopeTile90 R
     SpawnerTag: 
     StampPrefabID: 2
@@ -2729,11 +2826,11 @@ MonoBehaviour:
     _EditorDisplaySpawnerHeader: 1
   SubSpawners: []
   VariantOf: {fileID: 0}
-  _editor_drawStamp: 0
+  _editor_drawStamp: 1
   _editor_drawSpawners: 1
   _editor_drawGlobalRules: 0
   _editor_drawModPackRules: 0
-  _editor_shareSelected: 5
+  _editor_shareSelected: 0
   ParentPreset: {fileID: 11400000}
   ParentPack: {fileID: 4010537770972031752}
 --- !u!114 &8017177735639860324
@@ -2759,7 +2856,7 @@ MonoBehaviour:
   DrawObjectStamps: 1
   OMultiStamp: {fileID: 0}
   PrefabsList:
-  - Prefab: {fileID: 4744098297019401163, guid: fb632361a88ceeb43bcd90ebc044c899, type: 3}
+  - Prefab: {fileID: 1027639662616582, guid: e4bba4ed19caabe4986a437a7a8a2844, type: 3}
     MainCollider: {fileID: 0}
     subID: 0
     _refMesh: {fileID: 8568771882487935041, guid: 12bdb1582ddc2bd4d9248e99494e1b8e, type: 3}
@@ -2796,5 +2893,5 @@ MonoBehaviour:
   _editor_drawGlobalRules: 0
   _editor_drawModPackRules: 0
   _editor_shareSelected: 0
-  ParentPreset: {fileID: 0}
+  ParentPreset: {fileID: 11400000}
   ParentPack: {fileID: 4010537770972031752}
