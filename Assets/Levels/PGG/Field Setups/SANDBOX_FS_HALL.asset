@@ -192,10 +192,10 @@ MonoBehaviour:
   OMultiStamp: {fileID: 0}
   PrefabsList:
   - Prefab: {fileID: 7126589026732099666, guid: 94414984375e2e54586cdbabdb20ec74, type: 3}
-    MainCollider: {fileID: 0}
+    MainCollider: {fileID: 3701321868698039310, guid: 94414984375e2e54586cdbabdb20ec74, type: 3}
     subID: 0
     _refMesh: {fileID: -8814386876606807464, guid: 8f50acbdb7056ea40af34807460ba408, type: 3}
-    _refCol: {fileID: 0}
+    _refCol: {fileID: 3701321868698039310, guid: 94414984375e2e54586cdbabdb20ec74, type: 3}
   - Prefab: {fileID: 7126589026732099666, guid: 94414984375e2e54586cdbabdb20ec74, type: 3}
     MainCollider: {fileID: 0}
     subID: 0
@@ -214,7 +214,6 @@ MonoBehaviour:
     StampPrefabID: 0
     Parent: {fileID: -7524087098481071771}
     Rules:
-    - {fileID: 3391657039994221933}
     - {fileID: -238880922451240241}
     - {fileID: 1405991300298738416}
     - {fileID: -4551909891939978702}
@@ -662,7 +661,7 @@ MonoBehaviour:
   Logic: 0
   Negate: 0
   Global: 0
-  Enabled: 1
+  Enabled: 0
   Ignore: 0
   _editor_drawRule: 1
   CellAllow: 1
@@ -1086,7 +1085,7 @@ MonoBehaviour:
   _editor_drawGlobalRules: 0
   _editor_drawModPackRules: 0
   _editor_shareSelected: 0
-  ParentPreset: {fileID: 0}
+  ParentPreset: {fileID: 11400000}
   ParentPack: {fileID: 4010537770972031752}
 --- !u!114 &-1394717733352415955
 MonoBehaviour:
@@ -1349,7 +1348,7 @@ MonoBehaviour:
   _editor_drawRule: 1
   CellAllow: 1
   AllConditionsMet: 1
-  NewMaterial: {fileID: 0}
+  NewMaterial: {fileID: 2100000, guid: 69f9e52b501881447b0f741f65c79ffa, type: 2}
   MatVariable:
     name: FloorMat
     requiredType: 3
@@ -1782,7 +1781,7 @@ MonoBehaviour:
   YawOffset: 0
   DirectOffset: {x: 0, y: 0, z: 0}
   OffsetMode: 0
-  RotateBy90Only: 1
+  RotateBy90Only: 0
   V2: 0
   Advanced: 0
   SpawnOnCheck: 3
@@ -1894,8 +1893,8 @@ MonoBehaviour:
   Version2: 0
   ScaleBounds: 0.99
   Padding: 0
-  YawOffset: 180
-  DirectOffset: {x: 0, y: 0, z: 0.5}
+  YawOffset: 0
+  DirectOffset: {x: 0, y: 0, z: -0.5}
   OffsetMode: 1
   IgnoreOtherMods: 1
   DontCheckAdditionals: 0
@@ -1914,13 +1913,13 @@ MonoBehaviour:
   Logic: 0
   Negate: 0
   Global: 0
-  Enabled: 0
+  Enabled: 1
   Ignore: 0
   _editor_drawRule: 1
   CellAllow: 1
   AllConditionsMet: 1
-  EffectOn: 0
-  ApplyMode: 1
+  EffectOn: 1
+  ApplyMode: 0
   Space: 0
   GetCoords: 
   CheckMode: 0
@@ -1930,7 +1929,7 @@ MonoBehaviour:
     name: 
     requiredType: 5
     Tooltip: Set Additive Vector3 Field Variable value to this property
-  RotationOffset: {x: 0, y: 90, z: 0}
+  RotationOffset: {x: 0, y: 0, z: 0}
   ScaleMultiplier: {x: 1, y: 1, z: 1}
   RandomizeOffset: {x: 0, y: 0, z: 0}
   MaxDegreesSteps: {x: 1, y: 1, z: 1}
@@ -1977,7 +1976,7 @@ MonoBehaviour:
       EditorDisplayColor: {r: 0.4, g: 0.4, b: 1, a: 0.95}
 --- !u!114 &3391657039994221933
 MonoBehaviour:
-  m_ObjectHideFlags: 1
+  m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
@@ -1990,7 +1989,7 @@ MonoBehaviour:
   Logic: 0
   Negate: 0
   Global: 0
-  Enabled: 1
+  Enabled: 0
   Ignore: 0
   _editor_drawRule: 1
   CellAllow: 1

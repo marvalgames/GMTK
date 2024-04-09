@@ -106,10 +106,10 @@ MonoBehaviour:
   OMultiStamp: {fileID: 0}
   PrefabsList:
   - Prefab: {fileID: 427923017583535349, guid: c0d602d0a23f7d6488a5b062b2ec5eaa, type: 3}
-    MainCollider: {fileID: 0}
+    MainCollider: {fileID: 4149882407955879009, guid: c0d602d0a23f7d6488a5b062b2ec5eaa, type: 3}
     subID: 0
     _refMesh: {fileID: 2863967534805457344, guid: 8f50acbdb7056ea40af34807460ba408, type: 3}
-    _refCol: {fileID: 0}
+    _refCol: {fileID: 4149882407955879009, guid: c0d602d0a23f7d6488a5b062b2ec5eaa, type: 3}
   - Prefab: {fileID: 7036582132204373045, guid: b650300a6aa460a4d86d1edcac3724c7, type: 3}
     MainCollider: {fileID: 0}
     subID: 0
@@ -124,7 +124,7 @@ MonoBehaviour:
     Parent: {fileID: -8417504216931457559}
     Rules:
     - {fileID: 2057876523405530320}
-    - {fileID: 3748029475139337245}
+    - {fileID: 7133153373369863685}
     Mode: 0
     CellCheckMode: 0
     _Editor_SpawnerAdvancedOptionsFoldout: 0
@@ -171,7 +171,7 @@ MonoBehaviour:
   _editor_drawGlobalRules: 0
   _editor_drawModPackRules: 0
   _editor_shareSelected: 0
-  ParentPreset: {fileID: 0}
+  ParentPreset: {fileID: 11400000}
   ParentPack: {fileID: 4010537770972031752}
 --- !u!114 &-8313925951395660757
 MonoBehaviour:
@@ -313,20 +313,20 @@ MonoBehaviour:
   OMultiStamp: {fileID: 0}
   PrefabsList:
   - Prefab: {fileID: 7126589026732099666, guid: 94414984375e2e54586cdbabdb20ec74, type: 3}
-    MainCollider: {fileID: 0}
+    MainCollider: {fileID: 3701321868698039310, guid: 94414984375e2e54586cdbabdb20ec74, type: 3}
     subID: 0
     _refMesh: {fileID: -8814386876606807464, guid: 8f50acbdb7056ea40af34807460ba408, type: 3}
-    _refCol: {fileID: 0}
+    _refCol: {fileID: 3701321868698039310, guid: 94414984375e2e54586cdbabdb20ec74, type: 3}
   - Prefab: {fileID: 7126589026732099666, guid: 94414984375e2e54586cdbabdb20ec74, type: 3}
-    MainCollider: {fileID: 0}
+    MainCollider: {fileID: 3701321868698039310, guid: 94414984375e2e54586cdbabdb20ec74, type: 3}
     subID: 0
     _refMesh: {fileID: 5085965759457506131, guid: 8f50acbdb7056ea40af34807460ba408, type: 3}
-    _refCol: {fileID: 0}
+    _refCol: {fileID: 3701321868698039310, guid: 94414984375e2e54586cdbabdb20ec74, type: 3}
   - Prefab: {fileID: 7126589026732099666, guid: 94414984375e2e54586cdbabdb20ec74, type: 3}
-    MainCollider: {fileID: 0}
+    MainCollider: {fileID: 3701321868698039310, guid: 94414984375e2e54586cdbabdb20ec74, type: 3}
     subID: 0
     _refMesh: {fileID: -3268728532136532347, guid: 8f50acbdb7056ea40af34807460ba408, type: 3}
-    _refCol: {fileID: 0}
+    _refCol: {fileID: 3701321868698039310, guid: 94414984375e2e54586cdbabdb20ec74, type: 3}
   DrawMultiObjectStamps: 1
   Spawners:
   - Enabled: 1
@@ -359,7 +359,7 @@ MonoBehaviour:
   _editor_drawGlobalRules: 0
   _editor_drawModPackRules: 0
   _editor_shareSelected: 0
-  ParentPreset: {fileID: 0}
+  ParentPreset: {fileID: 11400000}
   ParentPack: {fileID: 4010537770972031752}
 --- !u!114 &-7057274667417803235
 MonoBehaviour:
@@ -752,12 +752,12 @@ MonoBehaviour:
   Logic: 0
   Negate: 0
   Global: 0
-  Enabled: 1
+  Enabled: 0
   Ignore: 0
   _editor_drawRule: 1
   CellAllow: 1
   AllConditionsMet: 1
-  ScaleMultiplier: {x: 1, y: 2, z: 1}
+  ScaleMultiplier: {x: 1, y: 1, z: 1}
   ScaleMulVariable:
     name: 
     requiredType: 5
@@ -1919,8 +1919,8 @@ MonoBehaviour:
   Version2: 0
   ScaleBounds: 0.99
   Padding: 0
-  YawOffset: 180
-  DirectOffset: {x: 0, y: 0, z: 0.5}
+  YawOffset: 0
+  DirectOffset: {x: 0, y: 0, z: -0.5}
   OffsetMode: 1
   IgnoreOtherMods: 1
   DontCheckAdditionals: 0
@@ -2210,7 +2210,7 @@ MonoBehaviour:
   Logic: 0
   Negate: 0
   Global: 0
-  Enabled: 1
+  Enabled: 0
   Ignore: 0
   _editor_drawRule: 1
   CellAllow: 1
@@ -2326,7 +2326,7 @@ MonoBehaviour:
   doFullBreak: 0
 --- !u!114 &3748029475139337245
 MonoBehaviour:
-  m_ObjectHideFlags: 1
+  m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
@@ -2784,6 +2784,42 @@ MonoBehaviour:
   OverridePitchRotation: 1
   InitPitchRotation: 0
   NotCheckDefaultPitch: 0
+--- !u!114 &7133153373369863685
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b496837ae5a0c3b4786589d6fb51e8d5, type: 3}
+  m_Name: 'SR_MoveRotateScale-[Fence Around]'
+  m_EditorClassIdentifier: 
+  Logic: 0
+  Negate: 0
+  Global: 0
+  Enabled: 1
+  Ignore: 0
+  _editor_drawRule: 1
+  CellAllow: 1
+  AllConditionsMet: 1
+  EffectOn: 0
+  ApplyMode: 0
+  Space: 0
+  GetCoords: 
+  CheckMode: 0
+  PositionOffset: {x: 0, y: 0, z: 0}
+  OffsetMode: 1
+  OffsetPosVariable:
+    name: 
+    requiredType: 5
+    Tooltip: Set Additive Vector3 Field Variable value to this property
+  RotationOffset: {x: 0, y: 90, z: 0}
+  ScaleMultiplier: {x: 1, y: 1, z: 1}
+  RandomizeOffset: {x: 0, y: 0, z: 0}
+  MaxDegreesSteps: {x: 1, y: 1, z: 1}
+  InheritScaleOffset: 0
 --- !u!114 &7906467318267168703
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2808,15 +2844,15 @@ MonoBehaviour:
   OMultiStamp: {fileID: 0}
   PrefabsList:
   - Prefab: {fileID: 821105046218489575, guid: 8be39c2d8dde8f241948b9dc0fa8b760, type: 3}
-    MainCollider: {fileID: 0}
+    MainCollider: {fileID: 1271096509189953082, guid: 8be39c2d8dde8f241948b9dc0fa8b760, type: 3}
     subID: 0
     _refMesh: {fileID: -4303887579223004961, guid: 8f50acbdb7056ea40af34807460ba408, type: 3}
-    _refCol: {fileID: 0}
+    _refCol: {fileID: 1271096509189953082, guid: 8be39c2d8dde8f241948b9dc0fa8b760, type: 3}
   - Prefab: {fileID: 6924196216273371695, guid: 5fdd0c7ef59efd248bc4aa9c32c6e2a1, type: 3}
-    MainCollider: {fileID: 0}
+    MainCollider: {fileID: 5901285650166885863, guid: 5fdd0c7ef59efd248bc4aa9c32c6e2a1, type: 3}
     subID: 0
     _refMesh: {fileID: -4303887579223004961, guid: 8f50acbdb7056ea40af34807460ba408, type: 3}
-    _refCol: {fileID: 0}
+    _refCol: {fileID: 5901285650166885863, guid: 5fdd0c7ef59efd248bc4aa9c32c6e2a1, type: 3}
   - Prefab: {fileID: 6924196216273371695, guid: a64c7c99ed712d24b929230d64e07e4c, type: 3}
     MainCollider: {fileID: 0}
     subID: 0
@@ -2978,8 +3014,8 @@ MonoBehaviour:
   _editor_drawSpawners: 1
   _editor_drawGlobalRules: 0
   _editor_drawModPackRules: 0
-  _editor_shareSelected: 3
-  ParentPreset: {fileID: 0}
+  _editor_shareSelected: 0
+  ParentPreset: {fileID: 11400000}
   ParentPack: {fileID: 4010537770972031752}
 --- !u!114 &8017177735639860324
 MonoBehaviour:
