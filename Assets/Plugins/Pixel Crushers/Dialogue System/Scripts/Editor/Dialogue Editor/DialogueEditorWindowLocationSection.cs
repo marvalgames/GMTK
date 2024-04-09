@@ -148,8 +148,21 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
         {
             var location = inspectorSelection as Location;
             if (location == null) return;
+            DrawOtherLocationPrimaryFields(location);
             DrawFieldsFoldout<Location>(location, locationListSelectedIndex, locationFoldouts);
             DrawAssetSpecificPropertiesSecondPart(location, locationListSelectedIndex, locationFoldouts);
+        }
+
+        private void DrawOtherLocationPrimaryFields(Location location)
+        {
+            if (location == null || location.fields == null || template.locationPrimaryFieldTitles == null) return;
+            foreach (var field in location.fields)
+            {
+                var fieldTitle = field.title;
+                if (string.IsNullOrEmpty(fieldTitle)) continue;
+                if (!template.locationPrimaryFieldTitles.Contains(field.title)) continue;
+                DrawMainSectionField(field);
+            }
         }
 
         private void DrawLocationMenu()

@@ -41,6 +41,7 @@ namespace Language.Lua
 
                     if (varName != null)
                     {
+                        SetKeyValue(enviroment, new LuaString(varName.Name), values[i]);
                         if (varName.Name == "Variable")
                         {
                             VariableTableToMonitor = values[0];
@@ -56,7 +57,6 @@ namespace Language.Lua
                                 UnityEngine.Debug.LogException(e);
                             }
                         }
-                        SetKeyValue(enviroment, new LuaString(varName.Name), values[i]);
                         continue;
                     }
                 }
@@ -97,41 +97,46 @@ namespace Language.Lua
 
         private static void SetKeyValue(LuaValue baseValue, LuaValue key, LuaValue value)
         {
-            if (baseValue == VariableTableToMonitor && key != null && value != null) //[PixelCrushers]
-            {
-                if (MonitoredVariables.Contains(key.ToString()))
-                {
-                    try
-                    {
-                        VariableChanged?.Invoke(key.ToString(), value.Value);
-                    }
-                    catch (Exception e)
-                    {
-                        UnityEngine.Debug.LogException(e);
-                    }
-                }
-            }
-
             LuaValue newIndex = LuaNil.Nil;
             LuaTable table = baseValue as LuaTable;
             if (table != null)
             {
-                if (table.ContainsKey(key))
+                try
                 {
-                    table.SetKeyValue(key, value);
-                    return;
-                }
-                else
-                {
-                    if (table.MetaTable != null)
-                    {
-                        newIndex = table.MetaTable.GetValue("__newindex");
-                    }
-
-                    if (newIndex == LuaNil.Nil)
+                    if (table.ContainsKey(key))
                     {
                         table.SetKeyValue(key, value);
                         return;
+                    }
+                    else
+                    {
+                        if (table.MetaTable != null)
+                        {
+                            newIndex = table.MetaTable.GetValue("__newindex");
+                        }
+
+                        if (newIndex == LuaNil.Nil)
+                        {
+                            table.SetKeyValue(key, value);
+                            return;
+                        }
+                    }
+                }
+                finally
+                {
+                    if (baseValue == VariableTableToMonitor && key != null && value != null) //[PixelCrushers]
+                    {
+                        if (MonitoredVariables.Contains(key.ToString()))
+                        {
+                            try
+                            {
+                                VariableChanged?.Invoke(key.ToString(), value.Value);
+                            }
+                            catch (Exception e)
+                            {
+                                UnityEngine.Debug.LogException(e);
+                            }
+                        }
                     }
                 }
             }

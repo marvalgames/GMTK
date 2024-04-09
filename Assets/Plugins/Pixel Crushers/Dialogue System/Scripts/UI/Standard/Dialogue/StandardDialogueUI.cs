@@ -323,6 +323,14 @@ namespace PixelCrushers.DialogueSystem
             conversationUIElements.standardSubtitleControls.ForceOverrideSubtitlePanel(customPanel);
         }
 
+        /// <summary>
+        /// Shows an actor immediately in a subtitle panel.
+        /// </summary>
+        public virtual void ShowActorInPanel(Actor actor, SubtitlePanelNumber subtitlePanelNumber, StandardUISubtitlePanel customPanel = null)
+        {
+            conversationUIElements.standardSubtitleControls.ShowActorInPanel(actor, subtitlePanelNumber, customPanel);
+        }
+
         #endregion
 
         #region Response Menu

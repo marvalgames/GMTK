@@ -596,6 +596,11 @@ namespace PixelCrushers.DialogueSystem
 
         protected virtual void SetSubtitleTextContent(Subtitle subtitle)
         {
+            if (addSpeakerName && !string.IsNullOrEmpty(subtitle.speakerInfo.Name))
+            {
+                subtitle.formattedText.text = FormattedText.Parse(string.Format(addSpeakerNameFormat, new object[] { subtitle.speakerInfo.Name, subtitle.formattedText.text })).text;
+            }
+
             TypewriterUtility.StopTyping(subtitleText);
             var previousText = accumulateText ? m_accumulatedText : string.Empty;
             if (accumulateText && !string.IsNullOrEmpty(subtitle.formattedText.text))
@@ -676,11 +681,6 @@ namespace PixelCrushers.DialogueSystem
         protected virtual void SetFormattedText(UITextField textField, string previousText, Subtitle subtitle)
         {
             var currentText = UITools.GetUIFormattedText(subtitle.formattedText);
-            if (addSpeakerName && !string.IsNullOrEmpty(subtitle.speakerInfo.Name))
-            {
-                currentText = FormattedText.Parse(string.Format(addSpeakerNameFormat, new object[] { subtitle.speakerInfo.Name, currentText })).text;
-            }
-
             textField.text = previousText + currentText;
             UITools.SendTextChangeMessage(textField);
             if (!haveSavedOriginalColor)
