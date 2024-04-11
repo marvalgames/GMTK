@@ -82,6 +82,133 @@ MonoBehaviour:
     IsSubSpawner: 0
     _EditorDisplaySpawnerHeader: 0
   BlockResult: 0
+--- !u!114 &-8887936818327505194
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3f1d61451050d554e8d53669d77fafc0, type: 3}
+  m_Name: 'SR_MultiCheckCellNeightbours-[Stairs Fences]'
+  m_EditorClassIdentifier: 
+  Logic: 0
+  Negate: 0
+  Global: 0
+  Enabled: 0
+  Ignore: 0
+  _editor_drawRule: 1
+  CellAllow: 0
+  AllConditionsMet: 1
+  quartRotor:
+    q1: 1
+    q2: 0
+    q3: 0
+    q4: 0
+  OverrideRotation: 0
+  initRotation: 0
+  rotorEff: 90
+  EachRotor: 0
+  CustomRotors:
+  - 0
+  - 0
+  - 0
+  - 0
+  CheckRules:
+  - CheckedCellsMustBe: 2
+    occupiedByTag: 
+    CheckMode: 0
+    OffsetOrigin: {x: 0, y: 0, z: 0}
+    R: 0
+    DirectCheck: 0
+    placement:
+      lu: 0
+      u: 1
+      ru: 0
+      l: 0
+      m: 0
+      r: 0
+      ld: 0
+      d: 0
+      rd: 0
+      UseAdvancedSetup: 0
+      AdvancedSetup: []
+    Negate: 0
+    NeightbourNeeds: 0
+    FullRotGet: 0
+  CheckPosit90: 0
+  CheckNeg90: 0
+  NotCheckDefaultPitch: 0
+  OverridePitchRotation: 1
+  InitPitchRotation: 0
+--- !u!114 &-8527077564951852057
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c360632d4510a074baef619f3210b541, type: 3}
+  m_Name: 'SR_CellNeightbours-[Stairs Fences]'
+  m_EditorClassIdentifier: 
+  Logic: 0
+  Negate: 0
+  Global: 0
+  Enabled: 1
+  Ignore: 0
+  _editor_drawRule: 1
+  CellAllow: 0
+  AllConditionsMet: 1
+  CheckedCellsMustBe: 2
+  NeightbourNeeds: 0
+  occupiedByTag: 
+  CheckMode: 0
+  DirectCheck: 0
+  OffsetOrigin: {x: 0, y: 0, z: 0}
+  placement:
+    lu: 0
+    u: 1
+    ru: 0
+    l: 0
+    m: 0
+    r: 0
+    ld: 0
+    d: 0
+    rd: 0
+    UseAdvancedSetup: 0
+    AdvancedSetup: []
+  quartRotor:
+    q1: 1
+    q2: 0
+    q3: 0
+    q4: 0
+  OverrideRotation: 1
+  initRotation: 90
+  rotorEff: 90
+  spawnOn: 5
+  EachRotor: 0
+  CustomRotors:
+  - 0
+  - 0
+  - 0
+  - 0
+  GetNeightbourPos: 0
+  GetNeightbourRot: 0
+  GetNeightbourScale: 0
+  UseRestrictedDir: 0
+  CustomCellsCheck: 0
+  FullRotGet: 0
+  Check3DAngles: 0
+  RotationSpaceDisplay: 0
+  CheckPosit90: 1
+  CheckNeg90: 1
+  OverridePitchRotation: 1
+  InitPitchRotation: 0
+  NotCheckDefaultPitch: 0
 --- !u!114 &-8417504216931457559
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -170,8 +297,8 @@ MonoBehaviour:
   _editor_drawSpawners: 1
   _editor_drawGlobalRules: 0
   _editor_drawModPackRules: 0
-  _editor_shareSelected: 0
-  ParentPreset: {fileID: 0}
+  _editor_shareSelected: 1
+  ParentPreset: {fileID: 11400000}
   ParentPack: {fileID: 4010537770972031752}
 --- !u!114 &-8036390951677653302
 MonoBehaviour:
@@ -287,7 +414,7 @@ MonoBehaviour:
   _editor_drawGlobalRules: 0
   _editor_drawModPackRules: 0
   _editor_shareSelected: 0
-  ParentPreset: {fileID: 0}
+  ParentPreset: {fileID: 11400000}
   ParentPack: {fileID: 4010537770972031752}
 --- !u!114 &-7057274667417803235
 MonoBehaviour:
@@ -480,6 +607,82 @@ MonoBehaviour:
   AllConditionsMet: 1
   RotationFrom: -90
   RotationTo: 90
+--- !u!114 &-5910133384301519831
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9327e64f60ac33a4fa5e7efebb9176fb, type: 3}
+  m_Name: SR_GetCoords-[Stairs Fences](Clone)
+  m_EditorClassIdentifier: 
+  Logic: 0
+  Negate: 0
+  Global: 0
+  Enabled: 1
+  Ignore: 0
+  _editor_drawRule: 1
+  CellAllow: 0
+  AllConditionsMet: 1
+  GetFromTagged: S
+  CheckMode: 0
+  WorldOffset: {x: 0, y: 0, z: 0}
+  OffsetMode: 0
+  DirectionalOffset: {x: -0.33, y: 0.5, z: 0}
+  StackOffset: 0
+  RotationEulerOffset: {x: 0, y: 90, z: -26}
+  GetScale: 0
+  ScaleMultiplier: {x: 1, y: 1, z: 1}
+  RandomOffsets: {x: 0, y: 0, z: 0}
+  RandomLocalRotation: {x: 0, y: 0, z: 0}
+  RandomScale: {x: 0, y: 0, z: 0}
+  PivotOffset: {x: 0, y: 0, z: 0}
+  MultiplyGetted: {x: 1, y: 1, z: 1}
+  DontSpawnIfNoTagged: 1
+  RemoveTagged: 0
+  TransformLikeChild: 0
+  GetRandomIfMulti: 0
+  RunOnRepetition: 0
+  HelperMode: 0
+  _DrawOffsets: 0
+  _DrawRandomization: 0
+  _DrawAdditionals: 0
+--- !u!114 &-5823907352424952571
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 42d3514c4697cf541b2d647b9793695a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  TriggerConnectionDrawMode: 0
+  IndividualID: -2147483647
+  NameID: 
+  wasCreated: 1
+  OutputConnections:
+  - ConnectionFromID: -2147483647
+    ConnectionToID: -2147483646
+    ConnectionFrom_AlternativeID: -1
+    ConnectionTo_AlternativeID: -1
+  InputConnections: []
+  NodePosition: {x: 732.70844, y: 505.00006}
+  NodeDrawOffset: {x: 0, y: 0}
+  ResizedScale: {x: 200, y: 140}
+  _EditorInContainedRange: []
+  IsContainedBy: {fileID: 0}
+  _EditorFoldout: 0
+  _EditorCollapse: 0
+  Enabled: 1
+  ParentPlanner: {fileID: 0}
+  ParentNodesContainer: {fileID: -3051774660926100108}
+  _editor_drawRule: 1
 --- !u!114 &-5722243987061521276
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -546,6 +749,74 @@ MonoBehaviour:
   customRemovers: []
   wasGenerated: 1
   doFullBreak: 0
+--- !u!114 &-5548772500139919029
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c360632d4510a074baef619f3210b541, type: 3}
+  m_Name: 'SR_CellNeightbours-[Stairs Fences]'
+  m_EditorClassIdentifier: 
+  Logic: 0
+  Negate: 0
+  Global: 0
+  Enabled: 0
+  Ignore: 0
+  _editor_drawRule: 0
+  CellAllow: 1
+  AllConditionsMet: 1
+  CheckedCellsMustBe: 2
+  NeightbourNeeds: 0
+  occupiedByTag: 
+  CheckMode: 0
+  DirectCheck: 1
+  OffsetOrigin: {x: 0, y: 0, z: 0}
+  placement:
+    lu: 0
+    u: 0
+    ru: 0
+    l: 1
+    m: 0
+    r: 0
+    ld: 0
+    d: 0
+    rd: 0
+    UseAdvancedSetup: 1
+    AdvancedSetup:
+    - {x: -1, y: 0, z: 0}
+    - {x: -1, y: -1, z: 0}
+  quartRotor:
+    q1: 1
+    q2: 0
+    q3: 0
+    q4: 0
+  OverrideRotation: 0
+  initRotation: 0
+  rotorEff: 90
+  spawnOn: 5
+  EachRotor: 0
+  CustomRotors:
+  - 0
+  - 0
+  - 0
+  - 0
+  GetNeightbourPos: 0
+  GetNeightbourRot: 0
+  GetNeightbourScale: 0
+  UseRestrictedDir: 0
+  CustomCellsCheck: 0
+  FullRotGet: 0
+  Check3DAngles: 0
+  RotationSpaceDisplay: 0
+  CheckPosit90: 1
+  CheckNeg90: 1
+  OverridePitchRotation: 1
+  InitPitchRotation: 0
+  NotCheckDefaultPitch: 0
 --- !u!114 &-5497163362131261965
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -775,6 +1046,71 @@ MonoBehaviour:
   OffsetMode: 1
   RandomWorldOffset: {x: 0, y: 0, z: 0}
   RandomRange: {x: 0, y: 1}
+--- !u!114 &-3403693691598792601
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3e9eb20ceb9cc73458939a17a04546d2, type: 3}
+  m_Name: (Clone)
+  m_EditorClassIdentifier: 
+  TriggerConnectionDrawMode: 0
+  IndividualID: -2147483642
+  NameID: 
+  wasCreated: 1
+  OutputConnections: []
+  InputConnections:
+  - ConnectionFromID: -2147483646
+    ConnectionToID: -2147483642
+    ConnectionFrom_AlternativeID: 1
+    ConnectionTo_AlternativeID: -1
+  NodePosition: {x: 811.5836, y: 746.28174}
+  NodeDrawOffset: {x: 0, y: 0}
+  ResizedScale: {x: 200, y: 140}
+  _EditorInContainedRange: []
+  IsContainedBy: {fileID: 0}
+  _EditorFoldout: 0
+  _EditorCollapse: 0
+  Enabled: 1
+  ParentPlanner: {fileID: 0}
+  ParentNodesContainer: {fileID: -3051774660926100108}
+  _editor_drawRule: 1
+--- !u!114 &-3051774660926100108
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d9229d68cf90a91408c1eeb22955c86a, type: 3}
+  m_Name: 'SR_ModGraph-[Stairs Fences]'
+  m_EditorClassIdentifier: 
+  Logic: 0
+  Negate: 0
+  Global: 0
+  Enabled: 0
+  Ignore: 0
+  _editor_drawRule: 1
+  CellAllow: 0
+  AllConditionsMet: 1
+  _editor_wasRenaming: 0
+  ExternalModGraph: {fileID: 0}
+  Nodes:
+  - {fileID: -5823907352424952571}
+  - {fileID: 5279768096312159563}
+  - {fileID: 5192116458893221199}
+  - {fileID: 2338179488728658947}
+  - {fileID: 4605154524727592657}
+  - {fileID: -3403693691598792601}
+  _graphVariables: []
+  proceduresBegin: {fileID: -5823907352424952571}
+  CallDuring: 0
 --- !u!114 &-2578806539607322669
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -870,6 +1206,33 @@ MonoBehaviour:
       ToCheck:
       - {x: 0, y: 0, z: 0}
       EditorDisplayColor: {r: 0.4, g: 0.4, b: 1, a: 0.95}
+--- !u!114 &-1978267522652328214
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5015748d498a9d94abd4c0c69a786f28, type: 3}
+  m_Name: 'SR_DirectOffset-[Stairs Fences]'
+  m_EditorClassIdentifier: 
+  Logic: 0
+  Negate: 0
+  Global: 0
+  Enabled: 0
+  Ignore: 0
+  _editor_drawRule: 0
+  CellAllow: 1
+  AllConditionsMet: 1
+  Append: 0
+  Randomize: 0
+  GetOffsetFromTagged: 
+  CheckMode: 0
+  Offset: {x: 0, y: 0.5, z: 0}
+  OffsetMode: 0
+  RandomOffset: {x: 0, y: 0, z: 0}
 --- !u!114 &-1750418505263690936
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -966,6 +1329,99 @@ MonoBehaviour:
     ToCheck: []
     EditorDisplayColor: {r: 1, g: 0.1, b: 0.1, a: 1}
   customRemovers: []
+  wasGenerated: 1
+  doFullBreak: 0
+--- !u!114 &-1393964330799419860
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e40483fbb8044424db6e9848a59ac14c, type: 3}
+  m_Name: 'SR_StairsHelper-[Stairs]'
+  m_EditorClassIdentifier: 
+  Logic: 0
+  Negate: 0
+  Global: 0
+  Enabled: 1
+  Ignore: 0
+  _editor_drawRule: 1
+  CellAllow: 0
+  AllConditionsMet: 1
+  RemoveTagged: 
+  CheckMode: 0
+  RemoveDetectionTolerance: 0
+  StopOnTagged: 
+  StopOnCheckMode: 0
+  checkSetup:
+    UseRotor: 0
+    Rotor: 0
+    UseCondition: 0
+    Condition: 0
+    ExtraString: 
+    ExtraValue: 0
+    ToCheck:
+    - {x: 0, y: 0, z: 0}
+    - {x: 0, y: 0, z: -1}
+    - {x: 0, y: 1, z: 0}
+    - {x: 0, y: 1, z: 1}
+    EditorDisplayColor: {r: 0.4, g: 0.4, b: 1, a: 0.95}
+  removeInCells:
+    UseRotor: 0
+    Rotor: 0
+    UseCondition: 0
+    Condition: 0
+    ExtraString: 
+    ExtraValue: 0
+    ToCheck:
+    - {x: 0, y: 0, z: 0}
+    - {x: 0, y: 1, z: 0}
+    EditorDisplayColor: {r: 0.8, g: 0.5, b: 0.4, a: 0.75}
+  breakOnCells:
+    UseRotor: 0
+    Rotor: 0
+    UseCondition: 0
+    Condition: 0
+    ExtraString: 
+    ExtraValue: 0
+    ToCheck: []
+    EditorDisplayColor: {r: 1, g: 0.1, b: 0.1, a: 1}
+  customRemovers:
+  - UseRotor: 0
+    Rotor: 0
+    UseCondition: 0
+    Condition: 0
+    ExtraString: 
+    ExtraValue: 0
+    ToCheck: []
+    EditorDisplayColor: {r: 0.4, g: 0.4, b: 1, a: 0.95}
+  - UseRotor: 0
+    Rotor: 0
+    UseCondition: 0
+    Condition: 0
+    ExtraString: 
+    ExtraValue: 0
+    ToCheck: []
+    EditorDisplayColor: {r: 0.4, g: 0.4, b: 1, a: 0.95}
+  - UseRotor: 0
+    Rotor: 0
+    UseCondition: 0
+    Condition: 0
+    ExtraString: 
+    ExtraValue: 0
+    ToCheck: []
+    EditorDisplayColor: {r: 0.4, g: 0.4, b: 1, a: 0.95}
+  - UseRotor: 0
+    Rotor: 0
+    UseCondition: 0
+    Condition: 0
+    ExtraString: 
+    ExtraValue: 0
+    ToCheck: []
+    EditorDisplayColor: {r: 0.4, g: 0.4, b: 1, a: 0.95}
   wasGenerated: 1
   doFullBreak: 0
 --- !u!114 &-1198439533311874938
@@ -1103,8 +1559,7 @@ MonoBehaviour:
     Condition: 0
     ExtraString: 
     ExtraValue: 0
-    ToCheck:
-    - {x: 0, y: 0, z: 0}
+    ToCheck: []
     EditorDisplayColor: {r: 0.9, g: 0.8, b: 0.4, a: 0.75}
   - UseRotor: 0
     Rotor: 0
@@ -1112,8 +1567,7 @@ MonoBehaviour:
     Condition: 0
     ExtraString: 
     ExtraValue: 0
-    ToCheck:
-    - {x: 0, y: 0, z: 0}
+    ToCheck: []
     EditorDisplayColor: {r: 0.9, g: 0.8, b: 0.4, a: 0.75}
   - UseRotor: 0
     Rotor: 0
@@ -1121,8 +1575,7 @@ MonoBehaviour:
     Condition: 0
     ExtraString: 
     ExtraValue: 0
-    ToCheck:
-    - {x: 0, y: 0, z: 0}
+    ToCheck: []
     EditorDisplayColor: {r: 0.9, g: 0.8, b: 0.4, a: 0.75}
   - UseRotor: 0
     Rotor: 0
@@ -1130,8 +1583,7 @@ MonoBehaviour:
     Condition: 0
     ExtraString: 
     ExtraValue: 0
-    ToCheck:
-    - {x: 0, y: 0, z: 0}
+    ToCheck: []
     EditorDisplayColor: {r: 0.9, g: 0.8, b: 0.4, a: 0.75}
   wasGenerated: 1
   doFullBreak: 0
@@ -1264,8 +1716,7 @@ MonoBehaviour:
     Condition: 0
     ExtraString: 
     ExtraValue: 0
-    ToCheck:
-    - {x: 0, y: 0, z: 0}
+    ToCheck: []
     EditorDisplayColor: {r: 0.9, g: 0.8, b: 0.4, a: 0.75}
   - UseRotor: 0
     Rotor: 0
@@ -1273,8 +1724,7 @@ MonoBehaviour:
     Condition: 0
     ExtraString: 
     ExtraValue: 0
-    ToCheck:
-    - {x: 0, y: 0, z: 0}
+    ToCheck: []
     EditorDisplayColor: {r: 0.9, g: 0.8, b: 0.4, a: 0.75}
   - UseRotor: 0
     Rotor: 0
@@ -1282,8 +1732,7 @@ MonoBehaviour:
     Condition: 0
     ExtraString: 
     ExtraValue: 0
-    ToCheck:
-    - {x: 0, y: 0, z: 0}
+    ToCheck: []
     EditorDisplayColor: {r: 0.9, g: 0.8, b: 0.4, a: 0.75}
   - UseRotor: 0
     Rotor: 0
@@ -1291,8 +1740,7 @@ MonoBehaviour:
     Condition: 0
     ExtraString: 
     ExtraValue: 0
-    ToCheck:
-    - {x: 0, y: 0, z: 0}
+    ToCheck: []
     EditorDisplayColor: {r: 0.9, g: 0.8, b: 0.4, a: 0.75}
   wasGenerated: 1
   doFullBreak: 0
@@ -1431,6 +1879,84 @@ MonoBehaviour:
     with forward and '
   CommentInHeader: 0
   Padding: {x: 8, y: 8}
+--- !u!114 &176241775378446082
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9327e64f60ac33a4fa5e7efebb9176fb, type: 3}
+  m_Name: 'SR_GetCoords-[Stairs Fences]'
+  m_EditorClassIdentifier: 
+  Logic: 0
+  Negate: 0
+  Global: 0
+  Enabled: 0
+  Ignore: 0
+  _editor_drawRule: 0
+  CellAllow: 0
+  AllConditionsMet: 1
+  GetFromTagged: S
+  CheckMode: 0
+  WorldOffset: {x: 0, y: 0, z: 0}
+  OffsetMode: 0
+  DirectionalOffset: {x: 0, y: 0, z: 0}
+  StackOffset: 0
+  RotationEulerOffset: {x: 0, y: 0, z: 0}
+  GetScale: 0
+  ScaleMultiplier: {x: 1, y: 1, z: 1}
+  RandomOffsets: {x: 0, y: 0, z: 0}
+  RandomLocalRotation: {x: 0, y: 0, z: 0}
+  RandomScale: {x: 0, y: 0, z: 0}
+  PivotOffset: {x: 0, y: 0, z: 0}
+  MultiplyGetted: {x: 1, y: 1, z: 1}
+  DontSpawnIfNoTagged: 1
+  RemoveTagged: 0
+  TransformLikeChild: 0
+  GetRandomIfMulti: 0
+  RunOnRepetition: 0
+  HelperMode: 0
+  _DrawOffsets: 1
+  _DrawRandomization: 0
+  _DrawAdditionals: 1
+--- !u!114 &248552135608242354
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3401e8bda3cc91343b11bed2506f2b74, type: 3}
+  m_Name: 'SR_IfCellContainsTag-[Stairs Fences]'
+  m_EditorClassIdentifier: 
+  Logic: 0
+  Negate: 0
+  Global: 0
+  Enabled: 0
+  Ignore: 0
+  _editor_drawRule: 0
+  CellAllow: 0
+  AllConditionsMet: 1
+  Tag: S
+  CheckMode: 0
+  UseRotationsCheck: 0
+  OnlyWithSameDirection: 0
+  CompareOffsetsAngle: 181
+  checkSetup:
+    UseRotor: 1
+    Rotor: 0
+    UseCondition: 1
+    Condition: 0
+    ExtraString: 
+    ExtraValue: 0
+    ToCheck:
+    - {x: 0, y: 0, z: 0}
+    EditorDisplayColor: {r: 0.4, g: 0.4, b: 1, a: 0.95}
 --- !u!114 &530917911774950061
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1501,8 +2027,7 @@ MonoBehaviour:
     Condition: 0
     ExtraString: 
     ExtraValue: 0
-    ToCheck:
-    - {x: 0, y: 0, z: 0}
+    ToCheck: []
     EditorDisplayColor: {r: 0.9, g: 0.8, b: 0.4, a: 0.75}
   - UseRotor: 0
     Rotor: 0
@@ -1510,8 +2035,7 @@ MonoBehaviour:
     Condition: 0
     ExtraString: 
     ExtraValue: 0
-    ToCheck:
-    - {x: 0, y: 0, z: 0}
+    ToCheck: []
     EditorDisplayColor: {r: 0.9, g: 0.8, b: 0.4, a: 0.75}
   - UseRotor: 0
     Rotor: 0
@@ -1519,8 +2043,7 @@ MonoBehaviour:
     Condition: 0
     ExtraString: 
     ExtraValue: 0
-    ToCheck:
-    - {x: 0, y: 0, z: 0}
+    ToCheck: []
     EditorDisplayColor: {r: 0.9, g: 0.8, b: 0.4, a: 0.75}
   - UseRotor: 0
     Rotor: 0
@@ -1528,8 +2051,7 @@ MonoBehaviour:
     Condition: 0
     ExtraString: 
     ExtraValue: 0
-    ToCheck:
-    - {x: 0, y: 0, z: 0}
+    ToCheck: []
     EditorDisplayColor: {r: 0.9, g: 0.8, b: 0.4, a: 0.75}
   wasGenerated: 1
   doFullBreak: 0
@@ -1654,6 +2176,102 @@ MonoBehaviour:
     - {x: 0, y: 1, z: 0}
     - {x: 0, y: 2, z: 0}
     EditorDisplayColor: {r: 0.4, g: 0.4, b: 1, a: 0.95}
+--- !u!114 &1417987373940881854
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c360632d4510a074baef619f3210b541, type: 3}
+  m_Name: 'SR_CellNeightbours-[Stairs Fences]'
+  m_EditorClassIdentifier: 
+  Logic: 0
+  Negate: 0
+  Global: 0
+  Enabled: 1
+  Ignore: 0
+  _editor_drawRule: 1
+  CellAllow: 0
+  AllConditionsMet: 1
+  CheckedCellsMustBe: 2
+  NeightbourNeeds: 0
+  occupiedByTag: 
+  CheckMode: 0
+  DirectCheck: 0
+  OffsetOrigin: {x: 0, y: 0, z: 0}
+  placement:
+    lu: 0
+    u: 0
+    ru: 0
+    l: 0
+    m: 0
+    r: 0
+    ld: 0
+    d: 1
+    rd: 0
+    UseAdvancedSetup: 1
+    AdvancedSetup:
+    - {x: 0, y: 0, z: -1}
+    - {x: 0, y: -1, z: -1}
+    - {x: 0, y: 1, z: -1}
+  quartRotor:
+    q1: 1
+    q2: 1
+    q3: 0
+    q4: 0
+  OverrideRotation: 0
+  initRotation: 0
+  rotorEff: 90
+  spawnOn: 5
+  EachRotor: 0
+  CustomRotors:
+  - 0
+  - 0
+  - 0
+  - 0
+  GetNeightbourPos: 0
+  GetNeightbourRot: 0
+  GetNeightbourScale: 0
+  UseRestrictedDir: 0
+  CustomCellsCheck: 0
+  FullRotGet: 0
+  Check3DAngles: 0
+  RotationSpaceDisplay: 0
+  CheckPosit90: 1
+  CheckNeg90: 1
+  OverridePitchRotation: 1
+  InitPitchRotation: 0
+  NotCheckDefaultPitch: 0
+--- !u!114 &1632216490079857989
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 226bc5f4badaab3438244b84b7cee058, type: 3}
+  m_Name: 'SR_Rotate-[Stairs Fences]'
+  m_EditorClassIdentifier: 
+  Logic: 0
+  Negate: 0
+  Global: 0
+  Enabled: 0
+  Ignore: 0
+  _editor_drawRule: 0
+  CellAllow: 1
+  AllConditionsMet: 1
+  GetRotationFromTagged: S
+  CheckMode: 0
+  RotationEulerOffset: {x: 0, y: 0, z: 0}
+  RandomRotation: {x: 0, y: 0, z: 0}
+  MaxDegreesSteps: {x: 1, y: 1, z: 1}
+  LocalRotation: 0
+  OverrideRotation: 0
 --- !u!114 &1774079721286814281
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1761,6 +2379,109 @@ MonoBehaviour:
   OffsetMode: 1
   IgnoreOtherMods: 1
   DontCheckAdditionals: 0
+--- !u!114 &2338179488728658947
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dd994df746dda2840906dfc6579e6f0f, type: 3}
+  m_Name: (Clone)
+  m_EditorClassIdentifier: 
+  TriggerConnectionDrawMode: 0
+  IndividualID: -2147483644
+  NameID: 
+  wasCreated: 1
+  OutputConnections: []
+  InputConnections: []
+  NodePosition: {x: 563.5537, y: 584.32306}
+  NodeDrawOffset: {x: 0, y: 0}
+  ResizedScale: {x: 200, y: 140}
+  _EditorInContainedRange: []
+  IsContainedBy: {fileID: 0}
+  _EditorFoldout: 0
+  _EditorCollapse: 0
+  Enabled: 1
+  ParentPlanner: {fileID: 0}
+  ParentNodesContainer: {fileID: -3051774660926100108}
+  _editor_drawRule: 1
+  AValue:
+    ParentNodeID: -2147483644
+    PortID: 0
+    ParentNode: {fileID: 2338179488728658947}
+    _E_LatestCorrectPortRect:
+      serializedVersion: 2
+      x: 589.5537
+      y: 620.32306
+      width: 27
+      height: 27
+    PortType: 0
+    NameDisplayMode: 0
+    ValueDisplayMode: 3
+    SlotMode: 0
+    DisplayName: To Check
+    OverwriteName: 
+    _HelperFunctionsID: -1
+    ConnectionDisplay: 0
+    IsSendingSignals: 0
+    portConnections:
+    - ConnectedNodeID: -2147483645
+      ConnectedNodePortID: 0
+      NodeReference: {fileID: 5192116458893221199}
+      isInput: 0
+    initValueSet: 1
+    initialized: 0
+    Variable:
+      Name: None
+      v3Val: {x: 0, y: 0, z: 0}
+      colVal: {r: 0, g: 0, b: 0, a: 0}
+      str: 
+      mat: {fileID: 0}
+      gameObj: {fileID: 0}
+      curve:
+        serializedVersion: 2
+        m_Curve: []
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 4
+      unityObj: {fileID: 0}
+      helper: {x: 0, y: 0, z: 0}
+      additionalHelperRef: {fileID: 0}
+      ValueType: 0
+      helpForFieldCommand: 0
+      displayOnScene: 0
+      allowTransformFollow: 0
+      FloatSwitch: 0
+  Output:
+    ParentNodeID: -2147483644
+    PortID: 0
+    ParentNode: {fileID: 2338179488728658947}
+    _E_LatestCorrectPortRect:
+      serializedVersion: 2
+      x: 673.5537
+      y: 620.32306
+      width: 27
+      height: 27
+    PortType: 1
+    NameDisplayMode: 1
+    ValueDisplayMode: 3
+    SlotMode: 0
+    DisplayName: 
+    OverwriteName: 
+    _HelperFunctionsID: -1
+    ConnectionDisplay: 0
+    IsSendingSignals: 0
+    portConnections:
+    - ConnectedNodeID: -2147483646
+      ConnectedNodePortID: 0
+      NodeReference: {fileID: 5279768096312159563}
+      isInput: 1
+    initValueSet: 1
+    initialized: 0
+    Value: 1
 --- !u!114 &2339920366916454944
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1828,8 +2549,7 @@ MonoBehaviour:
     Condition: 0
     ExtraString: 
     ExtraValue: 0
-    ToCheck:
-    - {x: 0, y: 0, z: 0}
+    ToCheck: []
     EditorDisplayColor: {r: 0.9, g: 0.8, b: 0.4, a: 0.75}
   - UseRotor: 0
     Rotor: 0
@@ -1837,8 +2557,7 @@ MonoBehaviour:
     Condition: 0
     ExtraString: 
     ExtraValue: 0
-    ToCheck:
-    - {x: 0, y: 0, z: 0}
+    ToCheck: []
     EditorDisplayColor: {r: 0.9, g: 0.8, b: 0.4, a: 0.75}
   - UseRotor: 0
     Rotor: 0
@@ -1846,8 +2565,7 @@ MonoBehaviour:
     Condition: 0
     ExtraString: 
     ExtraValue: 0
-    ToCheck:
-    - {x: 0, y: 0, z: 0}
+    ToCheck: []
     EditorDisplayColor: {r: 0.9, g: 0.8, b: 0.4, a: 0.75}
   - UseRotor: 0
     Rotor: 0
@@ -1855,11 +2573,122 @@ MonoBehaviour:
     Condition: 0
     ExtraString: 
     ExtraValue: 0
-    ToCheck:
-    - {x: 0, y: 0, z: 0}
+    ToCheck: []
     EditorDisplayColor: {r: 0.9, g: 0.8, b: 0.4, a: 0.75}
   wasGenerated: 1
   doFullBreak: 0
+--- !u!114 &2634371557901179441
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c360632d4510a074baef619f3210b541, type: 3}
+  m_Name: SR_CellNeightbours-[Stairs Fences](Clone)
+  m_EditorClassIdentifier: 
+  Logic: 0
+  Negate: 0
+  Global: 0
+  Enabled: 1
+  Ignore: 0
+  _editor_drawRule: 1
+  CellAllow: 1
+  AllConditionsMet: 1
+  CheckedCellsMustBe: 2
+  NeightbourNeeds: 0
+  occupiedByTag: 
+  CheckMode: 0
+  DirectCheck: 0
+  OffsetOrigin: {x: 0, y: 0, z: 0}
+  placement:
+    lu: 0
+    u: 1
+    ru: 0
+    l: 0
+    m: 0
+    r: 0
+    ld: 0
+    d: 0
+    rd: 0
+    UseAdvancedSetup: 1
+    AdvancedSetup:
+    - {x: 0, y: 0, z: 1}
+    - {x: 0, y: -1, z: 1}
+    - {x: 0, y: 1, z: 1}
+  quartRotor:
+    q1: 1
+    q2: 1
+    q3: 0
+    q4: 0
+  OverrideRotation: 0
+  initRotation: 0
+  rotorEff: 90
+  spawnOn: 5
+  EachRotor: 0
+  CustomRotors:
+  - 0
+  - 0
+  - 0
+  - 0
+  GetNeightbourPos: 0
+  GetNeightbourRot: 0
+  GetNeightbourScale: 0
+  UseRestrictedDir: 0
+  CustomCellsCheck: 0
+  FullRotGet: 0
+  Check3DAngles: 0
+  RotationSpaceDisplay: 0
+  CheckPosit90: 1
+  CheckNeg90: 1
+  OverridePitchRotation: 1
+  InitPitchRotation: 0
+  NotCheckDefaultPitch: 0
+--- !u!114 &2765370483128887805
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9327e64f60ac33a4fa5e7efebb9176fb, type: 3}
+  m_Name: 'SR_GetCoords-[Stairs Fences]'
+  m_EditorClassIdentifier: 
+  Logic: 0
+  Negate: 0
+  Global: 0
+  Enabled: 1
+  Ignore: 0
+  _editor_drawRule: 0
+  CellAllow: 0
+  AllConditionsMet: 1
+  GetFromTagged: S
+  CheckMode: 0
+  WorldOffset: {x: 0, y: 0, z: 0}
+  OffsetMode: 0
+  DirectionalOffset: {x: -0.33, y: 0.5, z: 0}
+  StackOffset: 0
+  RotationEulerOffset: {x: 0, y: 90, z: -26}
+  GetScale: 0
+  ScaleMultiplier: {x: 1, y: 1, z: 1}
+  RandomOffsets: {x: 0, y: 0, z: 0}
+  RandomLocalRotation: {x: 0, y: 0, z: 0}
+  RandomScale: {x: 0, y: 0, z: 0}
+  PivotOffset: {x: 0, y: 0, z: 0}
+  MultiplyGetted: {x: 1, y: 1, z: 1}
+  DontSpawnIfNoTagged: 1
+  RemoveTagged: 0
+  TransformLikeChild: 0
+  GetRandomIfMulti: 0
+  RunOnRepetition: 0
+  HelperMode: 0
+  _DrawOffsets: 1
+  _DrawRandomization: 0
+  _DrawAdditionals: 1
 --- !u!114 &3277330611074846594
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1949,8 +2778,7 @@ MonoBehaviour:
     Condition: 0
     ExtraString: 
     ExtraValue: 0
-    ToCheck:
-    - {x: 0, y: 0, z: 0}
+    ToCheck: []
     EditorDisplayColor: {r: 0.9, g: 0.8, b: 0.4, a: 0.75}
   - UseRotor: 0
     Rotor: 0
@@ -1958,8 +2786,7 @@ MonoBehaviour:
     Condition: 0
     ExtraString: 
     ExtraValue: 0
-    ToCheck:
-    - {x: 0, y: 0, z: 0}
+    ToCheck: []
     EditorDisplayColor: {r: 0.9, g: 0.8, b: 0.4, a: 0.75}
   wasGenerated: 1
   doFullBreak: 0
@@ -2056,6 +2883,92 @@ MonoBehaviour:
   MaxDegreesSteps: {x: 1, y: 90, z: 1}
   LocalRotation: 0
   OverrideRotation: 1
+--- !u!114 &3447409919264380647
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 671fd9c659a53a04eb310656f11c9125, type: 3}
+  m_Name: Stairs Fences
+  m_EditorClassIdentifier: 
+  TemporaryContainer: {fileID: 0}
+  Enabled: 1
+  ModTag: 
+  DrawMeshAndBox: 0
+  Combine: 0
+  RunEmittersIfContains: 0
+  DrawSetupFor: 0
+  OStamp: {fileID: 0}
+  DrawObjectStamps: 1
+  OMultiStamp: {fileID: 0}
+  PrefabsList:
+  - Prefab: {fileID: 6325126634580688049, guid: da6cb1bb852e3ab4b9c4be244174e8f0, type: 3}
+    MainCollider: {fileID: 0}
+    subID: 0
+    _refMesh: {fileID: 2863967534805457344, guid: 8f50acbdb7056ea40af34807460ba408, type: 3}
+    _refCol: {fileID: 0}
+  DrawMultiObjectStamps: 1
+  Spawners:
+  - Enabled: 1
+    Name: S-L
+    SpawnerTag: 
+    StampPrefabID: 0
+    Parent: {fileID: 3447409919264380647}
+    Rules:
+    - {fileID: 2765370483128887805}
+    - {fileID: 1417987373940881854}
+    Mode: 0
+    CellCheckMode: 0
+    _Editor_SpawnerAdvancedOptionsFoldout: 1
+    OnScalledGrid: 0
+    Repeat: 1
+    DontInheritRotations: 1
+    SwitchSpawnedToStatic: 0
+    MultipleToSpawn: 0
+    UseGlobalRules: 1
+    UseParentPackageRules: 1
+    _wasEnablingGlobalRules: 1
+    ScaleAccess: 1
+    DisplayPreviewGUI: 1
+    IsSubSpawner: 0
+    _EditorDisplaySpawnerHeader: 1
+  - Enabled: 1
+    Name: S-R
+    SpawnerTag: 
+    StampPrefabID: 0
+    Parent: {fileID: 3447409919264380647}
+    Rules:
+    - {fileID: -5910133384301519831}
+    - {fileID: 2634371557901179441}
+    - {fileID: 6095296385282414541}
+    Mode: 0
+    CellCheckMode: 0
+    _Editor_SpawnerAdvancedOptionsFoldout: 0
+    OnScalledGrid: 0
+    Repeat: 1
+    DontInheritRotations: 0
+    SwitchSpawnedToStatic: 0
+    MultipleToSpawn: 0
+    UseGlobalRules: 1
+    UseParentPackageRules: 1
+    _wasEnablingGlobalRules: 1
+    ScaleAccess: 1
+    DisplayPreviewGUI: 1
+    IsSubSpawner: 0
+    _EditorDisplaySpawnerHeader: 1
+  SubSpawners: []
+  VariantOf: {fileID: 0}
+  _editor_drawStamp: 0
+  _editor_drawSpawners: 1
+  _editor_drawGlobalRules: 0
+  _editor_drawModPackRules: 0
+  _editor_shareSelected: 0
+  ParentPreset: {fileID: 11400000}
+  ParentPack: {fileID: 4010537770972031752}
 --- !u!114 &3718521197933611772
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2126,8 +3039,7 @@ MonoBehaviour:
     Condition: 0
     ExtraString: 
     ExtraValue: 0
-    ToCheck:
-    - {x: 0, y: 0, z: 0}
+    ToCheck: []
     EditorDisplayColor: {r: 0.9, g: 0.8, b: 0.4, a: 0.75}
   - UseRotor: 0
     Rotor: 0
@@ -2135,8 +3047,7 @@ MonoBehaviour:
     Condition: 0
     ExtraString: 
     ExtraValue: 0
-    ToCheck:
-    - {x: 0, y: 0, z: 0}
+    ToCheck: []
     EditorDisplayColor: {r: 0.9, g: 0.8, b: 0.4, a: 0.75}
   - UseRotor: 0
     Rotor: 0
@@ -2144,8 +3055,7 @@ MonoBehaviour:
     Condition: 0
     ExtraString: 
     ExtraValue: 0
-    ToCheck:
-    - {x: 0, y: 0, z: 0}
+    ToCheck: []
     EditorDisplayColor: {r: 0.9, g: 0.8, b: 0.4, a: 0.75}
   - UseRotor: 0
     Rotor: 0
@@ -2153,8 +3063,7 @@ MonoBehaviour:
     Condition: 0
     ExtraString: 
     ExtraValue: 0
-    ToCheck:
-    - {x: 0, y: 0, z: 0}
+    ToCheck: []
     EditorDisplayColor: {r: 0.9, g: 0.8, b: 0.4, a: 0.75}
   wasGenerated: 1
   doFullBreak: 0
@@ -2292,6 +3201,7 @@ MonoBehaviour:
   - {fileID: -7524087098481071771}
   - {fileID: -8417504216931457559}
   - {fileID: 7906467318267168703}
+  - {fileID: 3447409919264380647}
   ParentPreset: {fileID: 11400000}
   DisableWholePackage: 0
   SeedMode: 0
@@ -2324,6 +3234,103 @@ MonoBehaviour:
     IsSubSpawner: 0
     _EditorDisplaySpawnerHeader: 0
   _EditorDisplayCallOnAll: 0
+--- !u!114 &4023065315816710148
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e40483fbb8044424db6e9848a59ac14c, type: 3}
+  m_Name: 'SR_StairsHelper-[Stairs]'
+  m_EditorClassIdentifier: 
+  Logic: 0
+  Negate: 0
+  Global: 0
+  Enabled: 1
+  Ignore: 0
+  _editor_drawRule: 1
+  CellAllow: 0
+  AllConditionsMet: 1
+  RemoveTagged: 
+  CheckMode: 0
+  RemoveDetectionTolerance: 0
+  StopOnTagged: 
+  StopOnCheckMode: 0
+  checkSetup:
+    UseRotor: 0
+    Rotor: 0
+    UseCondition: 0
+    Condition: 0
+    ExtraString: 
+    ExtraValue: 0
+    ToCheck:
+    - {x: 0, y: 0, z: 0}
+    - {x: 0, y: 0, z: -1}
+    - {x: 0, y: 1, z: 0}
+    - {x: 0, y: 1, z: 1}
+    EditorDisplayColor: {r: 0.4, g: 0.4, b: 1, a: 0.95}
+  removeInCells:
+    UseRotor: 0
+    Rotor: 0
+    UseCondition: 0
+    Condition: 0
+    ExtraString: 
+    ExtraValue: 0
+    ToCheck:
+    - {x: 0, y: 0, z: 0}
+    - {x: 0, y: 1, z: 0}
+    EditorDisplayColor: {r: 0.8, g: 0.5, b: 0.4, a: 0.75}
+  breakOnCells:
+    UseRotor: 0
+    Rotor: 0
+    UseCondition: 0
+    Condition: 0
+    ExtraString: 
+    ExtraValue: 0
+    ToCheck: []
+    EditorDisplayColor: {r: 1, g: 0.1, b: 0.1, a: 1}
+  customRemovers:
+  - UseRotor: 0
+    Rotor: 0
+    UseCondition: 0
+    Condition: 0
+    ExtraString: 
+    ExtraValue: 0
+    ToCheck:
+    - {x: 0, y: 0, z: 0}
+    EditorDisplayColor: {r: 0.9, g: 0.8, b: 0.4, a: 0.75}
+  - UseRotor: 0
+    Rotor: 0
+    UseCondition: 0
+    Condition: 0
+    ExtraString: 
+    ExtraValue: 0
+    ToCheck:
+    - {x: 0, y: 0, z: 0}
+    EditorDisplayColor: {r: 0.9, g: 0.8, b: 0.4, a: 0.75}
+  - UseRotor: 0
+    Rotor: 0
+    UseCondition: 0
+    Condition: 0
+    ExtraString: 
+    ExtraValue: 0
+    ToCheck:
+    - {x: 0, y: 0, z: 0}
+    EditorDisplayColor: {r: 0.9, g: 0.8, b: 0.4, a: 0.75}
+  - UseRotor: 0
+    Rotor: 0
+    UseCondition: 0
+    Condition: 0
+    ExtraString: 
+    ExtraValue: 0
+    ToCheck:
+    - {x: 0, y: 0, z: 0}
+    EditorDisplayColor: {r: 0.9, g: 0.8, b: 0.4, a: 0.75}
+  wasGenerated: 1
+  doFullBreak: 0
 --- !u!114 &4280704591889303905
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2387,6 +3394,85 @@ MonoBehaviour:
     ToCheck:
     - {x: 0, y: 0, z: 0}
     EditorDisplayColor: {r: 0.4, g: 0.4, b: 1, a: 0.95}
+--- !u!114 &4605154524727592657
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 251cbfd1d9863e5459e990c3c6383d51, type: 3}
+  m_Name: (Clone)
+  m_EditorClassIdentifier: 
+  TriggerConnectionDrawMode: 0
+  IndividualID: -2147483643
+  NameID: 
+  wasCreated: 1
+  OutputConnections: []
+  InputConnections: []
+  NodePosition: {x: 139.83334, y: 547.8645}
+  NodeDrawOffset: {x: 0, y: 0}
+  ResizedScale: {x: 200, y: 140}
+  _EditorInContainedRange: []
+  IsContainedBy: {fileID: 0}
+  _EditorFoldout: 0
+  _EditorCollapse: 0
+  Enabled: 1
+  ParentPlanner: {fileID: 0}
+  ParentNodesContainer: {fileID: -3051774660926100108}
+  _editor_drawRule: 1
+  GetMode: 2
+  Rotation:
+    ParentNodeID: -2147483643
+    PortID: 0
+    ParentNode: {fileID: 4605154524727592657}
+    _E_LatestCorrectPortRect:
+      serializedVersion: 2
+      x: 299.83334
+      y: 585.8645
+      width: 27
+      height: 27
+    PortType: 1
+    NameDisplayMode: 1
+    ValueDisplayMode: 3
+    SlotMode: 0
+    DisplayName: Rotation
+    OverwriteName: 
+    _HelperFunctionsID: -1
+    ConnectionDisplay: 0
+    IsSendingSignals: 0
+    portConnections:
+    - ConnectedNodeID: -2147483645
+      ConnectedNodePortID: 1
+      NodeReference: {fileID: 5192116458893221199}
+      isInput: 1
+    initValueSet: 1
+    initialized: 0
+    Value: {x: 0, y: 90, z: -26}
+  Spawn:
+    ParentNodeID: -2147483643
+    PortID: 0
+    ParentNode: {fileID: 4605154524727592657}
+    _E_LatestCorrectPortRect:
+      serializedVersion: 2
+      x: 165.83334
+      y: 557.8645
+      width: 27
+      height: 27
+    PortType: 0
+    NameDisplayMode: 0
+    ValueDisplayMode: 0
+    SlotMode: 0
+    DisplayName: Spawn
+    OverwriteName: 
+    _HelperFunctionsID: -1
+    ConnectionDisplay: 0
+    IsSendingSignals: 0
+    portConnections: []
+    initValueSet: 1
+    initialized: 0
 --- !u!114 &4703532684880343429
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2453,6 +3539,200 @@ MonoBehaviour:
   OverridePitchRotation: 1
   InitPitchRotation: 0
   NotCheckDefaultPitch: 0
+--- !u!114 &5192116458893221199
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 052efa019698d5344b4bb661267b29f7, type: 3}
+  m_Name: (Clone)
+  m_EditorClassIdentifier: 
+  TriggerConnectionDrawMode: 0
+  IndividualID: -2147483645
+  NameID: 
+  wasCreated: 1
+  OutputConnections: []
+  InputConnections: []
+  NodePosition: {x: 349.25, y: 522.5418}
+  NodeDrawOffset: {x: 0, y: 0}
+  ResizedScale: {x: 200, y: 140}
+  _EditorInContainedRange: []
+  IsContainedBy: {fileID: 0}
+  _EditorFoldout: 1
+  _EditorCollapse: 0
+  Enabled: 1
+  ParentPlanner: {fileID: 0}
+  ParentNodesContainer: {fileID: -3051774660926100108}
+  _editor_drawRule: 1
+  ResultCell:
+    ParentNodeID: -2147483645
+    PortID: 0
+    ParentNode: {fileID: 5192116458893221199}
+    _E_LatestCorrectPortRect:
+      serializedVersion: 2
+      x: 509.25
+      y: 603.5418
+      width: 27
+      height: 27
+    PortType: 1
+    NameDisplayMode: 0
+    ValueDisplayMode: 0
+    SlotMode: 0
+    DisplayName: Result Cell
+    OverwriteName: 
+    _HelperFunctionsID: -1
+    ConnectionDisplay: 0
+    IsSendingSignals: 0
+    portConnections:
+    - ConnectedNodeID: -2147483644
+      ConnectedNodePortID: 0
+      NodeReference: {fileID: 2338179488728658947}
+      isInput: 1
+    initValueSet: 1
+    initialized: 0
+  OriginCell:
+    ParentNodeID: -2147483645
+    PortID: 0
+    ParentNode: {fileID: 5192116458893221199}
+    _E_LatestCorrectPortRect:
+      serializedVersion: 2
+      x: 372.25
+      y: 622.5418
+      width: 27
+      height: 27
+    PortType: 0
+    NameDisplayMode: 0
+    ValueDisplayMode: 0
+    SlotMode: 0
+    DisplayName: Origin Cell
+    OverwriteName: 
+    _HelperFunctionsID: -1
+    ConnectionDisplay: 0
+    IsSendingSignals: 0
+    portConnections: []
+    initValueSet: 1
+    initialized: 0
+  CheckRotation:
+    ParentNodeID: -2147483645
+    PortID: 1
+    ParentNode: {fileID: 5192116458893221199}
+    _E_LatestCorrectPortRect:
+      serializedVersion: 2
+      x: 372.25
+      y: 642.5418
+      width: 27
+      height: 27
+    PortType: 0
+    NameDisplayMode: 0
+    ValueDisplayMode: 3
+    SlotMode: 0
+    DisplayName: Check Rotation
+    OverwriteName: 
+    _HelperFunctionsID: -1
+    ConnectionDisplay: 0
+    IsSendingSignals: 0
+    portConnections:
+    - ConnectedNodeID: -2147483643
+      ConnectedNodePortID: 0
+      NodeReference: {fileID: 4605154524727592657}
+      isInput: 0
+    initValueSet: 1
+    initialized: 0
+    Value: {x: 0, y: 0, z: 0}
+  Offset:
+    ParentNodeID: -2147483645
+    PortID: 2
+    ParentNode: {fileID: 5192116458893221199}
+    _E_LatestCorrectPortRect:
+      serializedVersion: 2
+      x: 372.25
+      y: 662.5418
+      width: 27
+      height: 27
+    PortType: 0
+    NameDisplayMode: 0
+    ValueDisplayMode: 3
+    SlotMode: 0
+    DisplayName: Offset
+    OverwriteName: 
+    _HelperFunctionsID: -1
+    ConnectionDisplay: 0
+    IsSendingSignals: 0
+    portConnections: []
+    initValueSet: 1
+    initialized: 0
+    Value: {x: -1, y: 0, z: 0}
+  selectedOffsets:
+  - {x: -1, y: 0, z: 0}
+--- !u!114 &5279768096312159563
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 162dd2c907286bd479e417bc1942a08a, type: 3}
+  m_Name: (Clone)
+  m_EditorClassIdentifier: 
+  TriggerConnectionDrawMode: 0
+  IndividualID: -2147483646
+  NameID: 
+  wasCreated: 1
+  OutputConnections:
+  - ConnectionFromID: -2147483646
+    ConnectionToID: -2147483642
+    ConnectionFrom_AlternativeID: 1
+    ConnectionTo_AlternativeID: -1
+  InputConnections:
+  - ConnectionFromID: -2147483647
+    ConnectionToID: -2147483646
+    ConnectionFrom_AlternativeID: -1
+    ConnectionTo_AlternativeID: -1
+  NodePosition: {x: 734.9169, y: 593.0002}
+  NodeDrawOffset: {x: 0, y: 0}
+  ResizedScale: {x: 200, y: 140}
+  _EditorInContainedRange: []
+  IsContainedBy: {fileID: 0}
+  _EditorFoldout: 0
+  _EditorCollapse: 0
+  Enabled: 1
+  ParentPlanner: {fileID: 0}
+  ParentNodesContainer: {fileID: -3051774660926100108}
+  _editor_drawRule: 1
+  FalseOrTrue:
+    ParentNodeID: -2147483646
+    PortID: 0
+    ParentNode: {fileID: 5279768096312159563}
+    _E_LatestCorrectPortRect:
+      serializedVersion: 2
+      x: 757.9169
+      y: 629.0002
+      width: 27
+      height: 27
+    PortType: 0
+    NameDisplayMode: 0
+    ValueDisplayMode: 3
+    SlotMode: 0
+    DisplayName: False Or True
+    OverwriteName: 
+    _HelperFunctionsID: -1
+    ConnectionDisplay: 0
+    IsSendingSignals: 0
+    portConnections:
+    - ConnectedNodeID: -2147483644
+      ConnectedNodePortID: 0
+      NodeReference: {fileID: 2338179488728658947}
+      isInput: 0
+    initValueSet: 1
+    initialized: 0
+    Value: 0
+  MultiCheckMode: 0
 --- !u!114 &5994133209160726009
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2480,6 +3760,32 @@ MonoBehaviour:
     Tooltip: 
   ReplaceOnly: {fileID: 0}
   ReplaceOnlyFirst: 1
+--- !u!114 &6095296385282414541
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f0acc9caea68f8c4b8c90c5e659b5f87, type: 3}
+  m_Name: 'SR_Scale-[Stairs Fences]'
+  m_EditorClassIdentifier: 
+  Logic: 0
+  Negate: 0
+  Global: 0
+  Enabled: 1
+  Ignore: 0
+  _editor_drawRule: 1
+  CellAllow: 1
+  AllConditionsMet: 1
+  ScaleMultiplier: {x: 1, y: 1, z: -1}
+  ScaleMulVariable:
+    name: 
+    requiredType: 5
+    Tooltip: 
+  RandomizeScale: {x: 0, y: 0, z: 0}
 --- !u!114 &6615972079416451501
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2727,14 +4033,36 @@ MonoBehaviour:
     DisplayPreviewGUI: 1
     IsSubSpawner: 0
     _EditorDisplaySpawnerHeader: 1
+  - Enabled: 1
+    Name: Global Material
+    SpawnerTag: 
+    StampPrefabID: -2
+    Parent: {fileID: 7906467318267168703}
+    Rules:
+    - {fileID: 5994133209160726009}
+    Mode: 0
+    CellCheckMode: 0
+    _Editor_SpawnerAdvancedOptionsFoldout: 0
+    OnScalledGrid: 0
+    Repeat: 1
+    DontInheritRotations: 0
+    SwitchSpawnedToStatic: 0
+    MultipleToSpawn: 0
+    UseGlobalRules: 1
+    UseParentPackageRules: 1
+    _wasEnablingGlobalRules: 1
+    ScaleAccess: 1
+    DisplayPreviewGUI: 1
+    IsSubSpawner: 0
+    _EditorDisplaySpawnerHeader: 1
   SubSpawners: []
   VariantOf: {fileID: 0}
   _editor_drawStamp: 0
   _editor_drawSpawners: 1
   _editor_drawGlobalRules: 0
   _editor_drawModPackRules: 0
-  _editor_shareSelected: 3
-  ParentPreset: {fileID: 0}
+  _editor_shareSelected: 0
+  ParentPreset: {fileID: 11400000}
   ParentPack: {fileID: 4010537770972031752}
 --- !u!114 &8017177735639860324
 MonoBehaviour:
