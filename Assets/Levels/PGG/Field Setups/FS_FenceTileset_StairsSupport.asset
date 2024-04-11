@@ -585,6 +585,33 @@ MonoBehaviour:
   NotCheckDefaultPitch: 0
   OverridePitchRotation: 1
   InitPitchRotation: 0
+--- !u!114 &-6715549363432848149
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3ea731bcdcafc6441aa5eca1daa55544, type: 3}
+  m_Name: 'SR_SetMaterial-[Stairs Fences]'
+  m_EditorClassIdentifier: 
+  Logic: 0
+  Negate: 0
+  Global: 0
+  Enabled: 1
+  Ignore: 0
+  _editor_drawRule: 1
+  CellAllow: 1
+  AllConditionsMet: 1
+  NewMaterial: {fileID: 2100000, guid: 93832943336916c4f83175f54e02a17c, type: 2}
+  MatVariable:
+    name: 
+    requiredType: 3
+    Tooltip: 
+  ReplaceOnly: {fileID: 0}
+  ReplaceOnlyFirst: 1
 --- !u!114 &-6173571632353893813
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -627,11 +654,11 @@ MonoBehaviour:
   _editor_drawRule: 1
   CellAllow: 0
   AllConditionsMet: 1
-  GetFromTagged: S
+  GetFromTagged: St
   CheckMode: 0
-  WorldOffset: {x: 0, y: 0, z: 0}
+  WorldOffset: {x: -0.25, y: 0, z: 2.2}
   OffsetMode: 0
-  DirectionalOffset: {x: -0.33, y: 0.5, z: 0}
+  DirectionalOffset: {x: 0, y: 0, z: 0}
   StackOffset: 0
   RotationEulerOffset: {x: 0, y: 90, z: -26}
   GetScale: 0
@@ -647,7 +674,7 @@ MonoBehaviour:
   GetRandomIfMulti: 0
   RunOnRepetition: 0
   HelperMode: 0
-  _DrawOffsets: 0
+  _DrawOffsets: 1
   _DrawRandomization: 0
   _DrawAdditionals: 0
 --- !u!114 &-5823907352424952571
@@ -2194,7 +2221,7 @@ MonoBehaviour:
   Enabled: 1
   Ignore: 0
   _editor_drawRule: 1
-  CellAllow: 0
+  CellAllow: 1
   AllConditionsMet: 1
   CheckedCellsMustBe: 2
   NeightbourNeeds: 0
@@ -2663,14 +2690,14 @@ MonoBehaviour:
   Global: 0
   Enabled: 1
   Ignore: 0
-  _editor_drawRule: 0
+  _editor_drawRule: 1
   CellAllow: 0
   AllConditionsMet: 1
-  GetFromTagged: S
+  GetFromTagged: St
   CheckMode: 0
-  WorldOffset: {x: 0, y: 0, z: 0}
+  WorldOffset: {x: -0.25, y: 0, z: -2.2}
   OffsetMode: 0
-  DirectionalOffset: {x: -0.33, y: 0.5, z: 0}
+  DirectionalOffset: {x: 0, y: 0, z: 0}
   StackOffset: 0
   RotationEulerOffset: {x: 0, y: 90, z: -26}
   GetScale: 0
@@ -2688,7 +2715,43 @@ MonoBehaviour:
   HelperMode: 0
   _DrawOffsets: 1
   _DrawRandomization: 0
-  _DrawAdditionals: 1
+  _DrawAdditionals: 0
+--- !u!114 &2951404570029524476
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b496837ae5a0c3b4786589d6fb51e8d5, type: 3}
+  m_Name: 'SR_MoveRotateScale-[Stairs Fences]'
+  m_EditorClassIdentifier: 
+  Logic: 0
+  Negate: 0
+  Global: 0
+  Enabled: 1
+  Ignore: 0
+  _editor_drawRule: 1
+  CellAllow: 1
+  AllConditionsMet: 1
+  EffectOn: 2
+  ApplyMode: 0
+  Space: 0
+  GetCoords: 
+  CheckMode: 0
+  PositionOffset: {x: 0, y: 0, z: 0}
+  OffsetMode: 1
+  OffsetPosVariable:
+    name: 
+    requiredType: 5
+    Tooltip: Set Additive Vector3 Field Variable value to this property
+  RotationOffset: {x: 0, y: 90, z: 0}
+  ScaleMultiplier: {x: 1.1, y: 1, z: -2}
+  RandomizeOffset: {x: 0, y: 0, z: 0}
+  MaxDegreesSteps: {x: 1, y: 1, z: 1}
+  InheritScaleOffset: 0
 --- !u!114 &3277330611074846594
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2856,6 +2919,33 @@ MonoBehaviour:
     requiredType: 5
     Tooltip: 
   RandomizeScale: {x: 0, y: 0, z: 0}
+--- !u!114 &3374490880338234115
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3ea731bcdcafc6441aa5eca1daa55544, type: 3}
+  m_Name: 'SR_SetMaterial-[Stairs Fences]'
+  m_EditorClassIdentifier: 
+  Logic: 0
+  Negate: 0
+  Global: 0
+  Enabled: 1
+  Ignore: 0
+  _editor_drawRule: 1
+  CellAllow: 1
+  AllConditionsMet: 1
+  NewMaterial: {fileID: 2100000, guid: 93832943336916c4f83175f54e02a17c, type: 2}
+  MatVariable:
+    name: 
+    requiredType: 3
+    Tooltip: 
+  ReplaceOnly: {fileID: 0}
+  ReplaceOnlyFirst: 1
 --- !u!114 &3391657039994221933
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2906,11 +2996,11 @@ MonoBehaviour:
   DrawObjectStamps: 1
   OMultiStamp: {fileID: 0}
   PrefabsList:
-  - Prefab: {fileID: 6325126634580688049, guid: da6cb1bb852e3ab4b9c4be244174e8f0, type: 3}
-    MainCollider: {fileID: 0}
+  - Prefab: {fileID: 427923017583535349, guid: c0d602d0a23f7d6488a5b062b2ec5eaa, type: 3}
+    MainCollider: {fileID: 4149882407955879009, guid: c0d602d0a23f7d6488a5b062b2ec5eaa, type: 3}
     subID: 0
     _refMesh: {fileID: 2863967534805457344, guid: 8f50acbdb7056ea40af34807460ba408, type: 3}
-    _refCol: {fileID: 0}
+    _refCol: {fileID: 4149882407955879009, guid: c0d602d0a23f7d6488a5b062b2ec5eaa, type: 3}
   DrawMultiObjectStamps: 1
   Spawners:
   - Enabled: 1
@@ -2921,6 +3011,8 @@ MonoBehaviour:
     Rules:
     - {fileID: 2765370483128887805}
     - {fileID: 1417987373940881854}
+    - {fileID: 2951404570029524476}
+    - {fileID: -6715549363432848149}
     Mode: 0
     CellCheckMode: 0
     _Editor_SpawnerAdvancedOptionsFoldout: 1
@@ -2945,6 +3037,7 @@ MonoBehaviour:
     - {fileID: -5910133384301519831}
     - {fileID: 2634371557901179441}
     - {fileID: 6095296385282414541}
+    - {fileID: 3374490880338234115}
     Mode: 0
     CellCheckMode: 0
     _Editor_SpawnerAdvancedOptionsFoldout: 0
@@ -2962,12 +3055,12 @@ MonoBehaviour:
     _EditorDisplaySpawnerHeader: 1
   SubSpawners: []
   VariantOf: {fileID: 0}
-  _editor_drawStamp: 0
+  _editor_drawStamp: 1
   _editor_drawSpawners: 1
   _editor_drawGlobalRules: 0
   _editor_drawModPackRules: 0
-  _editor_shareSelected: 0
-  ParentPreset: {fileID: 11400000}
+  _editor_shareSelected: 1
+  ParentPreset: {fileID: 0}
   ParentPack: {fileID: 4010537770972031752}
 --- !u!114 &3718521197933611772
 MonoBehaviour:
@@ -3780,7 +3873,7 @@ MonoBehaviour:
   _editor_drawRule: 1
   CellAllow: 1
   AllConditionsMet: 1
-  ScaleMultiplier: {x: 1, y: 1, z: -1}
+  ScaleMultiplier: {x: 1.1, y: 1, z: 2}
   ScaleMulVariable:
     name: 
     requiredType: 5
