@@ -58,6 +58,7 @@ public class EffectsManager : MonoBehaviour
                 var ve = Instantiate(actorEffect[i].vePrefab, transform);
                 Debug.Log("LOADED " + actorEffect[i].effectType);
                 actorEffect[i].veInstance = ve;
+                ve.Stop();
             }
 
         }

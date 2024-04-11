@@ -37,9 +37,12 @@ public partial struct InstantiatePrefabSystem : ISystem
         foreach (var (prefab, entity) in
                  SystemAPI.Query<PlayerMoveGameObjectClass>().WithEntityAccess())
         {
-            GameObject vfxGo = GameObject.Instantiate(prefab.vfxSystemGo);
-            ecb.AddComponent(entity,
-                new VisualEffectGO { VisualEffect = vfxGo.GetComponent<VisualEffect>() });
+            if (prefab.vfxSystemGo)
+            {
+                GameObject vfxGo = GameObject.Instantiate(prefab.vfxSystemGo);
+                ecb.AddComponent(entity,
+                    new VisualEffectGO { VisualEffect = vfxGo.GetComponent<VisualEffect>() });
+            }
 
             GameObject audioGo = GameObject.Instantiate(prefab.audioSourceGo);
             ecb.AddComponent(entity,
@@ -50,9 +53,12 @@ public partial struct InstantiatePrefabSystem : ISystem
         foreach (var (prefab, entity) in
                  SystemAPI.Query<PlayerJumpGameObjectClass>().WithEntityAccess())
         {
-            GameObject vfxGo = GameObject.Instantiate(prefab.vfxSystem);
-            ecb.AddComponent(entity,
-                new VisualEffectJumpGO() { VisualEffect = vfxGo.GetComponent<VisualEffect>() });
+            if (prefab.vfxSystem)
+            {
+                GameObject vfxGo = GameObject.Instantiate(prefab.vfxSystem);
+                ecb.AddComponent(entity,
+                    new VisualEffectJumpGO() { VisualEffect = vfxGo.GetComponent<VisualEffect>() });
+            }
 
             GameObject audioGo = GameObject.Instantiate(prefab.audioSourceGo);
             ecb.AddComponent(entity,

@@ -62,9 +62,9 @@ public class PlayerMovementBaker : Baker<PlayerMovementAuthoring>
 
         
         // Register the Prefab in the Baker
-        var entityPrefab = GetEntity(authoring.vfxPrefab, TransformUsageFlags.Dynamic);
+        // var entityPrefab = GetEntity(authoring.vfxPrefab, TransformUsageFlags.Dynamic);
         // Add the Entity reference to a component for instantiation later
-        var entity = GetEntity(TransformUsageFlags.Dynamic);
+        // var entity = GetEntity(TransformUsageFlags.Dynamic);
         //AddComponent(entity, new EntityPrefabComponent() {moveVfxSystem = entityPrefab});
         
         AddComponent(e, new ApplyImpulseComponent
@@ -81,7 +81,8 @@ public class PlayerMovementBaker : Baker<PlayerMovementAuthoring>
             checkGroundStartY = authoring.checkGroundStartY,
             OnGroundNegativeForce = authoring.onGroundNegativeForce
         });
-
+        //GameObject vfxSystemGo = null;
+        //if (authoring.vfxPrefab != null) vfxSystemGo = authoring.vfxPrefab;
         //pass  this to playermove mb and set VFX effect there - for some reason if set in Sub-Scene it ignores parameters
         AddComponentObject(GetEntity(authoring, TransformUsageFlags.Dynamic),
             new PlayerMoveGameObjectClass()
