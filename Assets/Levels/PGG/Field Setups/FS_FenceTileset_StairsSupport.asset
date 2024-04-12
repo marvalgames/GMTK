@@ -416,6 +416,42 @@ MonoBehaviour:
   _editor_shareSelected: 0
   ParentPreset: {fileID: 11400000}
   ParentPack: {fileID: 4010537770972031752}
+--- !u!114 &-7344788427628227639
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b496837ae5a0c3b4786589d6fb51e8d5, type: 3}
+  m_Name: 'SR_MoveRotateScale-[Stairs Fences]'
+  m_EditorClassIdentifier: 
+  Logic: 0
+  Negate: 0
+  Global: 0
+  Enabled: 1
+  Ignore: 0
+  _editor_drawRule: 1
+  CellAllow: 1
+  AllConditionsMet: 1
+  EffectOn: 2
+  ApplyMode: 0
+  Space: 0
+  GetCoords: 
+  CheckMode: 0
+  PositionOffset: {x: 0, y: 0, z: 0}
+  OffsetMode: 1
+  OffsetPosVariable:
+    name: 
+    requiredType: 5
+    Tooltip: Set Additive Vector3 Field Variable value to this property
+  RotationOffset: {x: 0, y: 90, z: 0}
+  ScaleMultiplier: {x: 0.8, y: 0.5, z: 0.2}
+  RandomizeOffset: {x: 0, y: 0, z: 0}
+  MaxDegreesSteps: {x: 1, y: 1, z: 1}
+  InheritScaleOffset: 0
 --- !u!114 &-7057274667417803235
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -651,7 +687,7 @@ MonoBehaviour:
   Global: 0
   Enabled: 1
   Ignore: 0
-  _editor_drawRule: 1
+  _editor_drawRule: 0
   CellAllow: 0
   AllConditionsMet: 1
   GetFromTagged: St
@@ -2125,7 +2161,7 @@ MonoBehaviour:
       EditorDisplayColor: {r: 0.4, g: 0.4, b: 1, a: 0.95}
 --- !u!114 &837159731577651806
 MonoBehaviour:
-  m_ObjectHideFlags: 1
+  m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
@@ -2278,12 +2314,10 @@ MonoBehaviour:
     UseAdvancedSetup: 1
     AdvancedSetup:
     - {x: 0, y: 0, z: -1}
-    - {x: 0, y: -1, z: -1}
-    - {x: 0, y: 1, z: -1}
   quartRotor:
     q1: 1
     q2: 1
-    q3: 0
+    q3: 1
     q4: 0
   OverrideRotation: 0
   initRotation: 0
@@ -2442,6 +2476,74 @@ MonoBehaviour:
   OffsetMode: 1
   IgnoreOtherMods: 1
   DontCheckAdditionals: 0
+--- !u!114 &2141239800169769918
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c360632d4510a074baef619f3210b541, type: 3}
+  m_Name: 'SR_CellNeightbours-[Stairs Fences]'
+  m_EditorClassIdentifier: 
+  Logic: 0
+  Negate: 0
+  Global: 0
+  Enabled: 1
+  Ignore: 0
+  _editor_drawRule: 1
+  CellAllow: 0
+  AllConditionsMet: 1
+  CheckedCellsMustBe: 2
+  NeightbourNeeds: 0
+  occupiedByTag: 
+  CheckMode: 0
+  DirectCheck: 0
+  OffsetOrigin: {x: 0, y: 0, z: 0}
+  placement:
+    lu: 0
+    u: 0
+    ru: 0
+    l: 0
+    m: 1
+    r: 0
+    ld: 0
+    d: 0
+    rd: 0
+    UseAdvancedSetup: 1
+    AdvancedSetup:
+    - {x: 0, y: 0, z: 0}
+    - {x: 0, y: 0, z: -1}
+  quartRotor:
+    q1: 1
+    q2: 1
+    q3: 1
+    q4: 0
+  OverrideRotation: 0
+  initRotation: 0
+  rotorEff: 90
+  spawnOn: 5
+  EachRotor: 0
+  CustomRotors:
+  - 0
+  - 0
+  - 0
+  - 0
+  GetNeightbourPos: 0
+  GetNeightbourRot: 0
+  GetNeightbourScale: 0
+  UseRestrictedDir: 0
+  CustomCellsCheck: 0
+  FullRotGet: 0
+  Check3DAngles: 0
+  RotationSpaceDisplay: 0
+  CheckPosit90: 1
+  CheckNeg90: 1
+  OverridePitchRotation: 1
+  InitPitchRotation: 0
+  NotCheckDefaultPitch: 0
 --- !u!114 &2338179488728658947
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2684,7 +2786,7 @@ MonoBehaviour:
   quartRotor:
     q1: 1
     q2: 1
-    q3: 0
+    q3: 1
     q4: 0
   OverrideRotation: 0
   initRotation: 0
@@ -2750,8 +2852,8 @@ MonoBehaviour:
   RunOnRepetition: 0
   HelperMode: 0
   _DrawOffsets: 1
-  _DrawRandomization: 0
-  _DrawAdditionals: 0
+  _DrawRandomization: 1
+  _DrawAdditionals: 1
 --- !u!114 &2951404570029524476
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2784,10 +2886,36 @@ MonoBehaviour:
     requiredType: 5
     Tooltip: Set Additive Vector3 Field Variable value to this property
   RotationOffset: {x: 0, y: 90, z: 0}
-  ScaleMultiplier: {x: 0.8, y: 1, z: 2}
+  ScaleMultiplier: {x: 0.8, y: 0.5, z: 2}
   RandomizeOffset: {x: 0, y: 0, z: 0}
   MaxDegreesSteps: {x: 1, y: 1, z: 1}
   InheritScaleOffset: 0
+--- !u!114 &3146823115353024141
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3d952c5e46755414198844f263150152, type: 3}
+  m_Name: 'SR_DuplicateSpawns-[Stairs Fences]'
+  m_EditorClassIdentifier: 
+  Logic: 0
+  Negate: 0
+  Global: 0
+  Enabled: 1
+  Ignore: 0
+  _editor_drawRule: 1
+  CellAllow: 1
+  AllConditionsMet: 1
+  Iterations: {x: 2, y: 1, z: 2}
+  OffsetPerIteration: {x: 1, y: 0, z: 1}
+  PositionOffsetSpace: 0
+  RandomizeOffset: {x: 0.2, y: 0, z: 0.2}
+  RandomizeRotation: {x: 0, y: 45, z: 0}
+  AddOneOffset: 0
 --- !u!114 &3277330611074846594
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -3040,7 +3168,7 @@ MonoBehaviour:
   DrawMultiObjectStamps: 1
   Spawners:
   - Enabled: 1
-    Name: S-L
+    Name: Stair-L
     SpawnerTag: 
     StampPrefabID: 0
     Parent: {fileID: 3447409919264380647}
@@ -3049,13 +3177,12 @@ MonoBehaviour:
     - {fileID: 1417987373940881854}
     - {fileID: 2951404570029524476}
     - {fileID: -6715549363432848149}
-    - {fileID: 837159731577651806}
     Mode: 0
     CellCheckMode: 0
     _Editor_SpawnerAdvancedOptionsFoldout: 1
     OnScalledGrid: 0
     Repeat: 1
-    DontInheritRotations: 1
+    DontInheritRotations: 0
     SwitchSpawnedToStatic: 0
     MultipleToSpawn: 0
     UseGlobalRules: 1
@@ -3066,7 +3193,7 @@ MonoBehaviour:
     IsSubSpawner: 0
     _EditorDisplaySpawnerHeader: 1
   - Enabled: 1
-    Name: S-R
+    Name: Stair-R
     SpawnerTag: 
     StampPrefabID: 0
     Parent: {fileID: 3447409919264380647}
@@ -3075,6 +3202,30 @@ MonoBehaviour:
     - {fileID: 2634371557901179441}
     - {fileID: 6095296385282414541}
     - {fileID: 3374490880338234115}
+    Mode: 0
+    CellCheckMode: 0
+    _Editor_SpawnerAdvancedOptionsFoldout: 1
+    OnScalledGrid: 0
+    Repeat: 1
+    DontInheritRotations: 0
+    SwitchSpawnedToStatic: 0
+    MultipleToSpawn: 0
+    UseGlobalRules: 1
+    UseParentPackageRules: 1
+    _wasEnablingGlobalRules: 1
+    ScaleAccess: 1
+    DisplayPreviewGUI: 1
+    IsSubSpawner: 0
+    _EditorDisplaySpawnerHeader: 1
+  - Enabled: 1
+    Name: Slope-L
+    SpawnerTag: 
+    StampPrefabID: 0
+    Parent: {fileID: 3447409919264380647}
+    Rules:
+    - {fileID: 5122086903774128849}
+    - {fileID: 2141239800169769918}
+    - {fileID: -7344788427628227639}
     Mode: 0
     CellCheckMode: 0
     _Editor_SpawnerAdvancedOptionsFoldout: 0
@@ -3096,7 +3247,7 @@ MonoBehaviour:
   _editor_drawSpawners: 1
   _editor_drawGlobalRules: 0
   _editor_drawModPackRules: 0
-  _editor_shareSelected: 0
+  _editor_shareSelected: 2
   ParentPreset: {fileID: 11400000, guid: 68f2b8a33bca99c418c77d98df3b1034, type: 2}
   ParentPack: {fileID: 4010537770972031752}
 --- !u!114 &3718521197933611772
@@ -3669,6 +3820,49 @@ MonoBehaviour:
   OverridePitchRotation: 1
   InitPitchRotation: 0
   NotCheckDefaultPitch: 0
+--- !u!114 &5122086903774128849
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9327e64f60ac33a4fa5e7efebb9176fb, type: 3}
+  m_Name: 'SR_GetCoords-[Stairs Fences]'
+  m_EditorClassIdentifier: 
+  Logic: 0
+  Negate: 0
+  Global: 0
+  Enabled: 1
+  Ignore: 0
+  _editor_drawRule: 1
+  CellAllow: 0
+  AllConditionsMet: 1
+  GetFromTagged: S
+  CheckMode: 0
+  WorldOffset: {x: 0, y: 0, z: 0}
+  OffsetMode: 0
+  DirectionalOffset: {x: -0.5, y: 0, z: 2}
+  StackOffset: 0
+  RotationEulerOffset: {x: 0, y: 90, z: -26}
+  GetScale: 0
+  ScaleMultiplier: {x: 1, y: 1, z: 1}
+  RandomOffsets: {x: 0, y: 0, z: 0}
+  RandomLocalRotation: {x: 0, y: 0, z: 0}
+  RandomScale: {x: 0, y: 0, z: 0}
+  PivotOffset: {x: 0, y: 0, z: 0}
+  MultiplyGetted: {x: 1, y: 1, z: 1}
+  DontSpawnIfNoTagged: 1
+  RemoveTagged: 0
+  TransformLikeChild: 0
+  GetRandomIfMulti: 0
+  RunOnRepetition: 0
+  HelperMode: 0
+  _DrawOffsets: 1
+  _DrawRandomization: 0
+  _DrawAdditionals: 1
 --- !u!114 &5192116458893221199
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -3910,7 +4104,7 @@ MonoBehaviour:
   _editor_drawRule: 1
   CellAllow: 1
   AllConditionsMet: 1
-  ScaleMultiplier: {x: 0.8, y: 1, z: -2}
+  ScaleMultiplier: {x: 0.8, y: 0.5, z: -2}
   ScaleMulVariable:
     name: 
     requiredType: 5
