@@ -9,9 +9,9 @@ using Unity.Transforms;
 
 public struct CameraControlsComponent : IComponentData
 {
+    public LocalTransform localTransform;
     public float fov;
     public bool active;
-    public LocalTransform localTransform;
     public float3 forward;
     public float3 right;
 }
@@ -19,14 +19,7 @@ public struct CameraControlsComponent : IComponentData
 public class CameraControls : MonoBehaviour
 {
     public Rewired.Player player;
-
     public int playerId = 0; // The Rewired player id of this character
-    //public Camera overlayCam;
-    //public Camera orthoCam;
-
-
-    public CinemachineVirtualCamera vcam;
-    public bool follow = true;
     private bool changeX, changeY;
     [Header("Free Look Rotation")] public CinemachineFreeLook freeLook;
     public CinemachineFreeLook freeLookCombat;
@@ -40,15 +33,9 @@ public class CameraControls : MonoBehaviour
     public float maxRadius = 120;
     public float xAxisValue;
     public float heightY;
-    [HideInInspector]
-    public float multiplierX = 90;
-    public float multiplierY = 1f;
+    public float multiplierX = 30;
+    public float multiplierY = 24;
 
-    //[Tooltip("multiply rig height by orbitRatio to set cam Radius")]
-    [HideInInspector]
-    public float orbitRatio = 2f;
-    [HideInInspector]
-    public float multiplierOrbit = 1f;
     private float startHeight;
     private float startRadius;
     float radiusValue;
@@ -85,13 +72,6 @@ public class CameraControls : MonoBehaviour
     {
         if (!ReInput.isReady) return;
         player = ReInput.players.GetPlayer(playerId);
-
-        if (follow)
-        {
-            changeX = true;
-            changeY = true;
-        }
-
         startHeight = freeLook.m_Orbits[1].m_Height;
         startRadius = freeLook.m_Orbits[1].m_Radius;
         radiusValue = startRadius;
@@ -101,8 +81,6 @@ public class CameraControls : MonoBehaviour
 
     void LateUpdate()
     {
-        //if (active == false) return;
-
         var controller = player.controllers.GetLastActiveController();
         var aimMode = false;
         var aimDisabled = false;
@@ -121,14 +99,8 @@ public class CameraControls : MonoBehaviour
         changeX = true;
         changeY = true;
 
-        if (player.GetAxis("RightVertical") >= 1f)
+        if (player.GetAxis("RightVertical") >= .25)
         {
-            if (follow)
-            {
-                changeX = false;
-                changeY = true;
-            }
-
             if (!modifier)
             {
                 heightY -= Time.deltaTime * multiplierY;
@@ -139,14 +111,8 @@ public class CameraControls : MonoBehaviour
             }
             ChangeFov(modifier);
         }
-        else if (player.GetAxis("RightVertical") <= -1f)
+        else if (player.GetAxis("RightVertical") <= -.25)
         {
-            if (follow)
-            {
-                changeX = false;
-                changeY = true;
-            }
-
             if (!modifier)
             {
                 heightY += Time.deltaTime * multiplierY;
@@ -159,28 +125,14 @@ public class CameraControls : MonoBehaviour
             ChangeFov(modifier);
         }
 
-        if (player.GetAxis("RightHorizontal") >= 1)
+        if (player.GetAxis("RightHorizontal") >= .25)
         {
             xAxisValue += Time.deltaTime * multiplierX;
-            if (follow)
-            {
-                changeX = true;
-                changeY = false;
-                xAxisValue = math.abs(xAxisValue);
-            }
-
             ChangeFov(modifier);
         }
-        else if (player.GetAxis("RightHorizontal") <= -1)
+        else if (player.GetAxis("RightHorizontal") <= -.25)
         {
             xAxisValue -= Time.deltaTime * multiplierX;
-            if (follow)
-            {
-                changeX = true;
-                changeY = false;
-                xAxisValue = -math.abs(xAxisValue);
-            }
-
             ChangeFov(modifier);
         }
     }
@@ -200,20 +152,14 @@ public class CameraControls : MonoBehaviour
             if (changeY && !modifier)
             {
                 heightY = math.clamp(heightY, minHeight, maxHeight);
-                //freeLook.m_YAxis.Value = fovY;
                 freeLook.m_Orbits[1].m_Height = heightY;
-                //Debug.Log("fovy " + fovY);
-                //Debug.Log("stht " + startHeight);
-
             }
             else if (changeY)
             {
-                //freeLook.m_Orbits[1].m_Radius = freeLook.m_Orbits[1].m_Height * orbitRatio;
                 radiusValue = math.clamp(radiusValue, minRadius, maxRadius);
                 freeLook.m_Orbits[1].m_Radius = radiusValue;
             }
-
-
+            
         }
     }
 }
