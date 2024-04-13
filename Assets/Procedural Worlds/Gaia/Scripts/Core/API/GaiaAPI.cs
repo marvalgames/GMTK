@@ -1022,7 +1022,7 @@ namespace Gaia
 #if UPPipeline
         public static float GetURPShadowDistance()
         {
-            UniversalRenderPipelineAsset asset = (UniversalRenderPipelineAsset)GraphicsSettings.renderPipelineAsset;
+            UniversalRenderPipelineAsset asset = (UniversalRenderPipelineAsset)GraphicsSettings.defaultRenderPipeline;
             if (asset != null)
             {
                 return asset.shadowDistance;
@@ -1032,7 +1032,7 @@ namespace Gaia
         }
         public static void SetURPShadowDistance(float value)
         {
-            UniversalRenderPipelineAsset asset = (UniversalRenderPipelineAsset)GraphicsSettings.renderPipelineAsset;
+            UniversalRenderPipelineAsset asset = (UniversalRenderPipelineAsset)GraphicsSettings.defaultRenderPipeline;
             if (asset != null)
             {
                 asset.shadowDistance = value;
@@ -1040,7 +1040,7 @@ namespace Gaia
         }
         public static int GetURPShadowCasecade()
         {
-            UniversalRenderPipelineAsset asset = (UniversalRenderPipelineAsset)GraphicsSettings.renderPipelineAsset;
+            UniversalRenderPipelineAsset asset = (UniversalRenderPipelineAsset)GraphicsSettings.defaultRenderPipeline;
             if (asset != null)
             {
                 return asset.shadowCascadeCount;
@@ -1050,7 +1050,7 @@ namespace Gaia
         }
         public static void SetURPShadowCasecade(int value)
         {
-            UniversalRenderPipelineAsset asset = (UniversalRenderPipelineAsset)GraphicsSettings.renderPipelineAsset;
+            UniversalRenderPipelineAsset asset = (UniversalRenderPipelineAsset)GraphicsSettings.defaultRenderPipeline;
             if (asset != null)
             {
                 if (value == 0)
@@ -1066,7 +1066,7 @@ namespace Gaia
         }
         public static int GetURPShadowResolution()
         {
-            UniversalRenderPipelineAsset asset = (UniversalRenderPipelineAsset)GraphicsSettings.renderPipelineAsset;
+            UniversalRenderPipelineAsset asset = (UniversalRenderPipelineAsset)GraphicsSettings.defaultRenderPipeline;
             if (asset != null)
             {
                 return asset.mainLightShadowmapResolution;

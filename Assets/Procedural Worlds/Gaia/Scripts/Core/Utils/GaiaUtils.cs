@@ -403,12 +403,12 @@ namespace Gaia
             }
 
             //Sets up the render to the correct pipeline
-            if (GraphicsSettings.renderPipelineAsset == null)
+            if (GraphicsSettings.defaultRenderPipeline == null)
             {
                 gaiaSettings.m_currentRenderer = GaiaConstants.EnvironmentRenderer.BuiltIn;
                 gaiaSettings.m_pipelineProfile.m_activePipelineInstalled = GaiaConstants.EnvironmentRenderer.BuiltIn;
             }
-            else if (GraphicsSettings.renderPipelineAsset.GetType().ToString().Contains("HDRenderPipelineAsset"))
+            else if (GraphicsSettings.defaultRenderPipeline.GetType().ToString().Contains("HDRenderPipelineAsset"))
             {
 #if HDPipeline
                 gaiaSettings.m_pipelineProfile.m_activePipelineInstalled = GaiaConstants.EnvironmentRenderer.HighDefinition;
@@ -418,7 +418,7 @@ namespace Gaia
                 gaiaSettings.m_pipelineProfile.m_activePipelineInstalled = GaiaConstants.EnvironmentRenderer.BuiltIn;
 #endif
             }
-            else if (GraphicsSettings.renderPipelineAsset.GetType().ToString().Contains("UniversalRenderPipelineAsset"))
+            else if (GraphicsSettings.defaultRenderPipeline.GetType().ToString().Contains("UniversalRenderPipelineAsset"))
             {
 #if UPPipeline
                 gaiaSettings.m_currentRenderer = GaiaConstants.EnvironmentRenderer.Universal;
@@ -1353,11 +1353,11 @@ namespace Gaia
         /// <returns></returns>
         public static GaiaConstants.EnvironmentRenderer GetActivePipeline()
         {
-            if (GraphicsSettings.renderPipelineAsset == null)
+            if (GraphicsSettings.defaultRenderPipeline == null)
             {
                 return GaiaConstants.EnvironmentRenderer.BuiltIn;
             }
-            else if (GraphicsSettings.renderPipelineAsset.GetType().ToString().Contains("HDRenderPipelineAsset"))
+            else if (GraphicsSettings.defaultRenderPipeline.GetType().ToString().Contains("HDRenderPipelineAsset"))
             {
                 return GaiaConstants.EnvironmentRenderer.HighDefinition;
             }
@@ -5404,7 +5404,7 @@ namespace Gaia
         /// <returns></returns>
         public static bool UsesCorrectPipelineDefines()
         {
-            if (GraphicsSettings.renderPipelineAsset == null)
+            if (GraphicsSettings.defaultRenderPipeline == null)
             {
 #if HDPipeline || UPPipeline
                 return false;
@@ -5414,7 +5414,7 @@ namespace Gaia
             }
             else
             {
-                if (GraphicsSettings.renderPipelineAsset.GetType().ToString().Contains("HDRenderPipelineAsset"))
+                if (GraphicsSettings.defaultRenderPipeline.GetType().ToString().Contains("HDRenderPipelineAsset"))
                 {
 #if HDPipeline && !UPPipeline
                     return true;

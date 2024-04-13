@@ -182,7 +182,7 @@ namespace Gaia.Pipeline.HDRP
             //    }
             //}
 
-            if (GraphicsSettings.renderPipelineAsset == null)
+            if (GraphicsSettings.defaultRenderPipeline == null)
             {
                 try
                 {
@@ -198,7 +198,7 @@ namespace Gaia.Pipeline.HDRP
                         //No mapping? This is most likely a new, untested unity version. Try latest entry in this case since this is most likely to work.
                         pipelineAssetName = profile.m_highDefinitionPipelineProfiles.Last().m_pipelineAssetName;
                     }
-                    GraphicsSettings.renderPipelineAsset = AssetDatabase.LoadAssetAtPath<RenderPipelineAsset>(GaiaUtils.GetAssetPath(pipelineAssetName + GaiaConstants.gaiaFileFormatAsset));
+                    GraphicsSettings.defaultRenderPipeline = AssetDatabase.LoadAssetAtPath<RenderPipelineAsset>(GaiaUtils.GetAssetPath(pipelineAssetName + GaiaConstants.gaiaFileFormatAsset));
 
                     int originalQualitySettingsLevel = QualitySettings.GetQualityLevel();
                     try
@@ -242,7 +242,7 @@ namespace Gaia.Pipeline.HDRP
         public static void UpdateHDRPPipelineSettings()
         {
 #if UPPipeline
-            RenderPipelineAsset pipelineAsset = GraphicsSettings.renderPipelineAsset;
+            RenderPipelineAsset pipelineAsset = GraphicsSettings.defaultRenderPipeline;
             if (pipelineAsset != null)
             {
                 QualitySettings.renderPipeline = pipelineAsset;

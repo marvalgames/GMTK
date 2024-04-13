@@ -327,7 +327,7 @@ public class ReadmeEditor : Editor {
 
         Debug.Log($"<b>[{AssetName}]</b> Set the render pipeline asset in the Graphics settings " +
                   "to the bundled example.");
-        GraphicsSettings.renderPipelineAsset = pipelineAsset;
+        GraphicsSettings.defaultRenderPipeline = pipelineAsset;
         GraphicsSettings.defaultRenderPipeline = pipelineAsset;
 
         ChangePipelineAssetAllQualityLevels(pipelineAsset);

@@ -84,7 +84,7 @@ public static class DetectRenderPipeline
 		if (UnityEngine.Rendering.GraphicsSettings.currentRenderPipeline != null)
 		{
 			string renderAssetType = "dummy string";
-			renderAssetType = UnityEngine.Rendering.GraphicsSettings.renderPipelineAsset.GetType().ToString();
+			renderAssetType = UnityEngine.Rendering.GraphicsSettings.defaultRenderPipeline.GetType().ToString();
 			if (renderAssetType.Contains("HDRenderPipeline"))
 			{
 				return true;
@@ -99,7 +99,7 @@ public static class DetectRenderPipeline
 		if (UnityEngine.Rendering.GraphicsSettings.currentRenderPipeline != null)
 		{
 			string renderAssetType = "dummy string";
-			renderAssetType = UnityEngine.Rendering.GraphicsSettings.renderPipelineAsset.GetType().ToString();
+			renderAssetType = UnityEngine.Rendering.GraphicsSettings.defaultRenderPipeline.GetType().ToString();
 			if (renderAssetType.Contains("UniversalRenderPipeline"))
 			{
 				return true;

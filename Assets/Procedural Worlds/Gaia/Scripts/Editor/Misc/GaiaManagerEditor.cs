@@ -6542,13 +6542,13 @@ namespace Gaia
             EditorGUILayout.LabelField("Product Name: " + Application.productName);
             EditorGUILayout.LabelField("Project Version: " + Application.version);
             EditorGUILayout.LabelField("Project Data Path: " + Application.dataPath);
-            if (GraphicsSettings.renderPipelineAsset == null)
+            if (GraphicsSettings.defaultRenderPipeline == null)
             {
                 EditorGUILayout.LabelField("Render Pipeline: Builtin");
             }
             else
             {
-                Type rpType = GraphicsSettings.renderPipelineAsset.GetType();
+                Type rpType = GraphicsSettings.defaultRenderPipeline.GetType();
                 if (rpType.FullName.Contains("HighDefinition"))
                 {
                     EditorGUILayout.LabelField("Render Pipeline: High Definition");
@@ -6573,13 +6573,13 @@ namespace Gaia
                 clipStringBuilder.AppendLine("Product Name: " + Application.productName);
                 clipStringBuilder.AppendLine("Project Version: " + Application.version);
                 clipStringBuilder.AppendLine("Project Data Path: " + Application.dataPath);
-                if (GraphicsSettings.renderPipelineAsset == null)
+                if (GraphicsSettings.defaultRenderPipeline == null)
                 {
                     clipStringBuilder.AppendLine("Render Pipeline: Builtin");
                 }
                 else
                 {
-                    Type rpType = GraphicsSettings.renderPipelineAsset.GetType();
+                    Type rpType = GraphicsSettings.defaultRenderPipeline.GetType();
                     if (rpType.FullName.Contains("HighDefinition"))
                     {
                         clipStringBuilder.AppendLine("Render Pipeline: High Definition");
