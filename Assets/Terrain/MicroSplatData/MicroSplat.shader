@@ -136,7 +136,6 @@ Shader "Terrain_0_0_b99067c5-3ca4-472c-a942-0a6163051f29"
       #define _BRANCHSAMPLES 1
       #define _BRANCHSAMPLESAGR 1
       #define _WETNESS 1
-      #define _MSRENDERLOOP_UNITYURP2022 1
       #define _MSRENDERLOOP_UNITYLD 1
       #define _MSRENDERLOOP_UNITYURP2020 1
       #define _MSRENDERLOOP_UNITYURP2021 1
@@ -4998,7 +4997,6 @@ float3 GetTessFactors ()
       #define _BRANCHSAMPLES 1
       #define _BRANCHSAMPLESAGR 1
       #define _WETNESS 1
-      #define _MSRENDERLOOP_UNITYURP2022 1
       #define _MSRENDERLOOP_UNITYLD 1
       #define _MSRENDERLOOP_UNITYURP2020 1
       #define _MSRENDERLOOP_UNITYURP2021 1
@@ -9799,7 +9797,6 @@ float3 GetTessFactors ()
       #define _BRANCHSAMPLES 1
       #define _BRANCHSAMPLESAGR 1
       #define _WETNESS 1
-      #define _MSRENDERLOOP_UNITYURP2022 1
       #define _MSRENDERLOOP_UNITYLD 1
       #define _MSRENDERLOOP_UNITYURP2020 1
       #define _MSRENDERLOOP_UNITYURP2021 1
@@ -14513,7 +14510,6 @@ float3 GetTessFactors ()
       #define _BRANCHSAMPLES 1
       #define _BRANCHSAMPLESAGR 1
       #define _WETNESS 1
-      #define _MSRENDERLOOP_UNITYURP2022 1
       #define _MSRENDERLOOP_UNITYLD 1
       #define _MSRENDERLOOP_UNITYURP2020 1
       #define _MSRENDERLOOP_UNITYURP2021 1
@@ -19223,7 +19219,6 @@ float3 GetTessFactors ()
       #define _BRANCHSAMPLES 1
       #define _BRANCHSAMPLESAGR 1
       #define _WETNESS 1
-      #define _MSRENDERLOOP_UNITYURP2022 1
       #define _MSRENDERLOOP_UNITYLD 1
       #define _MSRENDERLOOP_UNITYURP2020 1
       #define _MSRENDERLOOP_UNITYURP2021 1
@@ -23937,7 +23932,6 @@ float3 GetTessFactors ()
       #define _BRANCHSAMPLES 1
       #define _BRANCHSAMPLESAGR 1
       #define _WETNESS 1
-      #define _MSRENDERLOOP_UNITYURP2022 1
       #define _MSRENDERLOOP_UNITYLD 1
       #define _MSRENDERLOOP_UNITYURP2020 1
       #define _MSRENDERLOOP_UNITYURP2021 1
@@ -28667,7 +28661,7 @@ float3 GetTessFactors ()
 
         UsePass "Hidden/Nature/Terrain/Utilities/PICKING"
    }
-   Dependency "BaseMapShader" =  "Hidden/Terrain_0_0_b99067c5-3ca4-472c-a942-0a6163051f29_Base1918102964"
-   Fallback "Hidden/Terrain_0_0_b99067c5-3ca4-472c-a942-0a6163051f29_Base1918102964"
+   Dependency "BaseMapShader" =  "Hidden/Terrain_0_0_b99067c5-3ca4-472c-a942-0a6163051f29_Base-1213627053"
+   Fallback "Hidden/Terrain_0_0_b99067c5-3ca4-472c-a942-0a6163051f29_Base-1213627053"
    CustomEditor "MicroSplatShaderGUI"
 }
