@@ -188,8 +188,10 @@ PlayerSettings:
   strictShaderVariantMatching: 0
   VertexChannelCompressionMask: 4054
   iPhoneSdkVersion: 988
+  iOSSimulatorArchitecture: 0
   iOSTargetOSVersionString: 13.0
   tvOSSdkVersion: 0
+  tvOSSimulatorArchitecture: 0
   tvOSRequireExtendedGameController: 0
   tvOSTargetOSVersionString: 13.0
   VisionOSSdkVersion: 0
@@ -261,7 +263,6 @@ PlayerSettings:
   useCustomGradleSettingsTemplate: 0
   useCustomProguardFile: 0
   AndroidTargetArchitectures: 1
-  AndroidTargetDevices: 0
   AndroidSplashScreenScale: 0
   androidSplashScreen: {fileID: 0}
   AndroidKeystoreName: 
@@ -280,7 +281,6 @@ PlayerSettings:
     height: 180
     banner: {fileID: 0}
   androidGamepadSupportLevel: 0
-  chromeosInputEmulation: 1
   AndroidMinifyRelease: 0
   AndroidMinifyDebug: 0
   AndroidValidateAppBundleSize: 1
@@ -579,7 +579,7 @@ PlayerSettings:
   webWasm2023: 0
   scriptingDefineSymbols:
     Android: CROSS_PLATFORM_INPUT;MOBILE_INPUT
-    Standalone: UNITY_PIPELINE_URP;TMP_PRESENT;UNITY_PHYSICS_CUSTOM;CROSS_PLATFORM_INPUT;UPPipeline;GAIA_CINEMACHINE;GAIA_2023;GAIA_MESH_PRESENT;__MICROSPLAT__;__MICROSPLAT_GLOBALTEXTURE__;__MICROSPLAT_DETAILRESAMPLE__;__MICROSPLAT_TERRAINBLEND__;__MICROSPLAT_TRIPLANAR__;__MICROSPLAT_TEXTURECLUSTERS__;__MICROSPLAT_TESSELLATION__;__MICROSPLAT_WINDGLITTER__;__MICROSPLAT_STREAMS__;__MICROSPLAT_SNOW__;__MICROSPLAT_ALPHAHOLE__;__MICROSPLAT_MESHTERRAIN__;GAIA_INPUT_SYSTEM
+    Standalone: UNITY_PIPELINE_URP;TMP_PRESENT;UNITY_PHYSICS_CUSTOM;CROSS_PLATFORM_INPUT;UPPipeline;GAIA_CINEMACHINE;GAIA_2023;GAIA_MESH_PRESENT;__MICROSPLAT__;__MICROSPLAT_GLOBALTEXTURE__;__MICROSPLAT_DETAILRESAMPLE__;__MICROSPLAT_TERRAINBLEND__;__MICROSPLAT_TRIPLANAR__;__MICROSPLAT_TEXTURECLUSTERS__;__MICROSPLAT_TESSELLATION__;__MICROSPLAT_WINDGLITTER__;__MICROSPLAT_STREAMS__;__MICROSPLAT_SNOW__;__MICROSPLAT_ALPHAHOLE__;__MICROSPLAT_MESHTERRAIN__;GAIA_INPUT_SYSTEM;ASSET_INVENTORY
     WebGL: UNITY_PHYSICS_CUSTOM;GAIA_MESH_PRESENT
     Windows Store Apps: MOBILE_INPUT
     iPhone: CROSS_PLATFORM_INPUT;MOBILE_INPUT
@@ -625,6 +625,7 @@ PlayerSettings:
   metroTileBackgroundColor: {r: 0.13333334, g: 0.17254902, b: 0.21568628, a: 0}
   metroSplashScreenBackgroundColor: {r: 0.12941177, g: 0.17254902, b: 0.21568628, a: 1}
   metroSplashScreenUseBackgroundColor: 0
+  syncCapabilities: 0
   platformCapabilities: {}
   metroTargetDeviceFamilies: {}
   metroFTAName: 
