@@ -129,16 +129,10 @@ Shader "Terrain_0_0_b99067c5-3ca4-472c-a942-0a6163051f29"
             
       #define _MICROSPLAT 1
       #define _MICROTERRAIN 1
-      #define _PERTEXRIMLIGHT 1
       #define _HYBRIDHEIGHTBLEND 1
       #define _USEGRADMIP 1
       #define _MAX4TEXTURES 1
       #define _PERTEXUVSCALEOFFSET 1
-      #define _PERTEXSATURATION 1
-      #define _PERTEXTINT 1
-      #define _PERTEXBRIGHTNESS 1
-      #define _PERTEXCOLORINTENSITY 1
-      #define _PERTEXCONTRAST 1
       #define _BRANCHSAMPLES 1
       #define _BRANCHSAMPLESAGR 1
       #define _WETNESS 1
@@ -4997,16 +4991,10 @@ float3 GetTessFactors ()
             
       #define _MICROSPLAT 1
       #define _MICROTERRAIN 1
-      #define _PERTEXRIMLIGHT 1
       #define _HYBRIDHEIGHTBLEND 1
       #define _USEGRADMIP 1
       #define _MAX4TEXTURES 1
       #define _PERTEXUVSCALEOFFSET 1
-      #define _PERTEXSATURATION 1
-      #define _PERTEXTINT 1
-      #define _PERTEXBRIGHTNESS 1
-      #define _PERTEXCOLORINTENSITY 1
-      #define _PERTEXCONTRAST 1
       #define _BRANCHSAMPLES 1
       #define _BRANCHSAMPLESAGR 1
       #define _WETNESS 1
@@ -9804,16 +9792,10 @@ float3 GetTessFactors ()
             
       #define _MICROSPLAT 1
       #define _MICROTERRAIN 1
-      #define _PERTEXRIMLIGHT 1
       #define _HYBRIDHEIGHTBLEND 1
       #define _USEGRADMIP 1
       #define _MAX4TEXTURES 1
       #define _PERTEXUVSCALEOFFSET 1
-      #define _PERTEXSATURATION 1
-      #define _PERTEXTINT 1
-      #define _PERTEXBRIGHTNESS 1
-      #define _PERTEXCOLORINTENSITY 1
-      #define _PERTEXCONTRAST 1
       #define _BRANCHSAMPLES 1
       #define _BRANCHSAMPLESAGR 1
       #define _WETNESS 1
@@ -14524,16 +14506,10 @@ float3 GetTessFactors ()
             
       #define _MICROSPLAT 1
       #define _MICROTERRAIN 1
-      #define _PERTEXRIMLIGHT 1
       #define _HYBRIDHEIGHTBLEND 1
       #define _USEGRADMIP 1
       #define _MAX4TEXTURES 1
       #define _PERTEXUVSCALEOFFSET 1
-      #define _PERTEXSATURATION 1
-      #define _PERTEXTINT 1
-      #define _PERTEXBRIGHTNESS 1
-      #define _PERTEXCOLORINTENSITY 1
-      #define _PERTEXCONTRAST 1
       #define _BRANCHSAMPLES 1
       #define _BRANCHSAMPLESAGR 1
       #define _WETNESS 1
@@ -19240,16 +19216,10 @@ float3 GetTessFactors ()
             
       #define _MICROSPLAT 1
       #define _MICROTERRAIN 1
-      #define _PERTEXRIMLIGHT 1
       #define _HYBRIDHEIGHTBLEND 1
       #define _USEGRADMIP 1
       #define _MAX4TEXTURES 1
       #define _PERTEXUVSCALEOFFSET 1
-      #define _PERTEXSATURATION 1
-      #define _PERTEXTINT 1
-      #define _PERTEXBRIGHTNESS 1
-      #define _PERTEXCOLORINTENSITY 1
-      #define _PERTEXCONTRAST 1
       #define _BRANCHSAMPLES 1
       #define _BRANCHSAMPLESAGR 1
       #define _WETNESS 1
@@ -23960,16 +23930,10 @@ float3 GetTessFactors ()
             
       #define _MICROSPLAT 1
       #define _MICROTERRAIN 1
-      #define _PERTEXRIMLIGHT 1
       #define _HYBRIDHEIGHTBLEND 1
       #define _USEGRADMIP 1
       #define _MAX4TEXTURES 1
       #define _PERTEXUVSCALEOFFSET 1
-      #define _PERTEXSATURATION 1
-      #define _PERTEXTINT 1
-      #define _PERTEXBRIGHTNESS 1
-      #define _PERTEXCOLORINTENSITY 1
-      #define _PERTEXCONTRAST 1
       #define _BRANCHSAMPLES 1
       #define _BRANCHSAMPLESAGR 1
       #define _WETNESS 1
@@ -28703,7 +28667,7 @@ float3 GetTessFactors ()
 
         UsePass "Hidden/Nature/Terrain/Utilities/PICKING"
    }
-   Dependency "BaseMapShader" =  "Hidden/Terrain_0_0_b99067c5-3ca4-472c-a942-0a6163051f29_Base-1648266556"
-   Fallback "Hidden/Terrain_0_0_b99067c5-3ca4-472c-a942-0a6163051f29_Base-1648266556"
+   Dependency "BaseMapShader" =  "Hidden/Terrain_0_0_b99067c5-3ca4-472c-a942-0a6163051f29_Base1918102964"
+   Fallback "Hidden/Terrain_0_0_b99067c5-3ca4-472c-a942-0a6163051f29_Base1918102964"
    CustomEditor "MicroSplatShaderGUI"
 }
