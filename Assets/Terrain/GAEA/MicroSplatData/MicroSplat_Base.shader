@@ -11,7 +11,7 @@
 ////////////////////////////////////////
 
 
-Shader "Hidden/Terrain_0_0_5d21bcf1-2c18-43b3-9921-c579a8dd6414_Base-1575340280"
+Shader "Hidden/Terrain_0_0_5d21bcf1-2c18-43b3-9921-c579a8dd6414_Base1826409406"
 {
    Properties
    {
@@ -126,9 +126,11 @@ Shader "Hidden/Terrain_0_0_5d21bcf1-2c18-43b3-9921-c579a8dd6414_Base-1575340280"
             
       #define _MICROSPLAT 1
       #define _MICROTERRAIN 1
+      #define _PERTEXRIMLIGHT 1
       #define _HYBRIDHEIGHTBLEND 1
       #define _USEGRADMIP 1
       #define _PERTEXUVSCALEOFFSET 1
+      #define _PERTEXTINT 1
       #define _BRANCHSAMPLES 1
       #define _BRANCHSAMPLESAGR 1
       #define _MSRENDERLOOP_UNITYURP2022 1
@@ -4395,9 +4397,11 @@ float3 GetTessFactors ()
             
       #define _MICROSPLAT 1
       #define _MICROTERRAIN 1
+      #define _PERTEXRIMLIGHT 1
       #define _HYBRIDHEIGHTBLEND 1
       #define _USEGRADMIP 1
       #define _PERTEXUVSCALEOFFSET 1
+      #define _PERTEXTINT 1
       #define _BRANCHSAMPLES 1
       #define _BRANCHSAMPLESAGR 1
       #define _MSRENDERLOOP_UNITYURP2022 1
@@ -8603,9 +8607,11 @@ float3 GetTessFactors ()
             
       #define _MICROSPLAT 1
       #define _MICROTERRAIN 1
+      #define _PERTEXRIMLIGHT 1
       #define _HYBRIDHEIGHTBLEND 1
       #define _USEGRADMIP 1
       #define _PERTEXUVSCALEOFFSET 1
+      #define _PERTEXTINT 1
       #define _BRANCHSAMPLES 1
       #define _BRANCHSAMPLESAGR 1
       #define _MSRENDERLOOP_UNITYURP2022 1
@@ -12724,9 +12730,11 @@ float3 GetTessFactors ()
             
       #define _MICROSPLAT 1
       #define _MICROTERRAIN 1
+      #define _PERTEXRIMLIGHT 1
       #define _HYBRIDHEIGHTBLEND 1
       #define _USEGRADMIP 1
       #define _PERTEXUVSCALEOFFSET 1
+      #define _PERTEXTINT 1
       #define _BRANCHSAMPLES 1
       #define _BRANCHSAMPLESAGR 1
       #define _MSRENDERLOOP_UNITYURP2022 1
@@ -16841,9 +16849,11 @@ float3 GetTessFactors ()
             
       #define _MICROSPLAT 1
       #define _MICROTERRAIN 1
+      #define _PERTEXRIMLIGHT 1
       #define _HYBRIDHEIGHTBLEND 1
       #define _USEGRADMIP 1
       #define _PERTEXUVSCALEOFFSET 1
+      #define _PERTEXTINT 1
       #define _BRANCHSAMPLES 1
       #define _BRANCHSAMPLESAGR 1
       #define _MSRENDERLOOP_UNITYURP2022 1
@@ -20962,9 +20972,11 @@ float3 GetTessFactors ()
             
       #define _MICROSPLAT 1
       #define _MICROTERRAIN 1
+      #define _PERTEXRIMLIGHT 1
       #define _HYBRIDHEIGHTBLEND 1
       #define _USEGRADMIP 1
       #define _PERTEXUVSCALEOFFSET 1
+      #define _PERTEXTINT 1
       #define _BRANCHSAMPLES 1
       #define _BRANCHSAMPLESAGR 1
       #define _MSRENDERLOOP_UNITYURP2022 1
