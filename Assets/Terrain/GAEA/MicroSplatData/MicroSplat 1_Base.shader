@@ -11,7 +11,7 @@
 ////////////////////////////////////////
 
 
-Shader "Hidden/Terrain_0_0_5d21bcf1-2c18-43b3-9921-c579a8dd6414_Base1924421928"
+Shader "Hidden/Terrain_0_0_5d21bcf1-2c18-43b3-9921-c579a8dd6414_Base-372245405"
 {
    Properties
    {
@@ -36,6 +36,13 @@ Shader "Hidden/Terrain_0_0_5d21bcf1-2c18-43b3-9921-c579a8dd6414_Base1924421928"
       _TerrainHeightmapTexture("", 2D) = "black" {}
       _TerrainNormalmapTexture("", 2D) = "bump" {}
       _HybridHeightBlendDistance("Hybrid Blend Distance", Float) = 300
+
+
+
+
+
+
+
 
 
 
@@ -128,7 +135,6 @@ Shader "Hidden/Terrain_0_0_5d21bcf1-2c18-43b3-9921-c579a8dd6414_Base1924421928"
       #define _USEGRADMIP 1
       #define _MAX4TEXTURES 1
       #define _PERTEXUVSCALEOFFSET 1
-      #define _PERTEXTINT 1
       #define _BRANCHSAMPLES 1
       #define _BRANCHSAMPLESAGR 1
       #define _MSRENDERLOOP_UNITYURP2022 1
@@ -4399,7 +4405,6 @@ float3 GetTessFactors ()
       #define _USEGRADMIP 1
       #define _MAX4TEXTURES 1
       #define _PERTEXUVSCALEOFFSET 1
-      #define _PERTEXTINT 1
       #define _BRANCHSAMPLES 1
       #define _BRANCHSAMPLESAGR 1
       #define _MSRENDERLOOP_UNITYURP2022 1
@@ -8609,7 +8614,6 @@ float3 GetTessFactors ()
       #define _USEGRADMIP 1
       #define _MAX4TEXTURES 1
       #define _PERTEXUVSCALEOFFSET 1
-      #define _PERTEXTINT 1
       #define _BRANCHSAMPLES 1
       #define _BRANCHSAMPLESAGR 1
       #define _MSRENDERLOOP_UNITYURP2022 1
@@ -12732,7 +12736,6 @@ float3 GetTessFactors ()
       #define _USEGRADMIP 1
       #define _MAX4TEXTURES 1
       #define _PERTEXUVSCALEOFFSET 1
-      #define _PERTEXTINT 1
       #define _BRANCHSAMPLES 1
       #define _BRANCHSAMPLESAGR 1
       #define _MSRENDERLOOP_UNITYURP2022 1
@@ -16851,7 +16854,6 @@ float3 GetTessFactors ()
       #define _USEGRADMIP 1
       #define _MAX4TEXTURES 1
       #define _PERTEXUVSCALEOFFSET 1
-      #define _PERTEXTINT 1
       #define _BRANCHSAMPLES 1
       #define _BRANCHSAMPLESAGR 1
       #define _MSRENDERLOOP_UNITYURP2022 1
@@ -20974,7 +20976,6 @@ float3 GetTessFactors ()
       #define _USEGRADMIP 1
       #define _MAX4TEXTURES 1
       #define _PERTEXUVSCALEOFFSET 1
-      #define _PERTEXTINT 1
       #define _BRANCHSAMPLES 1
       #define _BRANCHSAMPLESAGR 1
       #define _MSRENDERLOOP_UNITYURP2022 1
