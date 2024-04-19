@@ -46,7 +46,7 @@
 
       float3x3 ComputeTerrainTBN(float4 th, out float3 terrainTangent, out float3 terrainBitangent)
       {
-         terrainTangent = (cross(th.xyz, float3(0,0,1)));
+         terrainTangent = (cross(th.xyz, float3(0,0,-1)));
          terrainBitangent = (cross(th.xyz, terrainTangent));
          float3x3 tbn = float3x3(terrainTangent, terrainBitangent, th.xyz);
          return tbn;
