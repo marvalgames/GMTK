@@ -17,7 +17,7 @@ Shader "Hidden/MicroVerse/CurvatureMapGen"
             #pragma shader_feature_local_fragment _ _PX
             #pragma shader_feature_local_fragment _ _PY
 
-            #include "UnityCG.cginc"
+            #include_with_pragmas "UnityCG.cginc"
 
 
             struct appdata

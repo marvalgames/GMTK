@@ -60,6 +60,9 @@ namespace JBooth.MicroVerseCore.Browser
 
         public void Draw(List<PresetItem> presets, Grouping grouping)
         {
+            // handle movement of preset items via keyport shortcut
+            ContentSelectionGridMovement.OnInspectorGUI( selectedPresetItem);
+
             int cellWidth = cellSize;
             int cellHeight = cellSize;
             float safetyMargin = cellWidth / 2f; // just some margin to keep the stamp preview almost fully visible

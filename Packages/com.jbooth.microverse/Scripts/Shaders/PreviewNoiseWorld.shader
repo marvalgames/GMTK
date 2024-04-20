@@ -11,8 +11,8 @@ Shader "Hidden/MicroVerse/PreviewNoiseWorld"
 
         HLSLINCLUDE
 
-        #include "UnityCG.cginc"
-        #include "TerrainPreview.cginc"
+        #include_with_pragmas "UnityCG.cginc"
+        #include_with_pragmas "TerrainPreview.cginc"
 
         
         
@@ -26,7 +26,7 @@ Shader "Hidden/MicroVerse/PreviewNoiseWorld"
 
 
             #pragma shader_feature_local_fragment _ _NOISE _FBM _WORLEY _WORM _WORMFBM _NOISETEXTURE
-            #include "Noise.cginc"
+            #include_with_pragmas "Noise.cginc"
 
             struct Varyings {
                 float4 positionCS : SV_POSITION;

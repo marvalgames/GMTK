@@ -21,13 +21,15 @@ Shader "Hidden/MicroVerse/MeshStamp"
             #pragma shader_feature_local_fragment _ _FALLOFFSMOOTHSTEP _FALLOFFEASEIN _FALLOFFEASEOUT _FALLOFFEASEINOUT
             #pragma shader_feature_local_fragment _ _FALLOFFNOISE _FALLOFFFBM _FALLOFFWORLEY _FALLOFFWORM _FALLOFFWORMFBM _FALLOFFNOISETEXTURE
             #pragma shader_feature_local_fragment _ _SUBTRACT
+            #pragma shader_feature_local_fragment _ _CONNECT
+            #pragma shader_feature_local_fragment _ _FILLAROUND
             // because unity's height format is stupid and only uses half the possible
             // precision.
             #define kMaxHeight          (32766.0f/65535.0f)
 
-            #include "UnityCG.cginc"
-            #include "/../Noise.cginc"
-            #include "/../HeightStampFiltering.cginc"
+            #include_with_pragmas "UnityCG.cginc"
+            #include_with_pragmas "/../Noise.cginc"
+            #include_with_pragmas "/../HeightStampFiltering.cginc"
 
             struct vertexInput
             {
@@ -56,6 +58,7 @@ Shader "Hidden/MicroVerse/MeshStamp"
             sampler2D _OriginalHeights;
             float _BlurSize;
             float3 _HeightScaleClamp;
+            float _ConnectHeight;
 
             v2f vert(vertexInput v)
             {
@@ -81,19 +84,30 @@ Shader "Hidden/MicroVerse/MeshStamp"
                 ybounds.y *= _HeightScaleClamp.x;
                 ybounds.y += ybounds.x;
 
-                
+                float2 uv = stampUV;
+                #if _SUBTRACT || _CONNECT || _FILLAROUND             
+                uv.y = 1.0 - uv.y;
+                #endif
 
                 [loop]
-                for (int x = -blurSize; x <= blurSize; x+=1)
+                for (int x = -blurSize; x <= blurSize; x += 1)
                 {
                     [loop]
-                    for (int y = -blurSize; y <= blurSize; y+=1)
+                    for (int y = -blurSize; y <= blurSize; y += 1)
                     {
-                        float hs = SAMPLE_DEPTH_TEXTURE(_StampTex, stampUV + float2(x, y) * _MainTex_TexelSize.xy * blurSkip).r;
+                        float hs = SAMPLE_DEPTH_TEXTURE(_StampTex, uv + float2(x, y) * _MainTex_TexelSize.xy * blurSkip).r;
+                        
+                        // clip out taller points of the mesh
+                        #if _CONNECT
+                        if(hs < _ConnectHeight)
+                            hs = 0.0;
+                        #endif
+            
                         float orig = hs;
-                        #if _SUBTRACT
+                        #if _SUBTRACT || _FILLAROUND || _CONNECT
                             hs = 1 - hs;   
                         #endif
+
                         hs = clamp(hs, _HeightScaleClamp.y, _HeightScaleClamp.z);
                         hs = (lerp(ybounds.x, ybounds.y, hs) + _YBounds.w) / _RealSize.y;
 
@@ -107,13 +121,14 @@ Shader "Hidden/MicroVerse/MeshStamp"
                         #else
                             hs = max(hs, height);
                         #endif
+
                         col += hs;
                     }
                 }
                 // Average the colors
                 int totalPixels = (2 * blurSize + 1) * (2 * blurSize + 1);
                 col /= totalPixels;
-
+    
                 return col;
 
             }
@@ -164,6 +179,20 @@ Shader "Hidden/MicroVerse/MeshStamp"
                 #else
                     float blend = max(height, depthSample);
                 #endif
+                
+                    
+                #if _FILLAROUND
+                    float newHeight = saturate(_YBounds.x) * depthSample;
+                    blend = max(height, newHeight);
+                    return PackHeightmap(clamp(lerp(height, blend, falloff), 0, kMaxHeight));
+                #elif _CONNECT
+                    float newHeight = saturate(_YBounds.x) * depthSample;
+                    float boundBottom = saturate((_YBounds.x + 0.5f) / _RealSize.y);
+                    newHeight = min(newHeight, boundBottom);
+                    blend = max(height, newHeight);
+                    return PackHeightmap(clamp(lerp(height, blend, falloff), 0, kMaxHeight));
+                #endif
+    
                 return PackHeightmap(clamp(lerp(height, blend, falloff), 0, kMaxHeight));
             }
             ENDCG

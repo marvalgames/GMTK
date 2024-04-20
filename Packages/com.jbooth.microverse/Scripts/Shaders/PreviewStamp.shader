@@ -12,8 +12,8 @@ Shader "Hidden/MicroVerse/PreviewStamp"
 
         HLSLINCLUDE
 
-        #include "UnityCG.cginc"
-        #include "TerrainPreview.cginc"
+        #include_with_pragmas "UnityCG.cginc"
+        #include_with_pragmas "TerrainPreview.cginc"
 
         
         ENDHLSL

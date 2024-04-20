@@ -14,7 +14,7 @@ Shader "Hidden/MicroVerse/PreviewBrushShader"
             #pragma vertex vert
             #pragma fragment frag
 
-            #include "UnityCG.cginc"
+            #include_with_pragmas "UnityCG.cginc"
 
             float _Falloff;
             float _Size;

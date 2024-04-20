@@ -22,10 +22,10 @@ Shader "Hidden/MicroVerse/SplatFilter"
             #pragma vertex vert
             #pragma fragment frag
 
-            #include "UnityCG.cginc"
-            #include "/../Noise.cginc"
-            #include "/../Filtering.cginc"
-            #include "/../SplatMerge.cginc"
+            #include_with_pragmas "UnityCG.cginc"
+            #include_with_pragmas "/../Noise.cginc"
+            #include_with_pragmas "/../Filtering.cginc"
+            #include_with_pragmas "/../SplatMerge.cginc"
 
             float _Channel;
             sampler2D _IndexMap;

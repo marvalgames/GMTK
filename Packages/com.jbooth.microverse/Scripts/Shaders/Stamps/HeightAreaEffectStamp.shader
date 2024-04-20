@@ -27,9 +27,9 @@ Shader "Hidden/MicroVerse/HeightAreaEffectStamp"
             // precision.
             #define kMaxHeight          (32766.0f/65535.0f)
 
-            #include "UnityCG.cginc"
-            #include "Packages/com.jbooth.microverse/Scripts/Shaders/Noise.cginc"
-            #include "/../HeightStampFiltering.cginc"
+            #include_with_pragmas "UnityCG.cginc"
+            #include_with_pragmas "Packages/com.jbooth.microverse/Scripts/Shaders/Noise.cginc"
+            #include_with_pragmas "/../HeightStampFiltering.cginc"
 
             struct vertexInput
             {

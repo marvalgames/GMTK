@@ -50,6 +50,7 @@ namespace JBooth.MicroVerseCore
                 }
             }
             EditorGUILayout.PropertyField(serializedObject.FindProperty("blendMode"));
+            EditorGUILayout.PropertyField(serializedObject.FindProperty("connectHeight"));
             EditorGUILayout.PropertyField(serializedObject.FindProperty("offset"));
             EditorGUILayout.PropertyField(serializedObject.FindProperty("heightScale"));
             EditorGUILayout.MinMaxSlider(new GUIContent("Height Clamp", "Clamp the height map range"), ref meshStamp.heightClamp.x, ref meshStamp.heightClamp.y, 0, 1);

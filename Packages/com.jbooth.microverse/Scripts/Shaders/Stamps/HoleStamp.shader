@@ -28,9 +28,9 @@ Shader "Hidden/MicroVerse/HoleStamp"
             #pragma shader_feature_local_fragment _ _TEXTUREFILTER
             #pragma shader_feature_local_fragment _ _COPYPASTE
         
-            #include "UnityCG.cginc"
-            #include "/../Noise.cginc"
-            #include "/../Filtering.cginc"
+            #include_with_pragmas "UnityCG.cginc"
+            #include_with_pragmas "/../Noise.cginc"
+            #include_with_pragmas "/../Filtering.cginc"
 
 
             float _Channel;

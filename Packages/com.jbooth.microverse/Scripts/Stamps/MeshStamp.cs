@@ -22,8 +22,10 @@ namespace JBooth.MicroVerseCore
 
         public enum BlendMode
         {
-            Add,
-            Subtract
+            Add = 0,
+            Subtract = 1,
+            Fillaround = 2,
+            Connect = 3
         }    
 
         public GameObject targetObject;
@@ -46,6 +48,9 @@ namespace JBooth.MicroVerseCore
         public float blur;
         [Tooltip("Do we pull terrain up towards the mesh, or down away from the mesh")]
         public BlendMode blendMode = BlendMode.Add;
+        [Range(0.9f, 0.1f)]
+        [Tooltip("The heighest point on the mesh terrain connnects to")]
+        public float connectHeight = 0.9f;
         Material material;
         static Shader meshShader;
         static Camera cam;
@@ -74,13 +79,13 @@ namespace JBooth.MicroVerseCore
                 cam.transform.position = new Vector3(bounds.center.x, bounds.min.y + 9999, bounds.center.z);
                 cam.transform.rotation = Quaternion.Euler(-90, 0, 0);
             }
+            
             cam.nearClipPlane = 0.5f;
             cam.farClipPlane = bounds.size.y + 1;
             float objectSize = Mathf.Max(bounds.size.x, bounds.size.z);
             cam.orthographicSize = objectSize / 2;
             cam.depthTextureMode = DepthTextureMode.Depth;
             cam.orthographic = true;
-            
         }
 
         public void SetHideRenderers(GameObject go, bool enabled)
@@ -154,9 +159,10 @@ namespace JBooth.MicroVerseCore
                 }
             }
             // need to add the offset somehow..
+            int sizeExtension = (int)blur * 4;
             var size = b.size;
-            size.x += 3 + (int)blur * 4;
-            size.z += 3 + (int)blur * 4;
+            size.x += 3 + sizeExtension;
+            size.z += 3 + sizeExtension;
             b.size = size;
             return b;
         }
@@ -324,6 +330,7 @@ namespace JBooth.MicroVerseCore
         static int _NoiseUV = Shader.PropertyToID("_NoiseUV");
         static int _YBounds = Shader.PropertyToID("_YBounds");
         static int _HeightScaleClamp = Shader.PropertyToID("_HeightScaleClamp");
+        static int _ConnectHeight = Shader.PropertyToID("_ConnectHeight");
 
         public bool ApplyHeightStamp(RenderTexture source, RenderTexture dest, HeightmapData heightmapData, OcclusionData od)
         {
@@ -341,9 +348,19 @@ namespace JBooth.MicroVerseCore
                 material.SetMatrix(_Transform, ComputeStampMatrix(heightmapData.terrain, b));
                 material.SetVector(_YBounds, new Vector4(b.min.y - 0.5f, b.max.y + 0.5f, b.size.y + 1, offset));
                 material.SetVector(_HeightScaleClamp, new Vector3(heightScale, heightClamp.x, heightClamp.y));
+                material.SetFloat(_ConnectHeight, 1.0f);
                 if (blendMode == BlendMode.Subtract)
                 {
                     keywordBuilder.Add("_SUBTRACT");
+                }
+                else if(blendMode == BlendMode.Connect)
+                {
+                    keywordBuilder.Add("_CONNECT");
+                    material.SetFloat(_ConnectHeight, connectHeight);
+                }
+                else if(blendMode == BlendMode.Fillaround)
+                {
+                    keywordBuilder.Add("_FILLAROUND");
                 }
                 keywordBuilder.Assign(material);
                 Graphics.Blit(source, dest, material);

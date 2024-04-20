@@ -14,8 +14,8 @@ Shader "Hidden/MicroVerse/NoisePreview"
             #pragma vertex vert
             #pragma fragment frag
 
-            #include "UnityCG.cginc"
-            #include "Noise.cginc"
+            #include_with_pragmas "UnityCG.cginc"
+            #include_with_pragmas "Noise.cginc"
 
             #pragma shader_feature_local_fragment _ _NOISE _FBM _WORLEY _WORM _WORMFBM
 

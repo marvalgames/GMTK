@@ -17,7 +17,7 @@ Shader "Hidden/MicroVerse/SplatToMega"
 
             #pragma shader_feature_local_fragment _ _MAX4TEXTURES _MAX8TEXTURES _MAX12TEXTURES _MAX16TEXTURES _MAX20TEXTURES _MAX24TEXTURES _MAX28TEXTURES _MAX32TEXTURES
 
-            #include "UnityCG.cginc"
+            #include_with_pragmas "UnityCG.cginc"
 
             struct appdata
             {

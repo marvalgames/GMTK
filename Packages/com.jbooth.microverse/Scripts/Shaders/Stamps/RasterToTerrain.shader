@@ -16,7 +16,7 @@
             #pragma vertex vert
             #pragma fragment frag
 
-            #include "UnityCG.cginc"
+            #include_with_pragmas "UnityCG.cginc"
 
             struct vertexInput
             {

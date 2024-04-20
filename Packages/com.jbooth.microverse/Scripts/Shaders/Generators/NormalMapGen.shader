@@ -17,7 +17,7 @@ Shader "Hidden/MicroVerse/NormalMapGen"
             #pragma shader_feature_local_fragment _ _NX
             #pragma shader_feature_local_fragment _ _NY
 
-            #include "UnityCG.cginc"
+            #include_with_pragmas "UnityCG.cginc"
 
             struct appdata
             {

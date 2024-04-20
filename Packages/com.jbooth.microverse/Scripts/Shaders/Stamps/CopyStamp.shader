@@ -14,7 +14,7 @@ Shader "Hidden/MicroVerse/CopyStamp"
             #pragma shader_feature_local_fragment _COPYHEIGHT
 
 
-            #include "UnityCG.cginc"
+            #include_with_pragmas "UnityCG.cginc"
 
             struct vertexInput
             {

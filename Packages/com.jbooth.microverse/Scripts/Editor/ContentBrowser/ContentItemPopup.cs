@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using UnityEditor;
 using UnityEngine;
 
@@ -7,11 +8,16 @@ namespace JBooth.MicroVerseCore.Browser
 {
     public class ContentItemPopup : PopupWindowContent
     {
+        private GUIContent prepareMoveContent = new GUIContent("Prepare Move", "Select a preset item for movement. Use Insert Here to effectively move the preset item.\n\nShortcut: ctrl + x");
+        private GUIContent insertBeforeContent = new GUIContent("Insert Before", "Inserts a preset item that was previously specified with 'Prepare Move' before current preset item.\n\nShorcut: ctrl + v");
+
         private enum Feature
         {
             UpdateThumbnail,
             PingCollection,
             Rename,
+            PrepareMove,
+            InsertBefore,
             Close
         }
 
@@ -22,6 +28,9 @@ namespace JBooth.MicroVerseCore.Browser
 
         public ContentItemPopup(ContentBrowser browser, PresetItem presetItem)
         {
+            if (presetItem == null || presetItem.collection == null)
+                return;
+
             this.browser = browser;
             this.presetItem = presetItem;
 
@@ -41,6 +50,8 @@ namespace JBooth.MicroVerseCore.Browser
                     features.Add(Feature.UpdateThumbnail);
                     features.Add(Feature.PingCollection);
                     features.Add(Feature.Rename);
+                    features.Add(Feature.PrepareMove);
+                    features.Add(Feature.InsertBefore);
                     features.Add(Feature.Close);
                     break;
             }
@@ -78,6 +89,31 @@ namespace JBooth.MicroVerseCore.Browser
                     Rename();
                 }
             }
+
+
+            if (features.Contains(Feature.PrepareMove))
+            {
+                if (GUILayout.Button(prepareMoveContent))
+                {
+                    ContentSelectionGridMovement.PrepareMove(presetItem);
+                    editorWindow.Close();
+
+                }
+            }
+
+            bool moveHereEnabled = ContentSelectionGridMovement.MoveHereEnabled(presetItem);
+
+            GUI.enabled = moveHereEnabled;
+            if (features.Contains(Feature.InsertBefore))
+            {
+                if (GUILayout.Button(insertBeforeContent))
+                {
+                    ContentSelectionGridMovement.InsertBefore(presetItem);
+                    editorWindow.Close();
+
+                }
+            }
+            GUI.enabled = true;
 
             if (features.Contains(Feature.Close))
             {
@@ -132,5 +168,7 @@ namespace JBooth.MicroVerseCore.Browser
 
             EditorGUIUtility.PingObject(presetItem.collection);
         }
+
+
     }
 }

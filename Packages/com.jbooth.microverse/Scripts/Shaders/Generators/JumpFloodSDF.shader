@@ -27,7 +27,7 @@ Shader "Hidden/MicroVerse/JumpFloodSDF"
             #pragma vertex vert
             #pragma fragment frag
 
-            #include "UnityCG.cginc"
+            #include_with_pragmas "UnityCG.cginc"
 
             #pragma target 4.5
 
@@ -113,7 +113,7 @@ Shader "Hidden/MicroVerse/JumpFloodSDF"
             #pragma vertex vert
             #pragma fragment frag
 
-            #include "UnityCG.cginc"
+            #include_with_pragmas "UnityCG.cginc"
 
             #pragma target 4.5
 
@@ -196,7 +196,7 @@ Shader "Hidden/MicroVerse/JumpFloodSDF"
             #pragma vertex vert
             #pragma fragment frag
 
-            #include "UnityCG.cginc"
+            #include_with_pragmas "UnityCG.cginc"
 
             #pragma target 4.5
 

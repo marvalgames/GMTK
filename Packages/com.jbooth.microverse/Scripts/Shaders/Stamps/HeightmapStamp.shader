@@ -33,9 +33,9 @@
             // precision.
             #define kMaxHeight          (32766.0f/65535.0f)
 
-            #include "UnityCG.cginc"
-            #include "/../Noise.cginc"
-            #include "/../HeightStampFiltering.cginc"
+            #include_with_pragmas "UnityCG.cginc"
+            #include_with_pragmas "/../Noise.cginc"
+            #include_with_pragmas "/../HeightStampFiltering.cginc"
 
             struct vertexInput
             {

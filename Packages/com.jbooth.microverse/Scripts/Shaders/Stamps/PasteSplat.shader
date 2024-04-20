@@ -15,8 +15,8 @@ Shader "Hidden/MicroVerse/PasteSplat"
 
             #pragma shader_feature_local_fragment _ _USEFALLOFF _USEFALLOFFRANGE _USEFALLOFFTEXTURE _USEFALLOFFSPLINEAREA
 
-            #include "UnityCG.cginc"
-            #include "/../SplatMerge.cginc"
+            #include_with_pragmas "UnityCG.cginc"
+            #include_with_pragmas "/../SplatMerge.cginc"
 
             sampler2D _IndexMap;
             sampler2D _WeightMap;

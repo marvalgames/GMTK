@@ -96,7 +96,11 @@ namespace JBooth.MicroVerseCore
                 if (previewImage != null) hash += previewImage.GetHashCode();
                 if (previewAsset != null) hash += previewAsset.GetHashCode();
                 if (previewGradient != null) hash += previewGradient.GetHashCode();
-                return hash + description.GetHashCode() ^ stamp.GetHashCode();
+                if (description != null) hash += description.GetHashCode();
+
+                if( stamp != null) hash = hash ^ stamp.GetHashCode();
+
+                return hash;
             }
         }
     }
