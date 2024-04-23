@@ -15,9 +15,9 @@ Shader "Hidden/MicroVerse/TreeSplatMod"
             #pragma fragment frag
 
             #include "UnityCG.cginc"
-            #include "Packages/com.jbooth.microverse/Scripts/Shaders/SplatMerge.cginc"
-            #include "Packages/com.jbooth.microverse/Scripts/Shaders/Noise.cginc"
-            #include "Packages/com.jbooth.microverse/Scripts/Shaders/Filtering.cginc"
+            #include_with_pragmas "Packages/com.jbooth.microverse/Scripts/Shaders/SplatMerge.cginc"
+            #include_with_pragmas "Packages/com.jbooth.microverse/Scripts/Shaders/Noise.cginc"
+            #include_with_pragmas "Packages/com.jbooth.microverse/Scripts/Shaders/Filtering.cginc"
 
             #pragma shader_feature_local_fragment _ _TEXTUREFILTER
             #pragma shader_feature_local_fragment _ _APPLYFILTER

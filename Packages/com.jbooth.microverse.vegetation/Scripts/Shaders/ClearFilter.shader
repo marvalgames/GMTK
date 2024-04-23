@@ -23,8 +23,8 @@ Shader "Hidden/MicroVerse/ClearFilter"
             #pragma shader_feature_local_fragment _ _TEXTUREFILTER
 
             #include "UnityCG.cginc"
-            #include "Packages/com.jbooth.microverse/Scripts/Shaders/Noise.cginc"
-            #include "Packages/com.jbooth.microverse/Scripts/Shaders/Filtering.cginc"
+            #include_with_pragmas "Packages/com.jbooth.microverse/Scripts/Shaders/Noise.cginc"
+            #include_with_pragmas "Packages/com.jbooth.microverse/Scripts/Shaders/Filtering.cginc"
 
             sampler2D _MainTex;
             sampler2D _WeightMap;

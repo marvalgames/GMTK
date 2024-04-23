@@ -17,7 +17,7 @@ Shader "Hidden/MicroVerse/SplineSDF"
             #pragma shader_feature_local_fragment _ _FINE
 
             #include "UnityCG.cginc"
-            #include "Packages/com.unity.splines/Shader/Spline.cginc"
+            #include_with_pragmas "Packages/com.unity.splines/Shader/Spline.cginc"
 
             struct vertexInput
             {

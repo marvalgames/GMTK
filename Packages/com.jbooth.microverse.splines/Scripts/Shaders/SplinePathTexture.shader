@@ -36,8 +36,8 @@
                 float2 uv : TEXCOORD0;
             };
 
-            #include "Packages/com.jbooth.microverse/Scripts/Shaders/SplatMerge.cginc"
-            #include "Packages/com.jbooth.microverse/Scripts/Shaders/Noise.cginc"
+            #include_with_pragmas "Packages/com.jbooth.microverse/Scripts/Shaders/SplatMerge.cginc"
+            #include_with_pragmas "Packages/com.jbooth.microverse/Scripts/Shaders/Noise.cginc"
 
             sampler2D _WeightMap;
             sampler2D _IndexMap;

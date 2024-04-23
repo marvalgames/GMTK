@@ -31,9 +31,9 @@ Shader "Hidden/MicroVerse/VegetationFilter"
 
             #include "UnityCG.cginc"
 
-            #include "Packages/com.jbooth.microverse/Scripts/Shaders/Noise.cginc"
-            #include "Packages/com.jbooth.microverse/Scripts/Shaders/Filtering.cginc"
-            #include "Packages/com.jbooth.microverse/Scripts/Shaders/SDFFilter.cginc"
+            #include_with_pragmas "Packages/com.jbooth.microverse/Scripts/Shaders/Noise.cginc"
+            #include_with_pragmas "Packages/com.jbooth.microverse/Scripts/Shaders/Filtering.cginc"
+            #include_with_pragmas "Packages/com.jbooth.microverse/Scripts/Shaders/SDFFilter.cginc"
 
             sampler2D _MainTex;
             sampler2D _PlacementMask;

@@ -26,8 +26,8 @@ Shader "Hidden/MicroVerse/SplineSDFFill"
             #pragma shader_feature_local_fragment _ _INTERSECTION _AREA _ROAD
 
             #include "UnityCG.cginc"
-            #include "Packages/com.unity.splines/Shader/Spline.cginc"
-            #include "Packages/com.jbooth.microverse/Scripts/Shaders/Noise.cginc"
+            #include_with_pragmas "Packages/com.unity.splines/Shader/Spline.cginc"
+            #include_with_pragmas "Packages/com.jbooth.microverse/Scripts/Shaders/Noise.cginc"
 
             struct vertexInput
             {

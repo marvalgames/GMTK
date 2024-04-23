@@ -14,7 +14,7 @@ Shader "Hidden/MicroVerse/SplineClear"
 
 
             #include "UnityCG.cginc"
-
+            
             struct vertexInput
             {
                 float4 vertex : POSITION;
