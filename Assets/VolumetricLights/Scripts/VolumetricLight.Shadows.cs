@@ -196,6 +196,7 @@ namespace VolumetricLights {
             }
 
             fogMat.SetVector(ShaderParams.ShadowIntensity, new Vector4(shadowIntensity, 1f - shadowIntensity, 0, 0));
+            fogMat.SetVector(ShaderParams.ShadowColor, shadowColor);
 
             if ((shadowCullingMask & 2) != 0) {
                 shadowCullingMask &= ~2; // exclude transparent FX layer

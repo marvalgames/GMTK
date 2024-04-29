@@ -25,6 +25,7 @@ float4 _TranslucencyTexture_TexelSize;
 float4 shadowTextureStart;
 float4 shadowTextureEnd;
 half3 _ShadowIntensity;
+half4 _ShadowColor;
 
 TEXTURE2D(_Cookie2D);
 SAMPLER(sampler_Cookie2D);

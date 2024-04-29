@@ -38,8 +38,9 @@ VaryingsParticle vertParticleUnlit(AttributesParticle input)
     output.positionWS.w = ComputeFogFactor(vertexInput.positionCS.z);
     output.clipPos = vertexInput.positionCS;
     output.color = input.color;
-    
-    float distSqr = dot(output.positionWS.xyz - _WorldSpaceCameraPos.xyz, output.positionWS.xyz - _WorldSpaceCameraPos.xyz);
+
+    float3 deltaPos = (float3)(output.positionWS.xyz - _WorldSpaceCameraPos.xyz);
+    float distSqr = dot(deltaPos, deltaPos);
     float distAtten =  saturate(_ParticleDistanceAtten / distSqr);
     output.color.a *= distAtten;
 

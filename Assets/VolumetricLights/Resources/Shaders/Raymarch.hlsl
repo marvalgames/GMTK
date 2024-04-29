@@ -44,11 +44,11 @@ half SampleDensity(float3 wpos) {
     return density * DistanceAttenuation(wpos);
 }
 
-void AddFog(float3 wpos, float energyStep, half3 baseColor, inout half4 sum) {
+void AddFog(float3 wpos, float energyStep, half4 baseColor, inout half4 sum) {
 
    half density = SampleDensity(wpos);
 
-   half4 fgCol = half4(baseColor, density);
+   half4 fgCol = half4(baseColor.rgb, baseColor.a * density);
    fgCol.rgb *= fgCol.aaa;
    fgCol.a = min(1.0, fgCol.a);
 
@@ -62,12 +62,12 @@ half4 Raymarch(float3 rayStart, float3 rayDir, float t0, float t1) {
 
     // diffusion
     #if VL_POINT
-        half spec = max(dot(rayDir, normalize(_ConeTipData.xyz - _WorldSpaceCameraPos)), 0);
+        half spec = dot(rayDir, normalize(_ConeTipData.xyz - _WorldSpaceCameraPos));
     #else
-        half spec = max(dot(rayDir, _ToLightDir.xyz), 0);
+        half spec = dot(rayDir, _ToLightDir.xyz);
     #endif
     half diffusion = 1.0 + spec * spec * _ToLightDir.w;
-    half3 lightColor = _LightColor.rgb * diffusion;
+    half4 lightColor = half4(_LightColor.rgb * diffusion, _LightColor.a);
 
     // compute raymarch step
     float rs = MIN_STEPPING + max(0, log(t1-t0)) / FOG_STEPPING;
@@ -83,10 +83,16 @@ half4 Raymarch(float3 rayStart, float3 rayDir, float t0, float t1) {
         if (t >= t1) break;
         #if VL_SHADOWS_CUBEMAP
        	    half atten = GetShadowCubemapAtten(wpos);
-            AddFog(wpos, energyStep, lightColor * atten, sum);
+            half4 baseColor = lerp(_ShadowColor, lightColor, atten);
+            AddFog(wpos, energyStep, baseColor, sum);
         #elif VL_SHADOWS || VL_SPOT_COOKIE || VL_SHADOWS_TRANSLUCENCY
        	    half3 atten = GetShadowAtten(t / t1);
-            AddFog(wpos, energyStep, lightColor * atten, sum);
+            #if VL_SHADOWS
+                half4 baseColor = lerp(_ShadowColor, lightColor, atten.r);
+            #else
+                half4 baseColor = half4(lightColor.rgb * atten, lightColor.a);
+            #endif
+            AddFog(wpos, energyStep, baseColor, sum);
        	#else 
             AddFog(wpos, energyStep, lightColor, sum);
         #endif

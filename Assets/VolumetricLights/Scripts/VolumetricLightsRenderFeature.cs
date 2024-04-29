@@ -3,10 +3,14 @@
 // Created by Kronnect
 //------------------------------------------------------------------------------------------------------------------
 
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
+#if UNITY_2023_3_OR_NEWER
+using UnityEngine.Rendering.RenderGraphModule;
+#endif
 
 namespace VolumetricLights {
 
@@ -48,7 +52,7 @@ namespace VolumetricLights {
 
             FilteringSettings filteringSettings = new FilteringSettings(RenderQueueRange.transparent, -1);
             readonly List<ShaderTagId> shaderTagIdList = new List<ShaderTagId>();
-            VolumetricLightsRenderFeature settings;
+            static VolumetricLightsRenderFeature settings;
             RTHandle m_LightBuffer;
 
             public VolumetricLightsRenderPass() {
@@ -63,13 +67,16 @@ namespace VolumetricLights {
             }
 
             public void Setup(VolumetricLightsRenderFeature settings) {
-                this.settings = settings;
+                VolumetricLightsRenderPass.settings = settings;
                 renderPassEvent = settings.renderPassEvent;
             }
 
+
+#if UNITY_2023_3_OR_NEWER
+            [Obsolete]
+#endif
             public override void Configure(CommandBuffer cmd, RenderTextureDescriptor cameraTextureDescriptor) {
                 RenderTextureDescriptor lightBufferDesc = cameraTextureDescriptor;
-                //int size = GetScaledSize(cameraTextureDescriptor.width, settings.downscaling);
                 lightBufferDesc.width = GetScaledSize(cameraTextureDescriptor.width, settings.downscaling);
                 lightBufferDesc.height = GetScaledSize(cameraTextureDescriptor.height, settings.downscaling);
                 lightBufferDesc.depthBufferBits = 0;
@@ -81,6 +88,9 @@ namespace VolumetricLights {
                 ConfigureInput(ScriptableRenderPassInput.Depth);
             }
 
+#if UNITY_2023_3_OR_NEWER
+            [Obsolete]
+#endif
             public override void Execute(ScriptableRenderContext context, ref RenderingData renderingData) {
 
                 CommandBuffer cmd = CommandBufferPool.Get(m_ProfilerTag);
@@ -114,14 +124,79 @@ namespace VolumetricLights {
 
             }
 
-            /// Cleanup any allocated resources that were created during the execution of this render pass.
-            public override void FrameCleanup(CommandBuffer cmd) {
+#if UNITY_2023_3_OR_NEWER
+
+            class PassData {
+                public RendererListHandle rendererListHandle;
+                public UniversalCameraData cameraData;
             }
+
+            public override void RecordRenderGraph(RenderGraph renderGraph, ContextContainer frameData) {
+
+                using (var builder = renderGraph.AddUnsafePass<PassData>(m_ProfilerTag, out var passData)) {
+
+                    builder.AllowPassCulling(false);
+
+                    UniversalResourceData resourceData = frameData.Get<UniversalResourceData>();
+                    UniversalRenderingData renderingData = frameData.Get<UniversalRenderingData>();
+                    UniversalLightData lightData = frameData.Get<UniversalLightData>();
+                    UniversalCameraData cameraData = frameData.Get<UniversalCameraData>();
+                    passData.cameraData = cameraData;
+
+                    builder.UseTexture(resourceData.activeDepthTexture, AccessFlags.Read);
+                    ConfigureInput(ScriptableRenderPassInput.Depth);
+
+
+                    var sortingCriteria = SortingCriteria.CommonTransparent;
+                    var drawingSettings = CreateDrawingSettings(shaderTagIdList, renderingData, cameraData, lightData, sortingCriteria);
+                    var filterSettings = filteringSettings;
+                    filterSettings.renderingLayerMask = renderingLayer;
+                    RendererListParams listParams = new RendererListParams(renderingData.cullResults, drawingSettings, filterSettings);
+                    passData.rendererListHandle = renderGraph.CreateRendererList(listParams);
+
+                    builder.UseRendererList(passData.rendererListHandle);
+
+                    builder.SetRenderFunc((PassData passData, UnsafeGraphContext context) => {
+
+                        CommandBuffer cmd = CommandBufferHelpers.GetNativeCommandBuffer(context.cmd);
+
+                        RenderTextureDescriptor lightBufferDesc = passData.cameraData.cameraTargetDescriptor;
+                        lightBufferDesc.width = GetScaledSize(lightBufferDesc.width, settings.downscaling);
+                        lightBufferDesc.height = GetScaledSize(lightBufferDesc.height, settings.downscaling);
+                        lightBufferDesc.depthBufferBits = 0;
+                        lightBufferDesc.useMipMap = false;
+                        lightBufferDesc.msaaSamples = 1;
+
+                        cmd.GetTemporaryRT(ShaderParams.LightBuffer, lightBufferDesc, FilterMode.Bilinear);
+                        RenderTargetIdentifier rti = new RenderTargetIdentifier(ShaderParams.LightBuffer, 0, CubemapFace.Unknown, -1);
+                        cmd.SetRenderTarget(rti);
+                        cmd.ClearRenderTarget(false, true, new Color(0, 0, 0, 0));
+
+                        cmd.SetGlobalInt(ShaderParams.ForcedInvisible, 0);
+                        if ((settings.downscaling <= 1f && settings.blurPasses < 1) || VolumetricLight.volumetricLights.Count == 0) {
+                            return;
+                        }
+
+                        foreach (VolumetricLight vl in VolumetricLight.volumetricLights) {
+                            if (vl != null && vl.meshRenderer != null) {
+                                vl.meshRenderer.renderingLayerMask = renderingLayer;
+                            }
+                        }
+
+                        cmd.DrawRendererList(passData.rendererListHandle);
+                        cmd.SetGlobalTexture(ShaderParams.LightBuffer, rti);
+                    });
+                }
+            }
+#endif
+
         }
 
 
 
         class BlurRenderPass : ScriptableRenderPass {
+
+            const string m_strProfilerTag = "Volumetric Lights Render Feature";
 
             enum Pass {
                 BlurHorizontal = 0,
@@ -132,14 +207,26 @@ namespace VolumetricLights {
                 BlurVerticalFinal = 5
             }
 
+            class PassData {
+#if UNITY_2022_3_OR_NEWER
+                public RTHandle source;
+#else
+                public RenderTargetIdentifier source;
+#endif
+#if UNITY_2023_3_OR_NEWER
+                public TextureHandle colorTexture;
+#endif
+            }
+
 
             ScriptableRenderer renderer;
-            Material mat;
-            RenderTextureDescriptor rtSourceDesc;
-            VolumetricLightsRenderFeature settings;
+            static Material mat;
+            static RenderTextureDescriptor sourceDesc;
+            static VolumetricLightsRenderFeature settings;
+            readonly PassData passData = new PassData();
 
             public void Setup(Shader shader, ScriptableRenderer renderer, VolumetricLightsRenderFeature settings) {
-                this.settings = settings;
+                BlurRenderPass.settings = settings;
                 this.renderPassEvent = settings.renderPassEvent;
                 this.renderer = renderer;
                 if (mat == null) {
@@ -183,11 +270,62 @@ namespace VolumetricLights {
                 }
             }
 
+#if UNITY_2023_3_OR_NEWER
+            [Obsolete]
+#endif
             public override void Configure(CommandBuffer cmd, RenderTextureDescriptor cameraTextureDescriptor) {
-                rtSourceDesc = cameraTextureDescriptor;
+                sourceDesc = cameraTextureDescriptor;
+                ConfigureInput(ScriptableRenderPassInput.Depth);
             }
 
+#if UNITY_2023_3_OR_NEWER
+            [Obsolete]
+#endif
             public override void Execute(ScriptableRenderContext context, ref RenderingData renderingData) {
+
+#if UNITY_2022_1_OR_NEWER
+                passData.source = renderer.cameraColorTargetHandle;
+#else
+                passData.source = renderer.cameraColorTarget;
+#endif
+                CommandBuffer cmd = CommandBufferPool.Get(m_strProfilerTag);
+                ExecutePass(passData, cmd);
+                context.ExecuteCommandBuffer(cmd);
+
+                CommandBufferPool.Release(cmd);
+            }
+
+#if UNITY_2023_3_OR_NEWER
+
+            public override void RecordRenderGraph(RenderGraph renderGraph, ContextContainer frameData) {
+
+                using (var builder = renderGraph.AddUnsafePass<PassData>(m_strProfilerTag, out var passData)) {
+
+                    builder.AllowPassCulling(false);
+
+                    UniversalResourceData resourceData = frameData.Get<UniversalResourceData>();
+                    UniversalRenderingData renderingData = frameData.Get<UniversalRenderingData>();
+                    UniversalLightData lightData = frameData.Get<UniversalLightData>();
+                    UniversalCameraData cameraData = frameData.Get<UniversalCameraData>();
+                    passData.colorTexture = resourceData.activeColorTexture;
+
+                    builder.UseTexture(resourceData.activeColorTexture, AccessFlags.ReadWrite);
+
+                    builder.UseTexture(resourceData.activeDepthTexture, AccessFlags.Read);
+                    ConfigureInput(ScriptableRenderPassInput.Depth);
+
+                    sourceDesc = cameraData.cameraTargetDescriptor;
+
+                    builder.SetRenderFunc((PassData passData, UnsafeGraphContext context) => {
+                        CommandBuffer cmd = CommandBufferHelpers.GetNativeCommandBuffer(context.cmd);
+                        passData.source = passData.colorTexture;
+                        ExecutePass(passData, cmd);
+                    });
+                }
+            }
+#endif
+
+            static void ExecutePass(PassData passData, CommandBuffer cmd) {
 
                 if (settings.downscaling <= 1f && settings.blurPasses < 1) {
                     Cleanup();
@@ -195,18 +333,16 @@ namespace VolumetricLights {
                 }
 
 #if UNITY_2022_1_OR_NEWER
-                RTHandle source = renderer.cameraColorTargetHandle;
+                RTHandle source = passData.source;
 #else
-                RenderTargetIdentifier source = renderer.cameraColorTarget;
+                RenderTargetIdentifier source = passData.source;
 #endif
-
-                var cmd = CommandBufferPool.Get("Volumetric Lights Render Feature");
 
                 cmd.SetGlobalInt(ShaderParams.ForcedInvisible, 1);
 
-                RenderTextureDescriptor rtBlurDesc = rtSourceDesc;
-                rtBlurDesc.width = GetScaledSize(rtSourceDesc.width, settings.downscaling);
-                rtBlurDesc.height = GetScaledSize(rtSourceDesc.height, settings.downscaling);
+                RenderTextureDescriptor rtBlurDesc = sourceDesc;
+                rtBlurDesc.width = GetScaledSize(sourceDesc.width, settings.downscaling);
+                rtBlurDesc.height = GetScaledSize(sourceDesc.height, settings.downscaling);
                 rtBlurDesc.useMipMap = false;
                 rtBlurDesc.colorFormat = settings.blurHDR ? RenderTextureFormat.ARGBHalf : RenderTextureFormat.ARGB32;
                 rtBlurDesc.msaaSamples = 1;
@@ -249,14 +385,11 @@ namespace VolumetricLights {
                 if (usingDownscaling) {
                     cmd.ReleaseTemporaryRT(ShaderParams.DownsampledDepth);
                 }
-                context.ExecuteCommandBuffer(cmd);
-
-                CommandBufferPool.Release(cmd);
             }
 
             static Mesh _fullScreenMesh;
 
-            Mesh fullscreenMesh {
+            static Mesh fullscreenMesh {
                 get {
                     if (_fullScreenMesh != null) {
                         return _fullScreenMesh;
@@ -283,19 +416,14 @@ namespace VolumetricLights {
                 }
             }
 
-            void FullScreenBlit(CommandBuffer cmd, RenderTargetIdentifier source, RenderTargetIdentifier destination, Material material, int passIndex) {
+            static void FullScreenBlit(CommandBuffer cmd, RenderTargetIdentifier source, RenderTargetIdentifier destination, Material material, int passIndex) {
                 destination = new RenderTargetIdentifier(destination, 0, CubemapFace.Unknown, -1);
                 cmd.SetRenderTarget(destination);
                 cmd.SetGlobalTexture(ShaderParams.MainTex, source);
                 cmd.DrawMesh(fullscreenMesh, Matrix4x4.identity, material, 0, passIndex);
             }
 
-            /// Cleanup any allocated resources that were created during the execution of this render pass.
-            public override void FrameCleanup(CommandBuffer cmd) {
-            }
-
-
-            public void Cleanup() {
+            public static void Cleanup() {
                 CoreUtils.Destroy(mat);
                 Shader.SetGlobalInt(ShaderParams.ForcedInvisible, 0);
             }
@@ -333,7 +461,7 @@ namespace VolumetricLights {
         void OnDisable() {
             installed = false;
             if (blurRenderPass != null) {
-                blurRenderPass.Cleanup();
+                BlurRenderPass.Cleanup();
             }
             Shader.SetGlobalFloat(ShaderParams.Downscaling, 0);
         }
@@ -371,7 +499,7 @@ namespace VolumetricLights {
             bool isActive = downscaling > 1f || blurPasses > 0;
             Shader.SetGlobalInt(ShaderParams.ForcedInvisible, isActive ? 1 : 0);
             Shader.SetGlobalFloat(ShaderParams.Downscaling, downscaling - 1f);
-			
+
             vlRenderPass.Setup(this);
             blurRenderPass.Setup(shader, renderer, this);
             renderer.EnqueuePass(vlRenderPass);

@@ -3,7 +3,7 @@
 
 #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
 
-#ifndef SHADER_API_PS4
+#if !defined(SHADER_API_PS5) && !defined(SHADER_API_PS4)
 CBUFFER_START(UnityPerMaterial)
 #endif
 
@@ -26,8 +26,9 @@ half4 _Color;
 float4 _AreaExtents;
 half4 _ParticleLightColor;
 float _ParticleDistanceAtten;
+float _NearClipDistance;
 
-#ifndef SHADER_API_PS4
+#if !defined(SHADER_API_PS5) && !defined(SHADER_API_PS4)
 CBUFFER_END
 #endif
 

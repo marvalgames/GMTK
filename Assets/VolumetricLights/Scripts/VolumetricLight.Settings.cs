@@ -116,6 +116,7 @@ namespace VolumetricLights {
         public float penumbra = 0.5f;
 
         [Tooltip("Radius of the tip of the cone. Only applies to spot lights.")] public float tipRadius;
+        public float nearClipDistance;
         [Tooltip("Custom cookie texture (RGB).")] public Texture2D cookieTexture;
 
         public Vector2 cookieScale = Vector2.one;
@@ -140,10 +141,13 @@ namespace VolumetricLights {
         public bool dustAutoToggle;
         [Tooltip("Distance to the light source at which the particule system is fully deactivated. Note that the distance is to the light position regardless of its light range or volume so you should consider the light area or range into this distance as well.")]
         public float dustDistanceDeactivation = 70f;
+        [Tooltip("Prewarms/populates dust when the volumetric light is enabled to ensure there're enough visible particles from start. Disabling this option can improve performance when many lights are activated at the same time.")]
+        public bool dustPrewarm = true;
 
         [Header("Shadow Occlusion")]
         public bool enableShadows;
         public float shadowIntensity = 0.7f;
+        public Color shadowColor = new Color(0, 0, 0, 1);
         [Tooltip("Enable translucent shadow map")]
         public bool shadowTranslucency;
         [Tooltip("Customizable intensity for the translucent map sampling")]
@@ -224,6 +228,7 @@ namespace VolumetricLights {
             if (shadowDirection == Vector3.zero) shadowDirection = Vector3.down; else shadowDirection.Normalize();
             shadowTranslucencyIntensity = Mathf.Max(0, shadowTranslucencyIntensity);
             directLightMultiplier = Mathf.Max(0, directLightMultiplier);
+            nearClipDistance = Mathf.Max(0, nearClipDistance);
 
             #endregion
 

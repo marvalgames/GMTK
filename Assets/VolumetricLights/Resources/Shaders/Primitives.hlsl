@@ -111,21 +111,23 @@ float ConeAttenuation(float3 wpos) {
     t = saturate(t);
 
     float3 projection = t * _ConeAxis.xyz;
-    float distSqr = dot(p - projection, p - projection);
+    float distSqr = dot2(p - projection);
 
     float maxDist = lerp(CONE_TIP_RADIUS, CONE_BASE_RADIUS, t);
     float maxDistSqr = maxDist * maxDist;
     float cone = (maxDistSqr - distSqr ) / (maxDistSqr * _Border);
     cone = saturate(cone);
 
-    t = dot2(p) / RANGE_SQR; // ensure light doesn't extend beyound spherical range
+    float t0 = dot2(p) / RANGE_SQR; // ensure light doesn't extend beyound spherical range
 
 #if VL_PHYSICAL_ATTEN
-    float t1 = t * _DistanceFallOff;
-    float atten = (1.0 - t) / dot(_FallOff, float3(1.0, t1, t1*t1));
+    float t1 = t0 * _DistanceFallOff;
+    float atten = (1.0 - t0) / dot(_FallOff, float3(1.0, t1, t1*t1));
 #else
-    float atten = 1.0 - (t * _DistanceFallOff);
+    float atten = 1.0 - (t0 * _DistanceFallOff);
 #endif
+
+    atten *= step(_NearClipDistance, t);
 
     cone *= saturate(atten);
     return cone;
@@ -135,6 +137,7 @@ float ConeAttenuation(float3 wpos) {
 float SphereAttenuation(float3 wpos) {
     float3 v = wpos - LIGHT_POS;
     float distSqr = dot2(v);
+
 #if VL_PHYSICAL_ATTEN
     float t = distSqr / RANGE_SQR;
     float t1 = t * _DistanceFallOff;
@@ -171,7 +174,7 @@ float AreaRectAttenuation(float3 wpos) {
 float AreaDiscAttenuation(float3 wpos) {
     float3 v = mul(unity_WorldToObject, float4(wpos, 1)).xyz;
     //v.z = max(v.z, 0); // abs(v);
-    float distSqr = dot(v.xy, v.xy);
+    float distSqr = dot2(v.xy);
 
     float maxDistSqr = _AreaExtents.x;
     float baseMultiplier = 1.0 + _AreaExtents.w * v.z;

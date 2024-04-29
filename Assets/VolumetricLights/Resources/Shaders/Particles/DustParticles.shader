@@ -57,6 +57,7 @@ Shader "VolumetricLights/DustParticles"
 		[HideInInspector] _ExtraGeoData("Extra Geo Data", Vector) = (1.0, 0, 0)
         [HideInInspector] _Border("Border", Float) = 0.1
         [HideInInspector] _DistanceFallOff("Length Falloff", Float) = 0
+        [HideInInspector] _NearClipDistance("Near Clip Distance", Float) = 0
         [HideInInspector] _FallOff("FallOff Physical", Vector) = (1.0, 2.0, 1.0)
         [HideInInspector] _ConeAxis("Cone Axis", Vector) = (0,0,0,0.5)
         [HideInInspector] _AreaExtents("Area Extents", Vector) = (0,0,0,1)

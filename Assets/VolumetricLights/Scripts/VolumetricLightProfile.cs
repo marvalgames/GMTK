@@ -164,6 +164,7 @@ namespace VolumetricLights {
 
         [Header("Spot Light")]
         [Tooltip("Radius of the tip of the cone. Only applies to spot lights.")] public float tipRadius;
+        public float nearClipDistance;
         [Tooltip("Custom cookie texture (RGB).")] public Texture2D cookieTexture;
 
         public Vector2 cookieScale = Vector2.one;
@@ -189,10 +190,13 @@ namespace VolumetricLights {
         public bool dustAutoToggle;
         [Tooltip("Distance to the light source at which the particule system is fully deactivated. Note that the distance is to the light position regardless of its light range or volume so you should consider the light area or range into this distance as well.")]
         public float dustDistanceDeactivation = 70f;
+        [Tooltip("Prewarms/populates dust when the volumetric light is enabled to ensure there're enough visible particles from start. Disabling this option can improve performance when many lights are activated at the same time.")]
+        public bool dustPrewarm = true;
 
         [Header("Shadow Occlusion")]
         public bool enableShadows;
         public float shadowIntensity = 0.7f;
+        public Color shadowColor = new Color(0, 0, 0, 1);
         [Tooltip("Enable translucent shadow map")]
         public bool shadowTranslucency;
         [Tooltip("Customizable intensity for the translucent map sampling")]
@@ -244,6 +248,7 @@ namespace VolumetricLights {
             }
 
             tipRadius = Mathf.Max(0, tipRadius);
+            nearClipDistance = Mathf.Max(0, nearClipDistance);
             density = Mathf.Max(0, density);
             noiseScale = Mathf.Max(0.1f, noiseScale);
             diffusionIntensity = Mathf.Max(0, diffusionIntensity);
@@ -319,6 +324,7 @@ namespace VolumetricLights {
             vl.diffusionIntensity = diffusionIntensity;
             vl.penumbra = penumbra;
             vl.tipRadius = tipRadius;
+            vl.nearClipDistance = nearClipDistance;
             vl.cookieTexture = cookieTexture;
             vl.cookieScale = cookieScale;
             vl.cookieSpeed = cookieSpeed;
@@ -333,8 +339,10 @@ namespace VolumetricLights {
             vl.dustDistanceAttenuation = dustDistanceAttenuation;
             vl.dustAutoToggle = dustAutoToggle;
             vl.dustDistanceDeactivation = dustDistanceDeactivation;
+            vl.dustPrewarm = dustPrewarm;
             vl.enableShadows = enableShadows;
             vl.shadowIntensity = shadowIntensity;
+            vl.shadowColor = shadowColor;
             vl.shadowTranslucency = shadowTranslucency;
             vl.shadowTranslucencyIntensity = shadowTranslucencyIntensity;
             vl.shadowTranslucencyBlend = shadowTranslucencyBlend;
@@ -391,6 +399,7 @@ namespace VolumetricLights {
             diffusionIntensity = vl.diffusionIntensity;
             penumbra = vl.penumbra;
             tipRadius = vl.tipRadius;
+            nearClipDistance = vl.nearClipDistance;
             cookieTexture = vl.cookieTexture;
             cookieScale = vl.cookieScale;
             cookieOffset = vl.cookieOffset;
@@ -403,10 +412,12 @@ namespace VolumetricLights {
             dustMaxSize = vl.dustMaxSize;
             dustWindSpeed = vl.dustWindSpeed;
             dustDistanceAttenuation = vl.dustDistanceAttenuation;
+            dustPrewarm = vl.dustPrewarm;
             dustAutoToggle = vl.dustAutoToggle;
             dustDistanceDeactivation = vl.dustDistanceDeactivation;
             enableShadows = vl.enableShadows;
             shadowIntensity = vl.shadowIntensity;
+            shadowColor = vl.shadowColor;
             shadowTranslucency = vl.shadowTranslucency;
             shadowTranslucencyIntensity = vl.shadowTranslucencyIntensity;
             shadowTranslucencyBlend = vl.shadowTranslucencyBlend;

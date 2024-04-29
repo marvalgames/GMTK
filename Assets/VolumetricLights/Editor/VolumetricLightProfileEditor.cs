@@ -11,9 +11,9 @@ namespace VolumetricLights {
         SerializedProperty autoToggle, distanceStartDimming, distanceDeactivation, autoToggleCheckInterval;
         SerializedProperty useNoise, noiseTexture, noiseStrength, noiseScale, noiseFinalMultiplier, density, mediumAlbedo, brightness;
         SerializedProperty attenuationMode, attenCoefConstant, attenCoefLinear, attenCoefQuadratic, rangeFallOff, diffusionIntensity, penumbra;
-        SerializedProperty tipRadius, cookieTexture, cookieScale, cookieOffset, cookieSpeed, frustumAngle, windDirection;
-        SerializedProperty enableDustParticles, dustBrightness, dustMinSize, dustMaxSize, dustDistanceAttenuation, dustWindSpeed, dustAutoToggle, dustDistanceDeactivation;
-        SerializedProperty enableShadows, shadowIntensity, shadowTranslucency, shadowTranslucencyIntensity, shadowTranslucencyBlend, shadowResolution, shadowCullingMask, shadowBakeInterval, shadowNearDistance, shadowAutoToggle, shadowDistanceDeactivation;
+        SerializedProperty tipRadius, nearClipDistance, cookieTexture, cookieScale, cookieOffset, cookieSpeed, frustumAngle, windDirection;
+        SerializedProperty enableDustParticles, dustBrightness, dustMinSize, dustMaxSize, dustDistanceAttenuation, dustWindSpeed, dustAutoToggle, dustDistanceDeactivation, dustPrewarm;
+        SerializedProperty enableShadows, shadowIntensity, shadowColor, shadowTranslucency, shadowTranslucencyIntensity, shadowTranslucencyBlend, shadowResolution, shadowCullingMask, shadowBakeInterval, shadowNearDistance, shadowAutoToggle, shadowDistanceDeactivation;
 		SerializedProperty shadowBakeMode, shadowOrientation, shadowDirection;
 
         void OnEnable() {
@@ -55,6 +55,7 @@ namespace VolumetricLights {
             diffusionIntensity = serializedObject.FindProperty("diffusionIntensity");
             penumbra = serializedObject.FindProperty("penumbra");
             tipRadius = serializedObject.FindProperty("tipRadius");
+            nearClipDistance = serializedObject.FindProperty("nearClipDistance");
             cookieTexture = serializedObject.FindProperty("cookieTexture");
             cookieScale = serializedObject.FindProperty("cookieScale");
             cookieOffset = serializedObject.FindProperty("cookieOffset");
@@ -69,8 +70,10 @@ namespace VolumetricLights {
             dustDistanceAttenuation = serializedObject.FindProperty("dustDistanceAttenuation");
             dustAutoToggle = serializedObject.FindProperty("dustAutoToggle");
             dustDistanceDeactivation = serializedObject.FindProperty("dustDistanceDeactivation");
+            dustPrewarm = serializedObject.FindProperty("dustPrewarm");
             enableShadows = serializedObject.FindProperty("enableShadows");
             shadowIntensity = serializedObject.FindProperty("shadowIntensity");
+            shadowColor = serializedObject.FindProperty("shadowColor");
             shadowTranslucency = serializedObject.FindProperty("shadowTranslucency");
             shadowTranslucencyIntensity = serializedObject.FindProperty("shadowTranslucencyIntensity");
             shadowTranslucencyBlend = serializedObject.FindProperty("shadowTranslucencyBlend");
@@ -166,6 +169,7 @@ namespace VolumetricLights {
             EditorGUILayout.PropertyField(penumbra);
 
             EditorGUILayout.PropertyField(tipRadius);
+            EditorGUILayout.PropertyField(nearClipDistance);
             EditorGUILayout.PropertyField(cookieTexture, new GUIContent("Cookie Texture (RGB)", "Assign any colored or grayscale texture. RGB values drive the color tint."));
             if (cookieTexture.objectReferenceValue != null) {
                 EditorGUI.indentLevel++;
@@ -184,6 +188,7 @@ namespace VolumetricLights {
             if (enableShadows.boolValue) {
                 EditorGUI.indentLevel++;
                 EditorGUILayout.PropertyField(shadowIntensity, new GUIContent("Intensity"));
+                EditorGUILayout.PropertyField(shadowColor, new GUIContent("Color"));
                 EditorGUILayout.PropertyField(shadowTranslucency, new GUIContent("Translucency"));
                 if (shadowTranslucency.boolValue) {
                     EditorGUI.indentLevel++;
@@ -226,6 +231,7 @@ namespace VolumetricLights {
                     EditorGUILayout.PropertyField(dustDistanceDeactivation, new GUIContent("Distance"));
                     EditorGUI.indentLevel--;
                 }
+                EditorGUILayout.PropertyField(dustPrewarm, new GUIContent("Prewarm"));
                 EditorGUI.indentLevel--;
             }
 
