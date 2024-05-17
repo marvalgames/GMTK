@@ -54,14 +54,14 @@ internal class QSettingsEditor : PropertyDrawer {
             EditorGUI.LabelField(rect, GetName(elemType), EditorStyles.boldLabel);
         };
 
-        reorderableList.onAddCallback = (list) => { var menu = new GenericMenu();
-
+        reorderableList.onAddCallback = (list) => {
+            var menu = new GenericMenu();
             foreach (var type in _availableRenderers[injectionPoint]) {
                 if (!elements.Contains(type.AssemblyQualifiedName))
                     menu.AddItem(new GUIContent(GetName(type)), false, () => {
                         Undo.RegisterCompleteObjectUndo(feature, $"Added {type} Custom Post Process");
                         elements.Add(type.AssemblyQualifiedName);
-                        forceRecreate(feature); // This is done since OnValidate doesn't get called.
+                        ForceRecreate(feature); // This is done since OnValidate doesn't get called.
                     });
             }
 
@@ -70,17 +70,18 @@ internal class QSettingsEditor : PropertyDrawer {
             menu.ShowAsContext();
             EditorUtility.SetDirty(feature);
         };
+
         reorderableList.onRemoveCallback = (list) => {
             Undo.RegisterCompleteObjectUndo(feature, $"Removed {list.list[list.index]} Custom Post Process");
             elements.RemoveAt(list.index);
             EditorUtility.SetDirty(feature);
-            forceRecreate(feature); // This is done since OnValidate doesn't get called.
+            ForceRecreate(feature); // This is done since OnValidate doesn't get called.
         };
         reorderableList.elementHeightCallback = _ =>
             EditorGUIUtility.singleLineHeight + EditorGUIUtility.standardVerticalSpacing;
         reorderableList.onReorderCallback = (list) => {
             EditorUtility.SetDirty(feature);
-            forceRecreate(feature); // This is done since OnValidate doesn't get called.
+            ForceRecreate(feature); // This is done since OnValidate doesn't get called.
         };
     }
 
@@ -96,8 +97,8 @@ internal class QSettingsEditor : PropertyDrawer {
             Debug.Assert(feature != null, nameof(feature) + " != null");
             InitList(ref state.listAfterOpaqueAndSky, feature.settings.renderersAfterOpaqueAndSky,
                      "After Opaque and Sky", InjectionPoint.AfterOpaqueAndSky, feature);
-            InitList(ref state.listBeforePostProcess, feature.settings.renderersBeforePostProcess,
-                     "Effects", InjectionPoint.BeforePostProcess, feature); // "Before Post Process"
+            InitList(ref state.listBeforePostProcess, feature.settings.renderersBeforePostProcess, "Effects",
+                     InjectionPoint.BeforePostProcess, feature); // "Before Post Process"
             InitList(ref state.listAfterPostProcess, feature.settings.renderersAfterPostProcess, "After Post Process",
                      InjectionPoint.AfterPostProcess, feature); // "After Post Process"
             _propertyStates.Add(path, state);
@@ -117,11 +118,9 @@ internal class QSettingsEditor : PropertyDrawer {
         state.listAfterOpaqueAndSky.DoLayoutList();
 #endif
 // #if Q_BEFORE_POST_PROCESS
-        EditorGUILayout.Space();
         state.listBeforePostProcess.DoLayoutList();
 // #endif
 #if Q_AFTER_POST_PROCESS
-        EditorGUILayout.Space();
         state.listAfterPostProcess.DoLayoutList();
 #endif
         if (EditorGUI.EndChangeCheck()) {
@@ -136,7 +135,7 @@ internal class QSettingsEditor : PropertyDrawer {
     /// Force recreating the render feature
     /// </summary>
     /// <param name="feature">The render feature to recreate</param>
-    private void forceRecreate(QuibliPostProcess feature) {
+    private void ForceRecreate(QuibliPostProcess feature) {
         feature.Create();
     }
 
@@ -145,8 +144,7 @@ internal class QSettingsEditor : PropertyDrawer {
     /// </summary>
     private void PopulateRenderers() {
         if (_availableRenderers != null) return;
-        _availableRenderers = new Dictionary<InjectionPoint, List<Type>>()
-        {
+        _availableRenderers = new Dictionary<InjectionPoint, List<Type>>() {
             { InjectionPoint.AfterOpaqueAndSky, new List<Type>() },
             { InjectionPoint.BeforePostProcess, new List<Type>() },
             { InjectionPoint.AfterPostProcess, new List<Type>() }

@@ -1,6 +1,15 @@
 ﻿#ifndef __HEIGHTSTAMPFILTERING__
 #define __HEIGHTSTAMPFILTERING__
 
+#if _COMPUTESHADER
+    #define SAMPLE(tex, samp, uv) tex.SampleLevel(samp, uv, 0)
+#else
+    #if _REQUIRELODSAMPLER
+        #define SAMPLE(tex, samp, uv) tex.SampleLevel(samp, uv, 0)
+    #else
+        #define SAMPLE(tex, samp, uv) tex.Sample(samp, uv)
+    #endif
+#endif
 
 sampler2D _FalloffTexture;
 float2 _Falloff;
@@ -119,16 +128,13 @@ float ComputeFalloff(float2 uv, float2 stampUV, float2 noiseUV, float noise)
     // not else, goes on top..
     #if _USEFALLOFFPAINTAREA
     {
-        float2 worldPosition = uv * _TerrainSize.xz;
+        float2 worldPosition = noiseUV * _TerrainSize.xz;
         float3 localPos = mul(_PaintAreaMatrix, float4(worldPosition.x, 0, worldPosition.y, 1)).xyz;
         float2 luv = float2(localPos.x + 0.5, localPos.z + 0.5);
-        float falloffSample = _PaintAreaFalloffTexture.Sample(shared_linear_clamp, luv).r;
+        float falloffSample = SAMPLE(_PaintAreaFalloffTexture, shared_linear_clamp, luv).r;
         falloff *= falloffSample;
         if (_PaintAreaClamp > 0.5)
-        {
-            if (luv.x <= 0 || luv.y <= 0 || luv.x >= 1 || luv.y >= 1)
-               falloff = 0;
-        }
+            falloff *= RectFalloff(luv, 1);
     }
     #endif
 

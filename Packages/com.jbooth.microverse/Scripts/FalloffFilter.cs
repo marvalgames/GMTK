@@ -132,6 +132,10 @@ namespace JBooth.MicroVerseCore
                     RenderTexture.ReleaseTemporary(rt);
                     Pack();
                 }
+                else if (texture == null)
+                    size = newSize;
+                
+
             }
 
             public void Fill(float val)
@@ -141,9 +145,9 @@ namespace JBooth.MicroVerseCore
                     Unpack();
                 }
                 Color c = new Color(val, 0, 0, 0);
-                for (int x = 0; x < (int)size; ++x)
+                for (int x = 0; x < texture.width; ++x)
                 {
-                    for (int y = 0; y < (int)size; ++y)
+                    for (int y = 0; y < texture.height; ++y)
                     {
                         texture.SetPixel(x, y, c);
                     }
@@ -186,17 +190,18 @@ namespace JBooth.MicroVerseCore
             {
                 if (texture == null)
                     Unpack();
-                int isize = (int)size;
-                int bx = Mathf.RoundToInt(Mathf.Clamp(x * isize - brushSize, 0, isize));
-                int by = Mathf.RoundToInt(Mathf.Clamp(y * isize - brushSize, 0, isize));
-                int tx = Mathf.RoundToInt(Mathf.Clamp(x * isize + brushSize, 0, isize));
-                int ty = Mathf.RoundToInt(Mathf.Clamp(y * isize + brushSize, 0, isize));
+                int isize = texture.width;
+                float brushSizeMult = brushSize * ((float)isize / 512);
+                int bx = Mathf.RoundToInt(Mathf.Clamp(x * isize - brushSizeMult, 0, isize));
+                int by = Mathf.RoundToInt(Mathf.Clamp(y * isize - brushSizeMult, 0, isize));
+                int tx = Mathf.RoundToInt(Mathf.Clamp(x * isize + brushSizeMult, 0, isize));
+                int ty = Mathf.RoundToInt(Mathf.Clamp(y * isize + brushSizeMult, 0, isize));
 
                 for (int xp = bx; xp < tx; ++xp)
                 {
                     for (int yp = by; yp < ty; ++yp)
                     {
-                        float w = Vector2.Distance(new Vector2(x * isize, y * isize), new Vector2(xp, yp)) / brushSize;
+                        float w = Vector2.Distance(new Vector2(x * isize, y * isize), new Vector2(xp, yp)) / brushSizeMult;
                         w = 1 - Mathf.Clamp01(w);
                         w = Mathf.Pow(w, brushFalloff);
                         w *= brushFlow;
@@ -217,7 +222,7 @@ namespace JBooth.MicroVerseCore
                 if (texture == null)
                     Unpack();
 
-                int isize = (int)size;
+                int isize = texture.width;
                 int bx = Mathf.RoundToInt(Mathf.Clamp(x * isize - brushSize, 0, isize));
                 int by = Mathf.RoundToInt(Mathf.Clamp(y * isize - brushSize, 0, isize));
                 int tx = Mathf.RoundToInt(Mathf.Clamp(x * isize + brushSize, 0, isize));
@@ -344,7 +349,7 @@ namespace JBooth.MicroVerseCore
                 keywords.Add("_USEFALLOFFPAINTAREA");
                 if (useFilter.paintArea.paintMask.texture == null)
                     useFilter.paintArea.paintMask.Unpack();
-
+ 
                 mat.SetTexture(_PaintAreaFalloffTexture, useFilter.paintArea.paintMask.texture);
                 mat.SetMatrix(_PaintAreaMatrix, useFilter.paintArea.transform.worldToLocalMatrix);
                 mat.SetFloat(_PaintAreaClamp, useFilter.paintArea.clampOutsideOfBounds ? 1.0f : 0.0f);

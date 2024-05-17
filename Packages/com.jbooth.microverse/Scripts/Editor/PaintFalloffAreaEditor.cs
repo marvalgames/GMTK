@@ -8,7 +8,7 @@ namespace JBooth.MicroVerseCore
     [CustomEditor(typeof(PaintFalloffArea))]
     public class PaintFalloffAreaEditor : Editor
     {
-
+        static GUIContent CTextureSize = new GUIContent("Texture Size", "Size of the backing texture");
         public override void OnInspectorGUI()
         {
             GUIUtil.DrawHeaderLogo();
@@ -16,6 +16,14 @@ namespace JBooth.MicroVerseCore
             PaintFalloffArea area = target as PaintFalloffArea;
             EditorGUI.BeginChangeCheck();
             EditorGUILayout.PropertyField(serializedObject.FindProperty("clampOutsideOfBounds"));
+            EditorGUI.BeginChangeCheck();
+            var size = (FalloffFilter.PaintMask.Size)EditorGUILayout.EnumPopup(CTextureSize, area.paintMask.size);
+
+            if (EditorGUI.EndChangeCheck())
+            {
+                Undo.RecordObject(area, "Adjust Falloff");
+                area.paintMask.Resize(size);
+            }
             GUIUtil.DoPaintGUI(area, area.paintMask);
 
             serializedObject.ApplyModifiedProperties();

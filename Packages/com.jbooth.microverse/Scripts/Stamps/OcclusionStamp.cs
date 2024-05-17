@@ -63,7 +63,6 @@ namespace JBooth.MicroVerseCore
 
             keywordBuilder.Add("_RECONSTRUCTNORMAL");
             filterSet.PrepareTransform(this.transform, od.terrain, material, keywords, GetTerrainScalingFactor(od.terrain));
-            
         }
 
         void Render(OcclusionData od)
@@ -86,6 +85,7 @@ namespace JBooth.MicroVerseCore
             }
             keywordBuilder.Clear();
             PrepareMaterial(material, od, keywordBuilder.keywords);
+            filterSet.PrepareMaterial(transform, material, keywordBuilder.keywords);
             keywordBuilder.Assign(material);
             material.SetVector("_Mask", new Vector4(occludeHeightWeight, 0, 0, 0));
             Render(od);
@@ -101,6 +101,7 @@ namespace JBooth.MicroVerseCore
             }
             keywordBuilder.Clear();
             keywordBuilder.Add("_ISSPLAT");
+            filterSet.PrepareMaterial(transform, material, keywordBuilder.keywords);
             PrepareMaterial(material, od, keywordBuilder.keywords);
             keywordBuilder.Assign(material);
             // we don't render into the occlusion mask, because splat layers
@@ -117,6 +118,14 @@ namespace JBooth.MicroVerseCore
 #if __MICROVERSE_VEGETATION__ || __MICROVERSE_OBJECTS__
         public bool OccludesOthers() { return true; }
         public bool NeedSDF() { return false; }
+
+
+        static int _Heightmap = Shader.PropertyToID("_Heightmap");
+        static int _Normalmap = Shader.PropertyToID("_Normalmap");
+        static int _Curvemap = Shader.PropertyToID("_Curvemap");
+        static int _Flowmap = Shader.PropertyToID("_Flowmap");
+        static int _IndexMap = Shader.PropertyToID("_IndexMap");
+        static int _WeightMap = Shader.PropertyToID("_WeightMap");
 #endif
 
 #if __MICROVERSE_VEGETATION__
@@ -130,6 +139,21 @@ namespace JBooth.MicroVerseCore
 
             keywordBuilder.Clear();
             PrepareMaterial(material, od, keywordBuilder.keywords);
+            filterSet.PrepareMaterial(transform, material, keywordBuilder.keywords);
+
+            var textureLayerWeights = filterSet.GetTextureWeights(vd.terrain.terrainData.terrainLayers);
+            material.SetVectorArray("_TextureLayerWeights", textureLayerWeights);
+            material.SetTexture(_Heightmap, vd.heightMap);
+            material.SetTexture(_Normalmap, vd.normalMap);
+            material.SetTexture(_Curvemap, vd.curveMap);
+            material.SetTexture(_Flowmap, vd.flowMap);
+            material.SetTexture(_IndexMap, vd.dataCache.indexMaps[vd.terrain]);
+            material.SetTexture(_WeightMap, vd.dataCache.weightMaps[vd.terrain]);
+
+            keywordBuilder.Assign(material);
+            
+
+
             keywordBuilder.Assign(material);
 
             material.SetVector("_Mask", new Vector4(0, 0, occludeTreeWeight, 0));
@@ -159,8 +183,16 @@ namespace JBooth.MicroVerseCore
             }
             keywordBuilder.Clear();
             PrepareMaterial(material, od, keywordBuilder.keywords);
+            filterSet.PrepareMaterial(transform, material, keywordBuilder.keywords);
             keywordBuilder.Assign(material);
-
+            var textureLayerWeights = filterSet.GetTextureWeights(dd.terrain.terrainData.terrainLayers);
+            material.SetVectorArray("_TextureLayerWeights", textureLayerWeights);
+            material.SetTexture(_Heightmap, dd.heightMap);
+            material.SetTexture(_Normalmap, dd.normalMap);
+            material.SetTexture(_Curvemap, dd.curveMap);
+            material.SetTexture(_Flowmap, dd.flowMap);
+            material.SetTexture(_IndexMap, dd.dataCache.indexMaps[dd.terrain]);
+            material.SetTexture(_WeightMap, dd.dataCache.weightMaps[dd.terrain]);
             material.SetVector("_Mask", new Vector4(0, 0, 0, occludeDetailWeight));
             Render(od);
         }
@@ -236,7 +268,17 @@ namespace JBooth.MicroVerseCore
             }
             keywordBuilder.Clear();
             PrepareMaterial(material, od, keywordBuilder.keywords);
+            filterSet.PrepareMaterial(transform, material, keywordBuilder.keywords);
             keywordBuilder.Assign(material);
+
+            var textureLayerWeights = filterSet.GetTextureWeights(td.terrain.terrainData.terrainLayers);
+            material.SetVectorArray("_TextureLayerWeights", textureLayerWeights);
+            material.SetTexture(_Heightmap, td.heightMap);
+            material.SetTexture(_Normalmap, td.normalMap);
+            material.SetTexture(_Curvemap, td.curveMap);
+            material.SetTexture(_Flowmap, td.flowMap);
+            material.SetTexture(_IndexMap, td.indexMap);
+            material.SetTexture(_WeightMap, td.weightMap);
 
             material.SetVector("_Mask", new Vector4(occludeObjectWeight, 0, 0, 0));
             RenderTexture temp = RenderTexture.GetTemporary(od.objectMask.descriptor);

@@ -71,7 +71,7 @@ public class ReadmeEditor : Editor {
                                                 MessageType.Info);
                     } else {
                         EditorGUILayout
-                            .HelpBox($"Update needed. " + $"The latest version is {_versionLatest}, but you have {_readme.AssetVersion}.",
+                            .HelpBox($"Update needed. The latest version is {{_versionLatest}}, but you have {{_readme.AssetVersion}}.",
                                      MessageType.Warning);
                     }
                 }
@@ -350,15 +350,11 @@ public class ReadmeEditor : Editor {
     }
 
     private void CheckVersion() {
-        NetworkManager.GetVersion(version => { _versionLatest = version; });
+        NetworkManager.GetVersion(version => { _versionLatest = version.Trim(); });
     }
 
     private void OpenSupportTicketGitHub() {
         Application.OpenURL("https://github.com/dustyroom-studio/quibli-doc/issues/new/choose");
-    }
-
-    private void OpenSupportTicketTrello() {
-        Application.OpenURL("https://trello.com/b/tOhjxOib/quibli-support");
     }
 
     private void OpenDocumentation() {
@@ -372,9 +368,11 @@ public class ReadmeEditor : Editor {
     private void DrawColorSpaceCheck() {
         if (PlayerSettings.colorSpace != ColorSpace.Linear) {
             DrawUILine(Color.gray, 1, 20);
-            EditorGUILayout
-                .HelpBox($"{AssetName} demo scenes were created for the Linear color space, but your project is using {PlayerSettings.colorSpace}.\nThis may result in the demo scenes appearing slightly different compared to the Asset Store screenshots.\nOptionally, you may switch the color space using the button below.",
-                         MessageType.Warning);
+            var m = $"{AssetName} demo scenes were created for the Linear color space, but your project is using " +
+                    $"{PlayerSettings.colorSpace}.\nThis may result in the demo scenes appearing slightly different " +
+                    $"compared to the Asset Store screenshots.\nOptionally, you may switch the color space using the " +
+                    $"button below.";
+            EditorGUILayout.HelpBox(m, MessageType.Warning);
 
             if (GUILayout.Button("Switch player settings to Linear color space")) {
                 PlayerSettings.colorSpace = ColorSpace.Linear;

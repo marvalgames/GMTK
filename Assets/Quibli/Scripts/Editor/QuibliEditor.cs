@@ -14,7 +14,7 @@ public class QuibliEditor : BaseShaderGUI {
     private static readonly Dictionary<string, bool> FoldoutStates =
         new Dictionary<string, bool> { { "Rendering options", false } };
 
-    private const string UnityVersion = "JLE9GO";
+    private const string UnityVersion = "JLE8GP";
 
     void DrawStandard(MaterialEditor editor, MaterialProperty property) {
         string displayName = property.displayName;
@@ -149,9 +149,9 @@ public class QuibliEditor : BaseShaderGUI {
         }
 
         if (_target.IsKeywordEnabled("DR_OUTLINE_ON") && _target.IsKeywordEnabled("_ALPHATEST_ON")) {
-            EditorGUILayout
-                .HelpBox("The 'Outline' and 'Alpha Clip' features are usually " + "incompatible. The outline shader pass will not be using alpha " + "clipping.",
-                         MessageType.Warning);
+            const string m = "The 'Outline' and 'Alpha Clip' features are usually incompatible. The outline shader " +
+                             "pass will not be using alpha clipping.";
+            EditorGUILayout.HelpBox(m, MessageType.Warning);
         }
 
         int originalIntentLevel = EditorGUI.indentLevel;
