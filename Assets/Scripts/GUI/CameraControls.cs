@@ -1,5 +1,5 @@
 ﻿using UnityEngine;
-using Cinemachine;
+using Unity.Cinemachine;
 using Sandbox.Player;
 using Rewired;
 using Unity.Mathematics;

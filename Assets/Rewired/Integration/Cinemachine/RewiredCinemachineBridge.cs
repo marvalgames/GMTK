@@ -114,7 +114,7 @@ namespace Rewired.Integration.Cinemachine {
         [System.NonSerialized]
         private readonly Dictionary<string, PlayerActionMapping> _mappings = new Dictionary<string, PlayerActionMapping>();
         [System.NonSerialized]
-        private global::Cinemachine.CinemachineCore.AxisInputDelegate _origAxisInputDelegate;
+        private global::Unity.Cinemachine.CinemachineCore.AxisInputDelegate _origAxisInputDelegate;
         [System.NonSerialized]
         private bool _initialized;
         
@@ -170,8 +170,8 @@ namespace Rewired.Integration.Cinemachine {
                 }
             }
 
-            _origAxisInputDelegate = global::Cinemachine.CinemachineCore.GetInputAxis;
-            global::Cinemachine.CinemachineCore.GetInputAxis = s_axisInputDelegate;
+            _origAxisInputDelegate = global::Unity.Cinemachine.CinemachineCore.GetInputAxis;
+            global::Unity.Cinemachine.CinemachineCore.GetInputAxis = s_axisInputDelegate;
 
             _initialized = true;
         }
@@ -179,8 +179,8 @@ namespace Rewired.Integration.Cinemachine {
         private void Deinitialize() {
             if(s_instance == this) s_instance = null;
             if(_mappings != null) _mappings.Clear();
-            if(global::Cinemachine.CinemachineCore.GetInputAxis == s_axisInputDelegate) {
-                global::Cinemachine.CinemachineCore.GetInputAxis = _origAxisInputDelegate;
+            if(global::Unity.Cinemachine.CinemachineCore.GetInputAxis == s_axisInputDelegate) {
+                global::Unity.Cinemachine.CinemachineCore.GetInputAxis = _origAxisInputDelegate;
             }
             _initialized = false;
         }
@@ -201,7 +201,7 @@ namespace Rewired.Integration.Cinemachine {
 #endif
 
         private static RewiredCinemachineBridge s_instance;
-        private static readonly global::Cinemachine.CinemachineCore.AxisInputDelegate s_axisInputDelegate = GetAxis;
+        private static readonly global::Unity.Cinemachine.CinemachineCore.AxisInputDelegate s_axisInputDelegate = GetAxis;
 
         private static float GetAxis(string name) {
             if(!ReInput.isReady || s_instance == null || !s_instance._initialized) return 0f;
