@@ -156,9 +156,15 @@
             #pragma multi_compile_fragment _ _LIGHT_COOKIES
             #pragma multi_compile _ _CLUSTERED_RENDERING
             #endif
-            #if UNITY_VERSION >= 202220
+            #if UNITY_VERSION >= 202220 && UNITY_VERSION < 600000
             #pragma multi_compile _ _FORWARD_PLUS
             #pragma multi_compile_fragment _ _WRITE_RENDERING_LAYERS
+            #endif
+            #if UNITY_VERSION >= 600000
+            #pragma multi_compile _ _FORWARD_PLUS
+            #include_with_pragmas "Packages/com.unity.render-pipelines.core/ShaderLibrary/FoveatedRenderingKeywords.hlsl"
+            #include_with_pragmas "Packages/com.unity.render-pipelines.universal/ShaderLibrary/ProbeVolumeVariants.hlsl"
+            #include_with_pragmas "Packages/com.unity.render-pipelines.universal/ShaderLibrary/RenderingLayers.hlsl"
             #endif
 
             // -------------------------------------

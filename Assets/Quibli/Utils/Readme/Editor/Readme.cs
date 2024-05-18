@@ -16,7 +16,7 @@ namespace Quibli {
 [ExecuteAlways]
 public class Readme : ScriptableObject {
     [NonSerialized]
-    public readonly string AssetVersion = "2.4.5";
+    public readonly string AssetVersion = "2.5.0";
     [NonSerialized]
     public bool? UrpInstalled;
     [NonSerialized]
