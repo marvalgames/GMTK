@@ -117,12 +117,12 @@ public class CameraControls : MonoBehaviour
             ChangeFov(modifier);
         }
 
-        if (player.GetAxis("RightHorizontal") >= .25)
+        if (player.GetAxis("RightHorizontal") <= -.25)
         {
             xAxisValue += Time.deltaTime * multiplierX;
             ChangeFov(modifier);
         }
-        else if (player.GetAxis("RightHorizontal") <= -.25)
+        else if (player.GetAxis("RightHorizontal") >= .25)
         {
             xAxisValue -= Time.deltaTime * multiplierX;
             ChangeFov(modifier);
