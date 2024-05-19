@@ -21,10 +21,13 @@ public class CameraControls : MonoBehaviour
     public Rewired.Player player;
     public int playerId = 0; // The Rewired player id of this character
     private bool changeX, changeY;
-    [Header("Free Look Rotation")] public CinemachineFreeLook freeLook;
-    public CinemachineFreeLook freeLookCombat;
-    public CinemachineInputAxisDriver xAxis;
-    public CinemachineInputAxisDriver yAxis;
+    [Header("Free Look Rotation")] public CinemachineVirtualCameraBase freeLook;
+
+    public CinemachineFollow follow;
+    //public CinemachineFreeLook freeLookCombat;
+    //public  DefaultInputAxisDriver xAxis;
+    //public DefaultInputAxisDriver   yAxis;
+    //[SerializeField] private CinemachineCameraOffset offset;
     public float minValueX = -360;
     public float maxValueX = 360;
     public float minHeight = 1;
@@ -43,40 +46,46 @@ public class CameraControls : MonoBehaviour
 
     [SerializeField] PlayerWeaponAim playerWeaponAimReference;
  
-    private void OnValidate()
-    {
-        xAxis.Validate();
-        yAxis.Validate();
-    }
-
-    private void Reset()
-    {
-        xAxis = new CinemachineInputAxisDriver
-        {
-            multiplier = -10f,
-            accelTime = 0.1f,
-            decelTime = 0.1f,
-            name = "Mouse X",
-        };
-        yAxis = new CinemachineInputAxisDriver
-        {
-            multiplier = 0.1f,
-            accelTime = 0.1f,
-            decelTime = 0.1f,
-            name = "Mouse Y",
-        };
-    }
+    // private void OnValidate()
+    // {
+    //     xAxis.Validate();
+    //     yAxis.Validate();
+    // }
+    //
+    // private void Reset()
+    // {
+    //     xAxis = new DefaultInputAxisDriver
+    //     {
+    //         
+    //         multiplier = -10f,
+    //         accelTime = 0.1f,
+    //         decelTime = 0.1f,
+    //         name = "Mouse X",
+    //     };
+    //     yAxis = new DefaultInputAxisDriver
+    //     {
+    //         multiplier = 0.1f,
+    //         accelTime = 0.1f,
+    //         decelTime = 0.1f,
+    //         name = "Mouse Y",
+    //     };
+    // }
 
 
     void Start()
     {
         if (!ReInput.isReady) return;
         player = ReInput.players.GetPlayer(playerId);
-        startHeight = freeLook.m_Orbits[1].m_Height;
-        startRadius = freeLook.m_Orbits[1].m_Radius;
+        startHeight = follow.FollowOffset.y;
+        xAxisValue = follow.FollowOffset.x;
+        //startHeight = offset.Offset.y;
+        //startRadius = offset.Offset.x;
         radiusValue = startRadius;
         heightY = startHeight;
         ChangeFov(false);
+        //offset = new CinemachineCameraOffset();
+        
+        
     }
 
     void LateUpdate()
@@ -146,18 +155,20 @@ public class CameraControls : MonoBehaviour
             if (changeX && !modifier)
             {
                 xAxisValue = math.clamp(xAxisValue, minValueX, maxValueX);
-                freeLook.m_XAxis.Value = xAxisValue;
+                follow.FollowOffset.x = xAxisValue;
+                //offset.Offset.x = xAxisValue;
             }
 
             if (changeY && !modifier)
             {
                 heightY = math.clamp(heightY, minHeight, maxHeight);
-                freeLook.m_Orbits[1].m_Height = heightY;
+                follow.FollowOffset.y = heightY;
+                //offset.Offset.y = heightY;
             }
             else if (changeY)
             {
                 radiusValue = math.clamp(radiusValue, minRadius, maxRadius);
-                freeLook.m_Orbits[1].m_Radius = radiusValue;
+                //freeLook.m_Orbits[1].m_Radius = radiusValue;
             }
             
         }
