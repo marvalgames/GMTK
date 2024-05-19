@@ -24,10 +24,6 @@ public class CameraControls : MonoBehaviour
     [Header("Free Look Rotation")] public CinemachineVirtualCameraBase freeLook;
 
     public CinemachineFollow follow;
-    //public CinemachineFreeLook freeLookCombat;
-    //public  DefaultInputAxisDriver xAxis;
-    //public DefaultInputAxisDriver   yAxis;
-    //[SerializeField] private CinemachineCameraOffset offset;
     public float minValueX = -360;
     public float maxValueX = 360;
     public float minHeight = 1;
@@ -41,37 +37,13 @@ public class CameraControls : MonoBehaviour
 
     private float startHeight;
     private float startRadius;
+    private Vector3 startRotationDamping;
     float radiusValue;
+    [SerializeField] bool aimMode;
 
 
     [SerializeField] PlayerWeaponAim playerWeaponAimReference;
  
-    // private void OnValidate()
-    // {
-    //     xAxis.Validate();
-    //     yAxis.Validate();
-    // }
-    //
-    // private void Reset()
-    // {
-    //     xAxis = new DefaultInputAxisDriver
-    //     {
-    //         
-    //         multiplier = -10f,
-    //         accelTime = 0.1f,
-    //         decelTime = 0.1f,
-    //         name = "Mouse X",
-    //     };
-    //     yAxis = new DefaultInputAxisDriver
-    //     {
-    //         multiplier = 0.1f,
-    //         accelTime = 0.1f,
-    //         decelTime = 0.1f,
-    //         name = "Mouse Y",
-    //     };
-    // }
-
-
     void Start()
     {
         if (!ReInput.isReady) return;
@@ -80,6 +52,7 @@ public class CameraControls : MonoBehaviour
         xAxisValue = follow.FollowOffset.x;
         //startHeight = offset.Offset.y;
         //startRadius = offset.Offset.x;
+        startRotationDamping = follow.TrackerSettings.RotationDamping;
         radiusValue = startRadius;
         heightY = startHeight;
         ChangeFov(false);
@@ -91,13 +64,23 @@ public class CameraControls : MonoBehaviour
     void LateUpdate()
     {
         var controller = player.controllers.GetLastActiveController();
-        var aimMode = false;
         var aimDisabled = false;
         if (playerWeaponAimReference)
         {
             aimMode = playerWeaponAimReference.aimMode;
             aimDisabled = playerWeaponAimReference.aimDisabled;
         }
+        
+        if (aimMode)
+        {
+            follow.TrackerSettings.RotationDamping = startRotationDamping * 10;
+        }
+        else
+        {
+            follow.TrackerSettings.RotationDamping = startRotationDamping * 1; 
+        }
+
+        
 
         if (controller == null || aimMode && !aimDisabled) return;//if aim Disabled completely then always allow right stick cam controls
 
@@ -151,7 +134,8 @@ public class CameraControls : MonoBehaviour
     {
         if (freeLook)
         {
-
+            
+            
             if (changeX && !modifier)
             {
                 xAxisValue = math.clamp(xAxisValue, minValueX, maxValueX);
