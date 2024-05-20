@@ -23,29 +23,29 @@ public class CameraControls : MonoBehaviour
     private bool changeX, changeY;
     [Header("Free Look Rotation")] public CinemachineCamera freeLook;
 
-    public CinemachineFollow follow;
-    public float minValueX = -360;
-    public float maxValueX = 360;
-    public float minHeight = 1;
+    public CinemachineOrbitalFollow follow;
+    public CinemachineRotationComposer RotationComposer;
+    public CinemachineRecomposer Recomposer;
+    
+    public float minValueX = -180;
+    public float maxValueX = 180;
+    public float minHeight = 0;
     [Tooltip("Max height is relative to FOV")]
-    public float maxHeight = 24f;
-    public float minRadius = 1;
-    public float maxRadius = 120;
-    public float minFov = 6;
-    public float maxFov = 120;
+    public float maxHeight = 45f;
+    public float minScale = .25f;
+    public float maxScale = 5;
     public float xAxisValue;
     public float heightY;
     public float multiplierX = 30;
     public float multiplierY = 24;
+    public float multiplierScale = 4;
 
     private float startHeight;
-    private float startRadius;
+    private float startScale;
     private Vector3 startRotationDamping;
-    private float startFov;
-    private float fovValue;
-    float radiusValue;
+    private float scaleValue;
     [SerializeField] bool aimMode;
-    private float fovHeightAdj;
+    //private float fovHeightAdj;
 
 
     [SerializeField] PlayerWeaponAim playerWeaponAimReference;
@@ -54,14 +54,11 @@ public class CameraControls : MonoBehaviour
     {
         if (!ReInput.isReady) return;
         player = ReInput.players.GetPlayer(playerId);
-        startHeight = follow.FollowOffset.y;
-        xAxisValue = follow.FollowOffset.x;
-        //startHeight = offset.Offset.y;
-        //startRadius = offset.Offset.x;
-        startRotationDamping = follow.TrackerSettings.RotationDamping;
-        startFov = freeLook.Lens.FieldOfView;
-        fovValue = startFov;
-        radiusValue = startRadius;
+        startHeight = follow.VerticalAxis.Value;
+        xAxisValue = follow.HorizontalAxis.Value;
+        startRotationDamping = RotationComposer.Damping;
+        startScale = Recomposer.ZoomScale;
+        scaleValue = startScale;
         heightY = startHeight;
         ChangeFov(false);
         
@@ -80,11 +77,11 @@ public class CameraControls : MonoBehaviour
         
         if (aimMode)
         {
-            follow.TrackerSettings.RotationDamping = startRotationDamping * 10;
+            RotationComposer.Damping = startRotationDamping * 10;
         }
         else
         {
-            follow.TrackerSettings.RotationDamping = startRotationDamping * 1; 
+            RotationComposer.Damping = startRotationDamping * 1;
         }
 
         
@@ -98,19 +95,7 @@ public class CameraControls : MonoBehaviour
         changeX = true;
         changeY = true;
 
-        if (player.GetAxis("RightVertical") >= .25)
-        {
-            if (!modifier)
-            {
-                heightY -= Time.deltaTime * multiplierY;
-            }
-            else
-            {
-                fovValue -= Time.deltaTime * multiplierY;
-            }
-            ChangeFov(modifier);
-        }
-        else if (player.GetAxis("RightVertical") <= -.25)
+        if (player.GetAxis("RightVertical") <= -.25)
         {
             if (!modifier)
             {
@@ -118,7 +103,19 @@ public class CameraControls : MonoBehaviour
             }
             else
             {
-                fovValue += Time.deltaTime * multiplierY;
+                scaleValue += Time.deltaTime * multiplierScale;
+            }
+            ChangeFov(modifier);
+        }
+        else if (player.GetAxis("RightVertical") >= .25)
+        {
+            if (!modifier)
+            {
+                heightY -= Time.deltaTime * multiplierY;
+            }
+            else
+            {
+                scaleValue -= Time.deltaTime * multiplierScale;
             }
 
             ChangeFov(modifier);
@@ -126,12 +123,12 @@ public class CameraControls : MonoBehaviour
 
         if (player.GetAxis("RightHorizontal") <= -.25)
         {
-            xAxisValue += Time.deltaTime * multiplierX;
+            xAxisValue -= Time.deltaTime * multiplierX;
             ChangeFov(modifier);
         }
         else if (player.GetAxis("RightHorizontal") >= .25)
         {
-            xAxisValue -= Time.deltaTime * multiplierX;
+            xAxisValue += Time.deltaTime * multiplierX;
             ChangeFov(modifier);
         }
     }
@@ -145,23 +142,20 @@ public class CameraControls : MonoBehaviour
             
             if (changeX && !modifier)
             {
-                xAxisValue = math.clamp(xAxisValue, minValueX, maxValueX);
-                follow.FollowOffset.x = xAxisValue;
-                //offset.Offset.x = xAxisValue;
+                //xAxisValue = math.clamp(xAxisValue, minValueX, maxValueX);
+                follow.HorizontalAxis.Value = xAxisValue;
             }
 
             if (changeY && !modifier)
             {
-                var adjMaxHeight = startFov / fovValue * maxHeight;
-                heightY = math.clamp(heightY, minHeight, adjMaxHeight);
-                follow.FollowOffset.y = heightY;
-                //offset.Offset.y = heightY;
+                //var adjMaxHeight = startFov / fovValue * maxHeight;
+                heightY = math.clamp(heightY, minHeight, maxHeight);
+                follow.VerticalAxis.Value = heightY;
             }
             else if (changeY)
             {
-                fovValue = math.clamp(fovValue, minFov, maxFov);
-                freeLook.Lens.FieldOfView = fovValue;
-                //freeLook.m_Orbits[1].m_Radius = radiusValue;
+                scaleValue = math.clamp(scaleValue, minScale, maxScale);
+                Recomposer.ZoomScale = scaleValue;
             }
             
         }
