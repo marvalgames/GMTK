@@ -21,15 +21,18 @@ public class CameraControls : MonoBehaviour
     public Rewired.Player player;
     public int playerId = 0; // The Rewired player id of this character
     private bool changeX, changeY;
-    [Header("Free Look Rotation")] public CinemachineVirtualCameraBase freeLook;
+    [Header("Free Look Rotation")] public CinemachineCamera freeLook;
 
     public CinemachineFollow follow;
     public float minValueX = -360;
     public float maxValueX = 360;
     public float minHeight = 1;
+    [Tooltip("Max height is relative to FOV")]
     public float maxHeight = 24f;
     public float minRadius = 1;
     public float maxRadius = 120;
+    public float minFov = 6;
+    public float maxFov = 120;
     public float xAxisValue;
     public float heightY;
     public float multiplierX = 30;
@@ -38,8 +41,11 @@ public class CameraControls : MonoBehaviour
     private float startHeight;
     private float startRadius;
     private Vector3 startRotationDamping;
+    private float startFov;
+    private float fovValue;
     float radiusValue;
     [SerializeField] bool aimMode;
+    private float fovHeightAdj;
 
 
     [SerializeField] PlayerWeaponAim playerWeaponAimReference;
@@ -53,12 +59,13 @@ public class CameraControls : MonoBehaviour
         //startHeight = offset.Offset.y;
         //startRadius = offset.Offset.x;
         startRotationDamping = follow.TrackerSettings.RotationDamping;
+        startFov = freeLook.Lens.FieldOfView;
+        fovValue = startFov;
         radiusValue = startRadius;
         heightY = startHeight;
         ChangeFov(false);
-        //offset = new CinemachineCameraOffset();
         
-        
+
     }
 
     void LateUpdate()
@@ -99,7 +106,7 @@ public class CameraControls : MonoBehaviour
             }
             else
             {
-                radiusValue -= Time.deltaTime * multiplierY;
+                fovValue -= Time.deltaTime * multiplierY;
             }
             ChangeFov(modifier);
         }
@@ -111,7 +118,7 @@ public class CameraControls : MonoBehaviour
             }
             else
             {
-                radiusValue += Time.deltaTime * multiplierY;
+                fovValue += Time.deltaTime * multiplierY;
             }
 
             ChangeFov(modifier);
@@ -145,13 +152,15 @@ public class CameraControls : MonoBehaviour
 
             if (changeY && !modifier)
             {
-                heightY = math.clamp(heightY, minHeight, maxHeight);
+                var adjMaxHeight = startFov / fovValue * maxHeight;
+                heightY = math.clamp(heightY, minHeight, adjMaxHeight);
                 follow.FollowOffset.y = heightY;
                 //offset.Offset.y = heightY;
             }
             else if (changeY)
             {
-                radiusValue = math.clamp(radiusValue, minRadius, maxRadius);
+                fovValue = math.clamp(fovValue, minFov, maxFov);
+                freeLook.Lens.FieldOfView = fovValue;
                 //freeLook.m_Orbits[1].m_Radius = radiusValue;
             }
             
