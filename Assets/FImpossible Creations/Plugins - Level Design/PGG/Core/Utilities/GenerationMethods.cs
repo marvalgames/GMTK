@@ -758,51 +758,105 @@ namespace FIMSpace.Generating
         {
             List<GameObject> combinationObjects = new List<GameObject>();
 
+
             #region Collect meshes and instances, categorize by materials
 
             Dictionary<CombineMaterialComparer, List<MeshFilter>> materialMeshes = new Dictionary<CombineMaterialComparer, List<MeshFilter>>();
             List<MeshRenderer> searchRend = new List<MeshRenderer>();
+            List<LODGroup> searchLODs = new List<LODGroup>();
 
-            for (int i = 0; i < toCombineSearch.Count; i++)
+            for( int i = 0; i < toCombineSearch.Count; i++ )
             {
-                searchRend.Clear();
-
                 GameObject tile = toCombineSearch[i];
 
-                //foreach (Transform t in tile.transform)
-                foreach (Transform t in tile.transform.GetComponentsInChildren<Transform>())
+                foreach( Transform t in tile.transform.GetComponentsInChildren<Transform>() )
                 {
                     MeshRenderer m = t.GetComponent<MeshRenderer>();
+                    LODGroup lod = t.GetComponent<LODGroup>();
+                    if( lod ) searchLODs.Add( lod );
 
-                    if (m)
-                        if (m.sharedMaterials.Length > 0)
-                            if (m.sharedMaterials[0] != null) // /Only single material/ renderers with not null materials
+                    if( m )
+                        if( m.sharedMaterials.Length > 0 )
+                            if( m.sharedMaterials[0] != null ) // /Only single material/ renderers with not null materials
                             {
-                                if (m.GetComponent<PGGIgnoreCombining>() == null) // Check if not ignoring this mesh 
-                                {
-                                    MeshFilter filter = m.gameObject.GetComponent<MeshFilter>();
-
-                                    if (filter) if (filter.sharedMesh != null) // Mesh filter with not null mesh required
-                                        {
-                                            var kMat = new CombineMaterialComparer(m.sharedMaterials);
-                                            if (materialMeshes.ContainsKey(kMat) == false) materialMeshes.Add(kMat, new List<MeshFilter>());
-
-                                            materialMeshes[kMat].Add(filter);
-                                            if (setStatic) m.gameObject.isStatic = true;
-
-                                            try
-                                            {
-                                                FGenerators.DestroyObject(m); // Clean ref to renderer component on the scene
-                                            }
-                                            catch (System.Exception)
-                                            {
-                                                m.enabled = false; // In case some component depends on it, then just disable
-                                            }
-                                        }
-                                }
+                                searchRend.Add( m );
                             }
                 }
             }
+
+            #endregion
+
+
+            #region Remove LOD > 0 renderers
+
+            List<Renderer> lodHelperList = new List<Renderer>();
+            List<Renderer> lodHelperToRemoveList = new List<Renderer>();
+
+            foreach( var lod in searchLODs )
+            {
+                lodHelperList.Clear();
+                lodHelperToRemoveList.Clear();
+
+                // Add all lod 0 renderers
+                var lods = lod.GetLODs();
+                if( lods.Length == 0 ) continue;
+
+                var rends = lods[0].renderers;
+                foreach( var r in rends ) lodHelperList.Add( r ); // Add main lod to combine
+
+                for( int i = 1; i < lods.Length; i++ ) // Add higher level lods
+                {
+                    rends = lods[i].renderers;
+                    foreach( var r in rends ) lodHelperToRemoveList.Add( r );
+                }
+
+                // Remove from to remove list, duplicated meshes of main lod
+                foreach( var r in lodHelperList ) lodHelperToRemoveList.Remove( r );
+
+                // Discard not used lods
+                foreach( var r in lodHelperToRemoveList )
+                {
+                    searchRend.Remove( r as MeshRenderer );
+                    MeshFilter f = r.GetComponent<MeshFilter>();
+                    if( f ) FGenerators.DestroyObject( f );
+                    FGenerators.DestroyObject( r );
+                }
+
+                lod.enabled = false;
+            }
+
+            #endregion
+
+
+            #region Arrange renderers per material
+
+
+            foreach( MeshRenderer m in searchRend )
+            {
+                if( m.GetComponent<PGGIgnoreCombining>() == null ) // Check if not ignoring this mesh 
+                {
+                    MeshFilter filter = m.gameObject.GetComponent<MeshFilter>();
+
+                    if( filter ) if( filter.sharedMesh != null ) // Mesh filter with not null mesh required
+                        {
+                            var kMat = new CombineMaterialComparer( m.sharedMaterials );
+                            if( materialMeshes.ContainsKey( kMat ) == false ) materialMeshes.Add( kMat, new List<MeshFilter>() );
+
+                            materialMeshes[kMat].Add( filter );
+                            if( setStatic ) m.gameObject.isStatic = true;
+
+                            try
+                            {
+                                FGenerators.DestroyObject( m ); // Clean ref to renderer component on the scene
+                            }
+                            catch( System.Exception )
+                            {
+                                m.enabled = false; // In case some component depends on it, then just disable
+                            }
+                        }
+                }
+            }
+
 
             #endregion
 

@@ -67,14 +67,14 @@ namespace FIMSpace.Generating.Planning.PlannerNodes.BuildSetup
             {
                 if (planners[c].Available == false) continue;
 
-                IterationField.Output_Provide_Planner(planners[c]);
+                IterationField.SetIDsOfPlanner(planners[c]);
                 //IterationField.SetIDsOfPlanner(planners[c]);
 
                 AddCondition.TriggerReadPort(true);
                 if (AddCondition.GetInputValue) choosen.Add(planners[c]);
             }
 
-            ChoosenFields.Output_Provide_PlannersList(choosen);
+            ChoosenFields.AssignPlannersList(choosen);
         }
 
 
