@@ -4,7 +4,7 @@
 //
 // Auto-generated shader code, don't hand edit!
 //
-//   Unity Version: 2022.3.28f1
+//   Unity Version: 6000.0.5f1
 //   MicroSplat Version: 3.9
 //   Render Pipeline: URP2022
 //   Platform: WindowsEditor
@@ -138,9 +138,6 @@ Shader "Terrain_Area2"
       #define _NONORMALMAP 1
       #define _USEGRADMIP 1
       #define _PERTEXUVSCALEOFFSET 1
-      #define _PERTEXTINT 1
-      #define _PERTEXBRIGHTNESS 1
-      #define _PERTEXCOLORINTENSITY 1
       #define _PERTEXSMOOTHSTR 1
       #define _PERTEXMETALLIC 1
       #define _BRANCHSAMPLES 1
@@ -4412,9 +4409,6 @@ float3 GetTessFactors ()
       #define _NONORMALMAP 1
       #define _USEGRADMIP 1
       #define _PERTEXUVSCALEOFFSET 1
-      #define _PERTEXTINT 1
-      #define _PERTEXBRIGHTNESS 1
-      #define _PERTEXCOLORINTENSITY 1
       #define _PERTEXSMOOTHSTR 1
       #define _PERTEXMETALLIC 1
       #define _BRANCHSAMPLES 1
@@ -8625,9 +8619,6 @@ float3 GetTessFactors ()
       #define _NONORMALMAP 1
       #define _USEGRADMIP 1
       #define _PERTEXUVSCALEOFFSET 1
-      #define _PERTEXTINT 1
-      #define _PERTEXBRIGHTNESS 1
-      #define _PERTEXCOLORINTENSITY 1
       #define _PERTEXSMOOTHSTR 1
       #define _PERTEXMETALLIC 1
       #define _BRANCHSAMPLES 1
@@ -12751,9 +12742,6 @@ float3 GetTessFactors ()
       #define _NONORMALMAP 1
       #define _USEGRADMIP 1
       #define _PERTEXUVSCALEOFFSET 1
-      #define _PERTEXTINT 1
-      #define _PERTEXBRIGHTNESS 1
-      #define _PERTEXCOLORINTENSITY 1
       #define _PERTEXSMOOTHSTR 1
       #define _PERTEXMETALLIC 1
       #define _BRANCHSAMPLES 1
@@ -16873,9 +16861,6 @@ float3 GetTessFactors ()
       #define _NONORMALMAP 1
       #define _USEGRADMIP 1
       #define _PERTEXUVSCALEOFFSET 1
-      #define _PERTEXTINT 1
-      #define _PERTEXBRIGHTNESS 1
-      #define _PERTEXCOLORINTENSITY 1
       #define _PERTEXSMOOTHSTR 1
       #define _PERTEXMETALLIC 1
       #define _BRANCHSAMPLES 1
@@ -20999,9 +20984,6 @@ float3 GetTessFactors ()
       #define _NONORMALMAP 1
       #define _USEGRADMIP 1
       #define _PERTEXUVSCALEOFFSET 1
-      #define _PERTEXTINT 1
-      #define _PERTEXBRIGHTNESS 1
-      #define _PERTEXCOLORINTENSITY 1
       #define _PERTEXSMOOTHSTR 1
       #define _PERTEXMETALLIC 1
       #define _BRANCHSAMPLES 1
@@ -25144,7 +25126,7 @@ float3 GetTessFactors ()
 
         UsePass "Hidden/Nature/Terrain/Utilities/PICKING"
    }
-   Dependency "BaseMapShader" =  "Hidden/Terrain_Area2_Base-493645013"
-   Fallback "Hidden/Terrain_Area2_Base-493645013"
+   Dependency "BaseMapShader" =  "Hidden/Terrain_Area2_Base-2074028151"
+   Fallback "Hidden/Terrain_Area2_Base-2074028151"
    CustomEditor "MicroSplatShaderGUI"
 }
