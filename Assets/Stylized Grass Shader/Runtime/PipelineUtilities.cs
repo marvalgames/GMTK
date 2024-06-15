@@ -145,10 +145,13 @@ namespace StylizedGrass
             UniversalRendererData r = (UniversalRendererData)defaultRenderer;
             
             //Need to copy these references, otherwise calling Camera.Render() with this renderer results in null-refs on the shaders in these resources.
-            //rendererData.shaders = r.shaders;
+            #if !UNITY_6000_0_OR_NEWER
+            rendererData.shaders = r.shaders;
+            #endif
+            
             rendererData.postProcessData = r.postProcessData;
             
-            #if UNITY_2021_2_OR_NEWER
+            #if UNITY_2021_2_OR_NEWER && !UNITY_6000_0_OR_NEWER
             rendererData.debugShaders = r.debugShaders;
             rendererData.xrSystemData = r.xrSystemData;
             #endif

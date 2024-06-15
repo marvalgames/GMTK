@@ -24,7 +24,6 @@ namespace StylizedGrass
         private GUIContent[] layerNames;
 
         private static string iconPrefix => EditorGUIUtility.isProSkin ? "d_" : "";
-        private static GUIContent RenderButtonContent;
 
         private bool expandRenderArea
         {
@@ -69,8 +68,6 @@ namespace StylizedGrass
                 Debug.Log("[Update to v1.4.0+] Grass Color Map Renderer: Serialized a reference to 3 shaders that are required for rendering to the component. Be sure to save the scene");
                 EditorUtility.SetDirty(script);
             }
-            
-            RenderButtonContent  = new GUIContent("  Render", EditorGUIUtility.IconContent(iconPrefix + "Animation.Record").image);
         }
 
         bool editingCollider
@@ -93,6 +90,8 @@ namespace StylizedGrass
             hasMeshRenderers = false;
             for (int i = 0; i < script.terrainObjects.Count; i++)
             {
+                if(script.terrainObjects[i] == null) continue;
+                
                 if (script.terrainObjects[i] && script.terrainObjects[i].GetComponent<MeshRenderer>() || script.terrainObjects[i].GetComponent<LODGroup>())
                 {
                     hasMeshRenderers = true;
@@ -105,7 +104,6 @@ namespace StylizedGrass
             StylizedGrassGUI.DrawHeader();
 
             serializedObject.Update();
-
             EditorGUI.BeginChangeCheck();
 
             using (new EditorGUILayout.HorizontalScope())
@@ -151,13 +149,12 @@ namespace StylizedGrass
             
             if (terrainObjects.arraySize == 0) terrainObjects.isExpanded = true;
             EditorGUI.BeginChangeCheck();
-            EditorGUILayout.PropertyField(terrainObjects, new GUIContent("Terrain(s)"));
-
+            EditorGUILayout.PropertyField(terrainObjects, new GUIContent("Terrain(s)", terrainObjects.tooltip), true);
             if (EditorGUI.EndChangeCheck())
             {
-                Validate();
+                EditorApplication.delayCall += Validate;
             }
-            
+
             using (new EditorGUILayout.HorizontalScope())
             {
                 GUILayout.FlexibleSpace();
@@ -308,9 +305,15 @@ namespace StylizedGrass
 
                     using (new EditorGUILayout.HorizontalScope())
                     {
+                        EditorGUI.BeginChangeCheck();
                         resIdx.intValue = EditorGUILayout.Popup("Resolution", resIdx.intValue, 
                             new string[] { "64x64", "128x128", "256x256", "512x512", "1024x1024", "2048x2048", "4096x4096" }, 
                             GUILayout.MaxWidth(EditorGUIUtility.labelWidth + 100f));
+
+                        if (EditorGUI.EndChangeCheck())
+                        {
+                            resolution.intValue = ColorMapRendering.IndexToResolution(resIdx.intValue);
+                        }
                     }
                     
                     EditorGUILayout.Space();
@@ -330,16 +333,15 @@ namespace StylizedGrass
                     EditorGUILayout.HelpBox("[Play mode] To improve runtime baking performance, no rendering data will be saved to disk. Instead the render result will be kept in memory and sent directly to the shader.", MessageType.Info);
                 }
                 
-                if (GUILayout.Button(RenderButtonContent, GUILayout.Height(30f)))
+                if (GUILayout.Button(new GUIContent("  Render", EditorGUIUtility.IconContent(iconPrefix + "Animation.Record").image), GUILayout.Height(30f)))
                 {
                     script.Render();
                 }
                 
             }//If terrains assigned
-
+            
             if (EditorGUI.EndChangeCheck())
             {
-                resolution.intValue = ColorMapRendering.IndexToResolution(resIdx.intValue);
                 serializedObject.ApplyModifiedProperties();
             }
             

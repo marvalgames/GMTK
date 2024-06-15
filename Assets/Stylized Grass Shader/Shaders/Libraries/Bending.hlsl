@@ -82,19 +82,20 @@ float4 GetBendVector(float3 wPos)
 	return v;
 }
 
-#define BENDING_END_DIST 3.0
+#define BENDING_END_DIST 3
+#define BENDING_FALLOFF_DIST 0.5
 
 float HeightDistanceWeight(float3 obstaclePos, float3 surfacePos)
 {
 	const float grassHeight = obstaclePos.y;
-	const float bendHeight = surfacePos.y;
+	const float benderHeight = surfacePos.y;
 
-	const float pixelDist = -(bendHeight - grassHeight);
+	float dist = (grassHeight - benderHeight);
 
-	//Ensure the weight tapers off once the obstacle start to go lower than 3 units from the grass.
-	const float falloff = 1-saturate((pixelDist - BENDING_END_DIST) / (grassHeight));
+	//Ensure the weight cuts off once the obstacle start to go lower than 3 units from the grass.
+	//if(benderHeight < (grassHeight - BENDING_END_DIST)) return 0;
 
-	return saturate((grassHeight - bendHeight) * falloff);
+	return saturate(dist / BENDING_FALLOFF_DIST);
 }
 
 float4 GetBendOffset(float3 wPos, BendSettings b)

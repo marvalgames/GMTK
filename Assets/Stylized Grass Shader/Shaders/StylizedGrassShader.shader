@@ -87,6 +87,25 @@ Shader "Universal Render Pipeline/Nature/Stylized Grass"
 		[HideInInspector][NoScaleOffset]unity_Lightmaps("unity_Lightmaps", 2DArray) = "" {}
 		[HideInInspector][NoScaleOffset]unity_LightmapsInd("unity_LightmapsInd", 2DArray) = "" {}
 		[HideInInspector][NoScaleOffset]unity_ShadowMasks("unity_ShadowMasks", 2DArray) = "" {}
+		
+		/* start FoliageRenderer */
+//		[HideInInspector] _TerrainAlbedoProvided("Blend with Albedo Shader", Float) = 0
+//		
+//		[HideInInspector]_TerrainSize("Terrain Size", Vector) = (0,0,0,0)
+//		[HideInInspector]_TerrainPosition("Terrain Position", Vector) = (0,0,0,0)
+//		_TerrainYOffset("Y Offset", Float) = 0
+//		
+//		[HideInInspector]_TerrainAlbedoC("Terrain", 2D) = "black" {}
+//	    [HideInInspector]_TerrainAlbedoL("TerrainL", 2D) = "black" {}
+//	    [HideInInspector]_TerrainAlbedoR("TerrainR", 2D) = "black" {}
+//	    [HideInInspector]_TerrainAlbedoU("TerrainU", 2D) = "black" {}
+//	    [HideInInspector]_TerrainAlbedoUL("TerrainUL", 2D) = "black" {}
+//	    [HideInInspector]_TerrainAlbedoUR("TerrainUR", 2D) = "black" {}
+//	    [HideInInspector]_TerrainAlbedoB("TerrainB", 2D) = "black" {}
+//	    [HideInInspector]_TerrainAlbedoBL("TerrainBL", 2D) = "black" {}
+//	    [HideInInspector]_TerrainAlbedoBR("TerrainBR", 2D) = "black" {}
+		/* end FoliageRenderer */
+
 	}
 
 	SubShader
@@ -159,24 +178,34 @@ Shader "Universal Render Pipeline/Nature/Stylized Grass"
 		#include "Assets/GPUInstancer/Shaders/Include/GPUInstancerInclude.cginc"
 		#endif
 		
+		/* start NatureRendererLegacy */
+//		#define NatureRendererLegacy
+//		#pragma instancing_options assumeuniformscaling procedural:SetupNatureRenderer
+		/* end NatureRendererLegacy */
+
+		#ifdef NatureRendererLegacy
+		/* include NatureRendererLegacy */
+		#include "Assets/Visual Design Cafe/Nature Shaders/Common/Nodes/Integrations/Nature Renderer.cginc"
+		#endif
+		
 		/* start NatureRenderer */
 //		#define NatureRenderer
-//		#pragma instancing_options assumeuniformscaling procedural:SetupNatureRenderer
+//		#pragma instancing_options procedural:SetupNatureRenderer
 		/* end NatureRenderer */
 
 		#ifdef NatureRenderer
 		/* include NatureRenderer */
-		#include "Assets/Visual Design Cafe/Nature Shaders/Common/Nodes/Integrations/Nature Renderer.cginc"
-		#endif
-		
-		/* start NatureRenderer2021 */
-//		#define NatureRenderer2021
-//		#pragma instancing_options procedural:SetupNatureRenderer
-		/* end NatureRenderer2021 */
-
-		#ifdef NatureRenderer2021
-		/* include NatureRenderer2021 */
 		#include "Assets/Visual Design Cafe/Nature Renderer/Shader Includes/Nature Renderer.templatex"
+		#endif
+
+		/* start FoliageRenderer */
+//		#define FoliageRenderer
+//		#pragma instancing_options procedural:setupFoliageRenderer forwardadd
+		/* end FoliageRenderer */
+
+		#ifdef FoliageRenderer
+		/* include FoliageRenderer */
+#include "Assets/FoliageRenderer/Shaders/FoliageRendererInstancing.cginc"
 		#endif
 		
 		ENDHLSL
@@ -251,6 +280,11 @@ Shader "Universal Render Pipeline/Nature/Stylized Grass"
 
 			//URP 14+
 			#pragma multi_compile_fragment _ _FORWARD_PLUS
+			//Workaround for bug in 2022.3.15+ (UUM-67560)
+            #if USE_FORWARD_PLUS && defined(SHADER_API_METAL) && UNITY_VERSION >= 202230
+            //Otherwise undefined
+            #define _FOVEATED_RENDERING_NON_UNIFORM_RASTER 0
+            #endif
 			
 			//Constants
 			#define SHADERPASS_FORWARD

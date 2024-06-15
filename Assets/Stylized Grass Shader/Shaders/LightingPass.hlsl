@@ -258,7 +258,6 @@ void PopulateLightingInputData(Varyings input, half3 normalTS, out InputData inp
 	inputData.vertexSH = input.vertexSH;
 	#endif
 	#endif
-
 }
 
 #if defined(SHADERPASS_DEFERRED) && UNITY_VERSION >= 202120
@@ -298,10 +297,10 @@ void LightingPassFragment(Varyings input, out half4 outColor : SV_Target0
 	#endif
 
 	//Debugging
-	//return float4(AngleFadeFactor(input.positionWS, _FadeAngleThreshold).xxx, 1.0);
-	//return float4(DistanceFadeFactor(input.positionWS, _FadeNear, _FadeFar).xxx, 1.0);
-	//return float4(HeightDistanceWeight(input.positionWS.y, GetBendVector(input.positionWS).y).xxx * GetBendVector(input.positionWS).a, 1.0);
-	//return float4(InterleavedNoise(input.positionCS.xy, PlayerFaceFactor(input.positionWS)).xxx, 1.0);
+	//outColor = float4(AngleFadeFactor(input.positionWS, _FadeAngleThreshold).xxx, 1.0); return;
+	//outColor = float4(DistanceFadeFactor(input.positionWS, _FadeNear, _FadeFar).xxx, 1.0); return;
+	//outColor = float4(HeightDistanceWeight(input.positionWS.y, GetBendVector(input.positionWS).y).xxx * GetBendVector(input.positionWS).a, 1.0); return;
+	//outColor = float4(InterleavedNoise(input.positionCS.xy, PlayerFaceFactor(input.positionWS)).xxx, 1.0); return;
 	
 	#ifdef DEBUG_BEND_AREA
 	float2 bendUV = GetBendMapUV(input.positionWS);

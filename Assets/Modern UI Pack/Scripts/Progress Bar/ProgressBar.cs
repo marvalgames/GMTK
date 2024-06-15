@@ -30,7 +30,7 @@ namespace Michsky.MUIP
         [Range(0, 5)] public int decimals = 0;
 
         // Events
-        [System.Serializable] 
+        [System.Serializable]
         public class ProgressBarEvent : UnityEvent<float> { }
         public ProgressBarEvent onValueChanged;
         [HideInInspector] public Slider eventSource;
@@ -43,16 +43,16 @@ namespace Michsky.MUIP
 
         void Update()
         {
-            if (isOn == false)
+            if (!isOn)
                 return;
 
-            if (currentPercent <= maxValue && invert == false) { currentPercent += speed * Time.deltaTime; }
-            else if (currentPercent >= minValue && invert == true) { currentPercent -= speed * Time.deltaTime; }
+            if (currentPercent <= maxValue && !invert) { currentPercent += speed * Time.unscaledDeltaTime; }
+            else if (currentPercent >= minValue && invert) { currentPercent -= speed * Time.unscaledDeltaTime; }
 
-            if (currentPercent >= maxValue && speed != 0 && restart == true && invert == false) { currentPercent = 0; }
-            else if (currentPercent <= minValue && speed != 0 && restart == true && invert == true) { currentPercent = maxValue; }
-            else if (currentPercent >= maxValue && speed != 0 && restart == false && invert == false) { currentPercent = maxValue; }
-            else if (currentPercent <= minValue && speed != 0 && restart == false && invert == true) { currentPercent = minValue; }
+            if (currentPercent >= maxValue && speed != 0 && restart && !invert) { currentPercent = 0; }
+            else if (currentPercent <= minValue && speed != 0 && restart && invert) { currentPercent = maxValue; }
+            else if (currentPercent >= maxValue && speed != 0 && !restart && !invert) { currentPercent = maxValue; }
+            else if (currentPercent <= minValue && speed != 0 && !restart && invert) { currentPercent = minValue; }
 
             UpdateUI();
         }
@@ -61,23 +61,18 @@ namespace Michsky.MUIP
         {
             loadingBar.fillAmount = currentPercent / maxValue;
 
-            if (addSuffix == true) { textPercent.text = currentPercent.ToString("F" + decimals) + suffix; }
+            if (addSuffix) { textPercent.text = currentPercent.ToString("F" + decimals) + suffix; }
             else { textPercent.text = currentPercent.ToString("F" + decimals); }
 
-            if (addPrefix == true)
-                textPercent.text = prefix + textPercent.text;
-
-            if (eventSource != null)
-                eventSource.value = currentPercent;
+            if (addPrefix) { textPercent.text = prefix + textPercent.text; }
+            if (eventSource != null) { eventSource.value = currentPercent; }
         }
 
         public void InitializeEvents()
         {
-            if (Application.isPlaying == true && onValueChanged.GetPersistentEventCount() != 0)
+            if (Application.isPlaying && onValueChanged.GetPersistentEventCount() != 0)
             {
-                if (eventSource == null)
-                    eventSource = gameObject.AddComponent(typeof(Slider)) as Slider;
-
+                if (eventSource == null) { eventSource = gameObject.AddComponent(typeof(Slider)) as Slider; }
                 eventSource.transition = Selectable.Transition.None;
                 eventSource.minValue = minValue;
                 eventSource.maxValue = maxValue;
@@ -85,7 +80,30 @@ namespace Michsky.MUIP
             }
         }
 
-        public void ClearEvents() { eventSource.onValueChanged.RemoveAllListeners(); }
-        public void ChangeValue(float newValue) { currentPercent = newValue; UpdateUI(); }
+        public void ClearEvents()
+        {
+            eventSource.onValueChanged.RemoveAllListeners();
+        }
+
+        // Will be replaced in future versions
+        public void ChangeValue(float newValue)
+        {
+            currentPercent = newValue;
+            UpdateUI();
+        }
+
+        public void SetValue(float newValue)
+        {
+            currentPercent = newValue;
+            UpdateUI();
+        }
+
+        public void SetValue(float newValue, string newPrefix = null, string newSuffix = null, bool updateUI = true)
+        {
+            currentPercent = newValue;
+            prefix = newPrefix;
+            suffix = newSuffix;
+            if (updateUI) { UpdateUI(); }
+        }
     }
 }

@@ -550,6 +550,7 @@ namespace PixelCrushers.DialogueSystem.Articy
             ConvertDialoguesToConversations();
             onProgressCallback("Processing hierarchy", 0.3f);
             ProcessHierarchy();
+            InsertDelayEvaluationNodesBeforeInputPins();
             onProgressCallback("Sorting links by position", 0.7f);
             SortAllLinksByPosition();
             if (prefs.SplitTextOnPipes) SplitPipesIntoEntries();
@@ -620,29 +621,25 @@ namespace PixelCrushers.DialogueSystem.Articy
             }
             conversation.dialogueEntries.Add(startEntry);
 
-            // Convert dialogue's in and out pins to passthrough group entries:
+            // Convert dialogue's in and out pins to [passthrough group] entries:
             for (int i = 0; i < articyDialogue.pins.Count; i++)
             {
                 var pin = articyDialogue.pins[i];
-                if (pin.semantic == ArticyData.SemanticType.Output && prefs.RecursionMode == ConverterPrefs.RecursionModes.Off) continue;
+                if (string.IsNullOrEmpty(pin.expression)) continue;
+                var isInputPin = pin.semantic == ArticyData.SemanticType.Input;
+                var isOutputPin = pin.semantic == ArticyData.SemanticType.Output;
+                if (isOutputPin && prefs.RecursionMode == ConverterPrefs.RecursionModes.Off) continue;
                 var entryID = GetNextConversationEntryID(conversation);
-                var title = (pin.semantic == ArticyData.SemanticType.Input) ? "input" : "output";
+                var title = isInputPin ? "input" : "output";
                 var entry = template.CreateDialogueEntry(entryID, conversationID, title);
                 entry.canvasRect = new Rect(articyDialogue.position.x, articyDialogue.position.y, DialogueEntry.CanvasRectWidth, DialogueEntry.CanvasRectHeight);
                 SetDialogueEntryParticipants(entry, conversation.ConversantID, conversation.ActorID);
-                if (pin.semantic == ArticyData.SemanticType.Input)
-                {
-                    ConvertPinExpressionsToConditionsAndScripts(entry, articyDialogue.pins, true, false);
-                }
-                else
-                {
-                    ConvertPinExpressionsToConditionsAndScripts(entry, articyDialogue.pins, false, true);
-                }
+                ConvertPinExpressionsToConditionsAndScripts(entry, articyDialogue.pins, isInputPin, !isInputPin);
                 entry.isGroup = true;
                 //Field.SetValue(entry.fields, "Sequence", "Continue()", FieldType.Text);
                 Field.SetValue(entry.fields, ArticyIdFieldTitle, pin.id, FieldType.Text);
 
-                if (pin.semantic == ArticyData.SemanticType.Input)
+                if (isInputPin)
                 {
                     var link = new Link();
                     link.originConversationID = conversationID;
@@ -896,6 +893,31 @@ namespace PixelCrushers.DialogueSystem.Articy
             CheckJumpsForGroupNodes();
         }
 
+        protected virtual void InsertDelayEvaluationNodesBeforeInputPins()
+        {
+            foreach (var conversation in database.conversations)
+            {
+                var numEntries = conversation.dialogueEntries.Count;
+                for (int i = 1; i < numEntries; i++)
+                {
+                    var parentEntry = conversation.dialogueEntries[i];
+                    if (string.IsNullOrEmpty(parentEntry.userScript)) continue;
+                    foreach (var link in parentEntry.outgoingLinks)
+                    {
+                        var childEntry = conversation.GetDialogueEntry(link.destinationDialogueID);
+                        if (string.IsNullOrEmpty(childEntry.conditionsString)) continue;
+                        // Parent has script and child has conditions, so create a buffer entry between them to delay evaluation:
+                        var childArticyId = Field.LookupValue(childEntry.fields, ArticyIdFieldTitle);
+                        var bufferEntry = CreateNewDialogueEntry(conversation, "Delay Evaluation", childArticyId + "-1");
+                        conversation.dialogueEntries.Add(bufferEntry);
+                        bufferEntry.Sequence = "Continue()";
+                        bufferEntry.outgoingLinks = new List<Link>() { new Link(link) };
+                        link.destinationDialogueID = bufferEntry.id;
+                    }
+                }
+            }
+        }
+
         protected const int MaxRecursionDepth = 1000;
 
         /// <summary>
@@ -1043,16 +1065,33 @@ namespace PixelCrushers.DialogueSystem.Articy
         protected virtual void ProcessConnectionNew(ArticyData.Connection connection)
         {
             if (connection == null) return;
-            if (!entriesByPinID.ContainsKey(connection.source.pinRef))
+
+            DialogueEntry sourceEntry, targetEntry;
+
+            // If connection is from dialogue, connect from <START> node:
+            var dialogue = LookupArticyDialogue(connection.source.idRef);
+            if (dialogue != null)
             {
-                return;
+                var conversation = database.conversations.Find(x => string.Equals(x.LookupValue(ArticyIdFieldTitle), connection.source.idRef));
+                if (conversation == null) return;
+                sourceEntry = conversation.GetFirstDialogueEntry();
             }
+            // Otherwise connect from source entry:
+            else
+            {
+                if (!entriesByPinID.ContainsKey(connection.source.pinRef))
+                {
+                    return;
+                }
+                sourceEntry = entriesByPinID[connection.source.pinRef];
+            }
+
+            // Either way, connect to target:
             if (!entriesByPinID.ContainsKey(connection.target.pinRef))
             {
                 return;
             }
-            var sourceEntry = entriesByPinID[connection.source.pinRef];
-            var targetEntry = entriesByPinID[connection.target.pinRef];
+            targetEntry = entriesByPinID[connection.target.pinRef];
             var linksToSelf = sourceEntry.conversationID == targetEntry.conversationID && sourceEntry.id == targetEntry.id;
             if (!linksToSelf)
             {
@@ -1096,6 +1135,11 @@ namespace PixelCrushers.DialogueSystem.Articy
                 if (conversation == null) continue;
                 conversation.dialogueEntries.Remove(entry);
             }
+        }
+
+        protected virtual ArticyData.Dialogue LookupArticyDialogue(string id)
+        {
+            return articyData.dialogues.ContainsKey(id) ? articyData.dialogues[id] : null;
         }
 
         protected virtual ArticyData.DialogueFragment LookupArticyDialogueFragment(string id)
@@ -1165,7 +1209,7 @@ namespace PixelCrushers.DialogueSystem.Articy
             var conditionsField = Field.Lookup(entry.fields, "Conditions");
             if (conditionsField != null) // Conditions field is handled differently.
             {
-                entry.userScript = AddToUserScript(entry.conditionsString, conditionsField.value);
+                entry.conditionsString = AddToUserScript(entry.conditionsString, conditionsField.value);
                 entry.fields.Remove(conditionsField);
             }
             var scriptField = Field.Lookup(entry.fields, "Script");
@@ -1421,12 +1465,42 @@ namespace PixelCrushers.DialogueSystem.Articy
 
         protected virtual string AddToConditions(string conditions, string moreConditions)
         {
-            return string.IsNullOrEmpty(conditions) ? moreConditions : string.Format("({0}) and ({1})", conditions, moreConditions);
+            if (string.IsNullOrEmpty(conditions) && string.IsNullOrEmpty(moreConditions))
+            {
+                return string.Empty;
+            }
+            else if (string.IsNullOrEmpty(conditions))
+            {
+                return moreConditions;
+            }
+            else if (string.IsNullOrEmpty(moreConditions))
+            {
+                return conditions;
+            }
+            else
+            {
+                return string.Format("({0}) and ({1})", conditions, moreConditions);
+            }
         }
 
         protected virtual string AddToUserScript(string script, string moreScript)
         {
-            return string.IsNullOrEmpty(script) ? moreScript : string.Format("{0}; {1}", script, moreScript);
+            if (string.IsNullOrEmpty(script) && string.IsNullOrEmpty(moreScript))
+            {
+                return string.Empty;
+            }
+            else if (string.IsNullOrEmpty(script))
+            {
+                return moreScript;
+            }
+            else if (string.IsNullOrEmpty(moreScript))
+            {
+                return script;
+            }
+            else
+            {
+                return string.Format("{0}; {1}", script, moreScript);
+            }
         }
 
         /// <summary>
@@ -1548,11 +1622,11 @@ namespace PixelCrushers.DialogueSystem.Articy
         {
             if (string.IsNullOrEmpty(expression)) return expression;
 
-            // If already Lua, return it:
-            if (expression.Contains("Variable[")) return expression;
-
             // Convert comments:
             string s = expression.Trim().Replace("///", "").Replace("//", "--");
+
+            // If already Lua, return it:
+            if (expression.Contains("Variable[")) return expression;
 
             // Convert random to math.random:
             s = Regex.Replace(s, @"(?<!math\.)random\(", "math.random(");

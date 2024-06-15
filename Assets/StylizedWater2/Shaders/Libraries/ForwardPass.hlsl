@@ -264,7 +264,7 @@ float4 ForwardPassFragment(Varyings input, FRONT_FACE_TYPE_REAL vertexFace : FRO
 	water.waveNormal = normalWS;
 	
 #if _WAVES
-	WaveInfo waves = GetWaveInfo(uv, TIME * _WaveSpeed, _WaveHeight,  lerp(1, 0, vertexColor.b), _WaveFadeDistance.x, _WaveFadeDistance.y);
+	WaveInfo waves = GetWaveInfo(uv, positionWS, TIME * _WaveSpeed, _WaveHeight,  lerp(1, 0, vertexColor.b), _WaveFadeDistance.x, _WaveFadeDistance.y);
 	
 	#if !_FLAT_SHADING
 	waves.normal = normalize(water.vertexNormal + waves.normal);
@@ -291,9 +291,13 @@ float4 ForwardPassFragment(Varyings input, FRONT_FACE_TYPE_REAL vertexFace : FRO
 	#endif
 
 	#if DYNAMIC_EFFECTS_ENABLED
-	float4 dynamicEffectsData = SampleDynamicEffectsData(positionWS.xyz + water.offset.xyz);
-	//return float4(BoundsEdgeMask(positionWS.xz).xxx, 1.0);
-	//return float4(dynamicEffectsData.rrr, 1.0);
+	float4 dynamicEffectsData = 0;
+	if(_ReceiveDynamicEffects)
+	{
+		dynamicEffectsData = SampleDynamicEffectsData(positionWS.xyz + water.offset.xyz);
+		//return float4(BoundsEdgeMask(positionWS.xz).xxx, 1.0);
+		//return float4(dynamicEffectsData.rrr, 1.0);
+	}
 	#endif
 
 	/* ========
@@ -352,10 +356,10 @@ float4 ForwardPassFragment(Varyings input, FRONT_FACE_TYPE_REAL vertexFace : FRO
 	water.tangentWorldNormal = water.waveNormal;
 	
 	#if DYNAMIC_EFFECTS_ENABLED
-	if(NORMALS_AVAILABLE)
+	if(_ReceiveDynamicEffects && NORMALS_AVAILABLE)
 	{
 		float4 dynamicNormals = SampleDynamicEffectsNormals(water.positionWS + water.offset);
-		dynamicNormals.xyz = lerp(water.vertexNormal, dynamicNormals.xyz, dynamicEffectsData.a);
+		//dynamicNormals.xyz = lerp(water.vertexNormal, dynamicNormals.xyz, dynamicEffectsData.a);
   
 		//Composite into wave normal. Not using the tangent normal, since this has variable influence on reflection, dynamic effects should denote geometry curvature
 		water.waveNormal = BlendNormalWorldspaceRNM(dynamicNormals.xyz, water.waveNormal, float3(0,1,0));
@@ -462,7 +466,10 @@ float4 ForwardPassFragment(Varyings input, FRONT_FACE_TYPE_REAL vertexFace : FRO
 	if (_IntersectionSource == 2) interSecGradient = saturate(interSecGradient + vertexColor.r);
 
 	#if DYNAMIC_EFFECTS_ENABLED
-	//interSecGradient += dynamicEffectsData[DE_ALPHA_CHANNEL];
+	if(_ReceiveDynamicEffects)
+	{
+		//interSecGradient += dynamicEffectsData[DE_ALPHA_CHANNEL];
+	}
 	#endif
 	
 	water.intersection = SampleIntersection(uv.xy + (offsetVector * _IntersectionDistortion), _IntersectionTiling, interSecGradient, _IntersectionFalloff, TIME * _IntersectionSpeed) * _IntersectionColor.a;
@@ -533,15 +540,18 @@ float4 ForwardPassFragment(Varyings input, FRONT_FACE_TYPE_REAL vertexFace : FRO
 
 	//Dynamic foam (separately sampled)
 	#if DYNAMIC_EFFECTS_ENABLED
-	foamDistortion = _FoamDistortion * dynamicEffectsData[DE_DISPLACEMENT_CHANNEL].xx;
+	if(_ReceiveDynamicEffects)
+	{
+		foamDistortion = _FoamDistortion * dynamicEffectsData[DE_DISPLACEMENT_CHANNEL].xx;
 	
-	foamTex = SampleDynamicFoam((uv + foamDistortion.xy), _FoamTilingDynamic, _FoamSubTilingDynamic, TIME, _FoamSpeedDynamic, _FoamSubSpeedDynamic);
+		foamTex = SampleDynamicFoam((uv + foamDistortion.xy), _FoamTilingDynamic, _FoamSubTilingDynamic, TIME, _FoamSpeedDynamic, _FoamSubSpeedDynamic);
 
-	foamMask = dynamicEffectsData[DE_FOAM_CHANNEL];
-	foamMask = saturate(1.0 - foamMask);
-	water.foam += smoothstep(foamMask, foamMask + 1.0, foamTex);
+		foamMask = dynamicEffectsData[DE_FOAM_CHANNEL];
+		foamMask = saturate(1.0 - foamMask);
+		water.foam += smoothstep(foamMask, foamMask + 1.0, foamTex);
 
-	water.foam = saturate(water.foam);
+		water.foam = saturate(water.foam);
+	}
 	#endif
 	
 	#if _NORMALMAP
@@ -559,7 +569,7 @@ float4 ForwardPassFragment(Varyings input, FRONT_FACE_TYPE_REAL vertexFace : FRO
 	#if _CAUSTICS
 	float3 causticsCoords = scene.positionWS;
 	#if _DISABLE_DEPTH_TEX
-	causticsCoords = causticsCoords;
+	causticsCoords = uv.xyy;
 	#endif
 	
 	float causticsMask = saturate((1-water.fog) - water.intersection - water.foam - scene.skyMask) * water.vFace;

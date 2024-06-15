@@ -1,3 +1,16 @@
+1.4.4
+
+Added:
+- Foliage Renderer integration
+
+Changed:
+- Implemented proper error handling for Unity 6.
+- Improved handling of grass benders below the grass, which should not apply any force.
+- Corrected LOD Group set up on GrassPatch_Realistic prefab.
+
+Fixed:
+- Shader compile error on MacOS when using 2022.3.15+ (workaround for known URP bug)
+
 1.4.3
 
 Fixed:

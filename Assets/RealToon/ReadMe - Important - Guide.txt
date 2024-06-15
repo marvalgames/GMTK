@@ -133,3 +133,16 @@ Notes
 *To know what's new, read the "What's New.txt" text file.
 
 ===========================================================================
+
+
+
+===========================================================================
+Video Tutorials
+===========================================================================
+
+*How to download, import and unpack RealToon (URP,HDRP and BiRP) Shader Packages (For Beginners and Others levels):
+https://www.youtube.com/watch?v=JVlbOYi2V3M
+
+*RealToon Tutorials:
+https://www.youtube.com/playlist?list=PL0M1m9smMVPJ4qEkJnZObqJE5mU9uz6SY
+===========================================================================

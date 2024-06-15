@@ -199,6 +199,15 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
         private void ToggleSyncLocationsFromDB()
         {
             database.syncInfo.syncLocations = !database.syncInfo.syncLocations;
+            if (!database.syncInfo.syncLocations && database.syncInfo.syncLocationsDatabase != null)
+            {
+                if (EditorUtility.DisplayDialog("Disconnect Synced DB",
+                    "Also delete synced locations from this database?", "Yes", "No"))
+                {
+                    database.locations.RemoveAll(x => syncedLocationIDs.Contains(x.id));
+                }
+            }
+            InitializeLocationReorderableList();
             SetDatabaseDirty("Toggle Sync Locations");
         }
 

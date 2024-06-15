@@ -600,6 +600,11 @@ namespace StylizedGrass
             EditorGUILayout.LabelField("Third-party renderer integration:", EditorStyles.boldLabel);
             using (new EditorGUILayout.HorizontalScope(EditorStyles.helpBox))
             {
+                #if UNITY_2022_1_OR_NEWER
+                //As of this version extra padding is added, to make room for property override indicators
+                GUILayout.Space(22f);
+                #endif
+                
                 EditorGUILayout.LabelField(ShaderConfigurator.CurrentIntegration.ToString());
                 if (GUILayout.Button("Change", GUILayout.MaxWidth(100f)))
                 {
@@ -608,8 +613,9 @@ namespace StylizedGrass
                     menu.AddItem(new GUIContent("None"), ShaderConfigurator.CurrentIntegration == ShaderConfigurator.Integration.None, () => ShaderConfigurator.SetIntegration(ShaderConfigurator.Integration.None));
                     menu.AddItem(new GUIContent("Vegetation Studio (Pro)"), ShaderConfigurator.CurrentIntegration == ShaderConfigurator.Integration.VegetationStudio, () => ShaderConfigurator.SetIntegration(ShaderConfigurator.Integration.VegetationStudio));
                     menu.AddItem(new GUIContent("GPU Instancer"), ShaderConfigurator.CurrentIntegration == ShaderConfigurator.Integration.GPUInstancer, () => ShaderConfigurator.SetIntegration(ShaderConfigurator.Integration.GPUInstancer));
-                    menu.AddItem(new GUIContent("Nature Renderer"), ShaderConfigurator.CurrentIntegration == ShaderConfigurator.Integration.NatureRenderer, () => ShaderConfigurator.SetIntegration(ShaderConfigurator.Integration.NatureRenderer));
-                    menu.AddItem(new GUIContent("Nature Renderer 2021"), ShaderConfigurator.CurrentIntegration == ShaderConfigurator.Integration.NatureRenderer2021, () => ShaderConfigurator.SetIntegration(ShaderConfigurator.Integration.NatureRenderer2021));
+                    menu.AddItem(new GUIContent("Nature Renderer 2020 (Legacy)"), ShaderConfigurator.CurrentIntegration == ShaderConfigurator.Integration.NatureRendererLegacy, () => ShaderConfigurator.SetIntegration(ShaderConfigurator.Integration.NatureRendererLegacy));
+                    menu.AddItem(new GUIContent("Nature Renderer 2021+"), ShaderConfigurator.CurrentIntegration == ShaderConfigurator.Integration.NatureRenderer, () => ShaderConfigurator.SetIntegration(ShaderConfigurator.Integration.NatureRenderer));
+                    menu.AddItem(new GUIContent("Foliage Renderer"), ShaderConfigurator.CurrentIntegration == ShaderConfigurator.Integration.FoliageRenderer, () => ShaderConfigurator.SetIntegration(ShaderConfigurator.Integration.FoliageRenderer));
 
                     menu.ShowAsContext();
                 }

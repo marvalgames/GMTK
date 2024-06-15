@@ -8,6 +8,7 @@ SAMPLER(sampler_CausticsTex);
 
 float2 GetCausticsProjection(in float4 positionCS, in float3 lightDir, float3 positionWS, inout half attenuation)
 {
+	#if !_DISABLE_DEPTH_TEX
 	if(_EnableDirectionalCaustics)
 	{
 		#if ADVANCED_SHADING
@@ -20,6 +21,7 @@ float2 GetCausticsProjection(in float4 positionCS, in float3 lightDir, float3 po
 		//CausticsProjection matrix set up through scripting
 		return mul(CausticsProjection, float4(positionWS, 1.0)).xy;
 	}
+	#endif
 
 	return positionWS.xz;
 }
@@ -28,8 +30,8 @@ float3 SampleCaustics(float2 uv, float2 time, float tiling, float chromance)
 {
 	//return SAMPLE_TEXTURE2D(_CausticsTex, sampler_CausticsTex, uv * tiling).rgb;
 	
-	float3 caustics1 = SAMPLE_TEXTURE2D(_CausticsTex, sampler_CausticsTex, uv * tiling + (time.xy)).rgb;
-	float3 caustics2 = SAMPLE_TEXTURE2D(_CausticsTex, sampler_CausticsTex, (uv * tiling * 0.8) - (time.xy)).rgb;
+	float3 caustics1 = SAMPLE_TEXTURE2D_LOD(_CausticsTex, sampler_CausticsTex, uv * tiling + (time.xy), 0).rgb;
+	float3 caustics2 = SAMPLE_TEXTURE2D_LOD(_CausticsTex, sampler_CausticsTex, (uv * tiling * 0.8) - (time.xy), 0).rgb;
 	
 	#if UNITY_COLORSPACE_GAMMA
 	caustics1 = SRGBToLinear(caustics1);

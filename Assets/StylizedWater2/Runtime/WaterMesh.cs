@@ -6,6 +6,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Rendering;
 using UnityEngine.Serialization;
 using Random = System.Random;
 
@@ -42,6 +43,8 @@ namespace StylizedWater2
         /// Generated output mesh. Empty by default, use the Rebuild() function to generate one from the current settings.
         /// </summary>
         public Mesh mesh;
+        
+        private static Vector4 defaultTangent = new Vector4(-1f, 0f, 0f, -1f);
         
         public Mesh Rebuild()
         {
@@ -92,7 +95,9 @@ namespace StylizedWater2
             var uvs2 = new List<Vector2>();
             vertices.Add(Vector3.zero); //Center
             var tris = new List<int>();
-
+            List<Vector3> normals = new List<Vector3>();
+            List<Vector4> tangents = new List<Vector4>();
+            
             // First pass => build vertices
             for (int loop = 0; loop < subdivisions; loop++)
             {
@@ -118,6 +123,9 @@ namespace StylizedWater2
                 uvs.Add(new Vector2(0.5f + (vertices[i].x) * UVTiling,0.5f + (vertices[i].z) * UVTiling));
                 //Lightmap UV's
                 uvs2.Add(new Vector2(0.5f + (vertices[i].x / scale),0.5f + (vertices[i].z / scale)));
+                
+                normals.Add(Vector3.up);
+                tangents.Add(defaultTangent);
             }
 
             // Second pass => connect vertices into triangles
@@ -149,14 +157,18 @@ namespace StylizedWater2
             }
 
             // Create the mesh
-            
-            m.SetVertices(vertices);
-            m.SetTriangles(tris, 0);
-            m.RecalculateNormals();
-            m.RecalculateTangents();
+
+            int vertexCount = vertices.Count;
+            if (vertexCount >= 65536) m.indexFormat = IndexFormat.UInt32;
+            m.SetVertices(vertices, 0, vertexCount, MeshUpdateFlags.DontRecalculateBounds | MeshUpdateFlags.DontValidateIndices);
+            m.SetTriangles(tris, 0, false);
+
             m.SetUVs(0, uvs);
             m.SetUVs(1, uvs2);
-            m.colors = new Color[vertices.Count];
+            m.colors = new Color[vertexCount];
+            
+            m.SetNormals(normals, 0, vertexCount, MeshUpdateFlags.DontRecalculateBounds | MeshUpdateFlags.DontValidateIndices);
+            m.SetTangents(tangents, 0, vertexCount, MeshUpdateFlags.DontRecalculateBounds | MeshUpdateFlags.DontValidateIndices);
 
             m.bounds = new Bounds(Vector3.zero, new Vector3(scale, boundsPadding, scale));
             
@@ -174,15 +186,14 @@ namespace StylizedWater2
             int xCount = subdivisions + 1;
             int zCount = subdivisions + 1;
             int numTriangles = subdivisions * subdivisions * 6;
-            int numVertices = xCount * zCount;
+            int vertexCount = xCount * zCount;
 
-            Vector3[] vertices = new Vector3[numVertices];
-            Vector2[] uvs = new Vector2[numVertices];
-            Vector2[] uvs2 = new Vector2[numVertices];
+            Vector3[] vertices = new Vector3[vertexCount];
+            Vector2[] uvs = new Vector2[vertexCount];
+            Vector2[] uvs2 = new Vector2[vertexCount];
             int[] triangles = new int[numTriangles];
-            Vector4[] tangents = new Vector4[numVertices];
-            Vector3[] normals = new Vector3[numVertices];
-            Vector4 tangent = new Vector4(1f, 0f, 0f, -1f);
+            Vector4[] tangents = new Vector4[vertexCount];
+            Vector3[] normals = new Vector3[vertexCount];
 
             int index = 0;
             float scaleX = scale / subdivisions;
@@ -200,10 +211,11 @@ namespace StylizedWater2
                     vertices[index].x += UnityEngine.Random.Range(-noise * noiseScale, noise * noiseScale);
                     vertices[index].z -= UnityEngine.Random.Range(noise * noiseScale, -noise * noiseScale);
                     
-                    tangents[index] = tangent;
                     uvs[index] = new Vector2(0.5f + (vertices[index].x) * UVTiling, 0.5f + (vertices[index].z) * UVTiling);
                     //Lightmap UV's
                     uvs2[index] = new Vector2(0.5f + vertices[index].x / scale, 0.5f + vertices[index].z / scale);
+                    
+                    tangents[index] = defaultTangent;
                     normals[index] = Vector3.up;
                     
                     index++;
@@ -226,13 +238,17 @@ namespace StylizedWater2
                 }
             }
 
-            m.vertices = vertices;
-            m.triangles = triangles;
-            m.uv = uvs;
-            m.uv2 = uvs2;
-            m.tangents = tangents;
-            m.normals = normals;
-            m.colors = new Color[vertices.Length];
+            if (vertexCount >= 65536) m.indexFormat = IndexFormat.UInt32;
+            m.SetVertices(vertices, 0, vertexCount, MeshUpdateFlags.DontRecalculateBounds | MeshUpdateFlags.DontValidateIndices);;
+            m.SetTriangles(triangles, 0, false);
+            
+            m.SetUVs(0, uvs);
+            m.SetUVs(1, uvs2);
+            
+            m.SetNormals(normals, 0, vertexCount);
+            m.SetTangents(tangents, 0, vertexCount);
+            
+            m.colors = new Color[vertexCount];
             m.bounds = new Bounds(Vector3.zero, new Vector3(scale, boundsPadding, scale));
 
             return m;

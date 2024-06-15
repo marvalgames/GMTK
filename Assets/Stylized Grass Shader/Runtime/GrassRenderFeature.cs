@@ -9,6 +9,10 @@ using UnityEngine.Rendering.Universal;
 using UnityEngine.Rendering.RendererUtils;
 #endif
 
+#if UNITY_6000_0_OR_NEWER
+#warning This version does not support Unity 6, the rendering API used has been deprecated by Unity. The warnings thrown by this script are harmless for now.
+#endif
+
 namespace StylizedGrass
 {
     [UnityEngine.Scripting.APIUpdating.MovedFrom(true, "StylizedGrass", "sc.stylizedgrass.runtime", "GrassBendingFeature")]
@@ -118,6 +122,10 @@ namespace StylizedGrass
 
                 return new Vector3(Snap(pos.x, texelSize), Snap(pos.y, texelSize), Snap(pos.z, texelSize));
             }
+            
+            #if UNITY_6000_0_OR_NEWER //Silence warning spam
+            public override void RecordRenderGraph(UnityEngine.Rendering.RenderGraphModule.RenderGraph renderGraph, ContextContainer frameData) { }
+            #endif
 
             public override void Configure(CommandBuffer cmd, RenderTextureDescriptor cameraTextureDescriptor)
             {
@@ -235,6 +243,10 @@ namespace StylizedGrass
                 this.settings = settings;
             }
             
+            #if UNITY_6000_0_OR_NEWER //Silence warning spam
+            public override void RecordRenderGraph(UnityEngine.Rendering.RenderGraphModule.RenderGraph renderGraph, ContextContainer frameData) { }
+            #endif
+            
             public override void Execute(ScriptableRenderContext context, ref RenderingData renderingData) { }
 
             public override void OnCameraSetup(CommandBuffer cmd, ref RenderingData renderingData)
@@ -326,6 +338,16 @@ namespace StylizedGrass
         
         private SetupConstants constantsSetupPass;
         private RenderBendVectors bendingVectorPass;
+
+        void OnEnable()
+        {
+            #if UNITY_6000_0_OR_NEWER && UNITY_EDITOR
+            if (UnityEngine.Rendering.GraphicsSettings.GetRenderPipelineSettings<RenderGraphSettings>().enableRenderCompatibilityMode == false)
+            {
+                Debug.LogError($"[{this.name}] Render Graph is enabled but is not supported. Enable \"Compatibility Mode\" in your project's Graphics Settings as a workaround.");
+            }
+            #endif
+        }
         
         public override void Create()
         {

@@ -181,6 +181,7 @@ namespace PixelCrushers.DialogueSystem
         private bool m_started = false;
         private DialogueDebug.DebugLevel m_lastDebugLevelSet = DialogueDebug.DebugLevel.None;
         private List<ActiveConversationRecord> m_activeConversations = new List<ActiveConversationRecord>();
+        private Queue<string> alertsQueuedForConversationEnd = new Queue<string>();
         private UILocalizationManager m_uiLocalizationManager = null;
         private bool m_calledRandomizeNextEntry = false;
         private bool m_isDuplicateBeingDestroyed = false;
@@ -1584,6 +1585,11 @@ namespace PixelCrushers.DialogueSystem
         private void OnConversationEnd(Transform actor)
         {
             conversationEnded(actor);
+            int safeguard = 0;
+            while (alertsQueuedForConversationEnd.Count > 0 && safeguard++ < 100)
+            {
+                ShowAlert(alertsQueuedForConversationEnd.Dequeue());
+            }
         }
 
         /// <summary>
@@ -1851,6 +1857,10 @@ namespace PixelCrushers.DialogueSystem
                 if (message.Contains("\\n")) message = message.Replace("\\n", "\n");
                 gameObject.BroadcastMessage(DialogueSystemMessages.OnShowAlert, message, SendMessageOptions.DontRequireReceiver);
                 dialogueUI.ShowAlert(GetLocalizedText(FormattedText.ParseCode(message)), duration);
+            }
+            else if (isConversationActive && !displaySettings.alertSettings.allowAlertsDuringConversations)
+            {
+                alertsQueuedForConversationEnd.Enqueue(message);
             }
         }
 
@@ -2337,11 +2347,13 @@ namespace PixelCrushers.DialogueSystem
 
             // Unregister previous instance's versions first:
             Lua.UnregisterFunction("RandomizeNextEntry");
+            Lua.UnregisterFunction("RandomizeNextEntryNoDuplicate");
             Lua.UnregisterFunction("UpdateTracker");
             // Then register functions:
             Lua.RegisterFunction("ShowAlert", null, SymbolExtensions.GetMethodInfo(() => LuaShowAlert(string.Empty)));
             Lua.RegisterFunction("HideAlert", null, SymbolExtensions.GetMethodInfo(() => LuaHideAlert()));
-            Lua.RegisterFunction("RandomizeNextEntry", this, SymbolExtensions.GetMethodInfo(() => RandomizeNextEntry()));
+            Lua.RegisterFunction("RandomizeNextEntry", this, SymbolExtensions.GetMethodInfo(() => LuaRandomizeNextEntry()));
+            Lua.RegisterFunction("RandomizeNextEntryNoDuplicate", this, SymbolExtensions.GetMethodInfo(() => LuaRandomizeNextEntryNoDuplicate()));
             Lua.RegisterFunction("UpdateTracker", this, SymbolExtensions.GetMethodInfo(() => SendUpdateTracker()));
             Lua.RegisterFunction("GetEntryText", null, SymbolExtensions.GetMethodInfo(() => GetEntryText((double)0, string.Empty)));
             Lua.RegisterFunction("GetEntryBool", null, SymbolExtensions.GetMethodInfo(() => GetEntryBool((double)0, string.Empty)));
@@ -2411,10 +2423,24 @@ namespace PixelCrushers.DialogueSystem
             return (entry != null) ? Field.LookupFloat(entry.fields, fieldName) : 0;
         }
 
-        public void RandomizeNextEntry()
+        public void RandomizeNextEntry(bool noDuplicate = false)
         {
             m_calledRandomizeNextEntry = true;
-            if (conversationController != null) conversationController.randomizeNextEntry = true;
+            if (conversationController != null)
+            {
+                conversationController.randomizeNextEntry = true;
+                conversationController.randomizeNextEntryNoDuplicate = noDuplicate;
+            }
+        }
+
+        private void LuaRandomizeNextEntry()
+        {
+            RandomizeNextEntry(false);
+        }
+
+        private void LuaRandomizeNextEntryNoDuplicate()
+        {
+            RandomizeNextEntry(true);
         }
 
         public static string Conditional(bool condition, string value)

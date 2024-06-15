@@ -124,7 +124,7 @@ namespace PixelCrushers.DialogueSystem
             conversationUIElements.ClearCaches();
         }
 
-        protected IEnumerator CloseAfterPanelsAreClosed()
+        protected virtual IEnumerator CloseAfterPanelsAreClosed()
         {
             // Close subtitle/menu panels and wait for them to finish:
             conversationUIElements.ClosePanels();

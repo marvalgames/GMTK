@@ -136,6 +136,7 @@ namespace StylizedWater2
         private MaterialProperty _WaveCount;
         private MaterialProperty _WaveDirection;
 
+
         private MaterialProperty _TessValue;
         private MaterialProperty _TessMin;
         private MaterialProperty _TessMax;
@@ -169,6 +170,8 @@ namespace StylizedWater2
         private MaterialProperty _FoamOn;
         private MaterialProperty _RefractionOn;
         private MaterialProperty _WavesOn;
+        
+        private MaterialProperty _ReceiveDynamicEffects;
 
         private MaterialProperty _CurvedWorldBendSettings;
         
@@ -333,6 +336,8 @@ namespace StylizedWater2
             _NormalMapOn = FindProperty("_NormalMapOn", props);
             _DistanceNormalsOn = FindProperty("_DistanceNormalsOn", props);
             _WavesOn = FindProperty("_WavesOn", props);
+            
+            _ReceiveDynamicEffects = FindProperty("_ReceiveDynamicEffects", props);
 
             if(material.HasProperty("_CurvedWorldBendSettings")) _CurvedWorldBendSettings = FindProperty("_CurvedWorldBendSettings", props);
             
@@ -529,6 +534,14 @@ namespace StylizedWater2
                     MessageType.Error);
             }
             
+            #if UNITY_6000_0_OR_NEWER
+            if (tesselationEnabled && UniversalRenderPipeline.asset.gpuResidentDrawerMode != GPUResidentDrawerMode.Disabled)
+            {
+                UI.DrawNotification(true, "[Unity 6+] Using the GPU Resident Drawer with Tessellation enabled is not supported!" +
+                                          "\n\nEither disable Tessellation (under the Rendering tab), or disable GPU Resident Drawer in your pipeline settings.", MessageType.Error);
+            }
+            #endif
+            
             UI.DrawNotification(depthAfterTransparents && _ZWrite.floatValue > 0, "\nZWrite option (Rendering tab) is enabled & Depth Texture Mode is set to \'After Transparents\" on the default renderer\n\nWater can not render properly with this combination\n", MessageType.Error);
             
             #if !UNITY_2023_1_OR_NEWER //OpenGLES 2.0 no longer supported at all
@@ -679,6 +692,8 @@ namespace StylizedWater2
 
                 UI.Material.DrawVector2(_Direction, "Direction");
                 UI.Material.DrawFloatField(_Speed, label:"Speed");
+                
+                UI.DrawNotification(WaterObject.CustomTime > 0, $"Shader animations are driven by a custom time value set through script ({WaterObject.CustomTime}).", MessageType.Info);
 
                 #if UNITY_2020_2_OR_NEWER
                 if (EditorWindow.focusedWindow && EditorWindow.focusedWindow.GetType() == typeof(SceneView))
@@ -853,8 +868,16 @@ namespace StylizedWater2
                     
                     UI.DrawNotification(material.enableInstancing, "Tessellation does not work correctly when GPU instancing is enabled", MessageType.Warning);
                 }
-
+                
                 EditorGUILayout.Space();
+
+                if (dynamicEffectsInstalled)
+                {
+                    DrawShaderProperty(_ReceiveDynamicEffects, new GUIContent(_ReceiveDynamicEffects.displayName, "Specify if this material should apply dynamic effects (displacement, foam + normals) to itself." +
+                                                                                                                  "\n\nThis functionality is specific to the Dynamic Effects extension"));
+
+                    EditorGUILayout.Space();
+                }
             }
             EditorGUILayout.EndFadeGroup();
         }
@@ -1066,13 +1089,16 @@ namespace StylizedWater2
                         EditorGUILayout.LabelField("Render feature settings", EditorStyles.boldLabel);
                         DrawRenderFeatureNotification();
 
-                        if (renderFeature)
+                        using (new EditorGUI.DisabledGroupScope((_DisableDepthTexture.floatValue == 1f && _CausticsOn.floatValue == 1f)))
                         {
-                            EditorGUI.BeginChangeCheck();
-                            renderFeature.directionalCaustics = EditorGUILayout.Toggle("Directional Caustics", renderFeature.directionalCaustics);
-                            if (EditorGUI.EndChangeCheck())
+                            if (renderFeature)
                             {
-                                EditorUtility.SetDirty(renderFeature);
+                                EditorGUI.BeginChangeCheck();
+                                renderFeature.directionalCaustics = EditorGUILayout.Toggle("Directional Caustics", renderFeature.directionalCaustics);
+                                if (EditorGUI.EndChangeCheck())
+                                {
+                                    EditorUtility.SetDirty(renderFeature);
+                                }
                             }
                         }
                     }

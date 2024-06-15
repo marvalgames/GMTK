@@ -78,6 +78,7 @@ namespace PixelCrushers.DialogueSystem.Articy
         public bool ConvertMarkupToRichText { get; set; }
         public bool SplitTextOnPipes { get; set; }
         public bool TrimWhitespace { get; set; } = true;
+        public bool ReorderIDs { get; set; }
         public string FlowFragmentScript { get; set; }
         public string VoiceOverProperty { get; set; }
         public string LocalizationXlsx { get; set; }
@@ -116,6 +117,7 @@ namespace PixelCrushers.DialogueSystem.Articy
             ConvertMarkupToRichText = true;
             SplitTextOnPipes = true;
             TrimWhitespace = true;
+            ReorderIDs = false;
             FlowFragmentScript = DefaultFlowFragmentScript;
             VoiceOverProperty = DefaultVoiceOverProperty;
             LocalizationXlsx = string.Empty;

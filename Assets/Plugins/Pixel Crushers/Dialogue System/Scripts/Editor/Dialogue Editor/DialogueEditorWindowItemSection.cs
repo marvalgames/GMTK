@@ -334,6 +334,15 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
         private void ToggleSyncItemsFromDB()
         {
             database.syncInfo.syncItems = !database.syncInfo.syncItems;
+            if (!database.syncInfo.syncItems && database.syncInfo.syncItemsDatabase != null)
+            {
+                if (EditorUtility.DisplayDialog("Disconnect Synced DB",
+                    "Also delete synced items/quests from this database?", "Yes", "No"))
+                {
+                    database.items.RemoveAll(x => syncedItemIDs.Contains(x.id));
+                }
+            }
+            InitializeItemReorderableList();
             SetDatabaseDirty("Toggle Sync Items");
         }
 

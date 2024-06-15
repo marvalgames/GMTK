@@ -117,6 +117,8 @@ CBUFFER_START(UnityPerMaterial)
 	half _VertexColorWaveFlattening;
 	half _VertexColorFoam;
 
+	bool _ReceiveDynamicEffects;
+
 	half _WaveTint;
 #ifdef TESSELLATION_ON	
 	float _TessValue;

@@ -55,7 +55,8 @@ namespace StylizedGrass
                 }
                 GUILayout.Space(11);
             }
-
+            
+            StylizedGrassGUI.DrawRenderGraphError();
 
             serializedObject.Update();
 

@@ -1,3 +1,44 @@
+1.6.6
+
+Fixed:
+- Workaround for shader error on Mac in Unity 2022.3.15+, regarding "_FOVEATED_RENDERING_NON_UNIFORM_RASTER" (known bug: UUM-67560)
+
+1.6.5
+
+Added:
+- "Sample Water Normal" sub-graph, allows other shaders to read out the water surface normal
+
+Fixed:
+- Distance fading for waves not behaving correctly if an origin shifting system was in use (WaterObject.PositionOffset)
+- Displacement Pre-pass unnecessarily also calculating information per-pixel
+
+1.6.4
+
+Changed:
+- Implemented proper error handling for Unity 6.
+- "Murky" water material
+
+Fixed:
+- Planar Reflections, minute changes in render scale not having an effect on resolution.
+- Buoyancy API not respecting custom time value if it was exactly 0.
+- Indirect lighting and reflections being black in demo scenes in Unity 2023.2+.
+- Translucency for point lights being visible on backfaces (underwater scenario).
+
+1.6.3
+
+Added:
+- Checkbox on material to enable Dynamic Effects (enabled by default).
+
+Changed:
+- Simulation space of particle effects is now World-Space by default
+- Water Grid 'columns' parameter now allows for a 0 value. This covers the use case of using the component with custom geometry.
+- Water Mesh creation is no longer limited to 65536 vertices.
+
+Fixed:
+- Water Grid, wireframe display not accurately representing the geometry if the Transform was scaled.
+- Caustics effect not appearing correctly when the "Disable Depth Texture" option was enabled.
+- Shader compile error on MacOS when using 2022.3.15+ (workaround for known URP bug)
+
 1.6.2
 
 Added:

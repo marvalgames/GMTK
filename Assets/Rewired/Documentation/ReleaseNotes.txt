@@ -1,3 +1,19 @@
+1.1.55.0:
+
+   Changes:
+      - Added Update Mode option.
+      - Removed DualSense Edge Enhanced Device Support due to not functioning correctly.
+
+   API Changes:
+      - Added Rewired.ReInput.Update function.
+      - Added Rewired.ReInput.ConfigHelper.updateMode property.
+      - Added Rewired.Config.UpdateMode enum.
+      - Added Rewired.ControllerExtensions.DualShock4Extension.batteryCharging property.
+   
+   Bug Fixes:
+      - Sony Dual Shock 4, Enhanced Device Support: Fixed incorrect battery level.
+      - Sony Dual Sense, Enhanced Device Support: Fixed incorrect battery charging state and battery level.
+
 1.1.54.1:
 
    Bug Fixes: 

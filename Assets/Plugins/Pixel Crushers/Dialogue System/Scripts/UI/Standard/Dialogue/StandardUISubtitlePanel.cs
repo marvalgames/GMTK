@@ -467,16 +467,31 @@ namespace PixelCrushers.DialogueSystem
             numAccumulatedLines = 0;
         }
 
+        private Coroutine m_ShowContinueButtonCoroutine;
+
         public virtual void ShowContinueButton()
         {
+            if (m_ShowContinueButtonCoroutine != null)
+            {
+                DialogueManager.instance.StopCoroutine(m_ShowContinueButtonCoroutine);
+            }
             if (blockInputDuration > 0)
             {
-                DialogueManager.instance.StartCoroutine(ShowContinueButtonAfterBlockDuration());
+                m_ShowContinueButtonCoroutine = DialogueManager.instance.StartCoroutine(ShowContinueButtonAfterBlockDuration());
             }
             else
             {
                 ShowContinueButtonNow();
             }
+        }
+
+        public virtual void HideContinueButton()
+        {
+            if (m_ShowContinueButtonCoroutine != null)
+            {
+                DialogueManager.instance.StopCoroutine(m_ShowContinueButtonCoroutine);
+            }
+            Tools.SetGameObjectActive(continueButton, false);
         }
 
         protected virtual IEnumerator ShowContinueButtonAfterBlockDuration()
@@ -494,6 +509,7 @@ namespace PixelCrushers.DialogueSystem
             yield return DialogueManager.instance.StartCoroutine(DialogueTime.WaitForSeconds(blockInputDuration));
             continueButton.interactable = true;
             ShowContinueButtonNow();
+            m_ShowContinueButtonCoroutine = null;
         }
 
         protected virtual void ShowContinueButtonNow()
@@ -514,11 +530,6 @@ namespace PixelCrushers.DialogueSystem
                 }
             }
             shouldShowContinueButton = true;
-        }
-
-        public virtual void HideContinueButton()
-        {
-            Tools.SetGameObjectActive(continueButton, false);
         }
 
         /// <summary>

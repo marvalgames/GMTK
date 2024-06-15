@@ -6188,6 +6188,21 @@
             Updates in the OnGUI loop.
             </summary>
         </member>
+        <member name="T:Rewired.Config.UpdateMode">
+            <summary>
+            Rewired update mode.
+            </summary>
+        </member>
+        <member name="F:Rewired.Config.UpdateMode.Automatic">
+            <summary>
+            Update is called automatically.
+            </summary>
+        </member>
+        <member name="F:Rewired.Config.UpdateMode.Manual">
+            <summary>
+            Update must be called manually.
+            </summary>
+        </member>
         <member name="T:Rewired.Config.ThrottleCalibrationMode">
             <summary>
             Throttle calibration mode.
@@ -8821,6 +8836,11 @@
         <member name="P:Rewired.ControllerExtensions.DualShock4Extension.batteryLevel">
             <summary>
             Battery level as a percentage. [0 - 100]
+            </summary>
+        </member>
+        <member name="P:Rewired.ControllerExtensions.DualShock4Extension.batteryCharging">
+            <summary>
+            Is the battery charging?
             </summary>
         </member>
         <member name="P:Rewired.ControllerExtensions.DualShock4Extension.Rewired#ControllerExtensions#IHIDControllerExtension#vendorId">
@@ -22953,6 +22973,47 @@
             Is the input system ready?
             </summary>
         </member>
+        <member name="M:Rewired.ReInput.Update">
+             <summary>
+             This can be used to update the system state manually.
+             Controller input values will be updated, Action values updated, button frame events reset and recalculated,
+             and various other events triggered (controller connect / disconnect, etc.)
+             The Manual update must be enabled in the Rewired Input Manager settings for this function to have any effect.
+             Each time this function is called, a new input frame will begin.
+             Input and button events will remain valid until the next input frame.
+             Button up/down events of all types (double click, etc) and axis delta values (mouse axes, etc.) are frame values. That is, they exist
+             for one input frame and then are cleared on the next frame. Because of this, when and how often Update is called is
+             very important for consumers of input using the polling method. Input should be updated on a 1:1 ratio with polling consumers of input,
+             and update should occur in the loop before input is consumed.
+             Automatic mode  allows you to choose multiple update loops and each will track frame values independently, but when using Manual update mode,
+             it is only possible to track these values for one input update loop. This means you cannot reliably consume input in multiple loops
+             that may update at different rates, such as consuming input in both MonoBehaviour.Update and MonoBehaviour.FixedUpdate.
+             Calling this function immediately before consuming input will have no effect on input latency on those platforms,
+             input sources, or devices that do not support multi-threaded input or those for which Rewired doesn't have a
+             multi-threaded implementation.
+             
+             NOTE: If you are attempting to update input manually in order to reduce input latency, realize that not all platforms,
+             input sources, or devices can be updated at an arbitrary time.
+            
+             WARNING: This must be called only from the main thread!
+            
+             WARNING: All Rewired addons (integrations, RewiredStandaloneInputModule, Control Mapper, Touch Controls, Player Mouse, etc.) require
+             input to be calculated correctly in the MonoBehaviour.Update loop. Specifically, button up/down events, and for some, mouse axis delta values, must be available
+             for the entire Update frame in order for these addons to read button events correctly. When you choose to manually handle
+             updating, Rewired cannot run the normal update in the Update loop when Manual update mode is used, so these addons may not function correctly depending on when or
+             how often you choose to update input. If you update input multiple times in a Unity frame, for example, button up/down events
+             may be reset before the MonoBehaviour.Update is called in these various addons, causing missed button events and incorrect axis delta values.
+             Because of this, addons may not function correctly if you choose to use manual updating.
+             
+             WARNING: Rewired has different dependencies for input on different platforms depending on the input sources in use and the devices in use.
+             If the input API in use for the device in question is unable to provide new input values by the time you call ReInput.Update, there will
+             be at least a 1-frame lag in input. This depends entirely on when you choose to update input and the specific input API in use for connected
+             input devices. For example, if you are using this to support updating input in an ECS System that you have set to run before UnityEngine.Input's
+             update executes, any devices on platforms that rely on UnityEngine.Input will retrieve an outdated value from UnityEngine.Input because it hasn't updated yet.
+             Whether this is an issue is dependent on order of execution. Unity has exposed low level functionality (PlayerLoop) that allows changing execution
+             order of various events. You must know exactly what you are doing if you intend to run the Rewired update manually any earlier than MonoBehaviour.Update.
+             </summary>
+        </member>
         <member name="M:Rewired.ReInput.Reset">
             <summary>
             Completely clears and reinitializes the Input Manager.
@@ -23058,6 +23119,12 @@
         <member name="P:Rewired.ReInput.ConfigHelper.useWindowsGamingInput">
             <summary>
             Toggles the use of WindowsGamingInput in Windows Standalone and Windows UWP during runtime. Rewired will be completely reset if this value is changed.
+            </summary>
+        </member>
+        <member name="P:Rewired.ReInput.ConfigHelper.updateMode">
+            <summary>
+            Changes the Update Mode setting during runtime.
+            Rewired will be completely reset if this value is changed.
             </summary>
         </member>
         <member name="P:Rewired.ReInput.ConfigHelper.updateLoop">

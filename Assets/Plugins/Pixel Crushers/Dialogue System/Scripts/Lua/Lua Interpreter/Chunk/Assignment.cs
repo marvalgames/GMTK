@@ -24,6 +24,11 @@ namespace Language.Lua
             VariableTableToMonitor = null;
         }
 
+        public static void InvokeVariableChanged(string variable, object value)
+        {
+            VariableChanged?.Invoke(variable, value);
+        }
+
         public override LuaValue Execute(LuaTable enviroment, out bool isBreak)
         {
             //[PixelCrushers] LuaValue[] values = this.ExprList.ConvertAll(expr => expr.Evaluate(enviroment)).ToArray();

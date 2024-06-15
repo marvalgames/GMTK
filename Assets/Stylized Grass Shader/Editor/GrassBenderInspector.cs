@@ -51,6 +51,8 @@ namespace StylizedGrass
             StylizedGrassGUI.DrawHeader();
 
             #if URP
+            StylizedGrassGUI.DrawRenderGraphError();
+            
             serializedObject.Update();
 
             EditorGUI.BeginChangeCheck();

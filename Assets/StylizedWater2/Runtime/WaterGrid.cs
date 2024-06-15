@@ -23,7 +23,7 @@ namespace StylizedWater2
         [Range(0.15f, 10f)] 
         [Tooltip("Distance between vertices, rather higher than lower")]
         public float vertexDistance = 2f;
-        [Min(1)]
+        [Min(0)]
         public int rowsColumns = 4;
 
         [HideInInspector]
@@ -140,12 +140,19 @@ namespace StylizedWater2
             }
         }
 
+        private void CalculateTileSize()
+        {
+            rowsColumns = Mathf.Max(rowsColumns, 0);
+            float m_scale = scale * this.transform.lossyScale.x;
+            tileSize = Mathf.Max(1f, m_scale / rowsColumns);
+        }
+        
         private void RecreateMesh()
         {
-            rowsColumns = Mathf.Max(rowsColumns, 1);
-            tileSize = Mathf.Max(1f, scale / rowsColumns);
-            
-            mesh = WaterMesh.Create(WaterMesh.Shape.Rectangle, tileSize, vertexDistance, tileSize);
+            CalculateTileSize();
+            float m_vertexDistance = vertexDistance * this.transform.lossyScale.x;
+
+            mesh = WaterMesh.Create(WaterMesh.Shape.Rectangle, tileSize, m_vertexDistance, tileSize);
         }
 
         private void ReassignMesh()
@@ -177,16 +184,19 @@ namespace StylizedWater2
         {
             if (DisplayWireframe)
             {
+                Gizmos.matrix = this.transform.localToWorldMatrix;
                 Gizmos.color = new Color(0, 0, 0, 0.5f);
 
                 foreach (WaterObject waterObject in objects)
                 {
-                    if(waterObject.meshFilter.sharedMesh) Gizmos.DrawWireMesh(waterObject.meshFilter.sharedMesh, waterObject.transform.position);
+                    if(waterObject.meshFilter.sharedMesh) Gizmos.DrawWireMesh(waterObject.meshFilter.sharedMesh, waterObject.transform.localPosition);
                 }
             }
 
             if (DisplayGrid)
             {
+                if (tileSize <= 0) CalculateTileSize();
+                
                 Gizmos.color = new Color(1f, 0.25f, 0.25f, 0.5f);
                 Gizmos.matrix = this.transform.localToWorldMatrix;
                 

@@ -298,6 +298,9 @@ namespace PixelCrushers.DialogueSystem.Articy
                 "Trim whitespace around pipes."),
                 prefs.TrimWhitespace);
             }
+            prefs.ReorderIDs = EditorGUILayout.Toggle(new GUIContent("Reorder IDs",
+                "Reorder internal dialogue entry IDs depth-first after importing."), 
+                prefs.ReorderIDs);
         }
 
         /// <summary>
@@ -786,6 +789,7 @@ namespace PixelCrushers.DialogueSystem.Articy
                     {
                         ArticyConverter.ConvertArticyDataToDatabase(articyData, prefs, template, database);
                         ArticyEditorTools.FindPortraitTexturesInAssetDatabase(articyData, prefs.PortraitFolder, database);
+                        if (prefs.ReorderIDs) ReorderIDs(database);
                         EditorUtility.SetDirty(database);
                         ConvertTextTable(assetName);
                         AssetDatabase.SaveAssets();
@@ -806,16 +810,21 @@ namespace PixelCrushers.DialogueSystem.Articy
             EditorUtility.DisplayProgressBar("Importing articy:draft project", info, progress);
         }
 
-        /// <summary>
-        /// Loads the dialogue database if it already exists and overwrite is ticked; otherwise creates a new one.
-        /// </summary>
-        /// <returns>
-        /// The database.
-        /// </returns>
-        /// <param name='filename'>
-        /// Asset filename.
-        /// </param>
-        private DialogueDatabase LoadOrCreateDatabase(string filename)
+        private void ReorderIDs(DialogueDatabase database)
+        {
+            DialogueDatabaseEditorTools.ReorderIDsInConversationsDepthFirst(database);
+        }
+
+    /// <summary>
+    /// Loads the dialogue database if it already exists and overwrite is ticked; otherwise creates a new one.
+    /// </summary>
+    /// <returns>
+    /// The database.
+    /// </returns>
+    /// <param name='filename'>
+    /// Asset filename.
+    /// </param>
+    private DialogueDatabase LoadOrCreateDatabase(string filename)
         {
             var assetPath = prefs.OutputFolder;
             if (!assetPath.EndsWith("/")) assetPath += "/";

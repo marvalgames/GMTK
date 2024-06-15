@@ -18,9 +18,13 @@ float3 BlendOverlay(float3 a, float3 b)
 	return color;
 }
 
-
 float4 SampleColorMapTexture(in float3 positionWS) 
 {
+	#ifdef FoliageRenderer
+	//float2 worldUV = (positionWS.xz + _TerrainPosition.xz * -1) / _TerrainSize.xz;
+	//return GetWorldAlbedo(positionWS.xz);
+	#endif
+	
 	#ifndef GRASS_COMMON_INCLUDED
 	return 0;
 	#else

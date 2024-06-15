@@ -78,7 +78,7 @@ namespace StylizedWater2
             using (new EditorGUILayout.HorizontalScope())
             {
                 EditorGUILayout.PrefixLabel(rowsColumns.displayName);
-                using (new EditorGUI.DisabledScope(rowsColumns.intValue <= 1))
+                using (new EditorGUI.DisabledScope(rowsColumns.intValue <= 0))
                 {
                     if (GUILayout.Button("-", EditorStyles.miniButtonLeft, GUILayout.Width(25f)))
                     {
@@ -97,10 +97,7 @@ namespace StylizedWater2
 
             EditorGUILayout.PropertyField(vertexDistance, new GUIContent("Min. vertex distance", vertexDistance.tooltip));
             vertexCount = Mathf.FloorToInt(((scale.floatValue / rowsColumns.intValue) / vertexDistance.floatValue) * ((scale.floatValue / rowsColumns.intValue) / vertexDistance.floatValue));
-            if(vertexCount > 65535)
-            {
-                EditorGUILayout.HelpBox("Vertex count of individual tiles is too high. Increase the vertex distance, decrease the grid scale, or add more rows/columns", MessageType.Error);
-            }
+            //EditorGUILayout.HelpBox($"Vertex count: {vertexCount}", MessageType.None);
 
             if (EditorGUI.EndChangeCheck())
             {

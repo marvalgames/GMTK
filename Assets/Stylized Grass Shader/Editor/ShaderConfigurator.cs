@@ -30,18 +30,21 @@ namespace StylizedGrass
             None,
             [InspectorName("Vegetation Studio (Pro)")]
             VegetationStudio,
-            [InspectorName("Nature Renderer")]
+            [InspectorName("Nature Renderer 2020 (Legacy)")]
+            NatureRendererLegacy,
+            [InspectorName("Nature Renderer 2021/2022")]
             NatureRenderer,
-            [InspectorName("Nature Renderer 2021")]
-            NatureRenderer2021,
             [InspectorName("GPU Instancer")]
-            GPUInstancer
+            GPUInstancer,
+            [InspectorName("Foliage Renderer")]
+            FoliageRenderer
         }
 
         private const string VegetationStudioGUID = "a9324aff8d6fb7746847dbf6108e0382";
-        private const string NatureRendererGUID = "e184c5532d8acad44a76e8763685710f";
-        private const string NatureRenderer2021GUID = "ca4c4574fc8ceab448f85800842a6cee";
+        private const string NatureRendererLegacyGUID = "e184c5532d8acad44a76e8763685710f";
+        private const string NatureRendererGUID = "ca4c4574fc8ceab448f85800842a6cee";
         private const string GPUInstancerGUID = "18df6f4b5f1ec6045ad24ed3cf05d13b";
+        private const string FoliageRendererGUID = "7f684950130464f4c86c65052b7c92c8";
 
         public static Integration CurrentIntegration
         {
@@ -65,9 +68,10 @@ namespace StylizedGrass
             {
                 ToggleCodeBlock(ShaderFilePath, Integration.None.ToString(), integration == Integration.None);
                 ToggleCodeBlock(ShaderFilePath, Integration.VegetationStudio.ToString(), integration == Integration.VegetationStudio);
+                ToggleCodeBlock(ShaderFilePath, Integration.NatureRendererLegacy.ToString(), integration == Integration.NatureRendererLegacy);
                 ToggleCodeBlock(ShaderFilePath, Integration.NatureRenderer.ToString(), integration == Integration.NatureRenderer);
-                ToggleCodeBlock(ShaderFilePath, Integration.NatureRenderer2021.ToString(), integration == Integration.NatureRenderer2021);
                 ToggleCodeBlock(ShaderFilePath, Integration.GPUInstancer.ToString(), integration == Integration.GPUInstancer);
+                ToggleCodeBlock(ShaderFilePath, Integration.FoliageRenderer.ToString(), integration == Integration.FoliageRenderer);
             }
             
             SetIncludePath(integration);
@@ -167,11 +171,13 @@ namespace StylizedGrass
             {
                 case Integration.VegetationStudio: GUID = VegetationStudioGUID;
                     break;
+                case Integration.NatureRendererLegacy: GUID = NatureRendererLegacyGUID;
+                    break;
                 case Integration.NatureRenderer: GUID = NatureRendererGUID;
                     break;
-                case Integration.NatureRenderer2021: GUID = NatureRenderer2021GUID;
-                    break;
                 case Integration.GPUInstancer: GUID = GPUInstancerGUID;
+                    break;
+                case Integration.FoliageRenderer: GUID = FoliageRendererGUID;
                     break;
                 default: GUID = string.Empty;
                     break;
