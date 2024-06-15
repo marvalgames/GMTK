@@ -138,6 +138,7 @@ Shader "Terrain_Area2"
       #define _NONORMALMAP 1
       #define _USEGRADMIP 1
       #define _PERTEXUVSCALEOFFSET 1
+      #define _PERTEXTINT 1
       #define _PERTEXSMOOTHSTR 1
       #define _PERTEXMETALLIC 1
       #define _BRANCHSAMPLES 1
@@ -4409,6 +4410,7 @@ float3 GetTessFactors ()
       #define _NONORMALMAP 1
       #define _USEGRADMIP 1
       #define _PERTEXUVSCALEOFFSET 1
+      #define _PERTEXTINT 1
       #define _PERTEXSMOOTHSTR 1
       #define _PERTEXMETALLIC 1
       #define _BRANCHSAMPLES 1
@@ -8619,6 +8621,7 @@ float3 GetTessFactors ()
       #define _NONORMALMAP 1
       #define _USEGRADMIP 1
       #define _PERTEXUVSCALEOFFSET 1
+      #define _PERTEXTINT 1
       #define _PERTEXSMOOTHSTR 1
       #define _PERTEXMETALLIC 1
       #define _BRANCHSAMPLES 1
@@ -12742,6 +12745,7 @@ float3 GetTessFactors ()
       #define _NONORMALMAP 1
       #define _USEGRADMIP 1
       #define _PERTEXUVSCALEOFFSET 1
+      #define _PERTEXTINT 1
       #define _PERTEXSMOOTHSTR 1
       #define _PERTEXMETALLIC 1
       #define _BRANCHSAMPLES 1
@@ -16861,6 +16865,7 @@ float3 GetTessFactors ()
       #define _NONORMALMAP 1
       #define _USEGRADMIP 1
       #define _PERTEXUVSCALEOFFSET 1
+      #define _PERTEXTINT 1
       #define _PERTEXSMOOTHSTR 1
       #define _PERTEXMETALLIC 1
       #define _BRANCHSAMPLES 1
@@ -20984,6 +20989,7 @@ float3 GetTessFactors ()
       #define _NONORMALMAP 1
       #define _USEGRADMIP 1
       #define _PERTEXUVSCALEOFFSET 1
+      #define _PERTEXTINT 1
       #define _PERTEXSMOOTHSTR 1
       #define _PERTEXMETALLIC 1
       #define _BRANCHSAMPLES 1
@@ -25126,7 +25132,7 @@ float3 GetTessFactors ()
 
         UsePass "Hidden/Nature/Terrain/Utilities/PICKING"
    }
-   Dependency "BaseMapShader" =  "Hidden/Terrain_Area2_Base-2074028151"
-   Fallback "Hidden/Terrain_Area2_Base-2074028151"
+   Dependency "BaseMapShader" =  "Hidden/Terrain_Area2_Base222639182"
+   Fallback "Hidden/Terrain_Area2_Base222639182"
    CustomEditor "MicroSplatShaderGUI"
 }

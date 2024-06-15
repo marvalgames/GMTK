@@ -11,7 +11,7 @@
 ////////////////////////////////////////
 
 
-Shader "Hidden/Terrain_Area2_Base-2074028151"
+Shader "Hidden/Terrain_Area2_Base222639182"
 {
    Properties
    {
@@ -138,6 +138,7 @@ Shader "Hidden/Terrain_Area2_Base-2074028151"
       #define _NONORMALMAP 1
       #define _USEGRADMIP 1
       #define _PERTEXUVSCALEOFFSET 1
+      #define _PERTEXTINT 1
       #define _PERTEXSMOOTHSTR 1
       #define _PERTEXMETALLIC 1
       #define _BRANCHSAMPLES 1
@@ -4410,6 +4411,7 @@ float3 GetTessFactors ()
       #define _NONORMALMAP 1
       #define _USEGRADMIP 1
       #define _PERTEXUVSCALEOFFSET 1
+      #define _PERTEXTINT 1
       #define _PERTEXSMOOTHSTR 1
       #define _PERTEXMETALLIC 1
       #define _BRANCHSAMPLES 1
@@ -8621,6 +8623,7 @@ float3 GetTessFactors ()
       #define _NONORMALMAP 1
       #define _USEGRADMIP 1
       #define _PERTEXUVSCALEOFFSET 1
+      #define _PERTEXTINT 1
       #define _PERTEXSMOOTHSTR 1
       #define _PERTEXMETALLIC 1
       #define _BRANCHSAMPLES 1
@@ -12745,6 +12748,7 @@ float3 GetTessFactors ()
       #define _NONORMALMAP 1
       #define _USEGRADMIP 1
       #define _PERTEXUVSCALEOFFSET 1
+      #define _PERTEXTINT 1
       #define _PERTEXSMOOTHSTR 1
       #define _PERTEXMETALLIC 1
       #define _BRANCHSAMPLES 1
@@ -16865,6 +16869,7 @@ float3 GetTessFactors ()
       #define _NONORMALMAP 1
       #define _USEGRADMIP 1
       #define _PERTEXUVSCALEOFFSET 1
+      #define _PERTEXTINT 1
       #define _PERTEXSMOOTHSTR 1
       #define _PERTEXMETALLIC 1
       #define _BRANCHSAMPLES 1
@@ -20989,6 +20994,7 @@ float3 GetTessFactors ()
       #define _NONORMALMAP 1
       #define _USEGRADMIP 1
       #define _PERTEXUVSCALEOFFSET 1
+      #define _PERTEXTINT 1
       #define _PERTEXSMOOTHSTR 1
       #define _PERTEXMETALLIC 1
       #define _BRANCHSAMPLES 1
