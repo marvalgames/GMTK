@@ -22,9 +22,9 @@ namespace Sandbox.Player
                 (
                     Entity e,
                     NpcAgentClass npcAgentAI,
-                    PlayerMoveGameObjectClass playerMove,
+                    //PlayerMoveGameObjectClass playerMove,
                     Animator animator,
-                    in RatingsComponent ratingsComponent,
+                    //in RatingsComponent ratingsComponent,
                     in NpcMovementComponent npcMovementComponent
                 ) =>
                 {
@@ -37,9 +37,14 @@ namespace Sandbox.Player
                     }
 
                     animator.speed = 1;
+                    
+                    Debug.Log("NPC " + agent.isOnNavMesh);
+                    
 
                     if (!agent) return;
                     if (!agent.enabled || !agent.isOnNavMesh) return;
+                    
+
 
                     var targetEntity = npcMovementComponent.targetEntity;
                     if (!SystemAPI.HasComponent<LocalTransform>(targetEntity)) return;

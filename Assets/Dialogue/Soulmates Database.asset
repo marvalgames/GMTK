@@ -182,14 +182,6 @@ MonoBehaviour:
       value: "Take out all the enemies\t\t"
       type: 0
       typeString: CustomFieldType_Text
-    - title: Success Description
-      value: All enemies defeated
-      type: 0
-      typeString: CustomFieldType_Text
-    - title: Failure Description
-      value: 
-      type: 0
-      typeString: CustomFieldType_Text
     - title: State
       value: unassigned
       type: 0
@@ -238,6 +230,14 @@ MonoBehaviour:
       value: unassigned
       type: 0
       typeString: CustomFieldType_QuestState
+    - title: Success Description
+      value: 
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: Failure Description
+      value: 
+      type: 0
+      typeString: CustomFieldType_Text
   - id: 3
     fields:
     - title: Name
@@ -475,8 +475,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 135.9016
-        y: 34.788506
+        x: 120.62402
+        y: 35.475792
         width: 160
         height: 30
     - id: 2
@@ -506,7 +506,7 @@ MonoBehaviour:
         type: 0
         typeString: CustomFieldType_Text
       - title: Dialogue Text
-        value: There's [lua(2 - Variable["enemiesKilled"])] left. We can do it.
+        value: Thee's [lua(3 - Variable["enemiesKilled"])] left. We can do it.r
         type: 0
         typeString: CustomFieldType_Text
       - title: Parenthetical
@@ -547,7 +547,7 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 366.03174
+        x: 362.99146
         y: 132.46849
         width: 160
         height: 30
@@ -618,8 +618,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 531.3691
-        y: 202.23416
+        x: 523.4475
+        y: 203.8028
         width: 160
         height: 30
     - id: 4
@@ -754,7 +754,7 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 169.52394
+        x: 154.21634
         y: 181.35358
         width: 160
         height: 30
@@ -823,7 +823,7 @@ MonoBehaviour:
       canvasRect:
         serializedVersion: 2
         x: 1.0988998
-        y: 293.71222
+        y: 294.49652
         width: 160
         height: 30
     - id: 7
@@ -1010,7 +1010,7 @@ MonoBehaviour:
       falseConditionAction: Block
       conditionPriority: 2
       outgoingLinks: []
-      conditionsString: Variable["enemiesKilled"] == 1 and CurrentQuestEntryState("Enemy
+      conditionsString: Variable["enemiesKilled"] == 3 and CurrentQuestEntryState("Enemy
         Attack", 1) ~= "success"
       userScript: SetQuestEntryState("Enemy Attack", 1, "success");
       onExecute:
@@ -1018,13 +1018,13 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 823.8376
+        x: 821.9903
         y: 186.74713
         width: 160
         height: 30
     entryGroups: []
-    canvasScrollPosition: {x: 374.99997, y: 27.27275}
-    canvasZoom: 0.8800001
+    canvasScrollPosition: {x: 0, y: 2.0618591}
+    canvasZoom: 0.97
   - id: 3
     fields:
     - title: Title

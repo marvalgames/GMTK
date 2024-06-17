@@ -182,14 +182,6 @@ MonoBehaviour:
       value: "Take out all the enemies\t\t"
       type: 0
       typeString: CustomFieldType_Text
-    - title: Success Description
-      value: All enemies defeated
-      type: 0
-      typeString: CustomFieldType_Text
-    - title: Failure Description
-      value: 
-      type: 0
-      typeString: CustomFieldType_Text
     - title: State
       value: unassigned
       type: 0
@@ -235,9 +227,17 @@ MonoBehaviour:
       type: 0
       typeString: CustomFieldType_Text
     - title: Entry 1 State
-      value: active
+      value: unassigned
       type: 0
       typeString: CustomFieldType_QuestState
+    - title: Success Description
+      value: 
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: Failure Description
+      value: 
+      type: 0
+      typeString: CustomFieldType_Text
   - id: 3
     fields:
     - title: Name
@@ -414,8 +414,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 393.2243
-        y: 12
+        x: 440.45224
+        y: 23.65049
         width: 160
         height: 30
     - id: 1
@@ -475,8 +475,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 194.79633
-        y: 65.05166
+        x: 123.352554
+        y: 34.788506
         width: 160
         height: 30
     - id: 2
@@ -539,15 +539,16 @@ MonoBehaviour:
         destinationDialogueID: 7
         isConnector: 0
         priority: 2
-      conditionsString: CurrentQuestState("Enemy Attack") == "active"
+      conditionsString: CurrentQuestState("Enemy Attack") == "active" and CurrentQuestEntryState("Enemy
+        Attack", 1) == "active"
       userScript: 
       onExecute:
         m_PersistentCalls:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 377.6822
-        y: 117.90538
+        x: 363.67874
+        y: 132.46849
         width: 160
         height: 30
     - id: 3
@@ -617,8 +618,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 569.527
-        y: 144.33942
+        x: 527.4475
+        y: 203.8028
         width: 160
         height: 30
     - id: 4
@@ -682,14 +683,14 @@ MonoBehaviour:
         isConnector: 0
         priority: 2
       conditionsString: Variable["enemiesKilled"] < 2
-      userScript: 
+      userScript: SetQuestEntryState("Enemy Attack", 1, "active");
       onExecute:
         m_PersistentCalls:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 5.2372894
-        y: 116.61017
+        x: 1
+        y: 124.5049
         width: 160
         height: 30
     - id: 5
@@ -746,14 +747,14 @@ MonoBehaviour:
       falseConditionAction: Block
       conditionPriority: 2
       outgoingLinks: []
-      conditionsString: Variable["enemiesKilled"] == 2
+      conditionsString: Variable["enemiesKilled"] >= 0
       userScript: SetQuestState("Enemy Attack", "success")
       onExecute:
         m_PersistentCalls:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 170.52394
+        x: 162.4651
         y: 181.35358
         width: 160
         height: 30
@@ -821,8 +822,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 1
-        y: 293.71222
+        x: 1.0988998
+        y: 294.49652
         width: 160
         height: 30
     - id: 7
@@ -886,8 +887,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 390.68085
-        y: 265.12006
+        x: 337.15475
+        y: 286.47928
         width: 160
         height: 30
     - id: 8
@@ -1009,20 +1010,21 @@ MonoBehaviour:
       falseConditionAction: Block
       conditionPriority: 2
       outgoingLinks: []
-      conditionsString: Variable["enemiesKilled"] == 1
+      conditionsString: Variable["enemiesKilled"] == 1 and CurrentQuestEntryState("Enemy
+        Attack", 1) ~= "success"
       userScript: SetQuestEntryState("Enemy Attack", 1, "success");
       onExecute:
         m_PersistentCalls:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 814.6271
-        y: 78.85243
+        x: 822.269
+        y: 186.74713
         width: 160
         height: 30
     entryGroups: []
-    canvasScrollPosition: {x: 0, y: 0}
-    canvasZoom: 0.7600002
+    canvasScrollPosition: {x: 7.8431396, y: 10.196106}
+    canvasZoom: 0.85000014
   - id: 3
     fields:
     - title: Title
@@ -1386,8 +1388,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 110
-        y: 25
+        x: 111
+        y: 26
         width: 160
         height: 30
     - id: 1
@@ -1444,15 +1446,15 @@ MonoBehaviour:
       falseConditionAction: Block
       conditionPriority: 2
       outgoingLinks: []
-      conditionsString: CurrentQuestState("Gold") == "unassigned"
-      userScript: 
+      conditionsString: Variable["pointsScored"] < 70
+      userScript: SetQuestState("Gold", "active")
       onExecute:
         m_PersistentCalls:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
         x: 26
-        y: 214
+        y: 218.75229
         width: 160
         height: 30
     - id: 2
@@ -1509,20 +1511,20 @@ MonoBehaviour:
       falseConditionAction: Block
       conditionPriority: 2
       outgoingLinks: []
-      conditionsString: 
+      conditionsString: Variable["pointsScored"] >= 70
       userScript: 
       onExecute:
         m_PersistentCalls:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 298
-        y: 173
+        x: 298.91742
+        y: 173.91742
         width: 160
         height: 30
     entryGroups: []
     canvasScrollPosition: {x: 0, y: 0}
-    canvasZoom: 1
+    canvasZoom: 1.0899999
   syncInfo:
     syncActors: 0
     syncItems: 0
