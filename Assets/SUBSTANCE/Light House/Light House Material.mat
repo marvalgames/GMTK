@@ -21,17 +21,29 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: Light House Material
-  m_Shader: {fileID: 4800000, guid: 933532a4fcc9baf4fa0491de14d08ed7, type: 3}
+  m_Shader: {fileID: 4800000, guid: 589366c8d179a91428574ab8bc5cf021, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords:
   - _ENVIRONMENTREFLECTIONS_OFF
-  - _NORMALMAP
-  m_InvalidKeywords: []
+  - _NORMALINDEPTHNORMALPASS
+  - _RECEIVEDECALS
+  - _RIMLIGHTING
+  - _SSAO_ENABLED
+  - _TEXMODE_ONE
+  - _TOONRIM
+  m_InvalidKeywords:
+  - DR_OUTLINE_ON
+  - DR_RIM_ON
+  - _BASEMAP_PREMULTIPLY
+  - _DETAILMAPBLENDINGMODE_MULTIPLY
+  - _ENERGYCONSERVATION_ON
+  - _RAMP_OFF
+  - _TEXTUREBLENDINGMODE_MULTIPLY
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
-  m_CustomRenderQueue: -1
+  m_CustomRenderQueue: 2000
   stringTagMap:
     IgnoreProjection: False
     RenderType: Opaque
@@ -98,7 +110,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _BaseMap:
-        m_Texture: {fileID: 2800000, guid: 262df8d2dc745ca4bbe7b4a5af4c793a, type: 3}
+        m_Texture: {fileID: 2800000, guid: 675167f3266ef1b479984dda54f91c66, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _BentNormalMap:
@@ -412,6 +424,7 @@ Material:
     - _BaseColorOverridden: 0
     - _BaseColorVisible: 1
     - _BaseColor_Step: 0.5
+    - _BaseMapPremultiply: 1
     - _BaseShade_Feather: 0.0001
     - _Base_Speed: 0
     - _Blend: 0
@@ -422,7 +435,7 @@ Material:
     - _Border: 25
     - _BrushLowerCut: 0
     - _BrushSize: 0.8
-    - _BumpScale: 1
+    - _BumpScale: 0
     - _BumpScaleMatcap: 1
     - _CameraDistanceImpact: 0.5
     - _CameraRolling_Stabilizer: 0
@@ -600,7 +613,7 @@ Material:
     - _Is_ViewCoord_Scroll: 0
     - _Is_ViewShift: 0
     - _LightColorContribution: 1
-    - _LightContribution: 1
+    - _LightContribution: 0
     - _LightDirection_MaskOn: 0
     - _LightmapDirectionPitch: 0
     - _LightmapDirectionYaw: 0
@@ -631,7 +644,7 @@ Material:
     - _OutlineOverridden: 0
     - _OutlineScale: 1
     - _OutlineVisible: 1
-    - _OutlineWidth: 0
+    - _OutlineWidth: 1
     - _Outline_Width: 0
     - _OverrideBakedGi: 0
     - _OverrideLightAttenuation: 0
@@ -656,7 +669,7 @@ Material:
     - _ReceivesSSR: 1
     - _RefractionModel: 0
     - _Rim: 1
-    - _RimEnabled: 0
+    - _RimEnabled: 1
     - _RimFrequency: 0
     - _RimLight: 0
     - _RimLightAlign: 0
@@ -747,11 +760,11 @@ Material:
     - _SupportDecals: 1
     - _Surface: 0
     - _SurfaceType: 0
-    - _TexMode: 0
+    - _TexMode: 1
     - _TexWorldScale: 1
     - _TexWorldScaleEmissive: 1
     - _TextureBlendingMode: 0
-    - _TextureImpact: 0
+    - _TextureImpact: 1
     - _Thickness: 1
     - _ThicknessMultiplier: 1
     - _ToonBlending: 1
