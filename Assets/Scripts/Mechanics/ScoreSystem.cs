@@ -35,6 +35,7 @@ public partial class ScoreSystem : SystemBase
 
                 if (score.pointsScored)
                 {
+                    Debug.Log("SCORE");
                     if (score is { trackStreak: true, trackCombo: true, combo: 1 })
                     {
                         score.streak += 1;

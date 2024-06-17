@@ -94,6 +94,8 @@ namespace Enemy
                         weaponComponent.tooFarTooAttack = true;
                         //Debug.Log("TOO FAR LOOP " + " " + e);
                     }
+
+//                    weaponComponent.tooFarTooAttack = false;
                 }
 
             ).Run();
@@ -129,6 +131,7 @@ namespace Enemy
                         enemyMove.speedMultiple = 1;
                         enemyState.selectMove = false;
                         var role = enemyMove.enemyRole;
+
                         if (role != EnemyRoles.None)
                         {
                             var enemyPosition = localTransform.Position;
@@ -221,7 +224,7 @@ namespace Enemy
                                         }
 
                                         weaponComponent.IsFiring = 1;
-                                        //Debug.Log("FIRING " + e);
+                                        Debug.Log("FIRING " + e);
                                         actorWeaponAim.weaponRaised = weaponRaised;
                                         SystemAPI.SetComponent(e, actorWeaponAim);
                                         SystemAPI.SetComponent(e, weaponComponent);
@@ -318,6 +321,7 @@ namespace Enemy
                                 {
                                     animator.SetInteger(Zone, 1);
                                     moveState = MoveStates.Patrol;
+                                    //Debug.Log("PATROL " + (int)distFromOpponent);
                                     enemyMove.Patrol();
                                 }
                                 else

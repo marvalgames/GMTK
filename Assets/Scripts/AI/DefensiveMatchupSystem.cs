@@ -53,6 +53,7 @@ namespace AI
                 var closestDistance = math.INFINITY;
                 var closestPlayer = Entity.Null;
                 var players = PlayerEntities.Length;
+
                 for (var i = 0; i < players; i++)
                 {
                     var playerE = PlayerEntities[i];
@@ -64,6 +65,7 @@ namespace AI
                         if (EnemiesGroup.HasComponent(enemyE) && EnemiesGroup.HasComponent(playerE))
                         {
                             distance *= defensiveStrategyComponent.switchToPlayerMultiplier;
+
                         }
                         if (distance < closestDistance)
                         {

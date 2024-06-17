@@ -137,7 +137,6 @@ namespace AI
             in DefensiveStrategyComponent defensiveStrategyComponent,
             ref MatchupComponent matchup)
         {
-            //Debug.Log("ATTACK " + enemiesAttackEntityList.Length);
 
             if (!transformGroup.HasComponent(enemyEntity)) return;
             var enemyPosition = transformGroup[enemyEntity].Position;
@@ -194,6 +193,7 @@ namespace AI
                 }
 
                 matchup.closestOpponent = closestPlayerEntity;
+
             }
 
 

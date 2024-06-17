@@ -22,10 +22,12 @@ public partial struct EnemiesAttackEnableableComponentSystem : ISystem
     public void OnUpdate(ref SystemState system)
     {
         if (LevelManager.instance == null) return;
+        //Debug.Log("Rev0");
 
         
         if (LevelManager.instance.endGame ||
             LevelManager.instance.currentLevelCompleted >= LevelManager.instance.totalLevels) return;
+        //Debug.Log("Rev1");
 
         var playerEntityList = playerQuery.ToEntityArray(Allocator.TempJob);
         if (playerEntityList.Length == 0) return;
@@ -39,6 +41,8 @@ public partial struct EnemiesAttackEnableableComponentSystem : ISystem
         var reverseMode = roleReversal;
         if (roleReversalMode) //if no role reverse mechanic then reverseMode set skipped;
         {
+            //Debug.Log("Rev2");
+
             var job = new EnemiesAttackEnableableJob()
             {
                 enemiesAttackComponentGroup = enemiesAttackComponentGroup,
@@ -62,6 +66,8 @@ partial struct EnemiesAttackEnableableJob : IJobEntity
         if (enemiesAttackComponentGroup.HasComponent(e))
         {
             enemiesAttackComponentGroup.SetComponentEnabled(e, reverseMode);
+            Debug.Log("Rev " + reverseMode);
+
         }
     }
 }

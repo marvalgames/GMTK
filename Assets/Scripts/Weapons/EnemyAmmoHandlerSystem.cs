@@ -39,6 +39,8 @@ namespace Enemy
                 ) =>
                 {
                     var playerE = defensiveStrategyComponent.closestEnemiesAttackEntity;
+                    //Debug.Log("ATTACK " + playerE + "  "  );
+
 
                     if (!SystemAPI.HasComponent<WeaponComponent>(entity)) return;
                     var enemyWeapon = SystemAPI.GetComponent<WeaponComponent>(entity);

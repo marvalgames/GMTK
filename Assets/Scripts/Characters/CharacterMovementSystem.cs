@@ -46,11 +46,9 @@ public partial class CharacterMovementSystem : SystemBase
 
                     if(math.distance(npcTransform.Position, playerTransform.Position) > switchDistance && !inAction)
                     {
-                        Debug.Log("1");
                         if (!SystemAPI.HasComponent<NpcMovementComponent>(npcE)) 
                         {
                             ecb.AddComponent(npcE, new NpcMovementComponent { targetEntity = playerE } );
-                            Debug.Log("11");
                         }
                     }
                     else
@@ -58,7 +56,6 @@ public partial class CharacterMovementSystem : SystemBase
                         if (SystemAPI.HasComponent<NpcMovementComponent>(npcE))
                         {
                             ecb.RemoveComponent<NpcMovementComponent>(npcE);
-                            Debug.Log("111");
                         }
                     }
                 }

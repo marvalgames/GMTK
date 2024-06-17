@@ -217,17 +217,17 @@ namespace Collisions
                                                                entityB)) //b is ammo so causes damage to entity
                     {
                         var shooter = Entity.Null;
-                        //shooter = SystemAPI.GetComponent<TriggerComponent>(entityB)
-                          //  .ParentEntity;
-
-                          //shooter always enemy for GMTK 2023
-                        shooter = SystemAPI.GetComponent<TriggerComponent>(entityA)
+                        shooter = SystemAPI.GetComponent<TriggerComponent>(entityB)
                             .ParentEntity;
 
-                        //Debug.Log("shooter " + shooter);
+                          //shooter always enemy for GMTK 2023
+                        //shooter = SystemAPI.GetComponent<TriggerComponent>(entityA)
+                          //  .ParentEntity;
+
 
                         if (shooter != Entity.Null && SystemAPI.HasComponent<AmmoComponent>(entityB))
                         {
+                            //Debug.Log("shooter " + shooter);
                             var isEnemyShooter = SystemAPI.HasComponent<EnemyComponent>(shooter);
                             //isEnemyShooter = true;
                             var target = SystemAPI.GetComponent<TriggerComponent>(entityA)
@@ -315,11 +315,11 @@ namespace Collisions
                                 scoreComponent.addBonus = 0;
                                 if (!isEnemyShooter)//player GMTK where can't score after hit - backwards
                                 {
-                                    scoreComponent.zeroPoints = true;
-                                    scoreComponent.pointsScored = false;
-                                    scoreComponent.combo = 0;
-                                    scoreComponent.streak = 0;
-                                    scoreComponent.score = scoreComponent.startShotValue;
+                                    //scoreComponent.zeroPoints = true;
+                                    //scoreComponent.pointsScored = false;
+                                    //scoreComponent.combo = 0;
+                                    //scoreComponent.streak = 0;
+                                    //scoreComponent.score = scoreComponent.startShotValue;
                                     //Debug.Log("PLAYER SHOT ");
                                 }
                                 //for gmtk bonus for charged (blocked)
