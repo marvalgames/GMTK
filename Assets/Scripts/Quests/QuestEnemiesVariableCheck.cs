@@ -49,7 +49,7 @@ namespace Quests
             if(manager == default) return;
             if (QuestLog.GetQuestState("Enemy Attack") == QuestState.Unassigned)
             {
-                //Debug.Log("quest state unassigned");
+                Debug.Log("quest state unassigned");
                 return;
             }
 
@@ -63,6 +63,7 @@ namespace Quests
             var hasMissionComponent = manager.HasComponent<MissionComponent>(questerEntity);
             if(!hasMissionComponent) return;
             var missionComponent = manager.GetComponentData<MissionComponent>(questerEntity);
+            Debug.Log("quest destroyed " + missionComponent.questUpdateEnemiesDestroyed);
             if (!missionComponent.questUpdateEnemiesDestroyed) return;
 
             

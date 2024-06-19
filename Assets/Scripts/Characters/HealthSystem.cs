@@ -104,6 +104,7 @@ public partial class HealthSystem : SystemBase
                     dead.playDeadEffects = true;
                     animator.speed = 1;
                     LevelManager.instance.enemyDestroyed = true;
+                    Debug.Log("Destroyed " + LevelManager.instance.enemyDestroyed);
                     var isEnemy = SystemAPI.HasComponent<EnemyComponent>(entity);
                     var isPlayer = SystemAPI.HasComponent<PlayerComponent>(entity);
                     if (isPlayer) animator.SetInteger(Dead, 1);// can easily change to effect index (maybe new field in component ammo and visual effect) if we add more DEAD animations
