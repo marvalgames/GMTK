@@ -161,7 +161,6 @@ namespace JBooth.MicroVerseCore
 
         public string id;
 
-
         public List<GameObject> spawnedInstances = new List<GameObject>();
 
         public enum Lock
@@ -196,8 +195,8 @@ namespace JBooth.MicroVerseCore
             
             public int flags;
             public bool densityByWeight { get { return (flags & (1 << 3)) == 0; } set { if (!value) flags |= 1 << 3; else flags &= ~(1 << 3); } }
-
             public bool disabled { get { return !((flags & (1 << 4)) == 0); } set { if (value) flags |= 1 << 4; else flags &= ~(1 << 4); } }
+            public bool alignDownhill { get { return !((flags & (1 << 5)) == 0); } set { if (value) flags |= 1 << 5; else flags &= ~(1 << 5); } }
 
         }
 

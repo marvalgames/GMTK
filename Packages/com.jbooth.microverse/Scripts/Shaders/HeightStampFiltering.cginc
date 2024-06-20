@@ -128,7 +128,7 @@ float ComputeFalloff(float2 uv, float2 stampUV, float2 noiseUV, float noise)
     // not else, goes on top..
     #if _USEFALLOFFPAINTAREA
     {
-        float2 worldPosition = noiseUV * _TerrainSize.xz;
+        float2 worldPosition = noiseUV * _TerrainSize.xz * (1000 / _TerrainSize.xz);
         float3 localPos = mul(_PaintAreaMatrix, float4(worldPosition.x, 0, worldPosition.y, 1)).xyz;
         float2 luv = float2(localPos.x + 0.5, localPos.z + 0.5);
         float falloffSample = SAMPLE(_PaintAreaFalloffTexture, shared_linear_clamp, luv).r;

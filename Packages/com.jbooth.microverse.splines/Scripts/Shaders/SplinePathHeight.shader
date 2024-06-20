@@ -20,9 +20,11 @@
             #pragma shader_feature_local _ _SPLINECURVETRENCHWEIGHT
             #pragma shader_feature_local _ _TREATASAREA
 
+            #define kMaxHeight          (32766.0f/65535.0f) 
 
             #include "UnityCG.cginc"
             #include_with_pragmas "Packages/com.jbooth.microverse/Scripts/Shaders/Noise.cginc"
+            #include_with_pragmas "Packages/com.jbooth.microverse/Scripts/Shaders/HeightStampFiltering.cginc" 
 
             struct vertexInput
             {
@@ -49,10 +51,6 @@
             float _RealHeight;
             float3 _NoiseUV;
             float _TerrainHeight;
-            sampler2D _FalloffNoiseTexture;
-            float4 _FalloffNoiseTexture_ST;
-            float4 _FalloffNoise;
-            int _FalloffNoiseChannel;
             float _HeightMapSize;
 
             sampler2D _HeightNoiseTexture;
@@ -60,6 +58,7 @@
             float4 _HeightNoise;
             int _HeightNoiseChannel;
 
+            float _Blend; 
             v2f vert(vertexInput v)
             {
                 v2f o;
@@ -169,7 +168,9 @@
 #endif
                 float newHeight = saturate(lerp(height, data.b/_RealHeight, falloff));
 
-                return PackHeightmap(newHeight);
+                float blend = CombineHeight(height, newHeight, _CombineMode); 
+
+                return PackHeightmap(clamp(lerp(height, blend, falloff), 0, kMaxHeight)); 
             }
             ENDCG
         }

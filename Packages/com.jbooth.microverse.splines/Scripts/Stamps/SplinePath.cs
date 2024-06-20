@@ -9,6 +9,14 @@ namespace JBooth.MicroVerseCore
 {
     public class SplinePath : Stamp, IHeightModifier, ITextureModifier
     {
+        public enum CombineMode
+        {
+            Override = 0,
+            Max = 1,
+            Min = 2,
+            Blend = 9,
+        }
+        public CombineMode heightBlendMode = CombineMode.Override;
         public enum SDFRes
         {
             k256 = 256,
@@ -34,6 +42,9 @@ namespace JBooth.MicroVerseCore
 
         public Noise positionNoise = new Noise();
         public Noise widthNoise = new Noise();
+        
+        [Tooltip("Blend between existing height map and new one")]
+        [Range(0, 1)] public float blend = 1; 
 
         public bool treatAsSplineArea;
         [Tooltip("Resolution of the internal SDF used for the spline. Higher makes edits take longer")]
@@ -289,6 +300,7 @@ namespace JBooth.MicroVerseCore
             base.OnDestroy();
         }
 
+
         static int _SplineSDF = Shader.PropertyToID("_SplineSDF");
         static int _TerrainHeight = Shader.PropertyToID("_TerrainHeight");
         static int _TreeWidth = Shader.PropertyToID("_TreeWidth");
@@ -303,6 +315,7 @@ namespace JBooth.MicroVerseCore
         static int _AlphaMapSize = Shader.PropertyToID("_AlphaMapSize");
         static int _SplatWeight = Shader.PropertyToID("_SplatWeight");
         static int _HeightMapSize = Shader.PropertyToID("_HeightMapSize");
+        static int _Blend = Shader.PropertyToID("_Blend");
         static Shader sdfToMaskShader = null;
         static Material sdfToMaskMat = null;
         public bool ApplyHeightStamp(RenderTexture source, RenderTexture dest,
@@ -323,6 +336,7 @@ namespace JBooth.MicroVerseCore
                     heightMat.SetFloat(_HeightMapSize, source.width);
                     keywordBuilder.Assign(heightMat);
                     Graphics.Blit(source, dest, heightMat);
+                    heightMat.SetFloat(_Blend, blend);
                     ret = true;
                 }
 
@@ -575,6 +589,8 @@ namespace JBooth.MicroVerseCore
         static int _RealHeight = Shader.PropertyToID("_RealHeight");
         static int _Trench = Shader.PropertyToID("_Trench");
         static int _TrenchCurve = Shader.PropertyToID("_TrenchCurve");
+        static int _CombineMode = Shader.PropertyToID("_CombineMode");
+        static int _CombineBlend = Shader.PropertyToID("_CombineBlend");
 
         void PrepareMaterial(Material material, HeightmapData heightmapData, List<string> keywords)
         {
@@ -601,8 +617,12 @@ namespace JBooth.MicroVerseCore
 
             heightNoise.PrepareMaterial(material, "_HEIGHT", "_Height", keywords);
             material.SetFloat(_RealHeight, heightmapData.RealHeight);
+            material.SetFloat(_Blend, blend);
+            material.SetFloat(_CombineBlend, blend);
             embankmentEasing.PrepareMaterial(material, "_FALLOFF", keywords);
             embankmentNoise.PrepareMaterial(material, "_FALLOFF", "_Falloff", keywords);
+
+            material.SetInt(_CombineMode, (int)heightBlendMode); 
         }
 
 
@@ -632,6 +652,7 @@ namespace JBooth.MicroVerseCore
             material.SetTexture(_SplatNoiseTexture, splatNoise.texture);
             material.SetTextureScale(_SplatNoiseTexture, splatNoise.GetTextureScale());
             material.SetTextureOffset(_SplatNoiseTexture, splatNoise.GetTextureOffset());
+            material.SetFloat(_CombineBlend, blend);
 
             var noisePos = splatmapData.terrain.transform.position;
             noisePos.x /= splatmapData.terrain.terrainData.size.x;

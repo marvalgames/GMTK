@@ -414,7 +414,7 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 440.45224
+        x: 439.76492
         y: 23.65049
         width: 160
         height: 30
@@ -475,8 +475,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 123.352554
-        y: 34.788506
+        x: 119.249435
+        y: 35.475792
         width: 160
         height: 30
     - id: 2
@@ -506,7 +506,7 @@ MonoBehaviour:
         type: 0
         typeString: CustomFieldType_Text
       - title: Dialogue Text
-        value: There's [lua(2 - Variable["enemiesKilled"])] left. We can do it.
+        value: Thee's [lua(3 - Variable["enemiesKilled"])] left. We can do it.r
         type: 0
         typeString: CustomFieldType_Text
       - title: Parenthetical
@@ -547,7 +547,7 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 363.67874
+        x: 362.99146
         y: 132.46849
         width: 160
         height: 30
@@ -618,7 +618,7 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 527.4475
+        x: 523.4475
         y: 203.8028
         width: 160
         height: 30
@@ -747,15 +747,15 @@ MonoBehaviour:
       falseConditionAction: Block
       conditionPriority: 2
       outgoingLinks: []
-      conditionsString: Variable["enemiesKilled"] >= 0
+      conditionsString: Variable["enemiesKilled"] == 2
       userScript: SetQuestState("Enemy Attack", "success")
       onExecute:
         m_PersistentCalls:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 162.4651
-        y: 181.35358
+        x: 171.39847
+        y: 190.97559
         width: 160
         height: 30
     - id: 6
@@ -887,7 +887,7 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 337.15475
+        x: 336.46747
         y: 286.47928
         width: 160
         height: 30
@@ -1010,7 +1010,7 @@ MonoBehaviour:
       falseConditionAction: Block
       conditionPriority: 2
       outgoingLinks: []
-      conditionsString: Variable["enemiesKilled"] == 1 and CurrentQuestEntryState("Enemy
+      conditionsString: Variable["enemiesKilled"] == 3 and CurrentQuestEntryState("Enemy
         Attack", 1) ~= "success"
       userScript: SetQuestEntryState("Enemy Attack", 1, "success");
       onExecute:
@@ -1018,13 +1018,13 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 822.269
+        x: 821.9903
         y: 186.74713
         width: 160
         height: 30
     entryGroups: []
-    canvasScrollPosition: {x: 7.8431396, y: 10.196106}
-    canvasZoom: 0.85000014
+    canvasScrollPosition: {x: 0, y: 0.6872864}
+    canvasZoom: 0.97
   - id: 3
     fields:
     - title: Title

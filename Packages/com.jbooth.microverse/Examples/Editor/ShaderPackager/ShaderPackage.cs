@@ -229,14 +229,14 @@ namespace JBooth.MicroVerseCore.ShaderPackager
                     e.shaderSrc = JBooth.BetterShaders.StackedShaderImporterEditor.BuildExportShader(JBooth.BetterShaders.ShaderBuilder.RenderPipeline.URP2022, optionOverrides, assetPath);
                     e.srpTarget = ShaderPackage.SRPTarget.URP;
                     e.UnityVersionMin = ShaderPackage.UnityVersion.Unity2022_2;
-                    e.UnityVersionMax = ShaderPackage.UnityVersion.Unity2023_3;
+                    e.UnityVersionMax = ShaderPackage.UnityVersion.Unity2022_3;
 
                     e = new ShaderPackage.Entry();
                     entries.Add(e);
                     e.shaderSrc = JBooth.BetterShaders.StackedShaderImporterEditor.BuildExportShader(JBooth.BetterShaders.ShaderBuilder.RenderPipeline.HDRP2022, optionOverrides, assetPath);
                     e.srpTarget = ShaderPackage.SRPTarget.HDRP;
                     e.UnityVersionMin = ShaderPackage.UnityVersion.Unity2022_2;
-                    e.UnityVersionMax = ShaderPackage.UnityVersion.Unity2023_3;
+                    e.UnityVersionMax = ShaderPackage.UnityVersion.Unity2022_3;
 
                     e = new ShaderPackage.Entry();
                     entries.Add(e);

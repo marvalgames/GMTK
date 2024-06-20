@@ -22,6 +22,8 @@ Shader "Hidden/MicroVerse/SplatFilter"
             #pragma vertex vert
             #pragma fragment frag
 
+            #define _SPLATSTAMP 1
+
             #include_with_pragmas "UnityCG.cginc"
             #include_with_pragmas "/../Noise.cginc"
             #include_with_pragmas "/../Filtering.cginc"
@@ -32,6 +34,8 @@ Shader "Hidden/MicroVerse/SplatFilter"
             sampler2D _WeightMap;
             sampler2D _PlacementMask;
             float2 _AlphaMapSize;
+
+            
 
 
             struct appdata

@@ -429,6 +429,9 @@
                 #if _USEFALLOFFPAINTAREA
                 {
                     float2 worldPosition = noiseUV * _TerrainSize.xz;
+                    #if !_SPLATSTAMP
+                        worldPosition *= (1000 / _TerrainSize.xz);
+                    #endif// * (1000 / _TerrainSize.xz);
                     float3 localPos = mul(_PaintAreaMatrix, float4(worldPosition.x, 0, worldPosition.y, 1)).xyz;
                     float2 uv = float2(localPos.x + 0.5, localPos.z + 0.5);
                     float falloffSample = SAMPLE(_PaintAreaFalloffTexture, shared_linear_clamp, uv).r;

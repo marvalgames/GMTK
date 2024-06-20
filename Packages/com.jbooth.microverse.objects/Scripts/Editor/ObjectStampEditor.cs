@@ -16,7 +16,7 @@ namespace JBooth.MicroVerseCore
         static GUIContent CWeight = new GUIContent("Weight", "Increases the chance that this object gets picked over others based on their weighting. Note this is not a percent where 0 is no chance; if 2 tree's are in the system, one with a weight of 0 and the other 100, then there is a 1 in 101 chance that the tree with 0 weights is placed");
         static GUIContent CWeightRange = new GUIContent("Weight Range", "Range of weight values that will allow objects to be spawned");
         static GUIContent CApplyToAll = new GUIContent("Apply to All", "Apply the settings of the current object instance to all the others in the object stamp");
-
+        static GUIContent CAlignDownhill = new GUIContent("Align Downhill", "Aligns rotation of the object to point downhill");
         Selectable[] selectableObjects;
         List<int> selectedObjectIndexes = new List<int>();
         int selectedObjectInstance = -1;
@@ -313,7 +313,8 @@ namespace JBooth.MicroVerseCore
                         GUILayout.BeginHorizontal();
                         {
                             rotLock = (ObjectStamp.Lock)EditorGUILayout.EnumPopup("Rotation Lock", randoms.rotationLock);
-
+   
+                            
                             // right align the quick buttons
                             GUILayout.FlexibleSpace();
 
@@ -341,6 +342,7 @@ namespace JBooth.MicroVerseCore
                                 randoms.rotationRangeY = new Vector2(-180, 180);
                                 randoms.rotationRangeZ = new Vector2(-180, 180);
                             }
+                            
 
                         }
                         GUILayout.EndHorizontal();
@@ -378,6 +380,7 @@ namespace JBooth.MicroVerseCore
                         }
 
                         var slopeAlignment = EditorGUILayout.Slider("Slope Alignment", randoms.slopeAlignment, 0, 1);
+                        var alignDownhill = EditorGUILayout.Toggle(CAlignDownhill, randoms.alignDownhill);
 
                         // scale
                         var scaleLock = (ObjectStamp.Lock)EditorGUILayout.EnumPopup("Scale Lock", randoms.scaleLock);
@@ -440,6 +443,7 @@ namespace JBooth.MicroVerseCore
 
                                 if (target.scaleLock != scaleLock) target.scaleLock = scaleLock;
                                 if (target.rotationLock != rotLock) target.rotationLock = rotLock;
+                                if (target.alignDownhill != alignDownhill) target.alignDownhill = alignDownhill;
 
                                 if (target.slopeAlignment != slopeAlignment) target.slopeAlignment = slopeAlignment;
                                 if (target.sink != sink) target.sink = sink;

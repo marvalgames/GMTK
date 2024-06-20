@@ -103,6 +103,7 @@ namespace JBooth.MicroVerseCore
             }
             EditorGUILayout.PropertyField(serializedObject.FindProperty("sdfRes"));
             EditorGUILayout.PropertyField(serializedObject.FindProperty("searchQuality"));
+            
             using (new GUILayout.VerticalScope(GUIUtil.boxStyle))
             {
                 GUIUtil.DrawNoise(sp, sp.positionNoise, "Position Noise", FilterSet.NoiseOp.Add, false, false);
@@ -116,6 +117,12 @@ namespace JBooth.MicroVerseCore
                 if (hprop.boolValue)
                 {
                     EditorGUI.indentLevel++;
+                    EditorGUILayout.PropertyField(serializedObject.FindProperty("heightBlendMode"));
+
+                    if (serializedObject.FindProperty("heightBlendMode").enumValueIndex == 3)
+                    {
+                        EditorGUILayout.PropertyField(serializedObject.FindProperty("blend"));
+                    }
                     EditorGUILayout.PropertyField(serializedObject.FindProperty("width"));
                     EditorGUILayout.PropertyField(serializedObject.FindProperty("smoothness"));
                     EditorGUILayout.PropertyField(serializedObject.FindProperty("trench"));

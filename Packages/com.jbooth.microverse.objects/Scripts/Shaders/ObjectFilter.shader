@@ -110,6 +110,7 @@ Shader "Hidden/MicroVerse/ObjectFilter"
 
             bool GetFlagDensityByWeight(Randomization r) { return (r.flags & (1 << 3)) == 0; }
             bool GetFlagDisabled(Randomization r) { return (!(r.flags & (1 << 4)) == 0); }
+            bool GetFlagAlignDownhill(Randomization r) { return (!(r.flags & (1 << 5)) == 0); }
 
             float4 NextRandom(float cellIdx)
             {
@@ -158,8 +159,6 @@ Shader "Hidden/MicroVerse/ObjectFilter"
                 float mask2 = 1.0 - tex2D(_ObjectMask, uv).r;
 
                 float sdf = SDFFilter(uv);
-
-                // do not saturate! will break scaling by weight
 
                 float result = (DoFilters(uv, stampUV, noiseUV));
 
@@ -293,13 +292,30 @@ Shader "Hidden/MicroVerse/ObjectFilter"
                             scaleY = scaleX;
                             scaleZ = scaleX;
                         }
+                       
 
+                        float4 qslopeAlign = 0;
+                        
+                        if (GetFlagAlignDownhill(random))
+                        {
+                            float3 right = float3(1,0,0);
+                            if (normal.y < 1)
+                            {
+                                right = cross(normal, float3(0,1,0));
+                            }
+                            float4 qAlign = q_look_at(right, -normal);
+                            float4 qPlane = q_look_at(right, float3(0, -1, 0)); 
+                            qslopeAlign = q_slerp(qPlane, qAlign, random.slopeAlignment);
+                        }
+                        else
+                        {
+                            float3 slopeAlign = lerp(float3(0,0,0), float3(normal.z * 90, 0, normal.x * -90), random.slopeAlignment);
+                            slopeAlign = radians(slopeAlign);
+                            qslopeAlign = euler_to_quaternion(slopeAlign);
+                        }
                         float3 rot = float3(rotX, rotY, rotZ);
-                        float3 slopeAlign = lerp(float3(0,0,0), float3(normal.z * 90, 0, normal.x * -90), random.slopeAlignment);
                         rot = radians(rot);
-                        slopeAlign = radians(slopeAlign);
                         float4 qrot = euler_to_quaternion(rot);
-                        float4 qslopeAlign = euler_to_quaternion(slopeAlign);
                         float4 fq = qmul(qslopeAlign, qrot);
                         o.rotation = fq;
 
