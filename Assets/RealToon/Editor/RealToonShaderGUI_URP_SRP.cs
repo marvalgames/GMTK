@@ -1,6 +1,6 @@
 //RealToonGUI URP
 //MJQStudioWorks
-//2022
+//2024
 
 #if UNITY_EDITOR
 
@@ -60,8 +60,8 @@ static string OLType = "Traditional";
 static bool remoout = true;
 static string remooutstat = "Remove Outline";
 
-static bool twofourfive_target = true;
-static string twofourfive_target_string = "Change shader compilation target to 2.0";
+static bool twofourfive_target = false;
+static string twofourfive_target_string = "Change shader compilation target to 4.5";
 
 static bool dots_lbs_cd = false;
 static string dots_lbs_cd_string = "DOTS|HR - Use Compute Deformation";
@@ -668,7 +668,7 @@ static string dots_lbs_cd_string = "DOTS|HR - Use Compute Deformation";
     "No light and shadow will be visible on a back of a plane/flat object or face.\n\nThis will only be take effect or visible if 'Culling' is turned 'Off' or 'Front'." ,
 
     //Change Shader Compilation Target To 2.0/4.5. [116]
-    "This will change the Shader Compilation Target of the RealToon Shader file to '2.0' or '4.5'.\n\n*If the shader compilation target is changed to 4.5, the shader will support DOTS/DOTS Hybrid Renderer and Tessellation.",
+    "This will change the Shader Compilation Target of the RealToon Shader file to '2.0' or '4.5'.\n\n*If the shader compilation target is changed to 4.5, the shader will support DOTS/DOTS Hybrid Renderer, GPU Resident and Tessellation.",
 
     //Hide Directional Light Shadow [117]
     "Hide received 'Directional Light' shadows on the object." ,
@@ -2581,9 +2581,9 @@ static string dots_lbs_cd_string = "DOTS|HR - Use Compute Deformation";
 
                 materialEditor.EnableInstancingField();
 
-#if ENABLE_HYBRID_RENDERER_V2
+//#if ENABLE_HYBRID_RENDERER_V2 //Removed because of GPU Resident
                 materialEditor.ShaderProperty(_N_F_DDMD, new GUIContent(_N_F_DDMD.displayName, TOTIPS[151]));
-#endif
+//#endif
 
                 materialEditor.ShaderProperty(_N_F_RDC, new GUIContent(_N_F_RDC.displayName, TOTIPS[147]));
                 materialEditor.ShaderProperty(_N_F_OFLMB, new GUIContent(_N_F_OFLMB.displayName, TOTIPS[141]));

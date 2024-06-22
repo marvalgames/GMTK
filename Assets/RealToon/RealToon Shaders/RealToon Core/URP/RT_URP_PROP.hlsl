@@ -262,6 +262,7 @@ CBUFFER_END
 //DOTS Instancing
 //===============================================================================
 #ifdef UNITY_DOTS_INSTANCING_ENABLED
+
 UNITY_DOTS_INSTANCING_START(MaterialPropertyMetadata)
 
 	UNITY_DOTS_INSTANCED_PROP(float4, _MainColor)
@@ -287,7 +288,7 @@ UNITY_DOTS_INSTANCING_START(MaterialPropertyMetadata)
 
 	UNITY_DOTS_INSTANCED_PROP(float, _DepthThreshold)
 
-	UNITY_DOTS_INSTANCED_PROP(float, _MCapIntensity);
+	UNITY_DOTS_INSTANCED_PROP(float, _MCapIntensity)
 	UNITY_DOTS_INSTANCED_PROP(float, _SPECMODE)
 	UNITY_DOTS_INSTANCED_PROP(float, _SPECIN)
 
@@ -392,150 +393,432 @@ UNITY_DOTS_INSTANCING_START(MaterialPropertyMetadata)
 	UNITY_DOTS_INSTANCED_PROP(float, _MinFadDistance)
 	UNITY_DOTS_INSTANCED_PROP(float, _MaxFadDistance)
 
-	UNITY_DOTS_INSTANCED_PROP(float, _ReduceShadowSpotDirectionalLight)
-
 	UNITY_DOTS_INSTANCED_PROP(float4, _SSAOColor)
 
-	UNITY_DOTS_INSTANCED_PROP(float, _SkinMatrixIndex)
-	UNITY_DOTS_INSTANCED_PROP(float, _ComputeMeshIndex)
+	//UNITY_DOTS_INSTANCED_PROP(float, _SkinMatrixIndex)
+	//UNITY_DOTS_INSTANCED_PROP(float, _ComputeMeshIndex)
 
 UNITY_DOTS_INSTANCING_END(MaterialPropertyMetadata)
 
 
-#define _MainColor										UNITY_ACCESS_DOTS_INSTANCED_PROP_WITH_DEFAULT(float4, _MainColor)
-#define _MaiColPo										UNITY_ACCESS_DOTS_INSTANCED_PROP_WITH_DEFAULT(float, _MaiColPo)
-#define _MVCOL											UNITY_ACCESS_DOTS_INSTANCED_PROP_WITH_DEFAULT(float, _MVCOL)
-#define _MCIALO											UNITY_ACCESS_DOTS_INSTANCED_PROP_WITH_DEFAULT(float, _MCIALO)
-#define _TexturePatternStyle							UNITY_ACCESS_DOTS_INSTANCED_PROP_WITH_DEFAULT(float, _TexturePatternStyle)
-#define _HighlightColor									UNITY_ACCESS_DOTS_INSTANCED_PROP_WITH_DEFAULT(float4, _HighlightColor)
-#define _HighlightColorPower							UNITY_ACCESS_DOTS_INSTANCED_PROP_WITH_DEFAULT(float, _HighlightColorPower)
 
-#define _OutlineWidth									UNITY_ACCESS_DOTS_INSTANCED_PROP_WITH_DEFAULT(float, _OutlineWidth)
-#define _OutlineExtrudeMethod							UNITY_ACCESS_DOTS_INSTANCED_PROP_WITH_DEFAULT(int, _OutlineExtrudeMethod)
-#define _OutlineOffset									UNITY_ACCESS_DOTS_INSTANCED_PROP_WITH_DEFAULT(float3, _OutlineOffset)
-#define _OutlineZPostionInCamera						UNITY_ACCESS_DOTS_INSTANCED_PROP_WITH_DEFAULT(float, _OutlineZPostionInCamera)
-#define _OutlineColor									UNITY_ACCESS_DOTS_INSTANCED_PROP_WITH_DEFAULT(float4, _OutlineColor)
-#define _MixMainTexToOutline							UNITY_ACCESS_DOTS_INSTANCED_PROP_WITH_DEFAULT(float, _MixMainTexToOutline)
-#define _NoisyOutlineIntensity							UNITY_ACCESS_DOTS_INSTANCED_PROP_WITH_DEFAULT(float, _NoisyOutlineIntensity)
-#define _DynamicNoisyOutline							UNITY_ACCESS_DOTS_INSTANCED_PROP_WITH_DEFAULT(float, _DynamicNoisyOutline)
-#define _LightAffectOutlineColor						UNITY_ACCESS_DOTS_INSTANCED_PROP_WITH_DEFAULT(float, _LightAffectOutlineColor)
-#define _OutlineWidthAffectedByViewDistance				UNITY_ACCESS_DOTS_INSTANCED_PROP_WITH_DEFAULT(float, _OutlineWidthAffectedByViewDistance)
-#define _FarDistanceMaxWidth							UNITY_ACCESS_DOTS_INSTANCED_PROP_WITH_DEFAULT(float, _FarDistanceMaxWidth)
-#define _VertexColorBlueAffectOutlineWitdh				UNITY_ACCESS_DOTS_INSTANCED_PROP_WITH_DEFAULT(float, _VertexColorBlueAffectOutlineWitdh)
+static float4 unity_DOTS_Sampled_MainColor;
+static float unity_DOTS_Sampled_MaiColPo;
+static float unity_DOTS_Sampled_MVCOL;
+static float unity_DOTS_Sampled_MCIALO;
+static float unity_DOTS_Sampled_TexturePatternStyle;
+static float4 unity_DOTS_Sampled_HighlightColor;
+static float unity_DOTS_Sampled_HighlightColorPower;
 
-#define _DepthThreshold									UNITY_ACCESS_DOTS_INSTANCED_PROP_WITH_DEFAULT(float, _DepthThreshold)
+static float unity_DOTS_Sampled_OutlineWidth;
+static int unity_DOTS_Sampled_OutlineExtrudeMethod;
+static float3 unity_DOTS_Sampled_OutlineOffset;
+static float unity_DOTS_Sampled_OutlineZPostionInCamera;
+static float4 unity_DOTS_Sampled_OutlineColor;
+static float unity_DOTS_Sampled_MixMainTexToOutline;
+static float unity_DOTS_Sampled_NoisyOutlineIntensity;
+static float unity_DOTS_Sampled_DynamicNoisyOutline;
+static float unity_DOTS_Sampled_LightAffectOutlineColor;
+static float unity_DOTS_Sampled_OutlineWidthAffectedByViewDistance;
+static float unity_DOTS_Sampled_FarDistanceMaxWidth;
+static float unity_DOTS_Sampled_VertexColorBlueAffectOutlineWitdh;
 
-#define _MCapIntensity									UNITY_ACCESS_DOTS_INSTANCED_PROP_WITH_DEFAULT(float, _MCapIntensity)
-#define _SPECMODE										UNITY_ACCESS_DOTS_INSTANCED_PROP_WITH_DEFAULT(float, _SPECMODE)
-#define _SPECIN											UNITY_ACCESS_DOTS_INSTANCED_PROP_WITH_DEFAULT(float, _SPECIN)
+static float unity_DOTS_Sampled_DepthThreshold;
 
-#define _Opacity										UNITY_ACCESS_DOTS_INSTANCED_PROP_WITH_DEFAULT(float, _Opacity)
-#define _TransparentThreshold							UNITY_ACCESS_DOTS_INSTANCED_PROP_WITH_DEFAULT(float, _TransparentThreshold)
+static float unity_DOTS_Sampled_MCapIntensity;
+static float unity_DOTS_Sampled_SPECMODE;
+static float unity_DOTS_Sampled_SPECIN;
 
-#define _Cutout											UNITY_ACCESS_DOTS_INSTANCED_PROP_WITH_DEFAULT(float, _Cutout)
-#define _AlphaBaseCutout								UNITY_ACCESS_DOTS_INSTANCED_PROP_WITH_DEFAULT(float, _AlphaBaseCutout)
-#define _UseSecondaryCutout								UNITY_ACCESS_DOTS_INSTANCED_PROP_WITH_DEFAULT(float, _UseSecondaryCutout)
+static float unity_DOTS_Sampled_Opacity;
+static float unity_DOTS_Sampled_TransparentThreshold;
 
-#define _Glow_Color										UNITY_ACCESS_DOTS_INSTANCED_PROP_WITH_DEFAULT(float4, _Glow_Color)
-#define _Glow_Edge_Width								UNITY_ACCESS_DOTS_INSTANCED_PROP_WITH_DEFAULT(float, _Glow_Edge_Width)
+static float unity_DOTS_Sampled_Cutout;
+static float unity_DOTS_Sampled_AlphaBaseCutout;
+static float unity_DOTS_Sampled_UseSecondaryCutout;
 
-#define _NormalMapIntensity								UNITY_ACCESS_DOTS_INSTANCED_PROP_WITH_DEFAULT(float, _NormalMapIntensity)
+static float4 unity_DOTS_Sampled_Glow_Color;
+static float unity_DOTS_Sampled_Glow_Edge_Width;
 
-#define _Saturation										UNITY_ACCESS_DOTS_INSTANCED_PROP_WITH_DEFAULT(float, _Saturation)
+static float unity_DOTS_Sampled_NormalMapIntensity;
 
-#define _SelfLitIntensity								UNITY_ACCESS_DOTS_INSTANCED_PROP_WITH_DEFAULT(float, _SelfLitIntensity)
-#define _SelfLitColor									UNITY_ACCESS_DOTS_INSTANCED_PROP_WITH_DEFAULT(float4, _SelfLitColor)
-#define _SelfLitPower									UNITY_ACCESS_DOTS_INSTANCED_PROP_WITH_DEFAULT(float, _SelfLitPower)
-#define _TEXMCOLINT										UNITY_ACCESS_DOTS_INSTANCED_PROP_WITH_DEFAULT(float, _TEXMCOLINT)
-#define _SelfLitHighContrast							UNITY_ACCESS_DOTS_INSTANCED_PROP_WITH_DEFAULT(float, _SelfLitHighContrast)
+static float unity_DOTS_Sampled_Saturation;
 
-#define _GlossIntensity									UNITY_ACCESS_DOTS_INSTANCED_PROP_WITH_DEFAULT(float, _GlossIntensity)
-#define _Glossiness										UNITY_ACCESS_DOTS_INSTANCED_PROP_WITH_DEFAULT(float, _Glossiness)
-#define _GlossSoftness									UNITY_ACCESS_DOTS_INSTANCED_PROP_WITH_DEFAULT(float, _GlossSoftness)
-#define _GlossColor										UNITY_ACCESS_DOTS_INSTANCED_PROP_WITH_DEFAULT(float4, _GlossColor)
-#define _GlossColorPower								UNITY_ACCESS_DOTS_INSTANCED_PROP_WITH_DEFAULT(float, _GlossColorPower)
+static float unity_DOTS_Sampled_SelfLitIntensity;
+static float4 unity_DOTS_Sampled_SelfLitColor;
+static float unity_DOTS_Sampled_SelfLitPower;
+static float unity_DOTS_Sampled_TEXMCOLINT;
+static float unity_DOTS_Sampled_SelfLitHighContrast;
 
-#define _GlossTextureSoftness							UNITY_ACCESS_DOTS_INSTANCED_PROP_WITH_DEFAULT(float, _GlossTextureSoftness)
-#define _PSGLOTEX										UNITY_ACCESS_DOTS_INSTANCED_PROP_WITH_DEFAULT(float, _PSGLOTEX)
-#define _GlossTextureRotate								UNITY_ACCESS_DOTS_INSTANCED_PROP_WITH_DEFAULT(float, _GlossTextureRotate)
-#define _GlossTextureFollowObjectRotation				UNITY_ACCESS_DOTS_INSTANCED_PROP_WITH_DEFAULT(float, _GlossTextureFollowObjectRotation)
-#define _GlossTextureFollowLight						UNITY_ACCESS_DOTS_INSTANCED_PROP_WITH_DEFAULT(float, _GlossTextureFollowLight)
+static float unity_DOTS_Sampled_GlossIntensity;
+static float unity_DOTS_Sampled_Glossiness;
+static float unity_DOTS_Sampled_GlossSoftness;
+static float4 unity_DOTS_Sampled_GlossColor;
+static float unity_DOTS_Sampled_GlossColorPower;
 
-#define _OverallShadowColor								UNITY_ACCESS_DOTS_INSTANCED_PROP_WITH_DEFAULT(float4, _OverallShadowColor)
-#define _OverallShadowColorPower						UNITY_ACCESS_DOTS_INSTANCED_PROP_WITH_DEFAULT(float, _OverallShadowColorPower)
-#define _SelfShadowShadowTAtViewDirection				UNITY_ACCESS_DOTS_INSTANCED_PROP_WITH_DEFAULT(float, _SelfShadowShadowTAtViewDirection)
-#define _ShadowHardness									UNITY_ACCESS_DOTS_INSTANCED_PROP_WITH_DEFAULT(float, _ShadowHardness)
-#define _SelfShadowRealtimeShadowIntensity				UNITY_ACCESS_DOTS_INSTANCED_PROP_WITH_DEFAULT(float, _SelfShadowRealtimeShadowIntensity)
+static float unity_DOTS_Sampled_GlossTextureSoftness;
+static float unity_DOTS_Sampled_PSGLOTEX;
+static float unity_DOTS_Sampled_GlossTextureRotate;
+static float unity_DOTS_Sampled_GlossTextureFollowObjectRotation;
+static float unity_DOTS_Sampled_GlossTextureFollowLight;
 
-#define _SelfShadowThreshold							UNITY_ACCESS_DOTS_INSTANCED_PROP_WITH_DEFAULT(float, _SelfShadowThreshold)
-#define _VertexColorGreenControlSelfShadowThreshold		UNITY_ACCESS_DOTS_INSTANCED_PROP_WITH_DEFAULT(float, _VertexColorGreenControlSelfShadowThreshold)
-#define _SelfShadowHardness								UNITY_ACCESS_DOTS_INSTANCED_PROP_WITH_DEFAULT(float, _SelfShadowHardness)
-#define _LigIgnoYNorDir									UNITY_ACCESS_DOTS_INSTANCED_PROP_WITH_DEFAULT(float, _LigIgnoYNorDir)
-#define _SelfShadowAffectedByLightShadowStrength        UNITY_ACCESS_DOTS_INSTANCED_PROP_WITH_DEFAULT(float, _SelfShadowAffectedByLightShadowStrength)
+static float4 unity_DOTS_Sampled_OverallShadowColor;
+static float unity_DOTS_Sampled_OverallShadowColorPower;
+static float unity_DOTS_Sampled_SelfShadowShadowTAtViewDirection;
+static float unity_DOTS_Sampled_ShadowHardness;
+static float unity_DOTS_Sampled_SelfShadowRealtimeShadowIntensity;
 
-#define _SelfShadowIntensity							UNITY_ACCESS_DOTS_INSTANCED_PROP_WITH_DEFAULT(float, _SelfShadowIntensity)
-#define _SelfShadowColor								UNITY_ACCESS_DOTS_INSTANCED_PROP_WITH_DEFAULT(float4, _SelfShadowColor)
-#define _SelfShadowColorPower							UNITY_ACCESS_DOTS_INSTANCED_PROP_WITH_DEFAULT(float, _SelfShadowColorPower)
+static float unity_DOTS_Sampled_SelfShadowThreshold;
+static float unity_DOTS_Sampled_VertexColorGreenControlSelfShadowThreshold;
+static float unity_DOTS_Sampled_SelfShadowHardness;
+static float unity_DOTS_Sampled_LigIgnoYNorDir;
+static float unity_DOTS_Sampled_SelfShadowAffectedByLightShadowStrength;
 
-#define _SelfShadowRealTimeShadowColor					UNITY_ACCESS_DOTS_INSTANCED_PROP_WITH_DEFAULT(float4, _SelfShadowRealTimeShadowColor)
-#define _SelfShadowRealTimeShadowColorPower             UNITY_ACCESS_DOTS_INSTANCED_PROP_WITH_DEFAULT(float, _SelfShadowRealTimeShadowColorPower)
+static float unity_DOTS_Sampled_SelfShadowIntensity;
+static float4 unity_DOTS_Sampled_SelfShadowColor;
+static float unity_DOTS_Sampled_SelfShadowColorPower;
 
-#define _SmoothObjectNormal								UNITY_ACCESS_DOTS_INSTANCED_PROP_WITH_DEFAULT(float, _SmoothObjectNormal)
-#define _VertexColorRedControlSmoothObjectNormal        UNITY_ACCESS_DOTS_INSTANCED_PROP_WITH_DEFAULT(float, _VertexColorRedControlSmoothObjectNormal)
-#define _XYZPosition									UNITY_ACCESS_DOTS_INSTANCED_PROP_WITH_DEFAULT(float4, _XYZPosition)
-#define _ShowNormal										UNITY_ACCESS_DOTS_INSTANCED_PROP_WITH_DEFAULT(float, _ShowNormal)
+static float4 unity_DOTS_Sampled_SelfShadowRealTimeShadowColor;
+static float unity_DOTS_Sampled_SelfShadowRealTimeShadowColorPower;
 
-#define _ShadowColorTexturePower						UNITY_ACCESS_DOTS_INSTANCED_PROP_WITH_DEFAULT(float, _ShadowColorTexturePower)
+static float unity_DOTS_Sampled_SmoothObjectNormal;
+static float unity_DOTS_Sampled_VertexColorRedControlSmoothObjectNormal;
+static float4 unity_DOTS_Sampled_XYZPosition;
+static float unity_DOTS_Sampled_ShowNormal;
 
-#define _ShadowTIntensity								UNITY_ACCESS_DOTS_INSTANCED_PROP_WITH_DEFAULT(float, _ShadowTIntensity)
-#define _ShadowTLightThreshold							UNITY_ACCESS_DOTS_INSTANCED_PROP_WITH_DEFAULT(float, _ShadowTLightThreshold)
-#define _ShadowTShadowThreshold							UNITY_ACCESS_DOTS_INSTANCED_PROP_WITH_DEFAULT(float, _ShadowTShadowThreshold)
-#define _ShadowTColor									UNITY_ACCESS_DOTS_INSTANCED_PROP_WITH_DEFAULT(float4, _ShadowTColor)
-#define _ShadowTColorPower								UNITY_ACCESS_DOTS_INSTANCED_PROP_WITH_DEFAULT(float, _ShadowTColorPower)
-#define _ShadowTHardness								UNITY_ACCESS_DOTS_INSTANCED_PROP_WITH_DEFAULT(float, _ShadowTHardness)
-#define _STIL											UNITY_ACCESS_DOTS_INSTANCED_PROP_WITH_DEFAULT(float, _STIL)
-#define _ShowInAmbientLightShadowIntensity              UNITY_ACCESS_DOTS_INSTANCED_PROP_WITH_DEFAULT(float, _ShowInAmbientLightShadowIntensity)
-#define _ShowInAmbientLightShadowThreshold              UNITY_ACCESS_DOTS_INSTANCED_PROP_WITH_DEFAULT(float, _ShowInAmbientLightShadowThreshold)
-#define _LightFalloffAffectShadowT						UNITY_ACCESS_DOTS_INSTANCED_PROP_WITH_DEFAULT(float, _LightFalloffAffectShadowT)
+static float unity_DOTS_Sampled_ShadowColorTexturePower;
 
-#define _PTCol											UNITY_ACCESS_DOTS_INSTANCED_PROP_WITH_DEFAULT(float4, _PTCol)
-#define _PTexturePower									UNITY_ACCESS_DOTS_INSTANCED_PROP_WITH_DEFAULT(float, _PTexturePower)
+static float unity_DOTS_Sampled_ShadowTIntensity;
+static float unity_DOTS_Sampled_ShadowTLightThreshold;
+static float unity_DOTS_Sampled_ShadowTShadowThreshold;
+static float4 unity_DOTS_Sampled_ShadowTColor;
+static float unity_DOTS_Sampled_ShadowTColorPower;
+static float unity_DOTS_Sampled_ShadowTHardness;
+static float unity_DOTS_Sampled_STIL;
+static float unity_DOTS_Sampled_ShowInAmbientLightShadowIntensity;
+static float unity_DOTS_Sampled_ShowInAmbientLightShadowThreshold;
+static float unity_DOTS_Sampled_LightFalloffAffectShadowT;
 
-#define _GIFlatShade									UNITY_ACCESS_DOTS_INSTANCED_PROP_WITH_DEFAULT(float, _GIFlatShade)
-#define _GIShadeThreshold								UNITY_ACCESS_DOTS_INSTANCED_PROP_WITH_DEFAULT(float, _GIShadeThreshold)
-#define _EnvironmentalLightingIntensity					UNITY_ACCESS_DOTS_INSTANCED_PROP_WITH_DEFAULT(float, _EnvironmentalLightingIntensity)
+static float4 unity_DOTS_Sampled_PTCol;
+static float unity_DOTS_Sampled_PTexturePower;
 
-#define _LightAffectShadow								UNITY_ACCESS_DOTS_INSTANCED_PROP_WITH_DEFAULT(float, _LightAffectShadow)
-#define _LightIntensity									UNITY_ACCESS_DOTS_INSTANCED_PROP_WITH_DEFAULT(float, _LightIntensity)
-#define _DirectionalLightIntensity						UNITY_ACCESS_DOTS_INSTANCED_PROP_WITH_DEFAULT(float, _DirectionalLightIntensity)
-#define _PointSpotlightIntensity						UNITY_ACCESS_DOTS_INSTANCED_PROP_WITH_DEFAULT(float, _PointSpotlightIntensity)
-#define _LightFalloffSoftness							UNITY_ACCESS_DOTS_INSTANCED_PROP_WITH_DEFAULT(float, _LightFalloffSoftness)
+static float unity_DOTS_Sampled_GIFlatShade;
+static float unity_DOTS_Sampled_GIShadeThreshold;
+static float unity_DOTS_Sampled_EnvironmentalLightingIntensity;
 
-#define _CustomLightDirectionIntensity					UNITY_ACCESS_DOTS_INSTANCED_PROP_WITH_DEFAULT(float, _CustomLightDirectionIntensity)
-#define _CustomLightDirection							UNITY_ACCESS_DOTS_INSTANCED_PROP_WITH_DEFAULT(float4, _CustomLightDirection)
-#define _CustomLightDirectionFollowObjectRotation       UNITY_ACCESS_DOTS_INSTANCED_PROP_WITH_DEFAULT(float, _CustomLightDirectionFollowObjectRotation)
+static float unity_DOTS_Sampled_LightAffectShadow;
+static float unity_DOTS_Sampled_LightIntensity;
+static float unity_DOTS_Sampled_DirectionalLightIntensity;
+static float unity_DOTS_Sampled_PointSpotlightIntensity;
+static float unity_DOTS_Sampled_LightFalloffSoftness;
 
-#define _ReflectionIntensity							UNITY_ACCESS_DOTS_INSTANCED_PROP_WITH_DEFAULT(float, _ReflectionIntensity)
-#define _ReflectionRoughtness							UNITY_ACCESS_DOTS_INSTANCED_PROP_WITH_DEFAULT(float, _ReflectionRoughtness)
-#define _RefMetallic									UNITY_ACCESS_DOTS_INSTANCED_PROP_WITH_DEFAULT(float, _RefMetallic)
+static float unity_DOTS_Sampled_CustomLightDirectionIntensity;
+static float4 unity_DOTS_Sampled_CustomLightDirection;
+static float unity_DOTS_Sampled_CustomLightDirectionFollowObjectRotation;
 
-#define _RimLigInt										UNITY_ACCESS_DOTS_INSTANCED_PROP_WITH_DEFAULT(float, _RimLigInt)
-#define _RimLightUnfill									UNITY_ACCESS_DOTS_INSTANCED_PROP_WITH_DEFAULT(float, _RimLightUnfill)
-#define _RimLightSoftness								UNITY_ACCESS_DOTS_INSTANCED_PROP_WITH_DEFAULT(float, _RimLightSoftness)
-#define _LightAffectRimLightColor						UNITY_ACCESS_DOTS_INSTANCED_PROP_WITH_DEFAULT(float, _LightAffectRimLightColor)
-#define _RimLightColor									UNITY_ACCESS_DOTS_INSTANCED_PROP_WITH_DEFAULT(float4, _RimLightColor)
-#define _RimLightColorPower								UNITY_ACCESS_DOTS_INSTANCED_PROP_WITH_DEFAULT(float, _RimLightColorPower)
-#define _RimLightInLight								UNITY_ACCESS_DOTS_INSTANCED_PROP_WITH_DEFAULT(float, _RimLightInLight)
+static float unity_DOTS_Sampled_ReflectionIntensity;
+static float unity_DOTS_Sampled_ReflectionRoughtness;
+static float unity_DOTS_Sampled_RefMetallic;
 
-#define _MinDissDistance								UNITY_ACCESS_DOTS_INSTANCED_PROP_WITH_DEFAULT(float, _MinFadDistance)
-#define _MaxDissDistance								UNITY_ACCESS_DOTS_INSTANCED_PROP_WITH_DEFAULT(float, _MaxFadDistance)
+static float unity_DOTS_Sampled_RimLigInt;
+static float unity_DOTS_Sampled_RimLightUnfill;
+static float unity_DOTS_Sampled_RimLightSoftness;
+static float unity_DOTS_Sampled_LightAffectRimLightColor;
+static float4 unity_DOTS_Sampled_RimLightColor;
+static float unity_DOTS_Sampled_RimLightColorPower;
+static float unity_DOTS_Sampled_RimLightInLight;
 
-#define _ReduceShadowSpotDirectionalLight				UNITY_ACCESS_DOTS_INSTANCED_PROP_WITH_DEFAULT(float, _ReduceShadowSpotDirectionalLight)
+static float unity_DOTS_Sampled_MinFadDistance;
+static float unity_DOTS_Sampled_MaxFadDistance;
 
-#define _SSAOColor                                      UNITY_ACCESS_DOTS_INSTANCED_PROP_WITH_DEFAULT(float4, _SSAOColor)
+//static float unity_DOTS_Sampled_ReduceShadowSpotDirectionalLight;
+
+static float4 unity_DOTS_Sampled_SSAOColor;
+
+//static float unity_DOTS_Sampled_SkinMatrixIndex;
+//static float unity_DOTS_Sampled_ComputeMeshIndex;
+
+
+
+void SetupDOTSLitMaterialPropertyCaches()
+{
+	unity_DOTS_Sampled_MainColor                                            = UNITY_ACCESS_DOTS_INSTANCED_PROP_WITH_DEFAULT(float4, _MainColor);
+	unity_DOTS_Sampled_MaiColPo                                             = UNITY_ACCESS_DOTS_INSTANCED_PROP_WITH_DEFAULT(float, _MaiColPo);
+	unity_DOTS_Sampled_MVCOL                                                = UNITY_ACCESS_DOTS_INSTANCED_PROP_WITH_DEFAULT(float, _MVCOL);
+	unity_DOTS_Sampled_MCIALO                                               = UNITY_ACCESS_DOTS_INSTANCED_PROP_WITH_DEFAULT(float, _MCIALO);
+	unity_DOTS_Sampled_TexturePatternStyle                                  = UNITY_ACCESS_DOTS_INSTANCED_PROP_WITH_DEFAULT(float, _TexturePatternStyle);
+	unity_DOTS_Sampled_HighlightColor                                       = UNITY_ACCESS_DOTS_INSTANCED_PROP_WITH_DEFAULT(float4, _HighlightColor);
+	unity_DOTS_Sampled_HighlightColorPower                                  = UNITY_ACCESS_DOTS_INSTANCED_PROP_WITH_DEFAULT(float, _HighlightColorPower);
+
+	unity_DOTS_Sampled_OutlineWidth                                         = UNITY_ACCESS_DOTS_INSTANCED_PROP_WITH_DEFAULT(float, _OutlineWidth);
+	unity_DOTS_Sampled_OutlineExtrudeMethod                                 = UNITY_ACCESS_DOTS_INSTANCED_PROP_WITH_DEFAULT(int, _OutlineExtrudeMethod);
+	unity_DOTS_Sampled_OutlineOffset                                        = UNITY_ACCESS_DOTS_INSTANCED_PROP_WITH_DEFAULT(float3, _OutlineOffset);
+	unity_DOTS_Sampled_OutlineZPostionInCamera                              = UNITY_ACCESS_DOTS_INSTANCED_PROP_WITH_DEFAULT(float, _OutlineZPostionInCamera);
+	unity_DOTS_Sampled_OutlineColor                                         = UNITY_ACCESS_DOTS_INSTANCED_PROP_WITH_DEFAULT(float4, _OutlineColor);
+	unity_DOTS_Sampled_MixMainTexToOutline                                  = UNITY_ACCESS_DOTS_INSTANCED_PROP_WITH_DEFAULT(float, _MixMainTexToOutline);
+	unity_DOTS_Sampled_NoisyOutlineIntensity                                = UNITY_ACCESS_DOTS_INSTANCED_PROP_WITH_DEFAULT(float, _NoisyOutlineIntensity);
+	unity_DOTS_Sampled_DynamicNoisyOutline                                  = UNITY_ACCESS_DOTS_INSTANCED_PROP_WITH_DEFAULT(float, _DynamicNoisyOutline);
+	unity_DOTS_Sampled_LightAffectOutlineColor                              = UNITY_ACCESS_DOTS_INSTANCED_PROP_WITH_DEFAULT(float, _LightAffectOutlineColor);
+	unity_DOTS_Sampled_OutlineWidthAffectedByViewDistance                   = UNITY_ACCESS_DOTS_INSTANCED_PROP_WITH_DEFAULT(float, _OutlineWidthAffectedByViewDistance);
+	unity_DOTS_Sampled_FarDistanceMaxWidth                                  = UNITY_ACCESS_DOTS_INSTANCED_PROP_WITH_DEFAULT(float, _FarDistanceMaxWidth);
+	unity_DOTS_Sampled_VertexColorBlueAffectOutlineWitdh                    = UNITY_ACCESS_DOTS_INSTANCED_PROP_WITH_DEFAULT(float, _VertexColorBlueAffectOutlineWitdh);
+
+	unity_DOTS_Sampled_DepthThreshold                                       = UNITY_ACCESS_DOTS_INSTANCED_PROP_WITH_DEFAULT(float, _DepthThreshold);
+
+	unity_DOTS_Sampled_MCapIntensity                                        = UNITY_ACCESS_DOTS_INSTANCED_PROP_WITH_DEFAULT(float, _MCapIntensity);
+	unity_DOTS_Sampled_SPECMODE                                             = UNITY_ACCESS_DOTS_INSTANCED_PROP_WITH_DEFAULT(float, _SPECMODE);
+	unity_DOTS_Sampled_SPECIN                                               = UNITY_ACCESS_DOTS_INSTANCED_PROP_WITH_DEFAULT(float, _SPECIN);
+
+	unity_DOTS_Sampled_Opacity                                              = UNITY_ACCESS_DOTS_INSTANCED_PROP_WITH_DEFAULT(float, _Opacity);
+	unity_DOTS_Sampled_TransparentThreshold                                 = UNITY_ACCESS_DOTS_INSTANCED_PROP_WITH_DEFAULT(float, _TransparentThreshold);
+
+	unity_DOTS_Sampled_Cutout                                               = UNITY_ACCESS_DOTS_INSTANCED_PROP_WITH_DEFAULT(float, _Cutout);
+	unity_DOTS_Sampled_AlphaBaseCutout                                      = UNITY_ACCESS_DOTS_INSTANCED_PROP_WITH_DEFAULT(float, _AlphaBaseCutout);
+	unity_DOTS_Sampled_UseSecondaryCutout                                   = UNITY_ACCESS_DOTS_INSTANCED_PROP_WITH_DEFAULT(float, _UseSecondaryCutout);
+
+	unity_DOTS_Sampled_Glow_Color                                           = UNITY_ACCESS_DOTS_INSTANCED_PROP_WITH_DEFAULT(float4, _Glow_Color);
+	unity_DOTS_Sampled_Glow_Edge_Width                                      = UNITY_ACCESS_DOTS_INSTANCED_PROP_WITH_DEFAULT(float, _Glow_Edge_Width);
+
+	unity_DOTS_Sampled_NormalMapIntensity                                   = UNITY_ACCESS_DOTS_INSTANCED_PROP_WITH_DEFAULT(float, _NormalMapIntensity);
+
+	unity_DOTS_Sampled_Saturation                                           = UNITY_ACCESS_DOTS_INSTANCED_PROP_WITH_DEFAULT(float, _Saturation);
+
+	unity_DOTS_Sampled_SelfLitIntensity                                     = UNITY_ACCESS_DOTS_INSTANCED_PROP_WITH_DEFAULT(float, _SelfLitIntensity);
+	unity_DOTS_Sampled_SelfLitColor                                         = UNITY_ACCESS_DOTS_INSTANCED_PROP_WITH_DEFAULT(float4, _SelfLitColor);
+	unity_DOTS_Sampled_SelfLitPower                                         = UNITY_ACCESS_DOTS_INSTANCED_PROP_WITH_DEFAULT(float, _SelfLitPower);
+	unity_DOTS_Sampled_TEXMCOLINT                                           = UNITY_ACCESS_DOTS_INSTANCED_PROP_WITH_DEFAULT(float, _TEXMCOLINT);
+	unity_DOTS_Sampled_SelfLitHighContrast                                  = UNITY_ACCESS_DOTS_INSTANCED_PROP_WITH_DEFAULT(float, _SelfLitHighContrast);
+
+	unity_DOTS_Sampled_GlossIntensity                                       = UNITY_ACCESS_DOTS_INSTANCED_PROP_WITH_DEFAULT(float, _GlossIntensity);
+	unity_DOTS_Sampled_Glossiness                                           = UNITY_ACCESS_DOTS_INSTANCED_PROP_WITH_DEFAULT(float, _Glossiness);
+	unity_DOTS_Sampled_GlossSoftness                                        = UNITY_ACCESS_DOTS_INSTANCED_PROP_WITH_DEFAULT(float, _GlossSoftness);
+	unity_DOTS_Sampled_GlossColor                                           = UNITY_ACCESS_DOTS_INSTANCED_PROP_WITH_DEFAULT(float4, _GlossColor);
+	unity_DOTS_Sampled_GlossColorPower                                      = UNITY_ACCESS_DOTS_INSTANCED_PROP_WITH_DEFAULT(float, _GlossColorPower);
+
+	unity_DOTS_Sampled_GlossTextureSoftness                                 = UNITY_ACCESS_DOTS_INSTANCED_PROP_WITH_DEFAULT(float, _GlossTextureSoftness);
+	unity_DOTS_Sampled_PSGLOTEX                                             = UNITY_ACCESS_DOTS_INSTANCED_PROP_WITH_DEFAULT(float, _PSGLOTEX);
+	unity_DOTS_Sampled_GlossTextureRotate                                   = UNITY_ACCESS_DOTS_INSTANCED_PROP_WITH_DEFAULT(float, _GlossTextureRotate);
+	unity_DOTS_Sampled_GlossTextureFollowObjectRotation                     = UNITY_ACCESS_DOTS_INSTANCED_PROP_WITH_DEFAULT(float, _GlossTextureFollowObjectRotation);
+	unity_DOTS_Sampled_GlossTextureFollowLight                              = UNITY_ACCESS_DOTS_INSTANCED_PROP_WITH_DEFAULT(float, _GlossTextureFollowLight);
+
+	unity_DOTS_Sampled_OverallShadowColor                                   = UNITY_ACCESS_DOTS_INSTANCED_PROP_WITH_DEFAULT(float4, _OverallShadowColor);
+	unity_DOTS_Sampled_OverallShadowColorPower                              = UNITY_ACCESS_DOTS_INSTANCED_PROP_WITH_DEFAULT(float, _OverallShadowColorPower);
+	unity_DOTS_Sampled_SelfShadowShadowTAtViewDirection                     = UNITY_ACCESS_DOTS_INSTANCED_PROP_WITH_DEFAULT(float, _SelfShadowShadowTAtViewDirection);
+	unity_DOTS_Sampled_ShadowHardness                                       = UNITY_ACCESS_DOTS_INSTANCED_PROP_WITH_DEFAULT(float, _ShadowHardness);
+	unity_DOTS_Sampled_SelfShadowRealtimeShadowIntensity                    = UNITY_ACCESS_DOTS_INSTANCED_PROP_WITH_DEFAULT(float, _SelfShadowRealtimeShadowIntensity);
+
+	unity_DOTS_Sampled_SelfShadowThreshold                                  = UNITY_ACCESS_DOTS_INSTANCED_PROP_WITH_DEFAULT(float, _SelfShadowThreshold);
+	unity_DOTS_Sampled_VertexColorGreenControlSelfShadowThreshold           = UNITY_ACCESS_DOTS_INSTANCED_PROP_WITH_DEFAULT(float, _VertexColorGreenControlSelfShadowThreshold);
+	unity_DOTS_Sampled_SelfShadowHardness                                   = UNITY_ACCESS_DOTS_INSTANCED_PROP_WITH_DEFAULT(float, _SelfShadowHardness);
+	unity_DOTS_Sampled_LigIgnoYNorDir                                       = UNITY_ACCESS_DOTS_INSTANCED_PROP_WITH_DEFAULT(float, _LigIgnoYNorDir);
+	unity_DOTS_Sampled_SelfShadowAffectedByLightShadowStrength              = UNITY_ACCESS_DOTS_INSTANCED_PROP_WITH_DEFAULT(float, _SelfShadowAffectedByLightShadowStrength);
+
+	unity_DOTS_Sampled_SelfShadowIntensity                                  = UNITY_ACCESS_DOTS_INSTANCED_PROP_WITH_DEFAULT(float, _SelfShadowIntensity);
+	unity_DOTS_Sampled_SelfShadowColor                                      = UNITY_ACCESS_DOTS_INSTANCED_PROP_WITH_DEFAULT(float4, _SelfShadowColor);
+	unity_DOTS_Sampled_SelfShadowColorPower                                 = UNITY_ACCESS_DOTS_INSTANCED_PROP_WITH_DEFAULT(float, _SelfShadowColorPower);
+
+	unity_DOTS_Sampled_SelfShadowRealTimeShadowColor                        = UNITY_ACCESS_DOTS_INSTANCED_PROP_WITH_DEFAULT(float4, _SelfShadowRealTimeShadowColor);
+	unity_DOTS_Sampled_SelfShadowRealTimeShadowColorPower                   = UNITY_ACCESS_DOTS_INSTANCED_PROP_WITH_DEFAULT(float, _SelfShadowRealTimeShadowColorPower);
+
+	unity_DOTS_Sampled_SmoothObjectNormal                                   = UNITY_ACCESS_DOTS_INSTANCED_PROP_WITH_DEFAULT(float, _SmoothObjectNormal);
+	unity_DOTS_Sampled_VertexColorRedControlSmoothObjectNormal              = UNITY_ACCESS_DOTS_INSTANCED_PROP_WITH_DEFAULT(float, _VertexColorRedControlSmoothObjectNormal);
+	unity_DOTS_Sampled_XYZPosition										    = UNITY_ACCESS_DOTS_INSTANCED_PROP_WITH_DEFAULT(float4, _XYZPosition);
+	unity_DOTS_Sampled_ShowNormal										    = UNITY_ACCESS_DOTS_INSTANCED_PROP_WITH_DEFAULT(float, _ShowNormal);
+
+	unity_DOTS_Sampled_ShadowColorTexturePower                              = UNITY_ACCESS_DOTS_INSTANCED_PROP_WITH_DEFAULT(float, _ShadowColorTexturePower);
+
+	unity_DOTS_Sampled_ShadowTIntensity                                     = UNITY_ACCESS_DOTS_INSTANCED_PROP_WITH_DEFAULT(float, _ShadowTIntensity);
+	unity_DOTS_Sampled_ShadowTLightThreshold                                = UNITY_ACCESS_DOTS_INSTANCED_PROP_WITH_DEFAULT(float, _ShadowTLightThreshold);
+	unity_DOTS_Sampled_ShadowTShadowThreshold                               = UNITY_ACCESS_DOTS_INSTANCED_PROP_WITH_DEFAULT(float, _ShadowTShadowThreshold);
+	unity_DOTS_Sampled_ShadowTColor                                         = UNITY_ACCESS_DOTS_INSTANCED_PROP_WITH_DEFAULT(float4, _ShadowTColor);
+	unity_DOTS_Sampled_ShadowTColorPower                                    = UNITY_ACCESS_DOTS_INSTANCED_PROP_WITH_DEFAULT(float, _ShadowTColorPower);
+	unity_DOTS_Sampled_ShadowTHardness                                      = UNITY_ACCESS_DOTS_INSTANCED_PROP_WITH_DEFAULT(float, _ShadowTHardness);
+	unity_DOTS_Sampled_STIL													= UNITY_ACCESS_DOTS_INSTANCED_PROP_WITH_DEFAULT(float, _STIL);
+	unity_DOTS_Sampled_ShowInAmbientLightShadowIntensity                    = UNITY_ACCESS_DOTS_INSTANCED_PROP_WITH_DEFAULT(float, _ShowInAmbientLightShadowIntensity);
+	unity_DOTS_Sampled_ShowInAmbientLightShadowThreshold                    = UNITY_ACCESS_DOTS_INSTANCED_PROP_WITH_DEFAULT(float, _ShowInAmbientLightShadowThreshold);
+	unity_DOTS_Sampled_LightFalloffAffectShadowT                            = UNITY_ACCESS_DOTS_INSTANCED_PROP_WITH_DEFAULT(float, _LightFalloffAffectShadowT);
+
+	unity_DOTS_Sampled_PTCol                                                = UNITY_ACCESS_DOTS_INSTANCED_PROP_WITH_DEFAULT(float4, _PTCol);
+	unity_DOTS_Sampled_PTexturePower                                        = UNITY_ACCESS_DOTS_INSTANCED_PROP_WITH_DEFAULT(float, _PTexturePower);
+
+	unity_DOTS_Sampled_GIFlatShade											= UNITY_ACCESS_DOTS_INSTANCED_PROP_WITH_DEFAULT(float, _GIFlatShade);
+	unity_DOTS_Sampled_GIShadeThreshold                                     = UNITY_ACCESS_DOTS_INSTANCED_PROP_WITH_DEFAULT(float, _GIShadeThreshold);
+	unity_DOTS_Sampled_EnvironmentalLightingIntensity                       = UNITY_ACCESS_DOTS_INSTANCED_PROP_WITH_DEFAULT(float, _EnvironmentalLightingIntensity);
+
+	unity_DOTS_Sampled_LightAffectShadow                                    = UNITY_ACCESS_DOTS_INSTANCED_PROP_WITH_DEFAULT(float, _LightAffectShadow);
+	unity_DOTS_Sampled_LightIntensity                                       = UNITY_ACCESS_DOTS_INSTANCED_PROP_WITH_DEFAULT(float, _LightIntensity);
+	unity_DOTS_Sampled_DirectionalLightIntensity                            = UNITY_ACCESS_DOTS_INSTANCED_PROP_WITH_DEFAULT(float, _DirectionalLightIntensity);
+	unity_DOTS_Sampled_PointSpotlightIntensity                              = UNITY_ACCESS_DOTS_INSTANCED_PROP_WITH_DEFAULT(float, _PointSpotlightIntensity);
+	unity_DOTS_Sampled_LightFalloffSoftness                                 = UNITY_ACCESS_DOTS_INSTANCED_PROP_WITH_DEFAULT(float, _LightFalloffSoftness);
+
+	unity_DOTS_Sampled_CustomLightDirectionIntensity                        = UNITY_ACCESS_DOTS_INSTANCED_PROP_WITH_DEFAULT(float, _CustomLightDirectionIntensity);
+	unity_DOTS_Sampled_CustomLightDirection                                 = UNITY_ACCESS_DOTS_INSTANCED_PROP_WITH_DEFAULT(float4, _CustomLightDirection);
+	unity_DOTS_Sampled_CustomLightDirectionFollowObjectRotation             = UNITY_ACCESS_DOTS_INSTANCED_PROP_WITH_DEFAULT(float, _CustomLightDirectionFollowObjectRotation);
+
+	unity_DOTS_Sampled_ReflectionIntensity                                  = UNITY_ACCESS_DOTS_INSTANCED_PROP_WITH_DEFAULT(float, _ReflectionIntensity);
+	unity_DOTS_Sampled_ReflectionRoughtness                                 = UNITY_ACCESS_DOTS_INSTANCED_PROP_WITH_DEFAULT(float, _ReflectionRoughtness);
+	unity_DOTS_Sampled_RefMetallic                                          = UNITY_ACCESS_DOTS_INSTANCED_PROP_WITH_DEFAULT(float, _RefMetallic);
+
+	unity_DOTS_Sampled_RimLigInt                                            = UNITY_ACCESS_DOTS_INSTANCED_PROP_WITH_DEFAULT(float, _RimLigInt);
+	unity_DOTS_Sampled_RimLightUnfill                                       = UNITY_ACCESS_DOTS_INSTANCED_PROP_WITH_DEFAULT(float, _RimLightUnfill);
+	unity_DOTS_Sampled_RimLightSoftness                                     = UNITY_ACCESS_DOTS_INSTANCED_PROP_WITH_DEFAULT(float, _RimLightSoftness);
+	unity_DOTS_Sampled_LightAffectRimLightColor                             = UNITY_ACCESS_DOTS_INSTANCED_PROP_WITH_DEFAULT(float, _LightAffectRimLightColor);
+	unity_DOTS_Sampled_RimLightColor                                        = UNITY_ACCESS_DOTS_INSTANCED_PROP_WITH_DEFAULT(float4, _RimLightColor);
+	unity_DOTS_Sampled_RimLightColorPower                                   = UNITY_ACCESS_DOTS_INSTANCED_PROP_WITH_DEFAULT(float, _RimLightColorPower);
+	unity_DOTS_Sampled_RimLightInLight                                      = UNITY_ACCESS_DOTS_INSTANCED_PROP_WITH_DEFAULT(float, _RimLightInLight);
+
+	unity_DOTS_Sampled_MinFadDistance                                       = UNITY_ACCESS_DOTS_INSTANCED_PROP_WITH_DEFAULT(float, _MinFadDistance);
+	unity_DOTS_Sampled_MaxFadDistance                                       = UNITY_ACCESS_DOTS_INSTANCED_PROP_WITH_DEFAULT(float, _MaxFadDistance);
+
+	unity_DOTS_Sampled_MinFadDistance                                       = UNITY_ACCESS_DOTS_INSTANCED_PROP_WITH_DEFAULT(float, _MinFadDistance);
+	unity_DOTS_Sampled_MaxFadDistance                                       = UNITY_ACCESS_DOTS_INSTANCED_PROP_WITH_DEFAULT(float, _MaxFadDistance);
+
+	unity_DOTS_Sampled_SSAOColor											= UNITY_ACCESS_DOTS_INSTANCED_PROP_WITH_DEFAULT(float4, _SSAOColor);
+
+	//unity_DOTS_Sampled_SkinMatrixIndex										= UNITY_ACCESS_DOTS_INSTANCED_PROP_WITH_DEFAULT(float, _SkinMatrixIndex);
+	//unity_DOTS_Sampled_ComputeMeshIndex										= UNITY_ACCESS_DOTS_INSTANCED_PROP_WITH_DEFAULT(float, _ComputeMeshIndex);
+
+}
+
+
+
+#undef UNITY_SETUP_DOTS_MATERIAL_PROPERTY_CACHES
+#define UNITY_SETUP_DOTS_MATERIAL_PROPERTY_CACHES() SetupDOTSLitMaterialPropertyCaches()
+
+#define _MainColor										unity_DOTS_Sampled_MainColor
+#define _MaiColPo										unity_DOTS_Sampled_MaiColPo
+#define _MVCOL											unity_DOTS_Sampled_MVCOL
+#define _MCIALO											unity_DOTS_Sampled_MCIALO
+#define _TexturePatternStyle							unity_DOTS_Sampled_TexturePatternStyle
+#define _HighlightColor									unity_DOTS_Sampled_HighlightColor
+#define _HighlightColorPower							unity_DOTS_Sampled_HighlightColorPower
+
+#define _OutlineWidth									unity_DOTS_Sampled_OutlineWidth
+#define _OutlineExtrudeMethod							unity_DOTS_Sampled_OutlineExtrudeMethod
+#define _OutlineOffset									unity_DOTS_Sampled_OutlineOffset
+#define _OutlineZPostionInCamera						unity_DOTS_Sampled_OutlineZPostionInCamera
+#define _OutlineColor									unity_DOTS_Sampled_OutlineColor
+#define _MixMainTexToOutline							unity_DOTS_Sampled_MixMainTexToOutline
+#define _NoisyOutlineIntensity							unity_DOTS_Sampled_NoisyOutlineIntensity
+#define _DynamicNoisyOutline							unity_DOTS_Sampled_DynamicNoisyOutline
+#define _LightAffectOutlineColor						unity_DOTS_Sampled_LightAffectOutlineColor
+#define _OutlineWidthAffectedByViewDistance				unity_DOTS_Sampled_OutlineWidthAffectedByViewDistance
+#define _FarDistanceMaxWidth							unity_DOTS_Sampled_FarDistanceMaxWidth
+#define _VertexColorBlueAffectOutlineWitdh				unity_DOTS_Sampled_VertexColorBlueAffectOutlineWitdh
+
+#define _DepthThreshold									unity_DOTS_Sampled_DepthThreshold
+
+#define _MCapIntensity									unity_DOTS_Sampled_MCapIntensity
+#define _SPECMODE										unity_DOTS_Sampled_SPECMODE
+#define _SPECIN											unity_DOTS_Sampled_SPECIN
+
+#define _Opacity										unity_DOTS_Sampled_Opacity
+#define _TransparentThreshold							unity_DOTS_Sampled_TransparentThreshold
+
+#define _Cutout											unity_DOTS_Sampled_Cutout
+#define _AlphaBaseCutout								unity_DOTS_Sampled_AlphaBaseCutout
+#define _UseSecondaryCutout								unity_DOTS_Sampled_UseSecondaryCutout
+
+#define _Glow_Color										unity_DOTS_Sampled_Glow_Color
+#define _Glow_Edge_Width								unity_DOTS_Sampled_Glow_Edge_Width
+
+#define _NormalMapIntensity								unity_DOTS_Sampled_NormalMapIntensity
+
+#define _Saturation										unity_DOTS_Sampled_Saturation
+
+#define _SelfLitIntensity								unity_DOTS_Sampled_SelfLitIntensity
+#define _SelfLitColor									unity_DOTS_Sampled_SelfLitColor
+#define _SelfLitPower									unity_DOTS_Sampled_SelfLitPower
+#define _TEXMCOLINT										unity_DOTS_Sampled_TEXMCOLINT
+#define _SelfLitHighContrast							unity_DOTS_Sampled_SelfLitHighContrast
+
+#define _GlossIntensity									unity_DOTS_Sampled_GlossIntensity
+#define _Glossiness										unity_DOTS_Sampled_Glossiness
+#define _GlossSoftness									unity_DOTS_Sampled_GlossSoftness
+#define _GlossColor										unity_DOTS_Sampled_GlossColor
+#define _GlossColorPower								unity_DOTS_Sampled_GlossColorPower
+
+#define _GlossTextureSoftness							unity_DOTS_Sampled_GlossTextureSoftness
+#define _PSGLOTEX										unity_DOTS_Sampled_PSGLOTEX
+#define _GlossTextureRotate								unity_DOTS_Sampled_GlossTextureRotate
+#define _GlossTextureFollowObjectRotation				unity_DOTS_Sampled_GlossTextureFollowObjectRotation
+#define _GlossTextureFollowLight						unity_DOTS_Sampled_GlossTextureFollowLight
+
+#define _OverallShadowColor								unity_DOTS_Sampled_OverallShadowColor
+#define _OverallShadowColorPower						unity_DOTS_Sampled_OverallShadowColorPower
+#define _SelfShadowShadowTAtViewDirection				unity_DOTS_Sampled_SelfShadowShadowTAtViewDirection
+#define _ShadowHardness									unity_DOTS_Sampled_ShadowHardness
+#define _SelfShadowRealtimeShadowIntensity				unity_DOTS_Sampled_SelfShadowRealtimeShadowIntensity
+
+#define _SelfShadowThreshold							unity_DOTS_Sampled_SelfShadowThreshold
+#define _VertexColorGreenControlSelfShadowThreshold		unity_DOTS_Sampled_VertexColorGreenControlSelfShadowThreshold
+#define _SelfShadowHardness								unity_DOTS_Sampled_SelfShadowHardness
+#define _LigIgnoYNorDir									unity_DOTS_Sampled_LigIgnoYNorDir
+#define _SelfShadowAffectedByLightShadowStrength        unity_DOTS_Sampled_SelfShadowAffectedByLightShadowStrength
+
+#define _SelfShadowIntensity							unity_DOTS_Sampled_SelfShadowIntensity
+#define _SelfShadowColor								unity_DOTS_Sampled_SelfShadowColor
+#define _SelfShadowColorPower							unity_DOTS_Sampled_SelfShadowColorPower
+
+#define _SelfShadowRealTimeShadowColor					unity_DOTS_Sampled_SelfShadowRealTimeShadowColor
+#define _SelfShadowRealTimeShadowColorPower             unity_DOTS_Sampled_SelfShadowRealTimeShadowColorPower
+
+#define _SmoothObjectNormal								unity_DOTS_Sampled_SmoothObjectNormal
+#define _VertexColorRedControlSmoothObjectNormal        unity_DOTS_Sampled_VertexColorRedControlSmoothObjectNormal
+#define _XYZPosition									unity_DOTS_Sampled_XYZPosition
+#define _ShowNormal										unity_DOTS_Sampled_ShowNormal
+
+#define _ShadowColorTexturePower						unity_DOTS_Sampled_ShadowColorTexturePower
+
+#define _ShadowTIntensity								unity_DOTS_Sampled_ShadowTIntensity
+#define _ShadowTLightThreshold							unity_DOTS_Sampled_ShadowTLightThreshold
+#define _ShadowTShadowThreshold							unity_DOTS_Sampled_ShadowTShadowThreshold
+#define _ShadowTColor									unity_DOTS_Sampled_ShadowTColor
+#define _ShadowTColorPower								unity_DOTS_Sampled_ShadowTColorPower
+#define _ShadowTHardness								unity_DOTS_Sampled_ShadowTHardness
+#define _STIL											unity_DOTS_Sampled_STIL
+#define _ShowInAmbientLightShadowIntensity              unity_DOTS_Sampled_ShowInAmbientLightShadowIntensity
+#define _ShowInAmbientLightShadowThreshold              unity_DOTS_Sampled_ShowInAmbientLightShadowThreshold
+#define _LightFalloffAffectShadowT						unity_DOTS_Sampled_LightFalloffAffectShadowT
+
+#define _PTCol											unity_DOTS_Sampled_PTCol
+#define _PTexturePower									unity_DOTS_Sampled_PTexturePower
+
+#define _GIFlatShade									unity_DOTS_Sampled_GIFlatShade
+#define _GIShadeThreshold								unity_DOTS_Sampled_GIShadeThreshold
+#define _EnvironmentalLightingIntensity					unity_DOTS_Sampled_EnvironmentalLightingIntensity
+
+#define _LightAffectShadow								unity_DOTS_Sampled_LightAffectShadow
+#define _LightIntensity									unity_DOTS_Sampled_LightIntensity
+#define _DirectionalLightIntensity						unity_DOTS_Sampled_DirectionalLightIntensity
+#define _PointSpotlightIntensity						unity_DOTS_Sampled_PointSpotlightIntensity
+#define _LightFalloffSoftness							unity_DOTS_Sampled_LightFalloffSoftness
+
+#define _CustomLightDirectionIntensity					unity_DOTS_Sampled_CustomLightDirectionIntensity
+#define _CustomLightDirection							unity_DOTS_Sampled_CustomLightDirection
+#define _CustomLightDirectionFollowObjectRotation       unity_DOTS_Sampled_CustomLightDirectionFollowObjectRotation
+
+#define _ReflectionIntensity							unity_DOTS_Sampled_ReflectionIntensity
+#define _ReflectionRoughtness							unity_DOTS_Sampled_ReflectionRoughtness
+#define _RefMetallic									unity_DOTS_Sampled_RefMetallic
+
+#define _RimLigInt										unity_DOTS_Sampled_RimLigInt
+#define _RimLightUnfill									unity_DOTS_Sampled_RimLightUnfill
+#define _RimLightSoftness								unity_DOTS_Sampled_RimLightSoftness
+#define _LightAffectRimLightColor						unity_DOTS_Sampled_LightAffectRimLightColor
+#define _RimLightColor									unity_DOTS_Sampled_RimLightColor
+#define _RimLightColorPower								unity_DOTS_Sampled_RimLightColorPower
+#define _RimLightInLight								unity_DOTS_Sampled_RimLightInLight
+
+#define _MinDissDistance								unity_DOTS_Sampled_MinFadDistance
+#define _MaxDissDistance								unity_DOTS_Sampled_MaxFadDistance
+
+#define _SSAOColor                                      unity_DOTS_Sampled_SSAOColor
+
+//#define _SkinMatrixIndex								unity_DOTS_Sampled_SkinMatrixIndex
+//#define _ComputeMeshIndex								unity_DOTS_Sampled_ComputeMeshIndex
 
 //=========
-#define UNITY_ACCESS_HYBRID_INSTANCED_PROP(var, type) UNITY_ACCESS_DOTS_INSTANCED_PROP_FROM_MACRO(type, Metadata##var) //
+#define UNITY_ACCESS_HYBRID_INSTANCED_PROP(var, type) UNITY_ACCESS_INSTANCED_PROP(type, var) //
 #else
 #define UNITY_ACCESS_HYBRID_INSTANCED_PROP(var, type) var //
 //=========
