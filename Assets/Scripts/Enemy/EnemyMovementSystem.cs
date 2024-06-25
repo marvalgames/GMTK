@@ -224,7 +224,7 @@ namespace Enemy
                                         }
 
                                         weaponComponent.IsFiring = 1;
-                                        Debug.Log("FIRING " + e);
+                                        //Debug.Log("FIRING " + e);
                                         actorWeaponAim.weaponRaised = weaponRaised;
                                         SystemAPI.SetComponent(e, actorWeaponAim);
                                         SystemAPI.SetComponent(e, weaponComponent);

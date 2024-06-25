@@ -42,7 +42,7 @@ public partial class MissionSystem : SystemBase
                     if(currentLevel >= totalLevels) return;
                     missionComponent.questUpdateEnemiesDestroyed = LevelManager.instance.enemyDestroyed;
                     var dead = LevelManager.instance.levelSettings[currentLevel].enemiesDead;
-                    Debug.Log("mission " + missionComponent.questUpdateEnemiesDestroyed + " " + dead);
+                    //Debug.Log("mission " + missionComponent.questUpdateEnemiesDestroyed + " " + dead);
                     missionComponent.questEnemiesDestroyed = dead;
                     if (SystemAPI.HasComponent<ScoreComponent>(e))
                     {
