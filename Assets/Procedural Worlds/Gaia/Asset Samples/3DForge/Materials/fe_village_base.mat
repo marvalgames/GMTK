@@ -3,32 +3,24 @@
 --- !u!21 &2100000
 Material:
   serializedVersion: 8
-  m_ObjectHideFlags: 0
+  m_ObjectHideFlags: 32
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: fe_village_base
-  m_Shader: {fileID: 4800000, guid: 589366c8d179a91428574ab8bc5cf021, type: 3}
+  m_Shader: {fileID: 4800000, guid: 933532a4fcc9baf4fa0491de14d08ed7, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords:
   - _ENVIRONMENTREFLECTIONS_OFF
-  - _NORMALINDEPTHNORMALPASS
-  - _RECEIVEDECALS
+  - _METALLICSPECGLOSSMAP
+  - _NORMALMAP
   - _SPECULARHIGHLIGHTS_OFF
-  - _SSAO_ENABLED
-  - _TEXMODE_ONE
-  m_InvalidKeywords:
-  - _ALPHATEST_OFF
-  - _PW_SF_COVER_ON
-  - '_PW_SF_COVER_ON
-
-'
-  - _RAMP_OFF
+  m_InvalidKeywords: []
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 1
   m_DoubleSidedGI: 0
-  m_CustomRenderQueue: 2000
+  m_CustomRenderQueue: -1
   stringTagMap:
     RenderType: Opaque
   disabledShaderPasses:
@@ -49,12 +41,28 @@ Material:
         m_Texture: {fileID: 2800000, guid: 4c6fe516c39334b44a29a95a1452e823, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    - _DetailAlbedoMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _DetailMask:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _DetailNormalMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _EmissionMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _GradientMap:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MainTex:
-        m_Texture: {fileID: 2800000, guid: a61600bde7dc89647bb79d8774c5074c, type: 3}
+        m_Texture: {fileID: 2800000, guid: c60886f37cee6d841955f0f4f6fdfedf, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MaskMap:
@@ -63,6 +71,10 @@ Material:
         m_Offset: {x: 0, y: 0}
     - _MetallicGlossMap:
         m_Texture: {fileID: 2800000, guid: a61600bde7dc89647bb79d8774c5074c, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _OcclusionMap:
+        m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _PW_CoverLayer0:
@@ -85,7 +97,15 @@ Material:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    - _ParallaxMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _ShadedBaseMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _SpecGlossMap:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
@@ -108,16 +128,22 @@ Material:
     - _AOPowerExp: 1
     - _AOVertexMask: 0
     - _AddLightFallOff: 1
+    - _AddPrecomputedVelocity: 0
     - _AlphaClip: 0
     - _AlphaFromMaskMap: 1
     - _AlphaTest: 0
+    - _AlphaToMask: 0
     - _Anisotropic: 0
     - _Anisotropy: 0
     - _ApplyNormal: 0
     - _ApplyNormalDepthNormal: 1
+    - _Blend: 0
+    - _BlendModePreserveSpecular: 1
     - _Border: 10
     - _BumpMapScale: 1
     - _BumpScale: 1
+    - _ClearCoatMask: 0
+    - _ClearCoatSmoothness: 0
     - _ColorMask: 15
     - _ColorizedShadowsAdd: 0
     - _ColorizedShadowsMain: 0
@@ -128,14 +154,19 @@ Material:
     - _CullOutline: 1
     - _Culling: 0
     - _Cutoff: 0.5
+    - _DetailAlbedoMapScale: 1
+    - _DetailNormalMapScale: 1
     - _DiffuseFallOff: 0.009
     - _DiffuseStep: 0
     - _DstBlend: 0
+    - _DstBlendAlpha: 0
     - _EnableMaskMap: 0
     - _EnableToonRim: 0
     - _EnergyConservation: 0
     - _EnvironmentReflections: 0
+    - _GlossMapScale: 0
     - _Glossiness: 0
+    - _GlossyReflections: 0
     - _Help: 0
     - _LightColorContribution: 1
     - _LuxSurface: 0
@@ -185,6 +216,7 @@ Material:
     - _PW_WindToggle: 0
     - _PW_WorldMapToggle: 0
     - _PW_WorldMapUVScale: 1
+    - _Parallax: 0.005
     - _QueueControl: -1
     - _QueueOffset: 0
     - _Ramp: 0
@@ -202,10 +234,12 @@ Material:
     - _ShadowFallOff: 0.75
     - _ShadowOffset: 1
     - _Smoothness: 0.5
+    - _SmoothnessTextureChannel: 0
     - _SpecularFallOff: 0.01
     - _SpecularHighlights: 0
     - _SpecularStep: 0.45
     - _SrcBlend: 1
+    - _SrcBlendAlpha: 1
     - _Stencil: 0
     - _StencilComp: 8
     - _StencilFail: 0
@@ -217,6 +251,7 @@ Material:
     - _ToonRimAttenuation: 0
     - _ToonRimFallOff: 1
     - _ToonRimPower: 0.5
+    - _WorkflowMode: 1
     - _WrapLighting: 0
     - _WriteMask: 255
     - _ZTest: 4
@@ -243,6 +278,7 @@ Material:
     - _SpecColor2nd: {r: 0.4, g: 0.4, b: 0.4, a: 1}
     - _ToonRimColor: {r: 1, g: 1, b: 1, a: 1}
   m_BuildTextureStacks: []
+  m_AllowLocking: 1
 --- !u!114 &6311856533647262753
 MonoBehaviour:
   m_ObjectHideFlags: 11
@@ -255,4 +291,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d0353a89b1f911e48b9e16bdc9f2e058, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  version: 7
+  version: 9

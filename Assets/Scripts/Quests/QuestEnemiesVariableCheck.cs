@@ -49,7 +49,6 @@ namespace Quests
             if(manager == default) return;
             if (QuestLog.GetQuestState("Enemy Attack") == QuestState.Unassigned)
             {
-                Debug.Log("quest state unassigned");
                 return;
             }
 
