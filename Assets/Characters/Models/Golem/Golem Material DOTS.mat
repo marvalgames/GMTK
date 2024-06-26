@@ -67,12 +67,12 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: Golem Material DOTS
-  m_Shader: {fileID: -6465566751694194690, guid: d56db2430d27d0f4fbd2650256e993e2, type: 3}
+  m_Shader: {fileID: -6465566751694194690, guid: 66001af8b7b27f04aae3705fdbae6808, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []
   m_InvalidKeywords: []
-  m_LightmapFlags: 4
+  m_LightmapFlags: 2
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
   m_CustomRenderQueue: -1
@@ -90,6 +90,10 @@ Material:
         m_Offset: {x: 0, y: 0}
     - Texture2D_db6a5e7e0fac41e0a98592bd98faeac3:
         m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _BASECOLORMAP:
+        m_Texture: {fileID: 2800000, guid: feb9d2ff93414ea43843aeeb39467ba3, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _BASEMAP:
@@ -124,6 +128,10 @@ Material:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    - _EMISSIONMAP:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _EmissionMap:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
@@ -145,6 +153,10 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MCapMask:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _METALLICMAP:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
@@ -172,6 +184,10 @@ Material:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    - _NORMAL:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _NormalMap:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
@@ -189,6 +205,10 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _ParallaxMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _SPECROUGHMAP:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
@@ -250,7 +270,7 @@ Material:
     - _DetailMapBlendingMode: 0
     - _DetailMapImpact: 0
     - _DetailNormalMapScale: 1
-    - _DirectionalLightIntensity: 0
+    - _DirectionalLightIntensity: 1
     - _DoubleSidedOutline: 1
     - _DstBlend: 0
     - _DstBlendAlpha: 0
@@ -263,7 +283,7 @@ Material:
     - _FlatRimSize: 0.5
     - _FlatSpecularEdgeSmoothness: 0
     - _FlatSpecularSize: 1
-    - _GIFlatShade: 0
+    - _GIFlatShade: 1
     - _GIShadeThreshold: 0
     - _GlossColorPower: 10
     - _GlossIntensity: 1
@@ -295,6 +315,7 @@ Material:
     - _LightmapDirectionYaw: 0
     - _MCIALO: 0
     - _MCapIntensity: 1
+    - _METALLIC: 0
     - _MVCOL: 0
     - _MaiColPo: 0.8
     - _MaxFadDistance: 2
@@ -302,6 +323,7 @@ Material:
     - _Metalliic: 1
     - _MinFadDistance: 0
     - _MixMainTexToOutline: 0
+    - _NORMALSTRENGTH: 1
     - _N_F_CA: 0
     - _N_F_CLD: 0
     - _N_F_CO: 0
@@ -327,7 +349,7 @@ Material:
     - _N_F_RDC: 1
     - _N_F_RL: 0
     - _N_F_SCT: 0
-    - _N_F_SL: 0
+    - _N_F_SL: 1
     - _N_F_SON: 0
     - _N_F_SS: 1
     - _N_F_ST: 0
@@ -342,7 +364,7 @@ Material:
     - _OutlineEnabled: 1
     - _OutlineExtrudeMethod: 0
     - _OutlineScale: 1
-    - _OutlineWidth: 0.5
+    - _OutlineWidth: 1
     - _OutlineWidthAffectedByViewDistance: 0
     - _OutlineZPostionInCamera: 0
     - _OverallShadowColorPower: 1
@@ -352,10 +374,11 @@ Material:
     - _PSGLOTEX: 0
     - _PTexturePower: 1
     - _Parallax: 0.005
-    - _PointSpotlightIntensity: 0
+    - _PointSpotlightIntensity: 1
     - _QueueControl: 0
     - _QueueOffset: 0
     - _RELG: 1
+    - _RIMPOWER: 5
     - _ReceiveShadows: 0
     - _ReduSha: 0.5
     - _RefMetallic: 0
@@ -363,17 +386,18 @@ Material:
     - _ReflectionIntensity: 0
     - _ReflectionRoughtness: 0
     - _RimEnabled: 1
-    - _RimLigInt: 1
+    - _RimLigInt: 0
     - _RimLightColorPower: 10
     - _RimLightInLight: 1
     - _RimLightSoftness: 1
     - _RimLightUnfill: 1.5
     - _SPECIN: 1
     - _SPECMODE: 0
+    - _SPECROUGH: 1
     - _STIL: 0
     - _Saturation: 1
     - _SelfLitHighContrast: 1
-    - _SelfLitIntensity: 0
+    - _SelfLitIntensity: 1
     - _SelfLitPower: 2
     - _SelfShadingSize: 0
     - _SelfShadowAffectedByLightShadowStrength: 0
@@ -425,6 +449,7 @@ Material:
     m_Colors:
     - Color_04e54799d2f0428d94b2151877fcae32: {r: 1, g: 1, b: 1, a: 1}
     - Color_efdaa08a30cf4bcab4f0ba1d4b1f8a6f: {r: 1.098039, g: 0.972549, b: 0, a: 0}
+    - _BASECOLOR: {r: 1, g: 1, b: 1, a: 1}
     - _BaseColor: {r: 1, g: 1, b: 1, a: 1}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _ColorGradient: {r: 0.85023, g: 0.85034, b: 0.8504499, a: 0.85056}
@@ -439,11 +464,11 @@ Material:
     - _LightAttenuation: {r: 0, g: 1, b: 0, a: 0}
     - _LightmapDirection: {r: 0, g: 1, b: 0, a: 0}
     - _MainColor: {r: 1, g: 1, b: 1, a: 1}
-    - _OutlineColor: {r: 0, g: 0, b: 0, a: 1}
+    - _OutlineColor: {r: 0.31764707, g: 0.70980394, b: 0.7294118, a: 1}
     - _OutlineOffset: {r: 0, g: 0, b: 0, a: 1}
     - _OverallShadowColor: {r: 0, g: 0, b: 0, a: 1}
     - _PTCol: {r: 0, g: 0, b: 0, a: 1}
-    - _RIMCOLOR: {r: 0.97382206, g: 0.5594593, b: 0, a: 1}
+    - _RIMCOLOR: {r: 0.31764707, g: 0.70980394, b: 0.7294118, a: 1}
     - _RimLightColor: {r: 1, g: 1, b: 1, a: 1}
     - _SSAOColor: {r: 0, g: 0, b: 0, a: 0}
     - _SelfLitColor: {r: 1, g: 1, b: 1, a: 1}

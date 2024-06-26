@@ -21,14 +21,11 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: Light House Material
-  m_Shader: {fileID: -6465566751694194690, guid: 2c3c6a46626419c4f8bbdeab2ec2afbd, type: 3}
+  m_Shader: {fileID: -6465566751694194690, guid: 66001af8b7b27f04aae3705fdbae6808, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
-  m_ValidKeywords:
-  - _HAFTONESHAPES_DOT
-  m_InvalidKeywords:
-  - _ENVIRONMENTREFLECTIONS_OFF
-  - _NORMALMAP
+  m_ValidKeywords: []
+  m_InvalidKeywords: []
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
@@ -41,6 +38,10 @@ Material:
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
+    - Texture2D_1573145900e7472896bc86b6a78afe89:
+        m_Texture: {fileID: 2800000, guid: 89556261bb3e4e8479e19727e27c4ee2, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - Texture2D_1dc73811a6394d2b84e908a248a81770:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
@@ -66,7 +67,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - Texture2D_db6a5e7e0fac41e0a98592bd98faeac3:
-        m_Texture: {fileID: 0}
+        m_Texture: {fileID: 2800000, guid: bd6487a852a99a943af27a1d80d6b018, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _1st_ShadeMap:
@@ -86,11 +87,11 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _BASECOLORMAP:
-        m_Texture: {fileID: 0}
+        m_Texture: {fileID: 2800000, guid: 89556261bb3e4e8479e19727e27c4ee2, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _BASEMAP:
-        m_Texture: {fileID: 2800000, guid: 675167f3266ef1b479984dda54f91c66, type: 3}
+        m_Texture: {fileID: 2800000, guid: 89556261bb3e4e8479e19727e27c4ee2, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _BakedGIRamp:
@@ -99,6 +100,10 @@ Material:
         m_Offset: {x: 0, y: 0}
     - _BakedNormal:
         m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _BaseColor:
+        m_Texture: {fileID: 2800000, guid: 89556261bb3e4e8479e19727e27c4ee2, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _BaseColorMap:
@@ -221,6 +226,10 @@ Material:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    - _MOHS:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _MainTex:
         m_Texture: {fileID: 2800000, guid: 675167f3266ef1b479984dda54f91c66, type: 3}
         m_Scale: {x: 1, y: 1}
@@ -238,11 +247,15 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _NORMAL:
-        m_Texture: {fileID: 0}
+        m_Texture: {fileID: 2800000, guid: bd6487a852a99a943af27a1d80d6b018, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _NORMALMAP:
         m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Normal:
+        m_Texture: {fileID: 2800000, guid: bd6487a852a99a943af27a1d80d6b018, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _NormalMap:
@@ -364,7 +377,10 @@ Material:
     m_Ints: []
     m_Floats:
     - ANISO: 0
+    - BloodDissolvePower_: 4
+    - BloodScale_: 7
     - Boolean_f9999c8db29c427d86a843c1a1c85720: 0
+    - Erosion_: 0
     - GRADIENT: 0
     - NORMAL: 0
     - RIM: 0
@@ -374,9 +390,10 @@ Material:
     - Vector1_0f3ca3289daa40b4a7654cc64fd05ec1: 0
     - Vector1_41f9ff23ce3149698a26c333c82ff943: 1
     - Vector1_85d44c600d6c46b38d9c8065f25681ea: 0
-    - Vector1_9d8e39b0f04348638f7b2a6447eb090c: 2.09
+    - Vector1_9d8e39b0f04348638f7b2a6447eb090c: 2
     - Vector1_E6329FE7: 0
     - Vector1_a461139cbd7041468f3f10310a3d0a81: 0
+    - Vector1_c3d27e07a7d24a629d05ed7cea8a0f1f: 1
     - Vector1_c89cb8dc56774a9583c7b9c3a5725c4c: 0
     - Vector1_e5b6f1488dec4326bd8bbd0e05156810: 0
     - Vector1_ef8218440bab45778cbb9f956c323532: 0
@@ -418,6 +435,8 @@ Material:
     - _ApplyNormal: 0
     - _ApplyNormalDepthNormal: 1
     - _AutoRenderQueue: 1
+    - _BUILTIN_QueueControl: -1
+    - _BUILTIN_QueueOffset: 0
     - _BaseColorOverridden: 0
     - _BaseColorVisible: 1
     - _BaseColor_Step: 0.5
@@ -623,7 +642,7 @@ Material:
     - _MaterialID: 1
     - _Metallic: 0
     - _Metalliic: 0
-    - _NORMALSTRENGTH: 0
+    - _NORMALSTRENGTH: 1
     - _Nearest_Distance: 0.5
     - _NoiseScale: 1
     - _NoiseStrength: 0.1
@@ -658,7 +677,7 @@ Material:
     - _QueueOffset: 0
     - _RECEIVE_SHADOWS: 0
     - _RIMLIGHTING: 0
-    - _RIMPOWER: 0
+    - _RIMPOWER: 5
     - _Ramp: 0
     - _ReadMask: 255
     - _ReceiveDecals: 1
@@ -713,6 +732,7 @@ Material:
     - _SmoothnessRemapMin: 0
     - _SmoothnessSource: 0
     - _SmoothnessTextureChannel: 0
+    - _SoftEdge: 20
     - _SpecClipMaskScale: 1
     - _SpecColor_1: 0.1
     - _SpecFalloff: 0
@@ -755,7 +775,7 @@ Material:
     - _StepOffset: 0
     - _StepViaRampTexture: 1
     - _Steps: 1
-    - _Strength: 2
+    - _Strength: 5
     - _SubsurfaceMask: 1
     - _SupportDecals: 1
     - _Surface: 0
@@ -825,19 +845,23 @@ Material:
     - _utsVersionY: 9
     - _utsVersionZ: 4
     m_Colors:
-    - Color_04e54799d2f0428d94b2151877fcae32: {r: 1, g: 1, b: 1, a: 0}
+    - BloodOffset_: {r: 0, g: 0, b: 0, a: 0}
+    - Color_: {r: 1, g: 1, b: 1, a: 1}
+    - Color_04e54799d2f0428d94b2151877fcae32: {r: 1, g: 1, b: 1, a: 1}
     - Color_556a7f3ec2574371b6ed8cc72b63d486: {r: 1, g: 0.6666667, b: 0.36862746, a: 1}
     - Color_77B4D621: {r: 1, g: 1, b: 1, a: 0}
     - Color_a7fc3f6cb07a40d29596b05667130bdb: {r: 0, g: 0, b: 0, a: 1}
+    - Color_efdaa08a30cf4bcab4f0ba1d4b1f8a6f: {r: 0.31764707, g: 0.70980394, b: 0.7294118, a: 1}
     - _1st_ShadeColor: {r: 1, g: 1, b: 1, a: 1}
     - _2nd_ShadeColor: {r: 1, g: 1, b: 1, a: 1}
     - _AngelRingMaskColor: {r: 0, g: 1, b: 0, a: 1}
     - _AngelRing_Color: {r: 1, g: 1, b: 1, a: 1}
     - _Ap_RimLightColor: {r: 1, g: 1, b: 1, a: 1}
-    - _BASECOLOR: {r: 1, g: 0.6666667, b: 0.36862746, a: 1}
+    - _BASECOLOR: {r: 1, g: 1, b: 1, a: 1}
     - _BaseColor: {r: 1, g: 1, b: 1, a: 1}
     - _BaseColorMap_MipInfo: {r: 0, g: 0, b: 0, a: 0}
     - _BaseColorMaskColor: {r: 1, g: 1, b: 1, a: 1}
+    - _BloodTiling: {r: 1, g: 1, b: 0, a: 0}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _ColorGradient: {r: 0.85023, g: 0.85034, b: 0.8504499, a: 0.85056}
     - _ColorShift: {r: 0, g: 0, b: 0, a: 1}
@@ -869,7 +893,7 @@ Material:
     - _OutlineDistancFade: {r: -25, g: 50, b: 0, a: 0}
     - _OutlineMaskColor: {r: 0, g: 0, b: 0, a: 1}
     - _Outline_Color: {r: 0.5, g: 0.5, b: 0.5, a: 1}
-    - _RIMCOLOR: {r: 1, g: 1, b: 1, a: 1}
+    - _RIMCOLOR: {r: 0.31764707, g: 0.70980394, b: 0.7294118, a: 1}
     - _RimColor: {r: 0.019852942, g: 0.044362746, b: 0.045588236, a: 1}
     - _RimLightColor: {r: 1, g: 1, b: 1, a: 1}
     - _RimLightMaskColor: {r: 1, g: 0, b: 1, a: 1}
