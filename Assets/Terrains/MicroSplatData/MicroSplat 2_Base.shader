@@ -11,7 +11,7 @@
 ////////////////////////////////////////
 
 
-Shader "Hidden/Terrain_Area2_Base1944775151"
+Shader "Hidden/Terrain_Area2_Base-799230638"
 {
    Properties
    {
@@ -147,7 +147,7 @@ Shader "Hidden/Terrain_Area2_Base1944775151"
       #define _USEGRADMIP 1
       #define _MAX8TEXTURES 1
       #define _PERTEXUVSCALEOFFSET 1
-      #define _PERTEXNORMSTR 1
+      #define _PERTEXCONTRAST 1
       #define _BRANCHSAMPLES 1
       #define _BRANCHSAMPLESAGR 1
       #define _NOISEHEIGHT 1
@@ -6352,7 +6352,7 @@ float3 GetTessFactors ()
       #define _USEGRADMIP 1
       #define _MAX8TEXTURES 1
       #define _PERTEXUVSCALEOFFSET 1
-      #define _PERTEXNORMSTR 1
+      #define _PERTEXCONTRAST 1
       #define _BRANCHSAMPLES 1
       #define _BRANCHSAMPLESAGR 1
       #define _NOISEHEIGHT 1
@@ -12496,7 +12496,7 @@ float3 GetTessFactors ()
       #define _USEGRADMIP 1
       #define _MAX8TEXTURES 1
       #define _PERTEXUVSCALEOFFSET 1
-      #define _PERTEXNORMSTR 1
+      #define _PERTEXCONTRAST 1
       #define _BRANCHSAMPLES 1
       #define _BRANCHSAMPLESAGR 1
       #define _NOISEHEIGHT 1
@@ -18553,7 +18553,7 @@ float3 GetTessFactors ()
       #define _USEGRADMIP 1
       #define _MAX8TEXTURES 1
       #define _PERTEXUVSCALEOFFSET 1
-      #define _PERTEXNORMSTR 1
+      #define _PERTEXCONTRAST 1
       #define _BRANCHSAMPLES 1
       #define _BRANCHSAMPLESAGR 1
       #define _NOISEHEIGHT 1
@@ -24606,7 +24606,7 @@ float3 GetTessFactors ()
       #define _USEGRADMIP 1
       #define _MAX8TEXTURES 1
       #define _PERTEXUVSCALEOFFSET 1
-      #define _PERTEXNORMSTR 1
+      #define _PERTEXCONTRAST 1
       #define _BRANCHSAMPLES 1
       #define _BRANCHSAMPLESAGR 1
       #define _NOISEHEIGHT 1
@@ -30663,7 +30663,7 @@ float3 GetTessFactors ()
       #define _USEGRADMIP 1
       #define _MAX8TEXTURES 1
       #define _PERTEXUVSCALEOFFSET 1
-      #define _PERTEXNORMSTR 1
+      #define _PERTEXCONTRAST 1
       #define _BRANCHSAMPLES 1
       #define _BRANCHSAMPLESAGR 1
       #define _NOISEHEIGHT 1
