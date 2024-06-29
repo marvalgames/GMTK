@@ -4,7 +4,7 @@
 //
 // Auto-generated shader code, don't hand edit!
 //
-//   Unity Version: 6000.0.5f1
+//   Unity Version: 6000.0.8f1
 //   MicroSplat Version: 3.9
 //   Render Pipeline: URP2022
 //   Platform: WindowsEditor
@@ -137,9 +137,11 @@ Shader "Terrain_0_0"
 
             
       #define _MICROSPLAT 1
+      #define _MICROMESHTERRAIN 1
       #define _HYBRIDHEIGHTBLEND 1
       #define _USEGRADMIP 1
       #define _MAX4TEXTURES 1
+      #define _PERPIXNORMAL 1
       #define _PERTEXUVSCALEOFFSET 1
       #define _PERTEXSATURATION 1
       #define _PERTEXTINT 1
@@ -150,9 +152,6 @@ Shader "Terrain_0_0"
       #define _BRANCHSAMPLESAGR 1
       #define _GLOBALNORMALS 1
       #define _TRIPLANAR 1
-      #define _MSRENDERLOOP_UNITYURP2022 1
-      #define _MICROMESHTERRAIN 1
-      #define _PERPIXNORMAL 1
       #define _MSRENDERLOOP_UNITYLD 1
       #define _MSRENDERLOOP_UNITYURP2020 1
       #define _MSRENDERLOOP_UNITYURP2021 1
@@ -5392,9 +5391,11 @@ float3 GetTessFactors ()
 
             
       #define _MICROSPLAT 1
+      #define _MICROMESHTERRAIN 1
       #define _HYBRIDHEIGHTBLEND 1
       #define _USEGRADMIP 1
       #define _MAX4TEXTURES 1
+      #define _PERPIXNORMAL 1
       #define _PERTEXUVSCALEOFFSET 1
       #define _PERTEXSATURATION 1
       #define _PERTEXTINT 1
@@ -5405,9 +5406,6 @@ float3 GetTessFactors ()
       #define _BRANCHSAMPLESAGR 1
       #define _GLOBALNORMALS 1
       #define _TRIPLANAR 1
-      #define _MSRENDERLOOP_UNITYURP2022 1
-      #define _MICROMESHTERRAIN 1
-      #define _PERPIXNORMAL 1
       #define _MSRENDERLOOP_UNITYLD 1
       #define _MSRENDERLOOP_UNITYURP2020 1
       #define _MSRENDERLOOP_UNITYURP2021 1
@@ -10586,9 +10584,11 @@ float3 GetTessFactors ()
 
             
       #define _MICROSPLAT 1
+      #define _MICROMESHTERRAIN 1
       #define _HYBRIDHEIGHTBLEND 1
       #define _USEGRADMIP 1
       #define _MAX4TEXTURES 1
+      #define _PERPIXNORMAL 1
       #define _PERTEXUVSCALEOFFSET 1
       #define _PERTEXSATURATION 1
       #define _PERTEXTINT 1
@@ -10599,9 +10599,6 @@ float3 GetTessFactors ()
       #define _BRANCHSAMPLESAGR 1
       #define _GLOBALNORMALS 1
       #define _TRIPLANAR 1
-      #define _MSRENDERLOOP_UNITYURP2022 1
-      #define _MICROMESHTERRAIN 1
-      #define _PERPIXNORMAL 1
       #define _MSRENDERLOOP_UNITYLD 1
       #define _MSRENDERLOOP_UNITYURP2020 1
       #define _MSRENDERLOOP_UNITYURP2021 1
@@ -15693,9 +15690,11 @@ float3 GetTessFactors ()
 
             
       #define _MICROSPLAT 1
+      #define _MICROMESHTERRAIN 1
       #define _HYBRIDHEIGHTBLEND 1
       #define _USEGRADMIP 1
       #define _MAX4TEXTURES 1
+      #define _PERPIXNORMAL 1
       #define _PERTEXUVSCALEOFFSET 1
       #define _PERTEXSATURATION 1
       #define _PERTEXTINT 1
@@ -15706,9 +15705,6 @@ float3 GetTessFactors ()
       #define _BRANCHSAMPLESAGR 1
       #define _GLOBALNORMALS 1
       #define _TRIPLANAR 1
-      #define _MSRENDERLOOP_UNITYURP2022 1
-      #define _MICROMESHTERRAIN 1
-      #define _PERPIXNORMAL 1
       #define _MSRENDERLOOP_UNITYLD 1
       #define _MSRENDERLOOP_UNITYURP2020 1
       #define _MSRENDERLOOP_UNITYURP2021 1
@@ -20796,9 +20792,11 @@ float3 GetTessFactors ()
 
             
       #define _MICROSPLAT 1
+      #define _MICROMESHTERRAIN 1
       #define _HYBRIDHEIGHTBLEND 1
       #define _USEGRADMIP 1
       #define _MAX4TEXTURES 1
+      #define _PERPIXNORMAL 1
       #define _PERTEXUVSCALEOFFSET 1
       #define _PERTEXSATURATION 1
       #define _PERTEXTINT 1
@@ -20809,9 +20807,6 @@ float3 GetTessFactors ()
       #define _BRANCHSAMPLESAGR 1
       #define _GLOBALNORMALS 1
       #define _TRIPLANAR 1
-      #define _MSRENDERLOOP_UNITYURP2022 1
-      #define _MICROMESHTERRAIN 1
-      #define _PERPIXNORMAL 1
       #define _MSRENDERLOOP_UNITYLD 1
       #define _MSRENDERLOOP_UNITYURP2020 1
       #define _MSRENDERLOOP_UNITYURP2021 1
@@ -25903,9 +25898,11 @@ float3 GetTessFactors ()
 
             
       #define _MICROSPLAT 1
+      #define _MICROMESHTERRAIN 1
       #define _HYBRIDHEIGHTBLEND 1
       #define _USEGRADMIP 1
       #define _MAX4TEXTURES 1
+      #define _PERPIXNORMAL 1
       #define _PERTEXUVSCALEOFFSET 1
       #define _PERTEXSATURATION 1
       #define _PERTEXTINT 1
@@ -25916,9 +25913,6 @@ float3 GetTessFactors ()
       #define _BRANCHSAMPLESAGR 1
       #define _GLOBALNORMALS 1
       #define _TRIPLANAR 1
-      #define _MSRENDERLOOP_UNITYURP2022 1
-      #define _MICROMESHTERRAIN 1
-      #define _PERPIXNORMAL 1
       #define _MSRENDERLOOP_UNITYLD 1
       #define _MSRENDERLOOP_UNITYURP2020 1
       #define _MSRENDERLOOP_UNITYURP2021 1
@@ -31014,7 +31008,7 @@ float3 GetTessFactors ()
       
       
    }
-   Dependency "BaseMapShader" =  "Hidden/Terrain_0_0_Base-1227670249"
-   Fallback "Hidden/Terrain_0_0_Base-1227670249"
+   Dependency "BaseMapShader" =  "Hidden/Terrain_0_0_Base-64432970"
+   Fallback "Hidden/Terrain_0_0_Base-64432970"
    CustomEditor "MicroSplatShaderGUI"
 }
