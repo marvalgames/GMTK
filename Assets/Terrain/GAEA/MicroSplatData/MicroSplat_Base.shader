@@ -4,14 +4,14 @@
 //
 // Auto-generated shader code, don't hand edit!
 //
-//   Unity Version: 6000.0.7f1
+//   Unity Version: 6000.0.8f1
 //   MicroSplat Version: 3.9
 //   Render Pipeline: URP2022
 //   Platform: WindowsEditor
 ////////////////////////////////////////
 
 
-Shader "Hidden/Terrain_0_0_c07bb250-42e3-46d1-a9af-cf031314bad8_Base-1066153052"
+Shader "Hidden/Terrain_0_0_c07bb250-42e3-46d1-a9af-cf031314bad8_Base-596996737"
 {
    Properties
    {
@@ -133,15 +133,12 @@ Shader "Hidden/Terrain_0_0_c07bb250-42e3-46d1-a9af-cf031314bad8_Base-1066153052"
 
             
       #define _MICROSPLAT 1
+      #define _MICROTERRAIN 1
+      #define _HYBRIDHEIGHTBLEND 1
+      #define _USEGRADMIP 1
       #define _BRANCHSAMPLES 1
       #define _BRANCHSAMPLESAGR 1
-      #define _USEGRADMIP 1
-      #define _MICROTERRAIN 1
-      #define _MSRENDERLOOP_UNITYLD 1
-      #define _MSRENDERLOOP_UNITYURP2020 1
-      #define _MSRENDERLOOP_UNITYURP2021 1
       #define _MSRENDERLOOP_UNITYURP2022 1
-      #define _HYBRIDHEIGHTBLEND 1
       #define _MICROSPLATBASEMAP 1
       #define _MSRENDERLOOP_UNITYLD 1
       #define _MSRENDERLOOP_UNITYURP2020 1
@@ -4404,15 +4401,12 @@ float3 GetTessFactors ()
 
             
       #define _MICROSPLAT 1
+      #define _MICROTERRAIN 1
+      #define _HYBRIDHEIGHTBLEND 1
+      #define _USEGRADMIP 1
       #define _BRANCHSAMPLES 1
       #define _BRANCHSAMPLESAGR 1
-      #define _USEGRADMIP 1
-      #define _MICROTERRAIN 1
-      #define _MSRENDERLOOP_UNITYLD 1
-      #define _MSRENDERLOOP_UNITYURP2020 1
-      #define _MSRENDERLOOP_UNITYURP2021 1
       #define _MSRENDERLOOP_UNITYURP2022 1
-      #define _HYBRIDHEIGHTBLEND 1
       #define _MICROSPLATBASEMAP 1
       #define _MSRENDERLOOP_UNITYLD 1
       #define _MSRENDERLOOP_UNITYURP2020 1
@@ -8614,15 +8608,12 @@ float3 GetTessFactors ()
 
             
       #define _MICROSPLAT 1
+      #define _MICROTERRAIN 1
+      #define _HYBRIDHEIGHTBLEND 1
+      #define _USEGRADMIP 1
       #define _BRANCHSAMPLES 1
       #define _BRANCHSAMPLESAGR 1
-      #define _USEGRADMIP 1
-      #define _MICROTERRAIN 1
-      #define _MSRENDERLOOP_UNITYLD 1
-      #define _MSRENDERLOOP_UNITYURP2020 1
-      #define _MSRENDERLOOP_UNITYURP2021 1
       #define _MSRENDERLOOP_UNITYURP2022 1
-      #define _HYBRIDHEIGHTBLEND 1
       #define _MICROSPLATBASEMAP 1
       #define _MSRENDERLOOP_UNITYLD 1
       #define _MSRENDERLOOP_UNITYURP2020 1
@@ -12737,15 +12728,12 @@ float3 GetTessFactors ()
 
             
       #define _MICROSPLAT 1
+      #define _MICROTERRAIN 1
+      #define _HYBRIDHEIGHTBLEND 1
+      #define _USEGRADMIP 1
       #define _BRANCHSAMPLES 1
       #define _BRANCHSAMPLESAGR 1
-      #define _USEGRADMIP 1
-      #define _MICROTERRAIN 1
-      #define _MSRENDERLOOP_UNITYLD 1
-      #define _MSRENDERLOOP_UNITYURP2020 1
-      #define _MSRENDERLOOP_UNITYURP2021 1
       #define _MSRENDERLOOP_UNITYURP2022 1
-      #define _HYBRIDHEIGHTBLEND 1
       #define _MICROSPLATBASEMAP 1
       #define _MSRENDERLOOP_UNITYLD 1
       #define _MSRENDERLOOP_UNITYURP2020 1
@@ -16856,15 +16844,12 @@ float3 GetTessFactors ()
 
             
       #define _MICROSPLAT 1
+      #define _MICROTERRAIN 1
+      #define _HYBRIDHEIGHTBLEND 1
+      #define _USEGRADMIP 1
       #define _BRANCHSAMPLES 1
       #define _BRANCHSAMPLESAGR 1
-      #define _USEGRADMIP 1
-      #define _MICROTERRAIN 1
-      #define _MSRENDERLOOP_UNITYLD 1
-      #define _MSRENDERLOOP_UNITYURP2020 1
-      #define _MSRENDERLOOP_UNITYURP2021 1
       #define _MSRENDERLOOP_UNITYURP2022 1
-      #define _HYBRIDHEIGHTBLEND 1
       #define _MICROSPLATBASEMAP 1
       #define _MSRENDERLOOP_UNITYLD 1
       #define _MSRENDERLOOP_UNITYURP2020 1
@@ -20979,15 +20964,12 @@ float3 GetTessFactors ()
 
             
       #define _MICROSPLAT 1
+      #define _MICROTERRAIN 1
+      #define _HYBRIDHEIGHTBLEND 1
+      #define _USEGRADMIP 1
       #define _BRANCHSAMPLES 1
       #define _BRANCHSAMPLESAGR 1
-      #define _USEGRADMIP 1
-      #define _MICROTERRAIN 1
-      #define _MSRENDERLOOP_UNITYLD 1
-      #define _MSRENDERLOOP_UNITYURP2020 1
-      #define _MSRENDERLOOP_UNITYURP2021 1
       #define _MSRENDERLOOP_UNITYURP2022 1
-      #define _HYBRIDHEIGHTBLEND 1
       #define _MICROSPLATBASEMAP 1
       #define _MSRENDERLOOP_UNITYLD 1
       #define _MSRENDERLOOP_UNITYURP2020 1
