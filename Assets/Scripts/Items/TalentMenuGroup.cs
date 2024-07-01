@@ -247,9 +247,9 @@ public class TalentMenuGroup : MonoBehaviour
         for (var i = 0; i < itemGroup.Length; i++)
         {
             if (itemGroup[i].itemPickedUp && itemGroup[i].pickedUpActor == playerEntities[playerIndex])
-            //if (itemGroup[i].itemPickedUp)
             {
                 powerItems.Add(itemGroup[i]);
+                Debug.Log("power " + itemGroup[i].statDescription1);
             }
         }
 

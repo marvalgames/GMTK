@@ -62,7 +62,7 @@ namespace Collisions
 
                         if (SystemAPI.HasComponent<EnemyComponent>(pickedUpActor) == false)
                         {
-                            talentItemComponent.pickedUpActor = pickedUpActor;
+                            talentItemComponent. pickedUpActor = pickedUpActor;
                             talentItemComponent.addPickupEntityToInventory = pickedUpActor;
                             talentItemComponent.itemPickedUp = true;
                             localTransform.Position.y -= -100;
