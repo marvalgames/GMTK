@@ -27,6 +27,14 @@ public class AudioPlayerJumpGO : IComponentData
     public AudioClip AudioClip;
 }
 
+public class BossAmmoManagerGO : IComponentData
+{
+    public AudioSource audioSource;
+    public AudioClip clip;
+}
+
+
+
 
 public partial struct InstantiatePrefabSystem : ISystem
 {
@@ -49,7 +57,7 @@ public partial struct InstantiatePrefabSystem : ISystem
                 new AudioPlayerGO { AudioSource = audioGo.GetComponent<AudioSource>(), AudioClip = prefab.clip });
             ecb.RemoveComponent<PlayerMoveGameObjectClass>(entity);
         }
-        
+
         foreach (var (prefab, entity) in
                  SystemAPI.Query<PlayerJumpGameObjectClass>().WithEntityAccess())
         {
@@ -64,6 +72,16 @@ public partial struct InstantiatePrefabSystem : ISystem
             ecb.AddComponent(entity,
                 new AudioPlayerJumpGO() { AudioSource = audioGo.GetComponent<AudioSource>(), AudioClip = prefab.clip });
             ecb.RemoveComponent<PlayerJumpGameObjectClass>(entity);
+        }
+
+        foreach (var (prefab, entity) in
+                 SystemAPI.Query<BossAmmoManagerClass>().WithEntityAccess())
+        {
+
+            GameObject audioGo = GameObject.Instantiate(prefab.audioSourceGo);
+            ecb.AddComponent(entity,
+                new BossAmmoManagerGO() { audioSource = audioGo.GetComponent<AudioSource>(), clip = prefab.clip });
+            ecb.RemoveComponent<BossAmmoManagerClass>(entity);
         }
 
         ecb.Playback(state.EntityManager);

@@ -38,7 +38,7 @@ namespace Sandbox.Player
 
                     animator.speed = 1;
                     
-                    Debug.Log("NPC " + agent.isOnNavMesh);
+                    //Debug.Log("NPC " + agent.isOnNavMesh);
                     
 
                     if (!agent) return;

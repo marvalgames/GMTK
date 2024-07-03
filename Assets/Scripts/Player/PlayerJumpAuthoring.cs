@@ -8,7 +8,7 @@ using UnityEngine.VFX;
 [System.Serializable]
 public class PlayerJumpGameObjectClass : IComponentData
 {
-    [FormerlySerializedAs("audioSourcePrefab")] public GameObject audioSourceGo; 
+    [FormerlySerializedAs("audioSourcePrefab")] public GameObject audioSourceGo;
     public GameObject vfxSystem;
     public AudioClip clip;
 }

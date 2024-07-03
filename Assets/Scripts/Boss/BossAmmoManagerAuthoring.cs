@@ -49,13 +49,17 @@ public struct
 
 public class BossAmmoManagerClass : IComponentData
 {
-    public AudioSource audioSource;
+    public GameObject audioSourceGo;
+    public GameObject vfxSystem;
     public AudioClip clip;
 }
 
+
+
 public class BossAmmoManagerAuthoring : MonoBehaviour
 {
-    public AudioSource weaponAudioSource;
+    public GameObject weaponAudioSource;
+    public AudioClip audioClip;
     public GameObject PrimaryAmmoPrefab;
     public List<AmmoClass> AmmoPrefabList = new List<AmmoClass>();
 
@@ -95,8 +99,8 @@ public class BossAmmoManagerAuthoring : MonoBehaviour
             authoring.Generate(authoring.randomize);
             var bossAmmoManager = new BossAmmoManagerClass
             {
-                audioSource = authoring.weaponAudioSource,
-                clip = authoring.weaponAudioSource.clip
+                audioSourceGo = authoring.weaponAudioSource,
+                clip = authoring.audioClip
             };
 
 

@@ -8,19 +8,17 @@ public partial class BossAmmoManagerSystem : SystemBase
         Entities.WithoutBurst().ForEach(
             (
                 Entity e,
-                //BossAmmoManager bulletManager,
-                //AudioClip weaponAudioClip,
                 Animator animator,
                 ref BossAmmoManagerComponent bulletManagerComponent,
-                in BossAmmoManagerClass bossAmmoManagerClass
+                in BossAmmoManagerGO bossAmmoManager
             ) =>
             {
                 //Debug.Log("BOSS AMMO MANAGER");
 
-                var weaponAudioSource = bossAmmoManagerClass.audioSource;
+                var weaponAudioSource = bossAmmoManager.audioSource;
                 if (weaponAudioSource && bulletManagerComponent.playSound)
                 {
-                    var clip = bossAmmoManagerClass.clip;
+                    var clip = bossAmmoManager.clip;
                     weaponAudioSource.PlayOneShot(clip, .25f);
                     bulletManagerComponent.playSound = false;
                 }
