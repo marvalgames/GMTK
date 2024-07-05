@@ -28,12 +28,14 @@ namespace Sandbox.Player
                     in InputControllerComponent inputController,
                     in LocalToWorld ltw,
                     in Animator animator,
-                    in PlayerDashClass player
+                    in DashAudioVideoGO player
                 ) =>
                 {
                     if (playerDash.active == false) return;
-                    var audioSource = player.audioSource;
+                    var audioSource = player.AudioSource;
+                    Debug.Log("DASH");
 
+                    
                     if (playerDash.DelayTimeTicker > 0)
                     {
                         playerDash.DelayTimeTicker -= dt;
@@ -44,7 +46,7 @@ namespace Sandbox.Player
                         playerDash.DelayTimeTicker = 0;
                     }
 
-                    if (playerDash.DashTimeTicker == 0 && playerDash.DelayTimeTicker <= 0)
+                    if (playerDash is { DashTimeTicker: 0, DelayTimeTicker: <= 0 })
                     {
                         var bPressed =
                             inputController.buttonB_DoublePress; // put back for general LD 50 change since no jump
@@ -67,24 +69,48 @@ namespace Sandbox.Player
 
                             if (audioSource != null)
                             {
-                                if (player.audioSource.clip)
+                                if (player.AudioClip)
                                 {
                                     if (audioSource.isPlaying == false)
                                     {
-                                        audioSource.clip = player.audioSource.clip;
+                                        audioSource.clip = player.AudioClip;
                                         audioSource.Play();
                                     }
                                 }
                             }
-
-                            if (player.ps)
-                            {
-                                if (player.ps.isPlaying == false)
-                                {
-                                    player.ps.transform.SetParent(player.transform);
-                                    player.ps.Play(true);
-                                }
-                            }
+                            //
+                            // if (goVisualEffect.VisualEffect && applyImpulseComponent.InJump)
+                            // {
+                            //     goVisualEffect.VisualEffect.transform.position = transform.Position;
+                            //     goVisualEffect.VisualEffect.SetFloat("FlareRate", 100);
+                            //     Debug.Log("VFX Jump");
+                            // }
+                            // else if (goVisualEffect.VisualEffect && !applyImpulseComponent.InJump)
+                            // {
+                            //     goVisualEffect.VisualEffect.transform.position = transform.Position;
+                            //     goVisualEffect.VisualEffect.SetFloat("FlareRate", 0);
+                            // }
+                            //
+                            //
+                            // var audioSource = goAudioPlayer.AudioSource;
+                            // if (audioSource && playerJumpComponent.playJumpAudio)
+                            // {
+                            //     var clip = goAudioPlayer.AudioClip;
+                            //     audioSource.PlayOneShot(audioSource.clip);
+                            //     playerJumpComponent.playJumpAudio = false;
+                            // }
+                            //
+                            //
+                            
+                            //
+                            // if (player.VisualEffect)
+                            // {
+                            //     if (player.VisualEffect.ps.isPlaying == false)
+                            //     {
+                            //         player.ps.transform.SetParent(player.transform);
+                            //         player.ps.Play(true);
+                            //     }
+                            // }
                         }
                     }
                     else if (playerDash.DashTimeTicker < playerDash.dashTime && animator.speed > 0 &&
@@ -105,7 +131,7 @@ namespace Sandbox.Player
                         animator.SetInteger(Dash, 0);
                         playerDash.InDash = false;
                         if (audioSource != null) audioSource.Stop();
-                        if (player.ps != null) player.ps.Stop();
+                        //if (player.ps != null) player.ps.Stop();
                     }
                 }
             ).Run();

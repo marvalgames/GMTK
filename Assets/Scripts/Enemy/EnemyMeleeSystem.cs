@@ -12,14 +12,15 @@ namespace Enemy
         [BurstCompile]
         public void OnUpdate(ref SystemState state)
         {
-            foreach (var (enemyAttackComponent, checkedComponent, matchupComponent,
+            foreach (var (enemyAttackComponent, checkedComponent, 
+                         matchupComponent,
                          enemyLocalTransform, entity)
                      in SystemAPI
-                         .Query<RefRW<EnemyStateComponent>, RefRW<CheckedComponent>, MatchupComponent, LocalTransform>()
+                         .Query<RefRW<EnemyStateComponent>, RefRW<CheckedComponent>, RefRO<MatchupComponent>, RefRO<LocalTransform>>()
                          .WithEntityAccess().WithAll<EnemyComponent, MeleeComponent, DeadComponent>())
             {
-                var enemyPosition = enemyLocalTransform.Position;
-                var playerPosition = matchupComponent.wayPointTargetPosition;
+                var enemyPosition = enemyLocalTransform.ValueRO.Position;
+                var playerPosition = matchupComponent.ValueRO.wayPointTargetPosition;
                 var dist = math.distance(playerPosition, enemyPosition);
                 if (enemyAttackComponent.ValueRW.selectMove)
                 {

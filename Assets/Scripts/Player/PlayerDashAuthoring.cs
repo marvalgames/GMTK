@@ -28,13 +28,13 @@ namespace Sandbox.Player
         public int Value;
     }
 
-    public class PlayerDashClass : IComponentData
+    public class PlayerDashGameObjectClass : IComponentData
     {
         //public BlobAssetReference<Unity.Physics.Collider> box;
-        public AudioSource audioSource;
+        public GameObject audioSource;
         public AudioClip audioClip;
-        public ParticleSystem ps;
-        public Transform transform;
+        public GameObject vfxPrefab;
+        //public Transform transform;
     }
 
     public class PlayerDashAuthoring : MonoBehaviour
@@ -49,9 +49,9 @@ namespace Sandbox.Player
         public int uses = 9999;
         public bool active = true;
 
-        public AudioSource audioSource;
+        public GameObject audioSource;
         public AudioClip clip;
-        public ParticleSystem ps;
+        public GameObject vfxPrefab;
 
 
 
@@ -72,23 +72,16 @@ namespace Sandbox.Player
                         invincibleEnd = authoring.invincibleEnd
                     }
                 );
-
-                // AudioSource authoringAudioSource = null;
-                // if (authoring.audioSource != null)
-                // {
-                //     authoringAudioSource = authoring.audioSource;
-                //     authoringAudioSource.clip = authoring.clip;
-                // }
-                //
-                //
-                // AddComponentObject(e, 
-                //     new PlayerDashClass
-                //     {
-                //         audioSource = authoring.audioSource,
-                //         audioClip = authoring.clip,
-                //         ps = authoring.ps,
-                //         transform = authoring.transform
-                //     } );
+                
+                
+                AddComponentObject(e, 
+                    new PlayerDashGameObjectClass()
+                    {
+                        audioSource = authoring.audioSource,
+                        audioClip = authoring.clip,
+                        vfxPrefab = authoring.vfxPrefab
+                        //transform = authoring.transform
+                    } );
 
                 
             }

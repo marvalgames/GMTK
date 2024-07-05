@@ -1,3 +1,5 @@
+using Player;
+using Sandbox.Player;
 using Unity.Burst;
 using Unity.Collections;
 using Unity.Entities;
@@ -31,6 +33,13 @@ public class BossAmmoManagerGO : IComponentData
 {
     public AudioSource audioSource;
     public AudioClip clip;
+}
+
+public class DashAudioVideoGO : IComponentData
+{
+    public AudioSource AudioSource;
+    public AudioClip AudioClip;
+    public VisualEffect VisualEffect;
 }
 
 
@@ -81,6 +90,19 @@ public partial struct InstantiatePrefabSystem : ISystem
             GameObject audioGo = GameObject.Instantiate(prefab.audioSourceGo);
             ecb.AddComponent(entity,
                 new BossAmmoManagerGO() { audioSource = audioGo.GetComponent<AudioSource>(), clip = prefab.clip });
+            ecb.RemoveComponent<BossAmmoManagerClass>(entity);
+        }
+
+        foreach (var (prefab, entity) in
+                 SystemAPI.Query<PlayerDashGameObjectClass>().WithEntityAccess())
+        {
+
+            GameObject audioGo = GameObject.Instantiate(prefab.audioSource);
+            ecb.AddComponent(entity,
+                new DashAudioVideoGO() { AudioSource = audioGo.GetComponent<AudioSource>(), AudioClip = prefab.audioClip
+                    // , VisualEffect = prefab.vfxPrefab.GetComponent<VisualEffect>()
+                    
+                });
             ecb.RemoveComponent<BossAmmoManagerClass>(entity);
         }
 
