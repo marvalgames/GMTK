@@ -43,6 +43,7 @@ namespace Collisions
                     var enemyB = SystemAPI.HasComponent<EnemyComponent>(entityB);
                     float hwA = 0;
                     float hwB = 0;
+                    Debug.Log("Is Defense0 " + isDefense);
                     if (SystemAPI.HasComponent<AnimatorWeightsComponent>(entityA))
                     {
                         hwA = SystemAPI.GetComponent<AnimatorWeightsComponent>(entityA).hitWeight;
@@ -55,6 +56,7 @@ namespace Collisions
 
                     if ((playerA && enemyB || playerB && enemyA) || (enemyA && enemyB))
                     {
+                        Debug.Log("Is Defense1 " + isDefense);
                         var checkedComponent = SystemAPI.GetComponent<CheckedComponent>(entityA);
                         //checkedComponent.anyDefenseStarted = false;
                         if (checkedComponent is

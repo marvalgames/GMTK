@@ -103,7 +103,7 @@ public partial struct InstantiatePrefabSystem : ISystem
                     // , VisualEffect = prefab.vfxPrefab.GetComponent<VisualEffect>()
                     
                 });
-            ecb.RemoveComponent<BossAmmoManagerClass>(entity);
+            ecb.RemoveComponent<PlayerDashGameObjectClass>(entity);
         }
 
         ecb.Playback(state.EntityManager);
