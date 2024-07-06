@@ -32,6 +32,7 @@ namespace Collisions
                     var typeB = collisionComponent.Part_other_entity;
                     var entityA = collisionComponent.Character_entity;
                     var entityB = collisionComponent.Character_other_entity;
+                    //Debug.Log(" DEFENSE " +  collisionComponent.isDefenseMove);
 
                     if (entityA == entityB && typeA != (int)TriggerType.Ammo && typeB != (int)TriggerType.Ammo) return;
 
@@ -43,7 +44,7 @@ namespace Collisions
                     var enemyB = SystemAPI.HasComponent<EnemyComponent>(entityB);
                     float hwA = 0;
                     float hwB = 0;
-                    Debug.Log("Is Defense0 " + isDefense);
+                    //Debug.Log("Is Defense0 " + isDefense);
                     if (SystemAPI.HasComponent<AnimatorWeightsComponent>(entityA))
                     {
                         hwA = SystemAPI.GetComponent<AnimatorWeightsComponent>(entityA).hitWeight;
@@ -56,16 +57,16 @@ namespace Collisions
 
                     if ((playerA && enemyB || playerB && enemyA) || (enemyA && enemyB))
                     {
-                        Debug.Log("Is Defense1 " + isDefense);
+                        //Debug.Log("Is Defense1 " + isDefense);
                         var checkedComponent = SystemAPI.GetComponent<CheckedComponent>(entityA);
                         //checkedComponent.anyDefenseStarted = false;
                         if (checkedComponent is
                             {
                                 hitTriggered: false, anyAttackStarted: true, anyDefenseStarted: true,
                                 attackCompleted: false
-                            } && hwA > .6 && isDefense)
+                            } && hwA >= 0 && isDefense)
                         {
-                            //Debug.Log("hit weight " + hw);
+                            Debug.Log("hit weight " + hwA);
                             var deflectPoints = 10;
                             var effectsIndex = 1; //0 dead usually 1 hurt 2 deflect?
 

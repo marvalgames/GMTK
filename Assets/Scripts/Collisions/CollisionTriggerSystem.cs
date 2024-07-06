@@ -117,7 +117,7 @@ namespace Collisions
                     return;
                 }
 
-
+ 
                 var primaryTriggerA = TriggerType.None;
                 var primaryTriggerB = TriggerType.None;
 
@@ -183,7 +183,7 @@ namespace Collisions
                         .anyDefenseStarted; //only true when trigger type is hand or similar so if true punching and similar still false
                 }
 
-
+                //Debug.Log("BLOCK " + defenseA + " " + defenseB);
 
                 //check if arm/hands colliding with each other (feet for attacker? melee? setting trigger type to that instead of hand)
                 var primaryDefenseTriggerMatchA = (typeA is (int)TriggerType.LeftHand or (int)TriggerType.RightHand) && (int)primaryTriggerB == typeB; 
@@ -192,6 +192,10 @@ namespace Collisions
                            primaryDefenseTriggerMatchA && defenseA;
                 defenseB = typeA is (int)TriggerType.Melee &&
                            primaryDefenseTriggerMatchB && defenseB;
+
+                var prA = (int)primaryTriggerA == typeA;
+                var prB = (int)primaryTriggerB == typeB;
+                //Debug.Log("MATCH  " + prA + " " + prB);
               
               
 
@@ -202,6 +206,7 @@ namespace Collisions
                                            && (int)primaryTriggerB == typeB;
 
 
+                Debug.Log("MATCH  " + defenseA + " " + defenseB);
          
             
 
@@ -234,7 +239,6 @@ namespace Collisions
 
                 //Debug.Log("mell a " + meleeA + " mell b " + meleeB);
                 //Debug.Log("punch a " + punchingA + " punch b " + punchingB);
-                //Debug.Log("def a " + defenseA + " def b " + defenseB);
                 if (ammoBlockedA)
                 {
                     var ammoComponent = ammoGroup[triggerComponentA.Entity];
@@ -259,6 +263,7 @@ namespace Collisions
                     //Debug.Log("ea0 " + effectA + " eb0 " + effectB);
                     //Debug.Log("aa " + ammoA + " pe " + triggerComponent_b.Type + "  ce " + ch_b);
                     //coll component part other always ammo ?
+
                     var collisionComponent =
                         new CollisionComponent()
                         {
@@ -296,6 +301,7 @@ namespace Collisions
                 else if ((punchingA || meleeA || defenseA || alwaysDamageA) && !ammoA && !ammoB)
                 {
                     //Debug.Log("always a " + alwaysDamageA + " always b " + alwaysDamageB + " cha " + ch_a + " chb " + ch_b);
+                    //Debug.Log("def a " + defenseA + " def b " + defenseB);
 
                     var collisionComponent =
                         new CollisionComponent()
@@ -312,6 +318,7 @@ namespace Collisions
                 else if (punchingB || meleeB || defenseB || alwaysDamageB && !ammoA && !ammoB)
                 {
                     //Debug.Log("always a " + alwaysDamageA + " always b " + alwaysDamageB + " cha " + ch_a + " chb " + ch_b);
+                    //Debug.Log("def a " + defenseA + " def b " + defenseB);
 
                     var collisionComponent =
                         new CollisionComponent()
