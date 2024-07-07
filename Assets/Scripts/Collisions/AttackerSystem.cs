@@ -48,11 +48,13 @@ namespace Collisions
                     if (SystemAPI.HasComponent<AnimatorWeightsComponent>(entityA))
                     {
                         hwA = SystemAPI.GetComponent<AnimatorWeightsComponent>(entityA).hitWeight;
+                        //Debug.Log("hit weight A " + hwA);
                     }
 
                     if (SystemAPI.HasComponent<AnimatorWeightsComponent>(entityB))
                     {
                         hwB = SystemAPI.GetComponent<AnimatorWeightsComponent>(entityB).hitWeight;
+                        //Debug.Log("hit weight B " + hwB);
                     }
 
                     if ((playerA && enemyB || playerB && enemyA) || (enemyA && enemyB))
@@ -64,12 +66,12 @@ namespace Collisions
                             {
                                 hitTriggered: false, anyAttackStarted: true, anyDefenseStarted: true,
                                 attackCompleted: false
-                            } && hwA >= 0 && isDefense)
+                            } && hwB >= .6 && isDefense)//can change as skill
                         {
-                            Debug.Log("hit weight " + hwA);
                             var deflectPoints = 10;
                             var effectsIndex = 1; //0 dead usually 1 hurt 2 deflect?
 
+                            Debug.Log("hit weight B " + hwB);
                             Debug.Log("DEFLECT ");
 
 
