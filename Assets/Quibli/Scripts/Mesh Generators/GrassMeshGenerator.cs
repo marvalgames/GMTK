@@ -9,9 +9,11 @@ using UnityEngine;
 namespace Dustyroom {
 [System.Serializable]
 public class LODTopologyOptions {
-    [Space] public int planeCount = 4;
+    [Space]
+    public int planeCount = 4;
 
-    [Space] public int verticesX = 1;
+    [Space]
+    public int verticesX = 1;
 
     public int verticesY = 4;
 }
@@ -24,34 +26,38 @@ public class GrassMeshGenerator : MonoBehaviour {
     [Tooltip("The width (X) and height (Y) of the grass patch in meters.")]
     public Vector2 patchSize = Vector2.one * 0.5f;
 
-    [BoxGroup("LOD: 0"), Label("Options")] public LODTopologyOptions lod0;
+    [BoxGroup("LOD: 0"), Label("Options")]
+    public LODTopologyOptions lod0;
 
-    [BoxGroup("LOD: 1"), Label("Enabled")] public bool enableLod1 = true;
+    [BoxGroup("LOD: 1"), Label("Enabled")]
+    public bool enableLod1 = true;
 
     [ShowIf(nameof(enableLod1)), BoxGroup("LOD: 1"), Label("Options")]
     public LODTopologyOptions lod1;
 
-    [BoxGroup("LOD: 2"), Label("Enabled")] public bool enableLod2 = false;
+    [BoxGroup("LOD: 2"), Label("Enabled")]
+    public bool enableLod2 = false;
 
     [ShowIf(nameof(enableLod2)), BoxGroup("LOD: 2"), Label("Options")]
     public LODTopologyOptions lod2;
 
-    [SerializeField, HideInInspector] private string previousPath = "Assets/";
+    [SerializeField, HideInInspector]
+    private string previousPath = "Assets/";
 
-    [Button("Add to scene")]
-    void AddToScene() {
+    // Button
+    public void AddToScene() {
         GeneratePatch();
     }
 
-    [Button("Save prefab")]
-    void Save() {
+    // Button
+    public void Save() {
         var patch = GeneratePatch();
         var path = string.IsNullOrEmpty(previousPath) ? "Grass Patch.prefab" : previousPath;
         ExportAssets(patch, path);
     }
 
-    [Button("Save prefab as...")]
-    void SaveAs() {
+    // Button
+    public void SaveAs() {
         var patch = GeneratePatch();
 
         string path = EditorUtility.SaveFilePanel("Save the mesh as file", "Assets/", "Grass Patch", "prefab");
@@ -64,7 +70,7 @@ public class GrassMeshGenerator : MonoBehaviour {
         previousPath = path;
     }
 
-    private void ExportAssets(GameObject patch, string path) {
+    private static void ExportAssets(GameObject patch, string path) {
         var meshes = patch.GetComponentsInChildren<MeshFilter>();
         var baseMeshPath =
             $"{Path.GetDirectoryName(path)}{Path.DirectorySeparatorChar}{Path.GetFileNameWithoutExtension(path)}-";
@@ -93,7 +99,7 @@ public class GrassMeshGenerator : MonoBehaviour {
 
         var lodGroup = go.AddComponent<LODGroup>();
         List<LOD> lods = new List<LOD>();
-        lods.Add(new LOD(0.3f, new Renderer[] {renderer0}));
+        lods.Add(new LOD(0.3f, new Renderer[] { renderer0 }));
 
         if (enableLod1) {
             var go1 = new GameObject("Grass LOD 1");
@@ -104,7 +110,7 @@ public class GrassMeshGenerator : MonoBehaviour {
 
             go1.transform.parent = go.transform;
 
-            lods.Add(new LOD(enableLod2 ? 0.1f : 0.05f, new Renderer[] {renderer1}));
+            lods.Add(new LOD(enableLod2 ? 0.1f : 0.05f, new Renderer[] { renderer1 }));
         }
 
         if (enableLod2) {
@@ -116,7 +122,7 @@ public class GrassMeshGenerator : MonoBehaviour {
 
             go2.transform.parent = go.transform;
 
-            lods.Add(new LOD(0.05f, new Renderer[] {renderer2}));
+            lods.Add(new LOD(0.05f, new Renderer[] { renderer2 }));
         }
 
         lodGroup.SetLODs(lods.ToArray());
@@ -126,7 +132,7 @@ public class GrassMeshGenerator : MonoBehaviour {
     }
 
     private Mesh GenerateLod(LODTopologyOptions lod, int index) {
-        var mesh = new Mesh {name = "Procedural Grass " + index};
+        var mesh = new Mesh { name = "Procedural Grass " + index };
 
         int numVerticesPerPlane = (lod.verticesX + 1) * (lod.verticesY + 1);
         Vector3[] vertices = new Vector3[numVerticesPerPlane * lod.planeCount];
@@ -154,8 +160,8 @@ public class GrassMeshGenerator : MonoBehaviour {
         int vertexStartIndex = (lod.verticesX + 1) * (lod.verticesY + 1) * planeIndex;
         for (int i = vertexStartIndex, y = 0; y <= lod.verticesY; y++) {
             for (int x = 0; x <= lod.verticesX; x++, i++) {
-                float xRatio = (float) x / lod.verticesX;
-                float yRatio = (float) y / lod.verticesY;
+                float xRatio = (float)x / lod.verticesX;
+                float yRatio = (float)y / lod.verticesY;
 
                 float horizontalCornerCoord = patchSize.x * (xRatio - 0.5f);
                 float vertexX = horizontalCornerCoord * Mathf.Sin(planeRotation);

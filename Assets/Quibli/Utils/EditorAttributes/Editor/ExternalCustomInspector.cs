@@ -8,7 +8,7 @@ namespace ExternalPropertyAttributes.Editor
 {
 	[CanEditMultipleObjects]
 	[CustomEditor(typeof(UnityEngine.Object), true)]
-	public sealed class ExternalCustomInspector : UnityEditor.Editor
+	public class ExternalCustomInspector : UnityEditor.Editor
 	{
 		private List<SerializedProperty> _serializedProperties = new List<SerializedProperty>();
 		private IEnumerable<FieldInfo> _nonSerializedFields;
@@ -16,7 +16,7 @@ namespace ExternalPropertyAttributes.Editor
 		private IEnumerable<MethodInfo> _methods;
 		private Dictionary<string, SavedBool> _foldouts = new Dictionary<string, SavedBool>();
 
-		private void OnEnable()
+		protected virtual void OnEnable()
 		{
 			_nonSerializedFields = ReflectionUtility.GetAllFields(
 				target, f => f.GetCustomAttributes(typeof(ShowNonSerializedFieldAttribute), true).Length > 0);
@@ -130,7 +130,7 @@ namespace ExternalPropertyAttributes.Editor
 
 		private void DrawNonSerializedFields(bool drawHeader = false)
 		{
-			if (_nonSerializedFields.Any())
+			if (_nonSerializedFields != null && _nonSerializedFields.Any())
 			{
 				if (drawHeader)
 				{
@@ -149,7 +149,7 @@ namespace ExternalPropertyAttributes.Editor
 
 		private void DrawNativeProperties(bool drawHeader = false)
 		{
-			if (_nativeProperties.Any())
+			if (_nativeProperties != null && _nativeProperties.Any())
 			{
 				if (drawHeader)
 				{
