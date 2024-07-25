@@ -71,10 +71,9 @@ namespace Collisions
                             var deflectPoints = 10;
                             var effectsIndex = 1; //0 dead usually 1 hurt 2 deflect?
 
-                            Debug.Log("hit weight B " + hwB);
-                            Debug.Log("DEFLECT ");
-
-
+                            //Debug.Log("hit weight B " + hwB);
+                            //Debug.Log("DEFLECT ");
+                            
                             ecb.AddComponent(entityA,
                                 new DeflectComponent
                                     { DeflectLanded = deflectPoints, DeflectReceived = 0, EntityDeflecting = entityA });

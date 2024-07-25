@@ -206,7 +206,7 @@ namespace Collisions
                                            && (int)primaryTriggerB == typeB;
 
 
-                Debug.Log("MATCH  " + defenseA + " " + defenseB);
+//            Debug.Log("MATCH  " + defenseA + " " + defenseB);
          
             
 
