@@ -22,9 +22,10 @@ struct BendSettings
 	float pushStrength;
 	float flattenStrength;
 	float perspectiveCorrection;
+	float billboardingVerticalRotation;
 };
 
-BendSettings PopulateBendSettings(uint mode, float mask, float pushStrength, float flattenStrength, float perspCorrection)
+BendSettings PopulateBendSettings(uint mode, float mask, float pushStrength, float flattenStrength, float perspCorrection, float billboardingVerticalRotation)
 {
 	BendSettings s = (BendSettings)0;
 
@@ -33,6 +34,7 @@ BendSettings PopulateBendSettings(uint mode, float mask, float pushStrength, flo
 	s.pushStrength = pushStrength;
 	s.flattenStrength = flattenStrength;
 	s.perspectiveCorrection = perspCorrection;
+	s.billboardingVerticalRotation = billboardingVerticalRotation;
 
 	return s;
 }
@@ -150,7 +152,7 @@ void ApplyPerspectiveCorrection(inout float3 offset, float3 wPos, float3 up, flo
 void GetBendOffset_float(float3 wPos, float mask, float pushStrength, float flattenStrength, out float4 offset)
 {
 	//Note: Mode and PerspCorrection parameters aren't used for just the grass bending
-	BendSettings b = PopulateBendSettings(0, mask, pushStrength, flattenStrength, 0);
+	BendSettings b = PopulateBendSettings(0, mask, pushStrength, flattenStrength, 0, 0);
 
 	offset = GetBendOffset(wPos, b);
 

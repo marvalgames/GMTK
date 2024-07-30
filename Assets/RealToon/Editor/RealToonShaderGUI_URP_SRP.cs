@@ -1,6 +1,6 @@
 //RealToonGUI URP
 //MJQStudioWorks
-//2024
+//©2024
 
 #if UNITY_EDITOR
 
@@ -31,6 +31,7 @@ namespace RealToon.GUIInspector
         static bool ShowRimLight;
         static bool ShowSeeThrough;
         static bool NearFadeDithering;
+        static bool Triplanar;
         //static bool ShowTessellation; In Progress
         static bool ShowDisableEnable;
         static bool ShowSettings;
@@ -60,8 +61,8 @@ static string OLType = "Traditional";
 static bool remoout = true;
 static string remooutstat = "Remove Outline";
 
-static bool twofourfive_target = true;
-static string twofourfive_target_string = "Change shader compilation target to 2.0";
+static bool twofourfive_target = false;
+static string twofourfive_target_string = "Change shader compilation target to 4.5";
 
 static bool dots_lbs_cd = false;
 static string dots_lbs_cd_string = "DOTS|HR - Use Compute Deformation";
@@ -90,6 +91,7 @@ static string dots_lbs_cd_string = "DOTS|HR - Use Compute Deformation";
         MaterialProperty _UseSecondaryCutout = null;
         MaterialProperty _SecondaryCutout = null;
         MaterialProperty _AlphaBaseCutout = null;
+        MaterialProperty _N_F_SCO = null;
         MaterialProperty _N_F_COEDGL = null;
         MaterialProperty _Glow_Color = null;
         MaterialProperty _Glow_Edge_Width = null;
@@ -228,6 +230,9 @@ static string dots_lbs_cd_string = "DOTS|HR - Use Compute Deformation";
         MaterialProperty _MinFadDistance = null;
         MaterialProperty _MaxFadDistance = null;
 
+        MaterialProperty _TriPlaTile = null;
+        MaterialProperty _TriPlaBlend = null;
+
         //MaterialProperty _TessellationSmoothness = null;
         //MaterialProperty _TessellationTransition = null;
         //MaterialProperty _TessellationNear = null;
@@ -265,6 +270,7 @@ static string dots_lbs_cd_string = "DOTS|HR - Use Compute Deformation";
         MaterialProperty _N_F_RDC = null;
         MaterialProperty _N_F_DDMD = null;
         MaterialProperty _N_F_NFD = null;
+        MaterialProperty _N_F_TP = null; //cc
 
         MaterialProperty _N_F_OFLMB = null;
 
@@ -309,7 +315,9 @@ static string dots_lbs_cd_string = "DOTS|HR - Use Compute Deformation";
             N_F_COEDGL_ON,
             N_F_DDMD_ON,
             N_F_SIMTRANS_ON,
-            N_F_NFD_ON
+            N_F_NFD_ON,
+            N_F_TP_ON,
+            N_F_SCO_ON
         }
 
         #endregion
@@ -319,470 +327,477 @@ static string dots_lbs_cd_string = "DOTS|HR - Use Compute Deformation";
         string[] TOTIPS =
         {
 
-    //Culling [0]
-    "Controls which sides of polygons should be culled (not drawn).\n\n\nBack: Don’t render polygons that are facing away from the viewer.\n\nFront: Don’t render polygons that are facing towards the viewer, Used for turning objects inside-out.\n\nOff: Disables culling - all faces are drawn, This also called Double Sided." ,
+        //Culling [0]
+        "Controls which sides of polygons should be culled (not drawn).\n\n\nBack: Don’t render polygons that are facing away from the viewer.\n\nFront: Don’t render polygons that are facing towards the viewer, Used for turning objects inside-out.\n\nOff: Disables culling - all faces are drawn, This also called Double Sided." ,
 
-    //Texture [1]
-    "Main or base texture." , 
+        //Texture [1]
+        "Main or base texture." , 
 
-    //Texture Pattern Style [2]
-    "Turn the 'Main/Base Texture' into pattern style." ,
+        //Texture Pattern Style [2]
+        "Turn the 'Main/Base Texture' into pattern style." ,
 
-    //Main Color [3]
-    "Main or base color." ,
+        //Main Color [3]
+        "Main or base color." ,
 
-    //Mix Vertex Color [4]
-    "Mix or show vertex color." ,
+        //Mix Vertex Color [4]
+        "Mix or show vertex color." ,
 
-    //Main Color in Ambient Light Only [5]
-    "Put the 'Main/Base Color' into ambient light." ,
+        //Main Color in Ambient Light Only [5]
+        "Put the 'Main/Base Color' into ambient light." ,
 
-    //Highlight Color [6]
-    "Highlight color." ,
+        //Highlight Color [6]
+        "Highlight color." ,
 
-    //Highlight Color Power [7]
-    "'Highlight Color' power or intensity." ,
+        //Highlight Color Power [7]
+        "'Highlight Color' power or intensity." ,
 
-    //Main Color Power [8]
-    "'Main Color' power or intensity." ,
+        //Main Color Power [8]
+        "'Main Color' power or intensity." ,
 
-    //Blend - Source [9] [Transparent Mode]
-    "Blending source.\n\n-Default Value: ScrAlpha" ,
+        //Blend - Source [9] [Transparent Mode]
+        "Blending source.\n\n-Default Value: ScrAlpha" ,
 
-    //Blend - Destination [10] [Transparent Mode]
-    "Blending Destination.\n\n-Default Value: OneMinusScrAlpha" ,
+        //Blend - Destination [10] [Transparent Mode]
+        "Blending Destination.\n\n-Default Value: OneMinusScrAlpha" ,
 
-    //Transparent Mode [11]
-    "Setting the current mode from Opaque to Transparent.\n\nThis will allow you to use 'Fade Transparency' and 'Cutout' feature.",
+        //Transparent Mode [11]
+        "Setting the current mode from Opaque to Transparent.\n\nThis will allow you to use 'Fade Transparency' and 'Cutout' feature.",
 
-    //Intensity [12] [MatCap]
-    "MatCap intensity." ,
+        //Intensity [12] [MatCap]
+        "MatCap intensity." ,
 
-    //MatCap [13] [MatCap]
-    "MatCap texture." ,
+        //MatCap [13] [MatCap]
+        "MatCap texture." ,
 
-    //Specualar Mode [14] [MatCap]
-    "Turn MatCap into specular." ,
+        //Specualar Mode [14] [MatCap]
+        "Turn MatCap into specular." ,
 
-    //Specular Power [15] [MatCap]
-    "Specular intensity or power." ,
+        //Specular Power [15] [MatCap]
+        "Specular intensity or power." ,
 
-    //Mask MatCap [16] [MatCap]
-    "Mask MatCap.\n\nUse a Black and White texture map.\nWhite means visible matcap while Black is not." ,
+        //Mask MatCap [16] [MatCap]
+        "Mask MatCap.\n\nUse a Black and White texture map.\nWhite means visible matcap while Black is not." ,
 
-    //Cutout [17]
-    "Cutout value or threshold." ,
+        //Cutout [17]
+        "Cutout value or threshold." ,
 
-    //Alpha Base Cutout [18] 
-    "It will use the alpha/transparent channel of the 'Main/Base Texture' to cutout." ,
+        //Alpha Base Cutout [18] 
+        "It will use the alpha/transparent channel of the 'Main/Base Texture' to cutout." ,
 
-    //Use Secondary Cutout Only [19]
-    "Use only the 'Secondary Cutout' to do the cutout." ,
+        //Use Secondary Cutout Only [19]
+        "Use only the 'Secondary Cutout' to do the cutout." ,
 
-    //Secondary Cutout [20]
-    "Secondary texture cutout.\n\nUse a Black and White texture map.\nWhite means not cut out while Black is cutout." ,
+        //Secondary Cutout [20]
+        "Secondary texture cutout.\n\nUse a Black and White texture map.\nWhite means not cut out while Black is cutout." ,
 
-    //Opacity [21]
-    "Adjust the Transparency - Opacity of the object" ,
+        //Opacity [21]
+        "Adjust the Transparency - Opacity of the object" ,
 
-    //Transparent Threshold [22]
-    "'Main/Base Texture' transparency threshold." ,
+        //Transparent Threshold [22]
+        "'Main/Base Texture' transparency threshold." ,
 
-    //Mask Transparency [23]
-    "Mask Transparency.\n\nWhite means opaque while Black means transparent." ,
+        //Mask Transparency [23]
+        "Mask Transparency.\n\nWhite means opaque while Black means transparent." ,
 
-    //Normal Map [24]
-    "Normal Map." ,
+        //Normal Map [24]
+        "Normal Map." ,
 
-    //Normal Map Intensity [25]
-    "'Normal Map' intensity." ,
+        //Normal Map Intensity [25]
+        "'Normal Map' intensity." ,
 
-    //Saturation [26] [Color Adjustment]
-    "Color saturation of the object." ,
+        //Saturation [26] [Color Adjustment]
+        "Color saturation of the object." ,
 
-    //Width [27] [Outline]
-    "Outline main width." ,
+        //Width [27] [Outline]
+        "Outline main width." ,
 
-    //Width Control [28] [Outline]
-    "Controls the 'Outline Width' using texture Map.\n\nUse a Black and White texture map.\nWhite means 1 while Black means 0.\nThis will not work if the Outline main width value is 0." ,
+        //Width Control [28] [Outline]
+        "Controls the 'Outline Width' using texture Map.\n\nUse a Black and White texture map.\nWhite means 1 while Black means 0.\nThis will not work if the Outline main width value is 0." ,
 
-    //Outline Extrude Method [29] [Outline]
-    "Outline Extrude Methods.\n\nNormal - The outline extrusion will be based on normal direction.\n\nOrigin - The outline extrusion will be based on the center of the object." ,
+        //Outline Extrude Method [29] [Outline]
+        "Outline Extrude Methods.\n\nNormal - The outline extrusion will be based on normal direction.\n\nOrigin - The outline extrusion will be based on the center of the object." ,
 
-    //Outline Offset [30] [Outline]
-    "Outline XYZ position." ,
+        //Outline Offset [30] [Outline]
+        "Outline XYZ position." ,
 
-    //Double Sided Outline [31] [Outline]
-    "Show the front side of the outline.\n\nUseful for plane object.\n'Outline Z Position In Camera' option is needed to be adjust to show the object." ,
+        //Double Sided Outline [31] [Outline]
+        "Show the front side of the outline.\n\nUseful for plane object.\n'Outline Z Position In Camera' option is needed to be adjust to show the object." ,
 
-    //Color [32] [Outline] [Outline]
-    "Outline color." ,
+        //Color [32] [Outline] [Outline]
+        "Outline color." ,
 
-    //Mix Main Texture To Outline [33] [Outline]
-    "Mix 'Main/Base Texture' to oultine." ,
+        //Mix Main Texture To Outline [33] [Outline]
+        "Mix 'Main/Base Texture' to oultine." ,
 
-    //Noisy Outline Intensity [34] [Outline]
-    "The power/intensity of the outline distortion or noise." ,
+        //Noisy Outline Intensity [34] [Outline]
+        "The power/intensity of the outline distortion or noise." ,
 
-    //Dynamic Noisy Outline [35] [Outline]
-    "Moving noisy or distort outline." ,
+        //Dynamic Noisy Outline [35] [Outline]
+        "Moving noisy or distort outline." ,
 
-    //Light Affect Outline Color [36] [Outline]
-    "Light (Brightness and Color) affect Outline color." ,
+        //Light Affect Outline Color [36] [Outline]
+        "Light (Brightness and Color) affect Outline color." ,
 
-    //Outline Width Affected By View Distance [37] [Outline]
-    "'Outline Width' affected by view distance." ,
+        //Outline Width Affected By View Distance [37] [Outline]
+        "'Outline Width' affected by view distance." ,
 
-    //Far Distance Max Width [38] [Outline]
-    "The maximum 'Outline Width' limit when moving far from the object." ,
+        //Far Distance Max Width [38] [Outline]
+        "The maximum 'Outline Width' limit when moving far from the object." ,
 
-    //Vertex Color Blue Affect Outline Width [39] [Outline]
-    "'Vertex Color Blue will affect the Outline Width.\n\nThis will not work if the Outline main width value is 0." ,
+        //Vertex Color Blue Affect Outline Width [39] [Outline]
+        "'Vertex Color Blue will affect the Outline Width.\n\nThis will not work if the Outline main width value is 0." ,
 
-    //Intensity [40] [SelfLit]
-    "How visible or strong the 'Self Lit' is." ,
+        //Intensity [40] [SelfLit]
+        "How visible or strong the 'Self Lit' is." ,
 
-    //Color [41] [SelfLit]
-    "Self Lit color" ,
+        //Color [41] [SelfLit]
+        "Self Lit color" ,
 
-    //Power [42] [SelfLit]
-    "'Self Lit Color' power or intensity." ,
+        //Power [42] [SelfLit]
+        "'Self Lit Color' power or intensity." ,
 
-    //Texture and Main Color Intensity [43] [SelfLit]
-    "'Main/Base Texture' and 'Main/Base Color' intensity.\n\nAdjust this if the 'Main/Base Texture' and 'Main/Base Color' is too strong or too bright for Self Lit." ,
+        //Texture and Main Color Intensity [43] [SelfLit]
+        "'Main/Base Texture' and 'Main/Base Color' intensity.\n\nAdjust this if the 'Main/Base Texture' and 'Main/Base Color' is too strong or too bright for Self Lit." ,
 
-    //High Contrast [44] [SelfLit]
-    "Turn Self Lit into high contrast colors and mix 'Base/Main Texture' twice." ,
+        //High Contrast [44] [SelfLit]
+        "Turn Self Lit into high contrast colors and mix 'Base/Main Texture' twice." ,
 
-    //Mask Self Lit [45] [SelfLit]
-    "Mask Self Lit.\n\nUse a Black and White texture map.\nWhite means visible Self Lit while Black is not." ,
+        //Mask Self Lit [45] [SelfLit]
+        "Mask Self Lit.\n\nUse a Black and White texture map.\nWhite means visible Self Lit while Black is not." ,
 
-    //Gloss Intensity [46] [Gloss]
-    "How visible or strong the 'Gloss' is." ,
+        //Gloss Intensity [46] [Gloss]
+        "How visible or strong the 'Gloss' is." ,
 
-    //Glossiness [47] [Gloss]
-    "Glossiness." ,
+        //Glossiness [47] [Gloss]
+        "Glossiness." ,
 
-    //Softness [48] [Gloss]
-    "How soft the 'Gloss' is." ,
+        //Softness [48] [Gloss]
+        "How soft the 'Gloss' is." ,
 
-    //Color [49] [Gloss]
-    "Gloss color" ,
+        //Color [49] [Gloss]
+        "Gloss color" ,
 
-    //Power [50] [Gloss]
-    "'Gloss Color' power or intensity." ,
+        //Power [50] [Gloss]
+        "'Gloss Color' power or intensity." ,
 
-    //Mask Gloss [51] [Gloss]
-    "Mask Gloss.\n\nWhite means visible Gloss while black is not." ,
+        //Mask Gloss [51] [Gloss]
+        "Mask Gloss.\n\nWhite means visible Gloss while black is not." ,
 
-    //Gloss Texture [52] [Gloss Texture]
-    "A Black and White texture map to be used as gloss.\n\nWhite means gloss while Black is not." ,
+        //Gloss Texture [52] [Gloss Texture]
+        "A Black and White texture map to be used as gloss.\n\nWhite means gloss while Black is not." ,
 
-    //Softness [53] [Gloss Texture]
-    "The softness of the 'Gloss Texture'." ,
+        //Softness [53] [Gloss Texture]
+        "The softness of the 'Gloss Texture'." ,
 
-    //Pattern Style [54] [Gloss Texture]
-    "Turn 'Gloss Texture' into pattern style." ,
+        //Pattern Style [54] [Gloss Texture]
+        "Turn 'Gloss Texture' into pattern style." ,
 
-    //Rotate [55] [Gloss Texture]
-    "Rotate 'Gloss Texture'." ,
+        //Rotate [55] [Gloss Texture]
+        "Rotate 'Gloss Texture'." ,
 
-    //Follow Object Rotation [56] [Gloss Texture]
-    "'Gloss Texture' will follow the object local rotation." ,
+        //Follow Object Rotation [56] [Gloss Texture]
+        "'Gloss Texture' will follow the object local rotation." ,
 
-    //Follow Light [57] [Gloss Texture]
-    "'Gloss Texture' will follow the light direction or position." ,
+        //Follow Light [57] [Gloss Texture]
+        "'Gloss Texture' will follow the light direction or position." ,
 
-    //Overall Shadow Color [58]
-    "Overall shadow color.\n\nThis will affect Realtime Shadow, Self Shadow/Shade and ShadowT." ,
+        //Overall Shadow Color [58]
+        "Overall shadow color.\n\nThis will affect Realtime Shadow, Self Shadow/Shade and ShadowT." ,
 
-    //Overall Shadow Color Power [59]
-    "'Overall shadow Color' power or intensity." ,
+        //Overall Shadow Color Power [59]
+        "'Overall shadow Color' power or intensity." ,
 
-    //Self Shadow & ShadowT At View Direction [60]
-    "'Self Shadow' and 'ShadowT' follow your view or camera view direction." ,
+        //Self Shadow & ShadowT At View Direction [60]
+        "'Self Shadow' and 'ShadowT' follow your view or camera view direction." ,
 
-    //Reduce Shadow (Point Light) [61]
-    "The amount of reduce self cast shadow.\n\nThis option will only take effect when there's a Point Light." ,
+        //Reduce Shadow (Point Light) [61]
+        "The amount of reduce self cast shadow.\n\nThis option will only take effect when there's a Point Light." ,
 
-    //Refresh Settings [62]
-    "This will refresh and re-apply the settings properly.\n\nClick this if there are some problem, after you update, after material reset or re-import RealToon.",
+        //Refresh Settings [62]
+        "This will refresh and re-apply the settings properly.\n\nClick this if there are some problem, after you update, after material reset or re-import RealToon.",
 
-    //Reduce Shadow [63]
-    "The amount of reduce self cast shadow.\n\nThis option will only take effect when there's a 'Directional Light', 'Point' or 'Spot Light'." ,
+        //Reduce Shadow [63]
+        "The amount of reduce self cast shadow.\n\nThis option will only take effect when there's a 'Directional Light', 'Point' or 'Spot Light'." ,
 
-    //Shadow Hardness [64] [RealTime Shadow]
-    "Real time shadow hardness" ,
+        //Shadow Hardness [64] [RealTime Shadow]
+        "Real time shadow hardness" ,
 
-    //Threshold [65] [Self Shadow]
-    "The amount of 'Self Shadow/Shade' on the object." ,
+        //Threshold [65] [Self Shadow]
+        "The amount of 'Self Shadow/Shade' on the object." ,
 
-    //Vertex Color Green Control Self Shadow Threshold [66]
-    "Controls 'Self Shadow Threshold' by using vertex color Green." ,
+        //Vertex Color Green Control Self Shadow Threshold [66]
+        "Controls 'Self Shadow Threshold' by using vertex color Green." ,
 
-    //Hardness [67] [Self Shadow]
-    "'Self Shadow/Shade' hardness." ,
+        //Hardness [67] [Self Shadow]
+        "'Self Shadow/Shade' hardness." ,
 
-    //Self Shadow & Real Time Shadow Color [68]
-    "'Self Shadow and Real Time Shadow Color'.\n\nBefore you set/change this, Set 'Overall Shadow Color' to White." ,
+        //Self Shadow & Real Time Shadow Color [68]
+        "'Self Shadow and Real Time Shadow Color'.\n\nBefore you set/change this, Set 'Overall Shadow Color' to White." ,
 
-    //Self Shadow & Real Time Shadow Color Power [69]
-    "'Self Shadow and Real Time Shadow Color' power or intensity." ,
+        //Self Shadow & Real Time Shadow Color Power [69]
+        "'Self Shadow and Real Time Shadow Color' power or intensity." ,
 
-    //Self Shadow Affected By Light Shadow Strength [70]
-    "Light shadow strength will affect self shadow visibility." ,
+        //Self Shadow Affected By Light Shadow Strength [70]
+        "Light shadow strength will affect self shadow visibility." ,
 
-    //Smooth Object Normal [71]
-    "The amount of smooth object normal." ,
+        //Smooth Object Normal [71]
+        "The amount of smooth object normal." ,
 
-    //Vertex Color Red Control Smooth Object Normal [72]
-    "'Vertex color Red controls the amount of smooth object normal." ,
+        //Vertex Color Red Control Smooth Object Normal [72]
+        "'Vertex color Red controls the amount of smooth object normal." ,
 
-    //XYZ Position [73] [Smooth Object Normal]
-    "Normal's XYZ positions." ,
+        //XYZ Position [73] [Smooth Object Normal]
+        "Normal's XYZ positions." ,
 
-    //Affect Shadow [74]
-    "Transparency affect shadow." ,
+        //Affect Shadow [74]
+        "Transparency affect shadow." ,
 
-    //Show Normal [75] [Smooth Object Normal]
-    "Show the normal of the object." ,
+        //Show Normal [75] [Smooth Object Normal]
+        "Show the normal of the object." ,
 
-    //Shadow Color Texture [76]
-    "A texture to color shadow.\n\nThis includes (RealTime Shadow, Self Shadow/Shade and ShadowT.\nYou can also use your 'Main/Base Texture' and adjust 'Power' to make it dark." ,
+        //Shadow Color Texture [76]
+        "A texture to color shadow.\n\nThis includes (RealTime Shadow, Self Shadow/Shade and ShadowT.\nYou can also use your 'Main/Base Texture' and adjust 'Power' to make it dark." ,
 
-    //Power [77] [Shadow Color Texture]
-    "How strong or dark the 'Shadow Color Texture'." ,
+        //Power [77] [Shadow Color Texture]
+        "How strong or dark the 'Shadow Color Texture'." ,
 
-    //Intensity [78] [ShadowT]
-    "How visitble or strong the 'ShadowT' is." ,
+        //Intensity [78] [ShadowT]
+        "How visitble or strong the 'ShadowT' is." ,
 
-    //ShadowT [79]
-    "ShadowT or Shadow Texture, shadows in texture form.\n\nUse Black or Gray and White Flat, Gradient and Smooth texture map.\nGray and White affected by light while Black is not.\n\nFor more info and how to use and make ShadowT texture maps, see 'Video Tutorials' and 'User Guide.pdf' at the bottom of this RealToon inspector.",
+        //ShadowT [79]
+        "ShadowT or Shadow Texture, shadows in texture form.\n\nUse Black or Gray and White Flat, Gradient and Smooth texture map.\nGray and White affected by light while Black is not.\n\nFor more info and how to use and make ShadowT texture maps, see 'Video Tutorials' and 'User Guide.pdf' at the bottom of this RealToon inspector.",
 
-    //Light Threshold [80] [ShadowT]
-    "The amount of light." ,
+        //Light Threshold [80] [ShadowT]
+        "The amount of light." ,
 
-    //Shadow Threshold [81] [ShadowT]
-    "The amount of ShadowT." ,
+        //Shadow Threshold [81] [ShadowT]
+        "The amount of ShadowT." ,
 
-    //Hardness [82] [ShadowT]
-    "'ShadowT' hardness." ,
+        //Hardness [82] [ShadowT]
+        "'ShadowT' hardness." ,
 
-    //Show In Shadow [83] [ShadowT]
-    "Show 'ShadowT' in shadow.\n\nThis will only be visible if realtime shadow and self shadow/shade color is not Black." ,
+        //Show In Shadow [83] [ShadowT]
+        "Show 'ShadowT' in shadow.\n\nThis will only be visible if realtime shadow and self shadow/shade color is not Black." ,
 
-    //Show In Ambient Light [84] [ShadowT]
-    "Show 'ShadowT' in Ambient Light.\n\nThis will only be visible if there's an Ambient Light present or GI." ,
+        //Show In Ambient Light [84] [ShadowT]
+        "Show 'ShadowT' in Ambient Light.\n\nThis will only be visible if there's an Ambient Light present or GI." ,
 
-    //Show In Ambient Light & Shadow Intensity [85] [ShadowT]
-    "'ShadowT' intensity or visibility in shadow and ambient light." ,
+        //Show In Ambient Light & Shadow Intensity [85] [ShadowT]
+        "'ShadowT' intensity or visibility in shadow and ambient light." ,
 
-    //Show In Ambient Light & Shadow Threshold [86] [ShadowT]
-    "'ShadowT' threshold in Ambient Light and shadow." ,
+        //Show In Ambient Light & Shadow Threshold [86] [ShadowT]
+        "'ShadowT' threshold in Ambient Light and shadow." ,
 
-    //Light Falloff Affect ShadowT [87]
-    "'Point light' and 'Spot Light' light falloff affect 'ShadowT'." ,
+        //Light Falloff Affect ShadowT [87]
+        "'Point light' and 'Spot Light' light falloff affect 'ShadowT'." ,
 
-    //PTexture [88]
-    "A Black and White texture to be used as pattern for shadow.\n\nBlack means pattern while White is nothing.\nThis will not be visible if the shadow color is Black." ,
+        //PTexture [88]
+        "A Black and White texture to be used as pattern for shadow.\n\nBlack means pattern while White is nothing.\nThis will not be visible if the shadow color is Black." ,
 
-    //Power [89] [PTexture]
-    "How strong or dark the pattern is." ,
+        //Power [89] [PTexture]
+        "How strong or dark the pattern is." ,
 
-    //Receive Environmental Ligthing and GI [90] [Lighting]
-    "Turn on or off receive 'Environmental Ligthing' or 'GI'." ,
+        //Receive Environmental Ligthing and GI [90] [Lighting]
+        "Turn on or off receive 'Environmental Ligthing' or 'GI'." ,
 
-    //Environmental Ligthing Intensity [91] [Lighting]
-    "Ambient Light, GI or Environmental Ligthing intensity on the object." ,
+        //Environmental Ligthing Intensity [91] [Lighting]
+        "Ambient Light, GI or Environmental Ligthing intensity on the object." ,
 
-    //GI Flat Shade [92] [Lighting]
-    "Turn GI or SH lighting shade into flat shade." ,
+        //GI Flat Shade [92] [Lighting]
+        "Turn GI or SH lighting shade into flat shade." ,
 
-    //GI Shade Threshold [93] [Lighting]
-    "The amount of GI Shade on the object." ,
+        //GI Shade Threshold [93] [Lighting]
+        "The amount of GI Shade on the object." ,
 
-    //Light affect Shadow [94] [Lighting]
-    "Light intensity, color and light falloff affect shadows.\n\nThis will affect (RealTime shadow, Self Shadow and ShadowT)." ,
+        //Light affect Shadow [94] [Lighting]
+        "Light intensity, color and light falloff affect shadows.\n\nThis will affect (RealTime shadow, Self Shadow and ShadowT)." ,
 
-    //Directional Light Intensity [95] [Lighting]
-    "Directional Light intensity received on the object." ,
+        //Directional Light Intensity [95] [Lighting]
+        "Directional Light intensity received on the object." ,
 
-    //Point and Spot Light Intensity [96] [Lighting]
-    "Point and Spot light intensity received on the object." ,
+        //Point and Spot Light Intensity [96] [Lighting]
+        "Point and Spot light intensity received on the object." ,
 
-    //Light Falloff Softness [97] [Lighting]
-    "How soft is the point and spot light light falloff." ,
+        //Light Falloff Softness [97] [Lighting]
+        "How soft is the point and spot light light falloff." ,
 
-    //Intensity [98] [Custom Light Direction]
-    "The amount of custom light direction." ,
+        //Intensity [98] [Custom Light Direction]
+        "The amount of custom light direction." ,
 
-    //Custom Light Direction [99] [Custom Light Direction]
-    "XYZ light direction." ,
+        //Custom Light Direction [99] [Custom Light Direction]
+        "XYZ light direction." ,
 
-    //Follow Object Rotation [100] [Custom Light Direction]
-    "'Custom Light Direction' follow object rotation." ,
+        //Follow Object Rotation [100] [Custom Light Direction]
+        "'Custom Light Direction' follow object rotation." ,
 
-    //Intensity [101] [Reflection]
-    "The amount reflection visibility." ,
+        //Intensity [101] [Reflection]
+        "The amount reflection visibility." ,
 
-    //Roughness [102] [Reflection]
-    "'Reflection' roughness." ,
+        //Roughness [102] [Reflection]
+        "'Reflection' roughness." ,
         
-    //Metallic [103] [Reflection]
-    "The amount of reflection metallic look." ,
+        //Metallic [103] [Reflection]
+        "The amount of reflection metallic look." ,
         
-    //Mask Reflection [104]
-    "Mask Reflection.\n\nWhite means visible relfection while Black means reflection not visible." ,
+        //Mask Reflection [104]
+        "Mask Reflection.\n\nWhite means visible relfection while Black means reflection not visible." ,
 
-    //FReflection [105]
-    "A texture or image to be used as reflection." ,
+        //FReflection [105]
+        "A texture or image to be used as reflection." ,
 
-    //Unfill [106] [Rim Light]
-    "Unfill the 'Rim Light' on the object." ,
+        //Unfill [106] [Rim Light]
+        "Unfill the 'Rim Light' on the object." ,
 
-    //Softness [107] [Rim Light]
-    "'Rim Light' softness." ,
+        //Softness [107] [Rim Light]
+        "'Rim Light' softness." ,
 
-    //Light Affect Rim Light [108] [Rim Light]
-    "Light (Brightness and Color) affect 'Rim Light'." ,
+        //Light Affect Rim Light [108] [Rim Light]
+        "Light (Brightness and Color) affect 'Rim Light'." ,
 
-    //Color [109] [Rim Light]
-    "'Rim Light' color." ,
+        //Color [109] [Rim Light]
+        "'Rim Light' color." ,
 
-    //Color Power [110] [Rim Light]
-    "'Rim Light Color' power or intensity." ,
+        //Color Power [110] [Rim Light]
+        "'Rim Light Color' power or intensity." ,
 
-    //Rim Light In Light [111]
-    "'Rim Light' will be visible in light only." ,
+        //Rim Light In Light [111]
+        "'Rim Light' will be visible in light only." ,
 
-    //ID [112] [See Through]
-    "ID or reference value.\n\n-Default Value: 0" ,
+        //ID [112] [See Through]
+        "ID or reference value.\n\n-Default Value: 0" ,
 
-    //Set A [113] [See Through]
-    "'A' The see through object while 'B' is the object to be seen through 'A'.\n\n-Default Value: A" ,
+        //Set A [113] [See Through]
+        "'A' The see through object while 'B' is the object to be seen through 'A'.\n\n-Default Value: A" ,
 
-    //Set B [114] [See Through]
-    "'A' The see through object while 'B' is the object to be seen through 'A'.\n\n-Default Value: None" ,
+        //Set B [114] [See Through]
+        "'A' The see through object while 'B' is the object to be seen through 'A'.\n\n-Default Value: None" ,
 
-    //No Light and Shadow On Backface [115]
-    "No light and shadow will be visible on a back of a plane/flat object or face.\n\nThis will only be take effect or visible if 'Culling' is turned 'Off' or 'Front'." ,
+        //No Light and Shadow On Backface [115]
+        "No light and shadow will be visible on a back of a plane/flat object or face.\n\nThis will only be take effect or visible if 'Culling' is turned 'Off' or 'Front'." ,
 
-    //Change Shader Compilation Target To 2.0/4.5. [116]
-    "This will change the Shader Compilation Target of the RealToon Shader file to '2.0' or '4.5'.\n\n*If the shader compilation target is changed to 4.5, the shader will support DOTS/DOTS Hybrid Renderer, GPU Resident and Tessellation.",
+        //Change Shader Compilation Target To 2.0/4.5. [116]
+        "This will change the Shader Compilation Target of the RealToon Shader file to '2.0' or '4.5'.\n\n*If the shader compilation target is changed to 4.5, the shader will support DOTS/DOTS Hybrid Renderer, GPU Resident and Tessellation.",
 
-    //Hide Directional Light Shadow [117]
-    "Hide received 'Directional Light' shadows on the object." ,
+        //Hide Directional Light Shadow [117]
+        "Hide received 'Directional Light' shadows on the object." ,
 
-    //Hide Point & Spot Light Shadow [118]
-    "Hide received 'Point and Spot Light' shadows on the object." ,
+        //Hide Point & Spot Light Shadow [118]
+        "Hide received 'Point and Spot Light' shadows on the object." ,
 
-    //Disable Cast Shadow [119]
-    "Disable object cast shadow." ,
+        //Disable Cast Shadow [119]
+        "Disable object cast shadow." ,
 
-    //ZWrite [120]
-    "Turn on or off ZWrite." ,
+        //ZWrite [120]
+        "Turn on or off ZWrite." ,
 
-    //Automatic Remove Unused Shader Keywords [121]
-    "Remove unused shader keywords automatically in all materials with Realtoon Shader. This will take effect once this enabled and when the RealToon Inspector shown. Disable this if you experience too slow Inspector.\n\n(Warning: This will also remove stored previous shaders shader keywords.)",
+        //Automatic Remove Unused Shader Keywords [121]
+        "Remove unused shader keywords automatically in all materials with Realtoon Shader. This will take effect once this enabled and when the RealToon Inspector shown. Disable this if you experience too slow Inspector.\n\n(Warning: This will also remove stored previous shaders shader keywords.)",
 
-    //Color[122] [PTexture]
-    "'PTexture' color." ,
+        //Color[122] [PTexture]
+        "'PTexture' color." ,
 
-    //Outline Z Position In Camera [123] [Outline]
-    "Adjust the outline Z position in camera space." ,
+        //Outline Z Position In Camera [123] [Outline]
+        "Adjust the outline Z position in camera space." ,
 
-    //RealTime Shadow Intensity [124] [RealTime Shadow]
-    "Adjust the realtime shadow intensity." ,
+        //RealTime Shadow Intensity [124] [RealTime Shadow]
+        "Adjust the realtime shadow intensity." ,
 
-    //Rim Light Intensity [125] [RimLight]
-    "'Rim Light' intensity.",
+        //Rim Light Intensity [125] [RimLight]
+        "'Rim Light' intensity.",
 
-    //Self Shadow & RealTime Shadow Intensity [126]
-    "Adjust the 'Self Shadow' and realtime shadow intensity." ,
+        //Self Shadow & RealTime Shadow Intensity [126]
+        "Adjust the 'Self Shadow' and realtime shadow intensity." ,
 
-    //Self Shadow Color [127] [Shadow]
-    "'Self Shadow' color." ,
+        //Self Shadow Color [127] [Shadow]
+        "'Self Shadow' color." ,
 
-    //Self Shadow Color Power [128] [Shadow]
-    "'Self Shadow' color power or intensity." ,
+        //Self Shadow Color Power [128] [Shadow]
+        "'Self Shadow' color power or intensity." ,
 
-    //Color [129] [ShadowT]
-    "'ShadowT' color." ,
+        //Color [129] [ShadowT]
+        "'ShadowT' color." ,
 
-    //Color Power [130] [ShadowT]
-    "'ShadowT' color power or intensity.",
+        //Color Power [130] [ShadowT]
+        "'ShadowT' color power or intensity.",
 
-    //Ignore Light [131] [ShadowT]
-    "'ShadowT' ignore direction light or light position.",
+        //Ignore Light [131] [ShadowT]
+        "'ShadowT' ignore direction light or light position.",
 
-    //Light Intensity [132] [Lighting]
-    "How strong is the Light in the shadow.",
+        //Light Intensity [132] [Lighting]
+        "How strong is the Light in the shadow.",
 
-    //Enable Additional Lights [133] [Lighting]
-    "Enable additional lights like Point and Spot lights.",
+        //Enable Additional Lights [133] [Lighting]
+        "Enable additional lights like Point and Spot lights.",
 
-    //Use Traditional Light Blend [134] [Lighting]
-    "Use traditional light blend.\n\nIf enabled light blending will be in add mode, if not enabled the light blending will based on high or maximum light intensity and the blending will be similar to Anime or Cartoon.",
+        //Use Traditional Light Blend [134] [Lighting]
+        "Use traditional light blend.\n\nIf enabled light blending will be in add mode, if not enabled the light blending will based on high or maximum light intensity and the blending will be similar to Anime or Cartoon.",
 
-    //Remove Outline/Add Outline (On Shader) [135]
-    "This will remove the Outline feature completely on the shader file or Add back the Outline feature on the shader file.\n\nThis is not per material.",
+        //Remove Outline/Add Outline (On Shader) [135]
+        "This will remove the Outline feature completely on the shader file or Add back the Outline feature on the shader file.\n\nThis is not per material.",
 
-    //Video Tutorials [136]
-    "RealToon's video tutorial playlist.",
+        //Video Tutorials [136]
+        "RealToon's video tutorial playlist.",
 
-    //RealToon (User Guide).pdf [137]
-    "RealToon's user guide or documentation.",
+        //RealToon (User Guide).pdf [137]
+        "RealToon's user guide or documentation.",
 
-    //Hide/Show UI [138]
-    "This will hide or show RealToon's Inspector UI.\n\nThis is global and not per material.",
+        //Hide/Show UI [138]
+        "This will hide or show RealToon's Inspector UI.\n\nThis is global and not per material.",
 
-    //Depth Threshold [139] [outline]
-    "This will adjust the depth based outline threshold.",
+        //Depth Threshold [139] [outline]
+        "This will adjust the depth based outline threshold.",
 
-    //Mix Outline To The Shader Output [140] [outline]
-    "This will mix the outline to the shader output",
+        //Mix Outline To The Shader Output [140] [outline]
+        "This will mix the outline to the shader output",
 
-    //Optimize for [Light Mode:Baked] [141]
-    "If enabled, it will disable all realtime features on the shader and optimize it for [Light Mode:Baked].\n\nDisable or uncheck this for [Light Mode: RealTime or Mixed] use.",
+        //Optimize for [Light Mode:Baked] [141]
+        "If enabled, it will disable all realtime features on the shader and optimize it for [Light Mode:Baked].\n\nDisable or uncheck this for [Light Mode: RealTime or Mixed] use.",
 
-    //Use Screen Space Outline/Use Traditional Outline [142] [outline]
-    "This will enable you to use 'Screen Space Outline' or 'Traditional Outline'.\n\n'Depth Texture' needs to be turn 'On' if you use the 'Screen Space Outline'.\n\nThis is not per material.",
+        //Use Screen Space Outline/Use Traditional Outline [142] [outline]
+        "This will enable you to use 'Screen Space Outline' or 'Traditional Outline'.\n\n'Depth Texture' needs to be turn 'On' if you use the 'Screen Space Outline'.\n\nThis is not per material.",
 
-    //Use Linear Blend Skinning/Compute Deformation [143]
-    "This will enable you to use 'Linear Blend Skinning' or 'Compute Deformation'.\n\nThis will modify the RealToon shader file.",
+        //Use Linear Blend Skinning/Compute Deformation [143]
+        "This will enable you to use 'Linear Blend Skinning' or 'Compute Deformation'.\n\nThis will modify the RealToon shader file.",
 
-    //Light Ignore Y Normal Direcion [144]
-    "Light will ignore Object Normal Y direction.",
+        //Light Ignore Y Normal Direcion [144]
+        "Light will ignore Object Normal Y direction.",
 
-    //Enable Screen Space Ambient Occlusion [145]
-    "Enable SSAO or Screen Space Ambient Occlusion." ,
+        //Enable Screen Space Ambient Occlusion [145]
+        "Enable SSAO or Screen Space Ambient Occlusion." ,
 
-    //Ambient Occlusion Color [146]
-    "Ambient Occlusion color or tint.",
+        //Ambient Occlusion Color [146]
+        "Ambient Occlusion color or tint.",
 
-    //Receive Decal [147]
-    "The object will Receive Decal.",
+        //Receive Decal [147]
+        "The object will Receive Decal.",
 
-    //Glow Color [148]
-    "Glow edge color.",
+        //Glow Color [148]
+        "Glow edge color.",
 
-    //Glow Edge Width [149]
-    "The width of the glow.",
+        //Glow Edge Width [149]
+        "The width of the glow.",
 
-    //Simple Transparency Mode[150]
-    "Common simple transparency.\nOnly 'Opacity', 'Blend Modes' and 'Affect Shadow' are available.\n\n'Transparent Threshold' and 'Mask Transparency' not available on this mode.",
+        //Simple Transparency Mode[150]
+        "Common simple transparency.\nOnly 'Opacity', 'Blend Modes' and 'Affect Shadow' are available.\n\n'Transparent Threshold' and 'Mask Transparency' not available on this mode.",
 
-    //Disable DOTS Mesh Deformation[151]
-    "Disable DOTS Mesh Deformation: 'Linear Blend Skinning and Compute Deformation'.\n\n*For Static Objects, enabled this.",
+        //Disable DOTS Mesh Deformation[151]
+        "Disable DOTS Mesh Deformation: 'Linear Blend Skinning and Compute Deformation'.\n\n*For Static Objects, enabled this.",
 
-    //Near Fade Dithering - Min Distance[152]
-    "The minimum near distance.",
+        //Near Fade Dithering - Min Distance[152]
+        "The minimum near distance.",
 
-    //Near Fade Dithering - Max Distance[153]
-    "The maximum near distance."
+        //Near Fade Dithering - Max Distance[153]
+        "The maximum near distance.",
 
+        //Soft Cutout [154]
+        "Dithering/Dot style cutout.\n\nFor a soft edge cutout.",
 
-};
+        //Tile (Triplanar) [155]
+        "Tiling scale of the texture.",
+
+        //Blend (Triplanar) [156]
+        "Blending of the triplanar texture."
+        };
 
         #endregion
 
@@ -790,61 +805,63 @@ static string dots_lbs_cd_string = "DOTS|HR - Use Compute Deformation";
 
         string[] TOTIPSEDF =
         {
-    //MatCap [0]
-    "MatCap or Material Capture.",
+        //MatCap [0]
+        "MatCap or Material Capture.",
 
-    //Normal Map [1]
-    "Normal Map.",
+        //Normal Map [1]
+        "Normal Map.",
 
-    //Outline [2]
-    "Outline.",
+        //Outline [2]
+        "Outline.",
 
-    //Cutout [3]
-    "Cutout.",
+        //Cutout [3]
+        "Cutout.",
 
-    //Color Adjustment [4]
-    "Adjust the color of the object.",
+        //Color Adjustment [4]
+        "Adjust the color of the object.",
 
-    //SelfLit [5]
-    "Own light or Emission.",
+        //SelfLit [5]
+        "Own light or Emission.",
 
-    //Gloss [6]
-    "Gloss.",
+        //Gloss [6]
+        "Gloss.",
 
-    //Gloss Texture [7]
-    "Gloss in texture form.\n\nUse a Black and White texture map.\nWhite means gloss while Black is not.",
+        //Gloss Texture [7]
+        "Gloss in texture form.\n\nUse a Black and White texture map.\nWhite means gloss while Black is not.",
 
-    //Self Shadow [8]
-    "Self Shadow or Shade.",
+        //Self Shadow [8]
+        "Self Shadow or Shade.",
 
-    //Smooth Object Normal [9]
-    "Smooth object normal or ignore object normal.",
+        //Smooth Object Normal [9]
+        "Smooth object normal or ignore object normal.",
 
-    //Shadow Color Texture [10]
-    "Color shadow using texture.",
+        //Shadow Color Texture [10]
+        "Color shadow using texture.",
 
-    //ShadowT [11]
-    "ShadowT or Shadow Texture, shadows in texture form.\n\nUse Black or Gray and White Flat, Gradient and Smooth texture map.\nGray and White affected by light while Black is not.\n\nFor more info and how to use and make ShadowT texture maps, see 'Video Tutorials' and 'User Guide.pdf' at the bottom of this RealToon inspector.",
+        //ShadowT [11]
+        "ShadowT or Shadow Texture, shadows in texture form.\n\nUse Black or Gray and White Flat, Gradient and Smooth texture map.\nGray and White affected by light while Black is not.\n\nFor more info and how to use and make ShadowT texture maps, see 'Video Tutorials' and 'User Guide.pdf' at the bottom of this RealToon inspector.",
 
-    //PTexture [12]
-    "PTexture or Pattern Texture.\n\nA Black and White texture to be used as pattern for shadow.\n\nBlack means pattern while White is nothing.\nThis will not be visible if the shadow color is Black.",
+        //PTexture [12]
+        "PTexture or Pattern Texture.\n\nA Black and White texture to be used as pattern for shadow.\n\nBlack means pattern while White is nothing.\nThis will not be visible if the shadow color is Black.",
 
-    //Custom Light Direction [13]
-    "Custom light direction.",
+        //Custom Light Direction [13]
+        "Custom light direction.",
 
-    //Reflection [14]
-    "Reflection.",
+        //Reflection [14]
+        "Reflection.",
 
-    //FReflection [15]
-    "FReflection or Fake Reflection.\n\nUse any texture or image as reflection.",
+        //FReflection [15]
+        "FReflection or Fake Reflection.\n\nUse any texture or image as reflection.",
 
-    //Rim Light [16]
-    "Rim light or fresnel effect.",
+        //Rim Light [16]
+        "Rim light or fresnel effect.",
 
-    //Near Fade Dithering [17]
-    "Object fades when the camera near."
+        //Near Fade Dithering [17]
+        "Object fades when the camera near.",
 
-};
+        //Triplanar [18]
+        "For a uniform texture scale and tiles.\n\nUseful for static objects and environment."
+        };
 
         #endregion
 
@@ -920,6 +937,7 @@ static string dots_lbs_cd_string = "DOTS|HR - Use Compute Deformation";
             _UseSecondaryCutout = ShaderGUI.FindProperty("_UseSecondaryCutout", properties);
             _SecondaryCutout = ShaderGUI.FindProperty("_SecondaryCutout", properties);
             _AlphaBaseCutout = ShaderGUI.FindProperty("_AlphaBaseCutout", properties);
+            _N_F_SCO = ShaderGUI.FindProperty("_N_F_SCO", properties); //cc
 
             _N_F_COEDGL = ShaderGUI.FindProperty("_N_F_COEDGL", properties);
             _Glow_Color = ShaderGUI.FindProperty("_Glow_Color", properties);
@@ -1062,6 +1080,9 @@ static string dots_lbs_cd_string = "DOTS|HR - Use Compute Deformation";
             _MinFadDistance = ShaderGUI.FindProperty("_MinFadDistance", properties);
             _MaxFadDistance = ShaderGUI.FindProperty("_MaxFadDistance", properties);
 
+            _TriPlaTile = ShaderGUI.FindProperty("_TriPlaTile", properties);
+            _TriPlaBlend = ShaderGUI.FindProperty("_TriPlaBlend", properties);
+
             //if (shader_name == "tessellation_d" || shader_name == "tessellation_ft" || shader_name == "tessellation_ref")
             //{
             //    _TessellationSmoothness = ShaderGUI.FindProperty("_TessellationSmoothness", properties);
@@ -1101,6 +1122,7 @@ static string dots_lbs_cd_string = "DOTS|HR - Use Compute Deformation";
             _N_F_FR = ShaderGUI.FindProperty("_N_F_FR", properties);
             _N_F_RL = ShaderGUI.FindProperty("_N_F_RL", properties);
             _N_F_NFD = ShaderGUI.FindProperty("_N_F_NFD", properties);
+            _N_F_TP = ShaderGUI.FindProperty("_N_F_TP", properties);
 
             _N_F_HDLS = ShaderGUI.FindProperty("_N_F_HDLS", properties);
             _N_F_HPSS = ShaderGUI.FindProperty("_N_F_HPSS", properties);
@@ -1345,6 +1367,7 @@ static string dots_lbs_cd_string = "DOTS|HR - Use Compute Deformation";
 
                             materialEditor.ShaderProperty(_Cutout, new GUIContent(_Cutout.displayName, TOTIPS[17]));
                             materialEditor.ShaderProperty(_AlphaBaseCutout, new GUIContent(_AlphaBaseCutout.displayName, TOTIPS[18]));
+                            materialEditor.ShaderProperty(_N_F_SCO, new GUIContent(_N_F_SCO.displayName, TOTIPS[154]));
 
                             GUILayout.Space(10);
 
@@ -2202,6 +2225,35 @@ static string dots_lbs_cd_string = "DOTS|HR - Use Compute Deformation";
 
                 #endregion
 
+                //Triplanar //cc
+
+                #region Triplanar
+
+                if (_N_F_TP.floatValue == 1)
+                {
+                    EditorGUILayout.LabelField("", GUI.skin.horizontalSlider);
+
+                    Rect r_tripla = EditorGUILayout.BeginVertical("Button");
+                    Triplanar = EditorGUILayout.Foldout(Triplanar, "(Triplanar)", true, EditorStyles.foldout);
+
+                    if (Triplanar)
+                    {
+
+                        GUILayout.Space(10);
+
+                        materialEditor.ShaderProperty(_TriPlaTile, new GUIContent(_TriPlaTile.displayName, TOTIPS[155]));
+                        materialEditor.ShaderProperty(_TriPlaBlend, new GUIContent(_TriPlaBlend.displayName, TOTIPS[156]));
+
+                        GUILayout.Space(10);
+
+                    }
+
+                    EditorGUILayout.EndVertical();
+
+                }
+
+                #endregion
+
                 //Tessellation (In Progress)
 
                 #region Tessellation
@@ -2488,6 +2540,10 @@ static string dots_lbs_cd_string = "DOTS|HR - Use Compute Deformation";
                     materialEditor.ShaderProperty(_N_F_NFD, new GUIContent(_N_F_NFD.displayName, TOTIPSEDF[17]));
                     EditorGUILayout.EndVertical();
 
+                    Rect r_tp = EditorGUILayout.BeginVertical("HelpBox");
+                    materialEditor.ShaderProperty(_N_F_TP, new GUIContent(_N_F_TP.displayName, TOTIPSEDF[18]));
+                    EditorGUILayout.EndVertical();
+
                 }
 
                 EditorGUILayout.EndVertical();
@@ -2581,7 +2637,7 @@ static string dots_lbs_cd_string = "DOTS|HR - Use Compute Deformation";
 
                 materialEditor.EnableInstancingField();
 
-//#if ENABLE_HYBRID_RENDERER_V2 //Removed because of GPU Resident
+//#if ENABLE_HYBRID_RENDERER_V2 //Removed because of GPU Resident Drawer
                 materialEditor.ShaderProperty(_N_F_DDMD, new GUIContent(_N_F_DDMD.displayName, TOTIPS[151]));
 //#endif
 
@@ -2853,6 +2909,17 @@ static string dots_lbs_cd_string = "DOTS|HR - Use Compute Deformation";
                 material.SetFloat("_N_F_CO", 0.0f);
             }
 
+            if ((material.IsKeywordEnabled("N_F_SCO_ON") || material.GetFloat("_N_F_SCO") == 1.0f))
+            {
+                material.EnableKeyword("N_F_SCO_ON");
+                material.SetFloat("_N_F_SCO", 1.0f);
+            }
+            else if ((!material.IsKeywordEnabled("N_F_SCO_ON") || material.GetFloat("_N_F_SCO") == 0.0f))
+            {
+                material.DisableKeyword("N_F_SCO_ON");
+                material.SetFloat("_N_F_SCO", 0.0f);
+            }
+
             if ((material.IsKeywordEnabled("N_F_O_ON") || material.GetFloat("_N_F_O") == 1.0f))
             {
                 material.EnableKeyword("N_F_O_ON");
@@ -3020,6 +3087,17 @@ static string dots_lbs_cd_string = "DOTS|HR - Use Compute Deformation";
             {
                 material.DisableKeyword("N_F_NFD_ON");
                 material.SetFloat("_N_F_NFD", 0.0f);
+            }
+
+            if ((material.IsKeywordEnabled("N_F_TP_ON") || material.GetFloat("_N_F_TP") == 1.0f))
+            {
+                material.EnableKeyword("N_F_TP_ON");
+                material.SetFloat("_N_F_TP", 1.0f);
+            }
+            else if ((!material.IsKeywordEnabled("N_F_TP_ON") || material.GetFloat("_N_F_TP") == 0.0f))
+            {
+                material.DisableKeyword("N_F_TP_ON");
+                material.SetFloat("_N_F_TP", 0.0f);
             }
 
             //======================================================================================================

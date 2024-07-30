@@ -123,7 +123,7 @@ namespace StylizedGrass
         public static void DrawRenderGraphError()
         {
             #if UNITY_6000_0_OR_NEWER && URP
-            if (GraphicsSettings.GetRenderPipelineSettings<RenderGraphSettings>().enableRenderCompatibilityMode == false)
+            if (PipelineUtilities.RenderGraphEnabled())
             {
                 EditorGUILayout.HelpBox("Using Render Graph in Unity 6+ is not supported." +
                                         "\n\nBackwards compatibility mode must be enabled.", MessageType.Error);
@@ -134,12 +134,12 @@ namespace StylizedGrass
                     GUILayout.FlexibleSpace();
                     if (GUILayout.Button(new GUIContent("Enable", EditorGUIUtility.IconContent("d_tab_next").image), GUILayout.Width(60)))
                     {
-                        GraphicsSettings.GetRenderPipelineSettings<RenderGraphSettings>().enableRenderCompatibilityMode = true;
+                        RenderGraphSettings settings = UnityEngine.Rendering.GraphicsSettings.GetRenderPipelineSettings<RenderGraphSettings>();
+                        
+                        settings.enableRenderCompatibilityMode = true;
 
                         EditorUtility.DisplayDialog($"{AssetInfo.ASSET_NAME} v{AssetInfo.INSTALLED_VERSION}", 
-                            "Please note that this option will be removed in a future Unity version, this version will no longer be functional then." +
-                            "\n\n" +
-                            "A license upgrade for Unity 6+ support may be available, please check the documentation for information.", "OK");
+                            "Please note that this option will be removed in a future Unity version, this version of the asset will no longer be functional then.", "OK");
                     }
                     GUILayout.Space(8);
                 }

@@ -45,6 +45,7 @@ Shader "Universal Render Pipeline/Nature/Stylized Grass"
 		_BendFlattenStrength("Flatten Strength (Y)", Range(0.0, 1.0)) = 1.0
 		_BendTint("Bending tint", Color) = (1, 1, 1, 1.0)
 		_PerspectiveCorrection("Perspective Correction", Range(0.0, 1.0)) = 1.0
+		_BillboardingVerticalRotation("Billboarding, vertical rotation", Range(0.0, 1.0)) = 0.0
 
 		//[Header(Wind)]
 		_WindAmbientStrength("Ambient Strength", Range(0.0, 1.0)) = 0.2
@@ -280,11 +281,6 @@ Shader "Universal Render Pipeline/Nature/Stylized Grass"
 
 			//URP 14+
 			#pragma multi_compile_fragment _ _FORWARD_PLUS
-			//Workaround for bug in 2022.3.15+ (UUM-67560)
-            #if USE_FORWARD_PLUS && defined(SHADER_API_METAL) && UNITY_VERSION >= 202230
-            //Otherwise undefined
-            #define _FOVEATED_RENDERING_NON_UNIFORM_RASTER 0
-            #endif
 			
 			//Constants
 			#define SHADERPASS_FORWARD

@@ -9,10 +9,6 @@ using UnityEngine.Rendering.Universal;
 using UnityEngine.Rendering.RendererUtils;
 #endif
 
-#if UNITY_6000_0_OR_NEWER
-#warning This version does not support Unity 6, the rendering API used has been deprecated by Unity. The warnings thrown by this script are harmless for now.
-#endif
-
 namespace StylizedGrass
 {
     [UnityEngine.Scripting.APIUpdating.MovedFrom(true, "StylizedGrass", "sc.stylizedgrass.runtime", "GrassBendingFeature")]
@@ -127,6 +123,10 @@ namespace StylizedGrass
             public override void RecordRenderGraph(UnityEngine.Rendering.RenderGraphModule.RenderGraph renderGraph, ContextContainer frameData) { }
             #endif
 
+            #if UNITY_6000_0_OR_NEWER
+            #pragma warning disable CS0672
+            #pragma warning disable CS0618
+            #endif
             public override void Configure(CommandBuffer cmd, RenderTextureDescriptor cameraTextureDescriptor)
             {
                 orthoSize = Mathf.Max(5, settings.bendingRenderRange) * 0.5f;
@@ -247,6 +247,10 @@ namespace StylizedGrass
             public override void RecordRenderGraph(UnityEngine.Rendering.RenderGraphModule.RenderGraph renderGraph, ContextContainer frameData) { }
             #endif
             
+            #if UNITY_6000_0_OR_NEWER
+            #pragma warning disable CS0672
+            #pragma warning disable CS0618
+            #endif
             public override void Execute(ScriptableRenderContext context, ref RenderingData renderingData) { }
 
             public override void OnCameraSetup(CommandBuffer cmd, ref RenderingData renderingData)
@@ -342,7 +346,7 @@ namespace StylizedGrass
         void OnEnable()
         {
             #if UNITY_6000_0_OR_NEWER && UNITY_EDITOR
-            if (UnityEngine.Rendering.GraphicsSettings.GetRenderPipelineSettings<RenderGraphSettings>().enableRenderCompatibilityMode == false)
+            if (PipelineUtilities.RenderGraphEnabled())
             {
                 Debug.LogError($"[{this.name}] Render Graph is enabled but is not supported. Enable \"Compatibility Mode\" in your project's Graphics Settings as a workaround.");
             }

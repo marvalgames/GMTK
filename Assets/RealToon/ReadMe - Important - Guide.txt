@@ -13,13 +13,13 @@ Note:
 
 If your project is 3D or Built-In RP:
 1.Go to folder "RealToon Shader Packages -> Built-In RP [3D]"
-2.Double click "RealToon Built-In RP [3D]", the latest one with the 'Later' word on it to unpack.
+2.Double click "RealToon Built-In RP [3D]", the latest one with the 'Later' word on it.
 3.Click "Import".
 
 If your project is Universal Render Pipeline or High Definition RP:
 1.Go to folder "RealToon Shader Packages -> SRP (LWRP - URP - HDRP)".
 2.Open the folder that correspond to your project render pipeline.
-3.Double click the latest one with the 'Later' word on it to unpack.
+3.Double click the latest one with the 'Later' word on it.
 4.Click "Import".
 
 To use RealToon:
@@ -76,10 +76,10 @@ Note:
 ===========================================================================
 
 Accessing the shader:
-[RealToon Built-In RP/3D] The shaders are in "RealToon"
-[RealToon LWRP] The shaders are in "Lightweight Render Pipeline"
-[RealToon URP] The shader is in "Universal Render Pipeline"
-[RealToon HDRP] The shader is in "HDRP".
+[RealToon Built-In RP/3D] The shaders are in "RealToon" folder.
+[RealToon LWRP] The shaders are in "Lightweight Render Pipeline" folder.
+[RealToon URP] The shader is in "Universal Render Pipeline" folder.
+[RealToon HDRP] The shader is in "HDRP" folder.
 
 ===========================================================================
 
@@ -90,13 +90,15 @@ Recommended Unity and SRP Versions:
 
 Unity and SRP(URP and HDRP) Versions:
 [URP]
-Unity 2023.1.0 to Later - URP 15
+Unity 6 to Later - URP 17
+Unity 2023.1.0 to before 2023.2.20 - URP 15 to 16
 Unity 2021.3.0 to before 2022.2.0 - URP 14
 Unity 2021.2.0 to before 2021.3.0 - URP 12 to 13
 Unity 2020.3.0 to before 2021.2.0 - URP 10 - 11
 
 [HDRP]
-Unity 2023.2.0 to Later - HDRP 16 to Later
+Unity 6 to Later - HDRP 17
+Unity 2023.2.0 to before 2023.2.20 - HDRP 16
 Unity 2022.2.0 to before 2022.3.0 - HDRP 14 to 15
 Unity 2021.2.0 to before 2022.2.0 - HDRP 12 to 13
 Unity 2020.2.0 to before 2021.2.0 - HDRP 10 to 11
@@ -110,15 +112,16 @@ From Unity 5 to current latest unity version.
 
 
 ===========================================================================
-For Example/Demo
+For Demo/Example Scenes
 ===========================================================================
 
-1.Go to folder "RealToon Example"
+1.Go to folder "RealToon Examples"
 2.Open the folder.
 	*For RealToon Built-In RP/3D: Built-In RP [3D] folder
 	*For RealToon LWRP - URP - HDRP: SRP folder
-3.Double click the package to unpack/import.
-4.click "Import""
+
+** For more info about the example/demo, 
+read the "Read Me First [About the Example - Demos].txt"
 ===========================================================================
 
 

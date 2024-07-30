@@ -47,6 +47,7 @@ half _BendPushStrength;
 half _BendMode;
 half _BendFlattenStrength;
 half _PerspectiveCorrection;
+half _BillboardingVerticalRotation;
 
 //Wind
 half _WindAmbientStrength;

@@ -28,7 +28,7 @@ Varyings DepthOnlyVertex(Attributes input)
 	float posOffset = ObjectPosRand01();
 
 	WindSettings wind = PopulateWindSettings(_WindAmbientStrength, _WindSpeed, _WindDirection, _WindSwinging, input.color[_VertexColorWindChannel], _WindObjectRand, _WindVertexRand, _WindRandStrength, _WindGustStrength, _WindGustFreq, _WindGustSpeed);
-	BendSettings bending = PopulateBendSettings(_BendMode, input.color[_VertexColorBendingChannel], _BendPushStrength, _BendFlattenStrength, _PerspectiveCorrection);
+	BendSettings bending = PopulateBendSettings(_BendMode, input.color[_VertexColorBendingChannel], _BendPushStrength, _BendFlattenStrength, _PerspectiveCorrection, _BillboardingVerticalRotation);
 
 	VertexInputs vertexInputs = GetVertexInputs(input, _NormalFlattenDepthNormals);
 	VertexOutput vertexData = GetVertexOutput(vertexInputs, posOffset, wind, bending);

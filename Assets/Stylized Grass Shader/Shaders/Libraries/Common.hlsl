@@ -272,8 +272,8 @@ VertexOutput GetVertexOutput(VertexInputs input, float rand, WindSettings s, Ben
 
 #if _BILLBOARD	
 	//Local vector towards camera
-	float3 camDir = normalize(input.positionOS.xyz - TransformWorldToObject(_WorldSpaceCameraPos.xyz));
-	camDir.y = 0; //Cylindrical billboarding
+	float3 camDir = camDir = normalize(input.positionOS.xyz - TransformWorldToObject(_WorldSpaceCameraPos.xyz));;
+	camDir.y = lerp(0, camDir.y, b.billboardingVerticalRotation); //Cylindrical billboarding if 0
 	
 	float3 forward = camDir;
 	float3 right = normalize(cross(float3(0,1,0), forward));

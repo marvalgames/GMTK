@@ -52,7 +52,7 @@ Varyings LitPassVertex(Attributes input)
 	float posOffset = ObjectPosRand01();
 
 	WindSettings wind = PopulateWindSettings(_WindAmbientStrength, _WindSpeed, _WindDirection, _WindSwinging, input.color[_VertexColorWindChannel], _WindObjectRand, _WindVertexRand, _WindRandStrength, _WindGustStrength, _WindGustFreq, _WindGustSpeed);
-	BendSettings bending = PopulateBendSettings(_BendMode, input.color[_VertexColorBendingChannel], _BendPushStrength, _BendFlattenStrength, _PerspectiveCorrection);
+	BendSettings bending = PopulateBendSettings(_BendMode, input.color[_VertexColorBendingChannel], _BendPushStrength, _BendFlattenStrength, _PerspectiveCorrection, _BillboardingVerticalRotation);
 
 	//Object space position, normals (and tangents)
 	VertexInputs vertexInputs = GetVertexInputs(input, _NormalFlattening);
@@ -97,7 +97,9 @@ Varyings LitPassVertex(Attributes input)
 	output.dynamicLightmapUV = input.dynamicLightmapUV.xy * unity_DynamicLightmapST.xy + unity_DynamicLightmapST.zw;
 	#endif
 
-	#if UNITY_VERSION >= 202320 //Note: actually available from 2023.1.7+ (URP 15.0.8)
+	#if UNITY_VERSION >= 600009 //Not supported, but patched to resolve error
+	OUTPUT_SH4(vertexData.positionWS, output.normalWS.xyz, GetWorldSpaceNormalizeViewDir(vertexData.positionWS), output.vertexSH, 1);
+	#elif UNITY_VERSION >= 202320 //Note: actually available from 2023.1.7+ (URP 15.0.8)
 	OUTPUT_SH4(vertexData.positionWS, output.normalWS.xyz, GetWorldSpaceNormalizeViewDir(vertexData.positionWS), output.vertexSH);
 	#else
 	OUTPUT_SH(output.normalWS.xyz, output.vertexSH);
@@ -238,7 +240,13 @@ void PopulateLightingInputData(Varyings input, half3 normalTS, out InputData inp
 	#if defined(DYNAMICLIGHTMAP_ON) && UNITY_VERSION >= 202120
 	inputData.bakedGI = SAMPLE_GI(input.staticLightmapUV, input.dynamicLightmapUV.xy, input.vertexSH, inputData.normalWS);
 	#elif !defined(LIGHTMAP_ON) && (defined(PROBE_VOLUMES_L1) || defined(PROBE_VOLUMES_L2))
+
+	#if UNITY_VERSION >= 600009 //Not supported, but patched to avoid compile error
+	inputData.bakedGI = SAMPLE_GI(input.vertexSH, GetAbsolutePositionWS(inputData.positionWS), inputData.normalWS, inputData.viewDirectionWS, input.positionCS.xy, 1, 1);
+	#else
 	inputData.bakedGI = SAMPLE_GI(input.vertexSH, GetAbsolutePositionWS(inputData.positionWS), inputData.normalWS, inputData.viewDirectionWS, input.positionCS.xy);
+	#endif
+
 	#else
 	inputData.bakedGI = SAMPLE_GI(input.staticLightmapUV, input.vertexSH, inputData.normalWS);
 	#endif

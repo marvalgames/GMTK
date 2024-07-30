@@ -33,7 +33,7 @@ namespace Sandbox.Player
                 {
                     if (playerDash.active == false) return;
                     var audioSource = player.AudioSource;
-                    Debug.Log("DASH");
+                    //Debug.Log("DASH");
 
                     
                     if (playerDash.DelayTimeTicker > 0)

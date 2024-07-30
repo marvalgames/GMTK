@@ -253,6 +253,19 @@ namespace StylizedGrass
                 Debug.LogError("[StylizedGrassRenderer] No Universal Render Pipeline is currently active.");
             }
         }
+        
+        public static bool RenderGraphEnabled()
+        {
+            #if UNITY_6000_0_OR_NEWER
+            RenderGraphSettings settings = UnityEngine.Rendering.GraphicsSettings.GetRenderPipelineSettings<RenderGraphSettings>();
+
+            if(settings == null) return false;
+
+            return settings.enableRenderCompatibilityMode == false;
+            #else
+            return false;
+            #endif
+        }
 #endif
     }
 }

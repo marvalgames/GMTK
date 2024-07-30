@@ -51,6 +51,7 @@ namespace StylizedGrass
         private MaterialProperty _BendPushStrength;
         private MaterialProperty _BendFlattenStrength;
         private MaterialProperty _PerspectiveCorrection;
+        private MaterialProperty _BillboardingVerticalRotation;
         private MaterialProperty _BendTint;
 
         private MaterialProperty _WindAmbientStrength;
@@ -157,6 +158,7 @@ namespace StylizedGrass
             _BendPushStrength = FindProperty("_BendPushStrength", props);
             _BendFlattenStrength = FindProperty("_BendFlattenStrength", props);
             _PerspectiveCorrection = FindProperty("_PerspectiveCorrection", props);
+            _BillboardingVerticalRotation = FindProperty("_BillboardingVerticalRotation", props);
             _BendTint = FindProperty("_BendTint", props);
 
             _WindMap = FindProperty("_WindMap", props);
@@ -317,7 +319,6 @@ namespace StylizedGrass
                 tooltipRect.width = 120f;
                 GUI.Label(tooltipRect, "Check for update", GUI.skin.button);
             }
-
         }
         
         private void DrawRendering()
@@ -344,13 +345,17 @@ namespace StylizedGrass
                 if (_AlphaToCoverage.floatValue > 0 && UniversalRenderPipeline.asset.msaaSampleCount == 1) EditorGUILayout.HelpBox("MSAA is disabled, alpha to coverage will have no effect", MessageType.None);
                 
                 materialEditor.ShaderProperty(_Billboard, new GUIContent(_Billboard.displayName, "Force the Z-axis of the mesh to face the camera (Requires the GrassBillboardQuad mesh!)"));
-
+                if (_Billboard.floatValue > 0.5 || _Billboard.hasMixedValue)
+                {
+                    EditorGUI.indentLevel++;
+                    materialEditor.ShaderProperty(_BillboardingVerticalRotation, new GUIContent("Vertical rotation", "The amount by which the grass is also facing the camera position on the vertical axis"));
+                    EditorGUI.indentLevel--;
+                }
                 EditorGUILayout.Space();
-                
 
                 materialEditor.ShaderProperty(_FadingOn, new GUIContent("Distance/Angle fading", "Reduces the alpha clipping based on camera distance and viewing angle (relative to the geometry)." +
-                                                                                                   "\n\nNote that this does not improve performance, only pixels are being hidden, meshes are still being rendered, " +
-                                                                                                   "best to match these settings to your maximum grass draw distance"));
+                                                                                                 "\n\nNote that this does not improve performance, only pixels are being hidden, meshes are still being rendered, " +
+                                                                                                 "best to match these settings to your maximum grass draw distance"));
 
                 if (_FadingOn.floatValue > 0f || _FadingOn.hasMixedValue)
                 {

@@ -1,3 +1,14 @@
+1.4.5
+
+Added:
+- Billboarding, parameter to control the amount of vertical rotation
+
+Changed:
+- Removed shader error workaround for MacOS added in v1.4.4. The related bug is now fixed in 2022.3.36f1+
+
+Fixed:
+- Hotfix for OUTPUT_SH4 and SAMPLE_GI shader macro errors in Unity 6000.0.9f1+
+
 1.4.4
 
 Added:

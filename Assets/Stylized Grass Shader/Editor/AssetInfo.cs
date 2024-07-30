@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -15,11 +16,10 @@ namespace StylizedGrass
         public const string ASSET_ID = "143830";
         public const string ASSET_ABRV = "SGS";
 
-        public const string INSTALLED_VERSION = "1.4.4";
+        public const string INSTALLED_VERSION = "1.4.5";
         public const string MIN_UNITY_VERSION = "2021.2";
         public const string MIN_URP_VERSION = "12.1.8";
 
-        public const string VERSION_FETCH_URL = "http://www.staggart.xyz/backend/versions/stylizedgrass.php";
         public const string DOC_URL = "http://staggart.xyz/unity/stylized-grass-shader/sgs-docs/";
         public const string FORUM_URL = "https://forum.unity.com/threads/804000/";
 
@@ -116,8 +116,8 @@ namespace StylizedGrass
             }
         }
 #endif
-
-        public static void OpenStorePage()
+        
+        public static void OpenInPackageManager()
         {
             Application.OpenURL("com.unity3d.kharma:content/" + ASSET_ID);
         }
@@ -159,9 +159,14 @@ namespace StylizedGrass
                 untestedVersion = true;
 #endif
             }
-
-            public static string fetchedVersionString;
-            public static System.Version fetchedVersion;
+            
+            public static string LATEST_VERSION
+            {
+                get => SessionState.GetString("SGS_LATEST_VERSION", INSTALLED_VERSION);
+                set => SessionState.SetString("SGS_LATEST_VERSION", value);
+            }
+            public static bool UPDATE_AVAILABLE => new Version(LATEST_VERSION) > new Version(INSTALLED_VERSION);
+            
             private static bool showPopup;
 
             public enum VersionStatus
@@ -186,56 +191,57 @@ namespace StylizedGrass
                 CheckForUpdate(true);
             }
 
-            private static int VersionStringToInt(string input)
-            {
-                //Remove all non-alphanumeric characters from version 
-                input = input.Replace(".", string.Empty);
-                input = input.Replace(" BETA", string.Empty);
-                return int.Parse(input, System.Globalization.NumberStyles.Any);
-            }
-
             public static void CheckForUpdate(bool showPopup = false)
             {
                 VersionChecking.showPopup = showPopup;
 
                 queryStatus = QueryStatus.Fetching;
 
-                using (WebClient webClient = new WebClient())
+                var url = $"https://api.assetstore.unity3d.com/package/latest-version/{ASSET_ID}";
+
+                using (System.Net.WebClient webClient = new System.Net.WebClient())
                 {
-                    webClient.DownloadStringCompleted += new System.Net.DownloadStringCompletedEventHandler(OnRetreivedServerVersion);
-                    webClient.DownloadStringAsync(new System.Uri(VERSION_FETCH_URL), fetchedVersionString);
+                    webClient.DownloadStringCompleted += OnRetrievedAPIContent;
+                    webClient.DownloadStringAsync(new System.Uri(url), apiResult);
                 }
             }
+            
+            public static string apiResult;
+            
+            private class AssetStoreItem
+            {
+                public string name;
+                public string version;
+            }
 
-            private static void OnRetreivedServerVersion(object sender, DownloadStringCompletedEventArgs e)
+            private static void OnRetrievedAPIContent(object sender, DownloadStringCompletedEventArgs e)
             {
                 if (e.Error == null && !e.Cancelled)
                 {
-                    fetchedVersionString = e.Result;
-                    fetchedVersion = new System.Version(fetchedVersionString);
-                    System.Version installedVersion = new System.Version(INSTALLED_VERSION);
+                    string result = e.Result;
 
-                    //Success
-                    IS_UPDATED = (installedVersion >= fetchedVersion) ? true : false;
+                    AssetStoreItem asset = (AssetStoreItem)JsonUtility.FromJson(result, typeof(AssetStoreItem));
 
+                    LATEST_VERSION = asset.version;
+                    
 #if SGS_DEV
-                    Debug.Log("<b>PackageVersionCheck</b> Up-to-date = " + IS_UPDATED + " (Installed:" + INSTALLED_VERSION + ") (Remote:" + fetchedVersionString + ")");
+                    Debug.Log("<b>PackageVersionCheck</b> Update available = " + UPDATE_AVAILABLE + " (Installed:" + INSTALLED_VERSION + ") (Remote:" + LATEST_VERSION + ")");
 #endif
 
                     queryStatus = QueryStatus.Completed;
 
                     if (VersionChecking.showPopup)
                     {
-                        if (!IS_UPDATED)
+                        if (UPDATE_AVAILABLE)
                         {
-                            if (EditorUtility.DisplayDialog(ASSET_NAME + ", version " + INSTALLED_VERSION, "A new version is available: " + fetchedVersionString, "Open store page", "Close"))
+                            if (EditorUtility.DisplayDialog(ASSET_NAME + ", version " + INSTALLED_VERSION, "An updated version is available: " + LATEST_VERSION, "Open Package Manager", "Close"))
                             {
-                                OpenStorePage();
+                                OpenInPackageManager();
                             }
                         }
                         else
                         {
-                            if (EditorUtility.DisplayDialog(ASSET_NAME + ", version " + INSTALLED_VERSION, "Your current version is up-to-date!", "Close")) { }
+                            if (EditorUtility.DisplayDialog(ASSET_NAME + ", version " + INSTALLED_VERSION, "Installed version is up-to-date!", "Close")) { }
                         }
                     }
                 }
@@ -243,9 +249,6 @@ namespace StylizedGrass
                 {
                     Debug.LogWarning("[" + ASSET_NAME + "] Contacting update server failed: " + e.Error.Message);
                     queryStatus = QueryStatus.Failed;
-
-                    //When failed, assume installation is up-to-date
-                    IS_UPDATED = true;
                 }
             }
 

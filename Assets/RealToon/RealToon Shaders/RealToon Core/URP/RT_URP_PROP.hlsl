@@ -246,6 +246,12 @@ CBUFFER_START(UnityPerMaterial)
 	//==
 
 
+	//== N_F_TP_ON
+		uniform float _TriPlaTile;
+		uniform float _TriPlaBlend;
+	//==
+
+
 	//== Others
 		uniform half4 _SSAOColor;
 
@@ -393,6 +399,9 @@ UNITY_DOTS_INSTANCING_START(MaterialPropertyMetadata)
 	UNITY_DOTS_INSTANCED_PROP(float, _MinFadDistance)
 	UNITY_DOTS_INSTANCED_PROP(float, _MaxFadDistance)
 
+	UNITY_DOTS_INSTANCED_PROP(float, _TriPlaTile)
+	UNITY_DOTS_INSTANCED_PROP(float, _TriPlaBlend)
+
 	UNITY_DOTS_INSTANCED_PROP(float4, _SSAOColor)
 
 	//UNITY_DOTS_INSTANCED_PROP(float, _SkinMatrixIndex)
@@ -529,6 +538,9 @@ static float unity_DOTS_Sampled_RimLightInLight;
 
 static float unity_DOTS_Sampled_MinFadDistance;
 static float unity_DOTS_Sampled_MaxFadDistance;
+
+static float unity_DOTS_Sampled_TriPlaTile;
+static float unity_DOTS_Sampled_TriPlaBlend;
 
 //static float unity_DOTS_Sampled_ReduceShadowSpotDirectionalLight;
 
@@ -672,6 +684,9 @@ void SetupDOTSLitMaterialPropertyCaches()
 	unity_DOTS_Sampled_MinFadDistance                                       = UNITY_ACCESS_DOTS_INSTANCED_PROP_WITH_DEFAULT(float, _MinFadDistance);
 	unity_DOTS_Sampled_MaxFadDistance                                       = UNITY_ACCESS_DOTS_INSTANCED_PROP_WITH_DEFAULT(float, _MaxFadDistance);
 
+    unity_DOTS_Sampled_TriPlaTile											= UNITY_ACCESS_DOTS_INSTANCED_PROP_WITH_DEFAULT(float, _TriPlaTile); //cc
+    unity_DOTS_Sampled_TriPlaBlend											= UNITY_ACCESS_DOTS_INSTANCED_PROP_WITH_DEFAULT(float, _TriPlaBlend); //cc
+
 	unity_DOTS_Sampled_SSAOColor											= UNITY_ACCESS_DOTS_INSTANCED_PROP_WITH_DEFAULT(float4, _SSAOColor);
 
 	//unity_DOTS_Sampled_SkinMatrixIndex										= UNITY_ACCESS_DOTS_INSTANCED_PROP_WITH_DEFAULT(float, _SkinMatrixIndex);
@@ -809,8 +824,11 @@ void SetupDOTSLitMaterialPropertyCaches()
 #define _RimLightColorPower								unity_DOTS_Sampled_RimLightColorPower
 #define _RimLightInLight								unity_DOTS_Sampled_RimLightInLight
 
-#define _MinDissDistance								unity_DOTS_Sampled_MinFadDistance
-#define _MaxDissDistance								unity_DOTS_Sampled_MaxFadDistance
+#define _MinFadDistance									unity_DOTS_Sampled_MinFadDistance
+#define _MaxFadDistance									unity_DOTS_Sampled_MaxFadDistance
+
+#define _TriPlaTile                                     unity_DOTS_Sampled_TriPlaTile
+#define _TriPlaBlend                                    unity_DOTS_Sampled_TriPlaBlend
 
 #define _SSAOColor                                      unity_DOTS_Sampled_SSAOColor
 
