@@ -932,7 +932,7 @@ AnimatorStateTransition:
   m_Conditions:
   - m_ConditionMode: 6
     m_ConditionEvent: CombatAction
-    m_EventTreshold: 2
+    m_EventTreshold: 1
   - m_ConditionMode: 6
     m_ConditionEvent: Zone
     m_EventTreshold: 3
@@ -1127,9 +1127,12 @@ AnimatorStateTransition:
   m_PrefabAsset: {fileID: 0}
   m_Name: 
   m_Conditions:
-  - m_ConditionMode: 6
+  - m_ConditionMode: 3
     m_ConditionEvent: CombatAction
-    m_EventTreshold: 3
+    m_EventTreshold: 1
+  - m_ConditionMode: 4
+    m_ConditionEvent: CombatAction
+    m_EventTreshold: 4
   - m_ConditionMode: 6
     m_ConditionEvent: Zone
     m_EventTreshold: 3
@@ -1566,15 +1569,15 @@ AnimatorStateMachine:
   m_StateMachineTransitions:
   - first: {fileID: 1107207875399562484}
     second: []
+  - first: {fileID: 1107307722106823392}
+    second:
+    - {fileID: 7894211219712173314}
   - first: {fileID: 1107438325616211404}
     second:
     - {fileID: 6712230498449495909}
   - first: {fileID: 1107753936289822652}
     second:
     - {fileID: -7115883707691550307}
-  - first: {fileID: 1107307722106823392}
-    second:
-    - {fileID: 7894211219712173314}
   m_StateMachineBehaviours: []
   m_AnyStatePosition: {x: -5230, y: -4150, z: 0}
   m_EntryPosition: {x: -4400, y: -3650, z: 0}
@@ -1642,10 +1645,10 @@ AnimatorStateMachine:
     m_Position: {x: 80, y: -460, z: 0}
   - serializedVersion: 1
     m_State: {fileID: 1102925734367044488}
-    m_Position: {x: 10, y: -200, z: 0}
+    m_Position: {x: -110, y: -170, z: 0}
   - serializedVersion: 1
     m_State: {fileID: 1102768471319847088}
-    m_Position: {x: 410, y: -230, z: 0}
+    m_Position: {x: 340, y: -220, z: 0}
   - serializedVersion: 1
     m_State: {fileID: -6791363211169055274}
     m_Position: {x: -260, y: -560, z: 0}
