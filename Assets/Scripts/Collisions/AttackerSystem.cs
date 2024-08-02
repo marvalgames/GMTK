@@ -61,19 +61,16 @@ namespace Collisions
                     {
                         //Debug.Log("Is Defense1 " + isDefense);
                         var checkedComponent = SystemAPI.GetComponent<CheckedComponent>(entityA);
-                        //checkedComponent.anyDefenseStarted = false;
                         if (checkedComponent is
                             {
                                 hitTriggered: false, anyAttackStarted: true, anyDefenseStarted: true,
                                 attackCompleted: false
-                            } && hwB >= .6 && isDefense)//can change as skill
+                            } && hwB >= .6 && hwB < 1 && isDefense)//can change as skill
                         {
                             var deflectPoints = 10;
                             var effectsIndex = 1; //0 dead usually 1 hurt 2 deflect?
-
                             //Debug.Log("hit weight B " + hwB);
                             //Debug.Log("DEFLECT ");
-                            
                             ecb.AddComponent(entityA,
                                 new DeflectComponent
                                     { DeflectLanded = deflectPoints, DeflectReceived = 0, EntityDeflecting = entityA });
