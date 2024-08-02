@@ -11,6 +11,8 @@ namespace Sandbox.Player
     public partial class PlayerCombatSystem : SystemBase
     {
         private static readonly int Vertical = Animator.StringToHash("Vertical");
+        private static readonly int CombatAction = Animator.StringToHash("CombatAction");
+
 
         protected override void OnUpdate()
         {
@@ -27,7 +29,9 @@ namespace Sandbox.Player
                 {
                     var buttonXpressed = inputController.buttonX_Press;//kick types
                     var buttonXtap = inputController.buttonX_Tap;//punch types
-                    var bPressed = inputController.buttonB_SinglePress; // put back for general LD 50 change since no jump
+                    //var bPressed = inputController.buttonB_SinglePress; // put back for general LD 50 change since no jump
+                    var bPressed = inputController.buttonB_held;
+                    var bButtonUp = inputController.buttonB_Released;
                     var allowKick = buttonXpressed == true && (math.abs(animator.GetFloat(Vertical)) < 2 || applyImpulse.Grounded == false);
                     if (buttonXtap)//punch
                     {
@@ -40,6 +44,10 @@ namespace Sandbox.Player
                     else if (bPressed)
                     {
                         playerCombat.SelectMove(10);
+                    }
+                    else if(bButtonUp)
+                    {
+                        animator.SetInteger(CombatAction, 0);
                     }
                 }
             ).Run();
