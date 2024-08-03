@@ -61,7 +61,6 @@ namespace Sandbox.Player
             if (animationIndex <= 0 || moveUsing.active == false) return;//0 is none on enum
             var defense = animationIndex == (int)AnimationType.Deflect;
             lastCombatAction = combatAction;
-            Debug.Log("last combat " + lastCombatAction);
             StartMove(animationIndex, primaryTrigger, defense);
         }
 
@@ -73,7 +72,7 @@ namespace Sandbox.Player
                 var checkedComponent = entityManager.GetComponentData<CheckedComponent>(meleeEntity);
                 checkedComponent.anyAttackStarted = true;
                 checkedComponent.anyDefenseStarted = defense;
-                Debug.Log("DEFENSE ANY STARTED " + defense);
+                //Debug.Log("DEFENSE ANY STARTED " + defense);
                 checkedComponent.primaryTrigger = primaryTrigger;
                 entityManager.SetComponentData(meleeEntity, checkedComponent);
             }

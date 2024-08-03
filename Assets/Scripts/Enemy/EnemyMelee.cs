@@ -88,6 +88,7 @@ public class EnemyMelee : MonoBehaviour
             checkedComponent.anyDefenseStarted = defense;
             checkedComponent.primaryTrigger = primaryTrigger;
             entityManager.SetComponentData(meleeEntity, checkedComponent);
+            //Debug.Log("anim index " + animationIndex);
             StartMove(animationIndex);
         }
         

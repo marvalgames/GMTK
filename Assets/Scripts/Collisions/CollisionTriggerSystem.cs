@@ -183,6 +183,7 @@ namespace Collisions
                         .anyDefenseStarted; //only true when trigger type is hand or similar so if true punching and similar still false
                 }
 
+                //Debug.Log("TYPE A B " + typeA + " " + typeB);
                 //Debug.Log("BLOCK " + defenseA + " " + defenseB);
 
                 //check if arm/hands colliding with each other (feet for attacker? melee? setting trigger type to that instead of hand)
@@ -301,7 +302,9 @@ namespace Collisions
                 else if ((punchingA || meleeA || defenseA || alwaysDamageA) && !ammoA && !ammoB)
                 {
                     //Debug.Log("always a " + alwaysDamageA + " always b " + alwaysDamageB + " cha " + ch_a + " chb " + ch_b);
-                    //Debug.Log("def a " + defenseA + " def b " + defenseB);
+                    //Debug.Log("DEFENSE A B " + defenseA + " " + defenseB);
+                    //Debug.Log("MELEE A B " + meleeA + " " + meleeB);
+
 
                     var collisionComponent =
                         new CollisionComponent()

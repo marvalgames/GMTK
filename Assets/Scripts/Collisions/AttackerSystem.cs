@@ -43,29 +43,31 @@ namespace Collisions
                     var enemyA = SystemAPI.HasComponent<EnemyComponent>(entityA);
                     var enemyB = SystemAPI.HasComponent<EnemyComponent>(entityB);
                     float hwA = 0;
-                    float hwB = 0;
+                    //float hwB = 0;
                     //Debug.Log("Is Defense0 " + isDefense);
                     if (SystemAPI.HasComponent<AnimatorWeightsComponent>(entityA))
                     {
                         hwA = SystemAPI.GetComponent<AnimatorWeightsComponent>(entityA).hitWeight;
-                        //Debug.Log("hit weight A " + hwA);
                     }
 
                     if (SystemAPI.HasComponent<AnimatorWeightsComponent>(entityB))
                     {
-                        hwB = SystemAPI.GetComponent<AnimatorWeightsComponent>(entityB).hitWeight;
+                        //hwB = SystemAPI.GetComponent<AnimatorWeightsComponent>(entityB).hitWeight;
                         //Debug.Log("hit weight B " + hwB);
                     }
 
                     if ((playerA && enemyB || playerB && enemyA) || (enemyA && enemyB))
                     {
                         //Debug.Log("Is Defense1 " + isDefense);
+
                         var checkedComponent = SystemAPI.GetComponent<CheckedComponent>(entityA);
+                        //Debug.Log("hit weight A " + hwA +
+                                  //" " + checkedComponent.hitTriggered + " " + checkedComponent.anyAttackStarted + " " + checkedComponent.anyDefenseStarted);
                         if (checkedComponent is
                             {
                                 hitTriggered: false, anyAttackStarted: true, anyDefenseStarted: true,
                                 attackCompleted: false
-                            } && hwB >= .6 && hwB < 1 && isDefense)//can change as skill
+                            } && hwA >= .6 && hwA < 1 && isDefense)//can change as skill
                         {
                             var deflectPoints = 10;
                             var effectsIndex = 1; //0 dead usually 1 hurt 2 deflect?
@@ -154,10 +156,7 @@ namespace Collisions
                             }
 
                             var damage = hitPower * hwA;
-
                             //Debug.Log("damage0 " + damage);
-
-
                             ecb.AddComponent(entityA,
                                 new DamageComponent
                                 {
