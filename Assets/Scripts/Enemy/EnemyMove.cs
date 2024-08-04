@@ -56,6 +56,8 @@ public struct EnemyStateComponent : IComponentData
     public CombatStates CombatState;
     //public AttackStages AttackStages;
     public LocalTransform targetZone;
+    public bool enemyStrikeAllowed;
+
 
 }
 
@@ -167,7 +169,7 @@ public class EnemyMove : MonoBehaviour
     public float backupSpeed = 15f;
     public float backupSeconds = .25f;
     public float backupTimer = 0;
-
+    //public float afterMoveTimer = 0;
 
     [HideInInspector]
     public Vector3 originalPosition;
@@ -183,7 +185,7 @@ public class EnemyMove : MonoBehaviour
     public ParticleSystem stunEffect;//used by freeze system
 
     public bool ignoreAgentAI;
-
+    
     [SerializeField]
     float duration = 3.0f;
     float normalizedTime = 0.0f;
@@ -425,6 +427,7 @@ public class EnemyMove : MonoBehaviour
         }
     }
 
+   
 
 
 

@@ -32,6 +32,8 @@ public class CombatActionState : StateMachineBehaviour
         animator.GetComponent<EnemyMelee>().StopAimIK();
         animator.GetComponent<EnemyMelee>().StopIK();
         animator.GetComponent<EnemyMelee>().EndAttack();
+        animator.SetInteger(CombatAction, 0);
+        Debug.Log("STRIKE END");
 
 
     }

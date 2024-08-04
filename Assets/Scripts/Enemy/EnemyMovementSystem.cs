@@ -122,11 +122,13 @@ namespace Enemy
                         if (levelCompleteComponent.areaIndex > LevelManager.instance.currentLevelCompleted) return;
                         var animator = enemyMove.anim;
                         var defensiveRole = SystemAPI.GetComponent<DefensiveStrategyComponent>(e).currentRole;
+                        var basicMovement = SystemAPI.GetComponent<EnemyMovementComponent>(e).enabled;
                         var enemyMeleeMovementComponent = SystemAPI.GetComponent<EnemyMeleeMovementComponent>(e);
                         var enemyWeaponMovementComponent = SystemAPI.GetComponent<EnemyWeaponMovementComponent>(e);
                         var enemyBehaviourComponent = SystemAPI.GetComponent<EnemyBehaviourComponent>(e);
                         var meleeMovement = enemyMeleeMovementComponent.enabled;
                         var weaponMovement = enemyWeaponMovementComponent.enabled;
+                        var enemyStrikeAllowed = enemyState.enemyStrikeAllowed;
                         
                         enemyMove.speedMultiple = 1;
                         enemyState.selectMove = false;
@@ -160,6 +162,7 @@ namespace Enemy
                             var distFromStation = math.distance(homePosition, enemyPosition);
                             var chaseRange = enemyBehaviourComponent.chaseRange;
                             var aggression = enemyBehaviourComponent.aggression;
+                            //var stopRange = basicMovement ? 10 : enemyBehaviourComponent.stopRange;
                             var stopRange = enemyBehaviourComponent.stopRange;
                             var weaponRaised = WeaponMotion.None;
                             //if closer than weapon shooting stop range always melee if melee switch active 
@@ -175,8 +178,6 @@ namespace Enemy
                                     meleeMovement = false;
                                 }
                             }
-                            
-
                             
                             if (distFromOpponent < stopRange && weaponMovement && enemyMeleeMovementComponent.switchUp)
                             {
@@ -234,10 +235,16 @@ namespace Enemy
                                 }
                             }
 
+                            //meleeMovement = true;
+                            
                             var backupZoneClose = enemyMeleeMovementComponent.combatStrikeDistanceZoneBegin;
                             var backupZoneFar = enemyMeleeMovementComponent.combatStrikeDistanceZoneEnd;
 
                             var strike = false;
+                            // var delayCompleted = true;
+                            //enemyMove.enemyStrikeAllowed = true;
+                            Debug.Log("STRIKE ALLOW " + enemyStrikeAllowed);
+
                             if (distFromOpponent < backupZoneClose && meleeMovement)
                             {
                                 enemyMove.backup = true; //only time to turn on 
@@ -246,7 +253,8 @@ namespace Enemy
                                 if (n <= aggression && enemyMove.backupTimer <= 0 &&
                                     distFromOpponent > backupZoneClose / 2)
                                 {
-                                    enemyMove.backup = false; //only time to turn on 
+                                    enemyMove.backup = false; //only time to turn on
+                                    //enemyMove.enemyStrike = true;
                                     strike = true;
                                 }
                             }
@@ -268,9 +276,13 @@ namespace Enemy
                                 {
                                     strike = true;
                                     enemyMove.backup = false; //try
+                                    //enemyMove.enemyStrike = true;
                                 }
                             }
 
+                            
+                            if(basicMovement || !enemyStrikeAllowed) strike = false;
+                            
                             var backup = enemyMove.backup;
                             if (stayHome && distFromStation > chaseRange) chaseRange = distFromStation;
                             MoveStates moveState;

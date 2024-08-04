@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Collisions;
 using Unity.Entities;
+using UnityEditor.Build;
 using UnityEngine;
 using UnityEngine.AI;
 using Random = UnityEngine.Random;
@@ -19,8 +20,12 @@ public class EnemyMelee : MonoBehaviour
     public MovesManager movesInspector;
     private EntityManager entityManager;
     private Entity meleeEntity;
- 
+    public float afterMoveTimer;
+    public bool enemyStrikeAllowed;
+    public float afterMoveSeconds = 1.5f;
+
     private static readonly int CombatAction = Animator.StringToHash("CombatAction");
+    private static readonly int Zone = Animator.StringToHash("Zone");
 
     void Start()
     {
@@ -34,11 +39,10 @@ public class EnemyMelee : MonoBehaviour
             }
 
             //entityManager.AddComponentObject(meleeEntity, this);
-            if(meleeEntity != Entity.Null) 
+            if (meleeEntity != Entity.Null)
                 entityManager.AddComponentObject(meleeEntity, this);
-
         }
-        
+
         animator = GetComponent<Animator>();
         //var em = GetComponent<EnemyMove>();
         agent = GetComponent<NavMeshAgent>();
@@ -48,13 +52,12 @@ public class EnemyMelee : MonoBehaviour
         for (var i = 0; i < movesInspector.Moves.Count; i++)
         {
             var move = movesInspector.Moves[i];
-            if(!move.active) continue;
+            if (!move.active) continue;
 
             move.target = moveUsing.target; //default target assigned in system
             move.targetEntity = meleeEntity;
             moveList.Add(move);
         }
-
     }
 
     public void SelectMoveUsing()
@@ -77,10 +80,10 @@ public class EnemyMelee : MonoBehaviour
         {
             moveUsing.moveParticleSystem.Play(true);
         }
-        
+
         var animationIndex = (int)moveUsing.animationType;
         var primaryTrigger = moveUsing.triggerType;
-            
+
         if (entityManager.HasComponent<CheckedComponent>(meleeEntity))
         {
             var defense = animationIndex == (int)AnimationType.Deflect;
@@ -91,19 +94,52 @@ public class EnemyMelee : MonoBehaviour
             //Debug.Log("anim index " + animationIndex);
             StartMove(animationIndex);
         }
-        
     }
 
     private int combatAction { get; set; }
 
     private void StartMove(int animationIndex)
     {
-        animator.SetInteger(CombatAction, animationIndex);
+        if (enemyStrikeAllowed)
+        {
+            Debug.Log("STRIKE UPDATE");
+            animator.SetInteger(CombatAction, animationIndex);
+            //enemyStrikeAllowed = false;
+            //afterMoveTimer = 0;
+        }
     }
 
+    public void SetAfterMoveDelay(float afterMoveSeconds)
+    {
+        //bool delayCompleted = true;
+        if (agent == null) return;
+        //enemyStrikeAllowed = false;
+        //if (enemyStrikeAllowed == false)
+        {
+            afterMoveTimer += Time.deltaTime;
+            if (afterMoveTimer >= afterMoveSeconds)
+            {
+                enemyStrikeAllowed = !enemyStrikeAllowed;
+                afterMoveTimer = 0;
+            }
+        }
 
+        // if (afterMoveTimer < afterMoveSeconds)
+        // {
+        //     afterMoveTimer += Time.deltaTime;
+        //     enemyStrikeAllowed = false;
+        // }
+        // else
+        // {
+        //     //afterMoveTimer = 0;
+        //     enemyStrikeAllowed = true;
+        // }
 
-    public void StartAttackUpdateCheckComponent()//event
+        //enemyStrikeAllowed = true;
+        // return delayCompleted;
+    }
+
+    public void StartAttackUpdateCheckComponent() //event
     {
         if (entityManager.HasComponent<CheckedComponent>(meleeEntity))
         {
@@ -111,22 +147,30 @@ public class EnemyMelee : MonoBehaviour
             checkedComponent.anyAttackStarted = true;
             checkedComponent.attackFirstFrame = true;
             checkedComponent.hitTriggered = false;
+            //checkedComponent.enemyStrikeAllowed = enemyStrikeAllowed;
             entityManager.SetComponentData(meleeEntity, checkedComponent);
-            
         }
     }
-    
-    public void StartMotionUpdateCheckComponent()//event
+    public void GetEnemyState() //event
+    {
+        if (entityManager.HasComponent<EnemyStateComponent>(meleeEntity))
+        {
+            var enemyStateComponent = entityManager.GetComponentData<EnemyStateComponent>(meleeEntity);
+            enemyStateComponent.enemyStrikeAllowed = enemyStrikeAllowed;
+            entityManager.SetComponentData(meleeEntity, enemyStateComponent);
+        }
+    }
+
+    public void StartMotionUpdateCheckComponent() //event
     {
         if (entityManager.HasComponent<CheckedComponent>(meleeEntity))
         {
             var checkedComponent = entityManager.GetComponentData<CheckedComponent>(meleeEntity);
         }
-      
     }
 
 
-    public void MatchupAdjustments()//event
+    public void MatchupAdjustments() //event
     {
         if (entityManager.HasComponent<MatchupComponent>(meleeEntity))
         {
@@ -148,16 +192,15 @@ public class EnemyMelee : MonoBehaviour
                 entityManager.SetComponentData(meleeEntity, score);
             }
 
-            checkedComponent.hitLanded = false;//set at end of attack only
+            checkedComponent.hitLanded = false; //set at end of attack only
             checkedComponent.anyDefenseStarted = false;
             checkedComponent.anyAttackStarted = false;
             checkedComponent.AttackStages = AttackStages.End;
 
             entityManager.SetComponentData(meleeEntity, checkedComponent);
-
         }
     }
-    
+
     public void StartAgent()
     {
         agent.enabled = true;
@@ -181,9 +224,6 @@ public class EnemyMelee : MonoBehaviour
     {
     }
 
-    
-    
-    
 
     public void StopIK()
     {
@@ -197,9 +237,8 @@ public class EnemyMelee : MonoBehaviour
     public void LateUpdateSystem()
     {
         if (entityManager == default) return;
+        SetAfterMoveDelay(afterMoveSeconds);
+        GetEnemyState();
         Aim();
     }
-
-
-    
 }

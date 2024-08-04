@@ -29,7 +29,7 @@ public class Moves
     public Vector3 target;
     public float weight;
     public Entity targetEntity;//not shown
-
+    public float timeAfterMove = .5f;
 
     [Header("EFFECTS")]
     public AudioSource moveAudioSource;
