@@ -21,6 +21,7 @@ namespace Collisions
         public int totalHits;
         public int totalAttempts;
         public TriggerType primaryTrigger;
+        public int animationIndex;
     }
 
     public struct CollisionComponent : IComponentData

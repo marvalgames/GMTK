@@ -72,8 +72,9 @@ namespace Sandbox.Player
                 var checkedComponent = entityManager.GetComponentData<CheckedComponent>(meleeEntity);
                 checkedComponent.anyAttackStarted = true;
                 checkedComponent.anyDefenseStarted = defense;
-                //Debug.Log("DEFENSE ANY STARTED " + defense);
+                Debug.Log("DEFENSE ANY STARTED " + defense + " " + primaryTrigger);
                 checkedComponent.primaryTrigger = primaryTrigger;
+                checkedComponent.animationIndex = animationIndex;
                 entityManager.SetComponentData(meleeEntity, checkedComponent);
             }
 

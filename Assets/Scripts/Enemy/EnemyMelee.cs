@@ -89,7 +89,8 @@ public class EnemyMelee : MonoBehaviour
             var defense = animationIndex == (int)AnimationType.Deflect;
             var checkedComponent = entityManager.GetComponentData<CheckedComponent>(meleeEntity);
             checkedComponent.anyDefenseStarted = defense;
-            checkedComponent.primaryTrigger = primaryTrigger;
+            checkedComponent.primaryTrigger = primaryTrigger;         
+            checkedComponent.animationIndex = animationIndex;
             entityManager.SetComponentData(meleeEntity, checkedComponent);
             //Debug.Log("anim index " + animationIndex);
             StartMove(animationIndex);
