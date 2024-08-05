@@ -119,16 +119,18 @@ namespace Sandbox.Player
                     leftStickY = 0;
                 }
 
-
-                bool aimMode = false;
+                var combatMode = false;
+                var aimMode = false;
                 if (actorWeapon)
                 {
                     var aimComponent = SystemAPI.GetComponent<ActorWeaponAimComponent>(entity);
                     var distanceFromTarget = math.distance(transform.ValueRW.Position, aimComponent.targetPosition);
                     aimComponent.distanceFromTarget = distanceFromTarget;
+                    combatMode = aimComponent.combatMode;
                     if (aimComponent.aimMode)
                     {
                         aimMode = true;
+                        combatMode = false;
                         forwardAdjustment = 2;
                     }
 
@@ -196,9 +198,23 @@ namespace Sandbox.Player
                     transform.ValueRW.Position = tr;
                 }
 
-                applyImpulseComponent.ValueRW.forwardSpeed = forwardSpeed;
+                // public void FaceWaypoint()
+                // {
+                //     if (!agent.enabled) return;
+                //     var lookDir = aiTarget - transform.position;
+                //     lookDir.y = 0;
+                //     if (lookDir.magnitude < .003f) return;
+                //     var rot = Quaternion.LookRotation(lookDir);
+                //     transform.rotation = Quaternion.Slerp(transform.rotation, rot, rotateSpeed * Time.deltaTime);
+                //
+                // }
 
-                if (math.length(targetDirection) > 0 && !aimMode)
+
+                applyImpulseComponent.ValueRW.forwardSpeed = forwardSpeed;
+                if (combatMode)
+                {
+                }
+                else if (math.length(targetDirection) > 0 && !aimMode)
                 {
                     quaternion targetRotation = Quaternion.LookRotation(inputDirection, math.up());
                     transform.ValueRW.Rotation = math.slerp(transform.ValueRW.Rotation, targetRotation,
@@ -262,7 +278,7 @@ namespace Sandbox.Player
                     // Debug.Log("AC " + goAudioPlayer.AudioClip);
                     var stickSpeed = applyImpulseComponent.animatorStickSpeed;
 
-                    
+
                     if (math.abs(stickSpeed) >= .0001f && applyImpulseComponent.Grounded)
                     {
                         if (goAudioPlayer.AudioSource)
@@ -294,7 +310,7 @@ namespace Sandbox.Player
                             audioSource.pitch = 0;
                             audioSource.Stop();
                         }
-                      
+
 
                         if (goVisualEffect.VisualEffect != null)
                         {

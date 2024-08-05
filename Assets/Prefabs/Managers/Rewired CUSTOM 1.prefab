@@ -48,6 +48,7 @@ MonoBehaviour:
   _dontDestroyOnLoad: 1
   _userData:
     configVars:
+      updateMode: 0
       updateLoop: 1
       alwaysUseUnityInput: 0
       windowsStandalonePrimaryInputSource: 0
@@ -60,7 +61,6 @@ MonoBehaviour:
       ps4_primaryInputSource: 0
       ps5_primaryInputSource: 0
       webGL_primaryInputSource: 0
-      stadia_primaryInputSource: 0
       useXInput: 1
       useNativeMouse: 1
       useEnhancedDeviceSupport: 1
@@ -148,12 +148,6 @@ MonoBehaviour:
         disableKeyboard: 0
         disableMouse: 0
         ignoreInputWhenAppNotInFocus: 1
-      platformVars_stadia:
-        disableKeyboard: 0
-        disableMouse: 0
-        ignoreInputWhenAppNotInFocus: 1
-        useNativeKeyboard: 1
-        useNativeMouse: 1
       maxJoysticksPerPlayer: 1
       autoAssignJoysticks: 1
       assignJoysticksToPlayingPlayersOnly: 0
@@ -197,6 +191,7 @@ MonoBehaviour:
     - _id: 9999999
       _name: System
       _descriptiveName: System
+      _key: 
       _startPlaying: 1
       _defaultJoystickMaps: []
       _defaultMouseMaps:
@@ -219,6 +214,7 @@ MonoBehaviour:
     - _id: 1
       _name: Player0
       _descriptiveName: Player0
+      _key: 
       _startPlaying: 1
       _defaultJoystickMaps:
       - _enabled: 1
@@ -262,6 +258,7 @@ MonoBehaviour:
     - _id: 3
       _name: Player1
       _descriptiveName: Player1
+      _key: 
       _startPlaying: 1
       _defaultJoystickMaps: []
       _defaultMouseMaps: []
@@ -281,6 +278,7 @@ MonoBehaviour:
     - _id: 4
       _name: Player2
       _descriptiveName: Player2
+      _key: 
       _startPlaying: 1
       _defaultJoystickMaps: []
       _defaultMouseMaps: []
@@ -300,6 +298,7 @@ MonoBehaviour:
     - _id: 5
       _name: Player3
       _descriptiveName: Player3
+      _key: 
       _startPlaying: 1
       _defaultJoystickMaps: []
       _defaultMouseMaps: []
@@ -323,6 +322,9 @@ MonoBehaviour:
       _descriptiveName: LS
       _positiveDescriptiveName: Move Horizontal Right
       _negativeDescriptiveName: Move Horizontal Left
+      _key: 
+      _positiveKey: 
+      _negativeKey: 
       _behaviorId: 0
       _userAssignable: 1
       _categoryId: 0
@@ -332,6 +334,9 @@ MonoBehaviour:
       _descriptiveName: LS
       _positiveDescriptiveName: Move Vertical Up
       _negativeDescriptiveName: Move Vertical Down
+      _key: 
+      _positiveKey: 
+      _negativeKey: 
       _behaviorId: 0
       _userAssignable: 1
       _categoryId: 0
@@ -341,6 +346,9 @@ MonoBehaviour:
       _descriptiveName: A
       _positiveDescriptiveName: 
       _negativeDescriptiveName: 
+      _key: 
+      _positiveKey: 
+      _negativeKey: 
       _behaviorId: 2
       _userAssignable: 1
       _categoryId: 0
@@ -350,6 +358,9 @@ MonoBehaviour:
       _descriptiveName: B
       _positiveDescriptiveName: 
       _negativeDescriptiveName: 
+      _key: 
+      _positiveKey: 
+      _negativeKey: 
       _behaviorId: 0
       _userAssignable: 1
       _categoryId: 0
@@ -359,6 +370,9 @@ MonoBehaviour:
       _descriptiveName: X
       _positiveDescriptiveName: 
       _negativeDescriptiveName: 
+      _key: 
+      _positiveKey: 
+      _negativeKey: 
       _behaviorId: 0
       _userAssignable: 1
       _categoryId: 0
@@ -368,6 +382,9 @@ MonoBehaviour:
       _descriptiveName: LB
       _positiveDescriptiveName: 
       _negativeDescriptiveName: 
+      _key: 
+      _positiveKey: 
+      _negativeKey: 
       _behaviorId: 0
       _userAssignable: 1
       _categoryId: 0
@@ -377,6 +394,9 @@ MonoBehaviour:
       _descriptiveName: LT
       _positiveDescriptiveName: 
       _negativeDescriptiveName: 
+      _key: 
+      _positiveKey: 
+      _negativeKey: 
       _behaviorId: 0
       _userAssignable: 1
       _categoryId: 0
@@ -386,6 +406,9 @@ MonoBehaviour:
       _descriptiveName: Select
       _positiveDescriptiveName: 
       _negativeDescriptiveName: 
+      _key: 
+      _positiveKey: 
+      _negativeKey: 
       _behaviorId: 0
       _userAssignable: 1
       _categoryId: 0
@@ -395,6 +418,9 @@ MonoBehaviour:
       _descriptiveName: Start
       _positiveDescriptiveName: 
       _negativeDescriptiveName: 
+      _key: 
+      _positiveKey: 
+      _negativeKey: 
       _behaviorId: 0
       _userAssignable: 1
       _categoryId: 0
@@ -404,6 +430,9 @@ MonoBehaviour:
       _descriptiveName: RS
       _positiveDescriptiveName: RightHorizontalRight
       _negativeDescriptiveName: RightHorizontalLeft
+      _key: 
+      _positiveKey: 
+      _negativeKey: 
       _behaviorId: 0
       _userAssignable: 1
       _categoryId: 0
@@ -413,6 +442,9 @@ MonoBehaviour:
       _descriptiveName: RS
       _positiveDescriptiveName: RightHorizontalRight
       _negativeDescriptiveName: RightHorizontalLeft
+      _key: 
+      _positiveKey: 
+      _negativeKey: 
       _behaviorId: 0
       _userAssignable: 1
       _categoryId: 0
@@ -422,6 +454,9 @@ MonoBehaviour:
       _descriptiveName: RS
       _positiveDescriptiveName: RightVerticalUp
       _negativeDescriptiveName: RightVerticalDown
+      _key: 
+      _positiveKey: 
+      _negativeKey: 
       _behaviorId: 0
       _userAssignable: 1
       _categoryId: 0
@@ -431,6 +466,9 @@ MonoBehaviour:
       _descriptiveName: RS
       _positiveDescriptiveName: RightVerticalUp
       _negativeDescriptiveName: RightVerticalDown
+      _key: 
+      _positiveKey: 
+      _negativeKey: 
       _behaviorId: 0
       _userAssignable: 1
       _categoryId: 0
@@ -440,6 +478,9 @@ MonoBehaviour:
       _descriptiveName: Y
       _positiveDescriptiveName: 
       _negativeDescriptiveName: 
+      _key: 
+      _positiveKey: 
+      _negativeKey: 
       _behaviorId: 0
       _userAssignable: 1
       _categoryId: 0
@@ -449,6 +490,9 @@ MonoBehaviour:
       _descriptiveName: RT
       _positiveDescriptiveName: 
       _negativeDescriptiveName: 
+      _key: 
+      _positiveKey: 
+      _negativeKey: 
       _behaviorId: 2
       _userAssignable: 1
       _categoryId: 0
@@ -458,6 +502,9 @@ MonoBehaviour:
       _descriptiveName: RB
       _positiveDescriptiveName: 
       _negativeDescriptiveName: 
+      _key: 
+      _positiveKey: 
+      _negativeKey: 
       _behaviorId: 0
       _userAssignable: 1
       _categoryId: 0
@@ -467,6 +514,9 @@ MonoBehaviour:
       _descriptiveName: Dpad Vertical
       _positiveDescriptiveName: Dpad Up
       _negativeDescriptiveName: Dpad Down
+      _key: 
+      _positiveKey: 
+      _negativeKey: 
       _behaviorId: 0
       _userAssignable: 1
       _categoryId: 0
@@ -476,6 +526,9 @@ MonoBehaviour:
       _descriptiveName: Dpad Horizontal
       _positiveDescriptiveName: Dpad Right
       _negativeDescriptiveName: Dpad Left
+      _key: 
+      _positiveKey: 
+      _negativeKey: 
       _behaviorId: 0
       _userAssignable: 1
       _categoryId: 0
@@ -485,6 +538,9 @@ MonoBehaviour:
       _descriptiveName: UIHorizontal
       _positiveDescriptiveName: UIHorizontal Right
       _negativeDescriptiveName: UIHorizontal Left
+      _key: 
+      _positiveKey: 
+      _negativeKey: 
       _behaviorId: 0
       _userAssignable: 1
       _categoryId: 2
@@ -494,6 +550,9 @@ MonoBehaviour:
       _descriptiveName: UIVertical
       _positiveDescriptiveName: UIVertical Up
       _negativeDescriptiveName: UIVertical Down
+      _key: 
+      _positiveKey: 
+      _negativeKey: 
       _behaviorId: 0
       _userAssignable: 1
       _categoryId: 2
@@ -503,6 +562,9 @@ MonoBehaviour:
       _descriptiveName: UISubmit
       _positiveDescriptiveName: 
       _negativeDescriptiveName: 
+      _key: 
+      _positiveKey: 
+      _negativeKey: 
       _behaviorId: 0
       _userAssignable: 1
       _categoryId: 2
@@ -512,6 +574,9 @@ MonoBehaviour:
       _descriptiveName: UICancel
       _positiveDescriptiveName: 
       _negativeDescriptiveName: 
+      _key: 
+      _positiveKey: 
+      _negativeKey: 
       _behaviorId: 0
       _userAssignable: 1
       _categoryId: 2
@@ -521,6 +586,9 @@ MonoBehaviour:
       _descriptiveName: Action0
       _positiveDescriptiveName: 
       _negativeDescriptiveName: 
+      _key: 
+      _positiveKey: 
+      _negativeKey: 
       _behaviorId: 0
       _userAssignable: 1
       _categoryId: 0
@@ -530,6 +598,9 @@ MonoBehaviour:
       _descriptiveName: Action1
       _positiveDescriptiveName: 
       _negativeDescriptiveName: 
+      _key: 
+      _positiveKey: 
+      _negativeKey: 
       _behaviorId: 0
       _userAssignable: 1
       _categoryId: 0
@@ -539,6 +610,9 @@ MonoBehaviour:
       _descriptiveName: Use1
       _positiveDescriptiveName: 
       _negativeDescriptiveName: 
+      _key: 
+      _positiveKey: 
+      _negativeKey: 
       _behaviorId: 0
       _userAssignable: 1
       _categoryId: 0
@@ -548,6 +622,9 @@ MonoBehaviour:
       _descriptiveName: Use2
       _positiveDescriptiveName: 
       _negativeDescriptiveName: 
+      _key: 
+      _positiveKey: 
+      _negativeKey: 
       _behaviorId: 0
       _userAssignable: 1
       _categoryId: 0
@@ -557,6 +634,9 @@ MonoBehaviour:
       _descriptiveName: Menu Right Bumper
       _positiveDescriptiveName: 
       _negativeDescriptiveName: 
+      _key: 
+      _positiveKey: 
+      _negativeKey: 
       _behaviorId: 0
       _userAssignable: 1
       _categoryId: 2
@@ -566,6 +646,9 @@ MonoBehaviour:
       _descriptiveName: Menu Left Bumper
       _positiveDescriptiveName: 
       _negativeDescriptiveName: 
+      _key: 
+      _positiveKey: 
+      _negativeKey: 
       _behaviorId: 0
       _userAssignable: 1
       _categoryId: 2
@@ -575,6 +658,9 @@ MonoBehaviour:
       _descriptiveName: LeftStickAction
       _positiveDescriptiveName: 
       _negativeDescriptiveName: 
+      _key: 
+      _positiveKey: 
+      _negativeKey: 
       _behaviorId: 0
       _userAssignable: 1
       _categoryId: 0
@@ -584,22 +670,28 @@ MonoBehaviour:
       _descriptiveName: RightStickAction
       _positiveDescriptiveName: 
       _negativeDescriptiveName: 
+      _key: 
+      _positiveKey: 
+      _negativeKey: 
       _behaviorId: 0
       _userAssignable: 1
       _categoryId: 0
     actionCategories:
     - _name: Default
       _descriptiveName: Default
+      _key: 
       _tag: 
       _id: 0
       _userAssignable: 1
     - _name: Menu
       _descriptiveName: Menu
+      _key: 
       _tag: 
       _id: 2
       _userAssignable: 1
     - _name: Dialog
       _descriptiveName: Dialog
+      _key: 
       _tag: 
       _id: 3
       _userAssignable: 1
@@ -661,6 +753,7 @@ MonoBehaviour:
     mapCategories:
     - _name: Default
       _descriptiveName: Default
+      _key: 
       _tag: 
       _id: 0
       _userAssignable: 1
@@ -668,6 +761,7 @@ MonoBehaviour:
       _checkConflictsCategoryIds: 
     - _name: Menu
       _descriptiveName: Menu
+      _key: 
       _tag: 
       _id: 2
       _userAssignable: 1
@@ -675,6 +769,7 @@ MonoBehaviour:
       _checkConflictsCategoryIds: 
     - _name: Dialog
       _descriptiveName: Category0
+      _key: 
       _tag: 
       _id: 3
       _userAssignable: 1
@@ -683,24 +778,30 @@ MonoBehaviour:
     joystickLayouts:
     - _name: Default
       _descriptiveName: Default
+      _key: 
       _id: 0
     - _name: AlternateLayout
       _descriptiveName: AlternateLayout
+      _key: 
       _id: 2
     keyboardLayouts:
     - _name: Default
       _descriptiveName: Default
+      _key: 
       _id: 0
     mouseLayouts:
     - _name: Default
       _descriptiveName: Default
+      _key: 
       _id: 0
     - _name: Layout0
       _descriptiveName: Layout0
+      _key: 
       _id: 1
     customControllerLayouts:
     - _name: Default
       _descriptiveName: Default
+      _key: 
       _id: 0
     joystickMaps:
     - id: 7
@@ -2713,47 +2814,69 @@ MonoBehaviour:
       _descriptiveName: TouchController
       _id: 1
       _typeGuidString: 7c4c35b7-0bde-44f2-b9a9-c99dd8730b4d
+      _key: 
       _elementIdentifiers:
       - _id: 0
         _name: AxisHorizontal
         _positiveName: 
         _negativeName: 
+        _key: 
+        _positiveKey: 
+        _negativeKey: 
         _elementType: 0
         _compoundElementType: 0
       - _id: 1
         _name: AxisVertical
         _positiveName: 
         _negativeName: 
+        _key: 
+        _positiveKey: 
+        _negativeKey: 
         _elementType: 0
         _compoundElementType: 0
       - _id: 2
         _name: AxisPadHorizontal
         _positiveName: 
         _negativeName: 
+        _key: 
+        _positiveKey: 
+        _negativeKey: 
         _elementType: 0
         _compoundElementType: 0
       - _id: 3
         _name: AxisPadVertical
         _positiveName: 
         _negativeName: 
+        _key: 
+        _positiveKey: 
+        _negativeKey: 
         _elementType: 0
         _compoundElementType: 0
       - _id: 5
         _name: TouchButton
         _positiveName: 
         _negativeName: 
+        _key: 
+        _positiveKey: 
+        _negativeKey: 
         _elementType: 1
         _compoundElementType: 0
       - _id: 6
         _name: FollowButton
         _positiveName: 
         _negativeName: 
+        _key: 
+        _positiveKey: 
+        _negativeKey: 
         _elementType: 1
         _compoundElementType: 0
       - _id: 7
         _name: StraightShotButton
         _positiveName: 
         _negativeName: 
+        _key: 
+        _positiveKey: 
+        _negativeKey: 
         _elementType: 1
         _compoundElementType: 0
       _axes:

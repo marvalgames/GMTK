@@ -58,6 +58,7 @@ namespace Sandbox.Player
         public bool isMouseMoving;
         public float angleToTarget;
         public bool aimMode;
+        public bool combatMode;
         public float distanceFromTarget;
         public bool startDashAimMode;
         public bool aimDisabled;

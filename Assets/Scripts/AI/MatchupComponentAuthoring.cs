@@ -18,6 +18,7 @@ public struct MatchupComponent : IComponentData
     public bool View360;
     public Entity closestOpponent;//player or enemy who can attack enemies
     public Entity closestPlayerEntity;//player only
+    public Entity closestEnemyEntity;//player only
     public bool validTarget;
     public float lookAtDistance;
     public float closestDistance;

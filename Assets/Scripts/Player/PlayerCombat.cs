@@ -9,13 +9,16 @@ namespace Sandbox.Player
     public class PlayerCombat : MonoBehaviour
     {
         public MovesManager movesInspector;
-        private Animator animator;
+        [HideInInspector]
+        public Animator animator;
         private List<Moves> moveList = new List<Moves>();
         public Moves moveUsing = new Moves();
         private Entity meleeEntity;
         private EntityManager entityManager;
         private static readonly int CombatAction = Animator.StringToHash("CombatAction");
         public int lastCombatAction;
+        [Header("Aim Speeds")] public float rotateSpeed = 15;
+        public float turnSpeed = 1;
 
         void Start()
         {

@@ -34,6 +34,11 @@ public partial class PlayerInputAmmoSystem : SystemBase
                 playerWeaponAimComponent.aimDisabled = true;
             }
 
+            if (aimMode)
+            {
+                playerWeaponAimComponent.combatMode = false;
+            }
+            
             // if ( 
             //(
             //attachWeapon.attachWeaponType == (int)WeaponType.Gun && rtPressed == true ||

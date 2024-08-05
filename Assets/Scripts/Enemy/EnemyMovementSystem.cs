@@ -243,7 +243,7 @@ namespace Enemy
                             var strike = false;
                             // var delayCompleted = true;
                             //enemyMove.enemyStrikeAllowed = true;
-                            Debug.Log("STRIKE ALLOW " + enemyStrikeAllowed);
+                            //Debug.Log("STRIKE ALLOW " + enemyStrikeAllowed);
 
                             if (distFromOpponent < backupZoneClose && meleeMovement)
                             {

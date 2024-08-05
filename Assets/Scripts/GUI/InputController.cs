@@ -36,6 +36,7 @@ public struct InputControllerComponent : IComponentData
     public bool rightTriggerDown;
 
 
+    public bool rightStickPressed;
 
     public bool leftBumperPressed;
     public bool leftBumperReleased;

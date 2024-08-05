@@ -31,7 +31,8 @@ public partial class InputControllerSystemUpdate : SystemBase
 
             inputController.leftStickX = player.GetAxis("Move Horizontal");
             inputController.leftStickY = player.GetAxis("Move Vertical");
-            
+
+            inputController.rightStickPressed = player.GetButtonDown("RightStickAction");
             
             inputController.leftBumperPressed = player.GetButtonDown("LeftBumper");
             inputController.rightBumperPressed = player.GetButtonDown("RightBumper");
