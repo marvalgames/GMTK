@@ -49,7 +49,7 @@ namespace Sandbox.Player
                     if (playerDash is { DashTimeTicker: 0, DelayTimeTicker: <= 0 })
                     {
                         var bPressed =
-                            inputController.buttonB_DoublePress; // put back for general LD 50 change since no jump
+                            inputController.buttonB_Pressed; // put back for general LD 50 change since no jump
                         if (bPressed)
                         {
                             playerDash.DashTimeTicker += dt;

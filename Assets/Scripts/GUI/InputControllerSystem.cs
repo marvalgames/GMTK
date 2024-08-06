@@ -35,6 +35,9 @@ public partial class InputControllerSystemUpdate : SystemBase
             inputController.rightStickPressed = player.GetButtonDown("RightStickAction");
             
             inputController.leftBumperPressed = player.GetButtonDown("LeftBumper");
+            inputController.leftBumperReleased = player.GetButtonUp("LeftBumper");
+
+            
             inputController.rightBumperPressed = player.GetButtonDown("RightBumper");
             
             

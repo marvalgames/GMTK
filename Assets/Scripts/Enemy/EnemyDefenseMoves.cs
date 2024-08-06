@@ -45,6 +45,8 @@ namespace Enemy
 
         void Execute(Entity entity, ref AnimationManagerComponentData animationComponent)
         {
+            //evade strike always
+            //change to certain amount of frames (not just attack started) before turning off 
             for (int i = 0; i < playerEntities.Length; i++)
             {
                 var playerEntity = playerEntities[i];
@@ -55,7 +57,7 @@ namespace Enemy
                     {
                         animationComponent.evadeStrike = true;
                     }
-                    else if(!checkedComponent.anyAttackStarted)
+                    else if(!checkedComponent.anyAttackStarted)//not false until player move complete (Block)
                     {
                         animationComponent.evadeStrike = false;
                     }
@@ -74,6 +76,7 @@ namespace Enemy
             {
                 if (checkedComponent.ValueRW.attackFirstFrame)
                 {
+                    Debug.Log("FIRST FRAME " + checkedComponent.ValueRW.attackFirstFrame);
                     checkedComponent.ValueRW.attackFirstFrame = false;
                 }
             }

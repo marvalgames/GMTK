@@ -151,6 +151,17 @@ namespace Collisions
                             }
 
                             var damage = hitPower * hwA;
+
+                            if (SystemAPI.HasComponent<EvadeComponent>(entityB))
+                            {
+                                var evade = SystemAPI.GetComponent<EvadeComponent>(entityB);
+                                if (evade.evadeStrike)
+                                {
+                                    damage = 0;
+                                    Debug.Log("ZERO DAMAGE");
+                                }
+                            }
+
                             ecb.AddComponent(entityA,
                                 new DamageComponent
                                 {

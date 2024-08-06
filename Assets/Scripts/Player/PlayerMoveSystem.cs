@@ -57,6 +57,7 @@ namespace Sandbox.Player
     {
         //public float currentSpeed;
         public float rotateSpeed;
+        public float combatRotateSpeed;
         public bool snapRotation;
         public float dampTime;
         public bool move2d;
@@ -140,7 +141,6 @@ namespace Sandbox.Player
                 applyImpulseComponent.ValueRW.playerMoving = false;
 
                 if (currentSpeed == 0) stickSpeed = 0;
-                //var camTransform = cam.transform;
                 var targetDirection = (leftStickX * camTransform.right * forwardSpeed +
                                        leftStickY * camTransform.forward * forwardSpeed);
                 var inputDirection = new Vector3(targetDirection.x, 0.0f, targetDirection.z).normalized;
@@ -198,20 +198,16 @@ namespace Sandbox.Player
                     transform.ValueRW.Position = tr;
                 }
 
-                // public void FaceWaypoint()
-                // {
-                //     if (!agent.enabled) return;
-                //     var lookDir = aiTarget - transform.position;
-                //     lookDir.y = 0;
-                //     if (lookDir.magnitude < .003f) return;
-                //     var rot = Quaternion.LookRotation(lookDir);
-                //     transform.rotation = Quaternion.Slerp(transform.rotation, rot, rotateSpeed * Time.deltaTime);
-                //
-                // }
+                var inDash = false;
+                if (SystemAPI.HasComponent<PlayerDashComponent>(entity))
+                {
+                    var playerDashComponent = SystemAPI.GetComponent<PlayerDashComponent>(entity);
+                    inDash = playerDashComponent.InDash;
+                }
 
 
                 applyImpulseComponent.ValueRW.forwardSpeed = forwardSpeed;
-                if (combatMode)
+                if (combatMode && !inDash)
                 {
                     var matchupComponent = SystemAPI.GetComponent<MatchupComponent>(entity);
 
@@ -220,7 +216,7 @@ namespace Sandbox.Player
                     var playerPosition = transform.ValueRW.Position;
                     var targetPosition = SystemAPI.GetComponent<LocalTransform>(targetEntity).Position;
                     var direction = math.normalize(targetPosition - playerPosition);
-                    var slerpDampTime = 15;
+                    var slerpDampTime = playerMoveComponent.combatRotateSpeed;
                     var targetRotation = quaternion.LookRotationSafe(direction, math.up());//always face player
                     var playerRotation = SystemAPI.GetComponent<LocalTransform>(entity).Rotation;
                     playerRotation = math.slerp(playerRotation, targetRotation.value,

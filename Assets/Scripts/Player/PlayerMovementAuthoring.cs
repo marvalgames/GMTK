@@ -17,7 +17,8 @@ public class PlayerMoveGameObjectClass : IComponentData
 
 public class PlayerMovementAuthoring : MonoBehaviour
 {
-    public float rotateSpeed = 18;
+    public float rotateSpeed = 15;
+    public float combatRotateSpeed = 15;
     public bool snapRotation = false;
     public float dampTime = 0;
     public bool move2d = false;
@@ -51,6 +52,7 @@ public class PlayerMovementBaker : Baker<PlayerMovementAuthoring>
         var e = GetEntity(authoring.gameObject, TransformUsageFlags.Dynamic);
         AddComponent(e, new PlayerMoveComponent()
         {
+            combatRotateSpeed = authoring.combatRotateSpeed,
             rotateSpeed = authoring.rotateSpeed,
             snapRotation = authoring.snapRotation,
             dampTime = authoring.dampTime,

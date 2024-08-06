@@ -20,7 +20,7 @@ public partial class PlayerInputAmmoSystem : SystemBase
             var dpadY = inputController.dpadY;
             var currentWeaponMotion = (WeaponMotion) animator.GetInteger(WeaponRaised);
             playerWeaponAimComponent.weaponRaised = currentWeaponMotion;
-            if (inputController.leftBumperPressed)
+            if (inputController.leftTriggerPressed)
             {
                 playerWeaponAimComponent.aimMode = !playerWeaponAimComponent.aimMode;
             }

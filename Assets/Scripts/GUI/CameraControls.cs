@@ -90,7 +90,7 @@ public class CameraControls : MonoBehaviour
 
         var gamePad = controller.type == ControllerType.Joystick;
         var keyboard = controller.type == ControllerType.Keyboard;
-        bool modifier = player.GetButton("RightBumper"); // get the "held" state of the button
+        bool modifier = player.GetButton("RightTrigger"); // get the "held" state of the button
 
         changeX = true;
         changeY = true;

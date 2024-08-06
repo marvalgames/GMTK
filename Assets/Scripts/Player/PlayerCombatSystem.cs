@@ -30,8 +30,9 @@ namespace Sandbox.Player
                     var buttonXpressed = inputController.buttonX_Press;//kick types
                     var buttonXtap = inputController.buttonX_Tap;//punch types
                     //var bPressed = inputController.buttonB_SinglePress; // put back for general LD 50 change since no jump
-                    var bPressed = inputController.buttonB_held;
-                    var bButtonUp = inputController.buttonB_Released;
+                    //var bPressed = inputController.buttonB_held;
+                    var leftBumperPressed = inputController.leftBumperPressed;
+                    var leftBumperUp = inputController.leftBumperReleased;
                     var allowKick = buttonXpressed == true && (math.abs(animator.GetFloat(Vertical)) < 2 || applyImpulse.Grounded == false);
                     if (buttonXtap)//punch
                     {
@@ -41,11 +42,11 @@ namespace Sandbox.Player
                     {
                         playerCombat.SelectMove(2);
                     }
-                    else if (bPressed)
+                    else if (leftBumperPressed)
                     {
                         playerCombat.SelectMove(10);
                     }
-                    else if(bButtonUp)
+                    else if(leftBumperUp)
                     {
                         animator.SetInteger(CombatAction, 0);
                     }

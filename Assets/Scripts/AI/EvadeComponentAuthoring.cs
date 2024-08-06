@@ -7,6 +7,7 @@ using UnityEngine;
 [Serializable]
 public struct EvadeComponent : IComponentData
 {
+    public bool evadeStrike;
     public bool InEvade;
     public float evadeMoveTime;
     public bool randomEvadeMoveTime;

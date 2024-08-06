@@ -12,14 +12,12 @@ namespace Managers
 
         protected override void OnUpdate()
         {
-            Entities.WithoutBurst().ForEach((Animator animator, ref AnimationManagerComponentData animationManagerData) =>
+            Entities.WithoutBurst().ForEach((Animator animator,ref EvadeComponent evadeComponent,
+                    ref AnimationManagerComponentData animationManagerData) =>
                 {
-                    animator.SetBool(EvadeStrike, animationManagerData.evadeStrike);
-
-                    if (animationManagerData.evadeStrike)
-                    {
-                        //animationManagerData.evadeStrike = false;
-                    }
+                    var evadeStrike = animationManagerData.evadeStrike;
+                    animator.SetBool(EvadeStrike, evadeStrike);
+                    evadeComponent.evadeStrike = evadeStrike;
                 }
             ).Run();
     
