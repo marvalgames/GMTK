@@ -133,9 +133,7 @@ public partial class BossStrategySystem : SystemBase
 
             var bossXZ = new float3(bossLocalTransform.Position.x, 0, bossLocalTransform.Position.z);
             var playerXZ = new float3(playerMove.Position.x, 0, playerMove.Position.z);
-
             var direction = math.normalize(playerXZ - bossXZ);
-
             var dist = math.distance(bossXZ, playerXZ);
             if (dist < 1) direction = -math.forward();//????????????????? 1
             var targetRotation = quaternion.LookRotationSafe(direction, math.up());//always face player

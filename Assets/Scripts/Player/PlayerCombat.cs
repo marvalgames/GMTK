@@ -17,9 +17,7 @@ namespace Sandbox.Player
         private EntityManager entityManager;
         private static readonly int CombatAction = Animator.StringToHash("CombatAction");
         public int lastCombatAction;
-        [Header("Aim Speeds")] public float rotateSpeed = 15;
-        public float turnSpeed = 1;
-
+       
         void Start()
         {
             animator = GetComponent<Animator>();

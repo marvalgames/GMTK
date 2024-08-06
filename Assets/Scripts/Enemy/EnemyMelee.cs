@@ -103,7 +103,7 @@ public class EnemyMelee : MonoBehaviour
     {
         if (enemyStrikeAllowed)
         {
-            Debug.Log("STRIKE UPDATE");
+            //Debug.Log("STRIKE UPDATE");
             animator.SetInteger(CombatAction, animationIndex);
             //enemyStrikeAllowed = false;
             //afterMoveTimer = 0;

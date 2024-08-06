@@ -169,7 +169,7 @@ namespace Sandbox.Player
                     }
 
 
-                    if (aimMode)
+                    if (aimMode || combatMode)
                     {
                         pv.ValueRW.Linear.x = inputDirection.x * currentSpeed * impulseFactor;
                         pv.ValueRW.Linear.z = inputDirection.z * currentSpeed * impulseFactor;
@@ -213,6 +213,19 @@ namespace Sandbox.Player
                 applyImpulseComponent.ValueRW.forwardSpeed = forwardSpeed;
                 if (combatMode)
                 {
+                    var matchupComponent = SystemAPI.GetComponent<MatchupComponent>(entity);
+
+                    //var localTransform = SystemAPI.GetComponent<LocalTransform>(entity);
+                    var targetEntity = matchupComponent.closestEnemyEntity;
+                    var playerPosition = transform.ValueRW.Position;
+                    var targetPosition = SystemAPI.GetComponent<LocalTransform>(targetEntity).Position;
+                    var direction = math.normalize(targetPosition - playerPosition);
+                    var slerpDampTime = 15;
+                    var targetRotation = quaternion.LookRotationSafe(direction, math.up());//always face player
+                    var playerRotation = SystemAPI.GetComponent<LocalTransform>(entity).Rotation;
+                    playerRotation = math.slerp(playerRotation, targetRotation.value,
+                        slerpDampTime * SystemAPI.Time.DeltaTime);
+                    transform.ValueRW.Rotation = playerRotation;
                 }
                 else if (math.length(targetDirection) > 0 && !aimMode)
                 {
@@ -251,8 +264,7 @@ namespace Sandbox.Player
                     var dampTime =
                         animStickSpeed < .003 ? 0 : playerMove.dampTime; //if stick not moved (stopping) then no damp
 
-                    animator.SetFloat(Vertical, animStickSpeed, dampTime,
-                        SystemAPI.Time.DeltaTime);
+                    animator.SetFloat(Vertical, animStickSpeed, dampTime, SystemAPI.Time.DeltaTime);
                     animator.SetBool(Grounded, applyImpulse.Grounded);
                 }
             ).Run();
