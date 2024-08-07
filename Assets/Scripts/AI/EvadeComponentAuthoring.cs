@@ -8,6 +8,7 @@ using UnityEngine;
 public struct EvadeComponent : IComponentData
 {
     public bool evadeStrike;
+    public float evadeStrikeRating;
     public bool InEvade;
     public float evadeMoveTime;
     public bool randomEvadeMoveTime;
@@ -29,6 +30,7 @@ public class EvadeComponentAuthoring : MonoBehaviour
     public float evadeMoveTime = 2.0f;
     public bool zMovement = true;
     public float evadeMoveSpeed = 5;
+    public float evadeStrikeRating = 8;
     public bool randomEvadeMoveTime = true;
 
     class EvadeComponentBaker : Baker<EvadeComponentAuthoring>
@@ -40,6 +42,7 @@ public class EvadeComponentAuthoring : MonoBehaviour
                 new EvadeComponent
                 {
                     evadeMoveTime = authoring.evadeMoveTime,
+                    evadeStrikeRating = authoring.evadeStrikeRating,
                     originalEvadeMoveSpeed = authoring.evadeMoveTime,
                     evadeMoveSpeed = authoring.evadeMoveSpeed,
                     zMovement = authoring.zMovement,

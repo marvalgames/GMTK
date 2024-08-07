@@ -10,7 +10,7 @@ namespace Sandbox.Player
         public float meleeWeaponPower = 1;
         public float hitPower = 10;//punch kick
         public float speed = 12;
-
+        public float combatSpeed = 6;
 
 
 
@@ -32,7 +32,9 @@ namespace Sandbox.Player
                         //speed = authoring.Ratings.speed,
                         //gameSpeed =  authoring.Ratings.speed,
                         speed = authoring.speed,
+                        combatSpeed = authoring.combatSpeed,
                         gameSpeed =  authoring.speed,
+                        gameCombatSpeed = authoring.combatSpeed,
                         gameWeaponPower = authoring.meleeWeaponPower,
                         WeaponPower = authoring.meleeWeaponPower,
                         hitPower = authoring.hitPower

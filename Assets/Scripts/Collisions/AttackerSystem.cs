@@ -155,10 +155,10 @@ namespace Collisions
                             if (SystemAPI.HasComponent<EvadeComponent>(entityB))
                             {
                                 var evade = SystemAPI.GetComponent<EvadeComponent>(entityB);
-                                if (evade.evadeStrike)
+                                if (evade.evadeStrike && damage <= evade.evadeStrikeRating)
                                 {
+                                    Debug.Log("ZERO DAMAGE " +  (damage * 1) );
                                     damage = 0;
-                                    Debug.Log("ZERO DAMAGE");
                                 }
                             }
 

@@ -47,13 +47,14 @@ namespace Enemy
         {
             //evade strike always
             //change to certain amount of frames (not just attack started) before turning off 
+            var checkedComponentEnemy = checkedGroup[entity];
             for (int i = 0; i < playerEntities.Length; i++)
             {
                 var playerEntity = playerEntities[i];
                 if (checkedGroup.HasComponent(playerEntity))
                 {
                     var checkedComponent = checkedGroup[playerEntity];
-                    if (checkedComponent.attackFirstFrame)
+                    if (checkedComponent.attackFirstFrame && !checkedComponentEnemy.anyAttackStarted)
                     {
                         animationComponent.evadeStrike = true;
                     }

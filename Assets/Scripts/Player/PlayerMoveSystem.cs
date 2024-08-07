@@ -139,7 +139,7 @@ namespace Sandbox.Player
                 }
 
                 applyImpulseComponent.ValueRW.playerMoving = false;
-
+                if (combatMode) currentSpeed = ratingsComponent.ValueRO.gameCombatSpeed;
                 if (currentSpeed == 0) stickSpeed = 0;
                 var targetDirection = (leftStickX * camTransform.right * forwardSpeed +
                                        leftStickY * camTransform.forward * forwardSpeed);
