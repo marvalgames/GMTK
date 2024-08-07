@@ -157,7 +157,7 @@ namespace Collisions
                                 var evade = SystemAPI.GetComponent<EvadeComponent>(entityB);
                                 if (evade.evadeStrike && damage <= evade.evadeStrikeRating)
                                 {
-                                    Debug.Log("ZERO DAMAGE " +  (damage * 1) );
+                                    //Debug.Log("ZERO DAMAGE " +  (damage * 1) );
                                     damage = 0;
                                 }
                             }

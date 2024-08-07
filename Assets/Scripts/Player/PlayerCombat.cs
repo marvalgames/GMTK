@@ -17,7 +17,9 @@ namespace Sandbox.Player
         private EntityManager entityManager;
         private static readonly int CombatAction = Animator.StringToHash("CombatAction");
         public int lastCombatAction;
-       
+        private static readonly int CombatMode = Animator.StringToHash("CombatMode");
+        private static readonly int Zone = Animator.StringToHash("Zone");
+
         void Start()
         {
             animator = GetComponent<Animator>();
@@ -73,20 +75,34 @@ namespace Sandbox.Player
                 var checkedComponent = entityManager.GetComponentData<CheckedComponent>(meleeEntity);
                 checkedComponent.anyAttackStarted = true;
                 checkedComponent.anyDefenseStarted = defense;
-                Debug.Log("DEFENSE ANY STARTED " + defense + " " + primaryTrigger);
                 checkedComponent.primaryTrigger = primaryTrigger;
                 checkedComponent.animationIndex = animationIndex;
                 entityManager.SetComponentData(meleeEntity, checkedComponent);
             }
-
             animator.SetInteger(CombatAction, animationIndex);
-            animator.SetLayerWeight(0, 0);
-            animator.SetLayerWeight(1, 1);
         }
 
         
         public void Aim()
         {
+            if (entityManager.HasComponent<ActorWeaponAimComponent>(meleeEntity))
+            {
+                var aimComponent = entityManager.GetComponentData<ActorWeaponAimComponent>(meleeEntity);
+                animator.SetInteger(Zone, aimComponent.combatMode ? 1 : 0);
+                //animator.SetBool(CombatMode, aimComponent.combatMode);
+                
+            }
+
+            // if (entityManager.HasComponent<ActorWeaponAimComponent>(meleeEntity))
+            // {
+            //     var aimComponent = entityManager.GetComponentData<ActorWeaponAimComponent>(meleeEntity);
+            //     if (aimComponent.combatMode)
+            //     {
+            //         animator.SetLayerWeight(1, 1);
+            //     }
+            //     animator.SetBool(CombatMode, aimComponent.combatMode);
+            //     
+            // }
 
         }
 
