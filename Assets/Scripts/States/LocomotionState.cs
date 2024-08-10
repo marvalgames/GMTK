@@ -24,6 +24,10 @@ public class LocomotionState : StateMachineBehaviour
         {
             animator.SetInteger(WeaponRaised, (int)WeaponMotion.Lowering);
         }
+        else if (animationType == AnimationType.DashRoll)
+        {
+            animator.SetInteger(Dash, 0);
+        }
 
 
 

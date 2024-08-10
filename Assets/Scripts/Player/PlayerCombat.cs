@@ -61,6 +61,7 @@ namespace Sandbox.Player
                 }
             }
 
+            Debug.Log("SELECT MOVE");
             if (animationIndex <= 0 || moveUsing.active == false) return;//0 is none on enum
             var defense = animationIndex == (int)AnimationType.Deflect;
             lastCombatAction = combatAction;
@@ -79,6 +80,17 @@ namespace Sandbox.Player
                 checkedComponent.animationIndex = animationIndex;
                 entityManager.SetComponentData(meleeEntity, checkedComponent);
             }
+            if (entityManager.HasComponent<ActorWeaponAimComponent>(meleeEntity))
+            {
+                var aimComponent = entityManager.GetComponentData<ActorWeaponAimComponent>(meleeEntity);
+                aimComponent.combatMode = true;
+                entityManager.SetComponentData(meleeEntity, aimComponent);
+                //animator.SetInteger(Zone, aimComponent.combatMode ? 1 : 0);
+                //animator.SetBool(CombatMode, aimComponent.combatMode);
+
+            }
+            Debug.Log("START MOVE");
+            animator.SetInteger(Zone, 1);
             animator.SetInteger(CombatAction, animationIndex);
         }
 
@@ -88,21 +100,10 @@ namespace Sandbox.Player
             if (entityManager.HasComponent<ActorWeaponAimComponent>(meleeEntity))
             {
                 var aimComponent = entityManager.GetComponentData<ActorWeaponAimComponent>(meleeEntity);
-                animator.SetInteger(Zone, aimComponent.combatMode ? 1 : 0);
+                //animator.SetInteger(Zone, aimComponent.combatMode ? 1 : 0);
                 //animator.SetBool(CombatMode, aimComponent.combatMode);
                 
             }
-
-            // if (entityManager.HasComponent<ActorWeaponAimComponent>(meleeEntity))
-            // {
-            //     var aimComponent = entityManager.GetComponentData<ActorWeaponAimComponent>(meleeEntity);
-            //     if (aimComponent.combatMode)
-            //     {
-            //         animator.SetLayerWeight(1, 1);
-            //     }
-            //     animator.SetBool(CombatMode, aimComponent.combatMode);
-            //     
-            // }
 
         }
 
