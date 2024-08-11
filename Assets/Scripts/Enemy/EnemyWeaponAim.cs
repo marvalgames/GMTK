@@ -68,7 +68,8 @@ public class EnemyWeaponAim : MonoBehaviour
         if (!agent.enabled) return;
         //weaponRaised = true;
 
-
+        var aim = animator.GetBool(Aim);
+        
         if (weaponRaised)
         {
             //currentAimWeight = Mathf.Lerp(currentAimWeight, aimWeight, Time.deltaTime * aimWeightLerpFactor);
@@ -105,6 +106,8 @@ public class EnemyWeaponAim : MonoBehaviour
 
             //rigBuilder = GetComponent<RigBuilder>();
             //rigBuilder.Build();
+            //var actor = manager.GetComponentData<ActorWeaponAimComponent>(entity);
+            //weaponRaised = actor.weaponRaised
 
              var matchComponent = manager.GetComponentData<MatchupComponent>(entity);
              var aimTargetEntity = matchComponent.targetEntity;

@@ -980,7 +980,8 @@ namespace PixelCrushers.DialogueSystem
         protected void PopulateCache(Transform speaker, Transform listener)
         {
             if (string.IsNullOrEmpty(barkConversation) && DialogueDebug.logWarnings) Debug.Log(string.Format("{0}: Bark (speaker={1}, listener={2}): conversation title is blank", new System.Object[] { DialogueDebug.Prefix, speaker, listener }), speaker);
-            ConversationModel conversationModel = new ConversationModel(DialogueManager.masterDatabase, barkConversation, speaker, listener, DialogueManager.allowLuaExceptions, DialogueManager.isDialogueEntryValid, barkEntryID);
+            ConversationModel conversationModel = new ConversationModel(DialogueManager.masterDatabase, barkConversation, speaker, listener, DialogueManager.allowLuaExceptions, DialogueManager.isDialogueEntryValid, 
+                barkEntryID, false, DialogueManager.useLinearGroupMode);
             cachedState = conversationModel.firstState;
             if ((cachedState == null) && DialogueDebug.logWarnings) Debug.Log(string.Format("{0}: Bark (speaker={1}, listener={2}): '{3}' has no START entry", new System.Object[] { DialogueDebug.Prefix, speaker, listener, barkConversation }), speaker);
             if (!cachedState.hasAnyResponses && DialogueDebug.logWarnings) Debug.Log(string.Format("{0}: Bark (speaker={1}, listener={2}): '{3}' has no valid bark lines", new System.Object[] { DialogueDebug.Prefix, speaker, listener, barkConversation }), speaker);

@@ -11,6 +11,7 @@ public struct AnimatorWeightsComponent : IComponentData
     public float hitWeight;
     public float aimWeight;
     public float deflectWeight;
+    public bool firstFrame;
 }
 
 [RequireMatchingQueriesForUpdate]

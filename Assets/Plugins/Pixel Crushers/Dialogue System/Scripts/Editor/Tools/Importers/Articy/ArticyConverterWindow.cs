@@ -77,6 +77,7 @@ namespace PixelCrushers.DialogueSystem.Articy
             DrawDropdownsPopup();
             DrawSlotsPopup();
             DrawRecursionMode();
+            DrawInstructionsPopup();
             DrawFlowFragmentMode();
             DrawOtherScriptsField();
             DrawUseTechnicalNamesToggle();
@@ -195,6 +196,16 @@ namespace PixelCrushers.DialogueSystem.Articy
         }
 
         /// <summary>
+        /// Draws the recursion mode dropdown.
+        /// </summary>
+        private void DrawInstructionsPopup()
+        {
+            EditorGUI.BeginChangeCheck();
+            prefs.ConvertInstructionsAs = (ConverterPrefs.CodeNodeMode)EditorGUILayout.EnumPopup(new GUIContent("Instructions as", "Specify whether instructions are group nodes or regular nodes. If instruction links to input pin that checks value set by instruction, set to Regular Node."), prefs.ConvertInstructionsAs, GUILayout.Width(300));
+            if (EditorGUI.EndChangeCheck()) ConverterPrefsTools.Save(prefs);
+        }
+
+        /// <summary>
         /// Draws the flow fragments dropdown.
         /// </summary>
         private void DrawFlowFragmentMode()
@@ -301,6 +312,9 @@ namespace PixelCrushers.DialogueSystem.Articy
             prefs.ReorderIDs = EditorGUILayout.Toggle(new GUIContent("Reorder IDs",
                 "Reorder internal dialogue entry IDs depth-first after importing."), 
                 prefs.ReorderIDs);
+            prefs.DelayEvaluation = EditorGUILayout.Toggle(new GUIContent("Delay Evaluation",
+                "If Dialogue Manager's Other Settings > Reevaluate Links After Subtitle ticked, you can generally untick this unless you're using SimStatus. If ticked, it will add <Delay Evaluation> nodes between nodes with Scripts and nodes with Conditions."),
+                prefs.DelayEvaluation);
         }
 
         /// <summary>
@@ -791,6 +805,7 @@ namespace PixelCrushers.DialogueSystem.Articy
                         ArticyEditorTools.FindPortraitTexturesInAssetDatabase(articyData, prefs.PortraitFolder, database);
                         if (prefs.ReorderIDs) ReorderIDs(database);
                         EditorUtility.SetDirty(database);
+                        PrefabUtility.RecordPrefabInstancePropertyModifications(database);
                         ConvertTextTable(assetName);
                         AssetDatabase.SaveAssets();
                         Debug.Log(string.Format("{0}: Created database '{1}' containing {2} actors, {3} conversations, {4} items/quests, {5} variables, and {6} locations.",

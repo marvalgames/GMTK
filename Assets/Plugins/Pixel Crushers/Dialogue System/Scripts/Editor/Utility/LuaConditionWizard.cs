@@ -339,6 +339,12 @@ namespace PixelCrushers.DialogueSystem
                             case CustomLuaParameterType.Variable:
                             case CustomLuaParameterType.VariableName:
                                 item.customParamValues[i] = EditorGUILayout.Popup((int)item.customParamValues[i], variablePopupNames);
+                                if ((int)item.customParamValues[i] == 0)
+                                {
+                                    // New variable:
+                                    item.newVariableName = EditorGUILayout.TextField(item.newVariableName);
+                                    item.newVariableType = (FieldType)EditorGUILayout.EnumPopup(item.newVariableType);
+                                }
                                 break;
                             case CustomLuaParameterType.Item:
                                 item.customParamValues[i] = EditorGUILayout.Popup((int)item.customParamValues[i], itemNames);
@@ -411,6 +417,12 @@ namespace PixelCrushers.DialogueSystem
                             case CustomLuaParameterType.Variable:
                             case CustomLuaParameterType.VariableName:
                                 item.customParamValues[i] = EditorGUILayout.Popup((int)item.customParamValues[i], variablePopupNames);
+                                if ((int)item.customParamValues[i] == 0)
+                                {
+                                    // New variable:
+                                    item.newVariableName = EditorGUILayout.TextField(item.newVariableName);
+                                    item.newVariableType = (FieldType)EditorGUILayout.EnumPopup(item.newVariableType);
+                                }
                                 break;
                             case CustomLuaParameterType.Item:
                                 item.customParamValues[i] = EditorGUILayout.Popup((int)item.customParamValues[i], itemNames);
@@ -505,9 +517,24 @@ namespace PixelCrushers.DialogueSystem
         {
             foreach (var item in conditionItems)
             {
-                if (item.conditionType == ConditionWizardResourceType.Variable && item.variableNamesIndex == 0)
+                if (item.conditionType == ConditionWizardResourceType.Variable)
                 {
                     AddNewVariable(item.newVariableName, item.newVariableType);
+                }
+                else if (item.conditionType == ConditionWizardResourceType.Custom)
+                {
+                    if (0 <= item.customLuaFuncIndex && item.customLuaFuncIndex < customLuaFuncs.Length)
+                    {
+                        var luaFuncRecord = customLuaFuncs[item.customLuaFuncIndex];
+                        for (int p = 0; p < luaFuncRecord.parameters.Length; p++)
+                        {
+                            if (luaFuncRecord.parameters[p] == CustomLuaParameterType.Variable ||
+                                luaFuncRecord.parameters[p] == CustomLuaParameterType.VariableName)
+                            {
+                                AddNewVariable(item.newVariableName, item.newVariableType);
+                            }
+                        }
+                    }
                 }
             }
         }
@@ -742,12 +769,22 @@ namespace PixelCrushers.DialogueSystem
                                     case CustomLuaParameterType.Variable:
                                         if (item.customParamValues[p] == null) item.customParamValues[p] = (int)0;
                                         var variableIndex = (int)item.customParamValues[p];
-                                        sb.Append((0 <= variableIndex && variableIndex < variableNames.Length) ? ("Variable[\"" + DialogueLua.StringToTableIndex(variableNames[variableIndex]) + "\"]") : "\"\"");
+                                        var value = (0 <= variableIndex && variableIndex < variableNames.Length) ? ("Variable[\"" + DialogueLua.StringToTableIndex(variableNames[variableIndex]) + "\"]") : "\"\"";
+                                        if (variableIndex == 0)
+                                        {
+                                            value = "Variable[\"" + DialogueLua.StringToTableIndex(item.newVariableName) + "\"]";
+                                        }
+                                        sb.Append(value);
                                         break;
                                     case CustomLuaParameterType.VariableName:
                                         if (item.customParamValues[p] == null) item.customParamValues[p] = (int)0;
                                         var variableNameIndex = (int)item.customParamValues[p];
-                                        sb.Append((0 <= variableNameIndex && variableNameIndex < variableNames.Length) ? ("\"" + variableNames[variableNameIndex] + "\"") : "\"\"");
+                                        var variableNameValue = (0 <= variableNameIndex && variableNameIndex < variableNames.Length) ? ("\"" + variableNames[variableNameIndex] + "\"") : "\"\"";
+                                        if (variableNameIndex == 0)
+                                        {
+                                            variableNameValue = "\"" + item.newVariableName + "\"";
+                                        }
+                                        sb.Append(variableNameValue);
                                         break;
                                     case CustomLuaParameterType.Item:
                                         if (item.customParamValues[p] == null) item.customParamValues[p] = (int)0;

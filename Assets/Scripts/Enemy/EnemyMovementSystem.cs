@@ -209,28 +209,32 @@ namespace Enemy
                                 if (SystemAPI.HasComponent<ActorWeaponAimComponent>(e))
                                 {
                                     var actorWeaponAim = SystemAPI.GetComponent<ActorWeaponAimComponent>(e);
+                                    weaponRaised = WeaponMotion.None;
 
 
                                     if (playerIsFiring && roleReversal == RoleReversalMode.On && !weaponComponent.tooFarTooAttack  || distFromOpponent <
                                         enemyWeaponMovementComponent.shootRangeDistance && weaponMovement &&
                                         roleReversal == RoleReversalMode.Off && enemyInShootingRange)
                                     {
-                                        if (weaponComponent.IsFiring == 0)
+                                        if (weaponComponent.firstFiring)
                                         {
                                             weaponRaised = WeaponMotion.Started;
+                                            //weaponComponent.firstFiring = false;
                                         }
-                                        else
+                                        else if(weaponComponent.IsFiring == 1)
                                         {
                                             weaponRaised = WeaponMotion.Raised;
                                         }
 
-                                        weaponComponent.IsFiring = 1;
-                                        //Debug.Log("FIRING " + e);
-                                        actorWeaponAim.weaponRaised = weaponRaised;
-                                        SystemAPI.SetComponent(e, actorWeaponAim);
-                                        SystemAPI.SetComponent(e, weaponComponent);
+                                        weaponComponent.IsFiring = 1;//hmm
+                                        
+                                        //Debug.Log("FIRING " + weaponComponent.IsFiring);
                                         //meleeMovement = true;//test
                                     }
+                                    actorWeaponAim.weaponRaised = weaponRaised;
+                                    SystemAPI.SetComponent(e, actorWeaponAim);
+                                    SystemAPI.SetComponent(e, weaponComponent);
+
                                     
                                 }
                             }

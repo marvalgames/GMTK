@@ -28,6 +28,7 @@ public struct WeaponComponent : IComponentData
     public float Duration;//rate counter for job
     //public bool CanFire;
     public int IsFiring;
+    public bool firstFiring;
     public LocalToWorld AmmoStartLocalToWorld;
     public LocalTransform AmmoStartTransform;
     //public Rotation AmmoStartRotation;

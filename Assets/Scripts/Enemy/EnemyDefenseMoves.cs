@@ -77,7 +77,7 @@ namespace Enemy
             {
                 if (checkedComponent.ValueRW.attackFirstFrame)
                 {
-                    Debug.Log("FIRST FRAME " + checkedComponent.ValueRW.attackFirstFrame);
+                    //Debug.Log("FIRST FRAME " + checkedComponent.ValueRW.attackFirstFrame);
                     checkedComponent.ValueRW.attackFirstFrame = false;
                 }
             }

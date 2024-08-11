@@ -54,13 +54,24 @@ namespace Enemy
                         strength = strength * (100 - enemyWeapon.ChangeAmmoStats * 2) / 100;
                         if (strength <= 0) strength = 0;
                     }
-
+                    Debug.Log("Firing Aim Weight " + animatorWeightsComponent.aimWeight);
+                    //Debug.Log("Firing Trigger Weight " + enemyWeapon.animTriggerWeight);
                     //if (enemyWeapon is { IsFiring: 1, Duration: 0 } )
-                    if (enemyWeapon is { IsFiring: 1, Duration: 0 }
-                        &&
-                        animatorWeightsComponent.aimWeight > enemyWeapon.animTriggerWeight
-                        )
+
+                    if (enemyWeapon is { IsFiring: 1, Duration: 0, firstFiring: false }
+                        //animatorWeightsComponent.aimWeight == 0
+                       )
                     {
+                        enemyWeapon.firstFiring = true;
+                        Debug.Log("FIRST TRUE");
+                    }
+                    else if (enemyWeapon is { IsFiring: 1, Duration: 0 }
+                             &&
+                             animatorWeightsComponent.aimWeight > enemyWeapon.animTriggerWeight
+                            )
+                    {
+                        //Debug.Log("Firing 0");
+                        //enemyWeapon.firstFiring = false;
                         enemyWeapon.Duration += dt;
                         //enemyWeapon.IsFiring = 0;
                         //var bossLocalTransform = SystemAPI.GetComponent<LocalTransform>(entity);
@@ -109,13 +120,17 @@ namespace Enemy
                     }
                     else if (enemyWeapon is { IsFiring: 1, Duration: > 0 })
                     {
-                        //actorWeaponAimComponent.weaponRaised = WeaponMotion.Raised;
+                        //Debug.Log("Firing Duration " + enemyWeapon.Duration);
+                        //Debug.Log("Firing Rate  " + enemyWeapon.Rate);
+                        enemyWeapon.firstFiring = false;
                         enemyWeapon.Duration += dt;
                         if ((enemyWeapon.Duration > rate) && (enemyWeapon.IsFiring == 1))
                         {
                             //actorWeaponAimComponent.weaponRaised = WeaponMotion.Lowering;
                             enemyWeapon.Duration = 0;
                             enemyWeapon.IsFiring = 0;
+                            Debug.Log("Firing Done");
+
                         }
                     }
 

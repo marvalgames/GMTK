@@ -16,8 +16,9 @@ public partial class EnemyWeaponAimSystemLateUpdate : SystemBase
             .ForEach((in EnemyWeaponAim mb, in ActorWeaponAimComponent actorWeaponAimComponent) =>
             {
                 mb.weaponRaised = actorWeaponAimComponent.weaponRaised == WeaponMotion.Started ||
-                                  actorWeaponAimComponent.weaponRaised == WeaponMotion.Raised;
+                                  actorWeaponAimComponent.weaponRaised == WeaponMotion.Started;
 
+                Debug.Log("WEAPON RAISE " + mb.weaponRaised);
 
                 mb.LateUpdateSystem();
             }).Run();
