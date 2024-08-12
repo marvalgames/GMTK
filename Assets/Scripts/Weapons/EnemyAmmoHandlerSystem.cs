@@ -54,18 +54,25 @@ namespace Enemy
                         strength = strength * (100 - enemyWeapon.ChangeAmmoStats * 2) / 100;
                         if (strength <= 0) strength = 0;
                     }
+
                     Debug.Log("Firing Aim Weight " + animatorWeightsComponent.aimWeight);
                     //Debug.Log("Firing Trigger Weight " + enemyWeapon.animTriggerWeight);
                     //if (enemyWeapon is { IsFiring: 1, Duration: 0 } )
 
-                    if (enemyWeapon is { IsFiring: 1, Duration: 0, firstFiring: false }
+                    if (enemyWeapon is { IsFiring: 1, Duration: 0, firingStage: FiringStage.None })
                         //animatorWeightsComponent.aimWeight == 0
-                       )
                     {
-                        enemyWeapon.firstFiring = true;
-                        Debug.Log("FIRST TRUE");
+                        enemyWeapon.firingStage = FiringStage.Start;
+                        //Debug.Log("FIRST TRUE");
                     }
-                    else if (enemyWeapon is { IsFiring: 1, Duration: 0 }
+                    else if (enemyWeapon is { IsFiring: 1, Duration: 0, firingStage: FiringStage.Start } &&
+                             animatorWeightsComponent.aimWeight <= enemyWeapon.animTriggerWeight
+                            )
+                    {
+                        enemyWeapon.firingStage = FiringStage.Update;
+                        //Debug.Log("FIRST TRUE");
+                    }
+                    else if (enemyWeapon is { IsFiring: 1, Duration: 0, firingStage: FiringStage.Update }
                              &&
                              animatorWeightsComponent.aimWeight > enemyWeapon.animTriggerWeight
                             )
@@ -89,13 +96,13 @@ namespace Enemy
                         var ammoStartXZ = new float3(ammoStartTransform.Position.x, ammoStartTransform.Position.y,
                             ammoStartTransform.Position.z);
                         //
-                        var yOffset = 1;//make member later
+                        var yOffset = 1; //make member later
                         var playerStartXZ = new float3(playerLocalTransform.x, playerLocalTransform.y + yOffset,
                             playerLocalTransform.z);
 
                         //playerStartXZ.y = 0;//test
                         //ammoStartXZ.y = 0;//test
-                        
+
                         var forward = math.forward(ammoRotation);
                         if (math.distancesq(ammoStartXZ, playerStartXZ) > 0)
                         {
@@ -122,15 +129,14 @@ namespace Enemy
                     {
                         //Debug.Log("Firing Duration " + enemyWeapon.Duration);
                         //Debug.Log("Firing Rate  " + enemyWeapon.Rate);
-                        enemyWeapon.firstFiring = false;
+                        enemyWeapon.firingStage = FiringStage.None;
                         enemyWeapon.Duration += dt;
                         if ((enemyWeapon.Duration > rate) && (enemyWeapon.IsFiring == 1))
                         {
                             //actorWeaponAimComponent.weaponRaised = WeaponMotion.Lowering;
                             enemyWeapon.Duration = 0;
                             enemyWeapon.IsFiring = 0;
-                            Debug.Log("Firing Done");
-
+                            //Debug.Log("Firing Done");
                         }
                     }
 

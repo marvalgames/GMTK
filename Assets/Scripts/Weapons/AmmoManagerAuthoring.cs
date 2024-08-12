@@ -11,6 +11,14 @@ public enum RoleReversalMode
     Toggle
 }
 
+public enum FiringStage
+{
+    None,
+    Start,
+    Update,
+    End
+}
+
 public struct WeaponComponent : IComponentData
 {
     public RoleReversalMode roleReversal;
@@ -28,7 +36,7 @@ public struct WeaponComponent : IComponentData
     public float Duration;//rate counter for job
     //public bool CanFire;
     public int IsFiring;
-    public bool firstFiring;
+    public FiringStage firingStage;
     public LocalToWorld AmmoStartLocalToWorld;
     public LocalTransform AmmoStartTransform;
     //public Rotation AmmoStartRotation;

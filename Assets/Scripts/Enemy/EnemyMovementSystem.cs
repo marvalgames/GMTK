@@ -216,7 +216,7 @@ namespace Enemy
                                         enemyWeaponMovementComponent.shootRangeDistance && weaponMovement &&
                                         roleReversal == RoleReversalMode.Off && enemyInShootingRange)
                                     {
-                                        if (weaponComponent.firstFiring)
+                                        if (weaponComponent.firingStage == FiringStage.None)
                                         {
                                             weaponRaised = WeaponMotion.Started;
                                             //weaponComponent.firstFiring = false;
