@@ -505,6 +505,7 @@ public class EnemyMove : MonoBehaviour
             {
                 agent.destination = target;
                 transform.position = agent.nextPosition;
+                //Debug.Log("IGNORE " + ignoreAgentAI);
                 anim.SetInteger(JumpState, 0);
             }
 
@@ -516,12 +517,18 @@ public class EnemyMove : MonoBehaviour
             {
                 audioSource.Play();
             }
+
+            agent.updatePosition = false;
+            agent.updatePosition = true;
+            //anim.SetInteger("Zone", 2);
             anim.SetFloat(Velz, velz, blendSpeed, Time.deltaTime);
         }
         else
         {
             agent.speed = 0;
         }
+        //Debug.Log("Agent Speed " + agent.speed);
+
         PlayEffects(velz);
 
 

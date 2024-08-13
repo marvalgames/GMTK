@@ -393,6 +393,7 @@ namespace Enemy
                                 enemyMove.UpdateEnemyMovement();
                                 enemyMove.AnimationMovement(targetPosition);
                                 enemyMove.FaceWaypoint();
+                                //Debug.Log("Enemy Move");
 
 
                                 //Debug.Log("DISTANCE " + Mathf.Round(distFromOpponent));

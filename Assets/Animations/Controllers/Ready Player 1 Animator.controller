@@ -673,7 +673,7 @@ AnimatorState:
   m_Speed: 1
   m_CycleOffset: 0
   m_Transitions:
-  - {fileID: 3286655560356195692}
+  - {fileID: 4212745372546116314}
   m_StateMachineBehaviours:
   - {fileID: 889801856736133178}
   m_Position: {x: 50, y: 50, z: 0}
@@ -1904,7 +1904,7 @@ AnimatorStateMachine:
     m_Position: {x: -1370, y: -1760, z: 0}
   - serializedVersion: 1
     m_State: {fileID: -4990295672561556258}
-    m_Position: {x: -190, y: -770, z: 0}
+    m_Position: {x: -1030, y: -1340, z: 0}
   - serializedVersion: 1
     m_State: {fileID: 254219591721194704}
     m_Position: {x: 160, y: -840, z: 0}
@@ -1941,7 +1941,7 @@ AnimatorStateMachine:
   m_ChildStateMachines:
   - serializedVersion: 1
     m_StateMachine: {fileID: -8437185558949305619}
-    m_Position: {x: -1180, y: -1160, z: 0}
+    m_Position: {x: -1430, y: -1320, z: 0}
   m_AnyStateTransitions:
   - {fileID: 5625583343790582349}
   - {fileID: -1397790103043303786}
@@ -2326,31 +2326,6 @@ AnimatorStateTransition:
   m_InterruptionSource: 0
   m_OrderedInterruption: 1
   m_CanTransitionToSelf: 1
---- !u!1101 &3286655560356195692
-AnimatorStateTransition:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_Name: 
-  m_Conditions:
-  - m_ConditionMode: 6
-    m_ConditionEvent: Dash
-    m_EventTreshold: 0
-  m_DstStateMachine: {fileID: 0}
-  m_DstState: {fileID: 1102494566746648296}
-  m_Solo: 0
-  m_Mute: 0
-  m_IsExit: 0
-  serializedVersion: 3
-  m_TransitionDuration: 0.25
-  m_TransitionOffset: 0
-  m_ExitTime: 0.765625
-  m_HasExitTime: 0
-  m_HasFixedDuration: 1
-  m_InterruptionSource: 0
-  m_OrderedInterruption: 0
-  m_CanTransitionToSelf: 1
 --- !u!1107 &3293854479496627969
 AnimatorStateMachine:
   serializedVersion: 6
@@ -2437,6 +2412,31 @@ AnimatorStateTransition:
   m_TransitionDuration: 0.25
   m_TransitionOffset: 0
   m_ExitTime: 0.94382024
+  m_HasExitTime: 1
+  m_HasFixedDuration: 1
+  m_InterruptionSource: 0
+  m_OrderedInterruption: 1
+  m_CanTransitionToSelf: 1
+--- !u!1101 &4212745372546116314
+AnimatorStateTransition:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: 
+  m_Conditions:
+  - m_ConditionMode: 6
+    m_ConditionEvent: Dash
+    m_EventTreshold: 0
+  m_DstStateMachine: {fileID: 0}
+  m_DstState: {fileID: -1584396546386262745}
+  m_Solo: 0
+  m_Mute: 0
+  m_IsExit: 0
+  serializedVersion: 3
+  m_TransitionDuration: 0.25
+  m_TransitionOffset: 0
+  m_ExitTime: 0.765625
   m_HasExitTime: 1
   m_HasFixedDuration: 1
   m_InterruptionSource: 0
