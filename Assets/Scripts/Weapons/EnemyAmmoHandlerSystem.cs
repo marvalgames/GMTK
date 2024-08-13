@@ -65,12 +65,12 @@ namespace Enemy
                         enemyWeapon.firingStage = FiringStage.Start;
                         //Debug.Log("FIRST TRUE");
                     }
-                    else if (enemyWeapon is { IsFiring: 1, Duration: 0, firingStage: FiringStage.Start } &&
+                    else if (enemyWeapon is { IsFiring: 1, Duration: 0, } &&
                              animatorWeightsComponent.aimWeight <= enemyWeapon.animTriggerWeight
                             )
                     {
-                        enemyWeapon.firingStage = FiringStage.Update;
-                        //Debug.Log("FIRST TRUE");
+                        enemyWeapon.firingStage = FiringStage.Start;
+                        Debug.Log("FIRST UPDATE");
                     }
                     else if (enemyWeapon is { IsFiring: 1, Duration: 0, firingStage: FiringStage.Update }
                              &&

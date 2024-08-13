@@ -15,8 +15,7 @@ public partial class EnemyWeaponAimSystemLateUpdate : SystemBase
         Entities.WithoutBurst().WithAny<DeadComponent>()
             .ForEach((in EnemyWeaponAim mb, in ActorWeaponAimComponent actorWeaponAimComponent) =>
             {
-                mb.weaponRaised = actorWeaponAimComponent.weaponRaised == WeaponMotion.Started ||
-                                  actorWeaponAimComponent.weaponRaised == WeaponMotion.Started;
+                mb.weaponRaised = actorWeaponAimComponent.weaponRaised == WeaponMotion.Started;
 
                 Debug.Log("WEAPON RAISE " + mb.weaponRaised);
 

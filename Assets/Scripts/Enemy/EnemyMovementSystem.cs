@@ -209,7 +209,7 @@ namespace Enemy
                                 if (SystemAPI.HasComponent<ActorWeaponAimComponent>(e))
                                 {
                                     var actorWeaponAim = SystemAPI.GetComponent<ActorWeaponAimComponent>(e);
-                                    weaponRaised = WeaponMotion.None;
+                                    //weaponRaised = WeaponMotion.None;
 
 
                                     if (playerIsFiring && roleReversal == RoleReversalMode.On && !weaponComponent.tooFarTooAttack  || distFromOpponent <
@@ -221,10 +221,12 @@ namespace Enemy
                                             weaponRaised = WeaponMotion.Started;
                                             //weaponComponent.firstFiring = false;
                                         }
-                                        else if(weaponComponent.IsFiring == 1)
+                                        else if(weaponComponent is { IsFiring: 1, firingStage: FiringStage.Start })
                                         {
-                                            weaponRaised = WeaponMotion.Raised;
+                                            weaponComponent.firingStage = FiringStage.Update;
+                                            weaponRaised = WeaponMotion.Started;
                                         }
+                                        
 
                                         weaponComponent.IsFiring = 1;//hmm
                                         

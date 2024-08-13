@@ -74,6 +74,7 @@ public class EnemyWeaponAim : MonoBehaviour
         {
             //currentAimWeight = Mathf.Lerp(currentAimWeight, aimWeight, Time.deltaTime * aimWeightLerpFactor);
             blendValue = Mathf.Lerp(blendValue, 1, Time.deltaTime * blendSpeed);
+            //blendValue = 0;
             animator.SetLayerWeight(0, 1 - blendValue);
             animator.SetLayerWeight(1, blendValue); //1 is weapon layer
             animator.SetBool(Aim, true);
@@ -83,6 +84,7 @@ public class EnemyWeaponAim : MonoBehaviour
         {
             //currentAimWeight = 0;
             blendValue = Mathf.Lerp(blendValue, 0, Time.deltaTime * blendSpeed);
+            //blendValue = 0;
             animator.SetLayerWeight(0, 1 - blendValue);
             animator.SetLayerWeight(1, blendValue);
             animator.SetBool(Aim, false);
