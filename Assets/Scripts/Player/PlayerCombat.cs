@@ -82,15 +82,16 @@ namespace Sandbox.Player
             }
             if (entityManager.HasComponent<ActorWeaponAimComponent>(meleeEntity))
             {
-                var aimComponent = entityManager.GetComponentData<ActorWeaponAimComponent>(meleeEntity);
-                aimComponent.combatMode = true;
-                entityManager.SetComponentData(meleeEntity, aimComponent);
+                //var aimComponent = entityManager.GetComponentData<ActorWeaponAimComponent>(meleeEntity);
+                //aimComponent.combatMode = true;
+                //entityManager.SetComponentData(meleeEntity, aimComponent);
                 //animator.SetInteger(Zone, aimComponent.combatMode ? 1 : 0);
                 //animator.SetBool(CombatMode, aimComponent.combatMode);
+                //Debug.Log("COMBAT MODE " + aimComponent.combatMode);
+
 
             }
-            Debug.Log("START MOVE");
-            animator.SetInteger(Zone, 1);
+            //animator.SetInteger(Zone, 1);
             animator.SetInteger(CombatAction, animationIndex);
         }
 
@@ -100,8 +101,9 @@ namespace Sandbox.Player
             if (entityManager.HasComponent<ActorWeaponAimComponent>(meleeEntity))
             {
                 var aimComponent = entityManager.GetComponentData<ActorWeaponAimComponent>(meleeEntity);
-                //animator.SetInteger(Zone, aimComponent.combatMode ? 1 : 0);
-                //animator.SetBool(CombatMode, aimComponent.combatMode);
+                Debug.Log("COMBAT MODE " + aimComponent.combatMode);
+                animator.SetInteger(Zone, aimComponent.combatMode ? 1 : 0);
+                animator.SetBool(CombatMode, aimComponent.combatMode);
                 
             }
 

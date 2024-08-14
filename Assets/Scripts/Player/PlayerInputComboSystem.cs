@@ -19,6 +19,7 @@ namespace Player
                 {
                     actorAimComponent.combatMode = !actorAimComponent.combatMode;
                     if (actorAimComponent.combatMode) actorAimComponent.aimMode = false;
+                    Debug.Log("Combat System " + actorAimComponent.combatMode);
                 }
             }).Run();
         }
