@@ -55,7 +55,7 @@ namespace Enemy
                         if (strength <= 0) strength = 0;
                     }
 
-                    Debug.Log("Firing Aim Weight " + animatorWeightsComponent.aimWeight);
+                    //Debug.Log("Firing Aim Weight " + animatorWeightsComponent.aimWeight);
                     //Debug.Log("Firing Trigger Weight " + enemyWeapon.animTriggerWeight);
                     //if (enemyWeapon is { IsFiring: 1, Duration: 0 } )
 
@@ -70,7 +70,7 @@ namespace Enemy
                             )
                     {
                         enemyWeapon.firingStage = FiringStage.Start;
-                        Debug.Log("FIRST UPDATE");
+                        //Debug.Log("FIRST UPDATE");
                     }
                     else if (enemyWeapon is { IsFiring: 1, Duration: 0, firingStage: FiringStage.Update }
                              &&

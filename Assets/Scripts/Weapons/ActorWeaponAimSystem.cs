@@ -16,9 +16,7 @@ public partial class EnemyWeaponAimSystemLateUpdate : SystemBase
             .ForEach((in EnemyWeaponAim mb, in ActorWeaponAimComponent actorWeaponAimComponent) =>
             {
                 mb.weaponRaised = actorWeaponAimComponent.weaponRaised == WeaponMotion.Started;
-
-                Debug.Log("WEAPON RAISE " + mb.weaponRaised);
-
+                mb.weaponRaised = actorWeaponAimComponent.weaponRaised == WeaponMotion.Started;
                 mb.LateUpdateSystem();
             }).Run();
     }
@@ -37,7 +35,6 @@ public partial class PlayerWeaponAimSystemLateUpdate : SystemBase
             if (mb.Player.controllers.GetLastActiveController() == null || playerWeaponAimComponent.combatMode) return;
             mb.LateUpdateSystem(playerWeaponAimComponent.weaponRaised);
             playerWeaponAimComponent.aimDirection = mb.aimDir;
-            //Debug.Log("MB AIM DIR " + mb.aimDir);
             var direction = math.normalize(mb.aimDir);
             direction.y = 0;
 
