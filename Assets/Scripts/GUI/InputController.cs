@@ -70,6 +70,7 @@ public struct InputControllerComponent : IComponentData
     public bool buttonX_held;
     public bool buttonX_Tap;
     public bool buttonX_Press;
+    public double buttonTimeX_UnPressed;
     public bool buttonX_SinglePress;
     public bool buttonX_DoublePress;
     public bool buttonX_Released;
@@ -88,6 +89,9 @@ public struct InputControllerComponent : IComponentData
 
     public double buttonTimePressed;
     public float maxTapTime;
+    public double comboBufferTime;
+    public double comboBufferTimeMax;
+
 
 
 }

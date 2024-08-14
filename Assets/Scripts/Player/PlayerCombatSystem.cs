@@ -12,6 +12,7 @@ namespace Sandbox.Player
     {
         private static readonly int Vertical = Animator.StringToHash("Vertical");
         private static readonly int CombatAction = Animator.StringToHash("CombatAction");
+        private static readonly int ComboCounter = Animator.StringToHash("ComboCounter");
 
 
         protected override void OnUpdate()
@@ -34,8 +35,20 @@ namespace Sandbox.Player
                     var leftBumperPressed = inputController.leftBumperPressed;
                     var leftBumperUp = inputController.leftBumperReleased;
                     var allowKick = buttonXpressed == true && (math.abs(animator.GetFloat(Vertical)) < 2 || applyImpulse.Grounded == false);
+                    var buttonXunPressed = inputController.buttonTimeX_UnPressed;
+                    var comboBufferTimeMax = inputController.comboBufferTimeMax;
+                    if (buttonXunPressed >= comboBufferTimeMax)
+                    {
+                        checkedComponent.comboCounter = 0;
+                    }
                     if (buttonXtap)//punch
                     {
+                        if (buttonXunPressed < comboBufferTimeMax)
+                        {
+                            checkedComponent.comboCounter = checkedComponent.comboCounter == 4
+                                ? checkedComponent.comboCounter = 0 : checkedComponent.comboCounter += 1;
+
+                        }
                         playerCombat.SelectMove(1);
                     }
                     else if (allowKick)//kick
@@ -50,6 +63,11 @@ namespace Sandbox.Player
                     {
                         animator.SetInteger(CombatAction, 0);
                     }
+                    
+                    //Debug.Log("COMBO COUNTER " + checkedComponent.comboCounter);
+                    animator.SetInteger(ComboCounter, checkedComponent.comboCounter);
+
+                    
                 }
             ).Run();
         }

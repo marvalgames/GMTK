@@ -9,8 +9,7 @@ namespace Sandbox.Player
     public class PlayerCombat : MonoBehaviour
     {
         public MovesManager movesInspector;
-        [HideInInspector]
-        public Animator animator;
+        [HideInInspector] public Animator animator;
         private List<Moves> moveList = new List<Moves>();
         public Moves moveUsing = new Moves();
         private Entity meleeEntity;
@@ -27,13 +26,12 @@ namespace Sandbox.Player
             for (var i = 0; i < movesInspector.Moves.Count; i++)
             {
                 var move = movesInspector.Moves[i];
-                move.target = moveUsing.target;//default target assigned in system
+                move.target = moveUsing.target; //default target assigned in system
                 move.targetEntity = meleeEntity;
                 moveList.Add(move);
-
             }
-            
-            
+
+
             if (meleeEntity == Entity.Null)
             {
                 meleeEntity = GetComponent<CharacterEntityTracker>().linkedEntity;
@@ -41,7 +39,8 @@ namespace Sandbox.Player
                 {
                     entityManager = GetComponent<CharacterEntityTracker>().entityManager;
                 }
-                if(meleeEntity != Entity.Null) entityManager.AddComponentObject(meleeEntity, this);
+
+                if (meleeEntity != Entity.Null) entityManager.AddComponentObject(meleeEntity, this);
             }
         }
 
@@ -51,7 +50,7 @@ namespace Sandbox.Player
             var animationIndex = -1;
             var primaryTrigger = TriggerType.None;
 
-            for (var i = 0; i < moveList.Count; i++)//pick from list defined in inspector
+            for (var i = 0; i < moveList.Count; i++) //pick from list defined in inspector
             {
                 if ((int)moveList[i].animationType == combatAction)
                 {
@@ -62,7 +61,7 @@ namespace Sandbox.Player
             }
 
             Debug.Log("SELECT MOVE");
-            if (animationIndex <= 0 || moveUsing.active == false) return;//0 is none on enum
+            if (animationIndex <= 0 || moveUsing.active == false) return; //0 is none on enum
             var defense = animationIndex == (int)AnimationType.Deflect;
             lastCombatAction = combatAction;
             StartMove(animationIndex, primaryTrigger, defense);
@@ -80,76 +79,59 @@ namespace Sandbox.Player
                 checkedComponent.animationIndex = animationIndex;
                 entityManager.SetComponentData(meleeEntity, checkedComponent);
             }
-            if (entityManager.HasComponent<ActorWeaponAimComponent>(meleeEntity))
-            {
-                //var aimComponent = entityManager.GetComponentData<ActorWeaponAimComponent>(meleeEntity);
-                //aimComponent.combatMode = true;
-                //entityManager.SetComponentData(meleeEntity, aimComponent);
-                //animator.SetInteger(Zone, aimComponent.combatMode ? 1 : 0);
-                //animator.SetBool(CombatMode, aimComponent.combatMode);
-                //Debug.Log("COMBAT MODE " + aimComponent.combatMode);
 
-
-            }
-            //animator.SetInteger(Zone, 1);
             animator.SetInteger(CombatAction, animationIndex);
         }
 
-        
+
         public void Aim()
         {
             if (entityManager.HasComponent<ActorWeaponAimComponent>(meleeEntity))
             {
                 var aimComponent = entityManager.GetComponentData<ActorWeaponAimComponent>(meleeEntity);
-                Debug.Log("COMBAT MODE " + aimComponent.combatMode);
+                //Debug.Log("COMBAT MODE " + aimComponent.combatMode);
                 animator.SetInteger(Zone, aimComponent.combatMode ? 1 : 0);
                 animator.SetBool(CombatMode, aimComponent.combatMode);
-                
             }
-
         }
 
         public void LateUpdateSystem()
         {
             if (moveList.Count == 0) return;
             Aim();
-        
-
-
         }
-        
-        public void StartMotionUpdateCheckComponent()//event
+
+        public void StartMotionUpdateCheckComponent() //event
         {
         }
-        
 
-        public void StartAttackUpdateCheckComponent()//event
+
+        public void StartAttackUpdateCheckComponent() //event
         {
-            
-            if(entityManager.HasComponent<MeleeComponent>(meleeEntity))
+            if (entityManager.HasComponent<MeleeComponent>(meleeEntity))
             {
                 var melee = entityManager.GetComponentData<MeleeComponent>(meleeEntity);
                 moveUsing.target = melee.target;
             }
-            
+
             if (moveUsing.moveAudioSource && moveUsing.moveAudioClip)
             {
                 moveUsing.moveAudioSource.clip = moveUsing.moveAudioClip;
                 moveUsing.moveAudioSource.PlayOneShot(moveUsing.moveAudioClip);
-
             }
+
             if (moveUsing.moveParticleSystem)
             {
                 moveUsing.moveParticleSystem.Play(true);
             }
-            
+
             if (entityManager.HasComponent<CheckedComponent>(meleeEntity))
             {
                 var checkedComponent = entityManager.GetComponentData<CheckedComponent>(meleeEntity);
                 checkedComponent.anyAttackStarted = true;
                 checkedComponent.attackFirstFrame = true;
                 //checkedComponent.anyDefenseStarted = false;
-                checkedComponent.hitTriggered = false;  
+                checkedComponent.hitTriggered = false;
                 entityManager.SetComponentData(meleeEntity, checkedComponent);
             }
         }
@@ -166,17 +148,13 @@ namespace Sandbox.Player
                     score.streak = 0;
                     entityManager.SetComponentData(meleeEntity, score);
                 }
-                checkedComponent.hitLanded = false;//set at end of attack only
+
+                checkedComponent.hitLanded = false; //set at end of attack only
                 checkedComponent.anyDefenseStarted = false;
                 checkedComponent.anyAttackStarted = false;
-                checkedComponent.AttackStages = AttackStages.End;//only for one frame
+                checkedComponent.AttackStages = AttackStages.End; //only for one frame
                 entityManager.SetComponentData(meleeEntity, checkedComponent);
-
             }
-
         }
-
-
-     
     }
 }

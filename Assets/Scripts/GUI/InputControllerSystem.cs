@@ -74,7 +74,7 @@ public partial class InputControllerSystemUpdate : SystemBase
             inputController.buttonX_Pressed = player.GetButtonDown("FireX");
             inputController.buttonX_held = player.GetButton("FireX");
             inputController.buttonX_Released = player.GetButtonUp("FireX");
-
+            inputController.buttonTimeX_UnPressed = player.GetButtonTimeUnpressed("FireX");
             //Y
             inputController.buttonY_Tap = false;
             inputController.buttonY_Press = false;
