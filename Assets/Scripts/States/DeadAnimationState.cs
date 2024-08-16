@@ -7,7 +7,7 @@ public class DeadAnimationState : StateMachineBehaviour
     private static readonly int aim = Animator.StringToHash("Aim");
 
     // OnStateEnter is called when a transition starts and the state machine starts to evaluate this state
-    override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
+    public override void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
         
         Debug.Log("animator dead");     
@@ -16,12 +16,12 @@ public class DeadAnimationState : StateMachineBehaviour
 
     }
 
-    override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
+    public override void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
         animator.speed = 0;
 
     }
-    override public void OnStateMove(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
+    public override void OnStateMove(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
         //// Implement code that processes and affects root motion
         //Vector3 velocity = animator.deltaPosition / SystemAPI.Time.DeltaTime * (float)animator.GetComponent<PlayerMove>().currentSpeed;

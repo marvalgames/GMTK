@@ -130,6 +130,7 @@ namespace Sandbox.Player
                 var checkedComponent = entityManager.GetComponentData<CheckedComponent>(meleeEntity);
                 checkedComponent.anyAttackStarted = true;
                 checkedComponent.attackFirstFrame = true;
+                checkedComponent.AttackStages = AttackStages.Start;
                 //checkedComponent.anyDefenseStarted = false;
                 checkedComponent.hitTriggered = false;
                 entityManager.SetComponentData(meleeEntity, checkedComponent);
@@ -148,7 +149,7 @@ namespace Sandbox.Player
                     score.streak = 0;
                     entityManager.SetComponentData(meleeEntity, score);
                 }
-
+                Debug.Log("End Attack");
                 checkedComponent.hitLanded = false; //set at end of attack only
                 checkedComponent.anyDefenseStarted = false;
                 checkedComponent.anyAttackStarted = false;

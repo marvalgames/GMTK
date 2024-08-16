@@ -4,7 +4,7 @@ public class CombatActionState : StateMachineBehaviour
 {
     private static readonly int CombatAction = Animator.StringToHash("CombatAction");
 
-    override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex) 
+    public override void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex) 
     {
         //change file to be like player combat where using checkComponent
         //animator.GetComponent<EnemyMelee>().attackStarted = true;
@@ -17,7 +17,7 @@ public class CombatActionState : StateMachineBehaviour
 
     }
     
-    override public void OnStateMove(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
+    public override void OnStateMove(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
         // Implement code that processes and affects root motion
         animator.GetComponent<EnemyMelee>().StartMotionUpdateCheckComponent();
@@ -26,7 +26,7 @@ public class CombatActionState : StateMachineBehaviour
 
 
     
-    override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
+    public override void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
         animator.GetComponent<EnemyMelee>().StartAgent();
         animator.GetComponent<EnemyMelee>().StopAimIK();

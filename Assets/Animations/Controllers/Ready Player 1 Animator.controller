@@ -130,7 +130,7 @@ AnimatorState:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: combo_one
-  m_Speed: 2
+  m_Speed: 1
   m_CycleOffset: 0
   m_Transitions:
   - {fileID: -3965573205523458050}
@@ -977,7 +977,7 @@ AnimatorStateTransition:
     m_ConditionEvent: CombatAction
     m_EventTreshold: 1
   - m_ConditionMode: 6
-    m_ConditionEvent: ComboCounter
+    m_ConditionEvent: ComboAnimationPlayed
     m_EventTreshold: 3
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: 8227777730467585468}
@@ -1536,7 +1536,7 @@ AnimatorController:
     m_DefaultInt: 0
     m_DefaultBool: 0
     m_Controller: {fileID: 9100000}
-  - m_Name: ComboCounter
+  - m_Name: ComboAnimationPlayed
     m_Type: 3
     m_DefaultFloat: 0
     m_DefaultInt: 0
@@ -1800,7 +1800,7 @@ AnimatorStateTransition:
     m_ConditionEvent: CombatAction
     m_EventTreshold: 1
   - m_ConditionMode: 6
-    m_ConditionEvent: ComboCounter
+    m_ConditionEvent: ComboAnimationPlayed
     m_EventTreshold: 1
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: -8639322062010189586}
@@ -1828,7 +1828,7 @@ AnimatorStateTransition:
     m_ConditionEvent: CombatAction
     m_EventTreshold: 1
   - m_ConditionMode: 6
-    m_ConditionEvent: ComboCounter
+    m_ConditionEvent: ComboAnimationPlayed
     m_EventTreshold: 2
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: 5396769127111866248}
@@ -2023,7 +2023,7 @@ AnimatorStateMachine:
     m_Position: {x: -1830, y: -1570, z: 0}
   - serializedVersion: 1
     m_State: {fileID: -8639322062010189586}
-    m_Position: {x: -2110, y: -1880, z: 0}
+    m_Position: {x: -1980, y: -1900, z: 0}
   - serializedVersion: 1
     m_State: {fileID: -7620921504010802392}
     m_Position: {x: -1760, y: -1430, z: 0}
@@ -2679,7 +2679,7 @@ AnimatorState:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: combo_two
-  m_Speed: 2
+  m_Speed: 1
   m_CycleOffset: 0
   m_Transitions:
   - {fileID: 7136022928507495472}
@@ -3364,7 +3364,7 @@ AnimatorState:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: combo_three
-  m_Speed: 2
+  m_Speed: 1
   m_CycleOffset: 0
   m_Transitions:
   - {fileID: 7029324871694083839}

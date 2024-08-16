@@ -12,7 +12,7 @@ namespace Sandbox.Player
     {
         private static readonly int Vertical = Animator.StringToHash("Vertical");
         private static readonly int CombatAction = Animator.StringToHash("CombatAction");
-        private static readonly int ComboCounter = Animator.StringToHash("ComboCounter");
+        private static readonly int ComboAnimationPlayed = Animator.StringToHash("ComboAnimationPlayed");
 
 
         protected override void OnUpdate()
@@ -37,19 +37,38 @@ namespace Sandbox.Player
                     var allowKick = buttonXpressed == true && (math.abs(animator.GetFloat(Vertical)) < 2 || applyImpulse.Grounded == false);
                     var buttonXunPressed = inputController.buttonTimeX_UnPressed;
                     var comboBufferTimeMax = inputController.comboBufferTimeMax;
-                    if (buttonXunPressed >= comboBufferTimeMax)
+                    Debug.Log("Attack Stage " + checkedComponent.AttackStages);
+                    Debug.Log("Combo Counter " + checkedComponent.comboCounter);
+                    if (buttonXunPressed >= comboBufferTimeMax && checkedComponent.comboAnimationPlayed == 0)
                     {
                         checkedComponent.comboCounter = 0;
                     }
-                    if (buttonXtap)//punch
+                    if (buttonXtap || checkedComponent is { comboCounter: > 1 })//punch
                     {
-                        if (buttonXunPressed < comboBufferTimeMax)
+                        if (buttonXtap && buttonXunPressed < comboBufferTimeMax)
                         {
-                            checkedComponent.comboCounter = checkedComponent.comboCounter == 4
-                                ? checkedComponent.comboCounter = 0 : checkedComponent.comboCounter += 1;
-
+                            checkedComponent.comboCounter += 1;
+                            if (checkedComponent.comboCounter == 1)
+                            {
+                                checkedComponent.comboAnimationPlayed = 1;
+                                playerCombat.SelectMove(1);
+                            }
+                   
                         }
-                        playerCombat.SelectMove(1);
+                        else if (!buttonXtap && checkedComponent is { comboCounter: > 1, AttackStages: AttackStages.End })
+                        {
+                            checkedComponent.AttackStages = AttackStages.No;
+                            checkedComponent.comboAnimationPlayed += 1;
+                            if (checkedComponent.comboAnimationPlayed <= 3)
+                            {
+                                playerCombat.SelectMove(1);
+                            }
+                            else
+                            {
+                                checkedComponent.comboAnimationPlayed = 0;
+                                checkedComponent.comboCounter = 0;
+                            }
+                        }
                     }
                     else if (allowKick)//kick
                     {
@@ -63,9 +82,7 @@ namespace Sandbox.Player
                     {
                         animator.SetInteger(CombatAction, 0);
                     }
-                    
-                    //Debug.Log("COMBO COUNTER " + checkedComponent.comboCounter);
-                    animator.SetInteger(ComboCounter, checkedComponent.comboCounter);
+                    animator.SetInteger(ComboAnimationPlayed, checkedComponent.comboAnimationPlayed);
 
                     
                 }
