@@ -105,6 +105,17 @@ namespace Sandbox.Player
         {
         }
 
+        public void StateUpdateCheckComponent()
+        {
+            if (entityManager.HasComponent<CheckedComponent>(meleeEntity))
+            {
+                var checkedComponent = entityManager.GetComponentData<CheckedComponent>(meleeEntity);
+                checkedComponent.AttackStages = AttackStages.Action;
+                entityManager.SetComponentData(meleeEntity, checkedComponent);
+            }
+            
+        }
+
 
         public void StartAttackUpdateCheckComponent() //event
         {

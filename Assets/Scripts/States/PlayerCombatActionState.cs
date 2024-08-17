@@ -15,6 +15,7 @@ public class PlayerCombatActionState : StateMachineBehaviour
     public override void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
         //animator.SetInteger("CombatAction", 0);
+        animator.GetComponent<PlayerCombat>().StateUpdateCheckComponent();
     }
 
     // OnStateExit is called when a transition ends and the state machine finishes evaluating this state

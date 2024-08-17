@@ -22,8 +22,8 @@ namespace Collisions
         public int totalAttempts;
         public TriggerType primaryTrigger;
         public int animationIndex;
+        public int comboIndexPlaying;
         public int comboCounter;
-        public int comboAnimationPlayed;
     }
 
     public struct CollisionComponent : IComponentData

@@ -89,7 +89,8 @@ public struct InputControllerComponent : IComponentData
 
     public double buttonTimePressed;
     public float maxTapTime;
-    public double comboBufferTime;
+    public double comboBufferTimeStart;
+    public double comboBufferTimeEnd;
     public double comboBufferTimeMax;
 
 
