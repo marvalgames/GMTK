@@ -1,8 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Collisions;
 using Unity.Entities;
-using UnityEditor.Build;
 using UnityEngine;
 using UnityEngine.AI;
 using Random = UnityEngine.Random;

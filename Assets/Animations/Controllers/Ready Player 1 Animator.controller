@@ -130,7 +130,7 @@ AnimatorState:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: combo_one
-  m_Speed: 1
+  m_Speed: 2.5
   m_CycleOffset: 0
   m_Transitions:
   - {fileID: -3965573205523458050}
@@ -1651,6 +1651,9 @@ AnimatorStateTransition:
   - m_ConditionMode: 6
     m_ConditionEvent: Zone
     m_EventTreshold: 0
+  - m_ConditionMode: 6
+    m_ConditionEvent: CombatAction
+    m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: -1584396546386262745}
   m_Solo: 0
@@ -2002,7 +2005,7 @@ AnimatorStateMachine:
     m_Position: {x: 160, y: -840, z: 0}
   - serializedVersion: 1
     m_State: {fileID: 3662086265820302311}
-    m_Position: {x: -2110, y: -1990, z: 0}
+    m_Position: {x: -1930, y: -2180, z: 0}
   - serializedVersion: 1
     m_State: {fileID: 2624026932153399081}
     m_Position: {x: -990, y: -1740, z: 0}
@@ -2017,13 +2020,13 @@ AnimatorStateMachine:
     m_Position: {x: -970, y: -1910, z: 0}
   - serializedVersion: 1
     m_State: {fileID: 487053771604423181}
-    m_Position: {x: -1570, y: -1850, z: 0}
+    m_Position: {x: -1670, y: -1900, z: 0}
   - serializedVersion: 1
     m_State: {fileID: -7274903614323025245}
     m_Position: {x: -1830, y: -1570, z: 0}
   - serializedVersion: 1
     m_State: {fileID: -8639322062010189586}
-    m_Position: {x: -1980, y: -1900, z: 0}
+    m_Position: {x: -2140, y: -2010, z: 0}
   - serializedVersion: 1
     m_State: {fileID: -7620921504010802392}
     m_Position: {x: -1760, y: -1430, z: 0}
@@ -2679,7 +2682,7 @@ AnimatorState:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: combo_two
-  m_Speed: 1
+  m_Speed: 2.5
   m_CycleOffset: 0
   m_Transitions:
   - {fileID: 7136022928507495472}
@@ -3364,7 +3367,7 @@ AnimatorState:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: combo_three
-  m_Speed: 1
+  m_Speed: 2.5
   m_CycleOffset: 0
   m_Transitions:
   - {fileID: 7029324871694083839}
