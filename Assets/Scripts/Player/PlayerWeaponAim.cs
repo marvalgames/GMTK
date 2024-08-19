@@ -221,7 +221,10 @@ namespace Sandbox.Player
                 crosshairImage.enabled = false;
                 return;
             }
-           
+
+            
+            Debug.Log("AIM " + aimMode);
+
             actorWeaponAimComponent.weaponLocation = playerWeaponLocation.position;
             var controller = Player.controllers.GetLastActiveController();
             if (controller == null && simController == false) return;
@@ -315,6 +318,8 @@ namespace Sandbox.Player
             _manager.SetComponentData(_entity, actorWeaponAimComponent);
 
             if (roleReversal == RoleReversalMode.On) crosshairImage.enabled = false;
+            Debug.Log("AIM ROLE " + roleReversal);
+
         }
 
         public void LateUpdateSystem(WeaponMotion weaponMotion)

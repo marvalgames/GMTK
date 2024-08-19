@@ -185,8 +185,7 @@ namespace Enemy
                             if (hasWeaponComponent)
                             {
                                 var weaponComponent = SystemAPI.GetComponent<WeaponComponent>(e);
-                             
-                            
+
 
                                 if (SystemAPI.HasComponent<ActorWeaponAimComponent>(e))
                                 {
@@ -194,7 +193,7 @@ namespace Enemy
                                     //weaponRaised = WeaponMotion.None;
 
 
-                                    if (playerIsFiring && 
+                                    if (playerIsFiring &&
                                         !weaponComponent.tooFarTooAttack || distFromOpponent <
                                         enemyWeaponMovementComponent.shootRangeDistance && weaponMovement &&
                                         enemyInShootingRange)
@@ -224,78 +223,68 @@ namespace Enemy
 
                             MoveStates moveState;
 
-                            if (checkedComponent.anyAttackStarted == false)
+                            //if (checkedComponent.anyAttackStarted == false)
+                            //{
+                            if (distFromOpponent < chaseRange &&
+                                distFromOpponent > stopRange) //weapon 1st option
                             {
-                                if (distFromOpponent < chaseRange &&
-                                    distFromOpponent > stopRange) //weapon 1st option
-                                {
-                                    moveState = MoveStates.Chase;
-                                    animator.SetInteger(Zone, 1);
-                                }
-                                else if (distFromOpponent < chaseRange) //weapon 2nd
-                                {
-                                    animator.SetInteger(Zone, 1);
-                                    moveState = MoveStates.Idle;
-                                }
-                                else
-                                {
-                                    animator.SetInteger(Zone, 1);
-                                    moveState = MoveStates.Stopped;
-                                }
-
-                                //enemyMove.FaceWaypoint();
-                                var lastState = enemyState.MoveState; //reads previous
-                                enemyState.currentStateTimer += SystemAPI.Time.DeltaTime;
-                                if (moveState == lastState || enemyState.MoveState == MoveStates.Default) //no change
-                                {
-                                    enemyState.MoveState = moveState;
-                                }
-                                else if (moveState != lastState &&
-                                         enemyState.currentStateTimer > 1) //switched but after time required in role
-                                {
-                                    enemyState.MoveState = moveState;
-                                    enemyState.currentStateTimer = 0;
-                                }
-
-                                //enemyState.MoveState = MoveStates.Chase;
-
-                       
-
-                                float3 opponentTargetPosition = new float3();
-                                float3 targetPosition = new float3();
-
-                                var targetEntity = matchupComponent.targetEntity;
-                                matchupComponent.isWaypointTarget = false;
-                                opponentTargetPosition = transformGroup[targetEntity].Position;
-
-
-                                matchupComponent.isWaypointTarget = false;
-                                targetPosition = opponentTargetPosition;
-                                matchupComponent.aimTarget = transformGroup[targetEntity];
-
-
-                                matchupComponent.opponentTargetPosition = opponentTargetPosition;
-
-                                enemyMove.UpdateEnemyMovement();
-                                enemyMove.AnimationMovement(targetPosition);
-                                enemyMove.FaceWaypoint();
+                                moveState = MoveStates.Chase;
+                                animator.SetInteger(Zone, 1);
                             }
+                            else if (distFromOpponent < chaseRange) //weapon 2nd
+                            {
+                                animator.SetInteger(Zone, 1);
+                                moveState = MoveStates.Idle;
+                            }
+                            else
+                            {
+                                animator.SetInteger(Zone, 1);
+                                moveState = MoveStates.Stopped;
+                            }
+
+                            //enemyMove.FaceWaypoint();
+                            var lastState = enemyState.MoveState; //reads previous
+                            enemyState.currentStateTimer += SystemAPI.Time.DeltaTime;
+                            if (moveState == lastState || enemyState.MoveState == MoveStates.Default) //no change
+                            {
+                                enemyState.MoveState = moveState;
+                            }
+                            else if (moveState != lastState &&
+                                     enemyState.currentStateTimer > 1) //switched but after time required in role
+                            {
+                                enemyState.MoveState = moveState;
+                                enemyState.currentStateTimer = 0;
+                            }
+
+                            enemyState.MoveState = MoveStates.Chase;
+
+
+                            float3 opponentTargetPosition = new float3();
+                            float3 targetPosition = new float3();
+
+                            var targetEntity = matchupComponent.targetEntity;
+                            matchupComponent.isWaypointTarget = false;
+                            opponentTargetPosition = transformGroup[targetEntity].Position;
+
+
+                            matchupComponent.isWaypointTarget = false;
+                            targetPosition = opponentTargetPosition;
+                            matchupComponent.aimTarget = transformGroup[targetEntity];
+
+
+                            matchupComponent.opponentTargetPosition = opponentTargetPosition;
+
+                            enemyMove.UpdateEnemyMovement();
+                            enemyMove.AnimationMovement(targetPosition);
+                            enemyMove.FaceWaypoint();
+                            //}
                         }
                     }
                 ).Run();
 
-           
-            for (var i = 0; i < PlayerEntities.Length; i++)
-            {
-                var e = PlayerEntities[i];
-                var hasWeapon = SystemAPI.HasComponent<WeaponComponent>(e);
-                if (hasWeapon)
-                {
-                    var player = SystemAPI.GetComponent<WeaponComponent>(e);
-                    player.roleReversal = playerInShootingRange ? RoleReversalMode.Off : RoleReversalMode.On;
-                    SystemAPI.SetComponent(e, player);
-                }
-            }
+
+            
+            
         }
     }
 }

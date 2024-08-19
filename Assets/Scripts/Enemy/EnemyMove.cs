@@ -436,6 +436,7 @@ public class EnemyMove : MonoBehaviour
 
     public void AnimationMovement(float3 target)
     {
+        Debug.Log("VELZ " + agent.isOnNavMesh);
         if (anim == null || agent.isOnNavMesh == false) return;
 
         float velz = 0;
@@ -521,6 +522,7 @@ public class EnemyMove : MonoBehaviour
             agent.updatePosition = false;
             agent.updatePosition = true;
             //anim.SetInteger("Zone", 2);
+            Debug.Log("VELZ " + velz);
             anim.SetFloat(Velz, velz);
         }
         else
@@ -597,6 +599,8 @@ public class EnemyMove : MonoBehaviour
             agent.updatePosition = false;
             Curve();
         }
+        
+        
     }
 
 
