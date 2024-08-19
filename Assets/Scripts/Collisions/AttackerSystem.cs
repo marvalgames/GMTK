@@ -33,183 +33,7 @@ namespace Collisions
                     var entityA = collisionComponent.Character_entity;
                     var entityB = collisionComponent.Character_other_entity;
                     if (entityA == entityB && typeA != (int)TriggerType.Ammo && typeB != (int)TriggerType.Ammo) return;
-
-                    var isMelee = collisionComponent.isMelee;
-                    var playerA = SystemAPI.HasComponent<PlayerComponent>(entityA);
-                    var playerB = SystemAPI.HasComponent<PlayerComponent>(entityB);
-                    var enemyA = SystemAPI.HasComponent<EnemyComponent>(entityA);
-                    var enemyB = SystemAPI.HasComponent<EnemyComponent>(entityB);
-                    float hwA = 0;
-                    float hwB = 0;
-                    if (SystemAPI.HasComponent<AnimatorWeightsComponent>(entityA))
-                    {
-                        hwA = SystemAPI.GetComponent<AnimatorWeightsComponent>(entityA).hitWeight;
-                    }
-
-                    if (SystemAPI.HasComponent<AnimatorWeightsComponent>(entityB))
-                    {
-                        hwB = SystemAPI.GetComponent<AnimatorWeightsComponent>(entityB).hitWeight;
-                    }
-
-                    if ((playerA && enemyB || playerB && enemyA) || (enemyA && enemyB))
-                    {
-                        var checkedComponentA = SystemAPI.GetComponent<CheckedComponent>(entityA);
-                        var isDefenseA = checkedComponentA.animationIndex == (int)AnimationType.Deflect;
-                        var checkedComponentB = SystemAPI.GetComponent<CheckedComponent>(entityB);
-                        var isDefenseB = checkedComponentB.animationIndex == (int)AnimationType.Deflect;
-                        if (
-                            checkedComponentA is
-                            {
-                                hitTriggered: false,
-                                //anyAttackStarted: true, 
-                                //anyDefenseStarted: true,
-                                attackCompleted: false
-                            } &&
-                            hwB >= .3 && hwB < 1 && isDefenseB) //can change as skill
-                        {
-                            var deflectPoints = 10;
-                            var effectsIndex = 1; //0 dead usually 1 hurt 2 deflect?
-                            ecb.AddComponent(entityB,
-                                new DeflectComponent
-                                    { DeflectLanded = deflectPoints, DeflectReceived = 0, EntityDeflecting = entityB });
-
-                            ecb.AddComponent(entityA,
-                                new DeflectComponent
-                                    { DeflectLanded = 0, DeflectReceived = deflectPoints, EntityDeflecting = entityB });
-
-
-                            ecb.AddComponent(entityB,
-                                new DamageComponent
-                                {
-                                    DamageLanded = deflectPoints, DamageReceived = 0, EntityCausingDamage = entityB,
-                                    LosingDamage = false
-                                });
-
-
-                            ecb.AddComponent(entityA,
-                                new DamageComponent
-                                {
-                                    EffectsIndex = 1, DamageLanded = 0, DamageReceived = deflectPoints,
-                                    EntityCausingDamage = entityB, LosingDamage = false
-                                });
-
-
-                            if (SystemAPI.HasComponent<SkillTreeComponent>(entityB))
-                            {
-                                var skill = SystemAPI.GetComponent<SkillTreeComponent>(entityB);
-                                skill.CurrentLevelXp += deflectPoints;
-                                SystemAPI.SetComponent(entityB, skill);
-                            }
-
-
-                            if (SystemAPI.HasComponent<ScoreComponent>(entityB) && deflectPoints >= 10) //test
-                            {
-                                var scoreComponent = SystemAPI.GetComponent<ScoreComponent>(entityB);
-                                scoreComponent.pointsScored = true;
-                                scoreComponent.combo = 1; //triggers score streak to increment (using  1 currently) 
-                                scoreComponent.scoredAgainstEntity = entityA;
-                                SystemAPI.SetComponent(entityB, scoreComponent);
-                            }
-
-                            if (SystemAPI.HasComponent<ScoreComponent>(entityA) && deflectPoints >= 10) //test
-                            {
-                                var scoreComponent = SystemAPI.GetComponent<ScoreComponent>(entityA);
-                                scoreComponent.combo = 0;
-                                scoreComponent.streak = 0;
-                                SystemAPI.SetComponent(entityA, scoreComponent);
-                                SystemAPI.SetComponent(entityA, scoreComponent);
-                            }
-
-
-                            checkedComponentA.anyDefenseStarted = false; //????
-                            //checkedComponent.anyAttackStarted = false; 
-                            checkedComponentA.hitTriggered = true;
-                            checkedComponentA.hitLanded = true;
-                            checkedComponentA.totalHits += 1;
-                            ecb.SetComponent(entityA, checkedComponentA);
-                        }
-                        else if (checkedComponentA is
-                                 {
-                                     //hitLanded: false, anyAttackStarted: true, attackCompleted: false,
-                                     hitTriggered: false,
-                                     anyDefenseStarted: false
-                                 } && hwA >= .6 && !isDefenseA)
-                        {
-                            var effectsIndex = 1; //0 dead usually 1 hurt
-                            float hitPower = 10; //need to be able to change eventually
-                            if (SystemAPI.HasComponent<RatingsComponent>(entityA))
-                            {
-                                hitPower = SystemAPI.GetComponent<RatingsComponent>(entityA).hitPower;
-                            }
-
-                            if (SystemAPI.HasComponent<HealthComponent>(entityA))
-                            {
-                                var he = SystemAPI.GetComponent<HealthComponent>(entityA);
-                                var alwaysDamage = he.alwaysDamage;
-                                if (alwaysDamage) hwA = 1;
-                                effectsIndex = he.meleeDamageEffectsIndex;
-                            }
-
-                            var damage = hitPower * hwA;
-
-                            if (SystemAPI.HasComponent<EvadeComponent>(entityB))
-                            {
-                                var evade = SystemAPI.GetComponent<EvadeComponent>(entityB);
-                                if (evade.evadeStrike && damage <= evade.evadeStrikeRating)
-                                {
-                                    //Debug.Log("ZERO DAMAGE " +  (damage * 1) );
-                                    damage = 0;
-                                }
-                            }
-
-                            ecb.AddComponent(entityA,
-                                new DamageComponent
-                                {
-                                    DamageLanded = damage, DamageReceived = 0, EntityCausingDamage = entityA,
-                                    LosingDamage = false
-                                });
-
-
-                            ecb.AddComponent(entityB,
-                                new DamageComponent
-                                {
-                                    EffectsIndex = effectsIndex, DamageLanded = 0, DamageReceived = damage,
-                                    EntityCausingDamage = entityA, LosingDamage = false
-                                });
-
-
-                            if (SystemAPI.HasComponent<SkillTreeComponent>(entityA))
-                            {
-                                var skill = SystemAPI.GetComponent<SkillTreeComponent>(entityA);
-                                skill.CurrentLevelXp += damage;
-                                SystemAPI.SetComponent(entityA, skill);
-                            }
-
-
-                            if (SystemAPI.HasComponent<ScoreComponent>(entityA) && damage >= 5) //test
-                            {
-                                var scoreComponent = SystemAPI.GetComponent<ScoreComponent>(entityA);
-                                scoreComponent.pointsScored = true;
-                                scoreComponent.combo = 1; //triggers score streak to increment (using  1 currently) 
-                                scoreComponent.scoredAgainstEntity = entityB;
-                                SystemAPI.SetComponent(entityA, scoreComponent);
-                            }
-
-                            if (SystemAPI.HasComponent<ScoreComponent>(entityB) && damage >= 5) //test
-                            {
-                                var scoreComponent = SystemAPI.GetComponent<ScoreComponent>(entityB);
-                                scoreComponent.combo = 0;
-                                scoreComponent.streak = 0;
-                                SystemAPI.SetComponent(entityB, scoreComponent);
-                            }
-
-                            checkedComponentA.anyDefenseStarted = false;
-                            checkedComponentA.hitTriggered = true; //one frame then turned off
-                            checkedComponentA.hitLanded = true; //on until end of animation / move
-                            checkedComponentA.totalHits += 1;
-                            ecb.SetComponent(entityA, checkedComponentA);
-                        }
-                    }
+                    
 
 
                     if (typeB == (int)TriggerType.Ammo && SystemAPI.HasComponent<TriggerComponent>(entityA)
@@ -221,16 +45,13 @@ namespace Collisions
                         var shooter = Entity.Null;
                         shooter = SystemAPI.GetComponent<TriggerComponent>(entityB)
                             .ParentEntity;
-
-                        //shooter always enemy for GMTK 2023
-                        //shooter = SystemAPI.GetComponent<TriggerComponent>(entityA)
-                        //  .ParentEntity;
-
-
+                        
+                        Debug.Log("SHOOTER " + shooter + " " + entityA);
+                        
                         if (shooter != Entity.Null && SystemAPI.HasComponent<AmmoComponent>(entityB))
                         {
                             var isEnemyShooter = SystemAPI.HasComponent<EnemyComponent>(shooter);
-                            //isEnemyShooter = true;
+                            isEnemyShooter = true;
                             var target = SystemAPI.GetComponent<TriggerComponent>(entityA)
                                 .ParentEntity;
                             var isEnemyTarget = SystemAPI.HasComponent<EnemyComponent>(target);
@@ -266,17 +87,17 @@ namespace Collisions
                             }
 
                             ammo.DamageCausedPreviously = true;
-                            var playerDamaged = false;
-
-                            if (shootsSelf)
-                            {
-                                shooter = playerList[0];
-                                //(shooter, entityA) = (entityA, shooter);
-                            }
-                            else
-                            {
-                                playerDamaged = true;
-                            }
+                            // var playerDamaged = false;
+                            //
+                            // if (shootsSelf)
+                            // {
+                            //     shooter = playerList[0];
+                            //     //(shooter, entityA) = (entityA, shooter);
+                            // }
+                            // else
+                            // {
+                            //     playerDamaged = true;
+                            // }
 
 
                             ecb.AddComponent(shooter,

@@ -521,7 +521,7 @@ public class EnemyMove : MonoBehaviour
             agent.updatePosition = false;
             agent.updatePosition = true;
             //anim.SetInteger("Zone", 2);
-            anim.SetFloat(Velz, velz, blendSpeed, Time.deltaTime);
+            anim.SetFloat(Velz, velz);
         }
         else
         {

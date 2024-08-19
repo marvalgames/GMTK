@@ -335,7 +335,8 @@ namespace Sandbox.Player
 
             _targetPosition.x = _manager.GetComponentData<ActorWeaponAimComponent>(_entity).crosshairRaycastTarget.x;
             _targetPosition.z = _manager.GetComponentData<ActorWeaponAimComponent>(_entity).crosshairRaycastTarget.z;
-            _targetPosition.y = _manager.GetComponentData<ActorWeaponAimComponent>(_entity).crosshairRaycastTarget.y;
+            //_targetPosition.y = _manager.GetComponentData<ActorWeaponAimComponent>(_entity).crosshairRaycastTarget.y;
+            _targetPosition.y = playerWeaponLocation.position.y;
             var aimTarget = _targetPosition;
 
             aimDir = math.normalize(aimTarget - playerWeaponLocation.position);

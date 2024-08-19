@@ -57,6 +57,7 @@ public partial class PlayerWeaponAmmoHandlerSystem : SystemBase
                 var ammoDataComponent = SystemAPI.GetComponent<AmmoDataComponent>(primaryAmmoEntity);
                 var rate = ammoDataComponent.GameRate;
                 var strength = ammoDataComponent.GameStrength;
+                var position = SystemAPI.GetComponent<LocalTransform>(entity).Position;
                 if (gun.roleReversal == RoleReversalMode.Off)
                 {
                     //change based on game

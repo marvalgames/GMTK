@@ -52,7 +52,7 @@ public partial class PlayerWeaponAimSystemLateUpdate : SystemBase
             playerWeaponAimComponent.angleToTarget = degrees;
             var turningValue = math.sign(degrees);
             var slerpDampTime = mb.rotateSpeed;
-
+            turningValue = 1;
 
             if (playerWeaponAimComponent.aimMode == false)
             {
@@ -61,8 +61,9 @@ public partial class PlayerWeaponAimSystemLateUpdate : SystemBase
             }
 
             var targetRotation = quaternion.LookRotationSafe(direction, math.up()); //always face xHair
-            localTransform.Rotation = math.slerp(localTransform.Rotation, targetRotation.value,
-                slerpDampTime * SystemAPI.Time.DeltaTime);
+            //localTransform.Rotation = math.slerp(localTransform.Rotation, targetRotation.value,
+            //    slerpDampTime * SystemAPI.Time.DeltaTime);
+            localTransform.Rotation = targetRotation;
             mb.animator.SetFloat(Turning, turningValue, turnSpeed, SystemAPI.Time.DeltaTime);
         }).Run();
     }

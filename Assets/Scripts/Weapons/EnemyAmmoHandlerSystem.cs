@@ -55,10 +55,7 @@ namespace Enemy
                         if (strength <= 0) strength = 0;
                     }
 
-                    //Debug.Log("Firing Aim Weight " + animatorWeightsComponent.aimWeight);
-                    //Debug.Log("Firing Trigger Weight " + enemyWeapon.animTriggerWeight);
-                    //if (enemyWeapon is { IsFiring: 1, Duration: 0 } )
-
+                 
                     if (enemyWeapon is { IsFiring: 1, Duration: 0, firingStage: FiringStage.None })
                         //animatorWeightsComponent.aimWeight == 0
                     {

@@ -147,6 +147,7 @@ namespace Sandbox.Player
 
 
                 applyImpulseComponent.ValueRW.animatorStickSpeed = stickSpeed;
+              
                 var ltw = SystemAPI.GetComponent<LocalToWorld>(entity);
                 float3 fwd = ltw.Forward * forwardSpeed;
                 float3 right = -ltw.Right * forwardSpeed;
@@ -248,19 +249,24 @@ namespace Sandbox.Player
                     in PlayerMoveComponent playerMove, in ApplyImpulseComponent applyImpulse) =>
                 {
                     var animStickSpeed = applyImpulse.animatorStickSpeed;
-                    if (SystemAPI.HasComponent<PlayerDashComponent>(e))
-                    {
-                        var playerDashComponent = SystemAPI.GetComponent<PlayerDashComponent>(e);
-                        animStickSpeed = applyImpulse.Grounded || playerDashComponent.InDash
-                                                               || applyImpulse.ApproachingStairs
-                            ? applyImpulse.animatorStickSpeed
-                            : 0;
-                    }
+                    // Debug.Log("Stick Speed " );
+                    // if (SystemAPI.HasComponent<PlayerDashComponent>(e))
+                    // {
+                    //     var playerDashComponent = SystemAPI.GetComponent<PlayerDashComponent>(e);
+                    //     animStickSpeed = playerDashComponent.InDash
+                    //                                            || applyImpulse.ApproachingStairs
+                    //         ? applyImpulse.animatorStickSpeed
+                    //         : 0;
+                    // }
+                    //
+                    
 
                     var dampTime =
                         animStickSpeed < .003 ? 0 : playerMove.dampTime; //if stick not moved (stopping) then no damp
+                    
+           
 
-                    animator.SetFloat(Vertical, animStickSpeed, dampTime, SystemAPI.Time.DeltaTime);
+                    animator.SetFloat(Vertical, animStickSpeed);
                     animator.SetBool(Grounded, applyImpulse.Grounded);
                 }
             ).Run();
