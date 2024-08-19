@@ -46,12 +46,12 @@ namespace Collisions
                         shooter = SystemAPI.GetComponent<TriggerComponent>(entityB)
                             .ParentEntity;
                         
-                        Debug.Log("SHOOTER " + shooter + " " + entityA);
+                        Debug.Log("SHOOTER " + shooter + " " + entityA + " " + entityB);
                         
                         if (shooter != Entity.Null && SystemAPI.HasComponent<AmmoComponent>(entityB))
                         {
                             var isEnemyShooter = SystemAPI.HasComponent<EnemyComponent>(shooter);
-                            isEnemyShooter = true;
+                            //isEnemyShooter = true;
                             var target = SystemAPI.GetComponent<TriggerComponent>(entityA)
                                 .ParentEntity;
                             var isEnemyTarget = SystemAPI.HasComponent<EnemyComponent>(target);
@@ -71,10 +71,6 @@ namespace Collisions
                                 ammo.frameSkipCounter = 0;
                             }
 
-                            var shootsSelf = shooter == entityA && isEnemyShooter;
-
-
-                            //if (ammo.DamageCausedPreviously || ammoData.ChargeRequired == true && ammo.Charged == false || isEnemyShooter == isEnemyTarget
                             if (ammo.DamageCausedPreviously || ammoData.ChargeRequired == true && ammo.Charged == false)
                             {
                                 damage = 0;
@@ -87,19 +83,8 @@ namespace Collisions
                             }
 
                             ammo.DamageCausedPreviously = true;
-                            // var playerDamaged = false;
-                            //
-                            // if (shootsSelf)
-                            // {
-                            //     shooter = playerList[0];
-                            //     //(shooter, entityA) = (entityA, shooter);
-                            // }
-                            // else
-                            // {
-                            //     playerDamaged = true;
-                            // }
-
-
+                    
+                            
                             ecb.AddComponent(shooter,
                                 new DamageComponent
                                 {
@@ -131,21 +116,8 @@ namespace Collisions
                             {
                                 var scoreComponent = SystemAPI.GetComponent<ScoreComponent>(shooter);
                                 scoreComponent.addBonus = 0;
-                                if (!isEnemyShooter) //player GMTK where can't score after hit - backwards
-                                {
-                                    //scoreComponent.zeroPoints = true;
-                                    //scoreComponent.pointsScored = false;
-                                    //scoreComponent.combo = 0;
-                                    //scoreComponent.streak = 0;
-                                    //scoreComponent.score = scoreComponent.startShotValue;
-                                }
 
                                 //for gmtk bonus for charged (blocked)
-                                if (ammo.Charged && isEnemyShooter == false && isEnemyTarget == true)
-                                {
-                                    scoreComponent.addBonus = scoreComponent.defaultPointsScored * 1;
-                                    ammo.Charged = false;
-                                }
 
                                 if (!scoreComponent.zeroPoints)
                                 {

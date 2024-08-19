@@ -93,28 +93,10 @@ namespace Collisions
                 var chA = triggerComponentA.ParentEntity;
                 var chB = triggerComponentB.ParentEntity;
                 var typeA = triggerComponentA.Type;
-                if (typeA == (int)TriggerType.Tail) typeA = (int)TriggerType.Melee;
                 var typeB = triggerComponentB.Type;
-                if (typeB == (int)TriggerType.Tail) typeB = (int)TriggerType.Melee;
-
-
+                
                 if (chA == chB && typeA != (int)TriggerType.Ammo && typeB != (int)TriggerType.Ammo) return; ////?????
-
-                var alwaysDamageA = false;
-                if (healthGroup.HasComponent(chA) == true)
-                {
-                    var healthComponentA = healthGroup[chA];
-                    alwaysDamageA = healthComponentA.alwaysDamage;
-                }
-
-                var alwaysDamageB = false;
-                if (healthGroup.HasComponent(chB) == true)
-                {
-                    var healthComponentB = healthGroup[chB];
-                    alwaysDamageB = healthComponentB.alwaysDamage; //regardless of type trigger
-                }
-
-
+                
                 if (triggerComponentA.Type == (int)TriggerType.Ground ||
                     triggerComponentB.Type == (int)TriggerType.Ground)
                 {
@@ -174,6 +156,8 @@ namespace Collisions
                             isMelee = false,
                             isHit = false
                         };
+                    
+                    Debug.Log("AMMO A " + collisionComponent.Character_entity + " " + collisionComponent.Character_other_entity);
 
                     Ecb.AddComponent(triggerComponentA.ParentEntity, collisionComponent);
                 }
@@ -190,6 +174,9 @@ namespace Collisions
                             isMelee = false,
                             isHit = false
                         };
+                    
+                    Debug.Log("AMMO B " + collisionComponent.Character_entity + " " + collisionComponent.Character_other_entity);
+
 
                     Ecb.AddComponent(triggerComponentB.ParentEntity, collisionComponent);
                 }
