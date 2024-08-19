@@ -26,6 +26,7 @@ namespace Collisions
         //public int comboCounter;
         public bool comboButtonClicked;
         public float scaleFactor;
+        public float scale_multiplier;
     }
 
     public struct CollisionComponent : IComponentData

@@ -104,7 +104,7 @@ namespace Collisions
                             if (SystemAPI.HasComponent<CheckedComponent>(entityA) && damage > 0)
                             {
                                 var checkedComponent = SystemAPI.GetComponent<CheckedComponent>(entityA);
-                                checkedComponent.scaleFactor *= 1.10f;
+                                checkedComponent.scaleFactor *= checkedComponent.scale_multiplier;
                                 SystemAPI.SetComponent(entityA, checkedComponent);
                                 Debug.Log("SCALE " + checkedComponent.scaleFactor);
                             }

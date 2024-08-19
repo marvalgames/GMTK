@@ -215,20 +215,20 @@ namespace Enemy
                                 moveState = MoveStates.Stopped;
                             }
 
-                            var lastState = enemyState.MoveState; //reads previous
-                            enemyState.currentStateTimer += SystemAPI.Time.DeltaTime;
-                            if (moveState == lastState || enemyState.MoveState == MoveStates.Default) //no change
-                            {
-                                enemyState.MoveState = moveState;
-                            }
-                            else if (moveState != lastState &&
-                                     enemyState.currentStateTimer > 1) //switched but after time required in role
-                            {
-                                enemyState.MoveState = moveState;
-                                enemyState.currentStateTimer = 0;
-                            }
-
-                            enemyState.MoveState = MoveStates.Chase;
+                            // var lastState = enemyState.MoveState; //reads previous
+                            // enemyState.currentStateTimer += SystemAPI.Time.DeltaTime;
+                            // if (moveState == lastState || enemyState.MoveState == MoveStates.Default) //no change
+                            // {
+                            //     enemyState.MoveState = moveState;
+                            // }
+                            // else if (moveState != lastState &&
+                            //          enemyState.currentStateTimer > 1) //switched but after time required in role
+                            // {
+                            //     enemyState.MoveState = moveState;
+                            //     enemyState.currentStateTimer = 0;
+                            // }
+                            //
+                            // enemyState.MoveState = MoveStates.Chase;
 
 
                             float3 opponentTargetPosition = new float3();

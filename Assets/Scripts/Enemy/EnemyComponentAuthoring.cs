@@ -52,6 +52,7 @@ public class EnemyComponentAuthoring : MonoBehaviour
     [SerializeField] int areaIndex;
 
     public float scaleFactor = 1;
+    public float scaleMultiplier = 1.10f;
 
     void LateUpdate()
     {
@@ -159,7 +160,7 @@ public class EnemyComponentAuthoring : MonoBehaviour
 
             AddComponent(e, new CharacterSaveComponent { saveIndex = index });
 
-            AddComponent(e, new CheckedComponent {scaleFactor = authoring.scaleFactor} );
+            AddComponent(e, new CheckedComponent {scaleFactor = authoring.scaleFactor, scale_multiplier = authoring.scaleMultiplier} );
 
             AddComponent(e,
                 new EnemyStateComponent { MoveState = MoveStates.Default, CombatState = CombatStates.Default });
