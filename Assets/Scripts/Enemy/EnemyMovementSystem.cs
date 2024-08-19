@@ -111,7 +111,6 @@ namespace Enemy
                         ref EnemyStateComponent enemyState,
                         ref CheckedComponent checkedComponent,
                         ref MatchupComponent matchupComponent,
-                        in LocalTransform localTransform,
                         in AnimatorWeightsComponent animatorWeightsComponent
                     ) =>
                     {
@@ -119,16 +118,13 @@ namespace Enemy
                         if (SystemAPI.GetComponent<DeadComponent>(e).isDead) return;
                         if (matchupComponent.closestOpponent == Entity.Null ||
                             matchupComponent.closestPlayerEntity == Entity.Null) return;
+                        
+
                         if (levelCompleteComponent.areaIndex > LevelManager.instance.currentLevelCompleted) return;
                         var animator = enemyMove.anim;
-                        var defensiveRole = SystemAPI.GetComponent<DefensiveStrategyComponent>(e).currentRole;
-                        var basicMovement = SystemAPI.GetComponent<EnemyMovementComponent>(e).enabled;
-                        var enemyMeleeMovementComponent = SystemAPI.GetComponent<EnemyMeleeMovementComponent>(e);
                         var enemyWeaponMovementComponent = SystemAPI.GetComponent<EnemyWeaponMovementComponent>(e);
                         var enemyBehaviourComponent = SystemAPI.GetComponent<EnemyBehaviourComponent>(e);
-                        var meleeMovement = enemyMeleeMovementComponent.enabled;
                         var weaponMovement = enemyWeaponMovementComponent.enabled;
-                        var enemyStrikeAllowed = enemyState.enemyStrikeAllowed;
 
                         enemyMove.speedMultiple = 1;
                         enemyState.selectMove = false;
@@ -136,10 +132,7 @@ namespace Enemy
 
                         if (role != EnemyRoles.None)
                         {
-                            var enemyPosition = localTransform.Position;
-                            var homePosition = enemyMove.originalPosition;
-                            var stayHome = enemyBehaviourComponent.useDistanceFromStation;
-
+                            var enemyPosition = SystemAPI.GetComponent<LocalTransform>(e).Position;
                             var closestPlayerEntity = matchupComponent.closestPlayerEntity;
                             var closestPlayerPosition =
                                 SystemAPI.GetComponent<LocalTransform>(closestPlayerEntity).Position;
@@ -151,20 +144,10 @@ namespace Enemy
                             closestOpponentPosition.y = 0;
 
 
-                            var isPlayerTarget = SystemAPI.HasComponent<PlayerComponent>(matchupComponent.targetEntity);
-                            //var pl = matchupComponent.opponentTargetPosition;
-                            var way = matchupComponent.wayPointTargetPosition;
-                            var aimWeight = animatorWeightsComponent.aimWeight;
-                            //pl.y = 0;
                             var en = enemyPosition;
                             en.y = 0;
                             var distFromOpponent = math.distance(closestOpponentPosition, en);
-                            var distFromPlayer = math.distance(closestPlayerPosition, en);
-                            var distFromWaypoint = math.distance(way, en);
-                            var distFromStation = math.distance(homePosition, enemyPosition);
                             var chaseRange = enemyBehaviourComponent.chaseRange;
-                            var aggression = enemyBehaviourComponent.aggression;
-                            //var stopRange = basicMovement ? 10 : enemyBehaviourComponent.stopRange;
                             var stopRange = enemyBehaviourComponent.stopRange;
                             var weaponRaised = WeaponMotion.None;
                             //if closer than weapon shooting stop range always melee if melee switch active 
@@ -177,7 +160,6 @@ namespace Enemy
                                 {
                                     //Debug.Log("TOO FAR");
                                     weaponMovement = false;
-                                    meleeMovement = false;
                                 }
                             }
 
@@ -190,9 +172,6 @@ namespace Enemy
                                 if (SystemAPI.HasComponent<ActorWeaponAimComponent>(e))
                                 {
                                     var actorWeaponAim = SystemAPI.GetComponent<ActorWeaponAimComponent>(e);
-                                    //weaponRaised = WeaponMotion.None;
-
-
                                     if (playerIsFiring &&
                                         !weaponComponent.tooFarTooAttack || distFromOpponent <
                                         enemyWeaponMovementComponent.shootRangeDistance && weaponMovement &&
@@ -201,7 +180,6 @@ namespace Enemy
                                         if (weaponComponent.firingStage == FiringStage.None)
                                         {
                                             weaponRaised = WeaponMotion.Started;
-                                            //weaponComponent.firstFiring = false;
                                         }
                                         else if (weaponComponent is { IsFiring: 1, firingStage: FiringStage.Start })
                                         {
@@ -219,12 +197,7 @@ namespace Enemy
                                     SystemAPI.SetComponent(e, weaponComponent);
                                 }
                             }
-
-
                             MoveStates moveState;
-
-                            //if (checkedComponent.anyAttackStarted == false)
-                            //{
                             if (distFromOpponent < chaseRange &&
                                 distFromOpponent > stopRange) //weapon 1st option
                             {
@@ -242,7 +215,6 @@ namespace Enemy
                                 moveState = MoveStates.Stopped;
                             }
 
-                            //enemyMove.FaceWaypoint();
                             var lastState = enemyState.MoveState; //reads previous
                             enemyState.currentStateTimer += SystemAPI.Time.DeltaTime;
                             if (moveState == lastState || enemyState.MoveState == MoveStates.Default) //no change
@@ -277,8 +249,14 @@ namespace Enemy
                             enemyMove.UpdateEnemyMovement();
                             enemyMove.AnimationMovement(targetPosition);
                             enemyMove.FaceWaypoint();
-                            //}
                         }
+
+
+                        var enemyTransform =
+                            SystemAPI.GetComponent<LocalTransform>(e);
+                        enemyTransform.Scale = checkedComponent.scaleFactor;
+                        SystemAPI.SetComponent(e, enemyTransform);
+
                     }
                 ).Run();
 

@@ -1,4 +1,5 @@
 using Unity.Entities;
+using Unity.Mathematics;
 using Unity.Transforms;
 using UnityEngine;
 using UnityEngine.AI;
@@ -77,6 +78,7 @@ public class CharacterEntityTracker : MonoBehaviour
         {
             var eLocalPosition = entityManager.GetComponentData<LocalTransform>(linkedEntity).Position;
             var eLocalRotation = entityManager.GetComponentData<LocalTransform>(linkedEntity).Rotation;
+            var eLocalScale = entityManager.GetComponentData<LocalTransform>(linkedEntity).Scale;
 
             if (followPlayerCharacter)
             {
@@ -87,11 +89,14 @@ public class CharacterEntityTracker : MonoBehaviour
             {
                 transform.position = eLocalPosition;
                 transform.rotation = eLocalRotation;
+                transform.localScale = new float3(eLocalScale, eLocalScale, eLocalScale);
             }
             else
             {
                 var localTransform = LocalTransform.FromPositionRotation(transform.position, transform.rotation);
+                transform.localScale = new float3(eLocalScale, eLocalScale, eLocalScale);
                 entityManager.SetComponentData(linkedEntity, localTransform);
+
             }
         }
 

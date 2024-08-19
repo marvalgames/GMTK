@@ -18,13 +18,13 @@ namespace Collisions
             Entities.WithoutBurst().WithAny<TriggeredComponentTag>().ForEach((
                     ref Entity entity, ref TriggerComponent triggerComponent, ref LocalTransform LocalTransform) =>
                 {
-                    if (triggerComponent.TriggeredVfxEntity != Entity.Null && triggerComponent.VfxSpawned < 1)
-                    {
-                        triggerComponent.VfxSpawned += 1;
-                        ecb.RemoveComponent<TriggeredComponentTag>(triggerComponent.TriggeredVfxEntity);
-                        var e = ecb.Instantiate(triggerComponent.TriggeredVfxEntity);
-                        ecb.SetComponent(e, LocalTransform);
-                    }
+                    // if (triggerComponent.TriggeredVfxEntity != Entity.Null && triggerComponent.VfxSpawned < 1)
+                    // {
+                    //     triggerComponent.VfxSpawned += 1;
+                    //     ecb.RemoveComponent<TriggeredComponentTag>(triggerComponent.TriggeredVfxEntity);
+                    //     var e = ecb.Instantiate(triggerComponent.TriggeredVfxEntity);
+                    //     ecb.SetComponent(e, LocalTransform);
+                    // }
                 }
             ).Run();
             ecb.Playback(EntityManager);

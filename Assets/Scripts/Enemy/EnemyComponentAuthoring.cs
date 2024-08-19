@@ -51,6 +51,7 @@ public class EnemyComponentAuthoring : MonoBehaviour
 
     [SerializeField] int areaIndex;
 
+    public float scaleFactor = 1;
 
     void LateUpdate()
     {
@@ -158,7 +159,7 @@ public class EnemyComponentAuthoring : MonoBehaviour
 
             AddComponent(e, new CharacterSaveComponent { saveIndex = index });
 
-            AddComponent(e, new CheckedComponent());
+            AddComponent(e, new CheckedComponent {scaleFactor = authoring.scaleFactor} );
 
             AddComponent(e,
                 new EnemyStateComponent { MoveState = MoveStates.Default, CombatState = CombatStates.Default });

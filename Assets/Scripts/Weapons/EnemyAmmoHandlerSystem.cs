@@ -124,16 +124,12 @@ namespace Enemy
                     }
                     else if (enemyWeapon is { IsFiring: 1, Duration: > 0 })
                     {
-                        //Debug.Log("Firing Duration " + enemyWeapon.Duration);
-                        //Debug.Log("Firing Rate  " + enemyWeapon.Rate);
                         enemyWeapon.firingStage = FiringStage.None;
                         enemyWeapon.Duration += dt;
                         if ((enemyWeapon.Duration > rate) && (enemyWeapon.IsFiring == 1))
                         {
-                            //actorWeaponAimComponent.weaponRaised = WeaponMotion.Lowering;
                             enemyWeapon.Duration = 0;
                             enemyWeapon.IsFiring = 0;
-                            //Debug.Log("Firing Done");
                         }
                     }
 

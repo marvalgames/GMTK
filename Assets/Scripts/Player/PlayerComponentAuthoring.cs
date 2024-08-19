@@ -82,7 +82,7 @@ namespace Sandbox.Player
 
         [SerializeField]
         bool paused = false;
-
+        public float scaleFactor = 1;
 
         public class PlayerComponentBaker : Baker<PlayerComponentAuthoring>
         {
@@ -166,7 +166,7 @@ namespace Sandbox.Player
                     }
                 );
 
-                AddComponent(e, new CheckedComponent());
+                AddComponent(e, new CheckedComponent {scaleFactor = authoring.scaleFactor});
 
                 AddComponent(e, 
                     new MatchupComponent

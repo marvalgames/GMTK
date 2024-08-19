@@ -85,12 +85,14 @@ namespace Sandbox.Player
             var time = SystemAPI.Time.DeltaTime;
             var camTransform = SystemAPI.GetSingleton<CameraControlsComponent>();
 
-            foreach (var (pv, transform, applyImpulseComponent, inputController, ratingsComponent, entity) in
+            foreach (var (pv, transform, applyImpulseComponent, inputController, ratingsComponent, checkedComponent,
+                         entity) in
                      SystemAPI.Query<RefRW<PhysicsVelocity>,
                              RefRW<LocalTransform>,
                              RefRW<ApplyImpulseComponent>,
                              RefRO<InputControllerComponent>,
-                             RefRO<RatingsComponent>>
+                             RefRO<RatingsComponent>,
+                             RefRO<CheckedComponent>>
                          ().WithEntityAccess())
             {
                 var forwardSpeed = 1;
@@ -125,7 +127,7 @@ namespace Sandbox.Player
                 if (actorWeapon)
                 {
                     var aimComponent = SystemAPI.GetComponent<ActorWeaponAimComponent>(entity);
-                    var distanceFromTarget = math.distance(transform.ValueRW.Position, aimComponent.targetPosition);
+                    var distanceFromTarget = math.distance(transform.ValueRO.Position, aimComponent.targetPosition);
                     aimComponent.distanceFromTarget = distanceFromTarget;
                     combatMode = aimComponent.combatMode;
                     if (aimComponent.aimMode)
@@ -147,7 +149,7 @@ namespace Sandbox.Player
 
 
                 applyImpulseComponent.ValueRW.animatorStickSpeed = stickSpeed;
-              
+
                 var ltw = SystemAPI.GetComponent<LocalToWorld>(entity);
                 float3 fwd = ltw.Forward * forwardSpeed;
                 float3 right = -ltw.Right * forwardSpeed;
@@ -170,7 +172,7 @@ namespace Sandbox.Player
                     }
 
 
-                    if (aimMode || combatMode)
+                    if (aimMode)
                     {
                         pv.ValueRW.Linear.x = inputDirection.x * currentSpeed * impulseFactor;
                         pv.ValueRW.Linear.z = inputDirection.z * currentSpeed * impulseFactor;
@@ -179,57 +181,12 @@ namespace Sandbox.Player
                     {
                         pv.ValueRW.Linear = fwd * stickSpeed * currentSpeed;
                     }
-
-                    if (applyImpulseComponent.ValueRW.ApproachingStairs)
-                    {
-                        pv.ValueRW.Linear.y += applyImpulseComponent.ValueRW.ApproachStairBoost;
-                    }
                 }
 
-                if (!applyImpulseComponent.ValueRW.ApproachingStairs)
-                {
-                    pv.ValueRW.Linear.y += applyImpulseComponent.ValueRW.OnGroundNegativeForce;
-                }
-
-
-                if (playerMoveComponent.move2d)
-                {
-                    var tr = transform.ValueRW.Position;
-                    tr.z = playerMoveComponent.startPosition.z;
-                    transform.ValueRW.Position = tr;
-                }
-
-                var inDash = false;
-                if (SystemAPI.HasComponent<PlayerDashComponent>(entity))
-                {
-                    var playerDashComponent = SystemAPI.GetComponent<PlayerDashComponent>(entity);
-                    inDash = playerDashComponent.InDash;
-                }
-
+                pv.ValueRW.Linear.y += applyImpulseComponent.ValueRW.OnGroundNegativeForce;
 
                 applyImpulseComponent.ValueRW.forwardSpeed = forwardSpeed;
-                if (combatMode && !inDash)
-                {
-                    var matchupComponent = SystemAPI.GetComponent<MatchupComponent>(entity);
-
-                    //var localTransform = SystemAPI.GetComponent<LocalTransform>(entity);
-                    var targetEntity = matchupComponent.closestEnemyEntity;
-                    var playerPosition = transform.ValueRW.Position;
-                    var targetPosition = SystemAPI.GetComponent<LocalTransform>(targetEntity).Position;
-                    var direction = math.normalize(targetPosition - playerPosition);
-                    var slerpDampTime = playerMoveComponent.combatRotateSpeed;
-                    var targetRotation = quaternion.LookRotationSafe(direction, math.up());//always face player
-                    var playerRotation = SystemAPI.GetComponent<LocalTransform>(entity).Rotation;
-                    playerRotation = math.slerp(playerRotation, targetRotation.value,
-                        slerpDampTime * SystemAPI.Time.DeltaTime);
-                    transform.ValueRW.Rotation = playerRotation;
-                }
-                else if (math.length(targetDirection) > 0 && !aimMode)
-                {
-                    quaternion targetRotation = Quaternion.LookRotation(inputDirection, math.up());
-                    transform.ValueRW.Rotation = math.slerp(transform.ValueRW.Rotation, targetRotation,
-                        playerMoveComponent.rotateSpeed * time / forwardAdjustment);
-                }
+                transform.ValueRW.Scale = checkedComponent.ValueRO.scaleFactor;
             }
         }
     }
@@ -249,23 +206,6 @@ namespace Sandbox.Player
                     in PlayerMoveComponent playerMove, in ApplyImpulseComponent applyImpulse) =>
                 {
                     var animStickSpeed = applyImpulse.animatorStickSpeed;
-                    // Debug.Log("Stick Speed " );
-                    // if (SystemAPI.HasComponent<PlayerDashComponent>(e))
-                    // {
-                    //     var playerDashComponent = SystemAPI.GetComponent<PlayerDashComponent>(e);
-                    //     animStickSpeed = playerDashComponent.InDash
-                    //                                            || applyImpulse.ApproachingStairs
-                    //         ? applyImpulse.animatorStickSpeed
-                    //         : 0;
-                    // }
-                    //
-                    
-
-                    var dampTime =
-                        animStickSpeed < .003 ? 0 : playerMove.dampTime; //if stick not moved (stopping) then no damp
-                    
-           
-
                     animator.SetFloat(Vertical, animStickSpeed);
                     animator.SetBool(Grounded, applyImpulse.Grounded);
                 }
@@ -281,15 +221,12 @@ namespace Sandbox.Player
         {
             Entities.WithoutBurst().ForEach(
                 (
+                    in LocalTransform transform,
                     in VisualEffectGO goVisualEffect,
                     in AudioPlayerGO goAudioPlayer,
-                    in LocalTransform transform,
                     in PlayerMoveComponent playerMoveComponent,
                     in ApplyImpulseComponent applyImpulseComponent) =>
                 {
-                    // var audioSource = playerMove.audioSource;
-                    // Debug.Log("AS " + goAudioPlayer.AudioSource);
-                    // Debug.Log("AC " + goAudioPlayer.AudioClip);
                     var stickSpeed = applyImpulseComponent.animatorStickSpeed;
 
 

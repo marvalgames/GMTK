@@ -1,6 +1,7 @@
 using Sandbox.Player;
 using Unity.Collections;
 using Unity.Entities;
+using Unity.Transforms;
 using UnityEngine;
 
 namespace Collisions
@@ -33,7 +34,6 @@ namespace Collisions
                     var entityA = collisionComponent.Character_entity;
                     var entityB = collisionComponent.Character_other_entity;
                     if (entityA == entityB && typeA != (int)TriggerType.Ammo && typeB != (int)TriggerType.Ammo) return;
-                    
 
 
                     if (typeB == (int)TriggerType.Ammo && SystemAPI.HasComponent<TriggerComponent>(entityA)
@@ -45,13 +45,10 @@ namespace Collisions
                         var shooter = Entity.Null;
                         shooter = SystemAPI.GetComponent<TriggerComponent>(entityB)
                             .ParentEntity;
-                        
-                        Debug.Log("SHOOTER " + shooter + " " + entityA + " " + entityB);
-                        
+
                         if (shooter != Entity.Null && SystemAPI.HasComponent<AmmoComponent>(entityB))
                         {
                             var isEnemyShooter = SystemAPI.HasComponent<EnemyComponent>(shooter);
-                            //isEnemyShooter = true;
                             var target = SystemAPI.GetComponent<TriggerComponent>(entityA)
                                 .ParentEntity;
                             var isEnemyTarget = SystemAPI.HasComponent<EnemyComponent>(target);
@@ -83,14 +80,15 @@ namespace Collisions
                             }
 
                             ammo.DamageCausedPreviously = true;
-                    
-                            
+
+
                             ecb.AddComponent(shooter,
                                 new DamageComponent
                                 {
                                     DamageLanded = damage, DamageReceived = 0, EntityCausingDamage = entityB,
                                     LosingDamage = false
                                 });
+
 
                             ecb.AddComponent(entityA,
                                 new DamageComponent
@@ -102,6 +100,15 @@ namespace Collisions
                                     LosingDamage = false,
                                     EntityCausingDamage = entityB
                                 });
+
+                            if (SystemAPI.HasComponent<CheckedComponent>(entityA) && damage > 0)
+                            {
+                                var checkedComponent = SystemAPI.GetComponent<CheckedComponent>(entityA);
+                                checkedComponent.scaleFactor *= 1.10f;
+                                SystemAPI.SetComponent(entityA, checkedComponent);
+                                Debug.Log("SCALE " + checkedComponent.scaleFactor);
+                            }
+
 
                             if (SystemAPI.HasComponent<SkillTreeComponent>(shooter))
                             {
@@ -116,9 +123,6 @@ namespace Collisions
                             {
                                 var scoreComponent = SystemAPI.GetComponent<ScoreComponent>(shooter);
                                 scoreComponent.addBonus = 0;
-
-                                //for gmtk bonus for charged (blocked)
-
                                 if (!scoreComponent.zeroPoints)
                                 {
                                     scoreComponent.scoringAmmoEntity = ammo.ammoEntity;
@@ -126,6 +130,7 @@ namespace Collisions
                                     scoreComponent.combo = 1;
                                     scoreComponent.scoredAgainstEntity = entityA;
                                 }
+
 
                                 SystemAPI.SetComponent(shooter, scoreComponent);
                             }
@@ -138,101 +143,7 @@ namespace Collisions
                                 SystemAPI.SetComponent(entityA, scoreComponent);
                             }
 
-
                             ecb.SetComponent(entityB, ammo);
-                        }
-                    }
-
-
-                    if (typeB == (int)TriggerType.Particle && SystemAPI.HasComponent<TriggerComponent>(entityA)
-                                                           && SystemAPI
-                                                               .HasComponent<
-                                                                   TriggerComponent>(
-                                                                   entityB)) //b is damage effect so causes damage to entity
-                    {
-                        var shooter = SystemAPI.GetComponent<TriggerComponent>(entityB)
-                            .ParentEntity;
-
-                        if (shooter != Entity.Null &&
-                            SystemAPI.HasComponent<VisualEffectEntityComponent>(entityB))
-                        {
-                            var isEnemyShooter = SystemAPI.HasComponent<EnemyComponent>(shooter);
-                            var target = SystemAPI.GetComponent<TriggerComponent>(entityA)
-                                .ParentEntity;
-                            var isEnemyTarget = SystemAPI.HasComponent<EnemyComponent>(target);
-                            var visualEffectComponent =
-                                SystemAPI.GetComponent<VisualEffectEntityComponent>(entityB);
-
-                            float damage = 0;
-                            var effectsIndex = 0;
-                            var skip = false;
-                            //if (visualEffectComponent.frameSkipCounter < visualEffectComponent.framesToSkip)
-                            if (visualEffectComponent.frameSkipCounter == 0)
-                            {
-                                visualEffectComponent.frameSkipCounter += 1;
-                                skip = false;
-                            }
-                            else if (visualEffectComponent.frameSkipCounter < visualEffectComponent.framesToSkip)
-
-                            {
-                                visualEffectComponent.frameSkipCounter += 1;
-                                skip = true;
-                            }
-                            else if (visualEffectComponent.frameSkipCounter >= visualEffectComponent.framesToSkip)
-
-                            {
-                                visualEffectComponent.frameSkipCounter = 0;
-                                skip = true;
-                            }
-
-                            if (skip == false)
-                            {
-                                damage = visualEffectComponent.damageAmount;
-                                //effectsIndex = (int)EffectType.Damaged;
-                                effectsIndex = visualEffectComponent.effectsIndex; //???
-                            }
-
-                            if (SystemAPI.HasComponent<DeadComponent>(entityA) == false ||
-                                SystemAPI.GetComponent<DeadComponent>(entityA).isDead)
-                            {
-                                damage = 0;
-                            }
-
-
-                            ecb.AddComponent(shooter,
-                                new DamageComponent
-                                {
-                                    DamageLanded = damage,
-                                    DamageReceived = 0,
-                                    EntityCausingDamage = entityB
-                                });
-
-
-                            ecb.AddComponent(entityA,
-                                new DamageComponent
-                                {
-                                    DamageLanded = 0, DamageReceived = damage, StunLanded = damage,
-                                    EntityCausingDamage = entityB, EffectsIndex = effectsIndex
-                                });
-
-                            if (SystemAPI.HasComponent<SkillTreeComponent>(shooter))
-                            {
-                                var skill = SystemAPI.GetComponent<SkillTreeComponent>(shooter);
-                                skill.CurrentLevelXp += damage;
-                                SystemAPI.SetComponent(shooter, skill);
-                            }
-
-
-                            if (SystemAPI.HasComponent<ScoreComponent>(shooter) && damage != 0)
-                            {
-                                var scoreComponent = SystemAPI.GetComponent<ScoreComponent>(shooter);
-                                scoreComponent.addBonus = 0;
-                                scoreComponent.pointsScored = true;
-                                scoreComponent.scoredAgainstEntity = entityA;
-                                SystemAPI.SetComponent(shooter, scoreComponent);
-                            }
-
-                            ecb.SetComponent(entityB, visualEffectComponent);
                         }
                     }
                 }

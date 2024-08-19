@@ -25,6 +25,7 @@ namespace Collisions
         public int comboIndexPlaying;
         //public int comboCounter;
         public bool comboButtonClicked;
+        public float scaleFactor;
     }
 
     public struct CollisionComponent : IComponentData
@@ -157,7 +158,6 @@ namespace Collisions
                             isHit = false
                         };
                     
-                    Debug.Log("AMMO A " + collisionComponent.Character_entity + " " + collisionComponent.Character_other_entity);
 
                     Ecb.AddComponent(triggerComponentA.ParentEntity, collisionComponent);
                 }
@@ -175,8 +175,6 @@ namespace Collisions
                             isHit = false
                         };
                     
-                    Debug.Log("AMMO B " + collisionComponent.Character_entity + " " + collisionComponent.Character_other_entity);
-
 
                     Ecb.AddComponent(triggerComponentB.ParentEntity, collisionComponent);
                 }
