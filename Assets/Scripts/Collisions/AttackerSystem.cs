@@ -106,7 +106,6 @@ namespace Collisions
                                 var checkedComponent = SystemAPI.GetComponent<CheckedComponent>(entityA);
                                 checkedComponent.scaleFactor *= checkedComponent.scale_multiplier;
                                 SystemAPI.SetComponent(entityA, checkedComponent);
-                                Debug.Log("SCALE " + checkedComponent.scaleFactor);
                             }
 
 
