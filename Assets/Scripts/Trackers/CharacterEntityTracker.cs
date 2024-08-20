@@ -1,3 +1,5 @@
+using Collisions;
+using Sandbox.Player;
 using Unity.Entities;
 using Unity.Mathematics;
 using Unity.Transforms;
@@ -79,6 +81,12 @@ public class CharacterEntityTracker : MonoBehaviour
             var eLocalPosition = entityManager.GetComponentData<LocalTransform>(linkedEntity).Position;
             var eLocalRotation = entityManager.GetComponentData<LocalTransform>(linkedEntity).Rotation;
             var eLocalScale = entityManager.GetComponentData<LocalTransform>(linkedEntity).Scale;
+            if (entityManager.HasComponent<CheckedComponent>(linkedEntity) && entityManager.HasComponent<PlayerComponent>(linkedEntity))
+            {
+                var checkedComponent = entityManager.GetComponentData<CheckedComponent>(linkedEntity);
+                eLocalScale = checkedComponent.scaleFactor;
+                Debug.Log("SC " + eLocalScale);
+            }
 
             if (followPlayerCharacter)
             {
@@ -90,6 +98,9 @@ public class CharacterEntityTracker : MonoBehaviour
                 transform.position = eLocalPosition;
                 transform.rotation = eLocalRotation;
                 transform.localScale = new float3(eLocalScale, eLocalScale, eLocalScale);
+                //var localTransform = LocalTransform.FromScale(eLocalScale);
+                //entityManager.SetComponentData(linkedEntity, localTransform);
+
             }
             else
             {

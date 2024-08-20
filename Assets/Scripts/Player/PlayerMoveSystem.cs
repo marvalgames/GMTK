@@ -186,7 +186,7 @@ namespace Sandbox.Player
                 pv.ValueRW.Linear.y += applyImpulseComponent.ValueRW.OnGroundNegativeForce;
 
                 applyImpulseComponent.ValueRW.forwardSpeed = forwardSpeed;
-                transform.ValueRW.Scale = checkedComponent.ValueRO.scaleFactor;
+                //transform.ValueRW.Scale = checkedComponent.ValueRO.scaleFactor;
             }
         }
     }
