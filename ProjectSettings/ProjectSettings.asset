@@ -12,8 +12,8 @@ PlayerSettings:
   targetDevice: 2
   useOnDemandResources: 0
   accelerometerFrequency: 60
-  companyName: Francisco Ramos
-  productName: Small Big Ball
+  companyName: DefaultCompany
+  productName: GMTK
   defaultCursor: {fileID: 0}
   cursorHotspot: {x: 0, y: 0}
   m_SplashScreenBackgroundColor: {r: 0.12156863, g: 0.12156863, b: 0.1254902, a: 1}
@@ -70,7 +70,7 @@ PlayerSettings:
   androidRenderOutsideSafeArea: 1
   androidUseSwappy: 1
   androidBlitType: 0
-  androidResizeableActivity: 0
+  androidResizeableActivity: 1
   androidDefaultWindowWidth: 1920
   androidDefaultWindowHeight: 1080
   androidMinimumWindowWidth: 400
@@ -78,7 +78,7 @@ PlayerSettings:
   androidFullscreenMode: 1
   androidAutoRotationBehavior: 1
   androidPredictiveBackSupport: 0
-  androidApplicationEntry: 1
+  androidApplicationEntry: 2
   defaultIsNativeResolution: 1
   macRetinaSupport: 1
   runInBackground: 0
@@ -89,11 +89,11 @@ PlayerSettings:
   hideHomeButton: 0
   submitAnalytics: 1
   usePlayerLog: 1
-  dedicatedServerOptimizations: 0
+  dedicatedServerOptimizations: 1
   bakeCollisionMeshes: 0
   forceSingleInstance: 0
   useFlipModelSwapchain: 1
-  resizableWindow: 1
+  resizableWindow: 0
   useMacAppStoreValidation: 0
   macAppStoreCategory: public.app-category.games
   gpuSkinning: 0
@@ -105,7 +105,7 @@ PlayerSettings:
   xboxEnableFitness: 0
   visibleInBackground: 1
   allowFullscreenSwitch: 1
-  fullscreenMode: 2
+  fullscreenMode: 1
   xboxSpeechDB: 0
   xboxEnableHeadOrientation: 0
   xboxEnableGuest: 0
@@ -160,10 +160,10 @@ PlayerSettings:
   resolutionScalingMode: 0
   resetResolutionOnWindowResize: 0
   androidSupportedAspectRatio: 1
-  androidMaxAspectRatio: 2.1
+  androidMaxAspectRatio: 2.4
   androidMinAspectRatio: 1
   applicationIdentifier:
-    Standalone: com.Francisco-Ramos.Small-Big-Ball
+    Standalone: com.DefaultCompany.GMTK
   buildNumber:
     Bratwurst: 0
     Standalone: 0
@@ -184,7 +184,7 @@ PlayerSettings:
   CreateWallpaper: 0
   androidSplitApplicationBinary: 0
   keepLoadedShadersAlive: 0
-  StripUnusedMeshComponents: 1
+  StripUnusedMeshComponents: 0
   strictShaderVariantMatching: 0
   VertexChannelCompressionMask: 4054
   iPhoneSdkVersion: 988
@@ -262,7 +262,7 @@ PlayerSettings:
   useCustomGradlePropertiesTemplate: 0
   useCustomGradleSettingsTemplate: 0
   useCustomProguardFile: 0
-  AndroidTargetArchitectures: 1
+  AndroidTargetArchitectures: 2
   AndroidSplashScreenScale: 0
   androidSplashScreen: {fileID: 0}
   AndroidKeystoreName: 
@@ -284,22 +284,16 @@ PlayerSettings:
   AndroidMinifyRelease: 0
   AndroidMinifyDebug: 0
   AndroidValidateAppBundleSize: 1
-  AndroidAppBundleSizeToValidate: 150
+  AndroidAppBundleSizeToValidate: 200
   AndroidReportGooglePlayAppDependencies: 1
   androidSymbolsSizeThreshold: 800
   m_BuildTargetIcons: []
   m_BuildTargetPlatformIcons: []
-  m_BuildTargetBatching:
-  - m_BuildTarget: Standalone
-    m_StaticBatching: 0
-    m_DynamicBatching: 1
+  m_BuildTargetBatching: []
   m_BuildTargetShaderSettings: []
   m_BuildTargetGraphicsJobs: []
   m_BuildTargetGraphicsJobMode: []
-  m_BuildTargetGraphicsAPIs:
-  - m_BuildTarget: WebGLSupport
-    m_APIs: 0b000000
-    m_Automatic: 1
+  m_BuildTargetGraphicsAPIs: []
   m_BuildTargetVRSettings: []
   m_DefaultShaderChunkSizeInMB: 16
   m_DefaultShaderChunkCount: 0
@@ -309,13 +303,17 @@ PlayerSettings:
   m_TemplateCustomTags: {}
   mobileMTRendering:
     Android: 1
+    VisionOS: 1
     iPhone: 1
     tvOS: 1
   m_BuildTargetGroupLightmapEncodingQuality: []
   m_BuildTargetGroupLightmapSettings: []
   m_BuildTargetGroupLoadStoreDebugModeSettings: []
   m_BuildTargetNormalMapEncoding: []
-  m_BuildTargetDefaultTextureCompressionFormat: []
+  m_BuildTargetDefaultTextureCompressionFormat:
+  - serializedVersion: 3
+    m_BuildTarget: WebGL
+    m_Formats: 05000000
   playModeTestRunnerEnabled: 0
   runPlayModeTestAsEditModeTest: 0
   actionOnDotNetUnhandledException: 1
@@ -581,18 +579,13 @@ PlayerSettings:
   webGLCloseOnQuit: 0
   webWasm2023: 0
   scriptingDefineSymbols:
-    Android: CROSS_PLATFORM_INPUT;MOBILE_INPUT
-    Standalone: UNITY_PIPELINE_URP;TMP_PRESENT;UNITY_PHYSICS_CUSTOM;CROSS_PLATFORM_INPUT;UPPipeline;GAIA_CINEMACHINE;GAIA_2023;GAIA_MESH_PRESENT;__MICROSPLAT__;__MICROSPLAT_GLOBALTEXTURE__;__MICROSPLAT_DETAILRESAMPLE__;__MICROSPLAT_TERRAINBLEND__;__MICROSPLAT_TRIPLANAR__;__MICROSPLAT_TEXTURECLUSTERS__;__MICROSPLAT_TESSELLATION__;__MICROSPLAT_WINDGLITTER__;__MICROSPLAT_STREAMS__;__MICROSPLAT_SNOW__;__MICROSPLAT_ALPHAHOLE__;__MICROSPLAT_MESHTERRAIN__;GAIA_INPUT_SYSTEM;PWB_URP;__MICROSPLAT_MICROVERSEPREVIEW__;__MICROSPLAT_LOWPOLY__;__MICROSPLAT_MESH__;__MICROSPLAT_OBJECTSHADER__;__MICROSPLAT_PROCTEX__;__MICROSPLAT_TRAX__;__MICROSPLAT_SCATTER__;__MICROSPLAT_DECAL__
-    WebGL: UNITY_PHYSICS_CUSTOM;GAIA_MESH_PRESENT;__MICROSPLAT__;__MICROSPLAT_WINDGLITTER__;__MICROSPLAT_SNOW__;__MICROSPLAT_ALPHAHOLE__;__MICROSPLAT_MESH__;__MICROSPLAT_STREAMS__;__MICROSPLAT_GLOBALTEXTURE__;__MICROSPLAT_TRAX__;__MICROSPLAT_DECAL__;__MICROSPLAT_SCATTER__;__MICROSPLAT_TEXTURECLUSTERS__;__MICROSPLAT_MESHTERRAIN__;__MICROSPLAT_DETAILRESAMPLE__;__MICROSPLAT_TERRAINBLEND__;__MICROSPLAT_TESSELLATION__;__MICROSPLAT_LOWPOLY__;__MICROSPLAT_OBJECTSHADER__;__MICROSPLAT_PROCTEX__;__MICROSPLAT_TRIPLANAR__;__MICROSPLAT_MICROVERSEPREVIEW__
-    Windows Store Apps: MOBILE_INPUT
-    iPhone: CROSS_PLATFORM_INPUT;MOBILE_INPUT
+    Standalone: __MICROSPLAT__;__MICROSPLAT_WINDGLITTER__;__MICROSPLAT_SNOW__;__MICROSPLAT_ALPHAHOLE__;__MICROSPLAT_MESH__;__MICROSPLAT_STREAMS__;__MICROSPLAT_GLOBALTEXTURE__;__MICROSPLAT_TRAX__;__MICROSPLAT_DECAL__;__MICROSPLAT_SCATTER__;__MICROSPLAT_TEXTURECLUSTERS__;__MICROSPLAT_MESHTERRAIN__;__MICROSPLAT_DETAILRESAMPLE__;__MICROSPLAT_TERRAINBLEND__;__MICROSPLAT_TESSELLATION__;__MICROSPLAT_LOWPOLY__;__MICROSPLAT_OBJECTSHADER__;__MICROSPLAT_PROCTEX__;__MICROSPLAT_TRIPLANAR__;UNITY_PHYSICS_CUSTOM;__MICROSPLAT_MICROVERSEPREVIEW__
   additionalCompilerArguments: {}
   platformArchitecture: {}
   scriptingBackend:
     Standalone: 1
   il2cppCompilerConfiguration: {}
-  il2cppCodeGeneration:
-    Standalone: 1
+  il2cppCodeGeneration: {}
   il2cppStacktraceInformation: {}
   managedStrippingLevel: {}
   incrementalIl2cppBuild: {}
@@ -607,14 +600,14 @@ PlayerSettings:
   editorAssembliesCompatibilityLevel: 1
   m_RenderingPath: 1
   m_MobileRenderingPath: 1
-  metroPackageName: Sandbox
+  metroPackageName: GMTK
   metroPackageVersion: 
   metroCertificatePath: 
   metroCertificatePassword: 
   metroCertificateSubject: 
   metroCertificateIssuer: 
   metroCertificateNotAfter: 0000000000000000
-  metroApplicationDescription: Sandbox
+  metroApplicationDescription: GMTK
   wsaImages: {}
   metroTileShortName: 
   metroTileShowName: 0
@@ -676,14 +669,14 @@ PlayerSettings:
     m_VersionCode: 1
     m_VersionName: 
   hmiPlayerDataPath: 
-  hmiForceSRGBBlit: 1
-  embeddedLinuxEnableGamepadInput: 1
+  hmiForceSRGBBlit: 0
+  embeddedLinuxEnableGamepadInput: 0
   hmiCpuConfiguration: 
   hmiLogStartupTiming: 0
   qnxGraphicConfPath: 
   apiCompatibilityLevel: 6
   captureStartupLogs: {}
-  activeInputHandler: 2
+  activeInputHandler: 0
   windowsGamepadBackendHint: 0
   cloudProjectId: 
   framebufferDepthMemorylessMode: 0
