@@ -105,8 +105,16 @@ namespace Collisions
                             {
                                 var checkedComponent = SystemAPI.GetComponent<CheckedComponent>(entityA);
                                 checkedComponent.scaleFactor *= checkedComponent.scale_multiplier;
-                                if (checkedComponent.scaleFactor > 3) checkedComponent.scaleFactor = 3;
+                                if (checkedComponent.scaleFactor > 2.5f) checkedComponent.scaleFactor = 2.5f;
                                 SystemAPI.SetComponent(entityA, checkedComponent);
+                            }
+
+                            if (SystemAPI.HasComponent<CheckedComponent>(shooter) && damage > 0 && !isEnemyShooter)
+                            {
+                                var checkedComponent = SystemAPI.GetComponent<CheckedComponent>(shooter);
+                                checkedComponent.scaleFactor *= 2 - checkedComponent.scale_multiplier;
+                                if (checkedComponent.scaleFactor < 1f) checkedComponent.scaleFactor = 1f;
+                                SystemAPI.SetComponent(shooter, checkedComponent);
                             }
 
 

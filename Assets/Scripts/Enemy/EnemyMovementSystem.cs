@@ -251,6 +251,10 @@ namespace Enemy
                             enemyMove.FaceWaypoint();
                         }
 
+                        var time = SystemAPI.Time.DeltaTime;
+                        checkedComponent.scaleFactor = checkedComponent.scaleFactor - time * .005f;
+                        if (checkedComponent.scaleFactor < 1) checkedComponent.scaleFactor = 1;
+
 
                         var enemyTransform =
                             SystemAPI.GetComponent<LocalTransform>(e);
