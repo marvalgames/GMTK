@@ -64,8 +64,8 @@ static string remooutstat = "Remove Outline";
 static bool twofourfive_target = true;
 static string twofourfive_target_string = "Change shader compilation target to 2.0";
 
-static bool dots_lbs_cd = false;
-static string dots_lbs_cd_string = "DOTS|HR - Use Compute Deformation";
+static bool dots_lbs_cd = true;
+static string dots_lbs_cd_string = "DOTS|HR - Use Linear Blend Skinning";
 
         #endregion
 

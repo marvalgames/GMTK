@@ -321,9 +321,9 @@ Blend[_BleModSour][_BleModDest]
 
 		#ifndef	N_F_DDMD_ON
 			float4 tangentOS    : TANGENT;
-float4 weights : BLENDWEIGHTS;//DOTS_LiBleSki_OL
-uint4 indices : BLENDINDICES;//DOTS_LiBleSki_OL
-//uint vertexID : SV_VertexID;//DOTS_CompDef_OL
+//float4 weights : BLENDWEIGHTS;//DOTS_LiBleSki_OL
+//uint4 indices : BLENDINDICES;//DOTS_LiBleSki_OL
+uint vertexID : SV_VertexID;//DOTS_CompDef_OL
 		#endif
 
 		#endif
@@ -373,8 +373,8 @@ uint4 indices : BLENDINDICES;//DOTS_LiBleSki_OL
 				float3 _LBS_CD_Normal = 0;
 				float4 _LBS_CD_Tangent = 0;
 
-DOTS_LiBleSki(input.indices, input.weights, input.positionOS.xyz, input.normalOS.xyz, input.tangentOS.xyz, (float3)_LBS_CD_Position, _LBS_CD_Normal, (float3)_LBS_CD_Tangent);//DOTS_LiBleSki_OL
-//DOTS_CompDef(input.vertexID, (float3)_LBS_CD_Position, _LBS_CD_Normal, (float3)_LBS_CD_Tangent);//DOTS_CompDef_OL
+//DOTS_LiBleSki(input.indices, input.weights, input.positionOS.xyz, input.normalOS.xyz, input.tangentOS.xyz, (float3)_LBS_CD_Position, _LBS_CD_Normal, (float3)_LBS_CD_Tangent);//DOTS_LiBleSki_OL
+DOTS_CompDef(input.vertexID, (float3)_LBS_CD_Position, _LBS_CD_Normal, (float3)_LBS_CD_Tangent);//DOTS_CompDef_OL
 
 			#endif
 			
@@ -753,9 +753,9 @@ DOTS_LiBleSki(input.indices, input.weights, input.positionOS.xyz, input.normalOS
 		#if defined(UNITY_DOTS_INSTANCING_ENABLED)
 
 		#ifndef	N_F_DDMD_ON
-float4 weights : BLENDWEIGHTS;//DOTS_LiBleSki_FL
-uint4 indices : BLENDINDICES;//DOTS_LiBleSki_FL
-//uint vertexID : SV_VertexID;//DOTS_CompDef_FL
+//float4 weights : BLENDWEIGHTS;//DOTS_LiBleSki_FL
+//uint4 indices : BLENDINDICES;//DOTS_LiBleSki_FL
+uint vertexID : SV_VertexID;//DOTS_CompDef_FL
 		#endif
 
 		#endif
@@ -809,8 +809,8 @@ uint4 indices : BLENDINDICES;//DOTS_LiBleSki_FL
 				float3 _LBS_CD_Normal = 0;
 				float4 _LBS_CD_Tangent = 0;
 
-DOTS_LiBleSki(input.indices, input.weights, input.positionOS.xyz, input.normalOS.xyz, input.tangentOS.xyz, (float3)_LBS_CD_Position, _LBS_CD_Normal, (float3)_LBS_CD_Tangent);//DOTS_LiBleSki_FL
-//DOTS_CompDef(input.vertexID, (float3)_LBS_CD_Position, _LBS_CD_Normal, (float3)_LBS_CD_Tangent);//DOTS_CompDef_FL
+//DOTS_LiBleSki(input.indices, input.weights, input.positionOS.xyz, input.normalOS.xyz, input.tangentOS.xyz, (float3)_LBS_CD_Position, _LBS_CD_Normal, (float3)_LBS_CD_Tangent);//DOTS_LiBleSki_FL
+DOTS_CompDef(input.vertexID, (float3)_LBS_CD_Position, _LBS_CD_Normal, (float3)_LBS_CD_Tangent);//DOTS_CompDef_FL
 
 			#endif
 
@@ -1374,9 +1374,9 @@ float3 Init_FO=RTD_CA*RTD_SON_CHE_1;
 
 		#ifndef	N_F_DDMD_ON
 			float4 tangentOS    : TANGENT;
-float4 weights : BLENDWEIGHTS;//DOTS_LiBleSki_SC
-uint4 indices : BLENDINDICES;//DOTS_LiBleSki_SC
-//uint vertexID : SV_VertexID;//DOTS_CompDef_SC
+//float4 weights : BLENDWEIGHTS;//DOTS_LiBleSki_SC
+//uint4 indices : BLENDINDICES;//DOTS_LiBleSki_SC
+uint vertexID : SV_VertexID;//DOTS_CompDef_SC
 		#endif
 
 		#endif
@@ -1449,8 +1449,8 @@ uint4 indices : BLENDINDICES;//DOTS_LiBleSki_SC
 				float3 _LBS_CD_Normal = 0;
 				float4 _LBS_CD_Tangent = 0;
 
-DOTS_LiBleSki(input.indices, input.weights, input.positionOS.xyz, input.normalOS.xyz, input.tangentOS.xyz, (float3)_LBS_CD_Position, _LBS_CD_Normal, (float3)_LBS_CD_Tangent);//DOTS_LiBleSki_SC
-//DOTS_CompDef(input.vertexID, (float3)_LBS_CD_Position, _LBS_CD_Normal, (float3)_LBS_CD_Tangent);//DOTS_CompDef_SC
+//DOTS_LiBleSki(input.indices, input.weights, input.positionOS.xyz, input.normalOS.xyz, input.tangentOS.xyz, (float3)_LBS_CD_Position, _LBS_CD_Normal, (float3)_LBS_CD_Tangent);//DOTS_LiBleSki_SC
+DOTS_CompDef(input.vertexID, (float3)_LBS_CD_Position, _LBS_CD_Normal, (float3)_LBS_CD_Tangent);//DOTS_CompDef_SC
 
 			#endif
 
@@ -1649,9 +1649,9 @@ DOTS_LiBleSki(input.indices, input.weights, input.positionOS.xyz, input.normalOS
 		#if defined(UNITY_DOTS_INSTANCING_ENABLED)
 
 		#ifndef	N_F_DDMD_ON
-float4 weights : BLENDWEIGHTS;//DOTS_LiBleSki_GB
-uint4 indices : BLENDINDICES;//DOTS_LiBleSki_GB
-//uint vertexID : SV_VertexID;//DOTS_CompDef_GB
+//float4 weights : BLENDWEIGHTS;//DOTS_LiBleSki_GB
+//uint4 indices : BLENDINDICES;//DOTS_LiBleSki_GB
+uint vertexID : SV_VertexID;//DOTS_CompDef_GB
 		#endif
 
 		#endif
@@ -1705,8 +1705,8 @@ uint4 indices : BLENDINDICES;//DOTS_LiBleSki_GB
 				float3 _LBS_CD_Normal = 0;
 				float4 _LBS_CD_Tangent = 0;
 
-DOTS_LiBleSki(input.indices, input.weights, input.positionOS.xyz, input.normalOS.xyz, input.tangentOS.xyz, (float3)_LBS_CD_Position, _LBS_CD_Normal, (float3)_LBS_CD_Tangent);//DOTS_LiBleSki_GB
-//DOTS_CompDef(input.vertexID, (float3)_LBS_CD_Position, _LBS_CD_Normal, (float3)_LBS_CD_Tangent);//DOTS_CompDef_GB
+//DOTS_LiBleSki(input.indices, input.weights, input.positionOS.xyz, input.normalOS.xyz, input.tangentOS.xyz, (float3)_LBS_CD_Position, _LBS_CD_Normal, (float3)_LBS_CD_Tangent);//DOTS_LiBleSki_GB
+DOTS_CompDef(input.vertexID, (float3)_LBS_CD_Position, _LBS_CD_Normal, (float3)_LBS_CD_Tangent);//DOTS_CompDef_GB
 
 			#endif
 
@@ -2285,9 +2285,9 @@ float3 Init_FO=RTD_CA*RTD_SON_CHE_1;
 		#ifndef	N_F_DDMD_ON
 			float3 normalOS     : NORMAL;
 			float4 tangentOS    : TANGENT;
-float4 weights : BLENDWEIGHTS;//DOTS_LiBleSki_DO
-uint4 indices : BLENDINDICES;//DOTS_LiBleSki_DO
-//uint vertexID : SV_VertexID;//DOTS_CompDef_DO
+//float4 weights : BLENDWEIGHTS;//DOTS_LiBleSki_DO
+//uint4 indices : BLENDINDICES;//DOTS_LiBleSki_DO
+uint vertexID : SV_VertexID;//DOTS_CompDef_DO
 		#endif
 
 		#endif
@@ -2324,8 +2324,8 @@ uint4 indices : BLENDINDICES;//DOTS_LiBleSki_DO
 				float3 _LBS_CD_Normal = 0;
 				float4 _LBS_CD_Tangent = 0;
 
-DOTS_LiBleSki(input.indices, input.weights, input.position.xyz, input.normalOS.xyz, input.tangentOS.xyz, (float3)_LBS_CD_Position, _LBS_CD_Normal, (float3)_LBS_CD_Tangent);//DOTS_LiBleSki_DO
-//DOTS_CompDef(input.vertexID, (float3)_LBS_CD_Position, _LBS_CD_Normal, (float3)_LBS_CD_Tangent);//DOTS_CompDef_DO
+//DOTS_LiBleSki(input.indices, input.weights, input.position.xyz, input.normalOS.xyz, input.tangentOS.xyz, (float3)_LBS_CD_Position, _LBS_CD_Normal, (float3)_LBS_CD_Tangent);//DOTS_LiBleSki_DO
+DOTS_CompDef(input.vertexID, (float3)_LBS_CD_Position, _LBS_CD_Normal, (float3)_LBS_CD_Tangent);//DOTS_CompDef_DO
 
 			#endif
 
@@ -2418,9 +2418,9 @@ DOTS_LiBleSki(input.indices, input.weights, input.position.xyz, input.normalOS.x
 		#if defined(UNITY_DOTS_INSTANCING_ENABLED)
 
 		#ifndef	N_F_DDMD_ON
-float4 weights : BLENDWEIGHTS;//DOTS_LiBleSki_DN
-uint4 indices : BLENDINDICES;//DOTS_LiBleSki_DN
-//uint vertexID : SV_VertexID;//DOTS_CompDef_DN
+//float4 weights : BLENDWEIGHTS;//DOTS_LiBleSki_DN
+//uint4 indices : BLENDINDICES;//DOTS_LiBleSki_DN
+uint vertexID : SV_VertexID;//DOTS_CompDef_DN
 		#endif
 
 		#endif
@@ -2460,8 +2460,8 @@ uint4 indices : BLENDINDICES;//DOTS_LiBleSki_DN
 				float3 _LBS_CD_Normal = 0;
 				float4 _LBS_CD_Tangent = 0;
 
-DOTS_LiBleSki(input.indices, input.weights, input.positionOS.xyz, input.normal.xyz, input.tangentOS.xyz, (float3)_LBS_CD_Position, _LBS_CD_Normal, (float3)_LBS_CD_Tangent);//DOTS_LiBleSki_DN
-//DOTS_CompDef(input.vertexID, (float3)_LBS_CD_Position, _LBS_CD_Normal, (float3)_LBS_CD_Tangent);//DOTS_CompDef_DN
+//DOTS_LiBleSki(input.indices, input.weights, input.positionOS.xyz, input.normal.xyz, input.tangentOS.xyz, (float3)_LBS_CD_Position, _LBS_CD_Normal, (float3)_LBS_CD_Tangent);//DOTS_LiBleSki_DN
+DOTS_CompDef(input.vertexID, (float3)_LBS_CD_Position, _LBS_CD_Normal, (float3)_LBS_CD_Tangent);//DOTS_CompDef_DN
 
 			#endif
 
@@ -2721,9 +2721,9 @@ DOTS_LiBleSki(input.indices, input.weights, input.positionOS.xyz, input.normal.x
 			#endif
 
 			#ifndef	N_F_DDMD_ON
-float4 weights : BLENDWEIGHTS;//DOTS_LiBleSki_MV
-uint4 indices : BLENDINDICES;//DOTS_LiBleSki_MV
-//uint vertexID : SV_VertexID;//DOTS_CompDef_MV
+//float4 weights : BLENDWEIGHTS;//DOTS_LiBleSki_MV
+//uint4 indices : BLENDINDICES;//DOTS_LiBleSki_MV
+uint vertexID : SV_VertexID;//DOTS_CompDef_MV
 			#endif
 
 				UNITY_VERTEX_INPUT_INSTANCE_ID
@@ -2765,8 +2765,8 @@ uint4 indices : BLENDINDICES;//DOTS_LiBleSki_MV
 						float3 _LBS_CD_Normal = 0;
 						float4 _LBS_CD_Tangent = 0;
 
-DOTS_LiBleSki(input.indices, input.weights, input.position.xyz, input.normalOS.xyz, input.tangentOS.xyz, (float3)_LBS_CD_Position, _LBS_CD_Normal, (float3)_LBS_CD_Tangent);//DOTS_LiBleSki_MV
-//DOTS_CompDef(input.vertexID, (float3)_LBS_CD_Position, _LBS_CD_Normal, (float3)_LBS_CD_Tangent);//DOTS_CompDef_MV
+//DOTS_LiBleSki(input.indices, input.weights, input.position.xyz, input.normalOS.xyz, input.tangentOS.xyz, (float3)_LBS_CD_Position, _LBS_CD_Normal, (float3)_LBS_CD_Tangent);//DOTS_LiBleSki_MV
+DOTS_CompDef(input.vertexID, (float3)_LBS_CD_Position, _LBS_CD_Normal, (float3)_LBS_CD_Tangent);//DOTS_CompDef_MV
 						_LBS_CD_Position.w = 1.0;
 
 					#endif
