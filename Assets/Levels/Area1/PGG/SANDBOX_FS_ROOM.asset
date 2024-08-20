@@ -796,79 +796,6 @@ MonoBehaviour:
   customRemovers: []
   wasGenerated: 1
   doFullBreak: 0
---- !u!114 &-5690952332803453791
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 671fd9c659a53a04eb310656f11c9125, type: 3}
-  m_Name: Floor(Clone)
-  m_EditorClassIdentifier: 
-  TemporaryContainer: {fileID: 0}
-  Enabled: 1
-  ModTag: 
-  DrawMeshAndBox: 0
-  Combine: 0
-  RunEmittersIfContains: 0
-  DrawSetupFor: 0
-  OStamp: {fileID: 0}
-  DrawObjectStamps: 1
-  OMultiStamp: {fileID: 0}
-  PrefabsList:
-  - Prefab: {fileID: 1517975900190509164, guid: 6f5280b59dd44334096d7070735de635, type: 3}
-    MainCollider: {fileID: 3701321868698039310, guid: 94414984375e2e54586cdbabdb20ec74, type: 3}
-    subID: 0
-    _refMesh: {fileID: 3450909479045973992, guid: a314109b417b6d247958a79b081ae58a, type: 3}
-    _refCol: {fileID: 3701321868698039310, guid: 94414984375e2e54586cdbabdb20ec74, type: 3}
-  - Prefab: {fileID: 1517975900190509164, guid: 6f5280b59dd44334096d7070735de635, type: 3}
-    MainCollider: {fileID: 0}
-    subID: 0
-    _refMesh: {fileID: 5085965759457506131, guid: 8f50acbdb7056ea40af34807460ba408, type: 3}
-    _refCol: {fileID: 0}
-  - Prefab: {fileID: 1517975900190509164, guid: 6f5280b59dd44334096d7070735de635, type: 3}
-    MainCollider: {fileID: 0}
-    subID: 0
-    _refMesh: {fileID: -3268728532136532347, guid: 8f50acbdb7056ea40af34807460ba408, type: 3}
-    _refCol: {fileID: 0}
-  DrawMultiObjectStamps: 1
-  Spawners:
-  - Enabled: 1
-    Name: Random
-    SpawnerTag: Floor
-    StampPrefabID: 0
-    Parent: {fileID: -5690952332803453791}
-    Rules:
-    - {fileID: 8658490465911125996}
-    - {fileID: 3311611985491455749}
-    - {fileID: -3264450517714255284}
-    Mode: 0
-    CellCheckMode: 0
-    _Editor_SpawnerAdvancedOptionsFoldout: 0
-    OnScalledGrid: 0
-    Repeat: 1
-    DontInheritRotations: 0
-    SwitchSpawnedToStatic: 0
-    MultipleToSpawn: 0
-    UseGlobalRules: 1
-    UseParentPackageRules: 1
-    _wasEnablingGlobalRules: 1
-    ScaleAccess: 1
-    DisplayPreviewGUI: 1
-    IsSubSpawner: 0
-    _EditorDisplaySpawnerHeader: 1
-  SubSpawners: []
-  VariantOf: {fileID: 0}
-  _editor_drawStamp: 1
-  _editor_drawSpawners: 1
-  _editor_drawGlobalRules: 0
-  _editor_drawModPackRules: 0
-  _editor_shareSelected: 0
-  ParentPreset: {fileID: 0}
-  ParentPack: {fileID: 4010537770972031752}
 --- !u!114 &-5543827325823862772
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1469,42 +1396,6 @@ MonoBehaviour:
     ToCheck:
     - {x: 0, y: 0, z: 0}
     EditorDisplayColor: {r: 0.4, g: 0.4, b: 1, a: 0.95}
---- !u!114 &-3264450517714255284
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b496837ae5a0c3b4786589d6fb51e8d5, type: 3}
-  m_Name: 'SR_MoveRotateScale-[Floor]'
-  m_EditorClassIdentifier: 
-  Logic: 0
-  Negate: 0
-  Global: 0
-  Enabled: 1
-  Ignore: 0
-  _editor_drawRule: 1
-  CellAllow: 1
-  AllConditionsMet: 1
-  EffectOn: 0
-  ApplyMode: 0
-  Space: 0
-  GetCoords: 
-  CheckMode: 0
-  PositionOffset: {x: 0.5, y: 0, z: -0.5}
-  OffsetMode: 1
-  OffsetPosVariable:
-    name: 
-    requiredType: 5
-    Tooltip: Set Additive Vector3 Field Variable value to this property
-  RotationOffset: {x: 0, y: 90, z: 0}
-  ScaleMultiplier: {x: 1, y: 1, z: 1}
-  RandomizeOffset: {x: 0, y: 0, z: 0}
-  MaxDegreesSteps: {x: 1, y: 1, z: 1}
-  InheritScaleOffset: 0
 --- !u!114 &-3170077804559345047
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1960,7 +1851,7 @@ MonoBehaviour:
   _editor_drawGlobalRules: 0
   _editor_drawModPackRules: 0
   _editor_shareSelected: 0
-  ParentPreset: {fileID: 0}
+  ParentPreset: {fileID: 11400000}
   ParentPack: {fileID: 4010537770972031752}
 --- !u!114 &-1394717733352415955
 MonoBehaviour:
@@ -2996,7 +2887,7 @@ MonoBehaviour:
     requiredType: 5
     Tooltip: Set Additive Vector3 Field Variable value to this property
   RotationOffset: {x: 0, y: 90, z: 0}
-  ScaleMultiplier: {x: 1, y: 1, z: 0.25}
+  ScaleMultiplier: {x: 1, y: 1, z: 1}
   RandomizeOffset: {x: 0, y: 0, z: 0}
   MaxDegreesSteps: {x: 1, y: 1, z: 1}
   InheritScaleOffset: 0
@@ -3107,42 +2998,6 @@ MonoBehaviour:
       - {x: 0, y: 0, z: 0}
       - {x: 0, y: 1, z: 0}
       EditorDisplayColor: {r: 0.4, g: 0.4, b: 1, a: 0.95}
---- !u!114 &3311611985491455749
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b496837ae5a0c3b4786589d6fb51e8d5, type: 3}
-  m_Name: 'SR_MoveRotateScale-[Floor]'
-  m_EditorClassIdentifier: 
-  Logic: 0
-  Negate: 0
-  Global: 0
-  Enabled: 1
-  Ignore: 0
-  _editor_drawRule: 1
-  CellAllow: 1
-  AllConditionsMet: 1
-  EffectOn: 2
-  ApplyMode: 0
-  Space: 0
-  GetCoords: 
-  CheckMode: 0
-  PositionOffset: {x: 0, y: 0, z: 0}
-  OffsetMode: 1
-  OffsetPosVariable:
-    name: 
-    requiredType: 5
-    Tooltip: Set Additive Vector3 Field Variable value to this property
-  RotationOffset: {x: 0, y: 90, z: 0}
-  ScaleMultiplier: {x: 1, y: 1, z: 1}
-  RandomizeOffset: {x: 0, y: 0, z: 0}
-  MaxDegreesSteps: {x: 1, y: 1, z: 1}
-  InheritScaleOffset: 0
 --- !u!114 &3320598842543362504
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3376,7 +3231,6 @@ MonoBehaviour:
   m_Name: Root
   m_EditorClassIdentifier: 
   FieldModificators:
-  - {fileID: -5690952332803453791}
   - {fileID: -3446306779585565179}
   ParentPreset: {fileID: 11400000}
   DisableWholePackage: 0
@@ -4327,41 +4181,6 @@ MonoBehaviour:
   NotCheckDefaultPitch: 0
   OverridePitchRotation: 1
   InitPitchRotation: 0
---- !u!114 &8658490465911125996
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3630e2a4943f49b40967499fb48c07ee, type: 3}
-  m_Name: 'SR_FloorPlacer-[Floor]'
-  m_EditorClassIdentifier: 
-  Logic: 0
-  Negate: 0
-  Global: 0
-  Enabled: 1
-  Ignore: 0
-  _editor_drawRule: 1
-  CellAllow: 1
-  AllConditionsMet: 1
-  Mode: 0
-  AlignMode: 1
-  YawOffset: 0
-  DirectOffset: {x: 0, y: 0, z: 0}
-  OffsetMode: 0
-  RotateBy90Only: 0
-  V2: 0
-  Advanced: 0
-  SpawnOnCheck: 3
-  SpawnOnTag: 
-  CheckMode: 0
-  OutsideCondition: 2
-  OutsideOnTag: 
-  CheckOutMode: 0
-  NegateOutsideCheck: 0
 --- !u!114 &8859776584118704051
 MonoBehaviour:
   m_ObjectHideFlags: 0

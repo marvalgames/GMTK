@@ -105,6 +105,7 @@ namespace Collisions
                             {
                                 var checkedComponent = SystemAPI.GetComponent<CheckedComponent>(entityA);
                                 checkedComponent.scaleFactor *= checkedComponent.scale_multiplier;
+                                if (checkedComponent.scaleFactor > 3) checkedComponent.scaleFactor = 3;
                                 SystemAPI.SetComponent(entityA, checkedComponent);
                             }
 
