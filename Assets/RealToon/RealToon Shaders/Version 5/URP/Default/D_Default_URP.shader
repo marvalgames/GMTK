@@ -143,9 +143,6 @@ Shader "Universal Render Pipeline/RealToon/Version 5/Default/Default"
 
 		[Toggle(N_F_STIAL_ON )] _N_F_STIAL ("Show In Ambient Light", Float ) = 0.0
         _ShowInAmbientLightShadowIntensity ("Show In Ambient Light & Shadow Intensity", Range(0, 1)) = 1.0
-        //_ShowInAmbientLightShadowThreshold ("Show In Ambient Light & Shadow Threshold", Float ) = 0.4
-
-        [ToggleOff] _LightFalloffAffectShadowT ("Light Falloff Affect ShadowT", Float ) = 0.0
 
         _PTexture ("PTexture", 2D) = "white" {}
 		_PTCol("Color", Color) = (0.0, 0.0, 0.0, 1.0)
