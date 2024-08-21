@@ -85,7 +85,6 @@ public class CharacterEntityTracker : MonoBehaviour
             {
                 var checkedComponent = entityManager.GetComponentData<CheckedComponent>(linkedEntity);
                 eLocalScale = checkedComponent.scaleFactor;
-                Debug.Log("SC " + eLocalScale);
             }
 
             if (followPlayerCharacter)
