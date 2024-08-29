@@ -18,8 +18,7 @@ public class HealthBar : MonoBehaviour
 
     public Entity entity;
     private EntityManager entityManager;
-    //Animator animator;
-
+    
 
 
 

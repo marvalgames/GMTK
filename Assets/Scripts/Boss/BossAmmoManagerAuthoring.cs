@@ -44,7 +44,6 @@ public struct
     BossAmmoManagerComponent : IComponentData //used for managed components - read and then call methods from MB
 {
     public bool playSound;
-    public bool setAnimationLayer;
 }
 
 public class BossAmmoManagerClass : IComponentData

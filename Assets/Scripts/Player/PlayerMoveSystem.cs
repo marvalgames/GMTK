@@ -107,10 +107,6 @@ namespace Sandbox.Player
                 var playerMoveComponent = SystemAPI.GetComponent<PlayerMoveComponent>(entity);
                 var actorWeapon = SystemAPI.HasComponent<ActorWeaponAimComponent>(entity);
 
-                var forwardAdjustment = 1;
-                applyImpulseComponent.ValueRW.checkMoveBackwards = false;
-
-
                 if (playerMoveComponent.move2d)
                 {
                     leftStickY = 0;
@@ -122,26 +118,21 @@ namespace Sandbox.Player
                     leftStickY = 0;
                 }
 
-                var combatMode = false;
                 var aimMode = false;
                 if (actorWeapon)
                 {
                     var aimComponent = SystemAPI.GetComponent<ActorWeaponAimComponent>(entity);
                     var distanceFromTarget = math.distance(transform.ValueRO.Position, aimComponent.targetPosition);
                     aimComponent.distanceFromTarget = distanceFromTarget;
-                    combatMode = aimComponent.combatMode;
                     if (aimComponent.aimMode)
                     {
                         aimMode = true;
-                        combatMode = false;
-                        forwardAdjustment = 2;
                     }
 
                     SystemAPI.SetComponent(entity, aimComponent);
                 }
 
                 applyImpulseComponent.ValueRW.playerMoving = false;
-                if (combatMode) currentSpeed = ratingsComponent.ValueRO.gameCombatSpeed;
                 if (currentSpeed == 0) stickSpeed = 0;
                 var targetDirection = (leftStickX * camTransform.right * forwardSpeed +
                                        leftStickY * camTransform.forward * forwardSpeed);
@@ -171,7 +162,6 @@ namespace Sandbox.Player
                         impulseFactor = impulse.animSpeedRatioOnReceived;
                     }
 
-
                     if (aimMode)
                     {
                         pv.ValueRW.Linear.x = inputDirection.x * currentSpeed * impulseFactor;
@@ -182,9 +172,7 @@ namespace Sandbox.Player
                         pv.ValueRW.Linear = fwd * stickSpeed * currentSpeed;
                     }
                 }
-
                 pv.ValueRW.Linear.y += applyImpulseComponent.ValueRW.OnGroundNegativeForce;
-
                 applyImpulseComponent.ValueRW.forwardSpeed = forwardSpeed;
                 //transform.ValueRW.Scale = checkedComponent.ValueRO.scaleFactor;
             }
@@ -192,29 +180,6 @@ namespace Sandbox.Player
     }
 
     [UpdateInGroup(typeof(FixedStepSimulationSystemGroup))]
-    [UpdateAfter(typeof(PlayerMoveSystem))]
-    public partial class PlayerMoveAnimatorSystem : SystemBase
-    {
-        private static readonly int Vertical = Animator.StringToHash("Vertical");
-        private static readonly int Grounded = Animator.StringToHash("Grounded");
-
-
-        protected override void OnUpdate()
-        {
-            Entities.WithoutBurst().ForEach(
-                (Animator animator, Entity e,
-                    in PlayerMoveComponent playerMove, in ApplyImpulseComponent applyImpulse) =>
-                {
-                    var animStickSpeed = applyImpulse.animatorStickSpeed;
-                    animator.SetFloat(Vertical, animStickSpeed);
-                    animator.SetBool(Grounded, applyImpulse.Grounded);
-                }
-            ).Run();
-        }
-    }
-
-    [UpdateInGroup(typeof(FixedStepSimulationSystemGroup))]
-    [UpdateAfter(typeof(PlayerMoveAnimatorSystem))]
     public partial class PlayerMoveAudioVfxSystem : SystemBase
     {
         protected override void OnUpdate()
@@ -273,4 +238,8 @@ namespace Sandbox.Player
             ).Run();
         }
     }
+    
+    
+    
+    
 }

@@ -8,7 +8,6 @@ public partial class BossAmmoManagerSystem : SystemBase
         Entities.WithoutBurst().ForEach(
             (
                 Entity e,
-                Animator animator,
                 ref BossAmmoManagerComponent bulletManagerComponent,
                 in BossAmmoManagerGO bossAmmoManager
             ) =>
@@ -23,11 +22,6 @@ public partial class BossAmmoManagerSystem : SystemBase
                     bulletManagerComponent.playSound = false;
                 }
 
-                if (bulletManagerComponent.setAnimationLayer)
-                {
-                    animator.SetLayerWeight(0, 0);
-                    bulletManagerComponent.setAnimationLayer = false;
-                }
             }
         ).Run();
     }

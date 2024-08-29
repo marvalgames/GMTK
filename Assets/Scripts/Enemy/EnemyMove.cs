@@ -143,7 +143,6 @@ public class EnemyMove : MonoBehaviour
     [HideInInspector]
     public NavMeshAgent agent;
     [HideInInspector]
-    public Animator anim;
     public List<WayPoint> wayPoints = new List<WayPoint>();
     [SerializeField] public int currentWayPointIndex = 0;
     [SerializeField]
@@ -215,7 +214,6 @@ public class EnemyMove : MonoBehaviour
 
 
         originalPosition = transform.position;
-        anim = GetComponent<Animator>();
 
         if (agent)
         {
@@ -303,7 +301,6 @@ public class EnemyMove : MonoBehaviour
         var isCurrentWayPointJump = wayPoints[currentWayPointIndex].action == WayPointAction.Jump;
         if (isCurrentWayPointJump == true)
         {
-            anim.SetInteger(JumpState, 1);
             normalizedTime = 0.0f;
             endPos = wayPoints[0].targetPosition + Vector3.up * agent.baseOffset;
         }
@@ -339,7 +336,6 @@ public class EnemyMove : MonoBehaviour
             if (wayPoints[currentWayPointIndex].action == WayPointAction.Jump)
             {
                 startPos = agent.transform.position;
-                anim.SetInteger(JumpState, 1);
                 normalizedTime = 0.0f;
                 endPos = wayPoints[currentWayPointIndex].targetPosition + Vector3.up * agent.baseOffset;
             }
@@ -348,15 +344,12 @@ public class EnemyMove : MonoBehaviour
         else if (agent.pathPending == false && agent.remainingDistance <= distance && isCurrentWayPointJump
             && jumpLanded)
         {
-            anim.SetInteger(JumpState, 0);
-
             jumpLanded = false;
             currentWayPointIndex++;
             if (currentWayPointIndex >= wayPoints.Count) currentWayPointIndex = 0;
             if (wayPoints[currentWayPointIndex].action == WayPointAction.Jump)
             {
                 startPos = agent.transform.position;
-                anim.SetInteger(JumpState, 1);
                 normalizedTime = 0.0f;
                 endPos = wayPoints[currentWayPointIndex].targetPosition + Vector3.up * agent.baseOffset;
             }
@@ -436,7 +429,7 @@ public class EnemyMove : MonoBehaviour
 
     public void AnimationMovement(float3 target)
     {
-        if (anim == null || agent.isOnNavMesh == false) return;
+        if (agent.isOnNavMesh == false) return;
 
         float velz = 0;
 
@@ -481,8 +474,7 @@ public class EnemyMove : MonoBehaviour
                 }
             }
 
-            var pursuitMode = anim.GetInteger(Zone);
-            var speed = pursuitMode >= 2 ? moveSpeed : moveSpeed * 1.5f;
+            var speed = moveSpeed * 1.5f;
             velz = forward.normalized.z;
 
             if (state == MoveStates.Idle || state == MoveStates.Stopped ||
@@ -505,8 +497,6 @@ public class EnemyMove : MonoBehaviour
             {
                 agent.destination = target;
                 transform.position = agent.nextPosition;
-                //Debug.Log("IGNORE " + ignoreAgentAI);
-                anim.SetInteger(JumpState, 0);
             }
 
             agent.speed = speed * impulseFactor;
@@ -520,13 +510,11 @@ public class EnemyMove : MonoBehaviour
 
             agent.updatePosition = false;
             agent.updatePosition = true;
-            anim.SetFloat(Velz, velz);
         }
         else
         {
             agent.speed = 0;
         }
-        //Debug.Log("Agent Speed " + agent.speed);
 
         PlayEffects(velz);
 
@@ -558,7 +546,6 @@ public class EnemyMove : MonoBehaviour
         if (manager.HasComponent<Pause>(entity) == true)
         {
             agent.speed = 0;
-            anim.speed = 0;
             return;
         }
 
@@ -581,7 +568,6 @@ public class EnemyMove : MonoBehaviour
 
 
         if (wayPoints.Count <= currentWayPointIndex) return;
-        anim.speed = impulseFactor;
         agent.updatePosition = false;
         agent.updateRotation = false;
         

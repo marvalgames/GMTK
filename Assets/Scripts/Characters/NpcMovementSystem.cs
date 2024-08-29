@@ -23,7 +23,6 @@ namespace Sandbox.Player
                     Entity e,
                     NpcAgentClass npcAgentAI,
                     //PlayerMoveGameObjectClass playerMove,
-                    Animator animator,
                     //in RatingsComponent ratingsComponent,
                     in NpcMovementComponent npcMovementComponent
                 ) =>
@@ -32,11 +31,9 @@ namespace Sandbox.Player
                     if (SystemAPI.HasComponent<Pause>(e) == true)
                     {
                         agent.speed = 0;
-                        animator.speed = 0;
                         return;
                     }
 
-                    animator.speed = 1;
                     
                     //Debug.Log("NPC " + agent.isOnNavMesh);
                     
@@ -58,7 +55,6 @@ namespace Sandbox.Player
                     var rotation = transform.Rotation;
                     rotation = math.slerp(rotation, targetRotation, npcAgentAI.rotateSpeed * time);
                     agent.speed = npcAgentAI.moveSpeed * npcAgentAI.switchSpeedMultiplier;
-                    animator.SetFloat(Vertical, 1);
                     transform.Position = agent.nextPosition;
                     transform.Rotation = rotation;
                     agent.transform.position = agent.nextPosition;

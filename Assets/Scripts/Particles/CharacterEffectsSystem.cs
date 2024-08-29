@@ -80,88 +80,65 @@ public partial class CharacterImpulseEffectsSystem : SystemBase
         Entities.WithoutBurst().ForEach(
             (
                 Entity e,
-                Animator anim,
                 ref PhysicsVelocity physicsVelocity,
                 in Impulse impulse
-            
             ) =>
             {
                 if (!SystemAPI.HasComponent<ImpulseComponent>(e)) return;
 
 
                 //anim null check later
-                if (anim != null)
+                var impulseComponent = impulseGroup[e];
+
+
+                float damageLanded = 0;
+                float damageReceived = 0;
+                if (impulseComponent.maxTime <= 0) return;
+                bool hasDamageComponent = SystemAPI.HasComponent<DamageComponent>(e);
+
+                if (hasDamageComponent)
                 {
-                    var impulseComponent = impulseGroup[e];
-
-
-                    float damageLanded = 0;
-                    float damageReceived = 0;
-                    if (impulseComponent.maxTime <= 0) return;
-                    bool hasDamageComponent = SystemAPI.HasComponent<DamageComponent>(e);
-                    bool hasNavMesh = anim.gameObject.GetComponent<NavMeshAgent>();
-
-                    if (hasDamageComponent)
+                    var damageComponent = SystemAPI.GetComponent<DamageComponent>(e);
+                    damageLanded = damageComponent.DamageLanded;
+                    damageReceived = damageComponent.DamageReceived;
+                    if (damageLanded > 0 && impulseComponent.activate == false)
                     {
-                        var damageComponent = SystemAPI.GetComponent<DamageComponent>(e);
-                        damageLanded = damageComponent.DamageLanded;
-                        damageReceived = damageComponent.DamageReceived;
-                        if (damageLanded > 0 && impulseComponent.activate == false)
-                        {
-                            impulse.impulseSourceHitLanded.GenerateImpulse();
-                            impulseComponent.activate = true;
-                            ecb.AddComponent<Pause>(e);
-                            anim.speed = impulseComponent.animSpeedRatio;
-                            if (hasNavMesh) anim.gameObject.GetComponent<NavMeshAgent>().speed = anim.speed;
-                            physicsVelocity.Linear =
-                                physicsVelocity.Linear * math.float3(anim.speed, anim.speed, anim.speed);
-                        }
-                        else if (damageReceived > 0 && impulseComponent.activateOnReceived == false)
-                        {
-                            impulse.impulseSourceHitReceived.GenerateImpulse();
-                            impulseComponent.activateOnReceived = true;
-                            ecb.AddComponent<Pause>(e);
-                            anim.speed = impulseComponent.animSpeedRatioOnReceived;
-                            if (hasNavMesh) anim.gameObject.GetComponent<NavMeshAgent>().speed = anim.speed;
-                            physicsVelocity.Linear =
-                                physicsVelocity.Linear * math.float3(anim.speed, anim.speed, anim.speed);
-                        }
+                        impulse.impulseSourceHitLanded.GenerateImpulse();
+                        impulseComponent.activate = true;
+                        ecb.AddComponent<Pause>(e);
                     }
-                    else if (impulseComponent.activate == true && impulseComponent.timer <= impulseComponent.maxTime)
+                    else if (damageReceived > 0 && impulseComponent.activateOnReceived == false)
                     {
-                        impulseComponent.timer += SystemAPI.Time.DeltaTime;
-                        physicsVelocity.Linear =
-                            physicsVelocity.Linear * math.float3(anim.speed, anim.speed, anim.speed);
-                        //Debug.Log("timer " + impulseComponent.timer);
-                        if (impulseComponent.timer >= impulseComponent.maxTime)
-                        {
-                            impulseComponent.timer = 0;
-                            impulseComponent.activate = false;
-                            anim.speed = 1;
-                            if (hasNavMesh) anim.gameObject.GetComponent<NavMeshAgent>().speed = anim.speed;
-                            ecb.RemoveComponent<Pause>(e);
-                        }
+                        impulse.impulseSourceHitReceived.GenerateImpulse();
+                        impulseComponent.activateOnReceived = true;
+                        ecb.AddComponent<Pause>(e);
                     }
-                    else if (impulseComponent.activateOnReceived == true &&
-                             impulseComponent.timerOnReceived <= impulseComponent.maxTimeOnReceived)
-                    {
-                        impulseComponent.timerOnReceived += SystemAPI.Time.DeltaTime;
-                        physicsVelocity.Linear =
-                            physicsVelocity.Linear * math.float3(anim.speed, anim.speed, anim.speed);
-                        //Debug.Log("timer " + impulseComponent.timer);
-                        if (impulseComponent.timerOnReceived >= impulseComponent.maxTimeOnReceived)
-                        {
-                            impulseComponent.timerOnReceived = 0;
-                            impulseComponent.activateOnReceived = false;
-                            anim.speed = 1;
-                            if (hasNavMesh) anim.gameObject.GetComponent<NavMeshAgent>().speed = anim.speed;
-                            ecb.RemoveComponent<Pause>(e);
-                        }
-                    }
-
-
-                    SystemAPI.SetComponent(e, impulseComponent);
                 }
+                else if (impulseComponent.activate == true && impulseComponent.timer <= impulseComponent.maxTime)
+                {
+                    impulseComponent.timer += SystemAPI.Time.DeltaTime;
+                    //Debug.Log("timer " + impulseComponent.timer);
+                    if (impulseComponent.timer >= impulseComponent.maxTime)
+                    {
+                        impulseComponent.timer = 0;
+                        impulseComponent.activate = false;
+                        ecb.RemoveComponent<Pause>(e);
+                    }
+                }
+                else if (impulseComponent.activateOnReceived == true &&
+                         impulseComponent.timerOnReceived <= impulseComponent.maxTimeOnReceived)
+                {
+                    impulseComponent.timerOnReceived += SystemAPI.Time.DeltaTime;
+                    if (impulseComponent.timerOnReceived >= impulseComponent.maxTimeOnReceived)
+                    {
+                        impulseComponent.timerOnReceived = 0;
+                        impulseComponent.activateOnReceived = false;
+                        ecb.RemoveComponent<Pause>(e);
+                    }
+                }
+
+
+                SystemAPI.SetComponent(e, impulseComponent);
             }
         ).Run();
 
@@ -171,7 +148,6 @@ public partial class CharacterImpulseEffectsSystem : SystemBase
                 Entity e,
                 ref DeadComponent deadComponent,
                 ref EffectsComponent effectsComponent,
-                in Animator animator, 
                 in EffectsManager effects) =>
             {
                 var audioSource = effects.audioSource;
@@ -207,24 +183,6 @@ public partial class CharacterImpulseEffectsSystem : SystemBase
         ).Run();
 
 
-        Entities.WithoutBurst().WithNone<Pause>().ForEach(
-            (
-                in Entity e,
-                in SlashComponent slashComponent,
-                in SlashClass slashComponentAuthoring) =>
-            {
-                var audioSource = slashComponentAuthoring.audioSource;
-                if(audioSource == null) return;
-                if (!slashComponentAuthoring.audioSource.clip || !slashComponentAuthoring.audioSource) return;
-                if (slashComponent.slashState == (int)SlashStates.Started)
-                {
-                    audioSource.clip = slashComponentAuthoring.audioSource.clip;
-                    audioSource.PlayOneShot(audioSource.clip);
-                }
-            }
-        ).Run();
-
-
         Entities.WithoutBurst().ForEach
         (
             (ref EffectsComponent effectsComponent,
@@ -252,7 +210,6 @@ public partial class CharacterDamageEffectsSystem : SystemBase
                 Entity e,
                 ref DeadComponent deadComponent,
                 ref EffectsComponent effectsComponent,
-                in Animator animator,
                 in AudioSource audioSource,
                 in EffectsManager effects) =>
             {
@@ -272,14 +229,12 @@ public partial class CharacterDamageEffectsSystem : SystemBase
                     //set in attackersystem by readin visualeffect component index
                     if (damageComponent.DamageReceived <= .0001) return;
                     Debug.Log("effects index " + effectsIndex);
-                    animator.SetInteger(HitReact,
-                        1); // can easily change to effect index (maybe new field in component ammo and visual effect) if we add more hitreact animations
-                    if (effects.actorEffect.Count > 0 )
+                    if (effects.actorEffect.Count > 0)
                     {
                         if (effects.actorEffect != null)
                         {
                             effectsIndex--;
-                            if (effects.actorEffect[effectsIndex].psInstance )
+                            if (effects.actorEffect[effectsIndex].psInstance)
                             {
                                 effects.actorEffect[effectsIndex].psInstance.Play(true);
                                 //Debug.Log("ps dam " + effects.actorEffect[effectsIndex].psInstance);
@@ -287,9 +242,8 @@ public partial class CharacterDamageEffectsSystem : SystemBase
 
                             if (effects.actorEffect[effectsIndex].veInstance)
                             {
-                                effects.actorEffect[effectsComponent.effectIndex].veInstance.Play(); 
+                                effects.actorEffect[effectsComponent.effectIndex].veInstance.Play();
                                 Debug.Log("ps dam " + effects.actorEffect[effectsIndex].veInstance);
-                                
                             }
 
 
@@ -310,9 +264,6 @@ public partial class CharacterDamageEffectsSystem : SystemBase
 [UpdateAfter(typeof(HealthSystem))]
 public partial class CharacterDeadEffectsSystem : SystemBase
 {
-    private static readonly int Dead = Animator.StringToHash("Dead");
-
-
     protected override void OnUpdate()
     {
         Entities.WithoutBurst().WithNone<Pause>().ForEach(
@@ -321,7 +272,6 @@ public partial class CharacterDeadEffectsSystem : SystemBase
                 ref DeadComponent deadComponent,
                 ref EffectsComponent effectsComponent,
                 in AudioSource audioSource,
-                in Animator animator,
                 in EffectsManager effects) =>
             {
                 //var audioSource = effects.audioSource;
@@ -335,16 +285,11 @@ public partial class CharacterDeadEffectsSystem : SystemBase
                     deadComponent.playDeadEffects = false;
                     var isEnemy = SystemAPI.HasComponent<EnemyComponent>(e);
                     var isPlayer = SystemAPI.HasComponent<PlayerComponent>(e);
-                    if (isPlayer)
-                        animator.SetInteger(Dead,
-                            1); // can easily change to effect index (maybe new field in component ammo and visual effect) if we add more DEAD animations
-                    if (isEnemy) animator.SetInteger(Dead, 2);
                     var effectsIndex = deadComponent.effectsIndex;
                     Debug.Log("eff ind play " + effectsIndex);
 
                     if (effects.actorEffect != null && effects.actorEffect.Count > 0)
                     {
-                        
                         if (effects.actorEffect[effectsIndex].veInstance)
                         {
                             effects.actorEffect[effectsComponent.effectIndex].veInstance.Play();
@@ -359,7 +304,7 @@ public partial class CharacterDeadEffectsSystem : SystemBase
                                 }
                             }
                         }
-                        
+
                         if (effects.actorEffect[effectsIndex]
                             .psInstance) //tryinmg to match index to effect type - 1 is dead
                         {
@@ -393,7 +338,6 @@ public partial class CharacterDeadEffectsSystem : SystemBase
 [UpdateInGroup(typeof(FixedStepSimulationSystemGroup))]
 [UpdateAfter(typeof(BreakableEffectsSystem))]
 [RequireMatchingQueriesForUpdate]
-
 public partial class ParticleInstanceSystem : SystemBase
 {
     protected override void OnUpdate()
@@ -421,7 +365,6 @@ public partial class ParticleInstanceSystem : SystemBase
                     particleSystem.Play(true);
                     particleSystem.transform.position = psComponent.psLocalTransform.Position;
                     Debug.Log("SPAWN PLAY " + e + " PS " + particleSystem.isPlaying + " " + particleSystem);
-                    
                 }
                 else if (particleSystem.isPlaying && psComponent.spawnStage == SpawnStage.Play)
                 {
@@ -447,7 +390,6 @@ public partial class ParticleInstanceSystem : SystemBase
 [UpdateAfter(typeof(Collisions.BreakableCollisionHandlerSystem))]
 public partial class BreakableEffectsSystem : SystemBase
 {
-
     protected override void OnUpdate()
     {
         var ecb = new EntityCommandBuffer(Allocator.Temp);
@@ -462,7 +404,7 @@ public partial class BreakableEffectsSystem : SystemBase
             {
                 if (playAndDestroyEffect.play && effect.psEntity != Entity.Null && effect.transformGameObject != null)
                 {
-                    var tr = LocalTransform.FromPosition(effect.transformGameObject.transform.position );
+                    var tr = LocalTransform.FromPosition(effect.transformGameObject.transform.position);
                     var psTag = new ParticleSystemComponent
                     {
                         psLocalTransform = tr,

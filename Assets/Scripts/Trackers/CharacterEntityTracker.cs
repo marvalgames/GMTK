@@ -22,7 +22,6 @@ public class CharacterEntityTracker : MonoBehaviour
     [Tooltip("Match with entity link index in Sub Scene")]
     public int index;
     private NavMeshAgent _agent;
-    private Animator _animator;
     [Tooltip("Follow entity movement (True for player)")]
     public bool followLocalTransform;
     [Tooltip("Set followLocalTransform from script if true")]
@@ -36,7 +35,6 @@ public class CharacterEntityTracker : MonoBehaviour
 
     void Start()
     {
-        _animator = GetComponent<Animator>();
         _agent = GetComponent<NavMeshAgent>();
         var world = World.DefaultGameObjectInjectionWorld;
         entityManager = world.EntityManager;
@@ -57,7 +55,6 @@ public class CharacterEntityTracker : MonoBehaviour
 
         if (linkedEntity != Entity.Null)
         {
-            entityManager.AddComponentObject(linkedEntity, _animator);
             if (_agent)
             {
                 entityManager.AddComponentObject(linkedEntity, _agent);

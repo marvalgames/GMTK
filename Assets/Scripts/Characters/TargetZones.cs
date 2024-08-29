@@ -26,12 +26,6 @@ public class TargetZones : MonoBehaviour
             deparentTriggers.parent = null;
         }
 
-        var animator = GetComponent<Animator>();
-        if (!animator) return;
-        if (headZone == null)
-        {
-            headZone = animator.GetBoneTransform(HumanBodyBones.Head);
-        }
         
         //TEST
         if (Entity == Entity.Null)

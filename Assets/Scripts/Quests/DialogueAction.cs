@@ -5,11 +5,9 @@ namespace Quests
 {
     public class DialogueAction : MonoBehaviour
     {
-        Animator animator;
         // Use this for initialization
         void Start()
         {
-            animator = GetComponent<Animator>();
             //DialogueManager.ShowAlert("HEY YOU");
         }
 

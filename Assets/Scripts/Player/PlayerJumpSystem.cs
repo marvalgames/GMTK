@@ -288,14 +288,12 @@ namespace Sandbox.Player
         {
             Entities.WithoutBurst().WithNone<Pause>().ForEach(
                 (
-                    Animator animator,
                     ref PlayerJumpComponent jump //uses animator that is added to entity from main scene Player Object
                 ) =>
                 {
                     if (jump.playJumpAnimation)
                     {
                         jump.playJumpAnimation = false;
-                        animator.SetInteger(JumpState, 1);
                     }
                 }
             ).Run();

@@ -51,7 +51,6 @@ public partial class HealthSystem : SystemBase
         float allPlayerDamageTotal = 0;
 
         Entities.WithoutBurst().ForEach((
-            Animator animator,
             ref DeadComponent deadComponent,
             ref HealthComponent healthComponent, ref DamageComponent damageComponent,
             ref RatingsComponent ratingsComponent,
@@ -102,13 +101,10 @@ public partial class HealthSystem : SystemBase
                     LevelManager.instance.levelSettings[LevelManager.instance.currentLevelCompleted].enemiesDead += 1;;
                     dead.isDead = true;
                     dead.playDeadEffects = true;
-                    animator.speed = 1;
                     LevelManager.instance.enemyDestroyed = true;
                     Debug.Log("Destroyed " + LevelManager.instance.enemyDestroyed);
                     var isEnemy = SystemAPI.HasComponent<EnemyComponent>(entity);
                     var isPlayer = SystemAPI.HasComponent<PlayerComponent>(entity);
-                    if (isPlayer) animator.SetInteger(Dead, 1);// can easily change to effect index (maybe new field in component ammo and visual effect) if we add more DEAD animations
-                    if (isEnemy) animator.SetInteger(Dead, 2);
                     if (SystemAPI.HasComponent<AmmoComponent>(entityCausingDamage))
                     {
                         var ammo = SystemAPI.GetComponent<AmmoComponent>(entityCausingDamage);

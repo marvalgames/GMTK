@@ -208,13 +208,7 @@ public partial class GameInterfaceSystem : SystemBase
             }
             ).Run();
 
-
-            Entities.WithoutBurst().ForEach((Entity entity, Animator animator) =>
-            {
-                animator.speed = paused ? 0 : 1;
-            }
-            ).Run();
-
+            
 
             Entities.WithoutBurst().ForEach((Entity entity, NavMeshAgent agent) =>
             {

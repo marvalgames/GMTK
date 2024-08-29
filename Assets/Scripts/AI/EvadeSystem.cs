@@ -43,7 +43,6 @@ public partial class EvadeSystem : SystemBase
                     {
                         if (hasEnemyStateComponent)
                         {
-                            //animator.SetBool(evade1, false);
                             evade.startAnimation = false;
                         }
 
@@ -112,19 +111,11 @@ public partial class EvadeSystem : SystemBase
 [RequireMatchingQueriesForUpdate]
 public partial class EvadeManagedSystem : SystemBase
 {
-    private static readonly int Evade1 = Animator.StringToHash("Evade");
     
     protected override void OnUpdate()
     {
         var time = SystemAPI.Time.DeltaTime;
         
-        //animate evade
-        Entities.WithoutBurst().WithAny<EnemyComponent>().ForEach((Entity e, Animator animator,
-                ref EvadeComponent evade) =>
-        {
-            animator.SetBool(Evade1, evade.startAnimation);
-        }
-        ).Run();
 
         Entities.WithoutBurst().WithAny<EnemyComponent>().ForEach((Entity e, NavMeshAgent agent,
                 in EvadeComponent evade, in NavMeshAgentComponent agentComponent) =>

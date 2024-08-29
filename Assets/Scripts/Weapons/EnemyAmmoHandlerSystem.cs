@@ -33,8 +33,7 @@ namespace Enemy
                 (
                     Entity entity,
                     ref AmmoManagerComponent ammoManagerComponent,
-                    in DefensiveStrategyComponent defensiveStrategyComponent,
-                    in AnimatorWeightsComponent animatorWeightsComponent
+                    in DefensiveStrategyComponent defensiveStrategyComponent
                 ) =>
                 {
                     var playerE = defensiveStrategyComponent.closestEnemiesAttackEntity;
@@ -61,16 +60,7 @@ namespace Enemy
                     {
                         enemyWeapon.firingStage = FiringStage.Start;
                     }
-                    else if (enemyWeapon is { IsFiring: 1, Duration: 0, } &&
-                             animatorWeightsComponent.aimWeight <= enemyWeapon.animTriggerWeight
-                            )
-                    {
-                        enemyWeapon.firingStage = FiringStage.Start;
-                    }
-                    else if (enemyWeapon is { IsFiring: 1, Duration: 0, firingStage: FiringStage.Update }
-                             &&
-                             animatorWeightsComponent.aimWeight > enemyWeapon.animTriggerWeight
-                            )
+                    else if (enemyWeapon is { IsFiring: 1, Duration: 0, firingStage: FiringStage.Update })
                     {
                         enemyWeapon.Duration += dt;
                         var e = commandBuffer.Instantiate(enemyWeapon.PrimaryAmmo);

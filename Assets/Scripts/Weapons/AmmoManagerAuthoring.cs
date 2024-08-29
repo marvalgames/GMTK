@@ -52,7 +52,6 @@ public struct WeaponComponent : IComponentData
 public struct AmmoManagerComponent : IComponentData //used for managed components - read and then call methods from MB
 {
     public bool playSound;
-    public bool setAnimationLayer;
 }
 
 

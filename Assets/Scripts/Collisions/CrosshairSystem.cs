@@ -5,6 +5,7 @@ using Unity.Mathematics;
 using Unity.Physics;
 using Unity.Physics.Systems;
 using Unity.Transforms;
+using UnityEngine;
 
 
 //[UpdateAfter(typeof(Unity.Physics.Systems.EndFramePhysicsSystem))]
@@ -48,8 +49,6 @@ namespace Collisions
                 actorWeaponAimEntityList.Dispose();
                 return;
             }
-            //var playerLocalTransform = SystemAPI.GetComponent<LocalTransform>(actorWeaponAimEntityList[0]);
-            //var playerRotation = SystemAPI.GetComponent<Rotation>(actorWeaponAimEntityList[0]);
             var allHits = new NativeList<Unity.Physics.RaycastHit>(Allocator.Temp);
             var collisionWorld = SystemAPI.GetSingleton<PhysicsWorldSingleton>();
 
@@ -60,21 +59,8 @@ namespace Collisions
                 var physicsWorldSystem = World.GetExistingSystem<Unity.Physics.Systems.BuildPhysicsWorld>();
                 var actorEntity = actorWeaponAimEntityList[0];
                 var actorWeaponAim = SystemAPI.GetComponent<ActorWeaponAimComponent>(actorEntity);
-                var LocalTransform = SystemAPI.GetComponent<LocalTransform>(entity);
-
-                //var mouse = actorWeaponAim.mouseCrosshairWorldPosition;
-                var xHairPosition = new float3(LocalTransform.Position.x, LocalTransform.Position.y, actorWeaponAim.crosshairRaycastTarget.z);
-                //Debug.Log("mouse " + mouse);
-                //actorWeaponAim.crosshairRaycastTarget = mouse;
-
-                var distance = crosshair.raycastDistance;
-            
-                //actorWeaponAim.closetEnemyWeaponTargetPosition = new float3(0, 0, distance);
-
                 var start = actorWeaponAim.rayCastStart;
                 var end = actorWeaponAim.rayCastEnd;
-            
-            
                 var inputForward = new RaycastInput()
                 {
                     Start = start,
@@ -124,7 +110,7 @@ namespace Collisions
                                 actorWeaponAim.crosshairRaycastTarget.y = hitForward.Position.y;
                                 actorWeaponAim.crosshairRaycastTarget.x = hitForward.Position.x;
                             }
-                            //Debug.Log("hit enemy position ");
+                            Debug.Log("hit enemy position ");
                         }
                         else
                         {
@@ -143,7 +129,7 @@ namespace Collisions
                                 actorWeaponAim.crosshairRaycastTarget.y = hitForward.Position.y;
                                 actorWeaponAim.crosshairRaycastTarget.x = hitForward.Position.x;
                             }
-                            //Debug.Log("hit breakable position ");
+                            Debug.Log("hit breakable position ");
                         }
                         else
                         {
@@ -168,11 +154,11 @@ namespace Collisions
                             actorWeaponAim.crosshairRaycastTarget.y = hitForward.Position.y;
                         }
 
-                        //Debug.Log("hit something ");
+                        Debug.Log("hit something ");
                     }
                     else
                     {
-                        //Debug.Log("hit terrain ");
+                        Debug.Log("hit terrain ");
                         actorWeaponAim.crosshairRaycastTarget.y = hitForward.Position.y;
                         actorWeaponAim.crosshairRaycastTarget.x = hitForward.Position.x;
                         actorWeaponAim.crosshairRaycastTarget.z = zLength;

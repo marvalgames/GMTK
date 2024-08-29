@@ -32,7 +32,6 @@ public class NpcAgentAi : MonoBehaviour
     [Tooltip("nav agent move speed multiplier")]
     public float switchSpeedMultiplier = 1.2f;
     [HideInInspector] public NavMeshAgent agent;
-    [HideInInspector] public Animator anim;
     [HideInInspector] public float moveSpeed;
     [HideInInspector]
     public float rotateSpeed = 1;
@@ -55,8 +54,6 @@ public class NpcAgentAi : MonoBehaviour
                 moveSpeed = agent.speed;
             }
         }
-
-        anim = GetComponent<Animator>();
     }
 
 

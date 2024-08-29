@@ -90,8 +90,6 @@ public class HealthBarAuthoring : MonoBehaviour
                 losingHealthRate = authoring.losingHealthRate,
                 meleeDamageEffectsIndex = authoring.meleeDamageEffectsIndex
             });;
-            
-            AddComponent(e, new AnimatorWeightsComponent());
 
         }
     }

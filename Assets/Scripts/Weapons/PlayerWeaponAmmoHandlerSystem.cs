@@ -31,8 +31,7 @@ public partial class PlayerWeaponAmmoHandlerSystem : SystemBase
                 ref AmmoManagerComponent bulletManagerComponent,
                 in ActorWeaponAimComponent actorWeaponAimComponent,
                 in DeadComponent dead,
-                in PhysicsVelocity playerVelocity,
-                in AttachWeaponComponent attachWeapon
+                in PhysicsVelocity playerVelocity
             ) =>
             {
                 if (!SystemAPI.HasComponent<WeaponComponent>(entity) ||
@@ -40,10 +39,7 @@ public partial class PlayerWeaponAmmoHandlerSystem : SystemBase
                 var gun = SystemAPI.GetComponent<WeaponComponent>(entity);
                 if (gun.roleReversal == RoleReversalMode.Off)
                 {
-                    if (attachWeapon.attachedWeaponSlot < 0 ||
-                        attachWeapon.attachWeaponType != (int)WeaponType.Gun &&
-                        attachWeapon.attachSecondaryWeaponType != (int)WeaponType.Gun
-                        || !actorWeaponAimComponent.aimMode
+                    if (!actorWeaponAimComponent.aimMode
                        )
                     {
                         gun.Duration = 0;
@@ -80,16 +76,8 @@ public partial class PlayerWeaponAmmoHandlerSystem : SystemBase
                         var weaponRotation = gun.AmmoStartLocalToWorld.Rotation;
                         var velocity = new PhysicsVelocity();
 
-                        if (actorWeaponAimComponent.weaponCamera == CameraTypes.TopDown)
-                        {
-                            velocity.Linear = actorWeaponAimComponent.aimDirection * strength;
-                            velocity.Angular = math.float3(0, 0, 0);
-                        }
-                        else
-                        {
-                            velocity.Linear = actorWeaponAimComponent.aimDirection * strength;
-                            velocity.Angular = math.float3(0, 0, 0);
-                        }
+                        velocity.Linear = actorWeaponAimComponent.aimDirection * strength;
+                        velocity.Angular = math.float3(0, 0, 0);
 
                         ammoDataComponent.Shooter = entity;
                         commandBuffer.SetComponent(entityInQueryIndex, e, ammoDataComponent);
@@ -102,7 +90,6 @@ public partial class PlayerWeaponAmmoHandlerSystem : SystemBase
                     }
 
                     bulletManagerComponent.playSound = true;
-                    bulletManagerComponent.setAnimationLayer = true;
                 }
                 else if (gun is { IsFiring: 1, Duration: > 0 })
                 {

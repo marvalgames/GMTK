@@ -27,7 +27,6 @@ namespace Sandbox.Player
                     ref PlayerDashComponent playerDash,
                     in InputControllerComponent inputController,
                     in LocalToWorld ltw,
-                    in Animator animator,
                     in DashAudioVideoGO player
                 ) =>
                 {
@@ -35,7 +34,7 @@ namespace Sandbox.Player
                     var audioSource = player.AudioSource;
                     //Debug.Log("DASH");
 
-                    
+
                     if (playerDash.DelayTimeTicker > 0)
                     {
                         playerDash.DelayTimeTicker -= dt;
@@ -53,18 +52,14 @@ namespace Sandbox.Player
                         if (bPressed)
                         {
                             playerDash.DashTimeTicker += dt;
-                            if (animator.GetInteger(Dash) == 0)
+                            playerDash.InDash = true;
+                            if (playerDash.uses > 0)
                             {
-                                animator.SetInteger(Dash, 1);
-                                playerDash.InDash = true;
-                                if (playerDash.uses > 0)
-                                {
-                                    playerDash.uses -= 1;
-                                }
-                                else
-                                {
-                                    playerDash.active = false;
-                                }
+                                playerDash.uses -= 1;
+                            }
+                            else
+                            {
+                                playerDash.active = false;
                             }
 
                             if (audioSource != null)
@@ -78,43 +73,10 @@ namespace Sandbox.Player
                                     }
                                 }
                             }
-                            //
-                            // if (goVisualEffect.VisualEffect && applyImpulseComponent.InJump)
-                            // {
-                            //     goVisualEffect.VisualEffect.transform.position = transform.Position;
-                            //     goVisualEffect.VisualEffect.SetFloat("FlareRate", 100);
-                            //     Debug.Log("VFX Jump");
-                            // }
-                            // else if (goVisualEffect.VisualEffect && !applyImpulseComponent.InJump)
-                            // {
-                            //     goVisualEffect.VisualEffect.transform.position = transform.Position;
-                            //     goVisualEffect.VisualEffect.SetFloat("FlareRate", 0);
-                            // }
-                            //
-                            //
-                            // var audioSource = goAudioPlayer.AudioSource;
-                            // if (audioSource && playerJumpComponent.playJumpAudio)
-                            // {
-                            //     var clip = goAudioPlayer.AudioClip;
-                            //     audioSource.PlayOneShot(audioSource.clip);
-                            //     playerJumpComponent.playJumpAudio = false;
-                            // }
-                            //
-                            //
-                            
-                            //
-                            // if (player.VisualEffect)
-                            // {
-                            //     if (player.VisualEffect.ps.isPlaying == false)
-                            //     {
-                            //         player.ps.transform.SetParent(player.transform);
-                            //         player.ps.Play(true);
-                            //     }
-                            // }
+                          
                         }
                     }
-                    else if (playerDash.DashTimeTicker < playerDash.dashTime && animator.speed > 0 &&
-                             SystemAPI.HasComponent<PhysicsVelocity>(e) && SystemAPI.HasComponent<PhysicsMass>(e))
+                    else if (playerDash.DashTimeTicker < playerDash.dashTime && SystemAPI.HasComponent<PhysicsVelocity>(e) && SystemAPI.HasComponent<PhysicsMass>(e))
                     {
                         var pv = SystemAPI.GetComponent<PhysicsVelocity>(e);
                         var pm = SystemAPI.GetComponent<PhysicsMass>(e);
@@ -128,7 +90,6 @@ namespace Sandbox.Player
                     {
                         playerDash.DashTimeTicker = 0;
                         playerDash.DelayTimeTicker = playerDash.delayTime;
-                        animator.SetInteger(Dash, 0);
                         playerDash.InDash = false;
                         if (audioSource != null) audioSource.Stop();
                         //if (player.ps != null) player.ps.Stop();

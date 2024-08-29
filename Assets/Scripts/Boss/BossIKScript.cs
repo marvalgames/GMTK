@@ -13,7 +13,6 @@ public class BossIKScript : MonoBehaviour
     public EntityManager entityManager;
 
     //int count = 0;
-    Animator animator;
     // Start is called before the first frame update
     void Start()
     {
@@ -27,8 +26,6 @@ public class BossIKScript : MonoBehaviour
             }
             //Debug.Log("LINKED " + linkedEntity);
         }
-        
-        animator = GetComponent<Animator>();
     }
 
  

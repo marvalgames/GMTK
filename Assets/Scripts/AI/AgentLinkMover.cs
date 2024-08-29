@@ -18,7 +18,6 @@ public class AgentLinkMover : MonoBehaviour
     public OffMeshLinkMoveMethod method = OffMeshLinkMoveMethod.Parabola;
     public AnimationCurve curve = new AnimationCurve();
     NavMeshAgent agent;
-    Animator anim;
     public float height = 2.0f;
     public float duration = .5f;//change for greater hang time, varying enemies. further between start and end may lead to duration differences
     private static readonly int JumpState = Animator.StringToHash("JumpState");
@@ -30,7 +29,6 @@ public class AgentLinkMover : MonoBehaviour
     void Start()
     {
         agent = GetComponent<NavMeshAgent>();
-        anim = GetComponent<Animator>();
      
     }
 
@@ -41,7 +39,6 @@ public class AgentLinkMover : MonoBehaviour
         if (agent.isOnOffMeshLink && !isAgentNavigatingLink)
         {
             isAgentNavigatingLink = true;
-            anim.SetInteger(JumpState, 1);
             data = agent.currentOffMeshLinkData;
             startPos = agent.transform.position;
             endPos = data.endPos + Vector3.up * (agent.baseOffset);
@@ -82,7 +79,6 @@ public class AgentLinkMover : MonoBehaviour
             normalizedTime = 0;
             isAgentNavigatingLink = false;
             agent.CompleteOffMeshLink();
-            anim.SetInteger(JumpState, 0);
         }
     }
 
@@ -97,7 +93,6 @@ public class AgentLinkMover : MonoBehaviour
             normalizedTime = 0;
             isAgentNavigatingLink = false;
             agent.CompleteOffMeshLink();
-            anim.SetInteger(JumpState, 0);
         }
     }
 
@@ -112,7 +107,6 @@ public class AgentLinkMover : MonoBehaviour
             agent.destination = transform1.position;
             normalizedTime += Time.deltaTime / duration;
             //Debug.Log("AGENT PARA NORM TIME " + normalizedTime);
-            Debug.Log("JUMPSTATE AGENT " + anim.GetInteger(JumpState));
 
         }
         else 
@@ -120,7 +114,6 @@ public class AgentLinkMover : MonoBehaviour
             normalizedTime = 0;
             isAgentNavigatingLink = false;
             agent.CompleteOffMeshLink();
-            anim.SetInteger(JumpState, 0);
         }
 
 
@@ -145,7 +138,6 @@ public class AgentLinkMover : MonoBehaviour
             normalizedTime = 0;
             isAgentNavigatingLink = false;
             agent.CompleteOffMeshLink();
-            anim.SetInteger(JumpState, 0);
         }
 
 

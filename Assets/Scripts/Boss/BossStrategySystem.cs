@@ -28,7 +28,6 @@ public partial class BossStrategySystem : SystemBase
         
         Entities.WithoutBurst().WithAll<EnemyComponent>().WithNone<Pause>().ForEach
         ((
-                Animator animator, 
                 EffectsManager effectsManager,
                 ref BossMovementComponent bossMovementComponent,
                 ref CheckedComponent checkedComponent,
@@ -36,8 +35,6 @@ public partial class BossStrategySystem : SystemBase
                 in AudioSource audioSource,
                 in  DefensiveStrategyComponent defensiveStrategyComponent) =>
         {
-
-            animator.speed = 1;
 
 
             if (SystemAPI.HasComponent<EvadeComponent>(enemyE))
@@ -88,21 +85,8 @@ public partial class BossStrategySystem : SystemBase
             }
 
 
-            var animStateInfo = animator.GetCurrentAnimatorStateInfo(0);
             
 
-            if (checkedComponent.attackCompleted && animType == 1)
-            {
-                checkedComponent.attackCompleted = false;
-                checkedComponent.hitTriggered = false;
-                checkedComponent.anyAttackStarted = true;
-            }
-            else if(animator.GetInteger(Strike) == 1 && !checkedComponent.attackCompleted
-             && animStateInfo.normalizedTime > .85)
-            {
-                checkedComponent.attackCompleted = true;
-            }
-            animator.SetInteger(Strike, animType);
             var chase = targetPointBuffer[bossMovementComponent.CurrentIndex].wayPointChase;
             if (targetPointBuffer.Length <= 0)
                 return;

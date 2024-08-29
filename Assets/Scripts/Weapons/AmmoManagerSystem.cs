@@ -12,7 +12,6 @@ public partial class AmmoManagerSystem : SystemBase
             (
                  Entity e,
                  AmmoManager ammoManager,
-                 Animator animator,
                  ref AmmoManagerComponent ammoManagerComponent
                  ) =>
             {

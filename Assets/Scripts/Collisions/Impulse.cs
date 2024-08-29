@@ -13,7 +13,6 @@ namespace Collisions
 
         private Entity entity;
         private EntityManager manager;
-        //public Animator animator;
 
         void Start()
         {
