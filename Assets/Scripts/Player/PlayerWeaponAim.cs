@@ -186,8 +186,7 @@ namespace Sandbox.Player
                 crosshairImage.enabled = false;
                 return;
             }
-
-
+            
             actorWeaponAimComponent.weaponLocation = playerWeaponLocation.position;
             var controller = Player.controllers.GetLastActiveController();
             if (controller == null && simController == false) return;
