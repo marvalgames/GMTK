@@ -137,7 +137,7 @@ namespace Collisions
                 {
                     applyImpulse.groundPosition = hitDown.Position;
                     var e = collisionWorld.Bodies[hitDown.RigidBodyIndex].Entity; //grounded
-                    if (applyImpulse.InJump == true)
+                    if (applyImpulse.InJump)
                     {
                         applyImpulse.InJump = false;
                         applyImpulse.Grounded = true;

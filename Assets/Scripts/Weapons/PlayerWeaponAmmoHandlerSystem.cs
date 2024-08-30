@@ -77,6 +77,7 @@ public partial class PlayerWeaponAmmoHandlerSystem : SystemBase
                         var velocity = new PhysicsVelocity();
 
                         velocity.Linear = actorWeaponAimComponent.aimDirection * strength;
+                        //velocity.Linear.y = 0;
                         velocity.Angular = math.float3(0, 0, 0);
 
                         ammoDataComponent.Shooter = entity;

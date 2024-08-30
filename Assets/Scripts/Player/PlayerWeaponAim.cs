@@ -245,6 +245,8 @@ namespace Sandbox.Player
             float3 start = _cam.ScreenToWorldPoint(new Vector3(mousePosition.x, mousePosition.y, 0));
             float3 end = ray.origin + Vector3.Normalize(ray.direction) * targetRange;
 
+            Debug.DrawRay(playerWeaponLocation.position, (Vector3) actorWeaponAimComponent.crosshairRaycastTarget - playerWeaponLocation.position, Color.red, Time.deltaTime);
+            
             actorWeaponAimComponent.rayCastStart = start;
             actorWeaponAimComponent.rayCastEnd = end;
             actorWeaponAimComponent.targetPosition = _targetPosition;
@@ -264,7 +266,7 @@ namespace Sandbox.Player
 
             _targetPosition.x = _manager.GetComponentData<ActorWeaponAimComponent>(_entity).crosshairRaycastTarget.x;
             _targetPosition.z = _manager.GetComponentData<ActorWeaponAimComponent>(_entity).crosshairRaycastTarget.z;
-            _targetPosition.y = playerWeaponLocation.position.y;
+            _targetPosition.y = _manager.GetComponentData<ActorWeaponAimComponent>(_entity).crosshairRaycastTarget.y;
             var aimTarget = _targetPosition;
             aimDir = math.normalize(aimTarget - playerWeaponLocation.position);
         }
