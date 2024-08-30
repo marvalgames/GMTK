@@ -30,8 +30,7 @@ public partial class PlayerWeaponAmmoHandlerSystem : SystemBase
                 int entityInQueryIndex,
                 ref AmmoManagerComponent bulletManagerComponent,
                 in ActorWeaponAimComponent actorWeaponAimComponent,
-                in DeadComponent dead,
-                in PhysicsVelocity playerVelocity
+                in DeadComponent dead
             ) =>
             {
                 if (!SystemAPI.HasComponent<WeaponComponent>(entity) ||
@@ -53,10 +52,8 @@ public partial class PlayerWeaponAmmoHandlerSystem : SystemBase
                 var ammoDataComponent = SystemAPI.GetComponent<AmmoDataComponent>(primaryAmmoEntity);
                 var rate = ammoDataComponent.GameRate;
                 var strength = ammoDataComponent.GameStrength;
-                var position = SystemAPI.GetComponent<LocalTransform>(entity).Position;
                 if (gun.roleReversal == RoleReversalMode.Off)
                 {
-                    //change based on game
                     if (gun.ChangeAmmoStats > 0)
                     {
                         strength = strength * (100 - gun.ChangeAmmoStats * 2) / 100;
@@ -69,26 +66,20 @@ public partial class PlayerWeaponAmmoHandlerSystem : SystemBase
                 {
                     gun.Duration += dt;
 
-                    if (gun.roleReversal == RoleReversalMode.Off)
-                    {
-                        var e = commandBuffer.Instantiate(entityInQueryIndex, gun.PrimaryAmmo);
-                        var weaponPosition = gun.AmmoStartLocalToWorld.Position; //use bone mb transform
-                        var weaponRotation = gun.AmmoStartLocalToWorld.Rotation;
-                        var velocity = new PhysicsVelocity();
-
-                        velocity.Linear = actorWeaponAimComponent.aimDirection * strength;
-                        //velocity.Linear.y = 0;
-                        velocity.Angular = math.float3(0, 0, 0);
-
-                        ammoDataComponent.Shooter = entity;
-                        commandBuffer.SetComponent(entityInQueryIndex, e, ammoDataComponent);
-                        commandBuffer.SetComponent(entityInQueryIndex, e, new TriggerComponent
-                            { Type = (int)TriggerType.Ammo, ParentEntity = entity, Entity = e, Active = true });
-                        var localTransform = LocalTransform.FromPositionRotation(weaponPosition, weaponRotation);
-                        localTransform.Scale = ammoDataComponent.AmmoScale;
-                        commandBuffer.SetComponent(entityInQueryIndex, e, localTransform);
-                        commandBuffer.SetComponent(entityInQueryIndex, e, velocity);
-                    }
+                    var e = commandBuffer.Instantiate(entityInQueryIndex, gun.PrimaryAmmo);
+                    var playerTransform = SystemAPI.GetComponent<LocalTransform>(entity);
+                    var velocity = SystemAPI.GetComponent<PhysicsVelocity>(entity);
+                    var currentLinearVelocity = velocity.Linear;
+                    velocity.Linear = actorWeaponAimComponent.aimDirection * strength + currentLinearVelocity;
+                    velocity.Angular = math.float3(0, 0, 0);
+                    
+                    commandBuffer.SetComponent(entityInQueryIndex, e, velocity);
+                    ammoDataComponent.Shooter = entity;
+                    commandBuffer.SetComponent(entityInQueryIndex, e, ammoDataComponent);
+                    commandBuffer.SetComponent(entityInQueryIndex, e, new TriggerComponent
+                        { Type = (int)TriggerType.Ammo, ParentEntity = entity, Entity = e, Active = true });
+                    commandBuffer.SetComponent(entityInQueryIndex, e, playerTransform);
+                    commandBuffer.SetComponent(entityInQueryIndex, e, velocity);
 
                     bulletManagerComponent.playSound = true;
                 }
