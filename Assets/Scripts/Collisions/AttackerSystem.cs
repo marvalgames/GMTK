@@ -1,163 +1,137 @@
 using Sandbox.Player;
 using Unity.Collections;
 using Unity.Entities;
+using Unity.Physics.Systems;
 using Unity.Transforms;
 using UnityEngine;
 
 namespace Collisions
 {
     [RequireMatchingQueriesForUpdate]
-    [UpdateInGroup(typeof(FixedStepSimulationSystemGroup))]
-    [UpdateAfter(typeof(CollisionSystem))]
+    [UpdateInGroup(typeof(PhysicsSystemGroup))]
+    //[UpdateAfter(typeof(CollisionSystem))]
+    [UpdateAfter(typeof(SphereRaycastSystem))]
     public partial class AttackerSystem : SystemBase
     {
         protected override void OnUpdate()
         {
             var ecb = new EntityCommandBuffer(Allocator.TempJob);
 
-            var playerQuery = GetEntityQuery(ComponentType.ReadOnly<PlayerComponent>()); //player 0
-            var playerList = playerQuery.ToEntityArray(Allocator.Temp);
-            if (playerList.Length == 0) return;
+            //var playerQuery = GetEntityQuery(ComponentType.ReadOnly<PlayerComponent>()); //player 0
+            //var playerList = playerQuery.ToEntityArray(Allocator.Temp);
+            //if (playerList.Length == 0) return;
 
 
             Entities.ForEach(
                 (
-                    in DeadComponent dead,
-                    in CollisionComponent collisionComponent,
-                    in Entity entity
+                    in CollisionComponent collisionComponent
                 ) =>
                 {
-                    if (dead.isDead == true) return;
+                    var entityA = collisionComponent.Character_entity; //ammo
+                    var entityB = collisionComponent.Character_other_entity; //target
+                    //Debug.Log(entityA + " Collision " + entityB);
 
-                    var typeA = collisionComponent.Part_entity;
-                    var typeB = collisionComponent.Part_other_entity;
-                    var entityA = collisionComponent.Character_entity;
-                    var entityB = collisionComponent.Character_other_entity;
-                    if (entityA == entityB && typeA != (int)TriggerType.Ammo && typeB != (int)TriggerType.Ammo) return;
+                    if (entityA == entityB) return;
 
 
-                    if (typeB == (int)TriggerType.Ammo && SystemAPI.HasComponent<TriggerComponent>(entityA)
-                                                       && SystemAPI
-                                                           .HasComponent<
-                                                               TriggerComponent>(
-                                                               entityB)) //b is ammo so causes damage to entity
+                    var shooter = Entity.Null;
+                    if (SystemAPI.HasComponent<TriggerComponent>(entityA))
                     {
-                        var shooter = Entity.Null;
-                        shooter = SystemAPI.GetComponent<TriggerComponent>(entityB)
-                            .ParentEntity;
+                        shooter = SystemAPI.GetComponent<TriggerComponent>(entityA).ParentEntity;
+                    }
+                    
+                    if (shooter != Entity.Null && SystemAPI.HasComponent<AmmoComponent>(entityA))
+                    {
+                        //var isEnemyShooter = SystemAPI.HasComponent<EnemyComponent>(shooter);
+                        var ammo =
+                            SystemAPI.GetComponent<AmmoComponent>(entityA);
+                        var ammoData =
+                            SystemAPI.GetComponent<AmmoDataComponent>(entityA);
 
-                        if (shooter != Entity.Null && SystemAPI.HasComponent<AmmoComponent>(entityB))
+                        float damage = 0; //why using enemy data and not ammo data ?? change this
+                        damage = ammoData.GameDamage; //overrides previous
+                        ammo.AmmoDead = true;
+
+                        if (ammo.DamageCausedPreviously &&
+                            ammo.frameSkipCounter > ammo.framesToSkip) //count in ammosystem
                         {
-                            var isEnemyShooter = SystemAPI.HasComponent<EnemyComponent>(shooter);
-                            var target = SystemAPI.GetComponent<TriggerComponent>(entityA)
-                                .ParentEntity;
-                            var isEnemyTarget = SystemAPI.HasComponent<EnemyComponent>(target);
-                            var ammo =
-                                SystemAPI.GetComponent<AmmoComponent>(entityB);
-                            var ammoData =
-                                SystemAPI.GetComponent<AmmoDataComponent>(entityB);
-
-                            float damage = 0; //why using enemy data and not ammo data ?? change this
-                            damage = ammoData.GameDamage; //overrides previous
-                            ammo.AmmoDead = true;
-
-                            if (ammo.DamageCausedPreviously &&
-                                ammo.frameSkipCounter > ammo.framesToSkip) //count in ammosystem
-                            {
-                                ammo.DamageCausedPreviously = false;
-                                ammo.frameSkipCounter = 0;
-                            }
-
-                            if (ammo.DamageCausedPreviously || ammoData.ChargeRequired == true && ammo.Charged == false)
-                            {
-                                damage = 0;
-                            }
-
-                            if (SystemAPI.HasComponent<DeadComponent>(entityA) == false ||
-                                SystemAPI.GetComponent<DeadComponent>(entityA).isDead)
-                            {
-                                damage = 0;
-                            }
-
-                            ammo.DamageCausedPreviously = true;
-
-
-                            ecb.AddComponent(shooter,
-                                new DamageComponent
-                                {
-                                    DamageLanded = damage, DamageReceived = 0, EntityCausingDamage = entityB,
-                                    LosingDamage = false
-                                });
-
-
-                            ecb.AddComponent(entityA,
-                                new DamageComponent
-                                {
-                                    DamageLanded = 0,
-                                    DamageReceived = damage,
-                                    StunLanded = damage,
-                                    EffectsIndex = ammo.effectIndex,
-                                    LosingDamage = false,
-                                    EntityCausingDamage = entityB
-                                });
-
-                            if (SystemAPI.HasComponent<CheckedComponent>(entityA) && damage > 0)
-                            {
-                                var checkedComponent = SystemAPI.GetComponent<CheckedComponent>(entityA);
-                                checkedComponent.scaleFactor *= checkedComponent.scale_multiplier;
-                                if (checkedComponent.scaleFactor > 2.5f) checkedComponent.scaleFactor = 2.5f;
-                                SystemAPI.SetComponent(entityA, checkedComponent);
-                            }
-
-                            if (SystemAPI.HasComponent<CheckedComponent>(shooter) && damage > 0 && !isEnemyShooter)
-                            {
-                                var checkedComponent = SystemAPI.GetComponent<CheckedComponent>(shooter);
-                                checkedComponent.scaleFactor *= 2 - checkedComponent.scale_multiplier;
-                                if (checkedComponent.scaleFactor < 1f) checkedComponent.scaleFactor = 1f;
-                                SystemAPI.SetComponent(shooter, checkedComponent);
-                            }
-
-
-                            if (SystemAPI.HasComponent<SkillTreeComponent>(shooter))
-                            {
-                                var skill = SystemAPI.GetComponent<SkillTreeComponent>(shooter);
-                                skill.CurrentLevelXp += damage;
-                                SystemAPI.SetComponent(shooter, skill);
-                            }
-
-
-                            //var isPlayerShooter = SystemAPI.HasComponent<PlayerComponent>(shooter);
-                            if (SystemAPI.HasComponent<ScoreComponent>(shooter) && damage != 0)
-                            {
-                                var scoreComponent = SystemAPI.GetComponent<ScoreComponent>(shooter);
-                                scoreComponent.addBonus = 0;
-                                if (!scoreComponent.zeroPoints)
-                                {
-                                    scoreComponent.scoringAmmoEntity = ammo.ammoEntity;
-                                    scoreComponent.pointsScored = true;
-                                    scoreComponent.combo = 1;
-                                    scoreComponent.scoredAgainstEntity = entityA;
-                                }
-
-
-                                SystemAPI.SetComponent(shooter, scoreComponent);
-                            }
-
-                            if (SystemAPI.HasComponent<ScoreComponent>(entityA) && damage >= 0)
-                            {
-                                var scoreComponent = SystemAPI.GetComponent<ScoreComponent>(entityA);
-                                scoreComponent.combo = 0;
-                                scoreComponent.streak = 0;
-                                SystemAPI.SetComponent(entityA, scoreComponent);
-                            }
-
-                            ecb.SetComponent(entityB, ammo);
+                            ammo.DamageCausedPreviously = false;
+                            ammo.frameSkipCounter = 0;
                         }
+
+                        if (ammo.DamageCausedPreviously || ammoData.ChargeRequired == true && ammo.Charged == false)
+                        {
+                            damage = 0;
+                        }
+
+                        if (SystemAPI.HasComponent<DeadComponent>(entityB) == false ||
+                            SystemAPI.GetComponent<DeadComponent>(entityB).isDead)
+                        {
+                            damage = 0;
+                        }
+
+                        ammo.DamageCausedPreviously = true;
+                        
+                        Debug.Log("DAMAGE " + entityB);
+
+
+                        ecb.AddComponent(shooter,
+                            new DamageComponent
+                            {
+                                DamageLanded = damage, DamageReceived = 0, EntityCausingDamage = entityA,
+                                LosingDamage = false
+                            });
+
+
+                        ecb.AddComponent(entityB,
+                            new DamageComponent
+                            {
+                                DamageLanded = 0,
+                                DamageReceived = damage,
+                                StunLanded = damage,
+                                EffectsIndex = ammo.effectIndex,
+                                LosingDamage = false,
+                                EntityCausingDamage = entityA
+                            });
+                        if (SystemAPI.HasComponent<SkillTreeComponent>(shooter))
+                        {
+                            var skill = SystemAPI.GetComponent<SkillTreeComponent>(shooter);
+                            skill.CurrentLevelXp += damage;
+                            SystemAPI.SetComponent(shooter, skill);
+                        }
+
+
+                        //var isPlayerShooter = SystemAPI.HasComponent<PlayerComponent>(shooter);
+                        if (SystemAPI.HasComponent<ScoreComponent>(shooter) && damage != 0)
+                        {
+                            var scoreComponent = SystemAPI.GetComponent<ScoreComponent>(shooter);
+                            scoreComponent.addBonus = 0;
+                            if (!scoreComponent.zeroPoints)
+                            {
+                                scoreComponent.scoringAmmoEntity = ammo.ammoEntity;
+                                scoreComponent.pointsScored = true;
+                                scoreComponent.combo = 1;
+                                scoreComponent.scoredAgainstEntity = entityA;
+                            }
+
+
+                            SystemAPI.SetComponent(shooter, scoreComponent);
+                        }
+
+                        if (SystemAPI.HasComponent<ScoreComponent>(entityB) && damage >= 0)
+                        {
+                            var scoreComponent = SystemAPI.GetComponent<ScoreComponent>(entityB);
+                            scoreComponent.combo = 0;
+                            scoreComponent.streak = 0;
+                            SystemAPI.SetComponent(entityB, scoreComponent);
+                        }
+
+                        ecb.SetComponent(entityA, ammo);
                     }
                 }
             ).Run();
 
-            playerList.Dispose();
+            //playerList.Dispose();
 
             ecb.Playback(EntityManager);
             ecb.Dispose();

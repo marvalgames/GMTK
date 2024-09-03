@@ -1,9 +1,11 @@
 using Rewired;
 using Sandbox.Player;
 using Unity.Entities;
+using Unity.Physics.Systems;
 
 
-[UpdateInGroup(typeof(FixedStepSimulationSystemGroup))]
+[UpdateInGroup(typeof(PhysicsSystemGroup))]
+[UpdateBefore(typeof(PlayerMoveSystem))]
 [RequireMatchingQueriesForUpdate]
 public partial class InputControllerSystemUpdate : SystemBase
 {

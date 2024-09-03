@@ -38,13 +38,8 @@ public partial struct ParticleRaycastSystem : ISystem
     public void OnUpdate(ref SystemState state)
     {
         var ecb = new EntityCommandBuffer(Allocator.TempJob);
-        //var physicsWorldSystem =  World.GetExistingSystem<Unity.Physics.Systems.BuildPhysicsWorld>();
         var collisionWorld = SystemAPI.GetSingleton<PhysicsWorldSingleton>();
 
-
-
-        //var dep0 = Entities.ForEach((Entity entity,
-        //    ref PhysicsCollider collider, in AmmoComponent ammoComponent) =>
         foreach (var(collider, ammoComponent, entity) 
                  in SystemAPI.Query<RefRW<PhysicsCollider>, AmmoComponent>().
                      WithEntityAccess())
@@ -79,7 +74,6 @@ public partial struct ParticleRaycastSystem : ISystem
             {
                 Start = start,
                 End = end,
-                //Filter = CollisionFilter.Default
                 Filter = new CollisionFilter()
                 {
                     BelongsTo = (uint)CollisionLayer.Particle,
@@ -88,8 +82,6 @@ public partial struct ParticleRaycastSystem : ISystem
                 }
             };
             var hitDown = new Unity.Physics.RaycastHit();
-            //Debug.DrawRay(inputDown.Start, direction, Color.white, distance);
-
             var hasPointHitDown = collisionWorld.CastRay(inputDown, out hitDown);
 
 
@@ -152,9 +144,6 @@ public partial struct ParticleRaycastSystem : ISystem
                             Entity = spawn,
                             Active = true
                         });
-
-                        //Debug.Log("POSITION " + spawn);
-                    
 
                     }
 

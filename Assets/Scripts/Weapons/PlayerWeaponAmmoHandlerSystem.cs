@@ -71,6 +71,7 @@ public partial class PlayerWeaponAmmoHandlerSystem : SystemBase
                     var velocity = SystemAPI.GetComponent<PhysicsVelocity>(entity);
                     var currentLinearVelocity = velocity.Linear;
                     velocity.Linear = actorWeaponAimComponent.aimDirection * strength + currentLinearVelocity;
+                    velocity.Linear.y = 0;
                     velocity.Angular = math.float3(0, 0, 0);
                     
                     commandBuffer.SetComponent(entityInQueryIndex, e, velocity);

@@ -135,7 +135,7 @@ namespace Collisions
                     }
                     else
                     {
-                        Debug.Log("hit terrain ");
+                        //Debug.Log("hit terrain ");
                         actorWeaponAim.crosshairRaycastTarget.y = hitForward.Position.y;
                         actorWeaponAim.crosshairRaycastTarget.x = hitForward.Position.x;
                         actorWeaponAim.crosshairRaycastTarget.z = zLength;

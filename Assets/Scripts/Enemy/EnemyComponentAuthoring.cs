@@ -165,6 +165,7 @@ public class EnemyComponentAuthoring : MonoBehaviour
             AddComponent(e,
                 new EnemyStateComponent { MoveState = MoveStates.Default, CombatState = CombatStates.Default });
 
+            
             //AddComponent(new EnemyClass(){go = authoring.gameObject});
         }
     }

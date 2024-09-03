@@ -4,13 +4,14 @@ using Unity.Entities;
 using Sandbox.Player;
 using Unity.Collections;
 using Unity.Mathematics;
+using Unity.Physics.Systems;
 using UnityEngine;
 
 
 //[UpdateInGroup(typeof(FixedStepSimulationSystemGroup), OrderLast = true)]
-[UpdateInGroup(typeof(FixedStepSimulationSystemGroup))]
+[UpdateInGroup(typeof(PhysicsSystemGroup))]
 //[UpdateInGroup(typeof(FixedStepSimulationSystemGroup))]
-[UpdateAfter(typeof(Collisions.CollisionSystem))]
+[UpdateAfter(typeof(AttackerSystem))]
 
 [RequireMatchingQueriesForUpdate]
 public partial class CleanupSystem : SystemBase
@@ -28,6 +29,8 @@ public partial class CleanupSystem : SystemBase
             (Entity e, ref DamageComponent damageComponent) =>
             {
                 ecb.RemoveComponent<DamageComponent>(e);
+                //damageComponent.DamageReceived = 0;
+                //damageComponent.DamageLanded = 0;
 
             }
         ).Schedule(this.Dependency);
