@@ -29,6 +29,7 @@ public partial class CleanupSystem : SystemBase
             (Entity e, ref DamageComponent damageComponent) =>
             {
                 ecb.RemoveComponent<DamageComponent>(e);
+                //Debug.Log("Damaged");
                 //damageComponent.DamageReceived = 0;
                 //damageComponent.DamageLanded = 0;
 

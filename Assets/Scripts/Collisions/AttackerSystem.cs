@@ -27,12 +27,10 @@ namespace Collisions
                     in CollisionComponent collisionComponent
                 ) =>
                 {
+
                     var entityA = collisionComponent.Character_entity; //ammo
                     var entityB = collisionComponent.Character_other_entity; //target
-                    //Debug.Log(entityA + " Collision " + entityB);
-
                     if (entityA == entityB) return;
-
 
                     var shooter = Entity.Null;
                     if (SystemAPI.HasComponent<TriggerComponent>(entityA))
@@ -42,24 +40,16 @@ namespace Collisions
                     
                     if (shooter != Entity.Null && SystemAPI.HasComponent<AmmoComponent>(entityA))
                     {
-                        //var isEnemyShooter = SystemAPI.HasComponent<EnemyComponent>(shooter);
+
+                        //Debug.Log("SHOOTER " + shooter);
                         var ammo =
                             SystemAPI.GetComponent<AmmoComponent>(entityA);
                         var ammoData =
                             SystemAPI.GetComponent<AmmoDataComponent>(entityA);
-
                         float damage = 0; //why using enemy data and not ammo data ?? change this
                         damage = ammoData.GameDamage; //overrides previous
-                        ammo.AmmoDead = true;
 
-                        if (ammo.DamageCausedPreviously &&
-                            ammo.frameSkipCounter > ammo.framesToSkip) //count in ammosystem
-                        {
-                            ammo.DamageCausedPreviously = false;
-                            ammo.frameSkipCounter = 0;
-                        }
-
-                        if (ammo.DamageCausedPreviously || ammoData.ChargeRequired == true && ammo.Charged == false)
+                        if (ammoData.ChargeRequired && ammo.Charged == false)
                         {
                             damage = 0;
                         }
@@ -69,10 +59,6 @@ namespace Collisions
                         {
                             damage = 0;
                         }
-
-                        ammo.DamageCausedPreviously = true;
-                        
-                        Debug.Log("DAMAGE " + entityB);
 
 
                         ecb.AddComponent(shooter,
@@ -93,15 +79,15 @@ namespace Collisions
                                 LosingDamage = false,
                                 EntityCausingDamage = entityA
                             });
+                        
+                        //Debug.Log("DAMAGE " + damage);
+                        
                         if (SystemAPI.HasComponent<SkillTreeComponent>(shooter))
                         {
                             var skill = SystemAPI.GetComponent<SkillTreeComponent>(shooter);
                             skill.CurrentLevelXp += damage;
                             SystemAPI.SetComponent(shooter, skill);
                         }
-
-
-                        //var isPlayerShooter = SystemAPI.HasComponent<PlayerComponent>(shooter);
                         if (SystemAPI.HasComponent<ScoreComponent>(shooter) && damage != 0)
                         {
                             var scoreComponent = SystemAPI.GetComponent<ScoreComponent>(shooter);
@@ -110,6 +96,7 @@ namespace Collisions
                             {
                                 scoreComponent.scoringAmmoEntity = ammo.ammoEntity;
                                 scoreComponent.pointsScored = true;
+                                //Debug.Log("Score ");
                                 scoreComponent.combo = 1;
                                 scoreComponent.scoredAgainstEntity = entityA;
                             }

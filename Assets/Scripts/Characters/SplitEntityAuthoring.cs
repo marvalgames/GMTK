@@ -2,9 +2,9 @@
 using UnityEngine;
 
 
-public struct SplitComponent : IComponentData, IEnableableComponent
+public struct SplitterComponent : IComponentData, IEnableableComponent
 {
-    public bool split;
+    //public bool split;
     public Entity splitPrefab;
 }
 
@@ -16,8 +16,7 @@ public class SplitEntityAuthoring : MonoBehaviour
         public override void Bake(SplitEntityAuthoring authoring)
         {
             var e = GetEntity(authoring.splitPrefab, TransformUsageFlags.Dynamic);
-            AddComponent(e, new SplitComponent { splitPrefab = e,  split = false });
-
+            AddComponent(GetEntity(TransformUsageFlags.None), new SplitterComponent() {splitPrefab = e});
         }
         
     }

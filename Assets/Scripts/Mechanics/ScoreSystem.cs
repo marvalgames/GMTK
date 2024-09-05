@@ -11,8 +11,6 @@ public partial class ScoreSystem : SystemBase
 {
     protected override void OnUpdate()
     {
-        //var flingGroup = GetComponentLookup<FlingMechanicComponent>(false);
-        //var damageGroup = GetComponentLookup<DamageComponent>(false);
         var ecb = new EntityCommandBuffer(Allocator.TempJob);
         
      
@@ -35,7 +33,6 @@ public partial class ScoreSystem : SystemBase
 
                 if (score.pointsScored)
                 {
-                    Debug.Log("SCORE");
                     if (score is { trackStreak: true, trackCombo: true, combo: 1 })
                     {
                         score.streak += 1;
@@ -79,16 +76,13 @@ public partial class ScoreSystem : SystemBase
 
                     if (SystemAPI.HasComponent<DamageComponent>(score.scoredAgainstEntity))
                     {
-                        //Debug.Log("against " + score.scoredAgainstEntity);
                         var damage = SystemAPI.GetComponent<DamageComponent>(score.scoredAgainstEntity);
                         damage.ScorePointsReceived = score.lastPointValue;
                         SystemAPI.SetComponent(score.scoredAgainstEntity, damage);
                     }
 
                     score.pointsScored = false;
-                    //score.scoringAmmoEntity = Entity.Null;
                     score.timeSinceLastScore = 0;
-                    //score.lastPointValue = 0;
                 }
                 else
                 {
