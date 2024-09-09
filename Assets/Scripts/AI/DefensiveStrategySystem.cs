@@ -7,7 +7,7 @@ using Unity.Transforms;
 [RequireMatchingQueriesForUpdate]
 public partial struct DefensiveStrategySystem : ISystem
 {
-    private EntityQuery playerQuery;
+    private EntityQuery playerQuery; 
 
     [BurstCompile]
     public void OnCreate(ref SystemState state)

@@ -26,7 +26,6 @@ public class CharacterSpawnerAuthoring : MonoBehaviour
             CharacterSpawnComponent characterSpawnComponent = new CharacterSpawnComponent {entityPrefab = e, entityPosition = authoring.transform.position, instanceCount = authoring.instanceCount, lockY = authoring.lockY} ;
             AddComponent(GetEntity(TransformUsageFlags.None), characterSpawnComponent);
             
-            
         }
     }
 }
