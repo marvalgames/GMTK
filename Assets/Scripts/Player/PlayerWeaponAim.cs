@@ -181,7 +181,7 @@ namespace Sandbox.Player
             aimMode = actorWeaponAimComponent.aimMode;
             aimDisabled = actorWeaponAimComponent.aimDisabled;
 
-            if (crossHair == null || !actorWeaponAimComponent.aimMode)
+            if (!crossHair || !actorWeaponAimComponent.aimMode)
             {
                 crosshairImage.enabled = false;
                 return;

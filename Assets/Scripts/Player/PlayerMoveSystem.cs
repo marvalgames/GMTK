@@ -118,7 +118,8 @@ namespace Sandbox.Player
                     leftStickY = 0;
                 }
 
-                var aimMode = false;
+                //var aimMode = false;
+                var aimMode = true;
                 if (actorWeapon)
                 {
                     var aimComponent = SystemAPI.GetComponent<ActorWeaponAimComponent>(entity);

@@ -2,6 +2,7 @@ using Rewired;
 using Sandbox.Player;
 using Unity.Entities;
 using Unity.Physics.Systems;
+using UnityEngine;
 
 
 [UpdateInGroup(typeof(PhysicsSystemGroup))]
@@ -33,7 +34,7 @@ public partial class InputControllerSystemUpdate : SystemBase
 
             inputController.leftStickX = player.GetAxis("Move Horizontal");
             inputController.leftStickY = player.GetAxis("Move Vertical");
-
+            
             inputController.rightStickPressed = player.GetButtonDown("RightStickAction");
             
             inputController.leftBumperPressed = player.GetButtonDown("LeftBumper");
