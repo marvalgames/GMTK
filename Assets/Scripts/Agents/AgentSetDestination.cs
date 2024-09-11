@@ -4,41 +4,31 @@ using ProjectDawn.Navigation.Hybrid;
 using Unity.Mathematics;
 using ProjectDawn.Navigation;
 
-
-public class AgentSetDestination : MonoBehaviour
+namespace Agents
 {
-    public Transform Target;
-
-    void Start()
+    
+    public class AgentSetDestination : MonoBehaviour
     {
-        GetComponent<AgentAuthoring>().SetDestination(Target.position);
+
+        void Start()
+        {
+        }
     }
-}
 
 // ECS component
-public struct SetDestination : IComponentData
-{
-    public float3 Value;
-}
+    public struct SetDestination : IComponentData
+    {
+    }
 
 // Bakes mono component into ecs component
-class AgentSetDestinationBaker : Baker<AgentSetDestination>
-{
-    public override void Bake(AgentSetDestination authoring)
+    class AgentSetDestinationBaker : Baker<AgentSetDestination>
     {
-        AddComponent(GetEntity(TransformUsageFlags.Dynamic),
-            new SetDestination { Value = authoring.Target.position });
-    }
-}
-
-// Sets agents destination
-partial struct AgentSetDestinationSystem : ISystem
-{
-    public void OnUpdate(ref SystemState systemState)
-    {
-        foreach (var (destination, body) in SystemAPI.Query<RefRO<SetDestination>, RefRW<AgentBody>>())
+        public override void Bake(AgentSetDestination authoring)
         {
-            body.ValueRW.SetDestination(destination.ValueRO.Value);
+            //AddComponent(GetEntity(TransformUsageFlags.Dynamic),
+                //new SetDestination { Value = authoring.Target.position });
+           // AddComponent(GetEntity(TransformUsageFlags.Dynamic),
+             //   new SetDestination { });
         }
     }
 }

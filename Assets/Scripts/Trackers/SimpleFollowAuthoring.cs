@@ -21,12 +21,15 @@ public class SimpleFollowAuthoring : MonoBehaviour
     {
         entityManager = World.DefaultGameObjectInjectionWorld.EntityManager;
         // Find the player entity (can be done via tags or queries)
-        var entityQuery = entityManager.CreateEntityQuery(typeof(PlayerComponent));
-        playerEntity = entityQuery.GetSingletonEntity();
+       
     }
 
     void LateUpdate()
     {
+        var entityQuery = entityManager.CreateEntityQuery(typeof(PlayerComponent));
+        if(entityQuery.CalculateEntityCount() == 0) return;
+        playerEntity = entityQuery.GetSingletonEntity();
+        
         if (entityManager.Exists(playerEntity))
         {
             // Get the player's position from ECS

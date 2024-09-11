@@ -11,7 +11,8 @@ public struct DefensiveStrategyComponent : IComponentData
     public Entity closeBulletEntity;
     public Entity closestEnemiesAttackEntity;
     public float switchToPlayerMultiplier;
-    
+    public float botSpeed;
+
 }
 
 public struct EnemyBehaviourComponent : IComponentData
@@ -80,6 +81,9 @@ public class EnemyBehaviorManager : MonoBehaviour
 
     [Header("Mechanics")] [SerializeField] private bool canFreeze;
 
+    [SerializeField]
+    private float botSpeed = 5.0f;
+
     class EnemyBehaviourBaker : Baker<EnemyBehaviorManager>
     {
         public override void Bake(EnemyBehaviorManager authoring)
@@ -112,7 +116,8 @@ public class EnemyBehaviorManager : MonoBehaviour
                     currentRole = DefensiveRoles.None,
                     currentRoleMaxTime = authoring.currentRoleMaxTime,
                     currentRoleTimer = 0,
-                    switchToPlayerMultiplier = authoring.switchToPlayerMultiplier
+                    switchToPlayerMultiplier = authoring.switchToPlayerMultiplier,
+                    botSpeed = authoring.botSpeed
                 });
 
             var position = authoring.transform.position;
