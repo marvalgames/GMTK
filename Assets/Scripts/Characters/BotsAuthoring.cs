@@ -12,6 +12,7 @@ namespace Sandbox.Player
             {
                 var entity = GetEntity(authoring, TransformUsageFlags.Dynamic);
                 AddComponent<Bot>(entity);
+                AddComponent(entity, new CharacterIndexComponent());
             }
         }
     }

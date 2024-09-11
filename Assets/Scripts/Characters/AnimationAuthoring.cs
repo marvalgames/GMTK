@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Unity.Entities;
 using Unity.Mathematics;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace Sandbox.Player
 {
@@ -12,9 +13,9 @@ namespace Sandbox.Player
 
         [Header("Prefabs")] public GameObject BotPrefab;
         public GameObject BotAnimatedPrefabGO;
-        
-        public List<CharacterDataClass> CharacterDataObject = new List<CharacterDataClass>();
-        
+
+        public List<CharacterDataClass> CharacterDataObject = new();
+
 
         class Baker : Baker<AnimationAuthoring>
         {
@@ -22,6 +23,7 @@ namespace Sandbox.Player
             {
                 var entity = GetEntity(authoring, TransformUsageFlags.None);
                 var animatedPrefab = authoring.BotAnimatedPrefabGO is not null;
+
                 AddComponent(entity, new CharacterData()
                 {
                     NumBots = authoring.NumBots,
@@ -30,26 +32,44 @@ namespace Sandbox.Player
                 });
 
                 var buffer = AddBuffer<CharacterDataElement>(entity);
-                
+                //var characterDataManagedList = new CharacterDataManaged[authoring.NumBots];
+
                 for (var i = 0; i < authoring.CharacterDataObject.Count; i++)
                 {
                     var characterData = authoring.CharacterDataObject[i];
                     var characterDataElement = new CharacterDataElement
                     {
+                        //PrefabGroup = i,
                         BotPrefab = GetEntity(characterData.BotPrefab, TransformUsageFlags.Dynamic),
-                        NumBots = characterData.NumBots
+                        NumBots = characterData.numBots,
+                        minPosX = characterData.minPosX,
+                        maxPosX = characterData.maxPosX,
+                        minPosZ = characterData.minPosZ,
+                        maxPosZ = characterData.maxPosZ
                     };
-                    
+
+
                     buffer.Add(characterDataElement);
                 }
-                
+
+
+                var animatedPrefabList = new CharacterDataManaged();
+                animatedPrefabList.BotAnimatedPrefabGO= authoring.BotAnimatedPrefabGO;//default
+                for (var i = 0; i < authoring.CharacterDataObject.Count; i++)
+                {
+                    animatedPrefabList.BotAnimatedPrefabList.Add(authoring.CharacterDataObject[i].BotAnimatedPrefab);
+                }
+
+
+                AddComponentObject(entity, animatedPrefabList);
+
                 if (animatedPrefab)
                 {
                     var configManaged = new CharacterDataManaged
                     {
                         BotAnimatedPrefabGO = authoring.BotAnimatedPrefabGO
                     };
-                    AddComponentObject(entity, configManaged);
+                    //AddComponentObject(entity, configManaged);
                 }
             }
         }
@@ -58,13 +78,25 @@ namespace Sandbox.Player
     [System.Serializable]
     public class CharacterDataClass
     {
+        public GameObject BotAnimatedPrefab;
         public GameObject BotPrefab;
-        public int NumBots;
+        [FormerlySerializedAs("NumBots")] public int numBots = 25;
+        public float minPosX = -15;
+        public float maxPosX = 15;
+        public float minPosZ = -895;
+        public float maxPosZ = -675;
     }
+
+    [InternalBufferCapacity(16)]
     public struct CharacterDataElement : IBufferElementData
     {
+        //public int PrefabGroup;//track index
         public int NumBots;
         public Entity BotPrefab;
+        public float minPosX;
+        public float maxPosX;
+        public float minPosZ;
+        public float maxPosZ;
     }
 
     public struct CharacterData : IComponentData
@@ -74,14 +106,20 @@ namespace Sandbox.Player
         public bool HasAnimatedPrefab;
     }
 
+    public struct CharacterIndexComponent : IComponentData
+    {
+        public int GroupIndex;
+        public int BotIndex;
+    }
+
     public class CharacterDataManaged : IComponentData
     {
         public GameObject BotAnimatedPrefabGO;
+        public List<GameObject> BotAnimatedPrefabList = new();
     }
 
     public class BotAnimation : IComponentData
     {
         public GameObject AnimatedGO; // the GO that is rendered and animated
     }
-    
 }

@@ -30,17 +30,22 @@ namespace Sandbox.Player
                 var configEntity = SystemAPI.GetSingletonEntity<CharacterData>();
                 if (state.EntityManager.HasComponent<CharacterDataManaged>(configEntity))
                 {
+                    var characterDataBuffer = SystemAPI.GetBufferLookup<CharacterDataElement>(true);
                     var configManaged = state.EntityManager.GetComponentObject<CharacterDataManaged>(configEntity);
+                    //var group = characterDataBuffer[configEntity][0].PrefabGroup;
 
                     var ecb = new EntityCommandBuffer(Allocator.Temp);
 
-                    foreach (var (transform, entity) in
-                             SystemAPI.Query<RefRO<LocalTransform>>()
+                    foreach (var (transform, characterIndex, entity) in
+                             SystemAPI.Query<RefRO<LocalTransform>, RefRO<CharacterIndexComponent>>()
                                  .WithAll<Bot>()
                                  .WithEntityAccess())
                     {
+                        var animatedPrefab = configManaged.BotAnimatedPrefabList[characterIndex.ValueRO.GroupIndex]; 
+                        Debug.Log("animated prefab " + animatedPrefab + " " + characterIndex.ValueRO.GroupIndex);
                         var botAnimation = new BotAnimation();
-                        var go = GameObject.Instantiate(configManaged.BotAnimatedPrefabGO);
+                        var go = GameObject.Instantiate(animatedPrefab);
+                        
                         botAnimation.AnimatedGO = go;
                         go.transform.localPosition = (Vector3)transform.ValueRO.Position;
                         ecb.AddComponent(entity, botAnimation);
@@ -53,7 +58,7 @@ namespace Sandbox.Player
                 }
             }
 
-            var isMovingId = Animator.StringToHash("IsMoving");
+            //var isMovingId = Animator.StringToHash("IsMoving");
             var vertical = Animator.StringToHash("Vertical");
 
 

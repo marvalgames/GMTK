@@ -3,6 +3,8 @@ using Unity.Burst;
 using Unity.Entities;
 using Unity.Mathematics;
 using Unity.Transforms;
+using UnityEngine;
+using Random = Unity.Mathematics.Random;
 
 
 public partial struct InstantiateSystem : ISystem
@@ -18,38 +20,50 @@ public partial struct InstantiateSystem : ISystem
     {
 
         state.Enabled = false;
-        var instantiator = SystemAPI.GetSingleton<CharacterData>();
-
-        var minPosX = -15.0f;
-        var maxPosX = 15.0f;
-        var minPosY = -895f;
-        var maxPosY = -675f;
-
+        var entity = SystemAPI.GetSingletonEntity<CharacterData>();
         // Prepare random generator
         Random random = new(123456);
-
-        for (int i = 0; i < instantiator.NumBots; i++)
+        
+        var characterDataBuffer = SystemAPI.GetBufferLookup<CharacterDataElement>(true);
+        var prefabCount = characterDataBuffer[entity].Length;
+        for (var i = 0; i < prefabCount; i++)
         {
-            Entity instance = state.EntityManager.Instantiate(instantiator.BotPrefab);
-
-            // Random position at x and z
-            float3 position = new()
+            var bots = characterDataBuffer[entity][i].NumBots;
+            var botPrefab = characterDataBuffer[entity][i].BotPrefab;
+            var minPosX = characterDataBuffer[entity][i].minPosX;
+            var maxPosX = characterDataBuffer[entity][i].maxPosX;
+            var minPosZ = characterDataBuffer[entity][i].minPosZ;
+            var maxPosZ = characterDataBuffer[entity][i].maxPosZ;
+            for (var j = 0; j < bots; j++)
             {
-                x = random.NextFloat(minPosX, maxPosX),
-                y = 3,
-                z = random.NextFloat(minPosY, maxPosY)
-            };
 
-            // Random euler rotation but only at y
-            float3 euler = new()
-            {
-                y = random.NextFloat(0.0f, 360.0f)
-            };
-            quaternion rotation = quaternion.Euler(euler);
+                var instance = state.EntityManager.Instantiate(botPrefab);
+                SystemAPI.SetComponent(instance, new CharacterIndexComponent { GroupIndex = i, BotIndex = j});
+                // Random position at x and z
+                float3 position = new()
+                {
+                    x = random.NextFloat(minPosX, maxPosX),
+                    y = 3,// add member along with scale and if random rotation
+                    z = random.NextFloat(minPosZ, maxPosZ)
+                };
 
-            // Set LocalTransform
-            state.EntityManager.SetComponentData(instance,
-                LocalTransform.FromPositionRotation(position, rotation));
+                
+                
+                // Random euler rotation but only at y //remove later 
+                float3 euler = new()
+                {
+                    y = random.NextFloat(0.0f, 360.0f)
+                };
+                quaternion rotation = quaternion.Euler(euler);
+
+                // Set LocalTransform
+                //SCALE has no effect since it's an entity
+                SystemAPI.SetComponent(instance,
+                    LocalTransform.FromPositionRotationScale(position, rotation, 1 ));
+
+            }
         }
+
+
     }
 }
