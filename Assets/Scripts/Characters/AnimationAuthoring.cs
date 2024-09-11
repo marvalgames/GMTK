@@ -1,4 +1,6 @@
-﻿using Unity.Entities;
+﻿using System;
+using System.Collections.Generic;
+using Unity.Entities;
 using Unity.Mathematics;
 using UnityEngine;
 
@@ -10,6 +12,9 @@ namespace Sandbox.Player
 
         [Header("Prefabs")] public GameObject BotPrefab;
         public GameObject BotAnimatedPrefabGO;
+        
+        public List<CharacterDataClass> CharacterDataObject = new List<CharacterDataClass>();
+        
 
         class Baker : Baker<AnimationAuthoring>
         {
@@ -24,6 +29,20 @@ namespace Sandbox.Player
                     HasAnimatedPrefab = animatedPrefab
                 });
 
+                var buffer = AddBuffer<CharacterDataElement>(entity);
+                
+                for (var i = 0; i < authoring.CharacterDataObject.Count; i++)
+                {
+                    var characterData = authoring.CharacterDataObject[i];
+                    var characterDataElement = new CharacterDataElement
+                    {
+                        BotPrefab = GetEntity(characterData.BotPrefab, TransformUsageFlags.Dynamic),
+                        NumBots = characterData.NumBots
+                    };
+                    
+                    buffer.Add(characterDataElement);
+                }
+                
                 if (animatedPrefab)
                 {
                     var configManaged = new CharacterDataManaged
@@ -34,6 +53,18 @@ namespace Sandbox.Player
                 }
             }
         }
+    }
+
+    [System.Serializable]
+    public class CharacterDataClass
+    {
+        public GameObject BotPrefab;
+        public int NumBots;
+    }
+    public struct CharacterDataElement : IBufferElementData
+    {
+        public int NumBots;
+        public Entity BotPrefab;
     }
 
     public struct CharacterData : IComponentData

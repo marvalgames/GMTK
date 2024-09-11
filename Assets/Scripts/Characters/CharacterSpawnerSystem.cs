@@ -23,7 +23,7 @@ public partial struct InstantiateSystem : ISystem
         var minPosX = -15.0f;
         var maxPosX = 15.0f;
         var minPosY = -895f;
-        var maxPosY = -875f;
+        var maxPosY = -675f;
 
         // Prepare random generator
         Random random = new(123456);

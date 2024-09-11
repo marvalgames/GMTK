@@ -9,7 +9,9 @@ using UnityEngine;
 public struct BossAmmoListBuffer : IBufferElementData
 {
     public Entity E;
+
     public Entity StartLocationEntity;
+
     //public LocalToWorld ammoStartLocalToWorld;
     public LocalTransform AmmoStartTransform;
 }
@@ -59,18 +61,18 @@ public class BossComponentAuthoring : MonoBehaviour
         public override void Bake(BossComponentAuthoring authoring)
         {
             var e = GetEntity(authoring.gameObject, TransformUsageFlags.Dynamic);
-            AddComponent(e, new EnemiesAttackComponent  {enemiesAttack = authoring.enemiesAttack} );
+            AddComponent(e, new EnemiesAttackComponent { enemiesAttack = authoring.enemiesAttack });
             SetComponentEnabled<EnemiesAttackComponent>(e, authoring.enemiesAttack);
 
-            
-            AddComponent(e, 
+
+            AddComponent(e,
                 new BossMovementComponent
                 {
                     WayPointReached = false,
                     Speed = authoring.BossSpeed, Repeat = authoring.Repeat, RotateSpeed = authoring.RotateSpeed
                 });
 
-            AddComponent(e, 
+            AddComponent(e,
                 new BossStrategyComponent
                 {
                     AimAtPlayer = authoring.AimAtPlayer, StopDistance = authoring.StopDistance
@@ -94,8 +96,6 @@ public class BossComponentAuthoring : MonoBehaviour
             );
 
 
-
-            
             AddComponent(e, new SkillTreeComponent()
                 {
                     e = e,
@@ -122,7 +122,7 @@ public class BossComponentAuthoring : MonoBehaviour
                 }
             );
 
-            AddComponent(e, 
+            AddComponent(e,
                 new LevelCompleteComponent
                 {
                     active = true,
@@ -148,7 +148,7 @@ public class BossComponentAuthoring : MonoBehaviour
                     ammoListIndex = authoring.wayPoints[i].ammoListIndex
                 };
 
-                
+
                 buffer.Add
                 (
                     bossWaypoint
@@ -156,6 +156,4 @@ public class BossComponentAuthoring : MonoBehaviour
             }
         }
     }
-
-    
 }
