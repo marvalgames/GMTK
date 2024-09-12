@@ -75,13 +75,14 @@ public class EnemyComponentAuthoring : MonoBehaviour
                     startPosition = authoring.transform.position
                 }
             );
-            AddComponent(e, new EnemiesAttackComponent  {enemiesAttack = authoring.enemiesAttack} );
+            AddComponent(e, new EnemiesAttackComponent { enemiesAttack = authoring.enemiesAttack });
             if (authoring.isNavMeshAgent)
             {
                 AddComponent(e, new NavMeshAgentComponent());
             }
+
             SetComponentEnabled<EnemiesAttackComponent>(e, authoring.enemiesAttack);
-            
+
             if (authoring.paused == true)
             {
                 AddComponent(e, new Pause());
@@ -140,33 +141,17 @@ public class EnemyComponentAuthoring : MonoBehaviour
                     checkLossCondition = authoring.checkLossCondition
                 }
             );
-            var a = authoring.name;
-            var b = string.Empty;
-            var val = 0;
-
-            for (var i = 0; i < a.Length; i++)
-            {
-                if (Char.IsDigit(a[i]))
-                    b += a[i];
-            }
-
-            if (b.Length > 0)
-                val = int.Parse(b);
-
-            //int index = Int32.Parse(str);//fix
-            var index = val;
 
             //Debug.Log("go " + a + " val " + index);
 
-            AddComponent(e, new CharacterSaveComponent { saveIndex = index });
+            AddComponent(e, new CharacterSaveComponent());
 
-            AddComponent(e, new CheckedComponent {scaleFactor = authoring.scaleFactor, scale_multiplier = authoring.scaleMultiplier} );
+            AddComponent(e,
+                new CheckedComponent
+                    { scaleFactor = authoring.scaleFactor, scale_multiplier = authoring.scaleMultiplier });
 
             AddComponent(e,
                 new EnemyStateComponent { MoveState = MoveStates.Default, CombatState = CombatStates.Default });
-
-            
-            //AddComponent(new EnemyClass(){go = authoring.gameObject});
         }
     }
 }

@@ -1,6 +1,9 @@
-﻿using Unity.Burst;
+﻿using Collisions;
+using Unity.Burst;
 using Unity.Collections;
 using Unity.Entities;
+using Unity.Mathematics;
+using Unity.Physics;
 using Unity.Rendering;
 using Unity.Transforms;
 using UnityEngine;
@@ -8,6 +11,7 @@ using UnityEngine.TextCore.Text;
 
 namespace Sandbox.Player
 {
+    [UpdateAfter(typeof(RaycastHeightSystem))]
     public partial struct AnimationSystem : ISystem
     {
         private bool isInitialized;
@@ -15,6 +19,7 @@ namespace Sandbox.Player
         [BurstCompile]
         public void OnCreate(ref SystemState state)
         {
+            state.RequireForUpdate<PhysicsWorldSingleton>();
             state.RequireForUpdate<CharacterData>();
             state.RequireForUpdate<Bot>();
         }
@@ -31,6 +36,7 @@ namespace Sandbox.Player
                 if (state.EntityManager.HasComponent<CharacterDataManaged>(configEntity))
                 {
                     var characterDataBuffer = SystemAPI.GetBufferLookup<CharacterDataElement>(true);
+                    var characterData = SystemAPI.GetSingleton<CharacterData>();
                     var configManaged = state.EntityManager.GetComponentObject<CharacterDataManaged>(configEntity);
                     //var group = characterDataBuffer[configEntity][0].PrefabGroup;
 
@@ -41,13 +47,14 @@ namespace Sandbox.Player
                                  .WithAll<Bot>()
                                  .WithEntityAccess())
                     {
-                        var animatedPrefab = configManaged.BotAnimatedPrefabList[characterIndex.ValueRO.GroupIndex]; 
+                        var animatedPrefab = configManaged.BotAnimatedPrefabList[characterIndex.ValueRO.GroupIndex];
                         Debug.Log("animated prefab " + animatedPrefab + " " + characterIndex.ValueRO.GroupIndex);
                         var botAnimation = new BotAnimation();
                         var go = GameObject.Instantiate(animatedPrefab);
-                        
+
                         botAnimation.AnimatedGO = go;
                         go.transform.localPosition = (Vector3)transform.ValueRO.Position;
+                        Debug.Log("Pos Y " + go.transform.localPosition.y);
                         ecb.AddComponent(entity, botAnimation);
 
                         // disable rendering
@@ -62,18 +69,21 @@ namespace Sandbox.Player
             var vertical = Animator.StringToHash("Vertical");
 
 
-            foreach (var (bot, transform, botAnimation) in
-                     SystemAPI.Query<RefRO<Bot>, RefRO<LocalTransform>, BotAnimation>())
+            foreach (var (bot, transform, botAnimation, entity) in
+                     SystemAPI.Query<RefRO<Bot>, RefRO<LocalTransform>, BotAnimation>().WithEntityAccess())
             {
                 var pos = (Vector3)transform.ValueRO.Position;
-                pos.y = 0;
-                botAnimation.AnimatedGO.transform.localPosition = pos;
-                botAnimation.AnimatedGO.transform.localRotation = (Quaternion)transform.ValueRO.Rotation;
-
+                //pos.y = 0;
+                botAnimation.AnimatedGO.transform.position = pos;
+                botAnimation.AnimatedGO.transform.rotation = (Quaternion)transform.ValueRO.Rotation;
+                
                 var animator = botAnimation.AnimatedGO.GetComponent<Animator>();
                 //animator.SetBool(isMovingId, bot.ValueRO.IsMoving());
                 animator.SetFloat(vertical, 1);
             }
         }
+
+       
+        
     }
 }

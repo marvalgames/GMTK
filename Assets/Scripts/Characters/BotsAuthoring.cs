@@ -13,7 +13,9 @@ namespace Sandbox.Player
                 var entity = GetEntity(authoring, TransformUsageFlags.Dynamic);
                 AddComponent<Bot>(entity);
                 AddComponent(entity, new CharacterIndexComponent());
+                AddComponent(entity, new RaycastComponent());
             }
+            
         }
     }
 
@@ -30,6 +32,12 @@ namespace Sandbox.Player
             return !(State == BotState.IDLE
                      || State == BotState.STOP);
         }
+    }
+    
+    public struct RaycastComponent : IComponentData
+    {
+        public float3 HitPosition; // Where the ray hit something
+        public bool HasHit;        // Whether the ray hit anything
     }
 
     public enum BotState

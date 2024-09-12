@@ -9,10 +9,13 @@ namespace Sandbox.Player
 {
     public class AnimationAuthoring : MonoBehaviour
     {
-        [Header("Bots")] public int NumBots = 10;
+        [HideInInspector] [Header("Bots")] public int NumBots = 10;
 
         [Header("Prefabs")] public GameObject BotPrefab;
         public GameObject BotAnimatedPrefabGO;
+
+        public float yLocation = 3;
+        public bool useTerrainHeight = false;
 
         public List<CharacterDataClass> CharacterDataObject = new();
 
@@ -24,12 +27,15 @@ namespace Sandbox.Player
                 var entity = GetEntity(authoring, TransformUsageFlags.None);
                 var animatedPrefab = authoring.BotAnimatedPrefabGO is not null;
 
-                AddComponent(entity, new CharacterData()
-                {
-                    NumBots = authoring.NumBots,
-                    BotPrefab = GetEntity(authoring.BotPrefab, TransformUsageFlags.Dynamic),
-                    HasAnimatedPrefab = animatedPrefab
-                });
+                AddComponent(entity, new CharacterData
+                    {
+                        NumBots = authoring.NumBots,
+                        BotPrefab = GetEntity(authoring.BotPrefab, TransformUsageFlags.Dynamic),
+                        HasAnimatedPrefab = animatedPrefab,
+                        UseTerrainHeight = authoring.useTerrainHeight,
+                        yLocation = authoring.yLocation
+                    }
+                );
 
                 var buffer = AddBuffer<CharacterDataElement>(entity);
                 //var characterDataManagedList = new CharacterDataManaged[authoring.NumBots];
@@ -54,7 +60,7 @@ namespace Sandbox.Player
 
 
                 var animatedPrefabList = new CharacterDataManaged();
-                animatedPrefabList.BotAnimatedPrefabGO= authoring.BotAnimatedPrefabGO;//default
+                animatedPrefabList.BotAnimatedPrefabGO = authoring.BotAnimatedPrefabGO; //default
                 for (var i = 0; i < authoring.CharacterDataObject.Count; i++)
                 {
                     animatedPrefabList.BotAnimatedPrefabList.Add(authoring.CharacterDataObject[i].BotAnimatedPrefab);
@@ -104,6 +110,8 @@ namespace Sandbox.Player
         public int NumBots;
         public Entity BotPrefab;
         public bool HasAnimatedPrefab;
+        public bool UseTerrainHeight;
+        public float yLocation;
     }
 
     public struct CharacterIndexComponent : IComponentData

@@ -9,21 +9,14 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5779442897721931942}
-  - component: {fileID: 7653125930177348372}
-  - component: {fileID: 3274265329842876918}
   - component: {fileID: 9058732827293613251}
-  - component: {fileID: 8606210377031589735}
-  - component: {fileID: 4927379751495207660}
-  - component: {fileID: 2127349347589598341}
-  - component: {fileID: 2890175082072022377}
-  - component: {fileID: 1317197175068443027}
   - component: {fileID: 6935957989097065918}
   - component: {fileID: 6610762595352572339}
   - component: {fileID: 5185929373605516913}
-  - component: {fileID: 4218585360259704403}
-  - component: {fileID: 1634391711898298529}
+  - component: {fileID: -3931649980164909424}
+  - component: {fileID: 6282829162052210521}
   m_Layer: 0
-  m_Name: Enemy Brackeys FAST
+  m_Name: Enemy Brackeys NO AI
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -46,39 +39,6 @@ Transform:
   - {fileID: 5640999170330817528}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &7653125930177348372
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3864508510212732009}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 62ef646c0e6b68d44a63943c709b5ffa, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  randomize: 1
-  Ratings: {fileID: 11400000, guid: 730ca547865f8e44996ac2b583fbf288, type: 2}
---- !u!114 &3274265329842876918
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3864508510212732009}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c3f3a7efc2694214c8251747b3829502, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  combineDamage: 0
-  showDamageMin: 50
-  showText3D: 1
-  losingHealth: 0
-  losingHealthRate: 1
-  meleeDamageEffectsIndex: 1
-  alwaysDamaging: 0
 --- !u!114 &9058732827293613251
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -101,101 +61,6 @@ MonoBehaviour:
   areaIndex: 0
   scaleFactor: 1
   scaleMultiplier: 1.05
---- !u!114 &8606210377031589735
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3864508510212732009}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d4a65520abdbc124489c258ded3925eb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  matchupClosest: 1
-  leader: 0
-  AngleRadians: 180
-  ViewDistanceSQ: 100
-  View360: 1
---- !u!114 &4927379751495207660
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3864508510212732009}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b2c41250841bd5249973a457031eeeac, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  switchUp: 0
-  switchUpTime: 3
-  navigationStates: 3
-  useDistanceFromStation: 0
-  currentRoleMaxTime: 3
-  breakRoute: 1
-  breakRouteVisionDistance: 30
-  switchToPlayerMultiplier: 6
-  canFreeze: 0
-  botSpeed: 5
---- !u!114 &2127349347589598341
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3864508510212732009}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8254d4a68da0b2143925c3ae2509abad, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  evadeMoveTime: 0.3
-  zMovement: 1
-  evadeMoveSpeed: 6
-  evadeStrikeRating: 7
-  randomEvadeMoveTime: 0
---- !u!114 &2890175082072022377
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3864508510212732009}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d8427fbd3d0823f49af5cf2dd3d538a6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  maxTime: 0.1
-  animSpeedRatio: 0.05
-  maxTimeOnReceived: 0.1
-  animSpeedRatioOnReceived: 0.05
---- !u!114 &1317197175068443027
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3864508510212732009}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c81798c420b41344a93d541b3fc2f75d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  PrimaryAmmoPrefab: {fileID: 9145492303991245301, guid: 664edcffc2ea4e54f86c032c38f51c66, type: 3}
-  SecondaryAmmoPrefab: {fileID: 0}
-  aimMode: 0
-  weaponCamera: 2
-  animTriggerWeight: 0.3
-  roleReversal: 0
-  roleReversalRangeMechanic: 5
-  randomize: 1
-  Strength: 0
-  Damage: 0
-  Rate: 0
 --- !u!114 &6935957989097065918
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -402,7 +267,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f50dfce9333b4c3d94e773753a0706e0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &4218585360259704403
+--- !u!114 &-3931649980164909424
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -421,7 +286,7 @@ MonoBehaviour:
   StoppingDistance: 0.1
   AutoBreaking: 1
   m_Layers: 1
---- !u!114 &1634391711898298529
+--- !u!114 &6282829162052210521
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
