@@ -31,13 +31,14 @@ namespace Sandbox.Player
             //var collisionWorld = SystemAPI.GetSingleton<PhysicsWorldSingleton>();
             var origin = position;
             var direction = math.normalize(new float3(0, -1, 0));
+
             var rayInput = new RaycastInput
             {
                 Start = origin,
                 End = origin + direction * 1000f,
                 Filter = new CollisionFilter
                 {
-                    BelongsTo = (uint)CollisionLayer.Enemy | (uint)CollisionLayer.Player,
+                    BelongsTo = (uint)CollisionLayer.Enemy,
                     CollidesWith = (uint)CollisionLayer.Terrain,
                     GroupIndex = 0
                 }

@@ -16,6 +16,7 @@ GameObject:
   - component: {fileID: 6282829162052210521}
   - component: {fileID: 8249120935799579030}
   - component: {fileID: -3438263797166661467}
+  - component: {fileID: 5581557231499822798}
   m_Layer: 0
   m_Name: Enemy Brackeys NO AI
   m_TagString: Untagged
@@ -195,7 +196,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ccea9ea98e38942e0b0938c27ed1903e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_MotionType: 0
+  m_MotionType: 1
   m_Smoothing: 0
   m_Mass: 1
   m_LinearDamping: 0
@@ -310,6 +311,28 @@ MonoBehaviour:
   breakRouteVisionDistance: 30
   switchToPlayerMultiplier: 6
   botSpeed: 5
+--- !u!114 &5581557231499822798
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3864508510212732009}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 00fe6fc1ebf8ff240ad5b12ad70ce1c2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  AgentTypeId: -1372625422
+  AreaMask: -1
+  AutoRepath: 1
+  m_Grounded: 1
+  m_OverrideAreaCosts: 0
+  m_LinkTraversalMode: 0
+  MappingExtent:
+    x: 10
+    y: 10
+    z: 10
 --- !u!1 &7550718136476566154
 GameObject:
   m_ObjectHideFlags: 0

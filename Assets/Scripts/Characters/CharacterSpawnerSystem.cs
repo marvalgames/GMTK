@@ -57,7 +57,8 @@ public partial struct InstantiateSystem : ISystem
                     var raycastComponent = SystemAPI.GetComponent<RaycastComponent>(instance);
                     yLocation = RaycastUtilities.ExecuteRaycast(SystemAPI.GetSingleton<PhysicsWorldSingleton>(),
                         position, raycastComponent);
-                    position.y = yLocation + 1;
+                    position.y = yLocation + .05f;
+
                 }
 
 
@@ -72,7 +73,6 @@ public partial struct InstantiateSystem : ISystem
                 //SCALE has no effect since it's an entity
                 SystemAPI.SetComponent(instance,
                     LocalTransform.FromPositionRotation(position, rotation));
-                //Debug.Log("SPAWN POSITION " + position);
             }
         }
     }
