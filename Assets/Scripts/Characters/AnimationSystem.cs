@@ -54,7 +54,7 @@ namespace Sandbox.Player
 
                         botAnimation.AnimatedGO = go;
                         go.transform.localPosition = (Vector3)transform.ValueRO.Position;
-                        Debug.Log("Pos Y " + go.transform.localPosition.y);
+                        //Debug.Log("Pos Y " + go.transform.localPosition.y);
                         ecb.AddComponent(entity, botAnimation);
 
                         // disable rendering

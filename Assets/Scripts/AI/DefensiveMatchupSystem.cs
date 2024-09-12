@@ -9,7 +9,7 @@ using UnityEngine;
 namespace AI
 {
     [RequireMatchingQueriesForUpdate]
-    public partial struct DefensiveMatchupSystem : ISystem
+    public partial struct DefensiveMatchupSystem : ISystem // Very Basic System Doesn't use target zones
     {
         private EntityQuery playerQuery;
 

@@ -57,7 +57,7 @@ public partial struct InstantiateSystem : ISystem
                     var raycastComponent = SystemAPI.GetComponent<RaycastComponent>(instance);
                     yLocation = RaycastUtilities.ExecuteRaycast(SystemAPI.GetSingleton<PhysicsWorldSingleton>(),
                         position, raycastComponent);
-                    position.y = yLocation;
+                    position.y = yLocation + 1;
                 }
 
 

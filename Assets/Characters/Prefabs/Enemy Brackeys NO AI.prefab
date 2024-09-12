@@ -9,12 +9,13 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5779442897721931942}
-  - component: {fileID: 9058732827293613251}
   - component: {fileID: 6935957989097065918}
   - component: {fileID: 6610762595352572339}
   - component: {fileID: 5185929373605516913}
   - component: {fileID: -3931649980164909424}
   - component: {fileID: 6282829162052210521}
+  - component: {fileID: 8249120935799579030}
+  - component: {fileID: -3438263797166661467}
   m_Layer: 0
   m_Name: Enemy Brackeys NO AI
   m_TagString: Untagged
@@ -39,28 +40,6 @@ Transform:
   - {fileID: 5640999170330817528}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &9058732827293613251
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3864508510212732009}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f60b773618c6fd646bb5373dda4ea86f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  enemiesAttack: 0
-  isNavMeshAgent: 1
-  checkLossCondition: 0
-  checkWinCondition: 0
-  invincible: 0
-  saveIndex: 0
-  paused: 0
-  areaIndex: 0
-  scaleFactor: 1
-  scaleMultiplier: 1.05
 --- !u!114 &6935957989097065918
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -159,11 +138,11 @@ MonoBehaviour:
     m_CollidesWithCategories:
       m_Override: 0
       m_Value:
-        Category00: 1
+        Category00: 0
         Category01: 1
-        Category02: 0
-        Category03: 1
-        Category04: 1
+        Category02: 1
+        Category03: 0
+        Category04: 0
         Category05: 0
         Category06: 0
         Category07: 0
@@ -300,6 +279,37 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Radius: 0.5
   Height: 2
+--- !u!114 &8249120935799579030
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3864508510212732009}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 62ef646c0e6b68d44a63943c709b5ffa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  randomize: 1
+  Ratings: {fileID: 11400000, guid: 730ca547865f8e44996ac2b583fbf288, type: 2}
+--- !u!114 &-3438263797166661467
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3864508510212732009}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d3f0011a17bfdd947befa71e0c972de2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  currentRoleMaxTime: 3
+  breakRoute: 1
+  breakRouteVisionDistance: 30
+  switchToPlayerMultiplier: 6
+  botSpeed: 5
 --- !u!1 &7550718136476566154
 GameObject:
   m_ObjectHideFlags: 0

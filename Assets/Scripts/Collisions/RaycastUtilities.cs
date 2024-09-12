@@ -46,7 +46,6 @@ namespace Sandbox.Player
             if (collisionWorld.CastRay(rayInput, out var hit))
             {
                 raycastComponent.HitPosition = hit.Position;
-                Debug.Log("Ray " + raycastComponent.HitPosition);
                 raycastComponent.HasHit = true;
                 yPosition = raycastComponent.HitPosition.y;
             }
