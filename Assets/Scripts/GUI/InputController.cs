@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using Rewired;
 using Unity.Entities;
+using Unity.Mathematics;
 
 
 public struct InputControllerComponent : IComponentData
@@ -93,6 +94,7 @@ public struct InputControllerComponent : IComponentData
     public double comboBufferTimeEnd;
     public double comboBufferTimeMax;
 
+    public float2 mousePosition;
 
 
 }

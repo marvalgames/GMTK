@@ -252,7 +252,6 @@ namespace Sandbox.Player
             actorWeaponAimComponent.targetPosition = _targetPosition;
             
             _manager.SetComponentData(_entity, actorWeaponAimComponent);
-            //aimDir = math.normalize((float3)mousePosition - position);
         }
 
         private void LateUpdate()

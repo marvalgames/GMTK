@@ -32,6 +32,7 @@ public partial class InputControllerSystemUpdate : SystemBase
         Entities.WithoutBurst().WithAll<PlayerComponent>().ForEach((ref InputControllerComponent inputController) =>
         {
 
+            inputController.mousePosition = player.controllers.Mouse.screenPosition;
             inputController.leftStickX = player.GetAxis("Move Horizontal");
             inputController.leftStickY = player.GetAxis("Move Vertical");
             
