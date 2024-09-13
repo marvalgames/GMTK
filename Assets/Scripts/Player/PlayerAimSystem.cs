@@ -2,6 +2,8 @@
 using Unity.Burst;
 using Unity.Entities;
 using Unity.Mathematics;
+using Unity.Transforms;
+using UnityEngine;
 
 namespace Player
 {
@@ -19,7 +21,10 @@ namespace Player
             foreach (var (actorAim, playerAim, entity) in SystemAPI.Query<RefRO<ActorWeaponAimComponent>, RefRW<PlayerAimComponent>>().WithEntityAccess())
             {
                 var aimTarget = actorAim.ValueRO.crosshairRaycastTarget;
-                playerAim.ValueRW.aimDirection = math.normalize(aimTarget - playerAim.ValueRW.aimLocation);
+                var transform = SystemAPI.GetComponent<LocalTransform>(entity);
+                //playerAim.ValueRW.aimDirection = math.normalize(aimTarget - playerAim.ValueRW.aimLocation);
+                playerAim.ValueRW.aimDirection = math.normalize(aimTarget - transform.Position);
+                Debug.Log("Aim Location " + playerAim.ValueRW.aimLocation);
             }
 
         }

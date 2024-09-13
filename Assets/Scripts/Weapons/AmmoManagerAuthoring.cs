@@ -120,8 +120,6 @@ public class AmmoManagerAuthoring : MonoBehaviour
                 new WeaponComponent()
                 {
                     AmmoStartLocalToWorld = localToWorld,
-                    //AmmoStartPosition = new LocalTransform() { Value = authoring.AmmoStartLocation.position },//not used because cant track bone 
-                    //AmmoStartRotation = new Rotation() { Value = authoring.AmmoStartLocation.rotation },
                     PrimaryAmmo = GetEntity(authoring.PrimaryAmmoPrefab, TransformUsageFlags.Dynamic),
                     SecondaryAmmo = GetEntity(authoring.SecondaryAmmoPrefab, TransformUsageFlags.Dynamic),
                     Strength = authoring.Strength,
@@ -142,8 +140,7 @@ public class AmmoManagerAuthoring : MonoBehaviour
                 {
                     aimMode = authoring.aimMode,
                     weaponCamera = authoring.weaponCamera,
-                    crosshairRaycastTarget =
-                        new float3 { x = authoring.transform.position.x, y = authoring.transform.position.y, z = authoring.transform.position.z }
+                    crosshairRaycastTarget = authoring.transform.position
                 });
 
             AddComponent(e, new AmmoManagerComponent());

@@ -12,13 +12,13 @@ namespace Player
 
     public class PlayerAimAuthoring : MonoBehaviour
     {
-        public float3 aimLocation;
+        public Transform aimLocation;//doesn't work because needs to update first in system
         private class PlayerAimAuthoringBaker : Baker<PlayerAimAuthoring>
         {
             public override void Bake(PlayerAimAuthoring authoring)
             {
                 var entity = GetEntity(authoring, TransformUsageFlags.None);
-                AddComponent(entity, new PlayerAimComponent { aimLocation = authoring.aimLocation });
+                AddComponent(entity, new PlayerAimComponent { aimLocation = authoring.aimLocation.position });
 
             }
         }

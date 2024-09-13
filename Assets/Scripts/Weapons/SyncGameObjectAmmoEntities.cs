@@ -65,12 +65,6 @@ partial class SynchronizeGameObjectTransformsGunEntities : SystemBase
             {
                 var position = ammoManager.AmmoStartLocation.position;
                 var rotation = ammoManager.AmmoStartLocation.rotation;
-                var localToWorld = new LocalToWorld
-                {
-                    Value = float4x4.TRS(position, rotation, Vector3.one)
-                };
-
-                weaponComponent.AmmoStartLocalToWorld = localToWorld;
                 weaponComponent.AmmoStartTransform.Position = position;
                 weaponComponent.AmmoStartTransform.Rotation = rotation;
                 //Debug.Log("AMMO START");

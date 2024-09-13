@@ -105,7 +105,7 @@ namespace Collisions
                         input.mousePosition.y, 0);
                     //}
 
-                    Debug.Log("mouse " + mousePosition);
+                    // Debug.Log("mouse " + mousePosition);
 
                     mousePosition.z = actorAim.crosshairRaycastTarget.z - _cam.transform.position.z;
 
@@ -132,6 +132,8 @@ namespace Collisions
 
                     start = actorAim.rayCastStart;
                     end = actorAim.rayCastEnd;
+                    Debug.Log("hit start " + start);
+                    Debug.Log("hit end " + end);
                     var inputForward = new RaycastInput
                     {
                         Start = start,
@@ -214,7 +216,7 @@ namespace Collisions
                         }
                         else
                         {
-                            //Debug.Log("hit terrain ");
+                            Debug.Log("hit terrain ");
                             actorAim.crosshairRaycastTarget.y = hitForward.Position.y;
                             actorAim.crosshairRaycastTarget.x = hitForward.Position.x;
                             actorAim.crosshairRaycastTarget.z = zLength;

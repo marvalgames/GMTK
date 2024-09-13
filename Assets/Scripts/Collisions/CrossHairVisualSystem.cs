@@ -8,7 +8,6 @@ using Unity.Rendering;
 using Unity.Transforms;
 using UnityEngine;
 using UnityEngine.TextCore.Text;
-using UnityEngine.UIElements;
 
 namespace Sandbox.Player
 {
@@ -29,8 +28,8 @@ namespace Sandbox.Player
             {
                 var pos = (Vector3)transform.ValueRO.Position;
                 //pos.y = 0;
-                crosshair.crosshairInstance.GetComponent<Image>().transform.position = pos;
-                Debug.Log("Pos " + pos);
+                //Debug.Log(crosshair.crosshairInstance.GetComponent<ImageContainer>());
+                crosshair.crosshairInstance.GetComponent<ImageContainer>().crosshairImage.transform.position = pos;
             }
         }
     }

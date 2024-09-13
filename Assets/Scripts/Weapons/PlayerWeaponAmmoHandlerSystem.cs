@@ -4,6 +4,7 @@ using Unity.Entities;
 using Unity.Mathematics;
 using Unity.Physics;
 using Unity.Transforms;
+using UnityEngine;
 
 [UpdateInGroup(typeof(LateSimulationSystemGroup))]
 [RequireMatchingQueriesForUpdate]
@@ -19,8 +20,8 @@ public partial class PlayerWeaponAmmoHandlerSystem : SystemBase
 
     protected override void OnUpdate()
     {
-        if (LevelManager.instance == null) return;
-        if (LevelManager.instance.endGame == true) return;
+        //if (LevelManager.instance == null) return;
+        //if (LevelManager.instance.endGame == true) return;
 
         var dt = SystemAPI.Time.DeltaTime; //gun duration
         var commandBuffer = _mEntityCommandBufferSystem.CreateCommandBuffer().AsParallelWriter();
@@ -35,6 +36,9 @@ public partial class PlayerWeaponAmmoHandlerSystem : SystemBase
             {
                 if (!SystemAPI.HasComponent<WeaponComponent>(entity) ||
                     SystemAPI.HasComponent<EnemyComponent>(entity)) return;
+                
+
+                
                 var gun = SystemAPI.GetComponent<WeaponComponent>(entity);
                 if (gun.roleReversal == RoleReversalMode.Off)
                 {
@@ -60,6 +64,8 @@ public partial class PlayerWeaponAmmoHandlerSystem : SystemBase
                         if (strength <= 0) strength = 0;
                     }
                 }
+
+                Debug.Log("Return");
 
 
                 if (gun is { IsFiring: 1, Duration: 0 })
@@ -93,6 +99,7 @@ public partial class PlayerWeaponAmmoHandlerSystem : SystemBase
                         gun.IsFiring = 0;
                     }
                 }
+
 
                 commandBuffer.SetComponent(entityInQueryIndex, entity, gun);
             }
